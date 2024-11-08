@@ -1,0 +1,16 @@
+{
+  "version": 6,
+  "configurePresets": [
+    {
+      "name": "gcc",
+      "generator": "Ninja",
+      "cacheVariables": {
+        "CMAKE_C_FLAGS_INIT": "-Wall -Wpedantic -Wextra -Wno-unused-function",
+        "CMAKE_C_STANDARD": "99",
+        "CMAKE_C_STANDARD_REQUIRED": true,
+        "CMAKE_C_EXTENSIONS": false,
+        "BUILD_TESTING": true
+      }
+    }
+  ]
+}
