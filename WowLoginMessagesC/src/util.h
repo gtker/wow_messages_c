@@ -8,7 +8,6 @@
 
 #include <malloc.h>
 #include <memory.h>
-#include <stdbool.h>
 #include <stdint.h>
 
 #define WLM_CHECK_RETURN_CODE(action)                    \

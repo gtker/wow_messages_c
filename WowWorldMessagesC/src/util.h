@@ -4,7 +4,6 @@
 #include "wow_world_messages/wow_world_messages.h"
 
 #include <malloc.h>
-#include <stdbool.h>
 #include <stdint.h>
 
 #define WWM_CHECK_RETURN_CODE(action)                    \

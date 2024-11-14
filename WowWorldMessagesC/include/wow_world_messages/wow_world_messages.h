@@ -1,7 +1,12 @@
 #ifndef WWM_WOW_WORLD_MESSAGES_H
 #define WWM_WOW_WORLD_MESSAGES_H
 
-#include <stdbool.h>
+#ifndef bool
+#define bool int
+#define true 1
+#define false 0
+#endif
+
 #include <stddef.h>
 #include <stdint.h>
 

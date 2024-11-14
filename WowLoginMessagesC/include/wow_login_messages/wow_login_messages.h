@@ -1,7 +1,12 @@
 #ifndef WOW_LOGIN_MESSAGES_H
 #define WOW_LOGIN_MESSAGES_H
 
-#include <stdbool.h>
+#ifndef bool
+#define bool int
+#define true 1
+#define false 0
+#endif
+
 #include <stddef.h>
 #include <stdint.h>
 
