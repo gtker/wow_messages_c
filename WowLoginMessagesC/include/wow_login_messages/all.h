@@ -21,17 +21,17 @@ typedef enum {
     ALL_LOCALE_KO_KR = 1802455890,
     ALL_LOCALE_ZH_TW = 2053657687,
     ALL_LOCALE_EN_TW = 1701729367,
-    ALL_LOCALE_EN_CN = 1701725006,
+    ALL_LOCALE_EN_CN = 1701725006
 } all_Locale;
 
 typedef enum {
     ALL_OS_WINDOWS = 5728622,
-    ALL_OS_MAC_OS_X = 5198680,
+    ALL_OS_MAC_OS_X = 5198680
 } all_Os;
 
 typedef enum {
     ALL_PLATFORM_X86 = 7878710,
-    ALL_PLATFORM_POWER_PC = 5263427,
+    ALL_PLATFORM_POWER_PC = 5263427
 } all_Platform;
 
 typedef enum {
@@ -40,7 +40,7 @@ typedef enum {
     ALL_PROTOCOL_VERSION_FIVE = 5,
     ALL_PROTOCOL_VERSION_SIX = 6,
     ALL_PROTOCOL_VERSION_SEVEN = 7,
-    ALL_PROTOCOL_VERSION_EIGHT = 8,
+    ALL_PROTOCOL_VERSION_EIGHT = 8
 } all_ProtocolVersion;
 
 typedef struct {
@@ -62,8 +62,8 @@ typedef struct {
     WowLoginString account_name;
 
 } all_CMD_AUTH_LOGON_CHALLENGE_Client;
-WOWLOGINMESSAGES_EXPORT WowLoginResult all_CMD_AUTH_LOGON_CHALLENGE_Client_write(WowLoginWriter* writer, const all_CMD_AUTH_LOGON_CHALLENGE_Client* object);
-WOWLOGINMESSAGES_EXPORT void all_CMD_AUTH_LOGON_CHALLENGE_Client_free(all_CMD_AUTH_LOGON_CHALLENGE_Client* object);
+WOWLOGINMESSAGESC_EXPORT WowLoginResult all_CMD_AUTH_LOGON_CHALLENGE_Client_write(WowLoginWriter* writer, const all_CMD_AUTH_LOGON_CHALLENGE_Client* object);
+WOWLOGINMESSAGESC_EXPORT void all_CMD_AUTH_LOGON_CHALLENGE_Client_free(all_CMD_AUTH_LOGON_CHALLENGE_Client* object);
 
 typedef struct {
     all_ProtocolVersion protocol_version;
@@ -76,8 +76,8 @@ typedef struct {
     WowLoginString account_name;
 
 } all_CMD_AUTH_RECONNECT_CHALLENGE_Client;
-WOWLOGINMESSAGES_EXPORT WowLoginResult all_CMD_AUTH_RECONNECT_CHALLENGE_Client_write(WowLoginWriter* writer, const all_CMD_AUTH_RECONNECT_CHALLENGE_Client* object);
-WOWLOGINMESSAGES_EXPORT void all_CMD_AUTH_RECONNECT_CHALLENGE_Client_free(all_CMD_AUTH_RECONNECT_CHALLENGE_Client* object);
+WOWLOGINMESSAGESC_EXPORT WowLoginResult all_CMD_AUTH_RECONNECT_CHALLENGE_Client_write(WowLoginWriter* writer, const all_CMD_AUTH_RECONNECT_CHALLENGE_Client* object);
+WOWLOGINMESSAGESC_EXPORT void all_CMD_AUTH_RECONNECT_CHALLENGE_Client_free(all_CMD_AUTH_RECONNECT_CHALLENGE_Client* object);
 
 typedef struct {
     WowLoginOpcode opcode;
@@ -88,9 +88,9 @@ typedef struct {
     } body;
 } AllClientOpcodeContainer;
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult all_client_opcode_read(WowLoginReader* reader, AllClientOpcodeContainer* opcodes);
+WOWLOGINMESSAGESC_EXPORT WowLoginResult all_client_opcode_read(WowLoginReader* reader, AllClientOpcodeContainer* opcodes);
 
-WOWLOGINMESSAGES_EXPORT void all_client_opcode_free(AllClientOpcodeContainer* opcodes);
+WOWLOGINMESSAGESC_EXPORT void all_client_opcode_free(AllClientOpcodeContainer* opcodes);
 
 #ifdef __cplusplus
 }

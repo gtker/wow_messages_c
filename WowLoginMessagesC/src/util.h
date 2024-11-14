@@ -34,6 +34,17 @@
     }                                                     \
     while (0)
 
+#define SKIP_FORWARD_BYTES(type_size)                     \
+    do                                                    \
+    {                                                     \
+        if (reader->index + (type_size) > reader->length) \
+        {                                                 \
+            return WLM_RESULT_NOT_ENOUGH_BYTES;           \
+        }                                                 \
+        reader->index += (type_size);                     \
+    }                                                     \
+    while (0)
+
 static WowLoginResult wlm_read_uint8(WowLoginReader* stream, uint8_t* value)
 {
     const size_t index = WLM_CHECK_LENGTH(1);
@@ -316,17 +327,28 @@ static void wlm_free_string(WowLoginString* string)
 
 #undef WLM_CHECK_LENGTH
 
-WOWLOGINMESSAGES_EXPORT WowLoginReader wlm_create_reader(const unsigned char* const source, const size_t length)
+
+WOWLOGINMESSAGESC_EXPORT WowLoginReader wlm_create_reader(const unsigned char* const source, const size_t length)
 {
-    return (WowLoginReader){source, length, 0};
+    WowLoginReader reader;
+    reader.source = source;
+    reader.length = length;
+    reader.index = 0;
+
+    return reader;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginWriter wlm_create_writer(unsigned char* const destination, const size_t length)
+WOWLOGINMESSAGESC_EXPORT WowLoginWriter wlm_create_writer(unsigned char* destination, const size_t length)
 {
-    return (WowLoginWriter){destination, length, 0};
+    WowLoginWriter writer;
+    writer.destination = destination;
+    writer.length = length;
+    writer.index = 0;
+
+    return writer;
 }
 
-WOWLOGINMESSAGES_EXPORT const char* wlm_error_code_to_string(const WowLoginResult result)
+WOWLOGINMESSAGESC_EXPORT const char* wlm_error_code_to_string(const WowLoginResult result)
 {
     switch (result)
     {

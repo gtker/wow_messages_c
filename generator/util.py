@@ -204,7 +204,7 @@ def first_version_as_module(tags: model.ObjectTags) -> str:
 
 
 def get_export_define(tags: model.ObjectTags) -> str:
-    return "WOWWORLDMESSAGES_EXPORT" if is_world(tags) else "WOWLOGINMESSAGES_EXPORT"
+    return "WOWWORLDMESSAGESC_EXPORT" if is_world(tags) else "WOWLOGINMESSAGESC_EXPORT"
 
 
 def get_type_prefix(tags: model.ObjectTags) -> str:

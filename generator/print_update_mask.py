@@ -9,14 +9,15 @@ def print_update_mask(s: Writer, h: Writer, update_mask: list[model.UpdateMask],
     h.open_curly("typedef enum")
 
     highest_offset = 0
-    for value in update_mask:
+    for index, value in enumerate(update_mask):
         highest_offset = max(value.offset, highest_offset)
 
+        comma = "," if index < (len(update_mask) - 1) else ""
         name = f"{module_name.upper()}_{value.object_type.name}_{value.name}"
         match value.data_type:
             case model.UpdateMaskDataTypeGUIDArrayUsingEnum(content=content):
                 for enumerator in content.definer.enumerators:
-                    h.wln(f"{name}_{enumerator.name} = {value.offset + int(enumerator.value.value) * 2},")
+                    h.wln(f"{name}_{enumerator.name} = {value.offset + int(enumerator.value.value) * 2}{comma}")
             case model.UpdateMaskDataTypeArrayOfStruct(content=content):
                 amount_of_items = value.size // content.size
                 mask = content.update_mask_struct
@@ -27,15 +28,15 @@ def print_update_mask(s: Writer, h: Writer, update_mask: list[model.UpdateMask],
                             extra = member.member.name.upper()
 
                             if member.size == 4:
-                                h.wln(f"{name}_{i}_{extra} = {val},")
+                                h.wln(f"{name}_{i}_{extra} = {val}{comma}")
                             elif member.size == 8:
-                                h.wln(f"{name}_{i}_{extra}_LOW = {val},")
-                                h.wln(f"{name}_{i}_{extra}_HIGH = {val + 1},")
+                                h.wln(f"{name}_{i}_{extra}_LOW = {val}{comma}")
+                                h.wln(f"{name}_{i}_{extra}_HIGH = {val + 1}{comma}")
                             else:
-                                h.wln(f"{name}_{i}_{extra}_{member_index} = {val},")
+                                h.wln(f"{name}_{i}_{extra}_{member_index} = {val}{comma}")
 
             case _:
-                h.wln(f"{name} = {value.offset},")
+                h.wln(f"{name} = {value.offset}{comma}")
 
     h.closing_curly(f" {module_name}_UpdateMaskValues;")
     h.newline()
@@ -55,11 +56,11 @@ typedef struct {{
 
 """)
 
-    set_declaration = f"WOWWORLDMESSAGES_EXPORT void {module_name}_update_mask_set({module_name}_UpdateMask* mask, {module_name}_UpdateMaskValues offset, uint32_t value)"
+    set_declaration = f"WOWWORLDMESSAGESC_EXPORT void {module_name}_update_mask_set({module_name}_UpdateMask* mask, {module_name}_UpdateMaskValues offset, uint32_t value)"
     h.wln(f"{set_declaration};")
     h.newline()
 
-    get_declaration = f"WOWWORLDMESSAGES_EXPORT uint32_t {module_name}_update_mask_get({module_name}_UpdateMask* mask, {module_name}_UpdateMaskValues offset)"
+    get_declaration = f"WOWWORLDMESSAGESC_EXPORT uint32_t {module_name}_update_mask_get({module_name}_UpdateMask* mask, {module_name}_UpdateMaskValues offset)"
     h.wln(f"{get_declaration};")
     h.newline()
 
@@ -120,6 +121,10 @@ static WowWorldResult {module_name}_update_mask_read(WowWorldReader* stream, {mo
     uint8_t j;
     
     uint8_t amount_of_headers;
+
+    memset(mask->headers, 0, sizeof(mask->headers));
+    memset(mask->values, 0, sizeof(mask->values));
+
     WWM_CHECK_RETURN_CODE(wwm_read_uint8(stream, &amount_of_headers));
 
     for (i = 0; i < amount_of_headers; ++i) {{

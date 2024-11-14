@@ -2,14 +2,98 @@
   "version": 6,
   "configurePresets": [
     {
-      "name": "gcc",
+      "name": "base-preset",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "hidden": true,
       "generator": "Ninja",
+      "errors": {
+        "dev": true,
+        "deprecated": true
+      },
       "cacheVariables": {
-        "CMAKE_C_FLAGS_INIT": "-Wall -Wpedantic -Wextra -Wno-unused-function",
-        "CMAKE_C_STANDARD": "99",
+        "CMAKE_C_STANDARD": "90",
         "CMAKE_C_STANDARD_REQUIRED": true,
         "CMAKE_C_EXTENSIONS": false,
-        "BUILD_TESTING": true
+        "CMAKE_COMPILE_WARNING_AS_ERROR": true,
+        "BUILD_TESTING": true,
+        "BUILD_EXAMPLES": true,
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "gcc",
+      "inherits": [
+        "base-preset"
+      ],
+      "cacheVariables": {
+        "CMAKE_C_FLAGS_INIT": "-Wall -Wpedantic -Wextra -Wno-unused-function"
+      }
+    },
+    {
+      "name": "clang",
+      "inherits": [
+        "base-preset"
+      ],
+      "cacheVariables": {
+        "CMAKE_C_FLAGS_INIT": "-Wall -Wpedantic -Wextra -Wno-unused-function"
+      }
+    },
+    {
+      "name": "cl",
+      "inherits": [
+        "base-preset"
+      ],
+      "cacheVariables": {
+        "CMAKE_C_FLAGS_INIT": "/W4"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "gcc",
+      "configurePreset": "gcc"
+    },
+    {
+      "name": "clang",
+      "configurePreset": "clang"
+    },
+    {
+      "name": "cl",
+      "configurePreset": "cl"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "gcc",
+      "configurePreset": "gcc",
+      "output": {
+        "outputOnFailure": true
+      },
+      "execution": {
+        "noTestsAction": "error",
+        "stopOnFailure": true
+      }
+    },
+    {
+      "name": "clang",
+      "configurePreset": "clang",
+      "output": {
+        "outputOnFailure": true
+      },
+      "execution": {
+        "noTestsAction": "error",
+        "stopOnFailure": true
+      }
+    },
+    {
+      "name": "cl",
+      "configurePreset": "cl",
+      "output": {
+        "outputOnFailure": true
+      },
+      "execution": {
+        "noTestsAction": "error",
+        "stopOnFailure": true
       }
     }
   ]

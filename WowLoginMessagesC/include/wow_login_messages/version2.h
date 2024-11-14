@@ -26,7 +26,7 @@ typedef enum {
     VERSION2_LOGIN_RESULT_FAIL_SUSPENDED = 12,
     VERSION2_LOGIN_RESULT_FAIL_NO_ACCESS = 13,
     VERSION2_LOGIN_RESULT_SUCCESS_SURVEY = 14,
-    VERSION2_LOGIN_RESULT_FAIL_PARENTALCONTROL = 15,
+    VERSION2_LOGIN_RESULT_FAIL_PARENTALCONTROL = 15
 } version2_LoginResult;
 
 typedef all_Os version2_Os;
@@ -40,14 +40,14 @@ typedef enum {
     VERSION2_REALM_CATEGORY_ONE = 1,
     VERSION2_REALM_CATEGORY_TWO = 2,
     VERSION2_REALM_CATEGORY_THREE = 3,
-    VERSION2_REALM_CATEGORY_FIVE = 5,
+    VERSION2_REALM_CATEGORY_FIVE = 5
 } version2_RealmCategory;
 
 typedef enum {
     VERSION2_REALM_TYPE_PLAYER_VS_ENVIRONMENT = 0,
     VERSION2_REALM_TYPE_PLAYER_VS_PLAYER = 1,
     VERSION2_REALM_TYPE_ROLEPLAYING = 6,
-    VERSION2_REALM_TYPE_ROLEPLAYING_PLAYER_VS_PLAYER = 8,
+    VERSION2_REALM_TYPE_ROLEPLAYING_PLAYER_VS_PLAYER = 8
 } version2_RealmType;
 
 typedef enum {
@@ -56,7 +56,7 @@ typedef enum {
     VERSION2_REALM_FLAG_OFFLINE = 2,
     VERSION2_REALM_FLAG_FORCE_BLUE_RECOMMENDED = 32,
     VERSION2_REALM_FLAG_FORCE_GREEN_RECOMMENDED = 64,
-    VERSION2_REALM_FLAG_FORCE_RED_FULL = 128,
+    VERSION2_REALM_FLAG_FORCE_RED_FULL = 128
 } version2_RealmFlag;
 
 typedef struct {
@@ -76,55 +76,55 @@ typedef all_Version version2_Version;
 typedef struct {
     uint16_t unknown1;
     uint32_t unknown2;
-    uint8_t* unknown3;
-    uint8_t* cd_key_proof;
+    uint8_t (*unknown3)[4];
+    uint8_t (*cd_key_proof)[20];
 
 } version2_TelemetryKey;
 
 typedef struct {
     version2_LoginResult result;
-    uint8_t* server_public_key;
+    uint8_t (*server_public_key)[32];
     uint8_t generator_length;
     uint8_t* generator;
     uint8_t large_safe_prime_length;
     uint8_t* large_safe_prime;
-    uint8_t* salt;
-    uint8_t* crc_salt;
+    uint8_t (*salt)[32];
+    uint8_t (*crc_salt)[16];
 
 } version2_CMD_AUTH_LOGON_CHALLENGE_Server;
-WOWLOGINMESSAGES_EXPORT WowLoginResult version2_CMD_AUTH_LOGON_CHALLENGE_Server_write(WowLoginWriter* writer, const version2_CMD_AUTH_LOGON_CHALLENGE_Server* object);
-WOWLOGINMESSAGES_EXPORT void version2_CMD_AUTH_LOGON_CHALLENGE_Server_free(version2_CMD_AUTH_LOGON_CHALLENGE_Server* object);
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version2_CMD_AUTH_LOGON_CHALLENGE_Server_write(WowLoginWriter* writer, const version2_CMD_AUTH_LOGON_CHALLENGE_Server* object);
+WOWLOGINMESSAGESC_EXPORT void version2_CMD_AUTH_LOGON_CHALLENGE_Server_free(version2_CMD_AUTH_LOGON_CHALLENGE_Server* object);
 
 typedef all_CMD_AUTH_LOGON_CHALLENGE_Client version2_CMD_AUTH_LOGON_CHALLENGE_Client;
 
 typedef struct {
-    uint8_t* client_public_key;
-    uint8_t* client_proof;
-    uint8_t* crc_hash;
+    uint8_t (*client_public_key)[32];
+    uint8_t (*client_proof)[20];
+    uint8_t (*crc_hash)[20];
     uint8_t number_of_telemetry_keys;
     version2_TelemetryKey* telemetry_keys;
 
 } version2_CMD_AUTH_LOGON_PROOF_Client;
-WOWLOGINMESSAGES_EXPORT WowLoginResult version2_CMD_AUTH_LOGON_PROOF_Client_write(WowLoginWriter* writer, const version2_CMD_AUTH_LOGON_PROOF_Client* object);
-WOWLOGINMESSAGES_EXPORT void version2_CMD_AUTH_LOGON_PROOF_Client_free(version2_CMD_AUTH_LOGON_PROOF_Client* object);
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version2_CMD_AUTH_LOGON_PROOF_Client_write(WowLoginWriter* writer, const version2_CMD_AUTH_LOGON_PROOF_Client* object);
+WOWLOGINMESSAGESC_EXPORT void version2_CMD_AUTH_LOGON_PROOF_Client_free(version2_CMD_AUTH_LOGON_PROOF_Client* object);
 
 typedef struct {
     version2_LoginResult result;
-    uint8_t* server_proof;
+    uint8_t (*server_proof)[20];
     uint32_t hardware_survey_id;
 
 } version2_CMD_AUTH_LOGON_PROOF_Server;
-WOWLOGINMESSAGES_EXPORT WowLoginResult version2_CMD_AUTH_LOGON_PROOF_Server_write(WowLoginWriter* writer, const version2_CMD_AUTH_LOGON_PROOF_Server* object);
-WOWLOGINMESSAGES_EXPORT void version2_CMD_AUTH_LOGON_PROOF_Server_free(version2_CMD_AUTH_LOGON_PROOF_Server* object);
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version2_CMD_AUTH_LOGON_PROOF_Server_write(WowLoginWriter* writer, const version2_CMD_AUTH_LOGON_PROOF_Server* object);
+WOWLOGINMESSAGESC_EXPORT void version2_CMD_AUTH_LOGON_PROOF_Server_free(version2_CMD_AUTH_LOGON_PROOF_Server* object);
 
 typedef struct {
     version2_LoginResult result;
-    uint8_t* challenge_data;
-    uint8_t* checksum_salt;
+    uint8_t (*challenge_data)[16];
+    uint8_t (*checksum_salt)[16];
 
 } version2_CMD_AUTH_RECONNECT_CHALLENGE_Server;
-WOWLOGINMESSAGES_EXPORT WowLoginResult version2_CMD_AUTH_RECONNECT_CHALLENGE_Server_write(WowLoginWriter* writer, const version2_CMD_AUTH_RECONNECT_CHALLENGE_Server* object);
-WOWLOGINMESSAGES_EXPORT void version2_CMD_AUTH_RECONNECT_CHALLENGE_Server_free(version2_CMD_AUTH_RECONNECT_CHALLENGE_Server* object);
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version2_CMD_AUTH_RECONNECT_CHALLENGE_Server_write(WowLoginWriter* writer, const version2_CMD_AUTH_RECONNECT_CHALLENGE_Server* object);
+WOWLOGINMESSAGESC_EXPORT void version2_CMD_AUTH_RECONNECT_CHALLENGE_Server_free(version2_CMD_AUTH_RECONNECT_CHALLENGE_Server* object);
 
 typedef all_CMD_AUTH_RECONNECT_CHALLENGE_Client version2_CMD_AUTH_RECONNECT_CHALLENGE_Client;
 
@@ -132,53 +132,53 @@ typedef struct {
     version2_LoginResult result;
 
 } version2_CMD_AUTH_RECONNECT_PROOF_Server;
-WOWLOGINMESSAGES_EXPORT WowLoginResult version2_CMD_AUTH_RECONNECT_PROOF_Server_write(WowLoginWriter* writer, const version2_CMD_AUTH_RECONNECT_PROOF_Server* object);
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version2_CMD_AUTH_RECONNECT_PROOF_Server_write(WowLoginWriter* writer, const version2_CMD_AUTH_RECONNECT_PROOF_Server* object);
 
 typedef struct {
-    uint8_t* proof_data;
-    uint8_t* client_proof;
-    uint8_t* client_checksum;
+    uint8_t (*proof_data)[16];
+    uint8_t (*client_proof)[20];
+    uint8_t (*client_checksum)[20];
 
 } version2_CMD_AUTH_RECONNECT_PROOF_Client;
-WOWLOGINMESSAGES_EXPORT WowLoginResult version2_CMD_AUTH_RECONNECT_PROOF_Client_write(WowLoginWriter* writer, const version2_CMD_AUTH_RECONNECT_PROOF_Client* object);
-WOWLOGINMESSAGES_EXPORT void version2_CMD_AUTH_RECONNECT_PROOF_Client_free(version2_CMD_AUTH_RECONNECT_PROOF_Client* object);
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version2_CMD_AUTH_RECONNECT_PROOF_Client_write(WowLoginWriter* writer, const version2_CMD_AUTH_RECONNECT_PROOF_Client* object);
+WOWLOGINMESSAGESC_EXPORT void version2_CMD_AUTH_RECONNECT_PROOF_Client_free(version2_CMD_AUTH_RECONNECT_PROOF_Client* object);
 
 typedef struct {
     uint8_t number_of_realms;
     version2_Realm* realms;
 
 } version2_CMD_REALM_LIST_Server;
-WOWLOGINMESSAGES_EXPORT WowLoginResult version2_CMD_REALM_LIST_Server_write(WowLoginWriter* writer, const version2_CMD_REALM_LIST_Server* object);
-WOWLOGINMESSAGES_EXPORT void version2_CMD_REALM_LIST_Server_free(version2_CMD_REALM_LIST_Server* object);
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version2_CMD_REALM_LIST_Server_write(WowLoginWriter* writer, const version2_CMD_REALM_LIST_Server* object);
+WOWLOGINMESSAGESC_EXPORT void version2_CMD_REALM_LIST_Server_free(version2_CMD_REALM_LIST_Server* object);
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version2_CMD_REALM_LIST_Client_write(WowLoginWriter* writer);
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version2_CMD_REALM_LIST_Client_write(WowLoginWriter* writer);
 
 typedef struct {
     WowLoginString filename;
     uint64_t file_size;
-    uint8_t* file_md5;
+    uint8_t (*file_md5)[16];
 
 } version2_CMD_XFER_INITIATE;
-WOWLOGINMESSAGES_EXPORT WowLoginResult version2_CMD_XFER_INITIATE_write(WowLoginWriter* writer, const version2_CMD_XFER_INITIATE* object);
-WOWLOGINMESSAGES_EXPORT void version2_CMD_XFER_INITIATE_free(version2_CMD_XFER_INITIATE* object);
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version2_CMD_XFER_INITIATE_write(WowLoginWriter* writer, const version2_CMD_XFER_INITIATE* object);
+WOWLOGINMESSAGESC_EXPORT void version2_CMD_XFER_INITIATE_free(version2_CMD_XFER_INITIATE* object);
 
 typedef struct {
     uint16_t size;
     uint8_t* data;
 
 } version2_CMD_XFER_DATA;
-WOWLOGINMESSAGES_EXPORT WowLoginResult version2_CMD_XFER_DATA_write(WowLoginWriter* writer, const version2_CMD_XFER_DATA* object);
-WOWLOGINMESSAGES_EXPORT void version2_CMD_XFER_DATA_free(version2_CMD_XFER_DATA* object);
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version2_CMD_XFER_DATA_write(WowLoginWriter* writer, const version2_CMD_XFER_DATA* object);
+WOWLOGINMESSAGESC_EXPORT void version2_CMD_XFER_DATA_free(version2_CMD_XFER_DATA* object);
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version2_CMD_XFER_ACCEPT_write(WowLoginWriter* writer);
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version2_CMD_XFER_ACCEPT_write(WowLoginWriter* writer);
 
 typedef struct {
     uint64_t offset;
 
 } version2_CMD_XFER_RESUME;
-WOWLOGINMESSAGES_EXPORT WowLoginResult version2_CMD_XFER_RESUME_write(WowLoginWriter* writer, const version2_CMD_XFER_RESUME* object);
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version2_CMD_XFER_RESUME_write(WowLoginWriter* writer, const version2_CMD_XFER_RESUME* object);
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version2_CMD_XFER_CANCEL_write(WowLoginWriter* writer);
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version2_CMD_XFER_CANCEL_write(WowLoginWriter* writer);
 
 typedef struct {
     WowLoginOpcode opcode;
@@ -190,9 +190,9 @@ typedef struct {
     } body;
 } Version2ClientOpcodeContainer;
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version2_client_opcode_read(WowLoginReader* reader, Version2ClientOpcodeContainer* opcodes);
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version2_client_opcode_read(WowLoginReader* reader, Version2ClientOpcodeContainer* opcodes);
 
-WOWLOGINMESSAGES_EXPORT void version2_client_opcode_free(Version2ClientOpcodeContainer* opcodes);
+WOWLOGINMESSAGESC_EXPORT void version2_client_opcode_free(Version2ClientOpcodeContainer* opcodes);
 
 typedef struct {
     WowLoginOpcode opcode;
@@ -208,9 +208,9 @@ typedef struct {
     } body;
 } Version2ServerOpcodeContainer;
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version2_server_opcode_read(WowLoginReader* reader, Version2ServerOpcodeContainer* opcodes);
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version2_server_opcode_read(WowLoginReader* reader, Version2ServerOpcodeContainer* opcodes);
 
-WOWLOGINMESSAGES_EXPORT void version2_server_opcode_free(Version2ServerOpcodeContainer* opcodes);
+WOWLOGINMESSAGESC_EXPORT void version2_server_opcode_free(Version2ServerOpcodeContainer* opcodes);
 
 #ifdef __cplusplus
 }

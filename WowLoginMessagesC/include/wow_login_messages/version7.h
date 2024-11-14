@@ -51,7 +51,7 @@ typedef version2_CMD_AUTH_RECONNECT_PROOF_Client version7_CMD_AUTH_RECONNECT_PRO
 
 typedef version5_CMD_AUTH_RECONNECT_PROOF_Server version7_CMD_AUTH_RECONNECT_PROOF_Server;
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version7_CMD_REALM_LIST_Client_write(WowLoginWriter* writer);
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version7_CMD_REALM_LIST_Client_write(WowLoginWriter* writer);
 
 typedef version6_CMD_REALM_LIST_Server version7_CMD_REALM_LIST_Server;
 
@@ -59,11 +59,11 @@ typedef version2_CMD_XFER_INITIATE version7_CMD_XFER_INITIATE;
 
 typedef version2_CMD_XFER_DATA version7_CMD_XFER_DATA;
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version7_CMD_XFER_ACCEPT_write(WowLoginWriter* writer);
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version7_CMD_XFER_ACCEPT_write(WowLoginWriter* writer);
 
 typedef version2_CMD_XFER_RESUME version7_CMD_XFER_RESUME;
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version7_CMD_XFER_CANCEL_write(WowLoginWriter* writer);
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version7_CMD_XFER_CANCEL_write(WowLoginWriter* writer);
 
 typedef struct {
     WowLoginOpcode opcode;
@@ -75,9 +75,9 @@ typedef struct {
     } body;
 } Version7ClientOpcodeContainer;
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version7_client_opcode_read(WowLoginReader* reader, Version7ClientOpcodeContainer* opcodes);
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version7_client_opcode_read(WowLoginReader* reader, Version7ClientOpcodeContainer* opcodes);
 
-WOWLOGINMESSAGES_EXPORT void version7_client_opcode_free(Version7ClientOpcodeContainer* opcodes);
+WOWLOGINMESSAGESC_EXPORT void version7_client_opcode_free(Version7ClientOpcodeContainer* opcodes);
 
 typedef struct {
     WowLoginOpcode opcode;
@@ -93,9 +93,9 @@ typedef struct {
     } body;
 } Version7ServerOpcodeContainer;
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version7_server_opcode_read(WowLoginReader* reader, Version7ServerOpcodeContainer* opcodes);
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version7_server_opcode_read(WowLoginReader* reader, Version7ServerOpcodeContainer* opcodes);
 
-WOWLOGINMESSAGES_EXPORT void version7_server_opcode_free(Version7ServerOpcodeContainer* opcodes);
+WOWLOGINMESSAGESC_EXPORT void version7_server_opcode_free(Version7ServerOpcodeContainer* opcodes);
 
 #ifdef __cplusplus
 }

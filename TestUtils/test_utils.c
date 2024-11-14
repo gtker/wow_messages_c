@@ -1,23 +1,29 @@
 #include "test_utils.h"
 
+#include <stdio.h>
+#include <stdlib.h>
 
 void wlm_test_compare_buffers(const unsigned char* buffer,
                               const unsigned char* write_buffer,
                               const size_t buffer_size,
                               const char* location)
 {
-    for (size_t i = 0; i < buffer_size; ++i)
+    size_t i;
+    for (i = 0; i < buffer_size; ++i)
     {
         if (buffer[i] != write_buffer[i])
         {
+            int line_number;
+            size_t j;
+
             printf("%s failed write:\n", location);
-            printf(__FILE__ ":" STRINGIFY(__LINE__) " Failed comparison at index %llu:\n", (long long unsigned int)i);
+            printf(__FILE__ ":" STRINGIFY(__LINE__) " Failed comparison at index %lu:\n", (long unsigned int)i);
             printf("    buffer:       '0x%02x'\n", buffer[i]);
             printf("    write_buffer: '0x%02x'\n", write_buffer[i]);
             puts("");
 
-            int line_number = 0;
-            for (size_t j = 0; j < buffer_size; ++j)
+            line_number = 0;
+            for (j = 0; j < buffer_size; ++j)
             {
                 if (j == i)
                 {
@@ -39,7 +45,7 @@ void wlm_test_compare_buffers(const unsigned char* buffer,
 
             printf("buffer:       ");
             line_number = sizeof("buffer:       ");
-            for (size_t j = i; j < buffer_size; ++j)
+            for (j = i; j < buffer_size; ++j)
             {
                 if (line_number >= 60)
                 {
@@ -54,7 +60,7 @@ void wlm_test_compare_buffers(const unsigned char* buffer,
 
             printf("write_buffer: ");
             line_number = sizeof("buffer:       ");
-            for (size_t j = i; j < buffer_size; ++j)
+            for (j = i; j < buffer_size; ++j)
             {
                 if (line_number >= 60)
                 {

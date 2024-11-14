@@ -50,25 +50,25 @@ typedef version2_CMD_AUTH_RECONNECT_PROOF_Client version6_CMD_AUTH_RECONNECT_PRO
 
 typedef version5_CMD_AUTH_RECONNECT_PROOF_Server version6_CMD_AUTH_RECONNECT_PROOF_Server;
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version6_CMD_REALM_LIST_Client_write(WowLoginWriter* writer);
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version6_CMD_REALM_LIST_Client_write(WowLoginWriter* writer);
 
 typedef struct {
     uint16_t number_of_realms;
     version5_Realm* realms;
 
 } version6_CMD_REALM_LIST_Server;
-WOWLOGINMESSAGES_EXPORT WowLoginResult version6_CMD_REALM_LIST_Server_write(WowLoginWriter* writer, const version6_CMD_REALM_LIST_Server* object);
-WOWLOGINMESSAGES_EXPORT void version6_CMD_REALM_LIST_Server_free(version6_CMD_REALM_LIST_Server* object);
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version6_CMD_REALM_LIST_Server_write(WowLoginWriter* writer, const version6_CMD_REALM_LIST_Server* object);
+WOWLOGINMESSAGESC_EXPORT void version6_CMD_REALM_LIST_Server_free(version6_CMD_REALM_LIST_Server* object);
 
 typedef version2_CMD_XFER_INITIATE version6_CMD_XFER_INITIATE;
 
 typedef version2_CMD_XFER_DATA version6_CMD_XFER_DATA;
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version6_CMD_XFER_ACCEPT_write(WowLoginWriter* writer);
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version6_CMD_XFER_ACCEPT_write(WowLoginWriter* writer);
 
 typedef version2_CMD_XFER_RESUME version6_CMD_XFER_RESUME;
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version6_CMD_XFER_CANCEL_write(WowLoginWriter* writer);
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version6_CMD_XFER_CANCEL_write(WowLoginWriter* writer);
 
 typedef struct {
     WowLoginOpcode opcode;
@@ -80,9 +80,9 @@ typedef struct {
     } body;
 } Version6ClientOpcodeContainer;
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version6_client_opcode_read(WowLoginReader* reader, Version6ClientOpcodeContainer* opcodes);
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version6_client_opcode_read(WowLoginReader* reader, Version6ClientOpcodeContainer* opcodes);
 
-WOWLOGINMESSAGES_EXPORT void version6_client_opcode_free(Version6ClientOpcodeContainer* opcodes);
+WOWLOGINMESSAGESC_EXPORT void version6_client_opcode_free(Version6ClientOpcodeContainer* opcodes);
 
 typedef struct {
     WowLoginOpcode opcode;
@@ -98,9 +98,9 @@ typedef struct {
     } body;
 } Version6ServerOpcodeContainer;
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version6_server_opcode_read(WowLoginReader* reader, Version6ServerOpcodeContainer* opcodes);
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version6_server_opcode_read(WowLoginReader* reader, Version6ServerOpcodeContainer* opcodes);
 
-WOWLOGINMESSAGES_EXPORT void version6_server_opcode_free(Version6ServerOpcodeContainer* opcodes);
+WOWLOGINMESSAGESC_EXPORT void version6_server_opcode_free(Version6ServerOpcodeContainer* opcodes);
 
 #ifdef __cplusplus
 }

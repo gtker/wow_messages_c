@@ -11,24 +11,39 @@ from writer import Writer
 
 def value_to_integer(val: str, integer_type: model.IntegerType) -> str:
     value = int(val)
-    if value > 2147483647:
+    if integer_type_to_size(integer_type) <= 4 and value > 2147483647:
         value = value.to_bytes(integer_type_to_size(integer_type), byteorder=sys.byteorder, signed=False)
-        return str(int.from_bytes(value, byteorder=sys.byteorder, signed=True))
+        value = str(int.from_bytes(value, byteorder=sys.byteorder, signed=True))
+        if value == "-2147483648":
+            return "-2147483647 - 1"  # Work around MSVC parsing it as unary negate operator, then as unsigned integer
+        else:
+            return value
+
     else:
         return val
 
 
 def print_enum(h: Writer, enum: Definer):
-    h.open_curly("typedef enum")
-
-    enum_name_upper = pascal_case_to_snake_case(enum.name).upper()
-
     first_version = first_version_as_module(enum.tags).upper()
-
-    for enumerator in enum.enumerators:
-        value = value_to_integer(enumerator.value.value, enum.integer_type)
-        h.wln(f"{first_version}_{enum_name_upper}_{enumerator.name.upper()} = {value},")
-
+    enum_name_upper = pascal_case_to_snake_case(enum.name).upper()
     first_module = first_version_as_module(enum.tags)
-    h.closing_curly(f" {first_module}_{enum.name};")
-    h.newline()
+
+    if integer_type_to_size(enum.integer_type) > 4:
+        h.wln("/* standard C only allows enums to be ints. We need larger than that */")
+        h.wln(f"typedef uint64_t {first_module}_{enum.name};")
+
+        for enumerator in enum.enumerators:
+            h.wln(f"#define {first_version}_{enum_name_upper}_{enumerator.name.upper()} {enumerator.value.value}")
+
+        h.newline()
+
+    else:
+        h.open_curly("typedef enum")
+
+        for i, enumerator in enumerate(enum.enumerators):
+            value = value_to_integer(enumerator.value.value, enum.integer_type)
+            comma = "," if i < (len(enum.enumerators) - 1) else ""
+            h.wln(f"{first_version}_{enum_name_upper}_{enumerator.name.upper()} = {value}{comma}")
+
+        h.closing_curly(f" {first_module}_{enum.name};")
+        h.newline()

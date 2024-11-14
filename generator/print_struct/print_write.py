@@ -4,15 +4,16 @@ from print_struct import container_has_c_members
 
 import model
 from model import Container
-from print_struct.struct_util import print_if_statement_header, print_optional_statement_header, \
+from print_struct.struct_util import print_if_statement_header, \
     integer_type_to_size, integer_type_to_short, integer_type_to_c_str
 from util import container_is_unencrypted, first_version_as_module, login_version_matches, is_world, get_type_prefix, \
     get_export_define
 from writer import Writer
 
 
-def print_write_struct_member(s: Writer, d: model.Definition, module_name: str, container_name: str):
-    variable_name = f"object->{d.name}"
+def print_write_struct_member(s: Writer, d: model.Definition, module_name: str, container_name: str,
+                              extra_indirection: str):
+    variable_name = f"object->{extra_indirection}{d.name}"
     match d.data_type:
         case model.DataTypeInteger(integer_type=integer_type):
             if d.constant_value is not None:
@@ -130,62 +131,61 @@ def print_write_struct_member(s: Writer, d: model.Definition, module_name: str, 
                 s.newline()
                 reader = f"{d.name}_reader"
 
+            fixed_prefix = "(*" if type(size) is model.ArraySizeFixed else ""
+            fixed_suffix = ")" if type(size) is model.ArraySizeFixed else ""
+
+            inner = ""
+            match inner_type:
+                case model.ArrayTypeInteger(integer_type=integer_type):
+                    short = integer_type_to_short(integer_type).upper()
+                    inner = f"WRITE_{short}({fixed_prefix}{variable_name}{fixed_suffix}[i])"
+
+                case model.ArrayTypeSpell():
+                    inner = f"WRITE_U32({fixed_prefix}{variable_name}{fixed_suffix}[i])"
+
+                case model.ArrayTypeGUID():
+                    inner = f"WRITE_U64({fixed_prefix}{variable_name}{fixed_suffix}[i])"
+
+                case model.ArrayTypeStruct(struct_data=e):
+                    version = first_version_as_module(e.tags)
+                    wlm_prefix = "WWM" if is_world(e.tags) else "WLM"
+                    inner = f"{wlm_prefix}_CHECK_RETURN_CODE({version}_{e.name}_write(writer, &{fixed_prefix}{variable_name}{fixed_suffix}[i]))"
+
+                case model.ArrayTypeCstring():
+                    inner = f"WRITE_STRING({fixed_prefix}{variable_name}{fixed_suffix}[i])"
+
+                case model.ArrayTypePackedGUID():
+                    inner = f"WWM_CHECK_RETURN_CODE(wwm_write_packed_guid(writer, {fixed_prefix}{variable_name}{fixed_suffix}[i]))"
+
+                case v2:
+                    raise Exception(f"{v2}")
+
             match size:
                 case model.ArraySizeFixed(size=size):
-                    s.w(f"WRITE_ARRAY({variable_name}, {size}, ")
+                    s.wln(f"WRITE_ARRAY({variable_name}, {size}, {inner});")
                 case model.ArraySizeVariable(size=size):
-                    s.w(f"WRITE_ARRAY({variable_name}, object->{size}, ")
+                    s.wln(f"WRITE_ARRAY({variable_name}, object->{extra_indirection}{size}, {inner});")
                 case model.ArraySizeEndless():
-                    if container_is_compressed:
-                        s.open(f"while not reader.at_eof():")
-                    elif not compressed:
-                        s.open("while _size < body_size:")
+                    if not compressed:
+                        s.wln(f"WRITE_ARRAY({variable_name}, object->{extra_indirection}amount_of_{d.name}, {inner});")
                     else:
                         s.open(f"while not {d.name}_reader.at_eof():")
                 case v:
                     raise Exception(f"{v}")
 
-            match inner_type:
-                case model.ArrayTypeInteger(integer_type=integer_type):
-                    short = integer_type_to_short(integer_type).upper()
-                    s.w_no_indent(f"WRITE_{short}({variable_name}[i])")
-
-                case model.ArrayTypeSpell():
-                    s.w_no_indent(f"WRITE_U32({variable_name}[i])")
-
-                case model.ArrayTypeGUID():
-                    s.w_no_indent(f"WRITE_U64({variable_name}[i])")
-
-                case model.ArrayTypeStruct(struct_data=e):
-                    version = first_version_as_module(e.tags)
-                    wlm_prefix = "WWM" if is_world(e.tags) else "WLM"
-                    s.w_no_indent(
-                        f"{wlm_prefix}_CHECK_RETURN_CODE({version}_{e.name}_write(writer, &{variable_name}[i]))")
-
-                case model.ArrayTypeCstring():
-                    s.w_no_indent(f"WRITE_STRING({variable_name}[i])")
-
-                case model.ArrayTypePackedGUID():
-                    s.w_no_indent(
-                        f"WWM_CHECK_RETURN_CODE(wwm_write_packed_guid(writer, {variable_name}[i]))"
-                    )
-
-                case v2:
-                    raise Exception(f"{v2}")
-
-            s.wln_no_indent(");")
-
     s.newline()
 
 
-def print_write(s: Writer, h: Writer, container: Container, object_type: model.ObjectType, module_name: str):
+def print_write(s: Writer, h: Writer, container: Container, object_type: model.ObjectType, module_name: str,
+                extra_indirection: str):
     result_type = get_type_prefix(container.tags)
     export = "static " if type(object_type) is model.ObjectTypeStruct else f"{get_export_define(container.tags)} "
     if is_world(container.tags) and module_name == "all":
         export = ""
-    function_declaration = f"{export}{result_type}Result {module_name}_{container.name}_write({result_type}Writer* writer, const {first_version_as_module(container.tags)}_{container.name}* object)"
+    function_suffix = f"_{object_type.container_type_tag.lower()}" if object_type != container.object_type else ""
+    function_declaration = f"{export}{result_type}Result {module_name}_{container.name}{function_suffix}_write({result_type}Writer* writer, const {first_version_as_module(container.tags)}_{container.name}* object)"
     if not container_has_c_members(container):
-        function_declaration = f"{export}{result_type}Result {module_name}_{container.name}_write({result_type}Writer* writer)"
+        function_declaration = f"{export}{result_type}Result {module_name}_{container.name}{function_suffix}_write({result_type}Writer* writer)"
 
     s.open_curly(function_declaration)
     match object_type:
@@ -227,15 +227,15 @@ def print_write(s: Writer, h: Writer, container: Container, object_type: model.O
             s.newline()
 
     for m in container.members:
-        print_write_member(s, m, prefix, module_name, container.name)
+        print_write_member(s, m, prefix, module_name, container.name, extra_indirection)
 
     if container.optional is not None:
-        print_optional_statement_header(s, container.optional)
+        s.open_curly(f"if(object->{extra_indirection}{container.optional.name} != NULL)")
 
         for m in container.optional.members:
-            print_write_member(s, m, prefix, module_name, container.name)
+            print_write_member(s, m, prefix, module_name, container.name, f"{container.optional.name}->")
 
-        s.close()
+        s.closing_curly()  # optional_statement_header
 
     s.newline()
     if is_world(container.tags):
@@ -247,13 +247,14 @@ def print_write(s: Writer, h: Writer, container: Container, object_type: model.O
     s.newline()
 
 
-def print_write_member(s: Writer, m: model.StructMember, prefix: str, module_name: str, container_name: str):
+def print_write_member(s: Writer, m: model.StructMember, prefix: str, module_name: str, container_name: str,
+                       extra_indirection: str):
     match m:
         case model.StructMemberDefinition(_tag, definition):
-            print_write_struct_member(s, definition, module_name, container_name)
+            print_write_struct_member(s, definition, module_name, container_name, extra_indirection)
 
         case model.StructMemberIfStatement(_tag, statement):
-            print_write_if_statement(s, statement, False, prefix, module_name, container_name)
+            print_write_if_statement(s, statement, False, prefix, module_name, container_name, extra_indirection)
 
         case _:
             raise Exception("invalid struct member")
@@ -262,7 +263,7 @@ def print_write_member(s: Writer, m: model.StructMember, prefix: str, module_nam
 def print_write_if_statement(s: Writer,
                              statement: model.IfStatement,
                              is_else_if: bool,
-                             prefix: str, module_name: str, container_name: str):
+                             prefix: str, module_name: str, container_name: str, extra_indirection: str):
     extra_elseif = ""
     if is_else_if:
         extra_elseif = "else "
@@ -270,9 +271,9 @@ def print_write_if_statement(s: Writer,
     print_if_statement_header(s, statement, extra_elseif, "self.", module_name)
 
     for m in statement.members:
-        print_write_member(s, m, prefix, module_name, container_name)
+        print_write_member(s, m, prefix, module_name, container_name, extra_indirection)
 
     s.closing_curly()  # if
 
     for elseif in statement.else_if_statements:
-        print_write_if_statement(s, elseif, True, prefix, module_name, container_name)
+        print_write_if_statement(s, elseif, True, prefix, module_name, container_name, extra_indirection)

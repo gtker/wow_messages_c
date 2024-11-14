@@ -4,6 +4,7 @@ import os.path
 import pstats
 import typing
 
+import struct_util
 from struct_util import container_should_have_size_function, integer_type_to_size, container_should_print
 
 import model
@@ -16,7 +17,8 @@ from print_cache_mask import print_cache_mask
 from print_enum import print_enum
 from print_named_guid import print_named_guid
 from print_struct import print_struct, container_has_c_members
-from print_struct.print_tests import print_login_tests, print_world_tests
+from print_struct.print_tests import print_login_tests, print_world_tests, print_login_test_prefix, \
+    print_login_test_suffix
 from print_struct.struct_util import all_members_from_container
 from print_update_mask import print_update_mask
 from print_variable_item_random_property import print_variable_item_random_property
@@ -33,10 +35,10 @@ from util import (
 from writer import Writer
 
 THIS_FILE_PATH = os.path.dirname(os.path.realpath(__file__))
-LOGIN_PROJECT_DIR = f"{THIS_FILE_PATH}/../WowLoginMessages"
+LOGIN_PROJECT_DIR = f"{THIS_FILE_PATH}/../WowLoginMessagesC"
 LOGIN_SOURCE_DIR = f"{LOGIN_PROJECT_DIR}/src"
 LOGIN_HEADER_DIR = f"{LOGIN_PROJECT_DIR}/include/wow_login_messages"
-WORLD_PROJECT_DIR = f"{THIS_FILE_PATH}/../WowWorldMessages"
+WORLD_PROJECT_DIR = f"{THIS_FILE_PATH}/../WowWorldMessagesC"
 WORLD_SOURCE_DIR = f"{WORLD_PROJECT_DIR}/src"
 WORLD_HEADER_DIR = f"{WORLD_PROJECT_DIR}/include/wow_world_messages"
 
@@ -50,13 +52,21 @@ def main():
     m = model.IntermediateRepresentationSchema.from_json_data(data)
     m = sanitize_model(m)
 
+    tests = Writer()
+    print_login_test_prefix(tests, m)
+
     s = Writer()
-    print_login(m.login, s, 0)
+    print_login(m.login, s, tests, 0)
     for i, v in enumerate(m.distinct_login_versions_other_than_all):
-        print_login(m.login, s, v)
+        print_login(m.login, s, tests, v)
 
     file_path = f"{LOGIN_SOURCE_DIR}/login.c"
     write_file_if_not_same(s, file_path)
+
+    print_login_test_suffix(tests)
+
+    file_path = f"{LOGIN_SOURCE_DIR}/all.test.c"
+    write_file_if_not_same(tests, file_path)
 
     print_world(m.world, m.vanilla_update_mask, model.WorldVersion(major=0, minor=0, build=0, patch=0))
     for v in VERSIONS:
@@ -119,6 +129,10 @@ def print_includes(s: Writer, h: Writer, world: typing.Optional[model.WorldVersi
     s.wln(f"#include \"{include_dir}/{version_name}.h\"")
     s.newline()
 
+    if world is not None and version_name != "all":
+        s.wln("#include <string.h> /* memset */")
+        s.newline()
+
 
 def print_footer(h: Writer, world: typing.Optional[model.WorldVersion], version_name: str):
     include_dir = "wow_login_messages"
@@ -164,12 +178,6 @@ def print_world(m: model.Objects, update_mask: list[model.UpdateMask], v: model.
                 s.newline()
 
     for d in filter(should_print, m.enums):
-        if integer_type_to_size(d.integer_type) > 4:
-            print(f"Skipping {d.name} enum because integer size is too big")
-            h.wln(f"/* {d.name} SKIPPED BECAUSE OF INTEGER SIZE */")
-            h.newline()
-            continue
-
         print_enum(h, d)
 
     for d in filter(should_print, m.flags):
@@ -201,8 +209,12 @@ def print_world(m: model.Objects, update_mask: list[model.UpdateMask], v: model.
         file_path = f"{WORLD_SOURCE_DIR}/{module_name}.test.c"
         write_file_if_not_same(tests, file_path)
 
+    print()
+    for reason, amount in struct_util.SKIPS.items():
+        print(f"{reason}: {amount}")
 
-def print_login(m: model.Objects, s: Writer, v: int):
+
+def print_login(m: model.Objects, s: Writer, tests: Writer, v: int):
     def should_print(container_or_definer: typing.Union[model.Definer | model.Container]):
         return version_matches(container_or_definer.tags, v)
 
@@ -277,11 +289,7 @@ def print_login(m: model.Objects, s: Writer, v: int):
     file_path = f"{LOGIN_HEADER_DIR}/{module_name}.h"
     write_file_if_not_same(h, file_path)
 
-    tests = Writer()
     print_login_tests(tests, m, v)
-
-    file_path = f"{LOGIN_SOURCE_DIR}/{module_name}.test.c"
-    write_file_if_not_same(tests, file_path)
 
 
 if __name__ == "__main__":

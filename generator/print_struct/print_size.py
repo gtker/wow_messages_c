@@ -4,7 +4,7 @@ import model
 from print_struct.print_write import print_write_member
 from print_struct.struct_util import (
     integer_type_to_size,
-    print_if_statement_header, container_should_have_size_function, print_optional_statement_header, )
+    print_if_statement_header, container_should_have_size_function, container_contains_array, )
 
 from util import first_version_as_module
 from writer import Writer
@@ -21,15 +21,15 @@ def print_size(s: Writer, container: model.Container, module_name: str):
         print_size_for_compressed_container(s, container)
     else:
         print_size_until_inner_members(s, container.members, container.manual_size_subtraction,
-                                       True, container.optional is not None, module_name)
+                                       True, container.optional is not None, module_name, "")
         if container.optional is not None:
-            print_optional_statement_header(s, container.optional)
+            s.open_curly(f"if(object->{container.optional.name} != NULL)")
             print_size_until_inner_members(s, container.optional.members, container.manual_size_subtraction, False,
-                                           False, module_name)
-            s.close()
+                                           False, module_name, f"{container.optional.name}->")
+            s.closing_curly()  # optional_statement_header
             s.newline()
 
-            s.wln("return _size")
+            s.wln("return _size;")
 
     s.closing_curly()
     s.newline()
@@ -37,8 +37,8 @@ def print_size(s: Writer, container: model.Container, module_name: str):
 
 def print_size_until_inner_members(s: Writer, members: list[model.StructMember],
                                    manual_size_subtraction: typing.Optional[int], return_early: bool,
-                                   has_optional: bool, module_name: str):
-    count, strings, uncounted_members = get_size_and_remaining_members(members, module_name)
+                                   has_optional: bool, module_name: str, extra_indirection: str):
+    count, strings, uncounted_members = get_size_and_remaining_members(members, module_name, extra_indirection)
 
     if manual_size_subtraction is not None:
         count -= manual_size_subtraction
@@ -59,7 +59,7 @@ def print_size_until_inner_members(s: Writer, members: list[model.StructMember],
             s.newline()
 
         for m in uncounted_members:
-            print_size_inner(s, m, module_name)
+            print_size_inner(s, m, module_name, extra_indirection)
 
         if return_early and not has_optional:
             s.wln(f"return _size;")
@@ -77,8 +77,8 @@ def print_size_for_compressed_container(s, container):
 
 
 def array_size_inner_values(
-        array: model.DataTypeArray, name: str, extra_self: str
-) -> typing.Union[str, int]:
+        array: model.DataTypeArray, name: str, extra_indirection: str,
+) -> typing.Union[str, int, None]:
     size = 0
     match array.inner_type:
         case model.ArrayTypeGUID():
@@ -103,46 +103,47 @@ def array_size_inner_values(
         case model.ArraySizeFixed(size=array_size):
             return size * int(array_size)
         case model.ArraySizeVariable(size=array_size):
-            return f"{size} * object->{array_size}"
+            return f"{size} * object->{extra_indirection}{array_size}"
         case model.ArraySizeEndless():
-            return "ARRAYSIZEENDLESS"
+            return None
 
         case v2:
             raise Exception(f"{v2}")
 
 
 def addable_size_value(
-        data_type: model.DataType, extra_self: str, name: str, module_name: str
+        data_type: model.DataType, extra_self: str, name: str, module_name: str, extra_indirection: str
 ) -> typing.Optional[typing.Tuple[int, typing.Optional[str]]]:
+    variable_name = f"object->{extra_indirection}{name}"
     match data_type:
         case model.DataTypeStruct(struct_data=e):
             if not e.sizes.constant_sized:
-                return 0, f"{module_name}_{e.name}_size(&object->{name})"
+                return 0, f"{module_name}_{e.name}_size(&{variable_name})"
             else:
                 return e.sizes.maximum_size, None
         case model.DataTypeString() | model.DataTypeCstring():
-            return 1, f"STRING_SIZE(object->{name})"
+            return 1, f"STRING_SIZE({variable_name})"
         case model.DataTypeSizedCstring():
-            return 4, f"STRING_SIZE(object->{name})"
+            return 4, f"STRING_SIZE({variable_name})"
         case model.DataTypePackedGUID():
-            return 0, f"wwm_packed_guid_size(object->{name})"
+            return 0, f"wwm_packed_guid_size({variable_name})"
         case model.DataTypeAchievementDoneArray() | model.DataTypeAchievementInProgressArray() \
              | model.DataTypeAddonArray() | model.DataTypeCacheMask() \
              | model.DataTypeVariableItemRandomProperty() \
              | model.DataTypeInspectTalentGearMask() \
              | model.DataTypeNamedGUID() \
              | model.DataTypeEnchantMask():
-            return 0, f"{extra_self}{name}.size()"
+            return 0, f"{extra_indirection}{name}.size()"
         case model.DataTypeUpdateMask():
-            return 0, f"{module_name}_update_mask_size(&object->{name})"
+            return 0, f"{module_name}_update_mask_size(&{variable_name})"
         case model.DataTypeMonsterMoveSpline():
-            return 0, f"wwm_monster_move_spline_size(&object->{name})"
+            return 0, f"wwm_monster_move_spline_size(&{variable_name})"
         case model.DataTypeAuraMask():
-            return 0, f"{module_name}_aura_mask_size(&object->{name})"
+            return 0, f"{module_name}_aura_mask_size(&{variable_name})"
         case model.DataTypeArray(compressed=compressed):
             if compressed:
                 return None
-            size = array_size_inner_values(data_type, name, extra_self)
+            size = array_size_inner_values(data_type, name, extra_indirection)
             if isinstance(size, str):
                 return 0, size
             elif isinstance(size, int):
@@ -181,8 +182,9 @@ def addable_size_value(
     return None
 
 
-def get_size_and_remaining_members(members: list[model.StructMember], module_name: str) -> typing.Tuple[
-    int, list[str], list[model.StructMember]]:
+def get_size_and_remaining_members(members: list[model.StructMember], module_name: str, extra_indirection: str) -> \
+        typing.Tuple[
+            int, list[str], list[model.StructMember]]:
     count = 0
     strings = []
     uncounted_members: typing.List[model.StructMember] = []
@@ -190,7 +192,7 @@ def get_size_and_remaining_members(members: list[model.StructMember], module_nam
     for m in members:
         match m:
             case model.StructMemberDefinition(struct_member_content=d):
-                addable = addable_size_value(d.data_type, "self.", d.name, module_name)
+                addable = addable_size_value(d.data_type, "self.", d.name, module_name, extra_indirection)
                 if addable is not None:
                     addable_count, addable_string = addable
                     count += addable_count
@@ -206,7 +208,7 @@ def get_size_and_remaining_members(members: list[model.StructMember], module_nam
     return count, strings, uncounted_members
 
 
-def print_size_inner(s: Writer, m: model.StructMember, module_name: str):
+def print_size_inner(s: Writer, m: model.StructMember, module_name: str, extra_indirection: str):
     extra_self = "self."
 
     match m:
@@ -232,35 +234,53 @@ def print_size_inner(s: Writer, m: model.StructMember, module_name: str):
 
                     else:
                         loop_max = ""
+                        variable_name = f"object{extra_indirection}->{d.name}"
+
+                        fixed_prefix = "(*" if type(size) is model.ArraySizeFixed else ""
+                        fixed_suffix = ")" if type(size) is model.ArraySizeFixed else ""
+
                         match size:
                             case model.ArraySizeFixed(size=size):
                                 loop_max = size
                             case model.ArraySizeVariable(size=size):
-                                loop_max = f"(int)object->{size}"
+                                loop_max = f"(int)object->{extra_indirection}{size}"
                             case model.ArraySizeEndless():
-                                raise Exception("uncompressed array?")
-                        s.open_curly(f"for(int i = 0; i < {loop_max}; ++i)")
+                                loop_max = f"(int)object->amount_of_{d.name}"
+                        s.open_curly("/* C89 scope to allow variable declarations */")
+                        s.wln("int i;")
+                        s.open_curly(f"for(i = 0; i < {loop_max}; ++i)")
 
                         match inner_type:
+                            case model.ArrayTypeInteger(integer_type=integer_type):
+                                s.wln(f"_size += {integer_type_to_size(integer_type)};")
+
+                            case model.ArrayTypeSpell():
+                                s.wln(f"_size += 4;")
+
                             case model.ArrayTypeStruct(struct_data=e):
                                 version = first_version_as_module(e.tags)
-                                s.wln(f"_size += {version}_{e.name}_size(&object->{d.name}[i]);")
+                                size = f"{version}_{e.name}_size(&{fixed_prefix}{variable_name}[i]{fixed_suffix})" if not e.sizes.constant_sized else str(
+                                    e.sizes.maximum_size)
+                                s.wln(
+                                    f"_size += {size};")
 
                             case model.ArrayTypeCstring():
-                                s.wln(f"_size += STRING_SIZE(object->{d.name}[i]);")
+                                s.wln(f"_size += STRING_SIZE({fixed_prefix}{variable_name}[i]{fixed_suffix});")
 
                             case model.ArrayTypePackedGUID():
-                                s.wln(f"_size += wwm_packed_guid_size(object->{d.name}[i]);")
+                                s.wln(
+                                    f"_size += wwm_packed_guid_size({fixed_prefix}{variable_name}[i]{fixed_suffix});")
 
                             case _:
                                 raise Exception(f"array size unknown type {inner_type}")
 
                         s.closing_curly()
+                        s.closing_curly()  # array scope
                 case v:
                     raise Exception(f"{v}")
 
         case model.StructMemberIfStatement(struct_member_content=statement):
-            print_size_if_statement(s, statement, False, module_name)
+            print_size_if_statement(s, statement, False, module_name, extra_indirection)
 
         case v:
             raise Exception(f"{v}")
@@ -268,7 +288,8 @@ def print_size_inner(s: Writer, m: model.StructMember, module_name: str):
     s.newline()
 
 
-def print_size_if_statement(s: Writer, statement: model.IfStatement, is_else_if: bool, module_name: str):
+def print_size_if_statement(s: Writer, statement: model.IfStatement, is_else_if: bool, module_name: str,
+                            extra_indirection: str):
     extra_elseif = ""
     if is_else_if:
         extra_elseif = "else "
@@ -277,9 +298,9 @@ def print_size_if_statement(s: Writer, statement: model.IfStatement, is_else_if:
 
     print_if_statement_header(s, statement, extra_elseif, extra_self, module_name)
 
-    print_size_until_inner_members(s, statement.members, None, False, False, module_name)
+    print_size_until_inner_members(s, statement.members, None, False, False, module_name, extra_indirection)
 
     s.closing_curly()  # if
 
     for elseif in statement.else_if_statements:
-        print_size_if_statement(s, elseif, True, module_name)
+        print_size_if_statement(s, elseif, True, module_name, extra_indirection)

@@ -17,7 +17,9 @@ typedef struct {
         source = """
 static size_t vanilla_aura_mask_size(const vanilla_AuraMask* object) {
     size_t size = 4; /* uint32_t header */
-    for(int i = 0; i < 32; ++i) {
+    int i;
+    
+    for(i = 0; i < 32; ++i) {
         if(object->auras[i] != 0) {
             size += 2; /* uint16_t members */
         }
@@ -28,9 +30,10 @@ static size_t vanilla_aura_mask_size(const vanilla_AuraMask* object) {
 
 static WowWorldResult vanilla_aura_mask_read(WowWorldReader* reader, vanilla_AuraMask* mask) {
     uint32_t header;
+    int i;
     WWM_CHECK_RETURN_CODE(wwm_read_uint32(reader, &header));
     
-    for(int i = 0; i < VANILLA_AURA_MASK_SIZE; ++i) {
+    for(i = 0; i < VANILLA_AURA_MASK_SIZE; ++i) {
         mask->auras[i] = 0; /* initialize to 0 */
         
         if ((header & (1 << i)) != 0) {
@@ -43,8 +46,9 @@ static WowWorldResult vanilla_aura_mask_read(WowWorldReader* reader, vanilla_Aur
 
 static WowWorldResult vanilla_aura_mask_write(WowWorldWriter* writer, const vanilla_AuraMask* mask) {
     uint32_t header = 0;
+    int i;
     
-    for(int i = 0; i < VANILLA_AURA_MASK_SIZE; ++i) {
+    for(i = 0; i < VANILLA_AURA_MASK_SIZE; ++i) {
         if (mask->auras[i] != 0) {
             header |= 1 << i;
         }
@@ -52,7 +56,7 @@ static WowWorldResult vanilla_aura_mask_write(WowWorldWriter* writer, const vani
     
     WWM_CHECK_RETURN_CODE(wwm_write_uint32(writer, header));
     
-    for(int i = 0; i < VANILLA_AURA_MASK_SIZE; ++i) {
+    for(i = 0; i < VANILLA_AURA_MASK_SIZE; ++i) {
         if (mask->auras[i] != 0) {
             WWM_CHECK_RETURN_CODE(wwm_write_uint16(writer, mask->auras[i]));
         }

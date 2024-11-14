@@ -24,7 +24,7 @@ WowWorldResult wwm_read_uint16_be(WowWorldReader* stream, uint16_t* value)
 {
     const size_t index = WWM_CHECK_LENGTH(2);
 
-    *value = (uint16_t)stream->source[index + 1] | (uint16_t)stream->source[index] << 8;
+    *value = (uint16_t)stream->source[index] << 8 | (uint16_t)stream->source[index + 1];
 
     return WWM_RESULT_SUCCESS;
 }
@@ -84,8 +84,8 @@ WowWorldResult wwm_write_uint16_be(WowWorldWriter* stream, const uint16_t value)
 {
     const size_t index = WWM_CHECK_LENGTH(2);
 
-    stream->destination[index + 1] = (char)value;
-    stream->destination[index] = (char)(value >> 8);
+    stream->destination[index] = (unsigned char)(value >> 8);
+    stream->destination[index + 1] = (unsigned char)value;
 
     return WWM_RESULT_SUCCESS;
 }
@@ -186,9 +186,11 @@ WowWorldResult wwm_write_cstring(WowWorldWriter* stream, const WowWorldString* s
 
 WowWorldResult wwm_read_sized_cstring(WowWorldReader* stream, WowWorldString* string)
 {
+    size_t index;
+
     WWM_CHECK_RETURN_CODE(wwm_read_uint32(stream, &string->length));
 
-    const size_t index = WWM_CHECK_LENGTH(string->length);
+    index = WWM_CHECK_LENGTH(string->length);
 
     string->string = malloc(string->length + 1);
     memcpy(string->string, &stream->source[index], string->length);
@@ -199,9 +201,10 @@ WowWorldResult wwm_read_sized_cstring(WowWorldReader* stream, WowWorldString* st
 
 WowWorldResult wwm_write_sized_cstring(WowWorldWriter* stream, const WowWorldString* string)
 {
+    size_t index;
     WWM_CHECK_RETURN_CODE(wwm_write_uint32(stream, string->length));
 
-    const size_t index = WWM_CHECK_LENGTH(string->length + 1);
+    index = WWM_CHECK_LENGTH(string->length + 1);
 
     memcpy(&stream->destination[index], string->string, string->length + 1);
 
@@ -295,9 +298,10 @@ size_t wwm_packed_guid_size(const uint64_t value)
 WowWorldResult wwm_read_packed_guid(WowWorldReader* stream, uint64_t* value)
 {
     int i;
+    uint8_t header;
     size_t index = WWM_CHECK_LENGTH(1);
 
-    const uint8_t header = stream->source[index];
+    header = stream->source[index];
     *value = 0;
 
     for (i = 0; i < 8; ++i)
@@ -306,8 +310,7 @@ WowWorldResult wwm_read_packed_guid(WowWorldReader* stream, uint64_t* value)
         if (byte_has_value)
         {
             index = WWM_CHECK_LENGTH(1);
-            const uint8_t v = stream->source[index];
-            *value = v << i * 8;
+            *value = stream->source[index] << i * 8;
         }
     }
 
@@ -317,10 +320,10 @@ WowWorldResult wwm_read_packed_guid(WowWorldReader* stream, uint64_t* value)
 WowWorldResult wwm_write_packed_guid(WowWorldWriter* stream, uint64_t value)
 {
     int i;
-    const size_t index = WWM_CHECK_LENGTH(1);
     uint8_t output[8];
     int output_index = 0;
     uint8_t header = 0;
+    const size_t index = WWM_CHECK_LENGTH(1);
 
     for (i = 0; i < 8; ++i)
     {
@@ -378,9 +381,9 @@ WowWorldResult wwm_read_monster_move_spline(WowWorldReader* stream, MonsterMoveS
 
     WWM_CHECK_RETURN_CODE(all_Vector3d_read(stream, &value->splines[0]));
 
-    uint32_t packed;
     for (i = 1; i < value->amount_of_splines; ++i)
     {
+        uint32_t packed;
         WWM_CHECK_RETURN_CODE(wwm_read_uint32(stream, &packed));
         from_packed(packed, &value->splines[i]);
     }
@@ -427,17 +430,25 @@ void wwm_monster_move_spline_free(const MonsterMoveSpline* value)
     free(value->splines);
 }
 
-WOWWORLDMESSAGES_EXPORT WowWorldReader wwm_create_reader(const unsigned char* const source, const size_t length)
+WOWWORLDMESSAGESC_EXPORT WowWorldReader wwm_create_reader(const unsigned char* const source, const size_t length)
 {
-    return (WowWorldReader){source, length, 0};
+    WowWorldReader reader;
+    reader.source = source;
+    reader.length = length;
+    reader.index = 0;
+    return reader;
 }
 
-WOWWORLDMESSAGES_EXPORT WowWorldWriter wwm_create_writer(unsigned char* const destination, const size_t length)
+WOWWORLDMESSAGESC_EXPORT WowWorldWriter wwm_create_writer(unsigned char* const destination, const size_t length)
 {
-    return (WowWorldWriter){destination, length, 0};
+    WowWorldWriter writer;
+    writer.destination = destination;
+    writer.length = length;
+    writer.index = 0;
+    return writer;
 }
 
-WOWWORLDMESSAGES_EXPORT const char* wwm_error_code_to_string(const WowWorldResult result)
+WOWWORLDMESSAGESC_EXPORT const char* wwm_error_code_to_string(const WowWorldResult result)
 {
     switch (result)
     {

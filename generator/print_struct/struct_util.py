@@ -5,22 +5,29 @@ from util import pascal_case_to_snake_case, first_version_as_module, world_versi
     version_to_module_name
 from writer import Writer
 
+SKIPS = {}
+
 
 def print_skip(container: model.Container, reason: str):
+    if reason in SKIPS:
+        SKIPS[reason] += 1
+    else:
+        SKIPS[reason] = 1
     print(f"Skipping {container.name} because it {reason}")
 
 
+def container_contains_array(e: model.Container) -> bool:
+    for m in all_members_from_container(e):
+        match m.data_type:
+            case model.DataTypeArray():
+                return True
+
+    return False
+
+
 def container_should_print(container: model.Container) -> bool:
-    match container.object_type:
-        case model.ObjectTypeMsg():
-            print_skip(container, "is MSG")
-            return False
-
-    if container.optional is not None:
-        print_skip(container, "has optional")
-        return False
-
     if container.tags.compressed is not None:
+        print_skip(container, "is compressed")
         return False
 
     for member in all_members_from_container(container):
@@ -29,11 +36,6 @@ def container_should_print(container: model.Container) -> bool:
                 if compressed:
                     print_skip(container, "has compressed array")
                     return False
-
-                match size:
-                    case model.ArraySizeEndless():
-                        print_skip(container, "has endless array")
-                        return False
 
                 match inner_type:
                     case model.ArrayTypeStruct(struct_data=e):
@@ -176,7 +178,11 @@ def type_to_c_str(ty: model.DataType, module_name: str) -> str:
         case model.DataTypeFlag(type_name=type_name):
             return f"{module_name}_{type_name}"
 
-        case model.DataTypeArray(inner_type=inner_type):
+        case model.DataTypeArray(size=size, inner_type=inner_type):
+            match size:
+                case model.ArraySizeFixed():
+                    return f"{array_type_to_c_str(inner_type)}"
+
             return f"{array_type_to_c_str(inner_type)}*"
 
         case model.DataTypeLevel():
@@ -277,31 +283,6 @@ def all_members_from_container(
             inner(m, out_members)
 
     return out_members
-
-
-def print_optional_statement_header(s: Writer, optional: model.OptionalMembers):
-    s.wln(f"# {optional.name}: optional")
-    s.w("if")
-    i = 0
-
-    extra_self = "self."
-
-    for m in optional.members:
-        match m:
-            case model.StructMemberDefinition(struct_member_content=d):
-                if d.constant_value is not None \
-                        or d.size_of_fields_before_size is not None:
-                    continue
-
-                if i != 0:
-                    s.w_no_indent(" and")
-
-                s.w_no_indent(f" {extra_self}{d.name} is not None")
-
-        i += 1
-
-    s.wln_no_indent(":")
-    s.inc_indent()
 
 
 def print_if_statement_header(

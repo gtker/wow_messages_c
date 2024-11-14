@@ -35,11 +35,9 @@ static WowLoginResult all_CMD_AUTH_LOGON_CHALLENGE_Client_read(WowLoginReader* r
     object->protocol_version = 0;
     READ_U8(object->protocol_version);
 
-    uint16_t temp_size;
-    READ_U16(temp_size);
+    SKIP_FORWARD_BYTES(2);
 
-    uint32_t temp_game_name;
-    READ_U32(temp_game_name);
+    SKIP_FORWARD_BYTES(4);
 
     WLM_CHECK_RETURN_CODE(all_Version_read(reader, &object->version));
 
@@ -61,7 +59,7 @@ static WowLoginResult all_CMD_AUTH_LOGON_CHALLENGE_Client_read(WowLoginReader* r
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult all_CMD_AUTH_LOGON_CHALLENGE_Client_write(WowLoginWriter* writer, const all_CMD_AUTH_LOGON_CHALLENGE_Client* object) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult all_CMD_AUTH_LOGON_CHALLENGE_Client_write(WowLoginWriter* writer, const all_CMD_AUTH_LOGON_CHALLENGE_Client* object) {
     WRITE_U8(0x00); /* opcode */
 
     WRITE_U8(object->protocol_version);
@@ -88,7 +86,7 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult all_CMD_AUTH_LOGON_CHALLENGE_Client_write
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT void all_CMD_AUTH_LOGON_CHALLENGE_Client_free(all_CMD_AUTH_LOGON_CHALLENGE_Client* object) {
+WOWLOGINMESSAGESC_EXPORT void all_CMD_AUTH_LOGON_CHALLENGE_Client_free(all_CMD_AUTH_LOGON_CHALLENGE_Client* object) {
     FREE_STRING(object->account_name);
 
 }
@@ -101,11 +99,9 @@ static WowLoginResult all_CMD_AUTH_RECONNECT_CHALLENGE_Client_read(WowLoginReade
     object->protocol_version = 0;
     READ_U8(object->protocol_version);
 
-    uint16_t temp_size;
-    READ_U16(temp_size);
+    SKIP_FORWARD_BYTES(2);
 
-    uint32_t temp_game_name;
-    READ_U32(temp_game_name);
+    SKIP_FORWARD_BYTES(4);
 
     WLM_CHECK_RETURN_CODE(all_Version_read(reader, &object->version));
 
@@ -127,7 +123,7 @@ static WowLoginResult all_CMD_AUTH_RECONNECT_CHALLENGE_Client_read(WowLoginReade
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult all_CMD_AUTH_RECONNECT_CHALLENGE_Client_write(WowLoginWriter* writer, const all_CMD_AUTH_RECONNECT_CHALLENGE_Client* object) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult all_CMD_AUTH_RECONNECT_CHALLENGE_Client_write(WowLoginWriter* writer, const all_CMD_AUTH_RECONNECT_CHALLENGE_Client* object) {
     WRITE_U8(0x02); /* opcode */
 
     WRITE_U8(object->protocol_version);
@@ -154,12 +150,12 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult all_CMD_AUTH_RECONNECT_CHALLENGE_Client_w
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT void all_CMD_AUTH_RECONNECT_CHALLENGE_Client_free(all_CMD_AUTH_RECONNECT_CHALLENGE_Client* object) {
+WOWLOGINMESSAGESC_EXPORT void all_CMD_AUTH_RECONNECT_CHALLENGE_Client_free(all_CMD_AUTH_RECONNECT_CHALLENGE_Client* object) {
     FREE_STRING(object->account_name);
 
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult all_client_opcode_read(WowLoginReader* reader, AllClientOpcodeContainer* opcodes) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult all_client_opcode_read(WowLoginReader* reader, AllClientOpcodeContainer* opcodes) {
     opcodes->opcode = 0;
     READ_U8(opcodes->opcode);
 
@@ -177,7 +173,7 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult all_client_opcode_read(WowLoginReader* re
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT void all_client_opcode_free(AllClientOpcodeContainer* opcodes) {
+WOWLOGINMESSAGESC_EXPORT void all_client_opcode_free(AllClientOpcodeContainer* opcodes) {
     switch (opcodes->opcode) {
         case CMD_AUTH_LOGON_CHALLENGE:
             all_CMD_AUTH_LOGON_CHALLENGE_Client_free(&opcodes->body.CMD_AUTH_LOGON_CHALLENGE_Client);
@@ -240,7 +236,7 @@ static WowLoginResult version2_Realm_write(WowLoginWriter* writer, const version
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT void version2_Realm_free(version2_Realm* object) {
+WOWLOGINMESSAGESC_EXPORT void version2_Realm_free(version2_Realm* object) {
     FREE_STRING(object->name);
 
     FREE_STRING(object->address);
@@ -253,11 +249,9 @@ static WowLoginResult version2_TelemetryKey_read(WowLoginReader* reader, version
     READ_U32(object->unknown2);
 
     READ_ARRAY_ALLOCATE(object->unknown3, 4, sizeof(uint8_t));
-    READ_ARRAY(object->unknown3, 4, READ_U8(object->unknown3[i]));
-
+    READ_ARRAY(object->unknown3, 4, READ_U8((*object->unknown3)[i]));
     READ_ARRAY_ALLOCATE(object->cd_key_proof, 20, sizeof(uint8_t));
-    READ_ARRAY(object->cd_key_proof, 20, READ_U8(object->cd_key_proof[i]));
-
+    READ_ARRAY(object->cd_key_proof, 20, READ_U8((*object->cd_key_proof)[i]));
     return WLM_RESULT_SUCCESS;
 }
 
@@ -266,15 +260,15 @@ static WowLoginResult version2_TelemetryKey_write(WowLoginWriter* writer, const 
 
     WRITE_U32(object->unknown2);
 
-    WRITE_ARRAY(object->unknown3, 4, WRITE_U8(object->unknown3[i]));
+    WRITE_ARRAY(object->unknown3, 4, WRITE_U8((*object->unknown3)[i]));
 
-    WRITE_ARRAY(object->cd_key_proof, 20, WRITE_U8(object->cd_key_proof[i]));
+    WRITE_ARRAY(object->cd_key_proof, 20, WRITE_U8((*object->cd_key_proof)[i]));
 
 
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT void version2_TelemetryKey_free(version2_TelemetryKey* object) {
+WOWLOGINMESSAGESC_EXPORT void version2_TelemetryKey_free(version2_TelemetryKey* object) {
     free(object->unknown3);
     object->unknown3 = NULL;
     free(object->cd_key_proof);
@@ -282,37 +276,31 @@ WOWLOGINMESSAGES_EXPORT void version2_TelemetryKey_free(version2_TelemetryKey* o
 }
 
 static WowLoginResult version2_CMD_AUTH_LOGON_CHALLENGE_Server_read(WowLoginReader* reader, version2_CMD_AUTH_LOGON_CHALLENGE_Server* object) {
-    uint8_t temp_protocol_version;
-    READ_U8(temp_protocol_version);
+    SKIP_FORWARD_BYTES(1);
 
     object->result = 0;
     READ_U8(object->result);
 
     if (object->result == VERSION2_LOGIN_RESULT_SUCCESS) {
         READ_ARRAY_ALLOCATE(object->server_public_key, 32, sizeof(uint8_t));
-        READ_ARRAY(object->server_public_key, 32, READ_U8(object->server_public_key[i]));
-
+        READ_ARRAY(object->server_public_key, 32, READ_U8((*object->server_public_key)[i]));
         READ_U8(object->generator_length);
 
         READ_ARRAY_ALLOCATE(object->generator, object->generator_length, sizeof(uint8_t));
         READ_ARRAY(object->generator, object->generator_length, READ_U8(object->generator[i]));
-
         READ_U8(object->large_safe_prime_length);
 
         READ_ARRAY_ALLOCATE(object->large_safe_prime, object->large_safe_prime_length, sizeof(uint8_t));
         READ_ARRAY(object->large_safe_prime, object->large_safe_prime_length, READ_U8(object->large_safe_prime[i]));
-
         READ_ARRAY_ALLOCATE(object->salt, 32, sizeof(uint8_t));
-        READ_ARRAY(object->salt, 32, READ_U8(object->salt[i]));
-
+        READ_ARRAY(object->salt, 32, READ_U8((*object->salt)[i]));
         READ_ARRAY_ALLOCATE(object->crc_salt, 16, sizeof(uint8_t));
-        READ_ARRAY(object->crc_salt, 16, READ_U8(object->crc_salt[i]));
-
+        READ_ARRAY(object->crc_salt, 16, READ_U8((*object->crc_salt)[i]));
     }
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version2_CMD_AUTH_LOGON_CHALLENGE_Server_write(WowLoginWriter* writer, const version2_CMD_AUTH_LOGON_CHALLENGE_Server* object) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version2_CMD_AUTH_LOGON_CHALLENGE_Server_write(WowLoginWriter* writer, const version2_CMD_AUTH_LOGON_CHALLENGE_Server* object) {
     WRITE_U8(0x00); /* opcode */
 
     WRITE_U8(0);
@@ -320,7 +308,7 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version2_CMD_AUTH_LOGON_CHALLENGE_Server_
     WRITE_U8(object->result);
 
     if (object->result == VERSION2_LOGIN_RESULT_SUCCESS) {
-        WRITE_ARRAY(object->server_public_key, 32, WRITE_U8(object->server_public_key[i]));
+        WRITE_ARRAY(object->server_public_key, 32, WRITE_U8((*object->server_public_key)[i]));
 
         WRITE_U8(object->generator_length);
 
@@ -330,16 +318,16 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version2_CMD_AUTH_LOGON_CHALLENGE_Server_
 
         WRITE_ARRAY(object->large_safe_prime, object->large_safe_prime_length, WRITE_U8(object->large_safe_prime[i]));
 
-        WRITE_ARRAY(object->salt, 32, WRITE_U8(object->salt[i]));
+        WRITE_ARRAY(object->salt, 32, WRITE_U8((*object->salt)[i]));
 
-        WRITE_ARRAY(object->crc_salt, 16, WRITE_U8(object->crc_salt[i]));
+        WRITE_ARRAY(object->crc_salt, 16, WRITE_U8((*object->crc_salt)[i]));
 
     }
 
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT void version2_CMD_AUTH_LOGON_CHALLENGE_Server_free(version2_CMD_AUTH_LOGON_CHALLENGE_Server* object) {
+WOWLOGINMESSAGESC_EXPORT void version2_CMD_AUTH_LOGON_CHALLENGE_Server_free(version2_CMD_AUTH_LOGON_CHALLENGE_Server* object) {
     if (object->result == VERSION2_LOGIN_RESULT_SUCCESS) {
         free(object->server_public_key);
         object->server_public_key = NULL;
@@ -356,30 +344,26 @@ WOWLOGINMESSAGES_EXPORT void version2_CMD_AUTH_LOGON_CHALLENGE_Server_free(versi
 
 static WowLoginResult version2_CMD_AUTH_LOGON_PROOF_Client_read(WowLoginReader* reader, version2_CMD_AUTH_LOGON_PROOF_Client* object) {
     READ_ARRAY_ALLOCATE(object->client_public_key, 32, sizeof(uint8_t));
-    READ_ARRAY(object->client_public_key, 32, READ_U8(object->client_public_key[i]));
-
+    READ_ARRAY(object->client_public_key, 32, READ_U8((*object->client_public_key)[i]));
     READ_ARRAY_ALLOCATE(object->client_proof, 20, sizeof(uint8_t));
-    READ_ARRAY(object->client_proof, 20, READ_U8(object->client_proof[i]));
-
+    READ_ARRAY(object->client_proof, 20, READ_U8((*object->client_proof)[i]));
     READ_ARRAY_ALLOCATE(object->crc_hash, 20, sizeof(uint8_t));
-    READ_ARRAY(object->crc_hash, 20, READ_U8(object->crc_hash[i]));
-
+    READ_ARRAY(object->crc_hash, 20, READ_U8((*object->crc_hash)[i]));
     READ_U8(object->number_of_telemetry_keys);
 
     READ_ARRAY_ALLOCATE(object->telemetry_keys, object->number_of_telemetry_keys, sizeof(version2_TelemetryKey));
-    READ_ARRAY(object->telemetry_keys, object->number_of_telemetry_keys, WLM_CHECK_RETURN_CODE(version2_TelemetryKey_read(reader, &object->telemetry_keys[i])););
-
+    READ_ARRAY(object->telemetry_keys, object->number_of_telemetry_keys, WLM_CHECK_RETURN_CODE(version2_TelemetryKey_read(reader, &object->telemetry_keys[i])));
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version2_CMD_AUTH_LOGON_PROOF_Client_write(WowLoginWriter* writer, const version2_CMD_AUTH_LOGON_PROOF_Client* object) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version2_CMD_AUTH_LOGON_PROOF_Client_write(WowLoginWriter* writer, const version2_CMD_AUTH_LOGON_PROOF_Client* object) {
     WRITE_U8(0x01); /* opcode */
 
-    WRITE_ARRAY(object->client_public_key, 32, WRITE_U8(object->client_public_key[i]));
+    WRITE_ARRAY(object->client_public_key, 32, WRITE_U8((*object->client_public_key)[i]));
 
-    WRITE_ARRAY(object->client_proof, 20, WRITE_U8(object->client_proof[i]));
+    WRITE_ARRAY(object->client_proof, 20, WRITE_U8((*object->client_proof)[i]));
 
-    WRITE_ARRAY(object->crc_hash, 20, WRITE_U8(object->crc_hash[i]));
+    WRITE_ARRAY(object->crc_hash, 20, WRITE_U8((*object->crc_hash)[i]));
 
     WRITE_U8(object->number_of_telemetry_keys);
 
@@ -389,7 +373,7 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version2_CMD_AUTH_LOGON_PROOF_Client_writ
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT void version2_CMD_AUTH_LOGON_PROOF_Client_free(version2_CMD_AUTH_LOGON_PROOF_Client* object) {
+WOWLOGINMESSAGESC_EXPORT void version2_CMD_AUTH_LOGON_PROOF_Client_free(version2_CMD_AUTH_LOGON_PROOF_Client* object) {
     free(object->client_public_key);
     object->client_public_key = NULL;
     free(object->client_proof);
@@ -406,21 +390,20 @@ static WowLoginResult version2_CMD_AUTH_LOGON_PROOF_Server_read(WowLoginReader* 
 
     if (object->result == VERSION2_LOGIN_RESULT_SUCCESS) {
         READ_ARRAY_ALLOCATE(object->server_proof, 20, sizeof(uint8_t));
-        READ_ARRAY(object->server_proof, 20, READ_U8(object->server_proof[i]));
-
+        READ_ARRAY(object->server_proof, 20, READ_U8((*object->server_proof)[i]));
         READ_U32(object->hardware_survey_id);
 
     }
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version2_CMD_AUTH_LOGON_PROOF_Server_write(WowLoginWriter* writer, const version2_CMD_AUTH_LOGON_PROOF_Server* object) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version2_CMD_AUTH_LOGON_PROOF_Server_write(WowLoginWriter* writer, const version2_CMD_AUTH_LOGON_PROOF_Server* object) {
     WRITE_U8(0x01); /* opcode */
 
     WRITE_U8(object->result);
 
     if (object->result == VERSION2_LOGIN_RESULT_SUCCESS) {
-        WRITE_ARRAY(object->server_proof, 20, WRITE_U8(object->server_proof[i]));
+        WRITE_ARRAY(object->server_proof, 20, WRITE_U8((*object->server_proof)[i]));
 
         WRITE_U32(object->hardware_survey_id);
 
@@ -429,7 +412,7 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version2_CMD_AUTH_LOGON_PROOF_Server_writ
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT void version2_CMD_AUTH_LOGON_PROOF_Server_free(version2_CMD_AUTH_LOGON_PROOF_Server* object) {
+WOWLOGINMESSAGESC_EXPORT void version2_CMD_AUTH_LOGON_PROOF_Server_free(version2_CMD_AUTH_LOGON_PROOF_Server* object) {
     if (object->result == VERSION2_LOGIN_RESULT_SUCCESS) {
         free(object->server_proof);
         object->server_proof = NULL;
@@ -442,31 +425,29 @@ static WowLoginResult version2_CMD_AUTH_RECONNECT_CHALLENGE_Server_read(WowLogin
 
     if (object->result == VERSION2_LOGIN_RESULT_SUCCESS) {
         READ_ARRAY_ALLOCATE(object->challenge_data, 16, sizeof(uint8_t));
-        READ_ARRAY(object->challenge_data, 16, READ_U8(object->challenge_data[i]));
-
+        READ_ARRAY(object->challenge_data, 16, READ_U8((*object->challenge_data)[i]));
         READ_ARRAY_ALLOCATE(object->checksum_salt, 16, sizeof(uint8_t));
-        READ_ARRAY(object->checksum_salt, 16, READ_U8(object->checksum_salt[i]));
-
+        READ_ARRAY(object->checksum_salt, 16, READ_U8((*object->checksum_salt)[i]));
     }
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version2_CMD_AUTH_RECONNECT_CHALLENGE_Server_write(WowLoginWriter* writer, const version2_CMD_AUTH_RECONNECT_CHALLENGE_Server* object) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version2_CMD_AUTH_RECONNECT_CHALLENGE_Server_write(WowLoginWriter* writer, const version2_CMD_AUTH_RECONNECT_CHALLENGE_Server* object) {
     WRITE_U8(0x02); /* opcode */
 
     WRITE_U8(object->result);
 
     if (object->result == VERSION2_LOGIN_RESULT_SUCCESS) {
-        WRITE_ARRAY(object->challenge_data, 16, WRITE_U8(object->challenge_data[i]));
+        WRITE_ARRAY(object->challenge_data, 16, WRITE_U8((*object->challenge_data)[i]));
 
-        WRITE_ARRAY(object->checksum_salt, 16, WRITE_U8(object->checksum_salt[i]));
+        WRITE_ARRAY(object->checksum_salt, 16, WRITE_U8((*object->checksum_salt)[i]));
 
     }
 
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT void version2_CMD_AUTH_RECONNECT_CHALLENGE_Server_free(version2_CMD_AUTH_RECONNECT_CHALLENGE_Server* object) {
+WOWLOGINMESSAGESC_EXPORT void version2_CMD_AUTH_RECONNECT_CHALLENGE_Server_free(version2_CMD_AUTH_RECONNECT_CHALLENGE_Server* object) {
     if (object->result == VERSION2_LOGIN_RESULT_SUCCESS) {
         free(object->challenge_data);
         object->challenge_data = NULL;
@@ -482,7 +463,7 @@ static WowLoginResult version2_CMD_AUTH_RECONNECT_PROOF_Server_read(WowLoginRead
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version2_CMD_AUTH_RECONNECT_PROOF_Server_write(WowLoginWriter* writer, const version2_CMD_AUTH_RECONNECT_PROOF_Server* object) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version2_CMD_AUTH_RECONNECT_PROOF_Server_write(WowLoginWriter* writer, const version2_CMD_AUTH_RECONNECT_PROOF_Server* object) {
     WRITE_U8(0x03); /* opcode */
 
     WRITE_U8(object->result);
@@ -493,28 +474,24 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version2_CMD_AUTH_RECONNECT_PROOF_Server_
 
 static WowLoginResult version2_CMD_AUTH_RECONNECT_PROOF_Client_read(WowLoginReader* reader, version2_CMD_AUTH_RECONNECT_PROOF_Client* object) {
     READ_ARRAY_ALLOCATE(object->proof_data, 16, sizeof(uint8_t));
-    READ_ARRAY(object->proof_data, 16, READ_U8(object->proof_data[i]));
-
+    READ_ARRAY(object->proof_data, 16, READ_U8((*object->proof_data)[i]));
     READ_ARRAY_ALLOCATE(object->client_proof, 20, sizeof(uint8_t));
-    READ_ARRAY(object->client_proof, 20, READ_U8(object->client_proof[i]));
-
+    READ_ARRAY(object->client_proof, 20, READ_U8((*object->client_proof)[i]));
     READ_ARRAY_ALLOCATE(object->client_checksum, 20, sizeof(uint8_t));
-    READ_ARRAY(object->client_checksum, 20, READ_U8(object->client_checksum[i]));
-
-    uint8_t temp_key_count;
-    READ_U8(temp_key_count);
+    READ_ARRAY(object->client_checksum, 20, READ_U8((*object->client_checksum)[i]));
+    SKIP_FORWARD_BYTES(1);
 
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version2_CMD_AUTH_RECONNECT_PROOF_Client_write(WowLoginWriter* writer, const version2_CMD_AUTH_RECONNECT_PROOF_Client* object) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version2_CMD_AUTH_RECONNECT_PROOF_Client_write(WowLoginWriter* writer, const version2_CMD_AUTH_RECONNECT_PROOF_Client* object) {
     WRITE_U8(0x03); /* opcode */
 
-    WRITE_ARRAY(object->proof_data, 16, WRITE_U8(object->proof_data[i]));
+    WRITE_ARRAY(object->proof_data, 16, WRITE_U8((*object->proof_data)[i]));
 
-    WRITE_ARRAY(object->client_proof, 20, WRITE_U8(object->client_proof[i]));
+    WRITE_ARRAY(object->client_proof, 20, WRITE_U8((*object->client_proof)[i]));
 
-    WRITE_ARRAY(object->client_checksum, 20, WRITE_U8(object->client_checksum[i]));
+    WRITE_ARRAY(object->client_checksum, 20, WRITE_U8((*object->client_checksum)[i]));
 
     WRITE_U8(0);
 
@@ -522,7 +499,7 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version2_CMD_AUTH_RECONNECT_PROOF_Client_
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT void version2_CMD_AUTH_RECONNECT_PROOF_Client_free(version2_CMD_AUTH_RECONNECT_PROOF_Client* object) {
+WOWLOGINMESSAGESC_EXPORT void version2_CMD_AUTH_RECONNECT_PROOF_Client_free(version2_CMD_AUTH_RECONNECT_PROOF_Client* object) {
     free(object->proof_data);
     object->proof_data = NULL;
     free(object->client_proof);
@@ -534,32 +511,31 @@ WOWLOGINMESSAGES_EXPORT void version2_CMD_AUTH_RECONNECT_PROOF_Client_free(versi
 static size_t version2_CMD_REALM_LIST_Server_size(const version2_CMD_REALM_LIST_Server* object) {
     size_t _size = 7;
 
-    for(int i = 0; i < (int)object->number_of_realms; ++i) {
-        _size += version2_Realm_size(&object->realms[i]);
+    /* C89 scope to allow variable declarations */ {
+        int i;
+        for(i = 0; i < (int)object->number_of_realms; ++i) {
+            _size += version2_Realm_size(&object->realms[i]);
+        }
     }
 
     return _size;
 }
 
 static WowLoginResult version2_CMD_REALM_LIST_Server_read(WowLoginReader* reader, version2_CMD_REALM_LIST_Server* object) {
-    uint16_t temp_size;
-    READ_U16(temp_size);
+    SKIP_FORWARD_BYTES(2);
 
-    uint32_t temp_header_padding;
-    READ_U32(temp_header_padding);
+    SKIP_FORWARD_BYTES(4);
 
     READ_U8(object->number_of_realms);
 
     READ_ARRAY_ALLOCATE(object->realms, object->number_of_realms, sizeof(version2_Realm));
-    READ_ARRAY(object->realms, object->number_of_realms, WLM_CHECK_RETURN_CODE(version2_Realm_read(reader, &object->realms[i])););
-
-    uint16_t temp_footer_padding;
-    READ_U16(temp_footer_padding);
+    READ_ARRAY(object->realms, object->number_of_realms, WLM_CHECK_RETURN_CODE(version2_Realm_read(reader, &object->realms[i])));
+    SKIP_FORWARD_BYTES(2);
 
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version2_CMD_REALM_LIST_Server_write(WowLoginWriter* writer, const version2_CMD_REALM_LIST_Server* object) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version2_CMD_REALM_LIST_Server_write(WowLoginWriter* writer, const version2_CMD_REALM_LIST_Server* object) {
     WRITE_U8(0x10); /* opcode */
 
     WRITE_U16((uint16_t)version2_CMD_REALM_LIST_Server_size(object));
@@ -576,12 +552,12 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version2_CMD_REALM_LIST_Server_write(WowL
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT void version2_CMD_REALM_LIST_Server_free(version2_CMD_REALM_LIST_Server* object) {
+WOWLOGINMESSAGESC_EXPORT void version2_CMD_REALM_LIST_Server_free(version2_CMD_REALM_LIST_Server* object) {
     free(object->realms);
     object->realms = NULL;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version2_CMD_REALM_LIST_Client_write(WowLoginWriter* writer) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version2_CMD_REALM_LIST_Client_write(WowLoginWriter* writer) {
     WRITE_U8(0x10); /* opcode */
 
     WRITE_U32(0);
@@ -596,25 +572,24 @@ static WowLoginResult version2_CMD_XFER_INITIATE_read(WowLoginReader* reader, ve
     READ_U64(object->file_size);
 
     READ_ARRAY_ALLOCATE(object->file_md5, 16, sizeof(uint8_t));
-    READ_ARRAY(object->file_md5, 16, READ_U8(object->file_md5[i]));
-
+    READ_ARRAY(object->file_md5, 16, READ_U8((*object->file_md5)[i]));
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version2_CMD_XFER_INITIATE_write(WowLoginWriter* writer, const version2_CMD_XFER_INITIATE* object) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version2_CMD_XFER_INITIATE_write(WowLoginWriter* writer, const version2_CMD_XFER_INITIATE* object) {
     WRITE_U8(0x30); /* opcode */
 
     WRITE_STRING(object->filename);
 
     WRITE_U64(object->file_size);
 
-    WRITE_ARRAY(object->file_md5, 16, WRITE_U8(object->file_md5[i]));
+    WRITE_ARRAY(object->file_md5, 16, WRITE_U8((*object->file_md5)[i]));
 
 
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT void version2_CMD_XFER_INITIATE_free(version2_CMD_XFER_INITIATE* object) {
+WOWLOGINMESSAGESC_EXPORT void version2_CMD_XFER_INITIATE_free(version2_CMD_XFER_INITIATE* object) {
     FREE_STRING(object->filename);
 
     free(object->file_md5);
@@ -626,11 +601,10 @@ static WowLoginResult version2_CMD_XFER_DATA_read(WowLoginReader* reader, versio
 
     READ_ARRAY_ALLOCATE(object->data, object->size, sizeof(uint8_t));
     READ_ARRAY(object->data, object->size, READ_U8(object->data[i]));
-
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version2_CMD_XFER_DATA_write(WowLoginWriter* writer, const version2_CMD_XFER_DATA* object) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version2_CMD_XFER_DATA_write(WowLoginWriter* writer, const version2_CMD_XFER_DATA* object) {
     WRITE_U8(0x31); /* opcode */
 
     WRITE_U16(object->size);
@@ -641,12 +615,12 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version2_CMD_XFER_DATA_write(WowLoginWrit
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT void version2_CMD_XFER_DATA_free(version2_CMD_XFER_DATA* object) {
+WOWLOGINMESSAGESC_EXPORT void version2_CMD_XFER_DATA_free(version2_CMD_XFER_DATA* object) {
     free(object->data);
     object->data = NULL;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version2_CMD_XFER_ACCEPT_write(WowLoginWriter* writer) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version2_CMD_XFER_ACCEPT_write(WowLoginWriter* writer) {
     WRITE_U8(0x32); /* opcode */
 
 
@@ -659,7 +633,7 @@ static WowLoginResult version2_CMD_XFER_RESUME_read(WowLoginReader* reader, vers
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version2_CMD_XFER_RESUME_write(WowLoginWriter* writer, const version2_CMD_XFER_RESUME* object) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version2_CMD_XFER_RESUME_write(WowLoginWriter* writer, const version2_CMD_XFER_RESUME* object) {
     WRITE_U8(0x33); /* opcode */
 
     WRITE_U64(object->offset);
@@ -668,14 +642,14 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version2_CMD_XFER_RESUME_write(WowLoginWr
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version2_CMD_XFER_CANCEL_write(WowLoginWriter* writer) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version2_CMD_XFER_CANCEL_write(WowLoginWriter* writer) {
     WRITE_U8(0x34); /* opcode */
 
 
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version2_client_opcode_read(WowLoginReader* reader, Version2ClientOpcodeContainer* opcodes) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version2_client_opcode_read(WowLoginReader* reader, Version2ClientOpcodeContainer* opcodes) {
     opcodes->opcode = 0;
     READ_U8(opcodes->opcode);
 
@@ -696,7 +670,7 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version2_client_opcode_read(WowLoginReade
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT void version2_client_opcode_free(Version2ClientOpcodeContainer* opcodes) {
+WOWLOGINMESSAGESC_EXPORT void version2_client_opcode_free(Version2ClientOpcodeContainer* opcodes) {
     switch (opcodes->opcode) {
         case CMD_AUTH_LOGON_PROOF:
             version2_CMD_AUTH_LOGON_PROOF_Client_free(&opcodes->body.CMD_AUTH_LOGON_PROOF_Client);
@@ -709,7 +683,7 @@ WOWLOGINMESSAGES_EXPORT void version2_client_opcode_free(Version2ClientOpcodeCon
     }
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version2_server_opcode_read(WowLoginReader* reader, Version2ServerOpcodeContainer* opcodes) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version2_server_opcode_read(WowLoginReader* reader, Version2ServerOpcodeContainer* opcodes) {
     opcodes->opcode = 0;
     READ_U8(opcodes->opcode);
 
@@ -742,7 +716,7 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version2_server_opcode_read(WowLoginReade
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT void version2_server_opcode_free(Version2ServerOpcodeContainer* opcodes) {
+WOWLOGINMESSAGESC_EXPORT void version2_server_opcode_free(Version2ServerOpcodeContainer* opcodes) {
     switch (opcodes->opcode) {
         case CMD_AUTH_LOGON_CHALLENGE:
             version2_CMD_AUTH_LOGON_CHALLENGE_Server_free(&opcodes->body.CMD_AUTH_LOGON_CHALLENGE_Server);
@@ -770,32 +744,26 @@ WOWLOGINMESSAGES_EXPORT void version2_server_opcode_free(Version2ServerOpcodeCon
 #include "wow_login_messages/version3.h"
 
 static WowLoginResult version3_CMD_AUTH_LOGON_CHALLENGE_Server_read(WowLoginReader* reader, version3_CMD_AUTH_LOGON_CHALLENGE_Server* object) {
-    uint8_t temp_protocol_version;
-    READ_U8(temp_protocol_version);
+    SKIP_FORWARD_BYTES(1);
 
     object->result = 0;
     READ_U8(object->result);
 
     if (object->result == VERSION2_LOGIN_RESULT_SUCCESS) {
         READ_ARRAY_ALLOCATE(object->server_public_key, 32, sizeof(uint8_t));
-        READ_ARRAY(object->server_public_key, 32, READ_U8(object->server_public_key[i]));
-
+        READ_ARRAY(object->server_public_key, 32, READ_U8((*object->server_public_key)[i]));
         READ_U8(object->generator_length);
 
         READ_ARRAY_ALLOCATE(object->generator, object->generator_length, sizeof(uint8_t));
         READ_ARRAY(object->generator, object->generator_length, READ_U8(object->generator[i]));
-
         READ_U8(object->large_safe_prime_length);
 
         READ_ARRAY_ALLOCATE(object->large_safe_prime, object->large_safe_prime_length, sizeof(uint8_t));
         READ_ARRAY(object->large_safe_prime, object->large_safe_prime_length, READ_U8(object->large_safe_prime[i]));
-
         READ_ARRAY_ALLOCATE(object->salt, 32, sizeof(uint8_t));
-        READ_ARRAY(object->salt, 32, READ_U8(object->salt[i]));
-
+        READ_ARRAY(object->salt, 32, READ_U8((*object->salt)[i]));
         READ_ARRAY_ALLOCATE(object->crc_salt, 16, sizeof(uint8_t));
-        READ_ARRAY(object->crc_salt, 16, READ_U8(object->crc_salt[i]));
-
+        READ_ARRAY(object->crc_salt, 16, READ_U8((*object->crc_salt)[i]));
         object->security_flag = 0;
         READ_U8(object->security_flag);
 
@@ -803,14 +771,13 @@ static WowLoginResult version3_CMD_AUTH_LOGON_CHALLENGE_Server_read(WowLoginRead
             READ_U32(object->pin_grid_seed);
 
             READ_ARRAY_ALLOCATE(object->pin_salt, 16, sizeof(uint8_t));
-            READ_ARRAY(object->pin_salt, 16, READ_U8(object->pin_salt[i]));
-
+            READ_ARRAY(object->pin_salt, 16, READ_U8((*object->pin_salt)[i]));
         }
     }
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version3_CMD_AUTH_LOGON_CHALLENGE_Server_write(WowLoginWriter* writer, const version3_CMD_AUTH_LOGON_CHALLENGE_Server* object) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version3_CMD_AUTH_LOGON_CHALLENGE_Server_write(WowLoginWriter* writer, const version3_CMD_AUTH_LOGON_CHALLENGE_Server* object) {
     WRITE_U8(0x00); /* opcode */
 
     WRITE_U8(0);
@@ -818,7 +785,7 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version3_CMD_AUTH_LOGON_CHALLENGE_Server_
     WRITE_U8(object->result);
 
     if (object->result == VERSION2_LOGIN_RESULT_SUCCESS) {
-        WRITE_ARRAY(object->server_public_key, 32, WRITE_U8(object->server_public_key[i]));
+        WRITE_ARRAY(object->server_public_key, 32, WRITE_U8((*object->server_public_key)[i]));
 
         WRITE_U8(object->generator_length);
 
@@ -828,16 +795,16 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version3_CMD_AUTH_LOGON_CHALLENGE_Server_
 
         WRITE_ARRAY(object->large_safe_prime, object->large_safe_prime_length, WRITE_U8(object->large_safe_prime[i]));
 
-        WRITE_ARRAY(object->salt, 32, WRITE_U8(object->salt[i]));
+        WRITE_ARRAY(object->salt, 32, WRITE_U8((*object->salt)[i]));
 
-        WRITE_ARRAY(object->crc_salt, 16, WRITE_U8(object->crc_salt[i]));
+        WRITE_ARRAY(object->crc_salt, 16, WRITE_U8((*object->crc_salt)[i]));
 
         WRITE_U8(object->security_flag);
 
         if (object->security_flag == VERSION3_SECURITY_FLAG_PIN) {
             WRITE_U32(object->pin_grid_seed);
 
-            WRITE_ARRAY(object->pin_salt, 16, WRITE_U8(object->pin_salt[i]));
+            WRITE_ARRAY(object->pin_salt, 16, WRITE_U8((*object->pin_salt)[i]));
 
         }
     }
@@ -845,7 +812,7 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version3_CMD_AUTH_LOGON_CHALLENGE_Server_
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT void version3_CMD_AUTH_LOGON_CHALLENGE_Server_free(version3_CMD_AUTH_LOGON_CHALLENGE_Server* object) {
+WOWLOGINMESSAGESC_EXPORT void version3_CMD_AUTH_LOGON_CHALLENGE_Server_free(version3_CMD_AUTH_LOGON_CHALLENGE_Server* object) {
     if (object->result == VERSION2_LOGIN_RESULT_SUCCESS) {
         free(object->server_public_key);
         object->server_public_key = NULL;
@@ -866,41 +833,35 @@ WOWLOGINMESSAGES_EXPORT void version3_CMD_AUTH_LOGON_CHALLENGE_Server_free(versi
 
 static WowLoginResult version3_CMD_AUTH_LOGON_PROOF_Client_read(WowLoginReader* reader, version3_CMD_AUTH_LOGON_PROOF_Client* object) {
     READ_ARRAY_ALLOCATE(object->client_public_key, 32, sizeof(uint8_t));
-    READ_ARRAY(object->client_public_key, 32, READ_U8(object->client_public_key[i]));
-
+    READ_ARRAY(object->client_public_key, 32, READ_U8((*object->client_public_key)[i]));
     READ_ARRAY_ALLOCATE(object->client_proof, 20, sizeof(uint8_t));
-    READ_ARRAY(object->client_proof, 20, READ_U8(object->client_proof[i]));
-
+    READ_ARRAY(object->client_proof, 20, READ_U8((*object->client_proof)[i]));
     READ_ARRAY_ALLOCATE(object->crc_hash, 20, sizeof(uint8_t));
-    READ_ARRAY(object->crc_hash, 20, READ_U8(object->crc_hash[i]));
-
+    READ_ARRAY(object->crc_hash, 20, READ_U8((*object->crc_hash)[i]));
     READ_U8(object->number_of_telemetry_keys);
 
     READ_ARRAY_ALLOCATE(object->telemetry_keys, object->number_of_telemetry_keys, sizeof(version2_TelemetryKey));
-    READ_ARRAY(object->telemetry_keys, object->number_of_telemetry_keys, WLM_CHECK_RETURN_CODE(version2_TelemetryKey_read(reader, &object->telemetry_keys[i])););
-
+    READ_ARRAY(object->telemetry_keys, object->number_of_telemetry_keys, WLM_CHECK_RETURN_CODE(version2_TelemetryKey_read(reader, &object->telemetry_keys[i])));
     object->security_flag = 0;
     READ_U8(object->security_flag);
 
     if (object->security_flag == VERSION3_SECURITY_FLAG_PIN) {
         READ_ARRAY_ALLOCATE(object->pin_salt, 16, sizeof(uint8_t));
-        READ_ARRAY(object->pin_salt, 16, READ_U8(object->pin_salt[i]));
-
+        READ_ARRAY(object->pin_salt, 16, READ_U8((*object->pin_salt)[i]));
         READ_ARRAY_ALLOCATE(object->pin_hash, 20, sizeof(uint8_t));
-        READ_ARRAY(object->pin_hash, 20, READ_U8(object->pin_hash[i]));
-
+        READ_ARRAY(object->pin_hash, 20, READ_U8((*object->pin_hash)[i]));
     }
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version3_CMD_AUTH_LOGON_PROOF_Client_write(WowLoginWriter* writer, const version3_CMD_AUTH_LOGON_PROOF_Client* object) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version3_CMD_AUTH_LOGON_PROOF_Client_write(WowLoginWriter* writer, const version3_CMD_AUTH_LOGON_PROOF_Client* object) {
     WRITE_U8(0x01); /* opcode */
 
-    WRITE_ARRAY(object->client_public_key, 32, WRITE_U8(object->client_public_key[i]));
+    WRITE_ARRAY(object->client_public_key, 32, WRITE_U8((*object->client_public_key)[i]));
 
-    WRITE_ARRAY(object->client_proof, 20, WRITE_U8(object->client_proof[i]));
+    WRITE_ARRAY(object->client_proof, 20, WRITE_U8((*object->client_proof)[i]));
 
-    WRITE_ARRAY(object->crc_hash, 20, WRITE_U8(object->crc_hash[i]));
+    WRITE_ARRAY(object->crc_hash, 20, WRITE_U8((*object->crc_hash)[i]));
 
     WRITE_U8(object->number_of_telemetry_keys);
 
@@ -909,16 +870,16 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version3_CMD_AUTH_LOGON_PROOF_Client_writ
     WRITE_U8(object->security_flag);
 
     if (object->security_flag == VERSION3_SECURITY_FLAG_PIN) {
-        WRITE_ARRAY(object->pin_salt, 16, WRITE_U8(object->pin_salt[i]));
+        WRITE_ARRAY(object->pin_salt, 16, WRITE_U8((*object->pin_salt)[i]));
 
-        WRITE_ARRAY(object->pin_hash, 20, WRITE_U8(object->pin_hash[i]));
+        WRITE_ARRAY(object->pin_hash, 20, WRITE_U8((*object->pin_hash)[i]));
 
     }
 
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT void version3_CMD_AUTH_LOGON_PROOF_Client_free(version3_CMD_AUTH_LOGON_PROOF_Client* object) {
+WOWLOGINMESSAGESC_EXPORT void version3_CMD_AUTH_LOGON_PROOF_Client_free(version3_CMD_AUTH_LOGON_PROOF_Client* object) {
     free(object->client_public_key);
     object->client_public_key = NULL;
     free(object->client_proof);
@@ -944,11 +905,10 @@ static WowLoginResult version3_CMD_SURVEY_RESULT_read(WowLoginReader* reader, ve
 
     READ_ARRAY_ALLOCATE(object->data, object->compressed_data_length, sizeof(uint8_t));
     READ_ARRAY(object->data, object->compressed_data_length, READ_U8(object->data[i]));
-
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version3_CMD_SURVEY_RESULT_write(WowLoginWriter* writer, const version3_CMD_SURVEY_RESULT* object) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version3_CMD_SURVEY_RESULT_write(WowLoginWriter* writer, const version3_CMD_SURVEY_RESULT* object) {
     WRITE_U8(0x04); /* opcode */
 
     WRITE_U32(object->survey_id);
@@ -963,12 +923,12 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version3_CMD_SURVEY_RESULT_write(WowLogin
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT void version3_CMD_SURVEY_RESULT_free(version3_CMD_SURVEY_RESULT* object) {
+WOWLOGINMESSAGESC_EXPORT void version3_CMD_SURVEY_RESULT_free(version3_CMD_SURVEY_RESULT* object) {
     free(object->data);
     object->data = NULL;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version3_CMD_REALM_LIST_Client_write(WowLoginWriter* writer) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version3_CMD_REALM_LIST_Client_write(WowLoginWriter* writer) {
     WRITE_U8(0x10); /* opcode */
 
     WRITE_U32(0);
@@ -977,21 +937,21 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version3_CMD_REALM_LIST_Client_write(WowL
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version3_CMD_XFER_ACCEPT_write(WowLoginWriter* writer) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version3_CMD_XFER_ACCEPT_write(WowLoginWriter* writer) {
     WRITE_U8(0x32); /* opcode */
 
 
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version3_CMD_XFER_CANCEL_write(WowLoginWriter* writer) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version3_CMD_XFER_CANCEL_write(WowLoginWriter* writer) {
     WRITE_U8(0x34); /* opcode */
 
 
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version3_client_opcode_read(WowLoginReader* reader, Version3ClientOpcodeContainer* opcodes) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version3_client_opcode_read(WowLoginReader* reader, Version3ClientOpcodeContainer* opcodes) {
     opcodes->opcode = 0;
     READ_U8(opcodes->opcode);
 
@@ -1012,7 +972,7 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version3_client_opcode_read(WowLoginReade
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT void version3_client_opcode_free(Version3ClientOpcodeContainer* opcodes) {
+WOWLOGINMESSAGESC_EXPORT void version3_client_opcode_free(Version3ClientOpcodeContainer* opcodes) {
     switch (opcodes->opcode) {
         case CMD_AUTH_LOGON_PROOF:
             version3_CMD_AUTH_LOGON_PROOF_Client_free(&opcodes->body.CMD_AUTH_LOGON_PROOF_Client);
@@ -1025,7 +985,7 @@ WOWLOGINMESSAGES_EXPORT void version3_client_opcode_free(Version3ClientOpcodeCon
     }
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version3_server_opcode_read(WowLoginReader* reader, Version3ServerOpcodeContainer* opcodes) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version3_server_opcode_read(WowLoginReader* reader, Version3ServerOpcodeContainer* opcodes) {
     opcodes->opcode = 0;
     READ_U8(opcodes->opcode);
 
@@ -1052,7 +1012,7 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version3_server_opcode_read(WowLoginReade
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT void version3_server_opcode_free(Version3ServerOpcodeContainer* opcodes) {
+WOWLOGINMESSAGESC_EXPORT void version3_server_opcode_free(Version3ServerOpcodeContainer* opcodes) {
     switch (opcodes->opcode) {
         case CMD_AUTH_LOGON_CHALLENGE:
             version3_CMD_AUTH_LOGON_CHALLENGE_Server_free(&opcodes->body.CMD_AUTH_LOGON_CHALLENGE_Server);
@@ -1128,7 +1088,7 @@ static WowLoginResult version5_Realm_write(WowLoginWriter* writer, const version
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT void version5_Realm_free(version5_Realm* object) {
+WOWLOGINMESSAGESC_EXPORT void version5_Realm_free(version5_Realm* object) {
     FREE_STRING(object->name);
 
     FREE_STRING(object->address);
@@ -1136,32 +1096,26 @@ WOWLOGINMESSAGES_EXPORT void version5_Realm_free(version5_Realm* object) {
 }
 
 static WowLoginResult version5_CMD_AUTH_LOGON_CHALLENGE_Server_read(WowLoginReader* reader, version5_CMD_AUTH_LOGON_CHALLENGE_Server* object) {
-    uint8_t temp_protocol_version;
-    READ_U8(temp_protocol_version);
+    SKIP_FORWARD_BYTES(1);
 
     object->result = 0;
     READ_U8(object->result);
 
     if (object->result == VERSION2_LOGIN_RESULT_SUCCESS) {
         READ_ARRAY_ALLOCATE(object->server_public_key, 32, sizeof(uint8_t));
-        READ_ARRAY(object->server_public_key, 32, READ_U8(object->server_public_key[i]));
-
+        READ_ARRAY(object->server_public_key, 32, READ_U8((*object->server_public_key)[i]));
         READ_U8(object->generator_length);
 
         READ_ARRAY_ALLOCATE(object->generator, object->generator_length, sizeof(uint8_t));
         READ_ARRAY(object->generator, object->generator_length, READ_U8(object->generator[i]));
-
         READ_U8(object->large_safe_prime_length);
 
         READ_ARRAY_ALLOCATE(object->large_safe_prime, object->large_safe_prime_length, sizeof(uint8_t));
         READ_ARRAY(object->large_safe_prime, object->large_safe_prime_length, READ_U8(object->large_safe_prime[i]));
-
         READ_ARRAY_ALLOCATE(object->salt, 32, sizeof(uint8_t));
-        READ_ARRAY(object->salt, 32, READ_U8(object->salt[i]));
-
+        READ_ARRAY(object->salt, 32, READ_U8((*object->salt)[i]));
         READ_ARRAY_ALLOCATE(object->crc_salt, 16, sizeof(uint8_t));
-        READ_ARRAY(object->crc_salt, 16, READ_U8(object->crc_salt[i]));
-
+        READ_ARRAY(object->crc_salt, 16, READ_U8((*object->crc_salt)[i]));
         object->security_flag = 0;
         READ_U8(object->security_flag);
 
@@ -1169,8 +1123,7 @@ static WowLoginResult version5_CMD_AUTH_LOGON_CHALLENGE_Server_read(WowLoginRead
             READ_U32(object->pin_grid_seed);
 
             READ_ARRAY_ALLOCATE(object->pin_salt, 16, sizeof(uint8_t));
-            READ_ARRAY(object->pin_salt, 16, READ_U8(object->pin_salt[i]));
-
+            READ_ARRAY(object->pin_salt, 16, READ_U8((*object->pin_salt)[i]));
         }
         if ((object->security_flag & VERSION5_SECURITY_FLAG_MATRIX_CARD) != 0) {
             READ_U8(object->width);
@@ -1188,7 +1141,7 @@ static WowLoginResult version5_CMD_AUTH_LOGON_CHALLENGE_Server_read(WowLoginRead
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version5_CMD_AUTH_LOGON_CHALLENGE_Server_write(WowLoginWriter* writer, const version5_CMD_AUTH_LOGON_CHALLENGE_Server* object) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version5_CMD_AUTH_LOGON_CHALLENGE_Server_write(WowLoginWriter* writer, const version5_CMD_AUTH_LOGON_CHALLENGE_Server* object) {
     WRITE_U8(0x00); /* opcode */
 
     WRITE_U8(0);
@@ -1196,7 +1149,7 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version5_CMD_AUTH_LOGON_CHALLENGE_Server_
     WRITE_U8(object->result);
 
     if (object->result == VERSION2_LOGIN_RESULT_SUCCESS) {
-        WRITE_ARRAY(object->server_public_key, 32, WRITE_U8(object->server_public_key[i]));
+        WRITE_ARRAY(object->server_public_key, 32, WRITE_U8((*object->server_public_key)[i]));
 
         WRITE_U8(object->generator_length);
 
@@ -1206,16 +1159,16 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version5_CMD_AUTH_LOGON_CHALLENGE_Server_
 
         WRITE_ARRAY(object->large_safe_prime, object->large_safe_prime_length, WRITE_U8(object->large_safe_prime[i]));
 
-        WRITE_ARRAY(object->salt, 32, WRITE_U8(object->salt[i]));
+        WRITE_ARRAY(object->salt, 32, WRITE_U8((*object->salt)[i]));
 
-        WRITE_ARRAY(object->crc_salt, 16, WRITE_U8(object->crc_salt[i]));
+        WRITE_ARRAY(object->crc_salt, 16, WRITE_U8((*object->crc_salt)[i]));
 
         WRITE_U8(object->security_flag);
 
         if ((object->security_flag & VERSION5_SECURITY_FLAG_PIN) != 0) {
             WRITE_U32(object->pin_grid_seed);
 
-            WRITE_ARRAY(object->pin_salt, 16, WRITE_U8(object->pin_salt[i]));
+            WRITE_ARRAY(object->pin_salt, 16, WRITE_U8((*object->pin_salt)[i]));
 
         }
         if ((object->security_flag & VERSION5_SECURITY_FLAG_MATRIX_CARD) != 0) {
@@ -1235,7 +1188,7 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version5_CMD_AUTH_LOGON_CHALLENGE_Server_
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT void version5_CMD_AUTH_LOGON_CHALLENGE_Server_free(version5_CMD_AUTH_LOGON_CHALLENGE_Server* object) {
+WOWLOGINMESSAGESC_EXPORT void version5_CMD_AUTH_LOGON_CHALLENGE_Server_free(version5_CMD_AUTH_LOGON_CHALLENGE_Server* object) {
     if (object->result == VERSION2_LOGIN_RESULT_SUCCESS) {
         free(object->server_public_key);
         object->server_public_key = NULL;
@@ -1258,46 +1211,39 @@ WOWLOGINMESSAGES_EXPORT void version5_CMD_AUTH_LOGON_CHALLENGE_Server_free(versi
 
 static WowLoginResult version5_CMD_AUTH_LOGON_PROOF_Client_read(WowLoginReader* reader, version5_CMD_AUTH_LOGON_PROOF_Client* object) {
     READ_ARRAY_ALLOCATE(object->client_public_key, 32, sizeof(uint8_t));
-    READ_ARRAY(object->client_public_key, 32, READ_U8(object->client_public_key[i]));
-
+    READ_ARRAY(object->client_public_key, 32, READ_U8((*object->client_public_key)[i]));
     READ_ARRAY_ALLOCATE(object->client_proof, 20, sizeof(uint8_t));
-    READ_ARRAY(object->client_proof, 20, READ_U8(object->client_proof[i]));
-
+    READ_ARRAY(object->client_proof, 20, READ_U8((*object->client_proof)[i]));
     READ_ARRAY_ALLOCATE(object->crc_hash, 20, sizeof(uint8_t));
-    READ_ARRAY(object->crc_hash, 20, READ_U8(object->crc_hash[i]));
-
+    READ_ARRAY(object->crc_hash, 20, READ_U8((*object->crc_hash)[i]));
     READ_U8(object->number_of_telemetry_keys);
 
     READ_ARRAY_ALLOCATE(object->telemetry_keys, object->number_of_telemetry_keys, sizeof(version2_TelemetryKey));
-    READ_ARRAY(object->telemetry_keys, object->number_of_telemetry_keys, WLM_CHECK_RETURN_CODE(version2_TelemetryKey_read(reader, &object->telemetry_keys[i])););
-
+    READ_ARRAY(object->telemetry_keys, object->number_of_telemetry_keys, WLM_CHECK_RETURN_CODE(version2_TelemetryKey_read(reader, &object->telemetry_keys[i])));
     object->security_flag = 0;
     READ_U8(object->security_flag);
 
     if ((object->security_flag & VERSION5_SECURITY_FLAG_PIN) != 0) {
         READ_ARRAY_ALLOCATE(object->pin_salt, 16, sizeof(uint8_t));
-        READ_ARRAY(object->pin_salt, 16, READ_U8(object->pin_salt[i]));
-
+        READ_ARRAY(object->pin_salt, 16, READ_U8((*object->pin_salt)[i]));
         READ_ARRAY_ALLOCATE(object->pin_hash, 20, sizeof(uint8_t));
-        READ_ARRAY(object->pin_hash, 20, READ_U8(object->pin_hash[i]));
-
+        READ_ARRAY(object->pin_hash, 20, READ_U8((*object->pin_hash)[i]));
     }
     if ((object->security_flag & VERSION5_SECURITY_FLAG_MATRIX_CARD) != 0) {
         READ_ARRAY_ALLOCATE(object->matrix_card_proof, 20, sizeof(uint8_t));
-        READ_ARRAY(object->matrix_card_proof, 20, READ_U8(object->matrix_card_proof[i]));
-
+        READ_ARRAY(object->matrix_card_proof, 20, READ_U8((*object->matrix_card_proof)[i]));
     }
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version5_CMD_AUTH_LOGON_PROOF_Client_write(WowLoginWriter* writer, const version5_CMD_AUTH_LOGON_PROOF_Client* object) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version5_CMD_AUTH_LOGON_PROOF_Client_write(WowLoginWriter* writer, const version5_CMD_AUTH_LOGON_PROOF_Client* object) {
     WRITE_U8(0x01); /* opcode */
 
-    WRITE_ARRAY(object->client_public_key, 32, WRITE_U8(object->client_public_key[i]));
+    WRITE_ARRAY(object->client_public_key, 32, WRITE_U8((*object->client_public_key)[i]));
 
-    WRITE_ARRAY(object->client_proof, 20, WRITE_U8(object->client_proof[i]));
+    WRITE_ARRAY(object->client_proof, 20, WRITE_U8((*object->client_proof)[i]));
 
-    WRITE_ARRAY(object->crc_hash, 20, WRITE_U8(object->crc_hash[i]));
+    WRITE_ARRAY(object->crc_hash, 20, WRITE_U8((*object->crc_hash)[i]));
 
     WRITE_U8(object->number_of_telemetry_keys);
 
@@ -1306,20 +1252,20 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version5_CMD_AUTH_LOGON_PROOF_Client_writ
     WRITE_U8(object->security_flag);
 
     if ((object->security_flag & VERSION5_SECURITY_FLAG_PIN) != 0) {
-        WRITE_ARRAY(object->pin_salt, 16, WRITE_U8(object->pin_salt[i]));
+        WRITE_ARRAY(object->pin_salt, 16, WRITE_U8((*object->pin_salt)[i]));
 
-        WRITE_ARRAY(object->pin_hash, 20, WRITE_U8(object->pin_hash[i]));
+        WRITE_ARRAY(object->pin_hash, 20, WRITE_U8((*object->pin_hash)[i]));
 
     }
     if ((object->security_flag & VERSION5_SECURITY_FLAG_MATRIX_CARD) != 0) {
-        WRITE_ARRAY(object->matrix_card_proof, 20, WRITE_U8(object->matrix_card_proof[i]));
+        WRITE_ARRAY(object->matrix_card_proof, 20, WRITE_U8((*object->matrix_card_proof)[i]));
 
     }
 
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT void version5_CMD_AUTH_LOGON_PROOF_Client_free(version5_CMD_AUTH_LOGON_PROOF_Client* object) {
+WOWLOGINMESSAGESC_EXPORT void version5_CMD_AUTH_LOGON_PROOF_Client_free(version5_CMD_AUTH_LOGON_PROOF_Client* object) {
     free(object->client_public_key);
     object->client_public_key = NULL;
     free(object->client_proof);
@@ -1346,8 +1292,7 @@ static WowLoginResult version5_CMD_AUTH_LOGON_PROOF_Server_read(WowLoginReader* 
 
     if (object->result == VERSION2_LOGIN_RESULT_SUCCESS) {
         READ_ARRAY_ALLOCATE(object->server_proof, 20, sizeof(uint8_t));
-        READ_ARRAY(object->server_proof, 20, READ_U8(object->server_proof[i]));
-
+        READ_ARRAY(object->server_proof, 20, READ_U8((*object->server_proof)[i]));
         READ_U32(object->hardware_survey_id);
 
         READ_U16(object->unknown);
@@ -1356,13 +1301,13 @@ static WowLoginResult version5_CMD_AUTH_LOGON_PROOF_Server_read(WowLoginReader* 
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version5_CMD_AUTH_LOGON_PROOF_Server_write(WowLoginWriter* writer, const version5_CMD_AUTH_LOGON_PROOF_Server* object) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version5_CMD_AUTH_LOGON_PROOF_Server_write(WowLoginWriter* writer, const version5_CMD_AUTH_LOGON_PROOF_Server* object) {
     WRITE_U8(0x01); /* opcode */
 
     WRITE_U8(object->result);
 
     if (object->result == VERSION2_LOGIN_RESULT_SUCCESS) {
-        WRITE_ARRAY(object->server_proof, 20, WRITE_U8(object->server_proof[i]));
+        WRITE_ARRAY(object->server_proof, 20, WRITE_U8((*object->server_proof)[i]));
 
         WRITE_U32(object->hardware_survey_id);
 
@@ -1373,7 +1318,7 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version5_CMD_AUTH_LOGON_PROOF_Server_writ
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT void version5_CMD_AUTH_LOGON_PROOF_Server_free(version5_CMD_AUTH_LOGON_PROOF_Server* object) {
+WOWLOGINMESSAGESC_EXPORT void version5_CMD_AUTH_LOGON_PROOF_Server_free(version5_CMD_AUTH_LOGON_PROOF_Server* object) {
     if (object->result == VERSION2_LOGIN_RESULT_SUCCESS) {
         free(object->server_proof);
         object->server_proof = NULL;
@@ -1384,13 +1329,12 @@ static WowLoginResult version5_CMD_AUTH_RECONNECT_PROOF_Server_read(WowLoginRead
     object->result = 0;
     READ_U8(object->result);
 
-    uint16_t temp_padding;
-    READ_U16(temp_padding);
+    SKIP_FORWARD_BYTES(2);
 
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version5_CMD_AUTH_RECONNECT_PROOF_Server_write(WowLoginWriter* writer, const version5_CMD_AUTH_RECONNECT_PROOF_Server* object) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version5_CMD_AUTH_RECONNECT_PROOF_Server_write(WowLoginWriter* writer, const version5_CMD_AUTH_RECONNECT_PROOF_Server* object) {
     WRITE_U8(0x03); /* opcode */
 
     WRITE_U8(object->result);
@@ -1401,7 +1345,7 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version5_CMD_AUTH_RECONNECT_PROOF_Server_
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version5_CMD_REALM_LIST_Client_write(WowLoginWriter* writer) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version5_CMD_REALM_LIST_Client_write(WowLoginWriter* writer) {
     WRITE_U8(0x10); /* opcode */
 
     WRITE_U32(0);
@@ -1413,32 +1357,31 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version5_CMD_REALM_LIST_Client_write(WowL
 static size_t version5_CMD_REALM_LIST_Server_size(const version5_CMD_REALM_LIST_Server* object) {
     size_t _size = 7;
 
-    for(int i = 0; i < (int)object->number_of_realms; ++i) {
-        _size += version5_Realm_size(&object->realms[i]);
+    /* C89 scope to allow variable declarations */ {
+        int i;
+        for(i = 0; i < (int)object->number_of_realms; ++i) {
+            _size += version5_Realm_size(&object->realms[i]);
+        }
     }
 
     return _size;
 }
 
 static WowLoginResult version5_CMD_REALM_LIST_Server_read(WowLoginReader* reader, version5_CMD_REALM_LIST_Server* object) {
-    uint16_t temp_size;
-    READ_U16(temp_size);
+    SKIP_FORWARD_BYTES(2);
 
-    uint32_t temp_header_padding;
-    READ_U32(temp_header_padding);
+    SKIP_FORWARD_BYTES(4);
 
     READ_U8(object->number_of_realms);
 
     READ_ARRAY_ALLOCATE(object->realms, object->number_of_realms, sizeof(version5_Realm));
-    READ_ARRAY(object->realms, object->number_of_realms, WLM_CHECK_RETURN_CODE(version5_Realm_read(reader, &object->realms[i])););
-
-    uint16_t temp_footer_padding;
-    READ_U16(temp_footer_padding);
+    READ_ARRAY(object->realms, object->number_of_realms, WLM_CHECK_RETURN_CODE(version5_Realm_read(reader, &object->realms[i])));
+    SKIP_FORWARD_BYTES(2);
 
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version5_CMD_REALM_LIST_Server_write(WowLoginWriter* writer, const version5_CMD_REALM_LIST_Server* object) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version5_CMD_REALM_LIST_Server_write(WowLoginWriter* writer, const version5_CMD_REALM_LIST_Server* object) {
     WRITE_U8(0x10); /* opcode */
 
     WRITE_U16((uint16_t)version5_CMD_REALM_LIST_Server_size(object));
@@ -1455,26 +1398,26 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version5_CMD_REALM_LIST_Server_write(WowL
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT void version5_CMD_REALM_LIST_Server_free(version5_CMD_REALM_LIST_Server* object) {
+WOWLOGINMESSAGESC_EXPORT void version5_CMD_REALM_LIST_Server_free(version5_CMD_REALM_LIST_Server* object) {
     free(object->realms);
     object->realms = NULL;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version5_CMD_XFER_ACCEPT_write(WowLoginWriter* writer) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version5_CMD_XFER_ACCEPT_write(WowLoginWriter* writer) {
     WRITE_U8(0x32); /* opcode */
 
 
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version5_CMD_XFER_CANCEL_write(WowLoginWriter* writer) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version5_CMD_XFER_CANCEL_write(WowLoginWriter* writer) {
     WRITE_U8(0x34); /* opcode */
 
 
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version5_client_opcode_read(WowLoginReader* reader, Version5ClientOpcodeContainer* opcodes) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version5_client_opcode_read(WowLoginReader* reader, Version5ClientOpcodeContainer* opcodes) {
     opcodes->opcode = 0;
     READ_U8(opcodes->opcode);
 
@@ -1495,7 +1438,7 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version5_client_opcode_read(WowLoginReade
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT void version5_client_opcode_free(Version5ClientOpcodeContainer* opcodes) {
+WOWLOGINMESSAGESC_EXPORT void version5_client_opcode_free(Version5ClientOpcodeContainer* opcodes) {
     switch (opcodes->opcode) {
         case CMD_AUTH_LOGON_PROOF:
             version5_CMD_AUTH_LOGON_PROOF_Client_free(&opcodes->body.CMD_AUTH_LOGON_PROOF_Client);
@@ -1508,7 +1451,7 @@ WOWLOGINMESSAGES_EXPORT void version5_client_opcode_free(Version5ClientOpcodeCon
     }
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version5_server_opcode_read(WowLoginReader* reader, Version5ServerOpcodeContainer* opcodes) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version5_server_opcode_read(WowLoginReader* reader, Version5ServerOpcodeContainer* opcodes) {
     opcodes->opcode = 0;
     READ_U8(opcodes->opcode);
 
@@ -1541,7 +1484,7 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version5_server_opcode_read(WowLoginReade
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT void version5_server_opcode_free(Version5ServerOpcodeContainer* opcodes) {
+WOWLOGINMESSAGESC_EXPORT void version5_server_opcode_free(Version5ServerOpcodeContainer* opcodes) {
     switch (opcodes->opcode) {
         case CMD_AUTH_LOGON_CHALLENGE:
             version5_CMD_AUTH_LOGON_CHALLENGE_Server_free(&opcodes->body.CMD_AUTH_LOGON_CHALLENGE_Server);
@@ -1568,7 +1511,7 @@ WOWLOGINMESSAGES_EXPORT void version5_server_opcode_free(Version5ServerOpcodeCon
 
 #include "wow_login_messages/version6.h"
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version6_CMD_REALM_LIST_Client_write(WowLoginWriter* writer) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version6_CMD_REALM_LIST_Client_write(WowLoginWriter* writer) {
     WRITE_U8(0x10); /* opcode */
 
     WRITE_U32(0);
@@ -1580,32 +1523,31 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version6_CMD_REALM_LIST_Client_write(WowL
 static size_t version6_CMD_REALM_LIST_Server_size(const version6_CMD_REALM_LIST_Server* object) {
     size_t _size = 8;
 
-    for(int i = 0; i < (int)object->number_of_realms; ++i) {
-        _size += version5_Realm_size(&object->realms[i]);
+    /* C89 scope to allow variable declarations */ {
+        int i;
+        for(i = 0; i < (int)object->number_of_realms; ++i) {
+            _size += version5_Realm_size(&object->realms[i]);
+        }
     }
 
     return _size;
 }
 
 static WowLoginResult version6_CMD_REALM_LIST_Server_read(WowLoginReader* reader, version6_CMD_REALM_LIST_Server* object) {
-    uint16_t temp_size;
-    READ_U16(temp_size);
+    SKIP_FORWARD_BYTES(2);
 
-    uint32_t temp_header_padding;
-    READ_U32(temp_header_padding);
+    SKIP_FORWARD_BYTES(4);
 
     READ_U16(object->number_of_realms);
 
     READ_ARRAY_ALLOCATE(object->realms, object->number_of_realms, sizeof(version5_Realm));
-    READ_ARRAY(object->realms, object->number_of_realms, WLM_CHECK_RETURN_CODE(version5_Realm_read(reader, &object->realms[i])););
-
-    uint16_t temp_footer_padding;
-    READ_U16(temp_footer_padding);
+    READ_ARRAY(object->realms, object->number_of_realms, WLM_CHECK_RETURN_CODE(version5_Realm_read(reader, &object->realms[i])));
+    SKIP_FORWARD_BYTES(2);
 
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version6_CMD_REALM_LIST_Server_write(WowLoginWriter* writer, const version6_CMD_REALM_LIST_Server* object) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version6_CMD_REALM_LIST_Server_write(WowLoginWriter* writer, const version6_CMD_REALM_LIST_Server* object) {
     WRITE_U8(0x10); /* opcode */
 
     WRITE_U16((uint16_t)version6_CMD_REALM_LIST_Server_size(object));
@@ -1622,26 +1564,26 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version6_CMD_REALM_LIST_Server_write(WowL
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT void version6_CMD_REALM_LIST_Server_free(version6_CMD_REALM_LIST_Server* object) {
+WOWLOGINMESSAGESC_EXPORT void version6_CMD_REALM_LIST_Server_free(version6_CMD_REALM_LIST_Server* object) {
     free(object->realms);
     object->realms = NULL;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version6_CMD_XFER_ACCEPT_write(WowLoginWriter* writer) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version6_CMD_XFER_ACCEPT_write(WowLoginWriter* writer) {
     WRITE_U8(0x32); /* opcode */
 
 
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version6_CMD_XFER_CANCEL_write(WowLoginWriter* writer) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version6_CMD_XFER_CANCEL_write(WowLoginWriter* writer) {
     WRITE_U8(0x34); /* opcode */
 
 
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version6_client_opcode_read(WowLoginReader* reader, Version6ClientOpcodeContainer* opcodes) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version6_client_opcode_read(WowLoginReader* reader, Version6ClientOpcodeContainer* opcodes) {
     opcodes->opcode = 0;
     READ_U8(opcodes->opcode);
 
@@ -1662,7 +1604,7 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version6_client_opcode_read(WowLoginReade
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT void version6_client_opcode_free(Version6ClientOpcodeContainer* opcodes) {
+WOWLOGINMESSAGESC_EXPORT void version6_client_opcode_free(Version6ClientOpcodeContainer* opcodes) {
     switch (opcodes->opcode) {
         case CMD_AUTH_LOGON_PROOF:
             version5_CMD_AUTH_LOGON_PROOF_Client_free(&opcodes->body.CMD_AUTH_LOGON_PROOF_Client);
@@ -1675,7 +1617,7 @@ WOWLOGINMESSAGES_EXPORT void version6_client_opcode_free(Version6ClientOpcodeCon
     }
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version6_server_opcode_read(WowLoginReader* reader, Version6ServerOpcodeContainer* opcodes) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version6_server_opcode_read(WowLoginReader* reader, Version6ServerOpcodeContainer* opcodes) {
     opcodes->opcode = 0;
     READ_U8(opcodes->opcode);
 
@@ -1708,7 +1650,7 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version6_server_opcode_read(WowLoginReade
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT void version6_server_opcode_free(Version6ServerOpcodeContainer* opcodes) {
+WOWLOGINMESSAGESC_EXPORT void version6_server_opcode_free(Version6ServerOpcodeContainer* opcodes) {
     switch (opcodes->opcode) {
         case CMD_AUTH_LOGON_CHALLENGE:
             version5_CMD_AUTH_LOGON_CHALLENGE_Server_free(&opcodes->body.CMD_AUTH_LOGON_CHALLENGE_Server);
@@ -1735,7 +1677,7 @@ WOWLOGINMESSAGES_EXPORT void version6_server_opcode_free(Version6ServerOpcodeCon
 
 #include "wow_login_messages/version7.h"
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version7_CMD_REALM_LIST_Client_write(WowLoginWriter* writer) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version7_CMD_REALM_LIST_Client_write(WowLoginWriter* writer) {
     WRITE_U8(0x10); /* opcode */
 
     WRITE_U32(0);
@@ -1744,21 +1686,21 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version7_CMD_REALM_LIST_Client_write(WowL
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version7_CMD_XFER_ACCEPT_write(WowLoginWriter* writer) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version7_CMD_XFER_ACCEPT_write(WowLoginWriter* writer) {
     WRITE_U8(0x32); /* opcode */
 
 
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version7_CMD_XFER_CANCEL_write(WowLoginWriter* writer) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version7_CMD_XFER_CANCEL_write(WowLoginWriter* writer) {
     WRITE_U8(0x34); /* opcode */
 
 
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version7_client_opcode_read(WowLoginReader* reader, Version7ClientOpcodeContainer* opcodes) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version7_client_opcode_read(WowLoginReader* reader, Version7ClientOpcodeContainer* opcodes) {
     opcodes->opcode = 0;
     READ_U8(opcodes->opcode);
 
@@ -1779,7 +1721,7 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version7_client_opcode_read(WowLoginReade
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT void version7_client_opcode_free(Version7ClientOpcodeContainer* opcodes) {
+WOWLOGINMESSAGESC_EXPORT void version7_client_opcode_free(Version7ClientOpcodeContainer* opcodes) {
     switch (opcodes->opcode) {
         case CMD_AUTH_LOGON_PROOF:
             version5_CMD_AUTH_LOGON_PROOF_Client_free(&opcodes->body.CMD_AUTH_LOGON_PROOF_Client);
@@ -1792,7 +1734,7 @@ WOWLOGINMESSAGES_EXPORT void version7_client_opcode_free(Version7ClientOpcodeCon
     }
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version7_server_opcode_read(WowLoginReader* reader, Version7ServerOpcodeContainer* opcodes) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version7_server_opcode_read(WowLoginReader* reader, Version7ServerOpcodeContainer* opcodes) {
     opcodes->opcode = 0;
     READ_U8(opcodes->opcode);
 
@@ -1825,7 +1767,7 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version7_server_opcode_read(WowLoginReade
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT void version7_server_opcode_free(Version7ServerOpcodeContainer* opcodes) {
+WOWLOGINMESSAGESC_EXPORT void version7_server_opcode_free(Version7ServerOpcodeContainer* opcodes) {
     switch (opcodes->opcode) {
         case CMD_AUTH_LOGON_CHALLENGE:
             version5_CMD_AUTH_LOGON_CHALLENGE_Server_free(&opcodes->body.CMD_AUTH_LOGON_CHALLENGE_Server);
@@ -1918,7 +1860,7 @@ static WowLoginResult version8_Realm_write(WowLoginWriter* writer, const version
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT void version8_Realm_free(version8_Realm* object) {
+WOWLOGINMESSAGESC_EXPORT void version8_Realm_free(version8_Realm* object) {
     FREE_STRING(object->name);
 
     FREE_STRING(object->address);
@@ -1928,32 +1870,26 @@ WOWLOGINMESSAGES_EXPORT void version8_Realm_free(version8_Realm* object) {
 }
 
 static WowLoginResult version8_CMD_AUTH_LOGON_CHALLENGE_Server_read(WowLoginReader* reader, version8_CMD_AUTH_LOGON_CHALLENGE_Server* object) {
-    uint8_t temp_protocol_version;
-    READ_U8(temp_protocol_version);
+    SKIP_FORWARD_BYTES(1);
 
     object->result = 0;
     READ_U8(object->result);
 
     if (object->result == VERSION8_LOGIN_RESULT_SUCCESS) {
         READ_ARRAY_ALLOCATE(object->server_public_key, 32, sizeof(uint8_t));
-        READ_ARRAY(object->server_public_key, 32, READ_U8(object->server_public_key[i]));
-
+        READ_ARRAY(object->server_public_key, 32, READ_U8((*object->server_public_key)[i]));
         READ_U8(object->generator_length);
 
         READ_ARRAY_ALLOCATE(object->generator, object->generator_length, sizeof(uint8_t));
         READ_ARRAY(object->generator, object->generator_length, READ_U8(object->generator[i]));
-
         READ_U8(object->large_safe_prime_length);
 
         READ_ARRAY_ALLOCATE(object->large_safe_prime, object->large_safe_prime_length, sizeof(uint8_t));
         READ_ARRAY(object->large_safe_prime, object->large_safe_prime_length, READ_U8(object->large_safe_prime[i]));
-
         READ_ARRAY_ALLOCATE(object->salt, 32, sizeof(uint8_t));
-        READ_ARRAY(object->salt, 32, READ_U8(object->salt[i]));
-
+        READ_ARRAY(object->salt, 32, READ_U8((*object->salt)[i]));
         READ_ARRAY_ALLOCATE(object->crc_salt, 16, sizeof(uint8_t));
-        READ_ARRAY(object->crc_salt, 16, READ_U8(object->crc_salt[i]));
-
+        READ_ARRAY(object->crc_salt, 16, READ_U8((*object->crc_salt)[i]));
         object->security_flag = 0;
         READ_U8(object->security_flag);
 
@@ -1961,8 +1897,7 @@ static WowLoginResult version8_CMD_AUTH_LOGON_CHALLENGE_Server_read(WowLoginRead
             READ_U32(object->pin_grid_seed);
 
             READ_ARRAY_ALLOCATE(object->pin_salt, 16, sizeof(uint8_t));
-            READ_ARRAY(object->pin_salt, 16, READ_U8(object->pin_salt[i]));
-
+            READ_ARRAY(object->pin_salt, 16, READ_U8((*object->pin_salt)[i]));
         }
         if ((object->security_flag & VERSION8_SECURITY_FLAG_MATRIX_CARD) != 0) {
             READ_U8(object->width);
@@ -1984,7 +1919,7 @@ static WowLoginResult version8_CMD_AUTH_LOGON_CHALLENGE_Server_read(WowLoginRead
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version8_CMD_AUTH_LOGON_CHALLENGE_Server_write(WowLoginWriter* writer, const version8_CMD_AUTH_LOGON_CHALLENGE_Server* object) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version8_CMD_AUTH_LOGON_CHALLENGE_Server_write(WowLoginWriter* writer, const version8_CMD_AUTH_LOGON_CHALLENGE_Server* object) {
     WRITE_U8(0x00); /* opcode */
 
     WRITE_U8(0);
@@ -1992,7 +1927,7 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version8_CMD_AUTH_LOGON_CHALLENGE_Server_
     WRITE_U8(object->result);
 
     if (object->result == VERSION8_LOGIN_RESULT_SUCCESS) {
-        WRITE_ARRAY(object->server_public_key, 32, WRITE_U8(object->server_public_key[i]));
+        WRITE_ARRAY(object->server_public_key, 32, WRITE_U8((*object->server_public_key)[i]));
 
         WRITE_U8(object->generator_length);
 
@@ -2002,16 +1937,16 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version8_CMD_AUTH_LOGON_CHALLENGE_Server_
 
         WRITE_ARRAY(object->large_safe_prime, object->large_safe_prime_length, WRITE_U8(object->large_safe_prime[i]));
 
-        WRITE_ARRAY(object->salt, 32, WRITE_U8(object->salt[i]));
+        WRITE_ARRAY(object->salt, 32, WRITE_U8((*object->salt)[i]));
 
-        WRITE_ARRAY(object->crc_salt, 16, WRITE_U8(object->crc_salt[i]));
+        WRITE_ARRAY(object->crc_salt, 16, WRITE_U8((*object->crc_salt)[i]));
 
         WRITE_U8(object->security_flag);
 
         if ((object->security_flag & VERSION8_SECURITY_FLAG_PIN) != 0) {
             WRITE_U32(object->pin_grid_seed);
 
-            WRITE_ARRAY(object->pin_salt, 16, WRITE_U8(object->pin_salt[i]));
+            WRITE_ARRAY(object->pin_salt, 16, WRITE_U8((*object->pin_salt)[i]));
 
         }
         if ((object->security_flag & VERSION8_SECURITY_FLAG_MATRIX_CARD) != 0) {
@@ -2035,7 +1970,7 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version8_CMD_AUTH_LOGON_CHALLENGE_Server_
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT void version8_CMD_AUTH_LOGON_CHALLENGE_Server_free(version8_CMD_AUTH_LOGON_CHALLENGE_Server* object) {
+WOWLOGINMESSAGESC_EXPORT void version8_CMD_AUTH_LOGON_CHALLENGE_Server_free(version8_CMD_AUTH_LOGON_CHALLENGE_Server* object) {
     if (object->result == VERSION8_LOGIN_RESULT_SUCCESS) {
         free(object->server_public_key);
         object->server_public_key = NULL;
@@ -2060,34 +1995,27 @@ WOWLOGINMESSAGES_EXPORT void version8_CMD_AUTH_LOGON_CHALLENGE_Server_free(versi
 
 static WowLoginResult version8_CMD_AUTH_LOGON_PROOF_Client_read(WowLoginReader* reader, version8_CMD_AUTH_LOGON_PROOF_Client* object) {
     READ_ARRAY_ALLOCATE(object->client_public_key, 32, sizeof(uint8_t));
-    READ_ARRAY(object->client_public_key, 32, READ_U8(object->client_public_key[i]));
-
+    READ_ARRAY(object->client_public_key, 32, READ_U8((*object->client_public_key)[i]));
     READ_ARRAY_ALLOCATE(object->client_proof, 20, sizeof(uint8_t));
-    READ_ARRAY(object->client_proof, 20, READ_U8(object->client_proof[i]));
-
+    READ_ARRAY(object->client_proof, 20, READ_U8((*object->client_proof)[i]));
     READ_ARRAY_ALLOCATE(object->crc_hash, 20, sizeof(uint8_t));
-    READ_ARRAY(object->crc_hash, 20, READ_U8(object->crc_hash[i]));
-
+    READ_ARRAY(object->crc_hash, 20, READ_U8((*object->crc_hash)[i]));
     READ_U8(object->number_of_telemetry_keys);
 
     READ_ARRAY_ALLOCATE(object->telemetry_keys, object->number_of_telemetry_keys, sizeof(version2_TelemetryKey));
-    READ_ARRAY(object->telemetry_keys, object->number_of_telemetry_keys, WLM_CHECK_RETURN_CODE(version2_TelemetryKey_read(reader, &object->telemetry_keys[i])););
-
+    READ_ARRAY(object->telemetry_keys, object->number_of_telemetry_keys, WLM_CHECK_RETURN_CODE(version2_TelemetryKey_read(reader, &object->telemetry_keys[i])));
     object->security_flag = 0;
     READ_U8(object->security_flag);
 
     if ((object->security_flag & VERSION8_SECURITY_FLAG_PIN) != 0) {
         READ_ARRAY_ALLOCATE(object->pin_salt, 16, sizeof(uint8_t));
-        READ_ARRAY(object->pin_salt, 16, READ_U8(object->pin_salt[i]));
-
+        READ_ARRAY(object->pin_salt, 16, READ_U8((*object->pin_salt)[i]));
         READ_ARRAY_ALLOCATE(object->pin_hash, 20, sizeof(uint8_t));
-        READ_ARRAY(object->pin_hash, 20, READ_U8(object->pin_hash[i]));
-
+        READ_ARRAY(object->pin_hash, 20, READ_U8((*object->pin_hash)[i]));
     }
     if ((object->security_flag & VERSION8_SECURITY_FLAG_MATRIX_CARD) != 0) {
         READ_ARRAY_ALLOCATE(object->matrix_card_proof, 20, sizeof(uint8_t));
-        READ_ARRAY(object->matrix_card_proof, 20, READ_U8(object->matrix_card_proof[i]));
-
+        READ_ARRAY(object->matrix_card_proof, 20, READ_U8((*object->matrix_card_proof)[i]));
     }
     if ((object->security_flag & VERSION8_SECURITY_FLAG_AUTHENTICATOR) != 0) {
         READ_STRING(object->authenticator);
@@ -2096,14 +2024,14 @@ static WowLoginResult version8_CMD_AUTH_LOGON_PROOF_Client_read(WowLoginReader* 
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version8_CMD_AUTH_LOGON_PROOF_Client_write(WowLoginWriter* writer, const version8_CMD_AUTH_LOGON_PROOF_Client* object) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version8_CMD_AUTH_LOGON_PROOF_Client_write(WowLoginWriter* writer, const version8_CMD_AUTH_LOGON_PROOF_Client* object) {
     WRITE_U8(0x01); /* opcode */
 
-    WRITE_ARRAY(object->client_public_key, 32, WRITE_U8(object->client_public_key[i]));
+    WRITE_ARRAY(object->client_public_key, 32, WRITE_U8((*object->client_public_key)[i]));
 
-    WRITE_ARRAY(object->client_proof, 20, WRITE_U8(object->client_proof[i]));
+    WRITE_ARRAY(object->client_proof, 20, WRITE_U8((*object->client_proof)[i]));
 
-    WRITE_ARRAY(object->crc_hash, 20, WRITE_U8(object->crc_hash[i]));
+    WRITE_ARRAY(object->crc_hash, 20, WRITE_U8((*object->crc_hash)[i]));
 
     WRITE_U8(object->number_of_telemetry_keys);
 
@@ -2112,13 +2040,13 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version8_CMD_AUTH_LOGON_PROOF_Client_writ
     WRITE_U8(object->security_flag);
 
     if ((object->security_flag & VERSION8_SECURITY_FLAG_PIN) != 0) {
-        WRITE_ARRAY(object->pin_salt, 16, WRITE_U8(object->pin_salt[i]));
+        WRITE_ARRAY(object->pin_salt, 16, WRITE_U8((*object->pin_salt)[i]));
 
-        WRITE_ARRAY(object->pin_hash, 20, WRITE_U8(object->pin_hash[i]));
+        WRITE_ARRAY(object->pin_hash, 20, WRITE_U8((*object->pin_hash)[i]));
 
     }
     if ((object->security_flag & VERSION8_SECURITY_FLAG_MATRIX_CARD) != 0) {
-        WRITE_ARRAY(object->matrix_card_proof, 20, WRITE_U8(object->matrix_card_proof[i]));
+        WRITE_ARRAY(object->matrix_card_proof, 20, WRITE_U8((*object->matrix_card_proof)[i]));
 
     }
     if ((object->security_flag & VERSION8_SECURITY_FLAG_AUTHENTICATOR) != 0) {
@@ -2129,7 +2057,7 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version8_CMD_AUTH_LOGON_PROOF_Client_writ
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT void version8_CMD_AUTH_LOGON_PROOF_Client_free(version8_CMD_AUTH_LOGON_PROOF_Client* object) {
+WOWLOGINMESSAGESC_EXPORT void version8_CMD_AUTH_LOGON_PROOF_Client_free(version8_CMD_AUTH_LOGON_PROOF_Client* object) {
     free(object->client_public_key);
     object->client_public_key = NULL;
     free(object->client_proof);
@@ -2160,8 +2088,7 @@ static WowLoginResult version8_CMD_AUTH_LOGON_PROOF_Server_read(WowLoginReader* 
 
     if (object->result == VERSION8_LOGIN_RESULT_SUCCESS) {
         READ_ARRAY_ALLOCATE(object->server_proof, 20, sizeof(uint8_t));
-        READ_ARRAY(object->server_proof, 20, READ_U8(object->server_proof[i]));
-
+        READ_ARRAY(object->server_proof, 20, READ_U8((*object->server_proof)[i]));
         object->account_flag = 0;
         READ_U32(object->account_flag);
 
@@ -2171,20 +2098,19 @@ static WowLoginResult version8_CMD_AUTH_LOGON_PROOF_Server_read(WowLoginReader* 
 
     }
     else if (object->result == VERSION8_LOGIN_RESULT_FAIL_UNKNOWN0|| object->result == VERSION8_LOGIN_RESULT_FAIL_UNKNOWN1|| object->result == VERSION8_LOGIN_RESULT_FAIL_BANNED|| object->result == VERSION8_LOGIN_RESULT_FAIL_UNKNOWN_ACCOUNT|| object->result == VERSION8_LOGIN_RESULT_FAIL_INCORRECT_PASSWORD|| object->result == VERSION8_LOGIN_RESULT_FAIL_ALREADY_ONLINE|| object->result == VERSION8_LOGIN_RESULT_FAIL_NO_TIME|| object->result == VERSION8_LOGIN_RESULT_FAIL_DB_BUSY|| object->result == VERSION8_LOGIN_RESULT_FAIL_VERSION_INVALID|| object->result == VERSION8_LOGIN_RESULT_LOGIN_DOWNLOAD_FILE|| object->result == VERSION8_LOGIN_RESULT_FAIL_INVALID_SERVER|| object->result == VERSION8_LOGIN_RESULT_FAIL_SUSPENDED|| object->result == VERSION8_LOGIN_RESULT_FAIL_NO_ACCESS|| object->result == VERSION8_LOGIN_RESULT_SUCCESS_SURVEY|| object->result == VERSION8_LOGIN_RESULT_FAIL_PARENTALCONTROL|| object->result == VERSION8_LOGIN_RESULT_FAIL_LOCKED_ENFORCED) {
-        uint16_t temp_padding;
-        READ_U16(temp_padding);
+        SKIP_FORWARD_BYTES(2);
 
     }
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version8_CMD_AUTH_LOGON_PROOF_Server_write(WowLoginWriter* writer, const version8_CMD_AUTH_LOGON_PROOF_Server* object) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version8_CMD_AUTH_LOGON_PROOF_Server_write(WowLoginWriter* writer, const version8_CMD_AUTH_LOGON_PROOF_Server* object) {
     WRITE_U8(0x01); /* opcode */
 
     WRITE_U8(object->result);
 
     if (object->result == VERSION8_LOGIN_RESULT_SUCCESS) {
-        WRITE_ARRAY(object->server_proof, 20, WRITE_U8(object->server_proof[i]));
+        WRITE_ARRAY(object->server_proof, 20, WRITE_U8((*object->server_proof)[i]));
 
         WRITE_U32(object->account_flag);
 
@@ -2201,7 +2127,7 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version8_CMD_AUTH_LOGON_PROOF_Server_writ
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT void version8_CMD_AUTH_LOGON_PROOF_Server_free(version8_CMD_AUTH_LOGON_PROOF_Server* object) {
+WOWLOGINMESSAGESC_EXPORT void version8_CMD_AUTH_LOGON_PROOF_Server_free(version8_CMD_AUTH_LOGON_PROOF_Server* object) {
     if (object->result == VERSION8_LOGIN_RESULT_SUCCESS) {
         free(object->server_proof);
         object->server_proof = NULL;
@@ -2216,31 +2142,29 @@ static WowLoginResult version8_CMD_AUTH_RECONNECT_CHALLENGE_Server_read(WowLogin
 
     if (object->result == VERSION8_LOGIN_RESULT_SUCCESS) {
         READ_ARRAY_ALLOCATE(object->challenge_data, 16, sizeof(uint8_t));
-        READ_ARRAY(object->challenge_data, 16, READ_U8(object->challenge_data[i]));
-
+        READ_ARRAY(object->challenge_data, 16, READ_U8((*object->challenge_data)[i]));
         READ_ARRAY_ALLOCATE(object->checksum_salt, 16, sizeof(uint8_t));
-        READ_ARRAY(object->checksum_salt, 16, READ_U8(object->checksum_salt[i]));
-
+        READ_ARRAY(object->checksum_salt, 16, READ_U8((*object->checksum_salt)[i]));
     }
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version8_CMD_AUTH_RECONNECT_CHALLENGE_Server_write(WowLoginWriter* writer, const version8_CMD_AUTH_RECONNECT_CHALLENGE_Server* object) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version8_CMD_AUTH_RECONNECT_CHALLENGE_Server_write(WowLoginWriter* writer, const version8_CMD_AUTH_RECONNECT_CHALLENGE_Server* object) {
     WRITE_U8(0x02); /* opcode */
 
     WRITE_U8(object->result);
 
     if (object->result == VERSION8_LOGIN_RESULT_SUCCESS) {
-        WRITE_ARRAY(object->challenge_data, 16, WRITE_U8(object->challenge_data[i]));
+        WRITE_ARRAY(object->challenge_data, 16, WRITE_U8((*object->challenge_data)[i]));
 
-        WRITE_ARRAY(object->checksum_salt, 16, WRITE_U8(object->checksum_salt[i]));
+        WRITE_ARRAY(object->checksum_salt, 16, WRITE_U8((*object->checksum_salt)[i]));
 
     }
 
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT void version8_CMD_AUTH_RECONNECT_CHALLENGE_Server_free(version8_CMD_AUTH_RECONNECT_CHALLENGE_Server* object) {
+WOWLOGINMESSAGESC_EXPORT void version8_CMD_AUTH_RECONNECT_CHALLENGE_Server_free(version8_CMD_AUTH_RECONNECT_CHALLENGE_Server* object) {
     if (object->result == VERSION8_LOGIN_RESULT_SUCCESS) {
         free(object->challenge_data);
         object->challenge_data = NULL;
@@ -2253,13 +2177,12 @@ static WowLoginResult version8_CMD_AUTH_RECONNECT_PROOF_Server_read(WowLoginRead
     object->result = 0;
     READ_U8(object->result);
 
-    uint16_t temp_padding;
-    READ_U16(temp_padding);
+    SKIP_FORWARD_BYTES(2);
 
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version8_CMD_AUTH_RECONNECT_PROOF_Server_write(WowLoginWriter* writer, const version8_CMD_AUTH_RECONNECT_PROOF_Server* object) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version8_CMD_AUTH_RECONNECT_PROOF_Server_write(WowLoginWriter* writer, const version8_CMD_AUTH_RECONNECT_PROOF_Server* object) {
     WRITE_U8(0x03); /* opcode */
 
     WRITE_U8(object->result);
@@ -2270,7 +2193,7 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version8_CMD_AUTH_RECONNECT_PROOF_Server_
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version8_CMD_REALM_LIST_Client_write(WowLoginWriter* writer) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version8_CMD_REALM_LIST_Client_write(WowLoginWriter* writer) {
     WRITE_U8(0x10); /* opcode */
 
     WRITE_U32(0);
@@ -2282,32 +2205,31 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version8_CMD_REALM_LIST_Client_write(WowL
 static size_t version8_CMD_REALM_LIST_Server_size(const version8_CMD_REALM_LIST_Server* object) {
     size_t _size = 8;
 
-    for(int i = 0; i < (int)object->number_of_realms; ++i) {
-        _size += version8_Realm_size(&object->realms[i]);
+    /* C89 scope to allow variable declarations */ {
+        int i;
+        for(i = 0; i < (int)object->number_of_realms; ++i) {
+            _size += version8_Realm_size(&object->realms[i]);
+        }
     }
 
     return _size;
 }
 
 static WowLoginResult version8_CMD_REALM_LIST_Server_read(WowLoginReader* reader, version8_CMD_REALM_LIST_Server* object) {
-    uint16_t temp_size;
-    READ_U16(temp_size);
+    SKIP_FORWARD_BYTES(2);
 
-    uint32_t temp_header_padding;
-    READ_U32(temp_header_padding);
+    SKIP_FORWARD_BYTES(4);
 
     READ_U16(object->number_of_realms);
 
     READ_ARRAY_ALLOCATE(object->realms, object->number_of_realms, sizeof(version8_Realm));
-    READ_ARRAY(object->realms, object->number_of_realms, WLM_CHECK_RETURN_CODE(version8_Realm_read(reader, &object->realms[i])););
-
-    uint16_t temp_footer_padding;
-    READ_U16(temp_footer_padding);
+    READ_ARRAY(object->realms, object->number_of_realms, WLM_CHECK_RETURN_CODE(version8_Realm_read(reader, &object->realms[i])));
+    SKIP_FORWARD_BYTES(2);
 
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version8_CMD_REALM_LIST_Server_write(WowLoginWriter* writer, const version8_CMD_REALM_LIST_Server* object) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version8_CMD_REALM_LIST_Server_write(WowLoginWriter* writer, const version8_CMD_REALM_LIST_Server* object) {
     WRITE_U8(0x10); /* opcode */
 
     WRITE_U16((uint16_t)version8_CMD_REALM_LIST_Server_size(object));
@@ -2324,26 +2246,26 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version8_CMD_REALM_LIST_Server_write(WowL
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT void version8_CMD_REALM_LIST_Server_free(version8_CMD_REALM_LIST_Server* object) {
+WOWLOGINMESSAGESC_EXPORT void version8_CMD_REALM_LIST_Server_free(version8_CMD_REALM_LIST_Server* object) {
     free(object->realms);
     object->realms = NULL;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version8_CMD_XFER_ACCEPT_write(WowLoginWriter* writer) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version8_CMD_XFER_ACCEPT_write(WowLoginWriter* writer) {
     WRITE_U8(0x32); /* opcode */
 
 
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version8_CMD_XFER_CANCEL_write(WowLoginWriter* writer) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version8_CMD_XFER_CANCEL_write(WowLoginWriter* writer) {
     WRITE_U8(0x34); /* opcode */
 
 
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version8_client_opcode_read(WowLoginReader* reader, Version8ClientOpcodeContainer* opcodes) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version8_client_opcode_read(WowLoginReader* reader, Version8ClientOpcodeContainer* opcodes) {
     opcodes->opcode = 0;
     READ_U8(opcodes->opcode);
 
@@ -2364,7 +2286,7 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version8_client_opcode_read(WowLoginReade
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT void version8_client_opcode_free(Version8ClientOpcodeContainer* opcodes) {
+WOWLOGINMESSAGESC_EXPORT void version8_client_opcode_free(Version8ClientOpcodeContainer* opcodes) {
     switch (opcodes->opcode) {
         case CMD_AUTH_LOGON_PROOF:
             version8_CMD_AUTH_LOGON_PROOF_Client_free(&opcodes->body.CMD_AUTH_LOGON_PROOF_Client);
@@ -2377,7 +2299,7 @@ WOWLOGINMESSAGES_EXPORT void version8_client_opcode_free(Version8ClientOpcodeCon
     }
 }
 
-WOWLOGINMESSAGES_EXPORT WowLoginResult version8_server_opcode_read(WowLoginReader* reader, Version8ServerOpcodeContainer* opcodes) {
+WOWLOGINMESSAGESC_EXPORT WowLoginResult version8_server_opcode_read(WowLoginReader* reader, Version8ServerOpcodeContainer* opcodes) {
     opcodes->opcode = 0;
     READ_U8(opcodes->opcode);
 
@@ -2410,7 +2332,7 @@ WOWLOGINMESSAGES_EXPORT WowLoginResult version8_server_opcode_read(WowLoginReade
     return WLM_RESULT_SUCCESS;
 }
 
-WOWLOGINMESSAGES_EXPORT void version8_server_opcode_free(Version8ServerOpcodeContainer* opcodes) {
+WOWLOGINMESSAGESC_EXPORT void version8_server_opcode_free(Version8ServerOpcodeContainer* opcodes) {
     switch (opcodes->opcode) {
         case CMD_AUTH_LOGON_CHALLENGE:
             version8_CMD_AUTH_LOGON_CHALLENGE_Server_free(&opcodes->body.CMD_AUTH_LOGON_CHALLENGE_Server);

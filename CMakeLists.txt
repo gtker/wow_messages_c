@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.29)
+cmake_minimum_required(VERSION 3.28)
 project(WowMessages LANGUAGES C)
 
 if (BUILD_TESTING)
@@ -6,10 +6,12 @@ if (BUILD_TESTING)
 
     add_library(WowMessages_TestUtils TestUtils/test_utils.c)
     target_include_directories(WowMessages_TestUtils PUBLIC TestUtils)
-    target_link_libraries(WowMessages_TestUtils PUBLIC WowLoginMessages::WowLoginMessages WowWorldMessages::WowWorldMessages)
+    target_link_libraries(WowMessages_TestUtils PUBLIC WowLoginMessagesC::WowLoginMessagesC WowWorldMessagesC::WowWorldMessagesC)
 
-    add_subdirectory(examples)
+    if (BUILD_EXAMPLES)
+        add_subdirectory(examples)
+    endif ()
 endif ()
 
-add_subdirectory(WowLoginMessages)
-add_subdirectory(WowWorldMessages)
+add_subdirectory(WowLoginMessagesC)
+add_subdirectory(WowWorldMessagesC)

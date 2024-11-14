@@ -3,7 +3,7 @@ import typing
 import model
 from print_struct.struct_util import container_has_c_members
 from util import login_version_matches, first_version_as_module, first_login_version, \
-    get_type_prefix, is_world, version_to_module_name, version_matches, get_export_define
+    get_type_prefix, is_world, version_to_module_name, version_matches, get_export_define, container_needs_size_in_read
 from writer import Writer
 import print_struct
 
@@ -18,6 +18,8 @@ def side_matches(e: model.Container, side: str) -> int:
         case model.ObjectTypeSlogin(opcode=opcode) | model.ObjectTypeSmsg(opcode=opcode):
             if side == "server":
                 return opcode
+        case model.ObjectTypeMsg(opcode=opcode):
+            return opcode
 
     return INVALID_OPCODE
 
@@ -115,8 +117,11 @@ def write_opcode_read(s: Writer, h: Writer, messages: list[model.Container], v: 
         s.wln(f"case {e.name.replace('_Client', '').replace('_Server', '')}:")
         s.inc_indent()
 
+        size_field_size = 2 if side == "server" else 4
+        body_size = f", _size - {size_field_size}" if container_needs_size_in_read(e) else ""
+
         version = first_version_as_module(e.tags)
-        s.wln(f"{wlm_prefix}_CHECK_RETURN_CODE({version}_{e.name}_read(reader, &opcodes->body.{e.name}));")
+        s.wln(f"{wlm_prefix}_CHECK_RETURN_CODE({version}_{e.name}_read(reader, &opcodes->body.{e.name}{body_size}));")
 
         s.wln("break;")
         s.dec_indent()
@@ -207,8 +212,9 @@ def print_login_utils(s: Writer, h: Writer, messages: list[model.Container], v: 
     if type(v) is model.WorldVersion and module_name != "all":
         h.open_curly("typedef enum")
 
-        for name, opcode in opcodes.items():
-            h.wln(f"{name} = {opcode},")
+        for i, (name, opcode) in enumerate(opcodes.items()):
+            comma = "," if i < len(opcodes.items()) - 1 else ""
+            h.wln(f"{name} = {opcode}{comma}")
 
         h.closing_curly(f" Wow{module_name_pascal}WorldOpcode;")
         h.newline()

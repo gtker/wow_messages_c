@@ -5,31 +5,36 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include "wowloginmessages_export.h"
+#include "wowloginmessagesc_export.h"
 
-typedef struct {
-    const unsigned char *const source;
+typedef struct
+{
+    const unsigned char* source;
     size_t length;
     size_t index;
 } WowLoginReader;
 
-typedef struct {
-    unsigned char *const destination;
+typedef struct
+{
+    unsigned char* destination;
     size_t length;
     size_t index;
 } WowLoginWriter;
 
-typedef enum {
+typedef enum
+{
     WLM_RESULT_SUCCESS = 0,
-    WLM_RESULT_NOT_ENOUGH_BYTES,
+    WLM_RESULT_NOT_ENOUGH_BYTES
 } WowLoginResult;
 
-typedef struct {
+typedef struct
+{
     uint8_t length;
-    char *string;
+    char* string;
 } WowLoginString;
 
-typedef enum {
+typedef enum
+{
     CMD_AUTH_LOGON_CHALLENGE = 0x00,
     CMD_AUTH_LOGON_PROOF = 0x01,
     CMD_AUTH_RECONNECT_CHALLENGE = 0x02,
@@ -40,13 +45,13 @@ typedef enum {
     CMD_XFER_DATA = 0x31,
     CMD_XFER_ACCEPT = 0x32,
     CMD_XFER_RESUME = 0x33,
-    CMD_XFER_CANCEL = 0x34,
+    CMD_XFER_CANCEL = 0x34
 } WowLoginOpcode;
 
-WOWLOGINMESSAGES_EXPORT const char *wlm_error_code_to_string(WowLoginResult result);
+WOWLOGINMESSAGESC_EXPORT const char* wlm_error_code_to_string(WowLoginResult result);
 
-WOWLOGINMESSAGES_EXPORT WowLoginReader wlm_create_reader(const unsigned char *const source, const size_t length);
+WOWLOGINMESSAGESC_EXPORT WowLoginReader wlm_create_reader(const unsigned char* const source, const size_t length);
 
-WOWLOGINMESSAGES_EXPORT WowLoginWriter wlm_create_writer(unsigned char *const destination, const size_t length);
+WOWLOGINMESSAGESC_EXPORT WowLoginWriter wlm_create_writer(unsigned char* const destination, const size_t length);
 
 #endif /* WOW_LOGIN_MESSAGES_H */
