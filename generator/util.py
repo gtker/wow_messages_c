@@ -3,13 +3,14 @@ import typing
 import model
 from writer import Writer
 
-ALL = model.WorldVersion(major=0, minor=0, patch=0, build=0)
+WORLD_VERSION_ALL = model.WorldVersion(major=0xFF, minor=0xFF, patch=0xFF, build=0xFFFF)
 VANILLA = model.WorldVersion(major=1, minor=12, patch=1, build=5875)
 TBC = model.WorldVersion(major=2, minor=4, patch=3, build=8606)
 WRATH = model.WorldVersion(major=3, minor=3, patch=5, build=12340)
 
 VERSIONS = [VANILLA, TBC, WRATH]
 
+LOGIN_VERSION_ALL = 0xFFFF
 
 def write_file_if_not_same(s: Writer, path: str):
     overwrite = False
@@ -90,7 +91,7 @@ def world_version_is_vanilla(version: model.WorldVersion) -> bool:
 
 
 def world_version_is_all(version: model.WorldVersion) -> bool:
-    return version == ALL
+    return version == WORLD_VERSION_ALL
 
 
 def world_version_matches(tags: model.ObjectTags, version: model.WorldVersion) -> bool:
@@ -123,9 +124,13 @@ def version_to_module_name(v: typing.Union[int | model.WorldVersion]) -> str:
 
 
 def world_version_to_module_name(v: model.WorldVersion) -> str:
+    if v == WORLD_VERSION_ALL:
+        return "all"
+
     match v:
-        case model.WorldVersion(major=0, minor=0, patch=0, build=0):
-            return "all"
+        # Hack around not having full alpha support
+        case model.WorldVersion(major=0):
+            return "vanilla"
         case model.WorldVersion(major=1):
             return "vanilla"
         case model.WorldVersion(major=2):
@@ -141,7 +146,7 @@ def world_version_to_title_name(v: model.WorldVersion) -> str:
 
 
 def login_version_to_module_name(v: int) -> str:
-    if v == 0:
+    if v == LOGIN_VERSION_ALL:
         return "all"
     else:
         return f"version{v}"
@@ -170,7 +175,7 @@ def first_login_version(tags: model.ObjectTags) -> int:
         case model.ObjectVersionsLogin(version_type=version_type):
             match version_type:
                 case model.LoginVersionsAll():
-                    return 0
+                    return LOGIN_VERSION_ALL
                 case model.LoginVersionsSpecific(versions=versions):
                     return versions[0]
                 case _:
@@ -184,7 +189,7 @@ def first_version_as_module(tags: model.ObjectTags) -> str:
         case model.ObjectVersionsLogin(version_type=l):
             match l:
                 case model.LoginVersionsAll():
-                    return login_version_to_module_name(0)
+                    return login_version_to_module_name(LOGIN_VERSION_ALL)
                 case model.LoginVersionsSpecific(versions=versions):
                     return login_version_to_module_name(versions[0])
                 case _:
@@ -195,9 +200,7 @@ def first_version_as_module(tags: model.ObjectTags) -> str:
                     return "all"
                 case model.WorldVersionsSpecific(versions=versions):
                     for v in versions:
-                        # Don't support alpha for this lib
-                        if v.major > 0:
-                            return world_version_to_module_name(v)
+                        return world_version_to_module_name(v)
 
                 case _:
                     raise Exception("invalid world versions type")

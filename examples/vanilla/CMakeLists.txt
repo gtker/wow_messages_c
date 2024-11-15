@@ -10,7 +10,7 @@ include(FetchContent)
 FetchContent_Declare(
         wow_srp
         GIT_REPOSITORY https://github.com/gtker/wow_srp_c.git
-        GIT_TAG 16c7b8b221c71add431cac2e4debc2ac70fdf4b5
+        GIT_TAG 1ac2456bc6bbfb2502148addca3d96bba7c1c89e
 )
 FetchContent_MakeAvailable(wow_srp)
 

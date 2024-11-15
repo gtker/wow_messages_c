@@ -1,9 +1,9 @@
 import sys
 
-from struct_util import integer_type_to_size
+from print_struct.struct_util import integer_type_to_size
 
 import model
-from generator.util import pascal_case_to_snake_case
+from util import pascal_case_to_snake_case
 from model import Definer
 from util import first_version_as_module
 from writer import Writer

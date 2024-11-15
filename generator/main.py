@@ -4,8 +4,8 @@ import os.path
 import pstats
 import typing
 
-import struct_util
-from struct_util import container_should_have_size_function, integer_type_to_size, container_should_print
+from util import LOGIN_VERSION_ALL, WORLD_VERSION_ALL
+from print_struct.struct_util import container_should_have_size_function, integer_type_to_size, container_should_print
 
 import model
 from login_utils import print_login_utils
@@ -16,7 +16,7 @@ from print_aura_mask import print_aura_mask
 from print_cache_mask import print_cache_mask
 from print_enum import print_enum
 from print_named_guid import print_named_guid
-from print_struct import print_struct, container_has_c_members
+from print_struct import print_struct, container_has_c_members, struct_util
 from print_struct.print_tests import print_login_tests, print_world_tests, print_login_test_prefix, \
     print_login_test_suffix
 from print_struct.struct_util import all_members_from_container
@@ -44,7 +44,6 @@ WORLD_HEADER_DIR = f"{WORLD_PROJECT_DIR}/include/wow_world_messages"
 
 IR_FILE_PATH = f"{THIS_FILE_PATH}/wow_messages/intermediate_representation.json"
 
-
 def main():
     print("Generating python files")
     f = open(IR_FILE_PATH)
@@ -56,7 +55,7 @@ def main():
     print_login_test_prefix(tests, m)
 
     s = Writer()
-    print_login(m.login, s, tests, 0)
+    print_login(m.login, s, tests, LOGIN_VERSION_ALL)
     for i, v in enumerate(m.distinct_login_versions_other_than_all):
         print_login(m.login, s, tests, v)
 
@@ -68,18 +67,11 @@ def main():
     file_path = f"{LOGIN_SOURCE_DIR}/all.test.c"
     write_file_if_not_same(tests, file_path)
 
-    print_world(m.world, m.vanilla_update_mask, model.WorldVersion(major=0, minor=0, build=0, patch=0))
+    print_world(m.world, m.vanilla_update_mask, WORLD_VERSION_ALL)
     for v in VERSIONS:
-        if v == VANILLA:
-            print_world(m.world, m.vanilla_update_mask, v)
-        elif v == TBC:
-            continue
-            print_world(m.world, m.tbc_update_mask, v)
-        elif v == WRATH:
-            continue
-            print_world(m.world, m.wrath_update_mask, v)
-        else:
-            raise Exception(f"invalid update mask version {v}")
+        update_mask = m.vanilla_update_mask if v == VANILLA else m.tbc_update_mask if v == TBC else m.wrath_update_mask if v == WRATH else None
+        print_world(m.world, update_mask, v)
+        break
 
     print("Finished generating files")
 
@@ -276,7 +268,7 @@ def print_login(m: model.Objects, s: Writer, tests: Writer, v: int):
         print_struct(s, h, e, module_name)
 
     for inc in type_includes:
-        name = "all" if inc == 0 else f"version{inc}"
+        name = login_version_to_module_name(inc)
         h_includes.wln(f"#include \"wow_login_messages/{name}.h\" /* type include */")
 
     h_includes.newline()
