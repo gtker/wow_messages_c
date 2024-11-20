@@ -1,6 +1,7 @@
 import model
 from model import Container
 from print_struct.struct_util import type_to_c_str
+from util import is_cpp
 from writer import Writer
 
 
@@ -35,8 +36,11 @@ def print_member_definition(non_optional: Writer, member: model.StructMember, mo
 
             match data_type:
                 case model.DataTypeArray(size=model.ArraySizeFixed(size=size)):
-                    non_optional.wln(
-                        f"{type_to_c_str(data_type, module_name)} (*{name})[{size}];")
+                    if is_cpp():
+                        non_optional.wln(f"std::array<{type_to_c_str(data_type, module_name)}, {size}> {name};")
+                    else:
+                        non_optional.wln(
+                            f"{type_to_c_str(data_type, module_name)} (*{name})[{size}];")
                 case _:
                     non_optional.wln(f"{type_to_c_str(data_type, module_name)} {name};")
 

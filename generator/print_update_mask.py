@@ -56,11 +56,11 @@ typedef struct {{
 
 """)
 
-    set_declaration = f"WOWWORLDMESSAGESC_EXPORT void {module_name}_update_mask_set({module_name}_UpdateMask* mask, {module_name}_UpdateMaskValues offset, uint32_t value)"
+    set_declaration = f"WOW_WORLD_MESSAGES_C_EXPORT void {module_name}_update_mask_set({module_name}_UpdateMask* mask, {module_name}_UpdateMaskValues offset, uint32_t value)"
     h.wln(f"{set_declaration};")
     h.newline()
 
-    get_declaration = f"WOWWORLDMESSAGESC_EXPORT uint32_t {module_name}_update_mask_get({module_name}_UpdateMask* mask, {module_name}_UpdateMaskValues offset)"
+    get_declaration = f"WOW_WORLD_MESSAGES_C_EXPORT uint32_t {module_name}_update_mask_get({module_name}_UpdateMask* mask, {module_name}_UpdateMaskValues offset)"
     h.wln(f"{get_declaration};")
     h.newline()
 

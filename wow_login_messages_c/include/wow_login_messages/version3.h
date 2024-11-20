@@ -50,8 +50,8 @@ typedef struct {
     uint8_t (*pin_salt)[16];
 
 } version3_CMD_AUTH_LOGON_CHALLENGE_Server;
-WOWLOGINMESSAGESC_EXPORT WowLoginResult version3_CMD_AUTH_LOGON_CHALLENGE_Server_write(WowLoginWriter* writer, const version3_CMD_AUTH_LOGON_CHALLENGE_Server* object);
-WOWLOGINMESSAGESC_EXPORT void version3_CMD_AUTH_LOGON_CHALLENGE_Server_free(version3_CMD_AUTH_LOGON_CHALLENGE_Server* object);
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version3_CMD_AUTH_LOGON_CHALLENGE_Server_write(WowLoginWriter* writer, const version3_CMD_AUTH_LOGON_CHALLENGE_Server* object);
+WOW_LOGIN_MESSAGES_C_EXPORT void version3_CMD_AUTH_LOGON_CHALLENGE_Server_free(version3_CMD_AUTH_LOGON_CHALLENGE_Server* object);
 
 typedef all_CMD_AUTH_LOGON_CHALLENGE_Client version3_CMD_AUTH_LOGON_CHALLENGE_Client;
 
@@ -68,8 +68,8 @@ typedef struct {
     uint8_t (*pin_hash)[20];
 
 } version3_CMD_AUTH_LOGON_PROOF_Client;
-WOWLOGINMESSAGESC_EXPORT WowLoginResult version3_CMD_AUTH_LOGON_PROOF_Client_write(WowLoginWriter* writer, const version3_CMD_AUTH_LOGON_PROOF_Client* object);
-WOWLOGINMESSAGESC_EXPORT void version3_CMD_AUTH_LOGON_PROOF_Client_free(version3_CMD_AUTH_LOGON_PROOF_Client* object);
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version3_CMD_AUTH_LOGON_PROOF_Client_write(WowLoginWriter* writer, const version3_CMD_AUTH_LOGON_PROOF_Client* object);
+WOW_LOGIN_MESSAGES_C_EXPORT void version3_CMD_AUTH_LOGON_PROOF_Client_free(version3_CMD_AUTH_LOGON_PROOF_Client* object);
 
 typedef all_CMD_AUTH_RECONNECT_CHALLENGE_Client version3_CMD_AUTH_RECONNECT_CHALLENGE_Client;
 
@@ -80,22 +80,22 @@ typedef struct {
     uint8_t* data;
 
 } version3_CMD_SURVEY_RESULT;
-WOWLOGINMESSAGESC_EXPORT WowLoginResult version3_CMD_SURVEY_RESULT_write(WowLoginWriter* writer, const version3_CMD_SURVEY_RESULT* object);
-WOWLOGINMESSAGESC_EXPORT void version3_CMD_SURVEY_RESULT_free(version3_CMD_SURVEY_RESULT* object);
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version3_CMD_SURVEY_RESULT_write(WowLoginWriter* writer, const version3_CMD_SURVEY_RESULT* object);
+WOW_LOGIN_MESSAGES_C_EXPORT void version3_CMD_SURVEY_RESULT_free(version3_CMD_SURVEY_RESULT* object);
 
 typedef version2_CMD_REALM_LIST_Server version3_CMD_REALM_LIST_Server;
 
-WOWLOGINMESSAGESC_EXPORT WowLoginResult version3_CMD_REALM_LIST_Client_write(WowLoginWriter* writer);
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version3_CMD_REALM_LIST_Client_write(WowLoginWriter* writer);
 
 typedef version2_CMD_XFER_INITIATE version3_CMD_XFER_INITIATE;
 
 typedef version2_CMD_XFER_DATA version3_CMD_XFER_DATA;
 
-WOWLOGINMESSAGESC_EXPORT WowLoginResult version3_CMD_XFER_ACCEPT_write(WowLoginWriter* writer);
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version3_CMD_XFER_ACCEPT_write(WowLoginWriter* writer);
 
 typedef version2_CMD_XFER_RESUME version3_CMD_XFER_RESUME;
 
-WOWLOGINMESSAGESC_EXPORT WowLoginResult version3_CMD_XFER_CANCEL_write(WowLoginWriter* writer);
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version3_CMD_XFER_CANCEL_write(WowLoginWriter* writer);
 
 typedef struct {
     WowLoginOpcode opcode;
@@ -107,9 +107,9 @@ typedef struct {
     } body;
 } Version3ClientOpcodeContainer;
 
-WOWLOGINMESSAGESC_EXPORT WowLoginResult version3_client_opcode_read(WowLoginReader* reader, Version3ClientOpcodeContainer* opcodes);
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version3_client_opcode_read(WowLoginReader* reader, Version3ClientOpcodeContainer* opcodes);
 
-WOWLOGINMESSAGESC_EXPORT void version3_client_opcode_free(Version3ClientOpcodeContainer* opcodes);
+WOW_LOGIN_MESSAGES_C_EXPORT void version3_client_opcode_free(Version3ClientOpcodeContainer* opcodes);
 
 typedef struct {
     WowLoginOpcode opcode;
@@ -123,9 +123,9 @@ typedef struct {
     } body;
 } Version3ServerOpcodeContainer;
 
-WOWLOGINMESSAGESC_EXPORT WowLoginResult version3_server_opcode_read(WowLoginReader* reader, Version3ServerOpcodeContainer* opcodes);
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version3_server_opcode_read(WowLoginReader* reader, Version3ServerOpcodeContainer* opcodes);
 
-WOWLOGINMESSAGESC_EXPORT void version3_server_opcode_free(Version3ServerOpcodeContainer* opcodes);
+WOW_LOGIN_MESSAGES_C_EXPORT void version3_server_opcode_free(Version3ServerOpcodeContainer* opcodes);
 
 #ifdef __cplusplus
 }

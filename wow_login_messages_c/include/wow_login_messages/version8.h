@@ -102,8 +102,8 @@ typedef struct {
     uint8_t required;
 
 } version8_CMD_AUTH_LOGON_CHALLENGE_Server;
-WOWLOGINMESSAGESC_EXPORT WowLoginResult version8_CMD_AUTH_LOGON_CHALLENGE_Server_write(WowLoginWriter* writer, const version8_CMD_AUTH_LOGON_CHALLENGE_Server* object);
-WOWLOGINMESSAGESC_EXPORT void version8_CMD_AUTH_LOGON_CHALLENGE_Server_free(version8_CMD_AUTH_LOGON_CHALLENGE_Server* object);
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version8_CMD_AUTH_LOGON_CHALLENGE_Server_write(WowLoginWriter* writer, const version8_CMD_AUTH_LOGON_CHALLENGE_Server* object);
+WOW_LOGIN_MESSAGES_C_EXPORT void version8_CMD_AUTH_LOGON_CHALLENGE_Server_free(version8_CMD_AUTH_LOGON_CHALLENGE_Server* object);
 
 typedef all_CMD_AUTH_LOGON_CHALLENGE_Client version8_CMD_AUTH_LOGON_CHALLENGE_Client;
 
@@ -120,8 +120,8 @@ typedef struct {
     WowLoginString authenticator;
 
 } version8_CMD_AUTH_LOGON_PROOF_Client;
-WOWLOGINMESSAGESC_EXPORT WowLoginResult version8_CMD_AUTH_LOGON_PROOF_Client_write(WowLoginWriter* writer, const version8_CMD_AUTH_LOGON_PROOF_Client* object);
-WOWLOGINMESSAGESC_EXPORT void version8_CMD_AUTH_LOGON_PROOF_Client_free(version8_CMD_AUTH_LOGON_PROOF_Client* object);
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version8_CMD_AUTH_LOGON_PROOF_Client_write(WowLoginWriter* writer, const version8_CMD_AUTH_LOGON_PROOF_Client* object);
+WOW_LOGIN_MESSAGES_C_EXPORT void version8_CMD_AUTH_LOGON_PROOF_Client_free(version8_CMD_AUTH_LOGON_PROOF_Client* object);
 
 typedef struct {
     version8_LoginResult result;
@@ -131,8 +131,8 @@ typedef struct {
     uint16_t unknown;
 
 } version8_CMD_AUTH_LOGON_PROOF_Server;
-WOWLOGINMESSAGESC_EXPORT WowLoginResult version8_CMD_AUTH_LOGON_PROOF_Server_write(WowLoginWriter* writer, const version8_CMD_AUTH_LOGON_PROOF_Server* object);
-WOWLOGINMESSAGESC_EXPORT void version8_CMD_AUTH_LOGON_PROOF_Server_free(version8_CMD_AUTH_LOGON_PROOF_Server* object);
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version8_CMD_AUTH_LOGON_PROOF_Server_write(WowLoginWriter* writer, const version8_CMD_AUTH_LOGON_PROOF_Server* object);
+WOW_LOGIN_MESSAGES_C_EXPORT void version8_CMD_AUTH_LOGON_PROOF_Server_free(version8_CMD_AUTH_LOGON_PROOF_Server* object);
 
 typedef struct {
     version8_LoginResult result;
@@ -140,8 +140,8 @@ typedef struct {
     uint8_t (*checksum_salt)[16];
 
 } version8_CMD_AUTH_RECONNECT_CHALLENGE_Server;
-WOWLOGINMESSAGESC_EXPORT WowLoginResult version8_CMD_AUTH_RECONNECT_CHALLENGE_Server_write(WowLoginWriter* writer, const version8_CMD_AUTH_RECONNECT_CHALLENGE_Server* object);
-WOWLOGINMESSAGESC_EXPORT void version8_CMD_AUTH_RECONNECT_CHALLENGE_Server_free(version8_CMD_AUTH_RECONNECT_CHALLENGE_Server* object);
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version8_CMD_AUTH_RECONNECT_CHALLENGE_Server_write(WowLoginWriter* writer, const version8_CMD_AUTH_RECONNECT_CHALLENGE_Server* object);
+WOW_LOGIN_MESSAGES_C_EXPORT void version8_CMD_AUTH_RECONNECT_CHALLENGE_Server_free(version8_CMD_AUTH_RECONNECT_CHALLENGE_Server* object);
 
 typedef all_CMD_AUTH_RECONNECT_CHALLENGE_Client version8_CMD_AUTH_RECONNECT_CHALLENGE_Client;
 
@@ -151,27 +151,27 @@ typedef struct {
     version8_LoginResult result;
 
 } version8_CMD_AUTH_RECONNECT_PROOF_Server;
-WOWLOGINMESSAGESC_EXPORT WowLoginResult version8_CMD_AUTH_RECONNECT_PROOF_Server_write(WowLoginWriter* writer, const version8_CMD_AUTH_RECONNECT_PROOF_Server* object);
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version8_CMD_AUTH_RECONNECT_PROOF_Server_write(WowLoginWriter* writer, const version8_CMD_AUTH_RECONNECT_PROOF_Server* object);
 
-WOWLOGINMESSAGESC_EXPORT WowLoginResult version8_CMD_REALM_LIST_Client_write(WowLoginWriter* writer);
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version8_CMD_REALM_LIST_Client_write(WowLoginWriter* writer);
 
 typedef struct {
     uint16_t number_of_realms;
     version8_Realm* realms;
 
 } version8_CMD_REALM_LIST_Server;
-WOWLOGINMESSAGESC_EXPORT WowLoginResult version8_CMD_REALM_LIST_Server_write(WowLoginWriter* writer, const version8_CMD_REALM_LIST_Server* object);
-WOWLOGINMESSAGESC_EXPORT void version8_CMD_REALM_LIST_Server_free(version8_CMD_REALM_LIST_Server* object);
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version8_CMD_REALM_LIST_Server_write(WowLoginWriter* writer, const version8_CMD_REALM_LIST_Server* object);
+WOW_LOGIN_MESSAGES_C_EXPORT void version8_CMD_REALM_LIST_Server_free(version8_CMD_REALM_LIST_Server* object);
 
 typedef version2_CMD_XFER_INITIATE version8_CMD_XFER_INITIATE;
 
 typedef version2_CMD_XFER_DATA version8_CMD_XFER_DATA;
 
-WOWLOGINMESSAGESC_EXPORT WowLoginResult version8_CMD_XFER_ACCEPT_write(WowLoginWriter* writer);
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version8_CMD_XFER_ACCEPT_write(WowLoginWriter* writer);
 
 typedef version2_CMD_XFER_RESUME version8_CMD_XFER_RESUME;
 
-WOWLOGINMESSAGESC_EXPORT WowLoginResult version8_CMD_XFER_CANCEL_write(WowLoginWriter* writer);
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version8_CMD_XFER_CANCEL_write(WowLoginWriter* writer);
 
 typedef struct {
     WowLoginOpcode opcode;
@@ -183,9 +183,9 @@ typedef struct {
     } body;
 } Version8ClientOpcodeContainer;
 
-WOWLOGINMESSAGESC_EXPORT WowLoginResult version8_client_opcode_read(WowLoginReader* reader, Version8ClientOpcodeContainer* opcodes);
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version8_client_opcode_read(WowLoginReader* reader, Version8ClientOpcodeContainer* opcodes);
 
-WOWLOGINMESSAGESC_EXPORT void version8_client_opcode_free(Version8ClientOpcodeContainer* opcodes);
+WOW_LOGIN_MESSAGES_C_EXPORT void version8_client_opcode_free(Version8ClientOpcodeContainer* opcodes);
 
 typedef struct {
     WowLoginOpcode opcode;
@@ -201,9 +201,9 @@ typedef struct {
     } body;
 } Version8ServerOpcodeContainer;
 
-WOWLOGINMESSAGESC_EXPORT WowLoginResult version8_server_opcode_read(WowLoginReader* reader, Version8ServerOpcodeContainer* opcodes);
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version8_server_opcode_read(WowLoginReader* reader, Version8ServerOpcodeContainer* opcodes);
 
-WOWLOGINMESSAGESC_EXPORT void version8_server_opcode_free(Version8ServerOpcodeContainer* opcodes);
+WOW_LOGIN_MESSAGES_C_EXPORT void version8_server_opcode_free(Version8ServerOpcodeContainer* opcodes);
 
 #ifdef __cplusplus
 }

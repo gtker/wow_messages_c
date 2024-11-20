@@ -12,7 +12,7 @@
 
 #include "wow_world_messages/all.h"
 
-#include "wowworldmessagesc_export.h"
+#include "wow_world_messages_c_export.h"
 
 typedef struct
 {
@@ -46,10 +46,10 @@ typedef struct
     all_Vector3d* splines;
 } MonsterMoveSpline;
 
-WOWWORLDMESSAGESC_EXPORT const char* wwm_error_code_to_string(WowWorldResult result);
+WOW_WORLD_MESSAGES_C_EXPORT const char* wwm_error_code_to_string(WowWorldResult result);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldReader wwm_create_reader(const unsigned char* const source, const size_t length);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldReader wwm_create_reader(const unsigned char* const source, const size_t length);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldWriter wwm_create_writer(unsigned char* const destination, const size_t length);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldWriter wwm_create_writer(unsigned char* const destination, const size_t length);
 
 #endif /* WWM_WOW_WORLD_MESSAGES_H */

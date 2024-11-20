@@ -327,7 +327,7 @@ static void wlm_free_string(WowLoginString* string)
 #undef WLM_CHECK_LENGTH
 
 
-WOWLOGINMESSAGESC_EXPORT WowLoginReader wlm_create_reader(const unsigned char* const source, const size_t length)
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginReader wlm_create_reader(const unsigned char* const source, const size_t length)
 {
     WowLoginReader reader;
     reader.source = source;
@@ -337,7 +337,7 @@ WOWLOGINMESSAGESC_EXPORT WowLoginReader wlm_create_reader(const unsigned char* c
     return reader;
 }
 
-WOWLOGINMESSAGESC_EXPORT WowLoginWriter wlm_create_writer(unsigned char* destination, const size_t length)
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginWriter wlm_create_writer(unsigned char* destination, const size_t length)
 {
     WowLoginWriter writer;
     writer.destination = destination;
@@ -347,7 +347,7 @@ WOWLOGINMESSAGESC_EXPORT WowLoginWriter wlm_create_writer(unsigned char* destina
     return writer;
 }
 
-WOWLOGINMESSAGESC_EXPORT const char* wlm_error_code_to_string(const WowLoginResult result)
+WOW_LOGIN_MESSAGES_C_EXPORT const char* wlm_error_code_to_string(const WowLoginResult result)
 {
     switch (result)
     {

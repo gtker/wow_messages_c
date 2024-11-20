@@ -10,7 +10,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include "wowloginmessagesc_export.h"
+#include "wow_login_messages_c_export.h"
 
 typedef struct
 {
@@ -53,10 +53,10 @@ typedef enum
     CMD_XFER_CANCEL = 0x34
 } WowLoginOpcode;
 
-WOWLOGINMESSAGESC_EXPORT const char* wlm_error_code_to_string(WowLoginResult result);
+WOW_LOGIN_MESSAGES_C_EXPORT const char* wlm_error_code_to_string(WowLoginResult result);
 
-WOWLOGINMESSAGESC_EXPORT WowLoginReader wlm_create_reader(const unsigned char* const source, const size_t length);
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginReader wlm_create_reader(const unsigned char* const source, const size_t length);
 
-WOWLOGINMESSAGESC_EXPORT WowLoginWriter wlm_create_writer(unsigned char* const destination, const size_t length);
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginWriter wlm_create_writer(unsigned char* const destination, const size_t length);
 
 #endif /* WOW_LOGIN_MESSAGES_H */

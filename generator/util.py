@@ -12,6 +12,15 @@ VERSIONS = [VANILLA, TBC, WRATH]
 
 LOGIN_VERSION_ALL = 0xFFFF
 
+IS_CPP = False
+def is_cpp() -> bool:
+    global IS_CPP
+    return IS_CPP
+
+def set_cpp(cpp: bool):
+    global IS_CPP
+    IS_CPP = cpp
+
 def write_file_if_not_same(s: Writer, path: str):
     overwrite = False
     try:
@@ -207,7 +216,7 @@ def first_version_as_module(tags: model.ObjectTags) -> str:
 
 
 def get_export_define(tags: model.ObjectTags) -> str:
-    return "WOWWORLDMESSAGESC_EXPORT" if is_world(tags) else "WOWLOGINMESSAGESC_EXPORT"
+    return "WOW_WORLD_MESSAGES_C_EXPORT" if is_world(tags) else "WOW_LOGIN_MESSAGES_C_EXPORT"
 
 
 def get_type_prefix(tags: model.ObjectTags) -> str:

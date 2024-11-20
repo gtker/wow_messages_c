@@ -6583,9 +6583,9 @@ typedef struct {
     uint32_t values[VANILLA_VALUES_LENGTH];
 } vanilla_UpdateMask;
 
-WOWWORLDMESSAGESC_EXPORT void vanilla_update_mask_set(vanilla_UpdateMask* mask, vanilla_UpdateMaskValues offset, uint32_t value);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_set(vanilla_UpdateMask* mask, vanilla_UpdateMaskValues offset, uint32_t value);
 
-WOWWORLDMESSAGESC_EXPORT uint32_t vanilla_update_mask_get(vanilla_UpdateMask* mask, vanilla_UpdateMaskValues offset);
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_get(vanilla_UpdateMask* mask, vanilla_UpdateMaskValues offset);
 
 typedef struct {
     vanilla_AddonType addon_type;
@@ -7154,14 +7154,14 @@ typedef struct {
 
 } vanilla_WorldState;
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_BOOTME_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BOOTME_write(WowWorldWriter* writer);
 
 typedef struct {
     WowWorldString query;
 
 } vanilla_CMSG_DBLOOKUP;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_DBLOOKUP_write(WowWorldWriter* writer, const vanilla_CMSG_DBLOOKUP* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_DBLOOKUP_free(vanilla_CMSG_DBLOOKUP* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_DBLOOKUP_write(WowWorldWriter* writer, const vanilla_CMSG_DBLOOKUP* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_DBLOOKUP_free(vanilla_CMSG_DBLOOKUP* object);
 
 typedef struct {
     uint32_t time;
@@ -7170,14 +7170,14 @@ typedef struct {
     float orientation;
 
 } vanilla_CMSG_WORLD_TELEPORT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_WORLD_TELEPORT_write(WowWorldWriter* writer, const vanilla_CMSG_WORLD_TELEPORT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_WORLD_TELEPORT_write(WowWorldWriter* writer, const vanilla_CMSG_WORLD_TELEPORT* object);
 
 typedef struct {
     WowWorldString name;
 
 } vanilla_CMSG_TELEPORT_TO_UNIT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_TELEPORT_TO_UNIT_write(WowWorldWriter* writer, const vanilla_CMSG_TELEPORT_TO_UNIT* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_TELEPORT_TO_UNIT_free(vanilla_CMSG_TELEPORT_TO_UNIT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_TELEPORT_TO_UNIT_write(WowWorldWriter* writer, const vanilla_CMSG_TELEPORT_TO_UNIT* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_TELEPORT_TO_UNIT_free(vanilla_CMSG_TELEPORT_TO_UNIT* object);
 
 typedef struct {
     WowWorldString name;
@@ -7191,42 +7191,42 @@ typedef struct {
     uint8_t facial_hair;
 
 } vanilla_CMSG_CHAR_CREATE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_CHAR_CREATE_write(WowWorldWriter* writer, const vanilla_CMSG_CHAR_CREATE* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_CHAR_CREATE_free(vanilla_CMSG_CHAR_CREATE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHAR_CREATE_write(WowWorldWriter* writer, const vanilla_CMSG_CHAR_CREATE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHAR_CREATE_free(vanilla_CMSG_CHAR_CREATE* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_CHAR_ENUM_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHAR_ENUM_write(WowWorldWriter* writer);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_CMSG_CHAR_DELETE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_CHAR_DELETE_write(WowWorldWriter* writer, const vanilla_CMSG_CHAR_DELETE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHAR_DELETE_write(WowWorldWriter* writer, const vanilla_CMSG_CHAR_DELETE* object);
 
 typedef struct {
     vanilla_WorldResult result;
 
 } vanilla_SMSG_CHAR_CREATE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_CHAR_CREATE_write(WowWorldWriter* writer, const vanilla_SMSG_CHAR_CREATE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CHAR_CREATE_write(WowWorldWriter* writer, const vanilla_SMSG_CHAR_CREATE* object);
 
 typedef struct {
     uint8_t amount_of_characters;
     vanilla_Character* characters;
 
 } vanilla_SMSG_CHAR_ENUM;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_CHAR_ENUM_write(WowWorldWriter* writer, const vanilla_SMSG_CHAR_ENUM* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_CHAR_ENUM_free(vanilla_SMSG_CHAR_ENUM* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CHAR_ENUM_write(WowWorldWriter* writer, const vanilla_SMSG_CHAR_ENUM* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_CHAR_ENUM_free(vanilla_SMSG_CHAR_ENUM* object);
 
 typedef struct {
     vanilla_WorldResult result;
 
 } vanilla_SMSG_CHAR_DELETE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_CHAR_DELETE_write(WowWorldWriter* writer, const vanilla_SMSG_CHAR_DELETE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CHAR_DELETE_write(WowWorldWriter* writer, const vanilla_SMSG_CHAR_DELETE* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_CMSG_PLAYER_LOGIN;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_PLAYER_LOGIN_write(WowWorldWriter* writer, const vanilla_CMSG_PLAYER_LOGIN* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PLAYER_LOGIN_write(WowWorldWriter* writer, const vanilla_CMSG_PLAYER_LOGIN* object);
 
 typedef struct {
     vanilla_Map map;
@@ -7234,7 +7234,7 @@ typedef struct {
     float orientation;
 
 } vanilla_SMSG_NEW_WORLD;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_NEW_WORLD_write(WowWorldWriter* writer, const vanilla_SMSG_NEW_WORLD* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_NEW_WORLD_write(WowWorldWriter* writer, const vanilla_SMSG_NEW_WORLD* object);
 
 typedef struct {
     uint32_t transport;
@@ -7246,7 +7246,7 @@ typedef struct {
 
     vanilla_SMSG_TRANSFER_PENDING_has_transport* has_transport;
 } vanilla_SMSG_TRANSFER_PENDING;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_TRANSFER_PENDING_write(WowWorldWriter* writer, const vanilla_SMSG_TRANSFER_PENDING* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TRANSFER_PENDING_write(WowWorldWriter* writer, const vanilla_SMSG_TRANSFER_PENDING* object);
 
 typedef struct {
     vanilla_Map map;
@@ -7254,43 +7254,43 @@ typedef struct {
     uint8_t argument;
 
 } vanilla_SMSG_TRANSFER_ABORTED;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_TRANSFER_ABORTED_write(WowWorldWriter* writer, const vanilla_SMSG_TRANSFER_ABORTED* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TRANSFER_ABORTED_write(WowWorldWriter* writer, const vanilla_SMSG_TRANSFER_ABORTED* object);
 
 typedef struct {
     vanilla_WorldResult result;
 
 } vanilla_SMSG_CHARACTER_LOGIN_FAILED;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_CHARACTER_LOGIN_FAILED_write(WowWorldWriter* writer, const vanilla_SMSG_CHARACTER_LOGIN_FAILED* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CHARACTER_LOGIN_FAILED_write(WowWorldWriter* writer, const vanilla_SMSG_CHARACTER_LOGIN_FAILED* object);
 
 typedef struct {
     uint32_t datetime;
     float timescale;
 
 } vanilla_SMSG_LOGIN_SETTIMESPEED;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_LOGIN_SETTIMESPEED_write(WowWorldWriter* writer, const vanilla_SMSG_LOGIN_SETTIMESPEED* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOGIN_SETTIMESPEED_write(WowWorldWriter* writer, const vanilla_SMSG_LOGIN_SETTIMESPEED* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_PLAYER_LOGOUT_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PLAYER_LOGOUT_write(WowWorldWriter* writer);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_LOGOUT_REQUEST_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_LOGOUT_REQUEST_write(WowWorldWriter* writer);
 
 typedef struct {
     vanilla_LogoutResult result;
     vanilla_LogoutSpeed speed;
 
 } vanilla_SMSG_LOGOUT_RESPONSE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_LOGOUT_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_LOGOUT_RESPONSE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOGOUT_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_LOGOUT_RESPONSE* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_LOGOUT_COMPLETE_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOGOUT_COMPLETE_write(WowWorldWriter* writer);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_LOGOUT_CANCEL_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_LOGOUT_CANCEL_write(WowWorldWriter* writer);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_LOGOUT_CANCEL_ACK_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOGOUT_CANCEL_ACK_write(WowWorldWriter* writer);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_CMSG_NAME_QUERY;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_NAME_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_NAME_QUERY* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_NAME_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_NAME_QUERY* object);
 
 typedef struct {
     uint64_t guid;
@@ -7301,15 +7301,15 @@ typedef struct {
     vanilla_Class class_type;
 
 } vanilla_SMSG_NAME_QUERY_RESPONSE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_NAME_QUERY_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_NAME_QUERY_RESPONSE* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_NAME_QUERY_RESPONSE_free(vanilla_SMSG_NAME_QUERY_RESPONSE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_NAME_QUERY_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_NAME_QUERY_RESPONSE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_NAME_QUERY_RESPONSE_free(vanilla_SMSG_NAME_QUERY_RESPONSE* object);
 
 typedef struct {
     uint32_t pet_number;
     uint64_t guid;
 
 } vanilla_CMSG_PET_NAME_QUERY;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_PET_NAME_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_PET_NAME_QUERY* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PET_NAME_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_PET_NAME_QUERY* object);
 
 typedef struct {
     uint32_t pet_number;
@@ -7317,14 +7317,14 @@ typedef struct {
     uint32_t pet_name_timestamp;
 
 } vanilla_SMSG_PET_NAME_QUERY_RESPONSE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_PET_NAME_QUERY_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_PET_NAME_QUERY_RESPONSE* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_PET_NAME_QUERY_RESPONSE_free(vanilla_SMSG_PET_NAME_QUERY_RESPONSE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PET_NAME_QUERY_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_PET_NAME_QUERY_RESPONSE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_PET_NAME_QUERY_RESPONSE_free(vanilla_SMSG_PET_NAME_QUERY_RESPONSE* object);
 
 typedef struct {
     uint32_t guild_id;
 
 } vanilla_CMSG_GUILD_QUERY;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_GUILD_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_GUILD_QUERY* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_GUILD_QUERY* object);
 
 typedef struct {
     uint32_t id;
@@ -7337,15 +7337,15 @@ typedef struct {
     uint32_t background_color;
 
 } vanilla_SMSG_GUILD_QUERY_RESPONSE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_GUILD_QUERY_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_GUILD_QUERY_RESPONSE* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_GUILD_QUERY_RESPONSE_free(vanilla_SMSG_GUILD_QUERY_RESPONSE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GUILD_QUERY_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_GUILD_QUERY_RESPONSE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GUILD_QUERY_RESPONSE_free(vanilla_SMSG_GUILD_QUERY_RESPONSE* object);
 
 typedef struct {
     uint32_t item;
     uint64_t guid;
 
 } vanilla_CMSG_ITEM_QUERY_SINGLE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_ITEM_QUERY_SINGLE_write(WowWorldWriter* writer, const vanilla_CMSG_ITEM_QUERY_SINGLE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_ITEM_QUERY_SINGLE_write(WowWorldWriter* writer, const vanilla_CMSG_ITEM_QUERY_SINGLE* object);
 
 typedef struct {
     vanilla_ItemClassAndSubClass class_and_sub_class;
@@ -7409,13 +7409,13 @@ typedef struct {
 
     vanilla_SMSG_ITEM_QUERY_SINGLE_RESPONSE_found* found;
 } vanilla_SMSG_ITEM_QUERY_SINGLE_RESPONSE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_ITEM_QUERY_SINGLE_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_ITEM_QUERY_SINGLE_RESPONSE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ITEM_QUERY_SINGLE_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_ITEM_QUERY_SINGLE_RESPONSE* object);
 
 typedef struct {
     uint32_t page_id;
 
 } vanilla_CMSG_PAGE_TEXT_QUERY;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_PAGE_TEXT_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_PAGE_TEXT_QUERY* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PAGE_TEXT_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_PAGE_TEXT_QUERY* object);
 
 typedef struct {
     uint32_t page_id;
@@ -7423,14 +7423,14 @@ typedef struct {
     uint32_t next_page_id;
 
 } vanilla_SMSG_PAGE_TEXT_QUERY_RESPONSE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_PAGE_TEXT_QUERY_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_PAGE_TEXT_QUERY_RESPONSE* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_PAGE_TEXT_QUERY_RESPONSE_free(vanilla_SMSG_PAGE_TEXT_QUERY_RESPONSE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PAGE_TEXT_QUERY_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_PAGE_TEXT_QUERY_RESPONSE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_PAGE_TEXT_QUERY_RESPONSE_free(vanilla_SMSG_PAGE_TEXT_QUERY_RESPONSE* object);
 
 typedef struct {
     uint32_t quest_id;
 
 } vanilla_CMSG_QUEST_QUERY;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_QUEST_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_QUEST_QUERY* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUEST_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_QUEST_QUERY* object);
 
 typedef struct {
     uint32_t quest_id;
@@ -7461,15 +7461,15 @@ typedef struct {
     WowWorldString (*objective_texts)[4];
 
 } vanilla_SMSG_QUEST_QUERY_RESPONSE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_QUEST_QUERY_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_QUEST_QUERY_RESPONSE* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_QUEST_QUERY_RESPONSE_free(vanilla_SMSG_QUEST_QUERY_RESPONSE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUEST_QUERY_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_QUEST_QUERY_RESPONSE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_QUEST_QUERY_RESPONSE_free(vanilla_SMSG_QUEST_QUERY_RESPONSE* object);
 
 typedef struct {
     uint32_t entry_id;
     uint64_t guid;
 
 } vanilla_CMSG_GAMEOBJECT_QUERY;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_GAMEOBJECT_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_GAMEOBJECT_QUERY* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GAMEOBJECT_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_GAMEOBJECT_QUERY* object);
 
 typedef struct {
     uint32_t info_type;
@@ -7487,14 +7487,14 @@ typedef struct {
 
     vanilla_SMSG_GAMEOBJECT_QUERY_RESPONSE_found* found;
 } vanilla_SMSG_GAMEOBJECT_QUERY_RESPONSE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_GAMEOBJECT_QUERY_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_GAMEOBJECT_QUERY_RESPONSE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GAMEOBJECT_QUERY_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_GAMEOBJECT_QUERY_RESPONSE* object);
 
 typedef struct {
     uint32_t creature;
     uint64_t guid;
 
 } vanilla_CMSG_CREATURE_QUERY;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_CREATURE_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_CREATURE_QUERY* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CREATURE_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_CREATURE_QUERY* object);
 
 typedef struct {
     WowWorldString name1;
@@ -7518,7 +7518,7 @@ typedef struct {
 
     vanilla_SMSG_CREATURE_QUERY_RESPONSE_found* found;
 } vanilla_SMSG_CREATURE_QUERY_RESPONSE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_CREATURE_QUERY_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_CREATURE_QUERY_RESPONSE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CREATURE_QUERY_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_CREATURE_QUERY_RESPONSE* object);
 
 typedef struct {
     uint32_t minimum_level;
@@ -7533,8 +7533,8 @@ typedef struct {
     WowWorldString* search_strings;
 
 } vanilla_CMSG_WHO;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_WHO_write(WowWorldWriter* writer, const vanilla_CMSG_WHO* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_WHO_free(vanilla_CMSG_WHO* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_WHO_write(WowWorldWriter* writer, const vanilla_CMSG_WHO* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_WHO_free(vanilla_CMSG_WHO* object);
 
 typedef struct {
     uint32_t listed_players;
@@ -7542,126 +7542,126 @@ typedef struct {
     vanilla_WhoPlayer* players;
 
 } vanilla_SMSG_WHO;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_WHO_write(WowWorldWriter* writer, const vanilla_SMSG_WHO* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_WHO_free(vanilla_SMSG_WHO* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_WHO_write(WowWorldWriter* writer, const vanilla_SMSG_WHO* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_WHO_free(vanilla_SMSG_WHO* object);
 
 typedef struct {
     WowWorldString character;
 
 } vanilla_CMSG_WHOIS;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_WHOIS_write(WowWorldWriter* writer, const vanilla_CMSG_WHOIS* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_WHOIS_free(vanilla_CMSG_WHOIS* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_WHOIS_write(WowWorldWriter* writer, const vanilla_CMSG_WHOIS* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_WHOIS_free(vanilla_CMSG_WHOIS* object);
 
 typedef struct {
     WowWorldString message;
 
 } vanilla_SMSG_WHOIS;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_WHOIS_write(WowWorldWriter* writer, const vanilla_SMSG_WHOIS* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_WHOIS_free(vanilla_SMSG_WHOIS* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_WHOIS_write(WowWorldWriter* writer, const vanilla_SMSG_WHOIS* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_WHOIS_free(vanilla_SMSG_WHOIS* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_FRIEND_LIST_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_FRIEND_LIST_write(WowWorldWriter* writer);
 
 typedef struct {
     uint8_t amount_of_friends;
     vanilla_Friend* friends;
 
 } vanilla_SMSG_FRIEND_LIST;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_FRIEND_LIST_write(WowWorldWriter* writer, const vanilla_SMSG_FRIEND_LIST* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_FRIEND_LIST_free(vanilla_SMSG_FRIEND_LIST* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_FRIEND_LIST_write(WowWorldWriter* writer, const vanilla_SMSG_FRIEND_LIST* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_FRIEND_LIST_free(vanilla_SMSG_FRIEND_LIST* object);
 
 typedef struct {
     vanilla_FriendResult result;
     uint64_t guid;
 
 } vanilla_SMSG_FRIEND_STATUS;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_FRIEND_STATUS_write(WowWorldWriter* writer, const vanilla_SMSG_FRIEND_STATUS* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_FRIEND_STATUS_write(WowWorldWriter* writer, const vanilla_SMSG_FRIEND_STATUS* object);
 
 typedef struct {
     WowWorldString name;
 
 } vanilla_CMSG_ADD_FRIEND;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_ADD_FRIEND_write(WowWorldWriter* writer, const vanilla_CMSG_ADD_FRIEND* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_ADD_FRIEND_free(vanilla_CMSG_ADD_FRIEND* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_ADD_FRIEND_write(WowWorldWriter* writer, const vanilla_CMSG_ADD_FRIEND* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_ADD_FRIEND_free(vanilla_CMSG_ADD_FRIEND* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_CMSG_DEL_FRIEND;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_DEL_FRIEND_write(WowWorldWriter* writer, const vanilla_CMSG_DEL_FRIEND* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_DEL_FRIEND_write(WowWorldWriter* writer, const vanilla_CMSG_DEL_FRIEND* object);
 
 typedef struct {
     uint8_t amount_of_ignored;
     uint64_t* ignored;
 
 } vanilla_SMSG_IGNORE_LIST;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_IGNORE_LIST_write(WowWorldWriter* writer, const vanilla_SMSG_IGNORE_LIST* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_IGNORE_LIST_free(vanilla_SMSG_IGNORE_LIST* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_IGNORE_LIST_write(WowWorldWriter* writer, const vanilla_SMSG_IGNORE_LIST* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_IGNORE_LIST_free(vanilla_SMSG_IGNORE_LIST* object);
 
 typedef struct {
     WowWorldString name;
 
 } vanilla_CMSG_ADD_IGNORE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_ADD_IGNORE_write(WowWorldWriter* writer, const vanilla_CMSG_ADD_IGNORE* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_ADD_IGNORE_free(vanilla_CMSG_ADD_IGNORE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_ADD_IGNORE_write(WowWorldWriter* writer, const vanilla_CMSG_ADD_IGNORE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_ADD_IGNORE_free(vanilla_CMSG_ADD_IGNORE* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_CMSG_DEL_IGNORE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_DEL_IGNORE_write(WowWorldWriter* writer, const vanilla_CMSG_DEL_IGNORE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_DEL_IGNORE_write(WowWorldWriter* writer, const vanilla_CMSG_DEL_IGNORE* object);
 
 typedef struct {
     WowWorldString name;
 
 } vanilla_CMSG_GROUP_INVITE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_GROUP_INVITE_write(WowWorldWriter* writer, const vanilla_CMSG_GROUP_INVITE* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_GROUP_INVITE_free(vanilla_CMSG_GROUP_INVITE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GROUP_INVITE_write(WowWorldWriter* writer, const vanilla_CMSG_GROUP_INVITE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GROUP_INVITE_free(vanilla_CMSG_GROUP_INVITE* object);
 
 typedef struct {
     WowWorldString name;
 
 } vanilla_SMSG_GROUP_INVITE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_GROUP_INVITE_write(WowWorldWriter* writer, const vanilla_SMSG_GROUP_INVITE* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_GROUP_INVITE_free(vanilla_SMSG_GROUP_INVITE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GROUP_INVITE_write(WowWorldWriter* writer, const vanilla_SMSG_GROUP_INVITE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GROUP_INVITE_free(vanilla_SMSG_GROUP_INVITE* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_GROUP_ACCEPT_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GROUP_ACCEPT_write(WowWorldWriter* writer);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_GROUP_DECLINE_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GROUP_DECLINE_write(WowWorldWriter* writer);
 
 typedef struct {
     WowWorldString name;
 
 } vanilla_SMSG_GROUP_DECLINE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_GROUP_DECLINE_write(WowWorldWriter* writer, const vanilla_SMSG_GROUP_DECLINE* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_GROUP_DECLINE_free(vanilla_SMSG_GROUP_DECLINE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GROUP_DECLINE_write(WowWorldWriter* writer, const vanilla_SMSG_GROUP_DECLINE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GROUP_DECLINE_free(vanilla_SMSG_GROUP_DECLINE* object);
 
 typedef struct {
     WowWorldString name;
 
 } vanilla_CMSG_GROUP_UNINVITE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_GROUP_UNINVITE_write(WowWorldWriter* writer, const vanilla_CMSG_GROUP_UNINVITE* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_GROUP_UNINVITE_free(vanilla_CMSG_GROUP_UNINVITE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GROUP_UNINVITE_write(WowWorldWriter* writer, const vanilla_CMSG_GROUP_UNINVITE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GROUP_UNINVITE_free(vanilla_CMSG_GROUP_UNINVITE* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_CMSG_GROUP_UNINVITE_GUID;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_GROUP_UNINVITE_GUID_write(WowWorldWriter* writer, const vanilla_CMSG_GROUP_UNINVITE_GUID* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GROUP_UNINVITE_GUID_write(WowWorldWriter* writer, const vanilla_CMSG_GROUP_UNINVITE_GUID* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_GROUP_UNINVITE_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GROUP_UNINVITE_write(WowWorldWriter* writer);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_CMSG_GROUP_SET_LEADER;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_GROUP_SET_LEADER_write(WowWorldWriter* writer, const vanilla_CMSG_GROUP_SET_LEADER* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GROUP_SET_LEADER_write(WowWorldWriter* writer, const vanilla_CMSG_GROUP_SET_LEADER* object);
 
 typedef struct {
     WowWorldString name;
 
 } vanilla_SMSG_GROUP_SET_LEADER;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_GROUP_SET_LEADER_write(WowWorldWriter* writer, const vanilla_SMSG_GROUP_SET_LEADER* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_GROUP_SET_LEADER_free(vanilla_SMSG_GROUP_SET_LEADER* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GROUP_SET_LEADER_write(WowWorldWriter* writer, const vanilla_SMSG_GROUP_SET_LEADER* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GROUP_SET_LEADER_free(vanilla_SMSG_GROUP_SET_LEADER* object);
 
 typedef struct {
     vanilla_GroupLootSetting loot_setting;
@@ -7669,11 +7669,11 @@ typedef struct {
     vanilla_ItemQuality loot_threshold;
 
 } vanilla_CMSG_LOOT_METHOD;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_LOOT_METHOD_write(WowWorldWriter* writer, const vanilla_CMSG_LOOT_METHOD* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_LOOT_METHOD_write(WowWorldWriter* writer, const vanilla_CMSG_LOOT_METHOD* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_GROUP_DISBAND_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GROUP_DISBAND_write(WowWorldWriter* writer);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_GROUP_DESTROYED_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GROUP_DESTROYED_write(WowWorldWriter* writer);
 
 typedef struct {
     vanilla_GroupLootSetting loot_setting;
@@ -7690,8 +7690,8 @@ typedef struct {
 
     vanilla_SMSG_GROUP_LIST_group_not_empty* group_not_empty;
 } vanilla_SMSG_GROUP_LIST;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_GROUP_LIST_write(WowWorldWriter* writer, const vanilla_SMSG_GROUP_LIST* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_GROUP_LIST_free(vanilla_SMSG_GROUP_LIST* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GROUP_LIST_write(WowWorldWriter* writer, const vanilla_SMSG_GROUP_LIST* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GROUP_LIST_free(vanilla_SMSG_GROUP_LIST* object);
 
 typedef struct {
     uint64_t guid;
@@ -7719,8 +7719,8 @@ typedef struct {
     vanilla_AuraMask pet_auras;
 
 } vanilla_SMSG_PARTY_MEMBER_STATS;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_PARTY_MEMBER_STATS_write(WowWorldWriter* writer, const vanilla_SMSG_PARTY_MEMBER_STATS* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_PARTY_MEMBER_STATS_free(vanilla_SMSG_PARTY_MEMBER_STATS* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PARTY_MEMBER_STATS_write(WowWorldWriter* writer, const vanilla_SMSG_PARTY_MEMBER_STATS* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_PARTY_MEMBER_STATS_free(vanilla_SMSG_PARTY_MEMBER_STATS* object);
 
 typedef struct {
     vanilla_PartyOperation operation;
@@ -7728,36 +7728,36 @@ typedef struct {
     vanilla_PartyResult result;
 
 } vanilla_SMSG_PARTY_COMMAND_RESULT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_PARTY_COMMAND_RESULT_write(WowWorldWriter* writer, const vanilla_SMSG_PARTY_COMMAND_RESULT* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_PARTY_COMMAND_RESULT_free(vanilla_SMSG_PARTY_COMMAND_RESULT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PARTY_COMMAND_RESULT_write(WowWorldWriter* writer, const vanilla_SMSG_PARTY_COMMAND_RESULT* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_PARTY_COMMAND_RESULT_free(vanilla_SMSG_PARTY_COMMAND_RESULT* object);
 
 typedef struct {
     WowWorldString guild_name;
 
 } vanilla_CMSG_GUILD_CREATE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_GUILD_CREATE_write(WowWorldWriter* writer, const vanilla_CMSG_GUILD_CREATE* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_GUILD_CREATE_free(vanilla_CMSG_GUILD_CREATE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_CREATE_write(WowWorldWriter* writer, const vanilla_CMSG_GUILD_CREATE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GUILD_CREATE_free(vanilla_CMSG_GUILD_CREATE* object);
 
 typedef struct {
     WowWorldString invited_player;
 
 } vanilla_CMSG_GUILD_INVITE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_GUILD_INVITE_write(WowWorldWriter* writer, const vanilla_CMSG_GUILD_INVITE* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_GUILD_INVITE_free(vanilla_CMSG_GUILD_INVITE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_INVITE_write(WowWorldWriter* writer, const vanilla_CMSG_GUILD_INVITE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GUILD_INVITE_free(vanilla_CMSG_GUILD_INVITE* object);
 
 typedef struct {
     WowWorldString player_name;
     WowWorldString guild_name;
 
 } vanilla_SMSG_GUILD_INVITE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_GUILD_INVITE_write(WowWorldWriter* writer, const vanilla_SMSG_GUILD_INVITE* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_GUILD_INVITE_free(vanilla_SMSG_GUILD_INVITE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GUILD_INVITE_write(WowWorldWriter* writer, const vanilla_SMSG_GUILD_INVITE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GUILD_INVITE_free(vanilla_SMSG_GUILD_INVITE* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_GUILD_ACCEPT_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_ACCEPT_write(WowWorldWriter* writer);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_GUILD_DECLINE_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_DECLINE_write(WowWorldWriter* writer);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_GUILD_INFO_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_INFO_write(WowWorldWriter* writer);
 
 typedef struct {
     WowWorldString guild_name;
@@ -7768,10 +7768,10 @@ typedef struct {
     uint32_t amount_of_accounts_in_guild;
 
 } vanilla_SMSG_GUILD_INFO;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_GUILD_INFO_write(WowWorldWriter* writer, const vanilla_SMSG_GUILD_INFO* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_GUILD_INFO_free(vanilla_SMSG_GUILD_INFO* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GUILD_INFO_write(WowWorldWriter* writer, const vanilla_SMSG_GUILD_INFO* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GUILD_INFO_free(vanilla_SMSG_GUILD_INFO* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_GUILD_ROSTER_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_ROSTER_write(WowWorldWriter* writer);
 
 typedef struct {
     uint32_t amount_of_members;
@@ -7782,47 +7782,47 @@ typedef struct {
     vanilla_GuildMember* members;
 
 } vanilla_SMSG_GUILD_ROSTER;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_GUILD_ROSTER_write(WowWorldWriter* writer, const vanilla_SMSG_GUILD_ROSTER* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_GUILD_ROSTER_free(vanilla_SMSG_GUILD_ROSTER* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GUILD_ROSTER_write(WowWorldWriter* writer, const vanilla_SMSG_GUILD_ROSTER* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GUILD_ROSTER_free(vanilla_SMSG_GUILD_ROSTER* object);
 
 typedef struct {
     WowWorldString player_name;
 
 } vanilla_CMSG_GUILD_PROMOTE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_GUILD_PROMOTE_write(WowWorldWriter* writer, const vanilla_CMSG_GUILD_PROMOTE* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_GUILD_PROMOTE_free(vanilla_CMSG_GUILD_PROMOTE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_PROMOTE_write(WowWorldWriter* writer, const vanilla_CMSG_GUILD_PROMOTE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GUILD_PROMOTE_free(vanilla_CMSG_GUILD_PROMOTE* object);
 
 typedef struct {
     WowWorldString player_name;
 
 } vanilla_CMSG_GUILD_DEMOTE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_GUILD_DEMOTE_write(WowWorldWriter* writer, const vanilla_CMSG_GUILD_DEMOTE* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_GUILD_DEMOTE_free(vanilla_CMSG_GUILD_DEMOTE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_DEMOTE_write(WowWorldWriter* writer, const vanilla_CMSG_GUILD_DEMOTE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GUILD_DEMOTE_free(vanilla_CMSG_GUILD_DEMOTE* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_GUILD_LEAVE_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_LEAVE_write(WowWorldWriter* writer);
 
 typedef struct {
     WowWorldString player_name;
 
 } vanilla_CMSG_GUILD_REMOVE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_GUILD_REMOVE_write(WowWorldWriter* writer, const vanilla_CMSG_GUILD_REMOVE* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_GUILD_REMOVE_free(vanilla_CMSG_GUILD_REMOVE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_REMOVE_write(WowWorldWriter* writer, const vanilla_CMSG_GUILD_REMOVE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GUILD_REMOVE_free(vanilla_CMSG_GUILD_REMOVE* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_GUILD_DISBAND_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_DISBAND_write(WowWorldWriter* writer);
 
 typedef struct {
     WowWorldString new_guild_leader_name;
 
 } vanilla_CMSG_GUILD_LEADER;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_GUILD_LEADER_write(WowWorldWriter* writer, const vanilla_CMSG_GUILD_LEADER* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_GUILD_LEADER_free(vanilla_CMSG_GUILD_LEADER* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_LEADER_write(WowWorldWriter* writer, const vanilla_CMSG_GUILD_LEADER* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GUILD_LEADER_free(vanilla_CMSG_GUILD_LEADER* object);
 
 typedef struct {
     WowWorldString message_of_the_day;
 
 } vanilla_CMSG_GUILD_MOTD;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_GUILD_MOTD_write(WowWorldWriter* writer, const vanilla_CMSG_GUILD_MOTD* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_GUILD_MOTD_free(vanilla_CMSG_GUILD_MOTD* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_MOTD_write(WowWorldWriter* writer, const vanilla_CMSG_GUILD_MOTD* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GUILD_MOTD_free(vanilla_CMSG_GUILD_MOTD* object);
 
 typedef struct {
     vanilla_GuildEvent event;
@@ -7830,8 +7830,8 @@ typedef struct {
     WowWorldString* event_descriptions;
 
 } vanilla_SMSG_GUILD_EVENT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_GUILD_EVENT_write(WowWorldWriter* writer, const vanilla_SMSG_GUILD_EVENT* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_GUILD_EVENT_free(vanilla_SMSG_GUILD_EVENT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GUILD_EVENT_write(WowWorldWriter* writer, const vanilla_SMSG_GUILD_EVENT* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GUILD_EVENT_free(vanilla_SMSG_GUILD_EVENT* object);
 
 typedef struct {
     vanilla_GuildCommand command;
@@ -7839,8 +7839,8 @@ typedef struct {
     vanilla_GuildCommandResult result;
 
 } vanilla_SMSG_GUILD_COMMAND_RESULT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_GUILD_COMMAND_RESULT_write(WowWorldWriter* writer, const vanilla_SMSG_GUILD_COMMAND_RESULT* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_GUILD_COMMAND_RESULT_free(vanilla_SMSG_GUILD_COMMAND_RESULT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GUILD_COMMAND_RESULT_write(WowWorldWriter* writer, const vanilla_SMSG_GUILD_COMMAND_RESULT* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GUILD_COMMAND_RESULT_free(vanilla_SMSG_GUILD_COMMAND_RESULT* object);
 
 typedef struct {
     vanilla_ChatType chat_type;
@@ -7850,8 +7850,8 @@ typedef struct {
     WowWorldString message;
 
 } vanilla_CMSG_MESSAGECHAT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_MESSAGECHAT_write(WowWorldWriter* writer, const vanilla_CMSG_MESSAGECHAT* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_MESSAGECHAT_free(vanilla_CMSG_MESSAGECHAT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MESSAGECHAT_write(WowWorldWriter* writer, const vanilla_CMSG_MESSAGECHAT* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_MESSAGECHAT_free(vanilla_CMSG_MESSAGECHAT* object);
 
 typedef struct {
     vanilla_ChatType chat_type;
@@ -7871,38 +7871,38 @@ typedef struct {
     vanilla_PlayerChatTag tag;
 
 } vanilla_SMSG_MESSAGECHAT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_MESSAGECHAT_write(WowWorldWriter* writer, const vanilla_SMSG_MESSAGECHAT* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_MESSAGECHAT_free(vanilla_SMSG_MESSAGECHAT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MESSAGECHAT_write(WowWorldWriter* writer, const vanilla_SMSG_MESSAGECHAT* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_MESSAGECHAT_free(vanilla_SMSG_MESSAGECHAT* object);
 
 typedef struct {
     WowWorldString channel_name;
     WowWorldString channel_password;
 
 } vanilla_CMSG_JOIN_CHANNEL;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_JOIN_CHANNEL_write(WowWorldWriter* writer, const vanilla_CMSG_JOIN_CHANNEL* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_JOIN_CHANNEL_free(vanilla_CMSG_JOIN_CHANNEL* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_JOIN_CHANNEL_write(WowWorldWriter* writer, const vanilla_CMSG_JOIN_CHANNEL* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_JOIN_CHANNEL_free(vanilla_CMSG_JOIN_CHANNEL* object);
 
 typedef struct {
     WowWorldString channel_name;
 
 } vanilla_CMSG_LEAVE_CHANNEL;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_LEAVE_CHANNEL_write(WowWorldWriter* writer, const vanilla_CMSG_LEAVE_CHANNEL* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_LEAVE_CHANNEL_free(vanilla_CMSG_LEAVE_CHANNEL* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_LEAVE_CHANNEL_write(WowWorldWriter* writer, const vanilla_CMSG_LEAVE_CHANNEL* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_LEAVE_CHANNEL_free(vanilla_CMSG_LEAVE_CHANNEL* object);
 
 typedef struct {
     vanilla_ChatNotify notify_type;
     WowWorldString channel_name;
 
 } vanilla_SMSG_CHANNEL_NOTIFY;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_CHANNEL_NOTIFY_write(WowWorldWriter* writer, const vanilla_SMSG_CHANNEL_NOTIFY* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_CHANNEL_NOTIFY_free(vanilla_SMSG_CHANNEL_NOTIFY* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CHANNEL_NOTIFY_write(WowWorldWriter* writer, const vanilla_SMSG_CHANNEL_NOTIFY* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_CHANNEL_NOTIFY_free(vanilla_SMSG_CHANNEL_NOTIFY* object);
 
 typedef struct {
     WowWorldString channel_name;
 
 } vanilla_CMSG_CHANNEL_LIST;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_LIST_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_LIST* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_CHANNEL_LIST_free(vanilla_CMSG_CHANNEL_LIST* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_LIST_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_LIST* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_LIST_free(vanilla_CMSG_CHANNEL_LIST* object);
 
 typedef struct {
     WowWorldString channel_name;
@@ -7911,109 +7911,109 @@ typedef struct {
     vanilla_ChannelMember* members;
 
 } vanilla_SMSG_CHANNEL_LIST;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_CHANNEL_LIST_write(WowWorldWriter* writer, const vanilla_SMSG_CHANNEL_LIST* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_CHANNEL_LIST_free(vanilla_SMSG_CHANNEL_LIST* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CHANNEL_LIST_write(WowWorldWriter* writer, const vanilla_SMSG_CHANNEL_LIST* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_CHANNEL_LIST_free(vanilla_SMSG_CHANNEL_LIST* object);
 
 typedef struct {
     WowWorldString channel_name;
     WowWorldString channel_password;
 
 } vanilla_CMSG_CHANNEL_PASSWORD;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_PASSWORD_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_PASSWORD* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_CHANNEL_PASSWORD_free(vanilla_CMSG_CHANNEL_PASSWORD* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_PASSWORD_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_PASSWORD* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_PASSWORD_free(vanilla_CMSG_CHANNEL_PASSWORD* object);
 
 typedef struct {
     WowWorldString channel_name;
     WowWorldString new_owner;
 
 } vanilla_CMSG_CHANNEL_SET_OWNER;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_SET_OWNER_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_SET_OWNER* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_CHANNEL_SET_OWNER_free(vanilla_CMSG_CHANNEL_SET_OWNER* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_SET_OWNER_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_SET_OWNER* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_SET_OWNER_free(vanilla_CMSG_CHANNEL_SET_OWNER* object);
 
 typedef struct {
     WowWorldString channel_name;
 
 } vanilla_CMSG_CHANNEL_OWNER;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_OWNER_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_OWNER* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_CHANNEL_OWNER_free(vanilla_CMSG_CHANNEL_OWNER* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_OWNER_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_OWNER* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_OWNER_free(vanilla_CMSG_CHANNEL_OWNER* object);
 
 typedef struct {
     WowWorldString channel_name;
     WowWorldString player_name;
 
 } vanilla_CMSG_CHANNEL_MODERATOR;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_MODERATOR_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_MODERATOR* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_CHANNEL_MODERATOR_free(vanilla_CMSG_CHANNEL_MODERATOR* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_MODERATOR_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_MODERATOR* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_MODERATOR_free(vanilla_CMSG_CHANNEL_MODERATOR* object);
 
 typedef struct {
     WowWorldString channel_name;
     WowWorldString player_name;
 
 } vanilla_CMSG_CHANNEL_UNMODERATOR;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_UNMODERATOR_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_UNMODERATOR* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_CHANNEL_UNMODERATOR_free(vanilla_CMSG_CHANNEL_UNMODERATOR* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_UNMODERATOR_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_UNMODERATOR* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_UNMODERATOR_free(vanilla_CMSG_CHANNEL_UNMODERATOR* object);
 
 typedef struct {
     WowWorldString channel_name;
     WowWorldString player_name;
 
 } vanilla_CMSG_CHANNEL_MUTE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_MUTE_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_MUTE* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_CHANNEL_MUTE_free(vanilla_CMSG_CHANNEL_MUTE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_MUTE_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_MUTE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_MUTE_free(vanilla_CMSG_CHANNEL_MUTE* object);
 
 typedef struct {
     WowWorldString channel_name;
     WowWorldString player_name;
 
 } vanilla_CMSG_CHANNEL_UNMUTE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_UNMUTE_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_UNMUTE* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_CHANNEL_UNMUTE_free(vanilla_CMSG_CHANNEL_UNMUTE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_UNMUTE_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_UNMUTE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_UNMUTE_free(vanilla_CMSG_CHANNEL_UNMUTE* object);
 
 typedef struct {
     WowWorldString channel_name;
     WowWorldString player_name;
 
 } vanilla_CMSG_CHANNEL_INVITE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_INVITE_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_INVITE* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_CHANNEL_INVITE_free(vanilla_CMSG_CHANNEL_INVITE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_INVITE_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_INVITE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_INVITE_free(vanilla_CMSG_CHANNEL_INVITE* object);
 
 typedef struct {
     WowWorldString channel_name;
     WowWorldString player_name;
 
 } vanilla_CMSG_CHANNEL_KICK;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_KICK_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_KICK* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_CHANNEL_KICK_free(vanilla_CMSG_CHANNEL_KICK* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_KICK_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_KICK* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_KICK_free(vanilla_CMSG_CHANNEL_KICK* object);
 
 typedef struct {
     WowWorldString channel_name;
     WowWorldString player_name;
 
 } vanilla_CMSG_CHANNEL_BAN;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_BAN_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_BAN* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_CHANNEL_BAN_free(vanilla_CMSG_CHANNEL_BAN* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_BAN_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_BAN* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_BAN_free(vanilla_CMSG_CHANNEL_BAN* object);
 
 typedef struct {
     WowWorldString channel_name;
     WowWorldString player_name;
 
 } vanilla_CMSG_CHANNEL_UNBAN;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_UNBAN_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_UNBAN* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_CHANNEL_UNBAN_free(vanilla_CMSG_CHANNEL_UNBAN* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_UNBAN_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_UNBAN* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_UNBAN_free(vanilla_CMSG_CHANNEL_UNBAN* object);
 
 typedef struct {
     WowWorldString channel_name;
 
 } vanilla_CMSG_CHANNEL_ANNOUNCEMENTS;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_ANNOUNCEMENTS_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_ANNOUNCEMENTS* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_CHANNEL_ANNOUNCEMENTS_free(vanilla_CMSG_CHANNEL_ANNOUNCEMENTS* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_ANNOUNCEMENTS_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_ANNOUNCEMENTS* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_ANNOUNCEMENTS_free(vanilla_CMSG_CHANNEL_ANNOUNCEMENTS* object);
 
 typedef struct {
     WowWorldString channel_name;
 
 } vanilla_CMSG_CHANNEL_MODERATE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_MODERATE_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_MODERATE* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_CHANNEL_MODERATE_free(vanilla_CMSG_CHANNEL_MODERATE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_MODERATE_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_MODERATE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_MODERATE_free(vanilla_CMSG_CHANNEL_MODERATE* object);
 
 typedef struct {
     uint32_t amount_of_objects;
@@ -8021,14 +8021,14 @@ typedef struct {
     vanilla_Object* objects;
 
 } vanilla_SMSG_UPDATE_OBJECT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_UPDATE_OBJECT_write(WowWorldWriter* writer, const vanilla_SMSG_UPDATE_OBJECT* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_UPDATE_OBJECT_free(vanilla_SMSG_UPDATE_OBJECT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_UPDATE_OBJECT_write(WowWorldWriter* writer, const vanilla_SMSG_UPDATE_OBJECT* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_UPDATE_OBJECT_free(vanilla_SMSG_UPDATE_OBJECT* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_SMSG_DESTROY_OBJECT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_DESTROY_OBJECT_write(WowWorldWriter* writer, const vanilla_SMSG_DESTROY_OBJECT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_DESTROY_OBJECT_write(WowWorldWriter* writer, const vanilla_SMSG_DESTROY_OBJECT* object);
 
 typedef struct {
     uint8_t bag_index;
@@ -8037,285 +8037,285 @@ typedef struct {
     vanilla_SpellCastTargets targets;
 
 } vanilla_CMSG_USE_ITEM;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_USE_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_USE_ITEM* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_USE_ITEM_free(vanilla_CMSG_USE_ITEM* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_USE_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_USE_ITEM* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_USE_ITEM_free(vanilla_CMSG_USE_ITEM* object);
 
 typedef struct {
     uint8_t bag_index;
     uint8_t slot;
 
 } vanilla_CMSG_OPEN_ITEM;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_OPEN_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_OPEN_ITEM* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_OPEN_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_OPEN_ITEM* object);
 
 typedef struct {
     uint8_t bag_index;
     uint8_t slot;
 
 } vanilla_CMSG_READ_ITEM;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_READ_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_READ_ITEM* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_READ_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_READ_ITEM* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_SMSG_READ_ITEM_OK;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_READ_ITEM_OK_write(WowWorldWriter* writer, const vanilla_SMSG_READ_ITEM_OK* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_READ_ITEM_OK_write(WowWorldWriter* writer, const vanilla_SMSG_READ_ITEM_OK* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_SMSG_READ_ITEM_FAILED;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_READ_ITEM_FAILED_write(WowWorldWriter* writer, const vanilla_SMSG_READ_ITEM_FAILED* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_READ_ITEM_FAILED_write(WowWorldWriter* writer, const vanilla_SMSG_READ_ITEM_FAILED* object);
 
 typedef struct {
     uint64_t guid;
     uint32_t id;
 
 } vanilla_SMSG_ITEM_COOLDOWN;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_ITEM_COOLDOWN_write(WowWorldWriter* writer, const vanilla_SMSG_ITEM_COOLDOWN* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ITEM_COOLDOWN_write(WowWorldWriter* writer, const vanilla_SMSG_ITEM_COOLDOWN* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_CMSG_GAMEOBJ_USE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_GAMEOBJ_USE_write(WowWorldWriter* writer, const vanilla_CMSG_GAMEOBJ_USE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GAMEOBJ_USE_write(WowWorldWriter* writer, const vanilla_CMSG_GAMEOBJ_USE* object);
 
 typedef struct {
     uint64_t guid;
     uint32_t animation_id;
 
 } vanilla_SMSG_GAMEOBJECT_CUSTOM_ANIM;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_GAMEOBJECT_CUSTOM_ANIM_write(WowWorldWriter* writer, const vanilla_SMSG_GAMEOBJECT_CUSTOM_ANIM* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GAMEOBJECT_CUSTOM_ANIM_write(WowWorldWriter* writer, const vanilla_SMSG_GAMEOBJECT_CUSTOM_ANIM* object);
 
 typedef struct {
     uint32_t trigger_id;
 
 } vanilla_CMSG_AREATRIGGER;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_AREATRIGGER_write(WowWorldWriter* writer, const vanilla_CMSG_AREATRIGGER* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AREATRIGGER_write(WowWorldWriter* writer, const vanilla_CMSG_AREATRIGGER* object);
 
 typedef struct {
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_START_FORWARD_Client;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_START_FORWARD_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_FORWARD_Client* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_START_FORWARD_Client_free(vanilla_MSG_MOVE_START_FORWARD_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_FORWARD_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_FORWARD_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_START_FORWARD_Client_free(vanilla_MSG_MOVE_START_FORWARD_Client* object);
 
 typedef struct {
     uint64_t guid;
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_START_FORWARD_Server;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_START_FORWARD_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_FORWARD_Server* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_START_FORWARD_Server_free(vanilla_MSG_MOVE_START_FORWARD_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_FORWARD_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_FORWARD_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_START_FORWARD_Server_free(vanilla_MSG_MOVE_START_FORWARD_Server* object);
 
 typedef struct {
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_START_BACKWARD_Client;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_START_BACKWARD_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_BACKWARD_Client* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_START_BACKWARD_Client_free(vanilla_MSG_MOVE_START_BACKWARD_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_BACKWARD_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_BACKWARD_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_START_BACKWARD_Client_free(vanilla_MSG_MOVE_START_BACKWARD_Client* object);
 
 typedef struct {
     uint64_t guid;
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_START_BACKWARD_Server;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_START_BACKWARD_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_BACKWARD_Server* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_START_BACKWARD_Server_free(vanilla_MSG_MOVE_START_BACKWARD_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_BACKWARD_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_BACKWARD_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_START_BACKWARD_Server_free(vanilla_MSG_MOVE_START_BACKWARD_Server* object);
 
 typedef struct {
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_STOP_Client;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_STOP_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_STOP_Client* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_STOP_Client_free(vanilla_MSG_MOVE_STOP_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_STOP_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_STOP_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_STOP_Client_free(vanilla_MSG_MOVE_STOP_Client* object);
 
 typedef struct {
     uint64_t guid;
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_STOP_Server;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_STOP_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_STOP_Server* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_STOP_Server_free(vanilla_MSG_MOVE_STOP_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_STOP_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_STOP_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_STOP_Server_free(vanilla_MSG_MOVE_STOP_Server* object);
 
 typedef struct {
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_START_STRAFE_LEFT_Client;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_START_STRAFE_LEFT_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_STRAFE_LEFT_Client* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_START_STRAFE_LEFT_Client_free(vanilla_MSG_MOVE_START_STRAFE_LEFT_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_STRAFE_LEFT_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_STRAFE_LEFT_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_START_STRAFE_LEFT_Client_free(vanilla_MSG_MOVE_START_STRAFE_LEFT_Client* object);
 
 typedef struct {
     uint64_t guid;
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_START_STRAFE_LEFT_Server;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_START_STRAFE_LEFT_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_STRAFE_LEFT_Server* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_START_STRAFE_LEFT_Server_free(vanilla_MSG_MOVE_START_STRAFE_LEFT_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_STRAFE_LEFT_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_STRAFE_LEFT_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_START_STRAFE_LEFT_Server_free(vanilla_MSG_MOVE_START_STRAFE_LEFT_Server* object);
 
 typedef struct {
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_START_STRAFE_RIGHT_Client;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_START_STRAFE_RIGHT_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_STRAFE_RIGHT_Client* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_START_STRAFE_RIGHT_Client_free(vanilla_MSG_MOVE_START_STRAFE_RIGHT_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_STRAFE_RIGHT_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_STRAFE_RIGHT_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_START_STRAFE_RIGHT_Client_free(vanilla_MSG_MOVE_START_STRAFE_RIGHT_Client* object);
 
 typedef struct {
     uint64_t guid;
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_START_STRAFE_RIGHT_Server;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_START_STRAFE_RIGHT_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_STRAFE_RIGHT_Server* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_START_STRAFE_RIGHT_Server_free(vanilla_MSG_MOVE_START_STRAFE_RIGHT_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_STRAFE_RIGHT_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_STRAFE_RIGHT_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_START_STRAFE_RIGHT_Server_free(vanilla_MSG_MOVE_START_STRAFE_RIGHT_Server* object);
 
 typedef struct {
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_STOP_STRAFE_Client;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_STOP_STRAFE_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_STOP_STRAFE_Client* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_STOP_STRAFE_Client_free(vanilla_MSG_MOVE_STOP_STRAFE_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_STOP_STRAFE_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_STOP_STRAFE_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_STOP_STRAFE_Client_free(vanilla_MSG_MOVE_STOP_STRAFE_Client* object);
 
 typedef struct {
     uint64_t guid;
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_STOP_STRAFE_Server;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_STOP_STRAFE_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_STOP_STRAFE_Server* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_STOP_STRAFE_Server_free(vanilla_MSG_MOVE_STOP_STRAFE_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_STOP_STRAFE_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_STOP_STRAFE_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_STOP_STRAFE_Server_free(vanilla_MSG_MOVE_STOP_STRAFE_Server* object);
 
 typedef struct {
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_JUMP_Client;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_JUMP_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_JUMP_Client* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_JUMP_Client_free(vanilla_MSG_MOVE_JUMP_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_JUMP_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_JUMP_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_JUMP_Client_free(vanilla_MSG_MOVE_JUMP_Client* object);
 
 typedef struct {
     uint64_t guid;
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_JUMP_Server;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_JUMP_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_JUMP_Server* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_JUMP_Server_free(vanilla_MSG_MOVE_JUMP_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_JUMP_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_JUMP_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_JUMP_Server_free(vanilla_MSG_MOVE_JUMP_Server* object);
 
 typedef struct {
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_START_TURN_LEFT_Client;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_START_TURN_LEFT_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_TURN_LEFT_Client* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_START_TURN_LEFT_Client_free(vanilla_MSG_MOVE_START_TURN_LEFT_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_TURN_LEFT_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_TURN_LEFT_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_START_TURN_LEFT_Client_free(vanilla_MSG_MOVE_START_TURN_LEFT_Client* object);
 
 typedef struct {
     uint64_t guid;
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_START_TURN_LEFT_Server;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_START_TURN_LEFT_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_TURN_LEFT_Server* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_START_TURN_LEFT_Server_free(vanilla_MSG_MOVE_START_TURN_LEFT_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_TURN_LEFT_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_TURN_LEFT_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_START_TURN_LEFT_Server_free(vanilla_MSG_MOVE_START_TURN_LEFT_Server* object);
 
 typedef struct {
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_START_TURN_RIGHT_Client;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_START_TURN_RIGHT_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_TURN_RIGHT_Client* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_START_TURN_RIGHT_Client_free(vanilla_MSG_MOVE_START_TURN_RIGHT_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_TURN_RIGHT_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_TURN_RIGHT_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_START_TURN_RIGHT_Client_free(vanilla_MSG_MOVE_START_TURN_RIGHT_Client* object);
 
 typedef struct {
     uint64_t guid;
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_START_TURN_RIGHT_Server;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_START_TURN_RIGHT_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_TURN_RIGHT_Server* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_START_TURN_RIGHT_Server_free(vanilla_MSG_MOVE_START_TURN_RIGHT_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_TURN_RIGHT_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_TURN_RIGHT_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_START_TURN_RIGHT_Server_free(vanilla_MSG_MOVE_START_TURN_RIGHT_Server* object);
 
 typedef struct {
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_STOP_TURN_Client;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_STOP_TURN_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_STOP_TURN_Client* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_STOP_TURN_Client_free(vanilla_MSG_MOVE_STOP_TURN_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_STOP_TURN_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_STOP_TURN_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_STOP_TURN_Client_free(vanilla_MSG_MOVE_STOP_TURN_Client* object);
 
 typedef struct {
     uint64_t guid;
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_STOP_TURN_Server;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_STOP_TURN_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_STOP_TURN_Server* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_STOP_TURN_Server_free(vanilla_MSG_MOVE_STOP_TURN_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_STOP_TURN_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_STOP_TURN_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_STOP_TURN_Server_free(vanilla_MSG_MOVE_STOP_TURN_Server* object);
 
 typedef struct {
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_START_PITCH_UP_Client;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_START_PITCH_UP_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_PITCH_UP_Client* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_START_PITCH_UP_Client_free(vanilla_MSG_MOVE_START_PITCH_UP_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_PITCH_UP_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_PITCH_UP_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_START_PITCH_UP_Client_free(vanilla_MSG_MOVE_START_PITCH_UP_Client* object);
 
 typedef struct {
     uint64_t guid;
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_START_PITCH_UP_Server;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_START_PITCH_UP_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_PITCH_UP_Server* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_START_PITCH_UP_Server_free(vanilla_MSG_MOVE_START_PITCH_UP_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_PITCH_UP_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_PITCH_UP_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_START_PITCH_UP_Server_free(vanilla_MSG_MOVE_START_PITCH_UP_Server* object);
 
 typedef struct {
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_START_PITCH_DOWN_Client;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_START_PITCH_DOWN_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_PITCH_DOWN_Client* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_START_PITCH_DOWN_Client_free(vanilla_MSG_MOVE_START_PITCH_DOWN_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_PITCH_DOWN_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_PITCH_DOWN_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_START_PITCH_DOWN_Client_free(vanilla_MSG_MOVE_START_PITCH_DOWN_Client* object);
 
 typedef struct {
     uint64_t guid;
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_START_PITCH_DOWN_Server;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_START_PITCH_DOWN_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_PITCH_DOWN_Server* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_START_PITCH_DOWN_Server_free(vanilla_MSG_MOVE_START_PITCH_DOWN_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_PITCH_DOWN_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_PITCH_DOWN_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_START_PITCH_DOWN_Server_free(vanilla_MSG_MOVE_START_PITCH_DOWN_Server* object);
 
 typedef struct {
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_STOP_PITCH_Client;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_STOP_PITCH_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_STOP_PITCH_Client* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_STOP_PITCH_Client_free(vanilla_MSG_MOVE_STOP_PITCH_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_STOP_PITCH_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_STOP_PITCH_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_STOP_PITCH_Client_free(vanilla_MSG_MOVE_STOP_PITCH_Client* object);
 
 typedef struct {
     uint64_t guid;
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_STOP_PITCH_Server;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_STOP_PITCH_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_STOP_PITCH_Server* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_STOP_PITCH_Server_free(vanilla_MSG_MOVE_STOP_PITCH_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_STOP_PITCH_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_STOP_PITCH_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_STOP_PITCH_Server_free(vanilla_MSG_MOVE_STOP_PITCH_Server* object);
 
 typedef struct {
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_SET_RUN_MODE_Client;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_SET_RUN_MODE_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_SET_RUN_MODE_Client* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_SET_RUN_MODE_Client_free(vanilla_MSG_MOVE_SET_RUN_MODE_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_SET_RUN_MODE_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_SET_RUN_MODE_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_SET_RUN_MODE_Client_free(vanilla_MSG_MOVE_SET_RUN_MODE_Client* object);
 
 typedef struct {
     uint64_t guid;
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_SET_RUN_MODE_Server;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_SET_RUN_MODE_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_SET_RUN_MODE_Server* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_SET_RUN_MODE_Server_free(vanilla_MSG_MOVE_SET_RUN_MODE_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_SET_RUN_MODE_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_SET_RUN_MODE_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_SET_RUN_MODE_Server_free(vanilla_MSG_MOVE_SET_RUN_MODE_Server* object);
 
 typedef struct {
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_SET_WALK_MODE_Client;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_SET_WALK_MODE_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_SET_WALK_MODE_Client* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_SET_WALK_MODE_Client_free(vanilla_MSG_MOVE_SET_WALK_MODE_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_SET_WALK_MODE_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_SET_WALK_MODE_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_SET_WALK_MODE_Client_free(vanilla_MSG_MOVE_SET_WALK_MODE_Client* object);
 
 typedef struct {
     uint64_t guid;
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_SET_WALK_MODE_Server;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_SET_WALK_MODE_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_SET_WALK_MODE_Server* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_SET_WALK_MODE_Server_free(vanilla_MSG_MOVE_SET_WALK_MODE_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_SET_WALK_MODE_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_SET_WALK_MODE_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_SET_WALK_MODE_Server_free(vanilla_MSG_MOVE_SET_WALK_MODE_Server* object);
 
 typedef struct {
     uint64_t guid;
@@ -8323,7 +8323,7 @@ typedef struct {
     uint32_t time;
 
 } vanilla_MSG_MOVE_TELEPORT_ACK_Client;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_TELEPORT_ACK_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_TELEPORT_ACK_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_TELEPORT_ACK_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_TELEPORT_ACK_Client* object);
 
 typedef struct {
     uint64_t guid;
@@ -8331,86 +8331,86 @@ typedef struct {
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_TELEPORT_ACK_Server;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_TELEPORT_ACK_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_TELEPORT_ACK_Server* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_TELEPORT_ACK_Server_free(vanilla_MSG_MOVE_TELEPORT_ACK_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_TELEPORT_ACK_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_TELEPORT_ACK_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_TELEPORT_ACK_Server_free(vanilla_MSG_MOVE_TELEPORT_ACK_Server* object);
 
 typedef struct {
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_FALL_LAND_Client;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_FALL_LAND_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_FALL_LAND_Client* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_FALL_LAND_Client_free(vanilla_MSG_MOVE_FALL_LAND_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_FALL_LAND_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_FALL_LAND_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_FALL_LAND_Client_free(vanilla_MSG_MOVE_FALL_LAND_Client* object);
 
 typedef struct {
     uint64_t guid;
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_FALL_LAND_Server;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_FALL_LAND_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_FALL_LAND_Server* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_FALL_LAND_Server_free(vanilla_MSG_MOVE_FALL_LAND_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_FALL_LAND_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_FALL_LAND_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_FALL_LAND_Server_free(vanilla_MSG_MOVE_FALL_LAND_Server* object);
 
 typedef struct {
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_START_SWIM_Client;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_START_SWIM_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_SWIM_Client* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_START_SWIM_Client_free(vanilla_MSG_MOVE_START_SWIM_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_SWIM_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_SWIM_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_START_SWIM_Client_free(vanilla_MSG_MOVE_START_SWIM_Client* object);
 
 typedef struct {
     uint64_t guid;
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_START_SWIM_Server;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_START_SWIM_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_SWIM_Server* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_START_SWIM_Server_free(vanilla_MSG_MOVE_START_SWIM_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_SWIM_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_SWIM_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_START_SWIM_Server_free(vanilla_MSG_MOVE_START_SWIM_Server* object);
 
 typedef struct {
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_STOP_SWIM_Client;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_STOP_SWIM_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_STOP_SWIM_Client* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_STOP_SWIM_Client_free(vanilla_MSG_MOVE_STOP_SWIM_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_STOP_SWIM_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_STOP_SWIM_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_STOP_SWIM_Client_free(vanilla_MSG_MOVE_STOP_SWIM_Client* object);
 
 typedef struct {
     uint64_t guid;
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_STOP_SWIM_Server;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_STOP_SWIM_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_STOP_SWIM_Server* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_STOP_SWIM_Server_free(vanilla_MSG_MOVE_STOP_SWIM_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_STOP_SWIM_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_STOP_SWIM_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_STOP_SWIM_Server_free(vanilla_MSG_MOVE_STOP_SWIM_Server* object);
 
 typedef struct {
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_SET_FACING_Client;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_SET_FACING_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_SET_FACING_Client* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_SET_FACING_Client_free(vanilla_MSG_MOVE_SET_FACING_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_SET_FACING_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_SET_FACING_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_SET_FACING_Client_free(vanilla_MSG_MOVE_SET_FACING_Client* object);
 
 typedef struct {
     uint64_t guid;
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_SET_FACING_Server;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_SET_FACING_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_SET_FACING_Server* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_SET_FACING_Server_free(vanilla_MSG_MOVE_SET_FACING_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_SET_FACING_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_SET_FACING_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_SET_FACING_Server_free(vanilla_MSG_MOVE_SET_FACING_Server* object);
 
 typedef struct {
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_SET_PITCH_Client;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_SET_PITCH_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_SET_PITCH_Client* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_SET_PITCH_Client_free(vanilla_MSG_MOVE_SET_PITCH_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_SET_PITCH_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_SET_PITCH_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_SET_PITCH_Client_free(vanilla_MSG_MOVE_SET_PITCH_Client* object);
 
 typedef struct {
     uint64_t guid;
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_SET_PITCH_Server;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_SET_PITCH_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_SET_PITCH_Server* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_SET_PITCH_Server_free(vanilla_MSG_MOVE_SET_PITCH_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_SET_PITCH_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_SET_PITCH_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_SET_PITCH_Server_free(vanilla_MSG_MOVE_SET_PITCH_Server* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_WORLDPORT_ACK_cmsg_write(WowWorldWriter* writer);
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_WORLDPORT_ACK_smsg_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_WORLDPORT_ACK_cmsg_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_WORLDPORT_ACK_smsg_write(WowWorldWriter* writer);
 
 typedef struct {
     uint64_t guid;
@@ -8425,29 +8425,29 @@ typedef struct {
     MonsterMoveSpline splines;
 
 } vanilla_SMSG_MONSTER_MOVE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_MONSTER_MOVE_write(WowWorldWriter* writer, const vanilla_SMSG_MONSTER_MOVE* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_MONSTER_MOVE_free(vanilla_SMSG_MONSTER_MOVE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MONSTER_MOVE_write(WowWorldWriter* writer, const vanilla_SMSG_MONSTER_MOVE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_MONSTER_MOVE_free(vanilla_SMSG_MONSTER_MOVE* object);
 
 typedef struct {
     uint64_t guid;
     uint32_t counter;
 
 } vanilla_SMSG_MOVE_WATER_WALK;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_MOVE_WATER_WALK_write(WowWorldWriter* writer, const vanilla_SMSG_MOVE_WATER_WALK* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MOVE_WATER_WALK_write(WowWorldWriter* writer, const vanilla_SMSG_MOVE_WATER_WALK* object);
 
 typedef struct {
     uint64_t guid;
     uint32_t counter;
 
 } vanilla_SMSG_MOVE_LAND_WALK;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_MOVE_LAND_WALK_write(WowWorldWriter* writer, const vanilla_SMSG_MOVE_LAND_WALK* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MOVE_LAND_WALK_write(WowWorldWriter* writer, const vanilla_SMSG_MOVE_LAND_WALK* object);
 
 typedef struct {
     all_Vector3d position;
     float orientation;
 
 } vanilla_CMSG_MOVE_SET_RAW_POSITION;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_MOVE_SET_RAW_POSITION_write(WowWorldWriter* writer, const vanilla_CMSG_MOVE_SET_RAW_POSITION* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MOVE_SET_RAW_POSITION_write(WowWorldWriter* writer, const vanilla_CMSG_MOVE_SET_RAW_POSITION* object);
 
 typedef struct {
     uint64_t guid;
@@ -8455,7 +8455,7 @@ typedef struct {
     float speed;
 
 } vanilla_SMSG_FORCE_RUN_SPEED_CHANGE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_FORCE_RUN_SPEED_CHANGE_write(WowWorldWriter* writer, const vanilla_SMSG_FORCE_RUN_SPEED_CHANGE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_FORCE_RUN_SPEED_CHANGE_write(WowWorldWriter* writer, const vanilla_SMSG_FORCE_RUN_SPEED_CHANGE* object);
 
 typedef struct {
     uint64_t guid;
@@ -8464,8 +8464,8 @@ typedef struct {
     float new_speed;
 
 } vanilla_CMSG_FORCE_RUN_SPEED_CHANGE_ACK;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_FORCE_RUN_SPEED_CHANGE_ACK_write(WowWorldWriter* writer, const vanilla_CMSG_FORCE_RUN_SPEED_CHANGE_ACK* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_FORCE_RUN_SPEED_CHANGE_ACK_free(vanilla_CMSG_FORCE_RUN_SPEED_CHANGE_ACK* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_FORCE_RUN_SPEED_CHANGE_ACK_write(WowWorldWriter* writer, const vanilla_CMSG_FORCE_RUN_SPEED_CHANGE_ACK* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_FORCE_RUN_SPEED_CHANGE_ACK_free(vanilla_CMSG_FORCE_RUN_SPEED_CHANGE_ACK* object);
 
 typedef struct {
     uint64_t guid;
@@ -8473,7 +8473,7 @@ typedef struct {
     float speed;
 
 } vanilla_SMSG_FORCE_RUN_BACK_SPEED_CHANGE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_FORCE_RUN_BACK_SPEED_CHANGE_write(WowWorldWriter* writer, const vanilla_SMSG_FORCE_RUN_BACK_SPEED_CHANGE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_FORCE_RUN_BACK_SPEED_CHANGE_write(WowWorldWriter* writer, const vanilla_SMSG_FORCE_RUN_BACK_SPEED_CHANGE* object);
 
 typedef struct {
     uint64_t guid;
@@ -8482,8 +8482,8 @@ typedef struct {
     float new_speed;
 
 } vanilla_CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK_write(WowWorldWriter* writer, const vanilla_CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK_free(vanilla_CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK_write(WowWorldWriter* writer, const vanilla_CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK_free(vanilla_CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK* object);
 
 typedef struct {
     uint64_t guid;
@@ -8491,7 +8491,7 @@ typedef struct {
     float speed;
 
 } vanilla_SMSG_FORCE_SWIM_SPEED_CHANGE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_FORCE_SWIM_SPEED_CHANGE_write(WowWorldWriter* writer, const vanilla_SMSG_FORCE_SWIM_SPEED_CHANGE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_FORCE_SWIM_SPEED_CHANGE_write(WowWorldWriter* writer, const vanilla_SMSG_FORCE_SWIM_SPEED_CHANGE* object);
 
 typedef struct {
     uint64_t guid;
@@ -8500,15 +8500,15 @@ typedef struct {
     float new_speed;
 
 } vanilla_CMSG_FORCE_SWIM_SPEED_CHANGE_ACK;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_FORCE_SWIM_SPEED_CHANGE_ACK_write(WowWorldWriter* writer, const vanilla_CMSG_FORCE_SWIM_SPEED_CHANGE_ACK* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_FORCE_SWIM_SPEED_CHANGE_ACK_free(vanilla_CMSG_FORCE_SWIM_SPEED_CHANGE_ACK* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_FORCE_SWIM_SPEED_CHANGE_ACK_write(WowWorldWriter* writer, const vanilla_CMSG_FORCE_SWIM_SPEED_CHANGE_ACK* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_FORCE_SWIM_SPEED_CHANGE_ACK_free(vanilla_CMSG_FORCE_SWIM_SPEED_CHANGE_ACK* object);
 
 typedef struct {
     uint64_t guid;
     uint32_t counter;
 
 } vanilla_SMSG_FORCE_MOVE_ROOT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_FORCE_MOVE_ROOT_write(WowWorldWriter* writer, const vanilla_SMSG_FORCE_MOVE_ROOT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_FORCE_MOVE_ROOT_write(WowWorldWriter* writer, const vanilla_SMSG_FORCE_MOVE_ROOT* object);
 
 typedef struct {
     uint64_t guid;
@@ -8516,15 +8516,15 @@ typedef struct {
     vanilla_MovementInfo info;
 
 } vanilla_CMSG_FORCE_MOVE_ROOT_ACK;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_FORCE_MOVE_ROOT_ACK_write(WowWorldWriter* writer, const vanilla_CMSG_FORCE_MOVE_ROOT_ACK* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_FORCE_MOVE_ROOT_ACK_free(vanilla_CMSG_FORCE_MOVE_ROOT_ACK* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_FORCE_MOVE_ROOT_ACK_write(WowWorldWriter* writer, const vanilla_CMSG_FORCE_MOVE_ROOT_ACK* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_FORCE_MOVE_ROOT_ACK_free(vanilla_CMSG_FORCE_MOVE_ROOT_ACK* object);
 
 typedef struct {
     uint64_t guid;
     uint32_t counter;
 
 } vanilla_SMSG_FORCE_MOVE_UNROOT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_FORCE_MOVE_UNROOT_write(WowWorldWriter* writer, const vanilla_SMSG_FORCE_MOVE_UNROOT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_FORCE_MOVE_UNROOT_write(WowWorldWriter* writer, const vanilla_SMSG_FORCE_MOVE_UNROOT* object);
 
 typedef struct {
     uint64_t guid;
@@ -8532,23 +8532,23 @@ typedef struct {
     vanilla_MovementInfo info;
 
 } vanilla_CMSG_FORCE_MOVE_UNROOT_ACK;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_FORCE_MOVE_UNROOT_ACK_write(WowWorldWriter* writer, const vanilla_CMSG_FORCE_MOVE_UNROOT_ACK* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_FORCE_MOVE_UNROOT_ACK_free(vanilla_CMSG_FORCE_MOVE_UNROOT_ACK* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_FORCE_MOVE_UNROOT_ACK_write(WowWorldWriter* writer, const vanilla_CMSG_FORCE_MOVE_UNROOT_ACK* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_FORCE_MOVE_UNROOT_ACK_free(vanilla_CMSG_FORCE_MOVE_UNROOT_ACK* object);
 
 typedef struct {
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_HEARTBEAT_Client;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_HEARTBEAT_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_HEARTBEAT_Client* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_HEARTBEAT_Client_free(vanilla_MSG_MOVE_HEARTBEAT_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_HEARTBEAT_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_HEARTBEAT_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_HEARTBEAT_Client_free(vanilla_MSG_MOVE_HEARTBEAT_Client* object);
 
 typedef struct {
     uint64_t guid;
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_HEARTBEAT_Server;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_HEARTBEAT_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_HEARTBEAT_Server* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_HEARTBEAT_Server_free(vanilla_MSG_MOVE_HEARTBEAT_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_HEARTBEAT_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_HEARTBEAT_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_HEARTBEAT_Server_free(vanilla_MSG_MOVE_HEARTBEAT_Server* object);
 
 typedef struct {
     uint64_t guid;
@@ -8559,7 +8559,7 @@ typedef struct {
     float vertical_speed;
 
 } vanilla_SMSG_MOVE_KNOCK_BACK;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_MOVE_KNOCK_BACK_write(WowWorldWriter* writer, const vanilla_SMSG_MOVE_KNOCK_BACK* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MOVE_KNOCK_BACK_write(WowWorldWriter* writer, const vanilla_SMSG_MOVE_KNOCK_BACK* object);
 
 typedef struct {
     uint64_t guid;
@@ -8567,36 +8567,36 @@ typedef struct {
     vanilla_MovementInfo info;
 
 } vanilla_CMSG_MOVE_KNOCK_BACK_ACK;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_MOVE_KNOCK_BACK_ACK_write(WowWorldWriter* writer, const vanilla_CMSG_MOVE_KNOCK_BACK_ACK* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_MOVE_KNOCK_BACK_ACK_free(vanilla_CMSG_MOVE_KNOCK_BACK_ACK* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MOVE_KNOCK_BACK_ACK_write(WowWorldWriter* writer, const vanilla_CMSG_MOVE_KNOCK_BACK_ACK* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_MOVE_KNOCK_BACK_ACK_free(vanilla_CMSG_MOVE_KNOCK_BACK_ACK* object);
 
 typedef struct {
     uint64_t guid;
     uint32_t counter;
 
 } vanilla_SMSG_MOVE_FEATHER_FALL;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_MOVE_FEATHER_FALL_write(WowWorldWriter* writer, const vanilla_SMSG_MOVE_FEATHER_FALL* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MOVE_FEATHER_FALL_write(WowWorldWriter* writer, const vanilla_SMSG_MOVE_FEATHER_FALL* object);
 
 typedef struct {
     uint64_t guid;
     uint32_t counter;
 
 } vanilla_SMSG_MOVE_NORMAL_FALL;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_MOVE_NORMAL_FALL_write(WowWorldWriter* writer, const vanilla_SMSG_MOVE_NORMAL_FALL* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MOVE_NORMAL_FALL_write(WowWorldWriter* writer, const vanilla_SMSG_MOVE_NORMAL_FALL* object);
 
 typedef struct {
     uint64_t guid;
     uint32_t counter;
 
 } vanilla_SMSG_MOVE_SET_HOVER;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_MOVE_SET_HOVER_write(WowWorldWriter* writer, const vanilla_SMSG_MOVE_SET_HOVER* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MOVE_SET_HOVER_write(WowWorldWriter* writer, const vanilla_SMSG_MOVE_SET_HOVER* object);
 
 typedef struct {
     uint64_t guid;
     uint32_t counter;
 
 } vanilla_SMSG_MOVE_UNSET_HOVER;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_MOVE_UNSET_HOVER_write(WowWorldWriter* writer, const vanilla_SMSG_MOVE_UNSET_HOVER* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MOVE_UNSET_HOVER_write(WowWorldWriter* writer, const vanilla_SMSG_MOVE_UNSET_HOVER* object);
 
 typedef struct {
     uint64_t guid;
@@ -8605,54 +8605,54 @@ typedef struct {
     uint32_t is_applied;
 
 } vanilla_CMSG_MOVE_HOVER_ACK;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_MOVE_HOVER_ACK_write(WowWorldWriter* writer, const vanilla_CMSG_MOVE_HOVER_ACK* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_MOVE_HOVER_ACK_free(vanilla_CMSG_MOVE_HOVER_ACK* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MOVE_HOVER_ACK_write(WowWorldWriter* writer, const vanilla_CMSG_MOVE_HOVER_ACK* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_MOVE_HOVER_ACK_free(vanilla_CMSG_MOVE_HOVER_ACK* object);
 
 typedef struct {
     vanilla_CinematicSequenceId cinematic_sequence_id;
 
 } vanilla_SMSG_TRIGGER_CINEMATIC;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_TRIGGER_CINEMATIC_write(WowWorldWriter* writer, const vanilla_SMSG_TRIGGER_CINEMATIC* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TRIGGER_CINEMATIC_write(WowWorldWriter* writer, const vanilla_SMSG_TRIGGER_CINEMATIC* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_NEXT_CINEMATIC_CAMERA_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_NEXT_CINEMATIC_CAMERA_write(WowWorldWriter* writer);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_COMPLETE_CINEMATIC_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_COMPLETE_CINEMATIC_write(WowWorldWriter* writer);
 
 typedef struct {
     uint32_t (*tutorial_data)[8];
 
 } vanilla_SMSG_TUTORIAL_FLAGS;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_TUTORIAL_FLAGS_write(WowWorldWriter* writer, const vanilla_SMSG_TUTORIAL_FLAGS* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_TUTORIAL_FLAGS_free(vanilla_SMSG_TUTORIAL_FLAGS* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TUTORIAL_FLAGS_write(WowWorldWriter* writer, const vanilla_SMSG_TUTORIAL_FLAGS* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_TUTORIAL_FLAGS_free(vanilla_SMSG_TUTORIAL_FLAGS* object);
 
 typedef struct {
     uint32_t tutorial_flag;
 
 } vanilla_CMSG_TUTORIAL_FLAG;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_TUTORIAL_FLAG_write(WowWorldWriter* writer, const vanilla_CMSG_TUTORIAL_FLAG* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_TUTORIAL_FLAG_write(WowWorldWriter* writer, const vanilla_CMSG_TUTORIAL_FLAG* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_TUTORIAL_CLEAR_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_TUTORIAL_CLEAR_write(WowWorldWriter* writer);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_TUTORIAL_RESET_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_TUTORIAL_RESET_write(WowWorldWriter* writer);
 
 typedef struct {
     vanilla_UnitStandState animation_state;
 
 } vanilla_CMSG_STANDSTATECHANGE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_STANDSTATECHANGE_write(WowWorldWriter* writer, const vanilla_CMSG_STANDSTATECHANGE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_STANDSTATECHANGE_write(WowWorldWriter* writer, const vanilla_CMSG_STANDSTATECHANGE* object);
 
 typedef struct {
     vanilla_Emote emote;
 
 } vanilla_CMSG_EMOTE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_EMOTE_write(WowWorldWriter* writer, const vanilla_CMSG_EMOTE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_EMOTE_write(WowWorldWriter* writer, const vanilla_CMSG_EMOTE* object);
 
 typedef struct {
     vanilla_Emote emote;
     uint64_t guid;
 
 } vanilla_SMSG_EMOTE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_EMOTE_write(WowWorldWriter* writer, const vanilla_SMSG_EMOTE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_EMOTE_write(WowWorldWriter* writer, const vanilla_SMSG_EMOTE* object);
 
 typedef struct {
     vanilla_TextEmote text_emote;
@@ -8660,7 +8660,7 @@ typedef struct {
     uint64_t target;
 
 } vanilla_CMSG_TEXT_EMOTE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_TEXT_EMOTE_write(WowWorldWriter* writer, const vanilla_CMSG_TEXT_EMOTE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_TEXT_EMOTE_write(WowWorldWriter* writer, const vanilla_CMSG_TEXT_EMOTE* object);
 
 typedef struct {
     uint64_t guid;
@@ -8669,21 +8669,21 @@ typedef struct {
     WowWorldString name;
 
 } vanilla_SMSG_TEXT_EMOTE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_TEXT_EMOTE_write(WowWorldWriter* writer, const vanilla_SMSG_TEXT_EMOTE* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_TEXT_EMOTE_free(vanilla_SMSG_TEXT_EMOTE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TEXT_EMOTE_write(WowWorldWriter* writer, const vanilla_SMSG_TEXT_EMOTE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_TEXT_EMOTE_free(vanilla_SMSG_TEXT_EMOTE* object);
 
 typedef struct {
     uint8_t item_slot;
 
 } vanilla_CMSG_AUTOSTORE_LOOT_ITEM;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_AUTOSTORE_LOOT_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_AUTOSTORE_LOOT_ITEM* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUTOSTORE_LOOT_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_AUTOSTORE_LOOT_ITEM* object);
 
 typedef struct {
     uint8_t source_bag;
     uint8_t source_slot;
 
 } vanilla_CMSG_AUTOEQUIP_ITEM;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_AUTOEQUIP_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_AUTOEQUIP_ITEM* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUTOEQUIP_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_AUTOEQUIP_ITEM* object);
 
 typedef struct {
     uint8_t source_bag;
@@ -8691,7 +8691,7 @@ typedef struct {
     uint8_t destination_bag;
 
 } vanilla_CMSG_AUTOSTORE_BAG_ITEM;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_AUTOSTORE_BAG_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_AUTOSTORE_BAG_ITEM* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUTOSTORE_BAG_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_AUTOSTORE_BAG_ITEM* object);
 
 typedef struct {
     uint8_t destination_bag;
@@ -8700,14 +8700,14 @@ typedef struct {
     uint8_t source_slot;
 
 } vanilla_CMSG_SWAP_ITEM;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_SWAP_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_SWAP_ITEM* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SWAP_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_SWAP_ITEM* object);
 
 typedef struct {
     vanilla_ItemSlot source_slot;
     vanilla_ItemSlot destination_slot;
 
 } vanilla_CMSG_SWAP_INV_ITEM;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_SWAP_INV_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_SWAP_INV_ITEM* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SWAP_INV_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_SWAP_INV_ITEM* object);
 
 typedef struct {
     uint8_t source_bag;
@@ -8717,14 +8717,14 @@ typedef struct {
     uint8_t amount;
 
 } vanilla_CMSG_SPLIT_ITEM;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_SPLIT_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_SPLIT_ITEM* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SPLIT_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_SPLIT_ITEM* object);
 
 typedef struct {
     uint64_t guid;
     uint8_t destination_slot;
 
 } vanilla_CMSG_AUTOEQUIP_ITEM_SLOT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_AUTOEQUIP_ITEM_SLOT_write(WowWorldWriter* writer, const vanilla_CMSG_AUTOEQUIP_ITEM_SLOT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUTOEQUIP_ITEM_SLOT_write(WowWorldWriter* writer, const vanilla_CMSG_AUTOEQUIP_ITEM_SLOT* object);
 
 typedef struct {
     uint8_t bag;
@@ -8735,7 +8735,7 @@ typedef struct {
     uint8_t unknown3;
 
 } vanilla_CMSG_DESTROYITEM;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_DESTROYITEM_write(WowWorldWriter* writer, const vanilla_CMSG_DESTROYITEM* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_DESTROYITEM_write(WowWorldWriter* writer, const vanilla_CMSG_DESTROYITEM* object);
 
 typedef struct {
     vanilla_InventoryResult result;
@@ -8745,48 +8745,48 @@ typedef struct {
     uint8_t bag_type_subclass;
 
 } vanilla_SMSG_INVENTORY_CHANGE_FAILURE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_INVENTORY_CHANGE_FAILURE_write(WowWorldWriter* writer, const vanilla_SMSG_INVENTORY_CHANGE_FAILURE* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_INVENTORY_CHANGE_FAILURE_free(vanilla_SMSG_INVENTORY_CHANGE_FAILURE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_INVENTORY_CHANGE_FAILURE_write(WowWorldWriter* writer, const vanilla_SMSG_INVENTORY_CHANGE_FAILURE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_INVENTORY_CHANGE_FAILURE_free(vanilla_SMSG_INVENTORY_CHANGE_FAILURE* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_SMSG_OPEN_CONTAINER;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_OPEN_CONTAINER_write(WowWorldWriter* writer, const vanilla_SMSG_OPEN_CONTAINER* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_OPEN_CONTAINER_write(WowWorldWriter* writer, const vanilla_SMSG_OPEN_CONTAINER* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_CMSG_INSPECT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_INSPECT_write(WowWorldWriter* writer, const vanilla_CMSG_INSPECT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_INSPECT_write(WowWorldWriter* writer, const vanilla_CMSG_INSPECT* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_SMSG_INSPECT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_INSPECT_write(WowWorldWriter* writer, const vanilla_SMSG_INSPECT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_INSPECT_write(WowWorldWriter* writer, const vanilla_SMSG_INSPECT* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_CMSG_INITIATE_TRADE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_INITIATE_TRADE_write(WowWorldWriter* writer, const vanilla_CMSG_INITIATE_TRADE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_INITIATE_TRADE_write(WowWorldWriter* writer, const vanilla_CMSG_INITIATE_TRADE* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_BEGIN_TRADE_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BEGIN_TRADE_write(WowWorldWriter* writer);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_BUSY_TRADE_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BUSY_TRADE_write(WowWorldWriter* writer);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_IGNORE_TRADE_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_IGNORE_TRADE_write(WowWorldWriter* writer);
 
 typedef struct {
     uint32_t unknown1;
 
 } vanilla_CMSG_ACCEPT_TRADE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_ACCEPT_TRADE_write(WowWorldWriter* writer, const vanilla_CMSG_ACCEPT_TRADE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_ACCEPT_TRADE_write(WowWorldWriter* writer, const vanilla_CMSG_ACCEPT_TRADE* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_UNACCEPT_TRADE_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_UNACCEPT_TRADE_write(WowWorldWriter* writer);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_CANCEL_TRADE_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CANCEL_TRADE_write(WowWorldWriter* writer);
 
 typedef struct {
     uint8_t trade_slot;
@@ -8794,19 +8794,19 @@ typedef struct {
     uint8_t slot;
 
 } vanilla_CMSG_SET_TRADE_ITEM;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_SET_TRADE_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_SET_TRADE_ITEM* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SET_TRADE_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_SET_TRADE_ITEM* object);
 
 typedef struct {
     uint8_t trade_slot;
 
 } vanilla_CMSG_CLEAR_TRADE_ITEM;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_CLEAR_TRADE_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_CLEAR_TRADE_ITEM* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CLEAR_TRADE_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_CLEAR_TRADE_ITEM* object);
 
 typedef struct {
     uint32_t gold;
 
 } vanilla_CMSG_SET_TRADE_GOLD;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_SET_TRADE_GOLD_write(WowWorldWriter* writer, const vanilla_CMSG_SET_TRADE_GOLD* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SET_TRADE_GOLD_write(WowWorldWriter* writer, const vanilla_CMSG_SET_TRADE_GOLD* object);
 
 typedef struct {
     vanilla_TradeStatus status;
@@ -8817,8 +8817,8 @@ typedef struct {
     uint8_t slot;
 
 } vanilla_SMSG_TRADE_STATUS;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_TRADE_STATUS_write(WowWorldWriter* writer, const vanilla_SMSG_TRADE_STATUS* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_TRADE_STATUS_free(vanilla_SMSG_TRADE_STATUS* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TRADE_STATUS_write(WowWorldWriter* writer, const vanilla_SMSG_TRADE_STATUS* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_TRADE_STATUS_free(vanilla_SMSG_TRADE_STATUS* object);
 
 typedef struct {
     bool self_player;
@@ -8829,44 +8829,44 @@ typedef struct {
     vanilla_TradeSlot (*trade_slots)[7];
 
 } vanilla_SMSG_TRADE_STATUS_EXTENDED;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_TRADE_STATUS_EXTENDED_write(WowWorldWriter* writer, const vanilla_SMSG_TRADE_STATUS_EXTENDED* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_TRADE_STATUS_EXTENDED_free(vanilla_SMSG_TRADE_STATUS_EXTENDED* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TRADE_STATUS_EXTENDED_write(WowWorldWriter* writer, const vanilla_SMSG_TRADE_STATUS_EXTENDED* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_TRADE_STATUS_EXTENDED_free(vanilla_SMSG_TRADE_STATUS_EXTENDED* object);
 
 typedef struct {
     uint32_t amount_of_factions;
     vanilla_FactionInitializer* factions;
 
 } vanilla_SMSG_INITIALIZE_FACTIONS;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_INITIALIZE_FACTIONS_write(WowWorldWriter* writer, const vanilla_SMSG_INITIALIZE_FACTIONS* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_INITIALIZE_FACTIONS_free(vanilla_SMSG_INITIALIZE_FACTIONS* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_INITIALIZE_FACTIONS_write(WowWorldWriter* writer, const vanilla_SMSG_INITIALIZE_FACTIONS* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_INITIALIZE_FACTIONS_free(vanilla_SMSG_INITIALIZE_FACTIONS* object);
 
 typedef struct {
     vanilla_Faction faction;
 
 } vanilla_SMSG_SET_FACTION_VISIBLE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SET_FACTION_VISIBLE_write(WowWorldWriter* writer, const vanilla_SMSG_SET_FACTION_VISIBLE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SET_FACTION_VISIBLE_write(WowWorldWriter* writer, const vanilla_SMSG_SET_FACTION_VISIBLE* object);
 
 typedef struct {
     uint32_t amount_of_faction_standings;
     vanilla_FactionStanding* faction_standings;
 
 } vanilla_SMSG_SET_FACTION_STANDING;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SET_FACTION_STANDING_write(WowWorldWriter* writer, const vanilla_SMSG_SET_FACTION_STANDING* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_SET_FACTION_STANDING_free(vanilla_SMSG_SET_FACTION_STANDING* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SET_FACTION_STANDING_write(WowWorldWriter* writer, const vanilla_SMSG_SET_FACTION_STANDING* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_SET_FACTION_STANDING_free(vanilla_SMSG_SET_FACTION_STANDING* object);
 
 typedef struct {
     vanilla_Faction faction;
     vanilla_FactionFlag flags;
 
 } vanilla_CMSG_SET_FACTION_ATWAR;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_SET_FACTION_ATWAR_write(WowWorldWriter* writer, const vanilla_CMSG_SET_FACTION_ATWAR* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SET_FACTION_ATWAR_write(WowWorldWriter* writer, const vanilla_CMSG_SET_FACTION_ATWAR* object);
 
 typedef struct {
     vanilla_ItemClass class_type;
     uint32_t item_sub_class_mask;
 
 } vanilla_SMSG_SET_PROFICIENCY;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SET_PROFICIENCY_write(WowWorldWriter* writer, const vanilla_SMSG_SET_PROFICIENCY* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SET_PROFICIENCY_write(WowWorldWriter* writer, const vanilla_SMSG_SET_PROFICIENCY* object);
 
 typedef struct {
     uint8_t button;
@@ -8875,14 +8875,14 @@ typedef struct {
     uint8_t action_type;
 
 } vanilla_CMSG_SET_ACTION_BUTTON;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_SET_ACTION_BUTTON_write(WowWorldWriter* writer, const vanilla_CMSG_SET_ACTION_BUTTON* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SET_ACTION_BUTTON_write(WowWorldWriter* writer, const vanilla_CMSG_SET_ACTION_BUTTON* object);
 
 typedef struct {
     uint32_t (*data)[120];
 
 } vanilla_SMSG_ACTION_BUTTONS;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_ACTION_BUTTONS_write(WowWorldWriter* writer, const vanilla_SMSG_ACTION_BUTTONS* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_ACTION_BUTTONS_free(vanilla_SMSG_ACTION_BUTTONS* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ACTION_BUTTONS_write(WowWorldWriter* writer, const vanilla_SMSG_ACTION_BUTTONS* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_ACTION_BUTTONS_free(vanilla_SMSG_ACTION_BUTTONS* object);
 
 typedef struct {
     uint8_t unknown1;
@@ -8892,35 +8892,35 @@ typedef struct {
     vanilla_CooldownSpell* cooldowns;
 
 } vanilla_SMSG_INITIAL_SPELLS;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_INITIAL_SPELLS_write(WowWorldWriter* writer, const vanilla_SMSG_INITIAL_SPELLS* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_INITIAL_SPELLS_free(vanilla_SMSG_INITIAL_SPELLS* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_INITIAL_SPELLS_write(WowWorldWriter* writer, const vanilla_SMSG_INITIAL_SPELLS* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_INITIAL_SPELLS_free(vanilla_SMSG_INITIAL_SPELLS* object);
 
 typedef struct {
     uint32_t id;
 
 } vanilla_SMSG_LEARNED_SPELL;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_LEARNED_SPELL_write(WowWorldWriter* writer, const vanilla_SMSG_LEARNED_SPELL* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LEARNED_SPELL_write(WowWorldWriter* writer, const vanilla_SMSG_LEARNED_SPELL* object);
 
 typedef struct {
     uint16_t new_spell_id;
     uint16_t old_spell_id;
 
 } vanilla_SMSG_SUPERCEDED_SPELL;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SUPERCEDED_SPELL_write(WowWorldWriter* writer, const vanilla_SMSG_SUPERCEDED_SPELL* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SUPERCEDED_SPELL_write(WowWorldWriter* writer, const vanilla_SMSG_SUPERCEDED_SPELL* object);
 
 typedef struct {
     uint32_t spell;
     vanilla_SpellCastTargets targets;
 
 } vanilla_CMSG_CAST_SPELL;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_CAST_SPELL_write(WowWorldWriter* writer, const vanilla_CMSG_CAST_SPELL* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_CAST_SPELL_free(vanilla_CMSG_CAST_SPELL* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CAST_SPELL_write(WowWorldWriter* writer, const vanilla_CMSG_CAST_SPELL* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CAST_SPELL_free(vanilla_CMSG_CAST_SPELL* object);
 
 typedef struct {
     uint32_t id;
 
 } vanilla_CMSG_CANCEL_CAST;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_CANCEL_CAST_write(WowWorldWriter* writer, const vanilla_CMSG_CANCEL_CAST* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CANCEL_CAST_write(WowWorldWriter* writer, const vanilla_CMSG_CANCEL_CAST* object);
 
 typedef struct {
     uint32_t spell;
@@ -8933,8 +8933,8 @@ typedef struct {
     uint32_t equipped_item_inventory_type_mask;
 
 } vanilla_SMSG_CAST_RESULT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_CAST_RESULT_write(WowWorldWriter* writer, const vanilla_SMSG_CAST_RESULT* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_CAST_RESULT_free(vanilla_SMSG_CAST_RESULT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CAST_RESULT_write(WowWorldWriter* writer, const vanilla_SMSG_CAST_RESULT* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_CAST_RESULT_free(vanilla_SMSG_CAST_RESULT* object);
 
 typedef struct {
     uint64_t cast_item;
@@ -8947,8 +8947,8 @@ typedef struct {
     uint32_t ammo_inventory_type;
 
 } vanilla_SMSG_SPELL_START;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SPELL_START_write(WowWorldWriter* writer, const vanilla_SMSG_SPELL_START* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_SPELL_START_free(vanilla_SMSG_SPELL_START* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELL_START_write(WowWorldWriter* writer, const vanilla_SMSG_SPELL_START* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_SPELL_START_free(vanilla_SMSG_SPELL_START* object);
 
 typedef struct {
     uint64_t cast_item;
@@ -8964,8 +8964,8 @@ typedef struct {
     uint32_t ammo_inventory_type;
 
 } vanilla_SMSG_SPELL_GO;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SPELL_GO_write(WowWorldWriter* writer, const vanilla_SMSG_SPELL_GO* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_SPELL_GO_free(vanilla_SMSG_SPELL_GO* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELL_GO_write(WowWorldWriter* writer, const vanilla_SMSG_SPELL_GO* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_SPELL_GO_free(vanilla_SMSG_SPELL_GO* object);
 
 typedef struct {
     uint64_t guid;
@@ -8973,7 +8973,7 @@ typedef struct {
     vanilla_SpellCastResult result;
 
 } vanilla_SMSG_SPELL_FAILURE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SPELL_FAILURE_write(WowWorldWriter* writer, const vanilla_SMSG_SPELL_FAILURE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELL_FAILURE_write(WowWorldWriter* writer, const vanilla_SMSG_SPELL_FAILURE* object);
 
 typedef struct {
     uint64_t guid;
@@ -8981,28 +8981,28 @@ typedef struct {
     vanilla_SpellCooldownStatus* cooldowns;
 
 } vanilla_SMSG_SPELL_COOLDOWN;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SPELL_COOLDOWN_write(WowWorldWriter* writer, const vanilla_SMSG_SPELL_COOLDOWN* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_SPELL_COOLDOWN_free(vanilla_SMSG_SPELL_COOLDOWN* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELL_COOLDOWN_write(WowWorldWriter* writer, const vanilla_SMSG_SPELL_COOLDOWN* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_SPELL_COOLDOWN_free(vanilla_SMSG_SPELL_COOLDOWN* object);
 
 typedef struct {
     uint32_t id;
     uint64_t guid;
 
 } vanilla_SMSG_COOLDOWN_EVENT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_COOLDOWN_EVENT_write(WowWorldWriter* writer, const vanilla_SMSG_COOLDOWN_EVENT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_COOLDOWN_EVENT_write(WowWorldWriter* writer, const vanilla_SMSG_COOLDOWN_EVENT* object);
 
 typedef struct {
     uint32_t id;
 
 } vanilla_CMSG_CANCEL_AURA;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_CANCEL_AURA_write(WowWorldWriter* writer, const vanilla_CMSG_CANCEL_AURA* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CANCEL_AURA_write(WowWorldWriter* writer, const vanilla_CMSG_CANCEL_AURA* object);
 
 typedef struct {
     uint8_t aura_slot;
     uint32_t aura_duration;
 
 } vanilla_SMSG_UPDATE_AURA_DURATION;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_UPDATE_AURA_DURATION_write(WowWorldWriter* writer, const vanilla_SMSG_UPDATE_AURA_DURATION* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_UPDATE_AURA_DURATION_write(WowWorldWriter* writer, const vanilla_SMSG_UPDATE_AURA_DURATION* object);
 
 typedef struct {
     uint32_t id;
@@ -9010,60 +9010,60 @@ typedef struct {
     vanilla_SpellCastResult result;
 
 } vanilla_SMSG_PET_CAST_FAILED;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_PET_CAST_FAILED_write(WowWorldWriter* writer, const vanilla_SMSG_PET_CAST_FAILED* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PET_CAST_FAILED_write(WowWorldWriter* writer, const vanilla_SMSG_PET_CAST_FAILED* object);
 
 typedef struct {
     uint32_t spell;
     uint32_t duration;
 
 } vanilla_MSG_CHANNEL_START_Server;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_CHANNEL_START_Server_write(WowWorldWriter* writer, const vanilla_MSG_CHANNEL_START_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_CHANNEL_START_Server_write(WowWorldWriter* writer, const vanilla_MSG_CHANNEL_START_Server* object);
 
 typedef struct {
     uint32_t time;
 
 } vanilla_MSG_CHANNEL_UPDATE_Server;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_CHANNEL_UPDATE_Server_write(WowWorldWriter* writer, const vanilla_MSG_CHANNEL_UPDATE_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_CHANNEL_UPDATE_Server_write(WowWorldWriter* writer, const vanilla_MSG_CHANNEL_UPDATE_Server* object);
 
 typedef struct {
     uint32_t id;
 
 } vanilla_CMSG_CANCEL_CHANNELLING;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_CANCEL_CHANNELLING_write(WowWorldWriter* writer, const vanilla_CMSG_CANCEL_CHANNELLING* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CANCEL_CHANNELLING_write(WowWorldWriter* writer, const vanilla_CMSG_CANCEL_CHANNELLING* object);
 
 typedef struct {
     uint64_t guid;
     vanilla_AiReaction reaction;
 
 } vanilla_SMSG_AI_REACTION;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_AI_REACTION_write(WowWorldWriter* writer, const vanilla_SMSG_AI_REACTION* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_AI_REACTION_write(WowWorldWriter* writer, const vanilla_SMSG_AI_REACTION* object);
 
 typedef struct {
     uint64_t target;
 
 } vanilla_CMSG_SET_SELECTION;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_SET_SELECTION_write(WowWorldWriter* writer, const vanilla_CMSG_SET_SELECTION* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SET_SELECTION_write(WowWorldWriter* writer, const vanilla_CMSG_SET_SELECTION* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_CMSG_SET_TARGET_OBSOLETE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_SET_TARGET_OBSOLETE_write(WowWorldWriter* writer, const vanilla_CMSG_SET_TARGET_OBSOLETE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SET_TARGET_OBSOLETE_write(WowWorldWriter* writer, const vanilla_CMSG_SET_TARGET_OBSOLETE* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_CMSG_ATTACKSWING;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_ATTACKSWING_write(WowWorldWriter* writer, const vanilla_CMSG_ATTACKSWING* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_ATTACKSWING_write(WowWorldWriter* writer, const vanilla_CMSG_ATTACKSWING* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_ATTACKSTOP_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_ATTACKSTOP_write(WowWorldWriter* writer);
 
 typedef struct {
     uint64_t attacker;
     uint64_t victim;
 
 } vanilla_SMSG_ATTACKSTART;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_ATTACKSTART_write(WowWorldWriter* writer, const vanilla_SMSG_ATTACKSTART* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ATTACKSTART_write(WowWorldWriter* writer, const vanilla_SMSG_ATTACKSTART* object);
 
 typedef struct {
     uint64_t player;
@@ -9071,17 +9071,17 @@ typedef struct {
     uint32_t unknown1;
 
 } vanilla_SMSG_ATTACKSTOP;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_ATTACKSTOP_write(WowWorldWriter* writer, const vanilla_SMSG_ATTACKSTOP* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ATTACKSTOP_write(WowWorldWriter* writer, const vanilla_SMSG_ATTACKSTOP* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_ATTACKSWING_NOTINRANGE_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ATTACKSWING_NOTINRANGE_write(WowWorldWriter* writer);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_ATTACKSWING_BADFACING_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ATTACKSWING_BADFACING_write(WowWorldWriter* writer);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_ATTACKSWING_NOTSTANDING_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ATTACKSWING_NOTSTANDING_write(WowWorldWriter* writer);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_ATTACKSWING_DEADTARGET_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ATTACKSWING_DEADTARGET_write(WowWorldWriter* writer);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_ATTACKSWING_CANT_ATTACK_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ATTACKSWING_CANT_ATTACK_write(WowWorldWriter* writer);
 
 typedef struct {
     vanilla_HitInfo hit_info;
@@ -9096,10 +9096,10 @@ typedef struct {
     uint32_t blocked_amount;
 
 } vanilla_SMSG_ATTACKERSTATEUPDATE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_ATTACKERSTATEUPDATE_write(WowWorldWriter* writer, const vanilla_SMSG_ATTACKERSTATEUPDATE* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_ATTACKERSTATEUPDATE_free(vanilla_SMSG_ATTACKERSTATEUPDATE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ATTACKERSTATEUPDATE_write(WowWorldWriter* writer, const vanilla_SMSG_ATTACKERSTATEUPDATE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_ATTACKERSTATEUPDATE_free(vanilla_SMSG_ATTACKERSTATEUPDATE* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_CANCEL_COMBAT_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CANCEL_COMBAT_write(WowWorldWriter* writer);
 
 typedef struct {
     uint64_t victim;
@@ -9109,7 +9109,7 @@ typedef struct {
     bool critical;
 
 } vanilla_SMSG_SPELLHEALLOG;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SPELLHEALLOG_write(WowWorldWriter* writer, const vanilla_SMSG_SPELLHEALLOG* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELLHEALLOG_write(WowWorldWriter* writer, const vanilla_SMSG_SPELLHEALLOG* object);
 
 typedef struct {
     uint64_t victim;
@@ -9119,7 +9119,7 @@ typedef struct {
     uint32_t damage;
 
 } vanilla_SMSG_SPELLENERGIZELOG;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SPELLENERGIZELOG_write(WowWorldWriter* writer, const vanilla_SMSG_SPELLENERGIZELOG* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELLENERGIZELOG_write(WowWorldWriter* writer, const vanilla_SMSG_SPELLENERGIZELOG* object);
 
 typedef struct {
     all_Vector3d position;
@@ -9127,23 +9127,23 @@ typedef struct {
     vanilla_Area area;
 
 } vanilla_SMSG_BINDPOINTUPDATE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_BINDPOINTUPDATE_write(WowWorldWriter* writer, const vanilla_SMSG_BINDPOINTUPDATE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_BINDPOINTUPDATE_write(WowWorldWriter* writer, const vanilla_SMSG_BINDPOINTUPDATE* object);
 
 typedef struct {
     uint64_t guid;
     vanilla_Area area;
 
 } vanilla_SMSG_PLAYERBOUND;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_PLAYERBOUND_write(WowWorldWriter* writer, const vanilla_SMSG_PLAYERBOUND* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PLAYERBOUND_write(WowWorldWriter* writer, const vanilla_SMSG_PLAYERBOUND* object);
 
 typedef struct {
     uint64_t guid;
     bool allow_movement;
 
 } vanilla_SMSG_CLIENT_CONTROL_UPDATE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_CLIENT_CONTROL_UPDATE_write(WowWorldWriter* writer, const vanilla_SMSG_CLIENT_CONTROL_UPDATE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CLIENT_CONTROL_UPDATE_write(WowWorldWriter* writer, const vanilla_SMSG_CLIENT_CONTROL_UPDATE* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_REPOP_REQUEST_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_REPOP_REQUEST_write(WowWorldWriter* writer);
 
 typedef struct {
     uint64_t guid;
@@ -9151,29 +9151,29 @@ typedef struct {
     bool player;
 
 } vanilla_SMSG_RESURRECT_REQUEST;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_RESURRECT_REQUEST_write(WowWorldWriter* writer, const vanilla_SMSG_RESURRECT_REQUEST* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_RESURRECT_REQUEST_free(vanilla_SMSG_RESURRECT_REQUEST* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_RESURRECT_REQUEST_write(WowWorldWriter* writer, const vanilla_SMSG_RESURRECT_REQUEST* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_RESURRECT_REQUEST_free(vanilla_SMSG_RESURRECT_REQUEST* object);
 
 typedef struct {
     uint64_t guid;
     uint8_t status;
 
 } vanilla_CMSG_RESURRECT_RESPONSE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_RESURRECT_RESPONSE_write(WowWorldWriter* writer, const vanilla_CMSG_RESURRECT_RESPONSE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_RESURRECT_RESPONSE_write(WowWorldWriter* writer, const vanilla_CMSG_RESURRECT_RESPONSE* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_CMSG_LOOT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_LOOT_write(WowWorldWriter* writer, const vanilla_CMSG_LOOT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_LOOT_write(WowWorldWriter* writer, const vanilla_CMSG_LOOT* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_LOOT_MONEY_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_LOOT_MONEY_write(WowWorldWriter* writer);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_CMSG_LOOT_RELEASE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_LOOT_RELEASE_write(WowWorldWriter* writer, const vanilla_CMSG_LOOT_RELEASE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_LOOT_RELEASE_write(WowWorldWriter* writer, const vanilla_CMSG_LOOT_RELEASE* object);
 
 typedef struct {
     uint64_t guid;
@@ -9184,29 +9184,29 @@ typedef struct {
     vanilla_LootItem* items;
 
 } vanilla_SMSG_LOOT_RESPONSE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_LOOT_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_LOOT_RESPONSE* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_LOOT_RESPONSE_free(vanilla_SMSG_LOOT_RESPONSE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOOT_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_LOOT_RESPONSE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_LOOT_RESPONSE_free(vanilla_SMSG_LOOT_RESPONSE* object);
 
 typedef struct {
     uint64_t guid;
     uint8_t unknown1;
 
 } vanilla_SMSG_LOOT_RELEASE_RESPONSE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_LOOT_RELEASE_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_LOOT_RELEASE_RESPONSE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOOT_RELEASE_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_LOOT_RELEASE_RESPONSE* object);
 
 typedef struct {
     uint8_t slot;
 
 } vanilla_SMSG_LOOT_REMOVED;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_LOOT_REMOVED_write(WowWorldWriter* writer, const vanilla_SMSG_LOOT_REMOVED* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOOT_REMOVED_write(WowWorldWriter* writer, const vanilla_SMSG_LOOT_REMOVED* object);
 
 typedef struct {
     uint32_t amount;
 
 } vanilla_SMSG_LOOT_MONEY_NOTIFY;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_LOOT_MONEY_NOTIFY_write(WowWorldWriter* writer, const vanilla_SMSG_LOOT_MONEY_NOTIFY* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOOT_MONEY_NOTIFY_write(WowWorldWriter* writer, const vanilla_SMSG_LOOT_MONEY_NOTIFY* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_LOOT_CLEAR_MONEY_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOOT_CLEAR_MONEY_write(WowWorldWriter* writer);
 
 typedef struct {
     uint64_t guid;
@@ -9221,24 +9221,24 @@ typedef struct {
     uint32_t item_count;
 
 } vanilla_SMSG_ITEM_PUSH_RESULT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_ITEM_PUSH_RESULT_write(WowWorldWriter* writer, const vanilla_SMSG_ITEM_PUSH_RESULT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ITEM_PUSH_RESULT_write(WowWorldWriter* writer, const vanilla_SMSG_ITEM_PUSH_RESULT* object);
 
 typedef struct {
     uint64_t initiator;
     uint64_t target;
 
 } vanilla_SMSG_DUEL_REQUESTED;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_DUEL_REQUESTED_write(WowWorldWriter* writer, const vanilla_SMSG_DUEL_REQUESTED* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_DUEL_REQUESTED_write(WowWorldWriter* writer, const vanilla_SMSG_DUEL_REQUESTED* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_DUEL_OUTOFBOUNDS_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_DUEL_OUTOFBOUNDS_write(WowWorldWriter* writer);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_DUEL_INBOUNDS_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_DUEL_INBOUNDS_write(WowWorldWriter* writer);
 
 typedef struct {
     bool ended_without_interruption;
 
 } vanilla_SMSG_DUEL_COMPLETE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_DUEL_COMPLETE_write(WowWorldWriter* writer, const vanilla_SMSG_DUEL_COMPLETE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_DUEL_COMPLETE_write(WowWorldWriter* writer, const vanilla_SMSG_DUEL_COMPLETE* object);
 
 typedef struct {
     vanilla_DuelWinnerReason reason;
@@ -9246,46 +9246,46 @@ typedef struct {
     WowWorldString initiator_name;
 
 } vanilla_SMSG_DUEL_WINNER;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_DUEL_WINNER_write(WowWorldWriter* writer, const vanilla_SMSG_DUEL_WINNER* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_DUEL_WINNER_free(vanilla_SMSG_DUEL_WINNER* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_DUEL_WINNER_write(WowWorldWriter* writer, const vanilla_SMSG_DUEL_WINNER* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_DUEL_WINNER_free(vanilla_SMSG_DUEL_WINNER* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_CMSG_DUEL_ACCEPTED;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_DUEL_ACCEPTED_write(WowWorldWriter* writer, const vanilla_CMSG_DUEL_ACCEPTED* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_DUEL_ACCEPTED_write(WowWorldWriter* writer, const vanilla_CMSG_DUEL_ACCEPTED* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_CMSG_DUEL_CANCELLED;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_DUEL_CANCELLED_write(WowWorldWriter* writer, const vanilla_CMSG_DUEL_CANCELLED* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_DUEL_CANCELLED_write(WowWorldWriter* writer, const vanilla_CMSG_DUEL_CANCELLED* object);
 
 typedef struct {
     vanilla_MountResult result;
 
 } vanilla_SMSG_MOUNTRESULT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_MOUNTRESULT_write(WowWorldWriter* writer, const vanilla_SMSG_MOUNTRESULT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MOUNTRESULT_write(WowWorldWriter* writer, const vanilla_SMSG_MOUNTRESULT* object);
 
 typedef struct {
     vanilla_DismountResult result;
 
 } vanilla_SMSG_DISMOUNTRESULT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_DISMOUNTRESULT_write(WowWorldWriter* writer, const vanilla_SMSG_DISMOUNTRESULT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_DISMOUNTRESULT_write(WowWorldWriter* writer, const vanilla_SMSG_DISMOUNTRESULT* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_MOUNTSPECIAL_ANIM_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MOUNTSPECIAL_ANIM_write(WowWorldWriter* writer);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_SMSG_MOUNTSPECIAL_ANIM;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_MOUNTSPECIAL_ANIM_write(WowWorldWriter* writer, const vanilla_SMSG_MOUNTSPECIAL_ANIM* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MOUNTSPECIAL_ANIM_write(WowWorldWriter* writer, const vanilla_SMSG_MOUNTSPECIAL_ANIM* object);
 
 typedef struct {
     vanilla_PetTameFailureReason reason;
 
 } vanilla_SMSG_PET_TAME_FAILURE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_PET_TAME_FAILURE_write(WowWorldWriter* writer, const vanilla_SMSG_PET_TAME_FAILURE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PET_TAME_FAILURE_write(WowWorldWriter* writer, const vanilla_SMSG_PET_TAME_FAILURE* object);
 
 typedef struct {
     uint32_t position2;
@@ -9299,7 +9299,7 @@ typedef struct {
 
     vanilla_CMSG_PET_SET_ACTION_extra* extra;
 } vanilla_CMSG_PET_SET_ACTION;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_PET_SET_ACTION_write(WowWorldWriter* writer, const vanilla_CMSG_PET_SET_ACTION* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PET_SET_ACTION_write(WowWorldWriter* writer, const vanilla_CMSG_PET_SET_ACTION* object);
 
 typedef struct {
     uint64_t pet;
@@ -9307,23 +9307,23 @@ typedef struct {
     uint64_t target;
 
 } vanilla_CMSG_PET_ACTION;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_PET_ACTION_write(WowWorldWriter* writer, const vanilla_CMSG_PET_ACTION* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PET_ACTION_write(WowWorldWriter* writer, const vanilla_CMSG_PET_ACTION* object);
 
 typedef struct {
     uint64_t pet;
 
 } vanilla_CMSG_PET_ABANDON;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_PET_ABANDON_write(WowWorldWriter* writer, const vanilla_CMSG_PET_ABANDON* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PET_ABANDON_write(WowWorldWriter* writer, const vanilla_CMSG_PET_ABANDON* object);
 
 typedef struct {
     uint64_t pet;
     WowWorldString name;
 
 } vanilla_CMSG_PET_RENAME;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_PET_RENAME_write(WowWorldWriter* writer, const vanilla_CMSG_PET_RENAME* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_PET_RENAME_free(vanilla_CMSG_PET_RENAME* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PET_RENAME_write(WowWorldWriter* writer, const vanilla_CMSG_PET_RENAME* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_PET_RENAME_free(vanilla_CMSG_PET_RENAME* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_PET_NAME_INVALID_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PET_NAME_INVALID_write(WowWorldWriter* writer);
 
 typedef struct {
     uint32_t duration;
@@ -9343,7 +9343,7 @@ typedef struct {
 
     vanilla_SMSG_PET_SPELLS_action_bars* action_bars;
 } vanilla_SMSG_PET_SPELLS;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_PET_SPELLS_write(WowWorldWriter* writer, const vanilla_SMSG_PET_SPELLS* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PET_SPELLS_write(WowWorldWriter* writer, const vanilla_SMSG_PET_SPELLS* object);
 
 typedef struct {
     uint64_t guid;
@@ -9353,13 +9353,13 @@ typedef struct {
     vanilla_PetEnabled pet_enabled;
 
 } vanilla_SMSG_PET_MODE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_PET_MODE_write(WowWorldWriter* writer, const vanilla_SMSG_PET_MODE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PET_MODE_write(WowWorldWriter* writer, const vanilla_SMSG_PET_MODE* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_CMSG_GOSSIP_HELLO;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_GOSSIP_HELLO_write(WowWorldWriter* writer, const vanilla_CMSG_GOSSIP_HELLO* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GOSSIP_HELLO_write(WowWorldWriter* writer, const vanilla_CMSG_GOSSIP_HELLO* object);
 
 typedef struct {
     WowWorldString code;
@@ -9371,7 +9371,7 @@ typedef struct {
 
     vanilla_CMSG_GOSSIP_SELECT_OPTION_unknown* unknown;
 } vanilla_CMSG_GOSSIP_SELECT_OPTION;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_GOSSIP_SELECT_OPTION_write(WowWorldWriter* writer, const vanilla_CMSG_GOSSIP_SELECT_OPTION* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GOSSIP_SELECT_OPTION_write(WowWorldWriter* writer, const vanilla_CMSG_GOSSIP_SELECT_OPTION* object);
 
 typedef struct {
     uint64_t guid;
@@ -9382,44 +9382,44 @@ typedef struct {
     vanilla_QuestItem* quests;
 
 } vanilla_SMSG_GOSSIP_MESSAGE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_GOSSIP_MESSAGE_write(WowWorldWriter* writer, const vanilla_SMSG_GOSSIP_MESSAGE* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_GOSSIP_MESSAGE_free(vanilla_SMSG_GOSSIP_MESSAGE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GOSSIP_MESSAGE_write(WowWorldWriter* writer, const vanilla_SMSG_GOSSIP_MESSAGE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GOSSIP_MESSAGE_free(vanilla_SMSG_GOSSIP_MESSAGE* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_GOSSIP_COMPLETE_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GOSSIP_COMPLETE_write(WowWorldWriter* writer);
 
 typedef struct {
     uint32_t text_id;
     uint64_t guid;
 
 } vanilla_CMSG_NPC_TEXT_QUERY;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_NPC_TEXT_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_NPC_TEXT_QUERY* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_NPC_TEXT_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_NPC_TEXT_QUERY* object);
 
 typedef struct {
     uint32_t text_id;
     vanilla_NpcTextUpdate (*texts)[8];
 
 } vanilla_SMSG_NPC_TEXT_UPDATE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_NPC_TEXT_UPDATE_write(WowWorldWriter* writer, const vanilla_SMSG_NPC_TEXT_UPDATE* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_NPC_TEXT_UPDATE_free(vanilla_SMSG_NPC_TEXT_UPDATE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_NPC_TEXT_UPDATE_write(WowWorldWriter* writer, const vanilla_SMSG_NPC_TEXT_UPDATE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_NPC_TEXT_UPDATE_free(vanilla_SMSG_NPC_TEXT_UPDATE* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_CMSG_QUESTGIVER_STATUS_QUERY;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_QUESTGIVER_STATUS_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_QUESTGIVER_STATUS_QUERY* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUESTGIVER_STATUS_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_QUESTGIVER_STATUS_QUERY* object);
 
 typedef struct {
     uint64_t guid;
     vanilla_QuestGiverStatus status;
 
 } vanilla_SMSG_QUESTGIVER_STATUS;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_QUESTGIVER_STATUS_write(WowWorldWriter* writer, const vanilla_SMSG_QUESTGIVER_STATUS* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTGIVER_STATUS_write(WowWorldWriter* writer, const vanilla_SMSG_QUESTGIVER_STATUS* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_CMSG_QUESTGIVER_HELLO;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_QUESTGIVER_HELLO_write(WowWorldWriter* writer, const vanilla_CMSG_QUESTGIVER_HELLO* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUESTGIVER_HELLO_write(WowWorldWriter* writer, const vanilla_CMSG_QUESTGIVER_HELLO* object);
 
 typedef struct {
     uint64_t npc;
@@ -9430,17 +9430,17 @@ typedef struct {
     vanilla_QuestItem* quest_items;
 
 } vanilla_SMSG_QUESTGIVER_QUEST_LIST;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_LIST_write(WowWorldWriter* writer, const vanilla_SMSG_QUESTGIVER_QUEST_LIST* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_QUESTGIVER_QUEST_LIST_free(vanilla_SMSG_QUESTGIVER_QUEST_LIST* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_LIST_write(WowWorldWriter* writer, const vanilla_SMSG_QUESTGIVER_QUEST_LIST* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_QUESTGIVER_QUEST_LIST_free(vanilla_SMSG_QUESTGIVER_QUEST_LIST* object);
 
 typedef struct {
     uint64_t guid;
     uint32_t quest_id;
 
 } vanilla_CMSG_QUESTGIVER_QUERY_QUEST;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_QUESTGIVER_QUERY_QUEST_write(WowWorldWriter* writer, const vanilla_CMSG_QUESTGIVER_QUERY_QUEST* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUESTGIVER_QUERY_QUEST_write(WowWorldWriter* writer, const vanilla_CMSG_QUESTGIVER_QUERY_QUEST* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_QUESTGIVER_QUEST_AUTOLAUNCH_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUESTGIVER_QUEST_AUTOLAUNCH_write(WowWorldWriter* writer);
 
 typedef struct {
     uint64_t guid;
@@ -9459,22 +9459,22 @@ typedef struct {
     vanilla_QuestDetailsEmote* emotes;
 
 } vanilla_SMSG_QUESTGIVER_QUEST_DETAILS;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_DETAILS_write(WowWorldWriter* writer, const vanilla_SMSG_QUESTGIVER_QUEST_DETAILS* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_QUESTGIVER_QUEST_DETAILS_free(vanilla_SMSG_QUESTGIVER_QUEST_DETAILS* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_DETAILS_write(WowWorldWriter* writer, const vanilla_SMSG_QUESTGIVER_QUEST_DETAILS* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_QUESTGIVER_QUEST_DETAILS_free(vanilla_SMSG_QUESTGIVER_QUEST_DETAILS* object);
 
 typedef struct {
     uint64_t guid;
     uint32_t quest_id;
 
 } vanilla_CMSG_QUESTGIVER_ACCEPT_QUEST;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_QUESTGIVER_ACCEPT_QUEST_write(WowWorldWriter* writer, const vanilla_CMSG_QUESTGIVER_ACCEPT_QUEST* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUESTGIVER_ACCEPT_QUEST_write(WowWorldWriter* writer, const vanilla_CMSG_QUESTGIVER_ACCEPT_QUEST* object);
 
 typedef struct {
     uint64_t guid;
     uint32_t quest_id;
 
 } vanilla_CMSG_QUESTGIVER_COMPLETE_QUEST;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_QUESTGIVER_COMPLETE_QUEST_write(WowWorldWriter* writer, const vanilla_CMSG_QUESTGIVER_COMPLETE_QUEST* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUESTGIVER_COMPLETE_QUEST_write(WowWorldWriter* writer, const vanilla_CMSG_QUESTGIVER_COMPLETE_QUEST* object);
 
 typedef struct {
     uint64_t npc;
@@ -9493,15 +9493,15 @@ typedef struct {
     uint32_t flags3;
 
 } vanilla_SMSG_QUESTGIVER_REQUEST_ITEMS;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_QUESTGIVER_REQUEST_ITEMS_write(WowWorldWriter* writer, const vanilla_SMSG_QUESTGIVER_REQUEST_ITEMS* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_QUESTGIVER_REQUEST_ITEMS_free(vanilla_SMSG_QUESTGIVER_REQUEST_ITEMS* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTGIVER_REQUEST_ITEMS_write(WowWorldWriter* writer, const vanilla_SMSG_QUESTGIVER_REQUEST_ITEMS* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_QUESTGIVER_REQUEST_ITEMS_free(vanilla_SMSG_QUESTGIVER_REQUEST_ITEMS* object);
 
 typedef struct {
     uint64_t guid;
     uint32_t quest_id;
 
 } vanilla_CMSG_QUESTGIVER_REQUEST_REWARD;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_QUESTGIVER_REQUEST_REWARD_write(WowWorldWriter* writer, const vanilla_CMSG_QUESTGIVER_REQUEST_REWARD* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUESTGIVER_REQUEST_REWARD_write(WowWorldWriter* writer, const vanilla_CMSG_QUESTGIVER_REQUEST_REWARD* object);
 
 typedef struct {
     uint64_t npc;
@@ -9520,8 +9520,8 @@ typedef struct {
     uint32_t reward_spell_cast;
 
 } vanilla_SMSG_QUESTGIVER_OFFER_REWARD;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_QUESTGIVER_OFFER_REWARD_write(WowWorldWriter* writer, const vanilla_SMSG_QUESTGIVER_OFFER_REWARD* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_QUESTGIVER_OFFER_REWARD_free(vanilla_SMSG_QUESTGIVER_OFFER_REWARD* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTGIVER_OFFER_REWARD_write(WowWorldWriter* writer, const vanilla_SMSG_QUESTGIVER_OFFER_REWARD* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_QUESTGIVER_OFFER_REWARD_free(vanilla_SMSG_QUESTGIVER_OFFER_REWARD* object);
 
 typedef struct {
     uint64_t guid;
@@ -9529,15 +9529,15 @@ typedef struct {
     uint32_t reward;
 
 } vanilla_CMSG_QUESTGIVER_CHOOSE_REWARD;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_QUESTGIVER_CHOOSE_REWARD_write(WowWorldWriter* writer, const vanilla_CMSG_QUESTGIVER_CHOOSE_REWARD* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUESTGIVER_CHOOSE_REWARD_write(WowWorldWriter* writer, const vanilla_CMSG_QUESTGIVER_CHOOSE_REWARD* object);
 
 typedef struct {
     vanilla_QuestFailedReason msg;
 
 } vanilla_SMSG_QUESTGIVER_QUEST_INVALID;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_INVALID_write(WowWorldWriter* writer, const vanilla_SMSG_QUESTGIVER_QUEST_INVALID* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_INVALID_write(WowWorldWriter* writer, const vanilla_SMSG_QUESTGIVER_QUEST_INVALID* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_QUESTGIVER_CANCEL_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUESTGIVER_CANCEL_write(WowWorldWriter* writer);
 
 typedef struct {
     uint32_t quest_id;
@@ -9548,48 +9548,48 @@ typedef struct {
     vanilla_QuestItemReward* item_rewards;
 
 } vanilla_SMSG_QUESTGIVER_QUEST_COMPLETE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_COMPLETE_write(WowWorldWriter* writer, const vanilla_SMSG_QUESTGIVER_QUEST_COMPLETE* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_QUESTGIVER_QUEST_COMPLETE_free(vanilla_SMSG_QUESTGIVER_QUEST_COMPLETE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_COMPLETE_write(WowWorldWriter* writer, const vanilla_SMSG_QUESTGIVER_QUEST_COMPLETE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_QUESTGIVER_QUEST_COMPLETE_free(vanilla_SMSG_QUESTGIVER_QUEST_COMPLETE* object);
 
 typedef struct {
     uint32_t quest_id;
     vanilla_QuestFailedReason reason;
 
 } vanilla_SMSG_QUESTGIVER_QUEST_FAILED;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_FAILED_write(WowWorldWriter* writer, const vanilla_SMSG_QUESTGIVER_QUEST_FAILED* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_FAILED_write(WowWorldWriter* writer, const vanilla_SMSG_QUESTGIVER_QUEST_FAILED* object);
 
 typedef struct {
     uint8_t slot1;
     uint8_t slot2;
 
 } vanilla_CMSG_QUESTLOG_SWAP_QUEST;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_QUESTLOG_SWAP_QUEST_write(WowWorldWriter* writer, const vanilla_CMSG_QUESTLOG_SWAP_QUEST* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUESTLOG_SWAP_QUEST_write(WowWorldWriter* writer, const vanilla_CMSG_QUESTLOG_SWAP_QUEST* object);
 
 typedef struct {
     uint8_t slot;
 
 } vanilla_CMSG_QUESTLOG_REMOVE_QUEST;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_QUESTLOG_REMOVE_QUEST_write(WowWorldWriter* writer, const vanilla_CMSG_QUESTLOG_REMOVE_QUEST* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUESTLOG_REMOVE_QUEST_write(WowWorldWriter* writer, const vanilla_CMSG_QUESTLOG_REMOVE_QUEST* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_QUESTLOG_FULL_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTLOG_FULL_write(WowWorldWriter* writer);
 
 typedef struct {
     uint32_t quest_id;
 
 } vanilla_SMSG_QUESTUPDATE_FAILED;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_QUESTUPDATE_FAILED_write(WowWorldWriter* writer, const vanilla_SMSG_QUESTUPDATE_FAILED* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTUPDATE_FAILED_write(WowWorldWriter* writer, const vanilla_SMSG_QUESTUPDATE_FAILED* object);
 
 typedef struct {
     uint32_t quest_id;
 
 } vanilla_SMSG_QUESTUPDATE_FAILEDTIMER;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_QUESTUPDATE_FAILEDTIMER_write(WowWorldWriter* writer, const vanilla_SMSG_QUESTUPDATE_FAILEDTIMER* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTUPDATE_FAILEDTIMER_write(WowWorldWriter* writer, const vanilla_SMSG_QUESTUPDATE_FAILEDTIMER* object);
 
 typedef struct {
     uint32_t quest_id;
 
 } vanilla_SMSG_QUESTUPDATE_COMPLETE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_QUESTUPDATE_COMPLETE_write(WowWorldWriter* writer, const vanilla_SMSG_QUESTUPDATE_COMPLETE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTUPDATE_COMPLETE_write(WowWorldWriter* writer, const vanilla_SMSG_QUESTUPDATE_COMPLETE* object);
 
 typedef struct {
     uint32_t quest_id;
@@ -9599,20 +9599,20 @@ typedef struct {
     uint64_t guid;
 
 } vanilla_SMSG_QUESTUPDATE_ADD_KILL;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_QUESTUPDATE_ADD_KILL_write(WowWorldWriter* writer, const vanilla_SMSG_QUESTUPDATE_ADD_KILL* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTUPDATE_ADD_KILL_write(WowWorldWriter* writer, const vanilla_SMSG_QUESTUPDATE_ADD_KILL* object);
 
 typedef struct {
     uint32_t required_item_id;
     uint32_t items_required;
 
 } vanilla_SMSG_QUESTUPDATE_ADD_ITEM;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_QUESTUPDATE_ADD_ITEM_write(WowWorldWriter* writer, const vanilla_SMSG_QUESTUPDATE_ADD_ITEM* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTUPDATE_ADD_ITEM_write(WowWorldWriter* writer, const vanilla_SMSG_QUESTUPDATE_ADD_ITEM* object);
 
 typedef struct {
     uint32_t quest_id;
 
 } vanilla_CMSG_QUEST_CONFIRM_ACCEPT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_QUEST_CONFIRM_ACCEPT_write(WowWorldWriter* writer, const vanilla_CMSG_QUEST_CONFIRM_ACCEPT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUEST_CONFIRM_ACCEPT_write(WowWorldWriter* writer, const vanilla_CMSG_QUEST_CONFIRM_ACCEPT* object);
 
 typedef struct {
     uint32_t quest_id;
@@ -9620,20 +9620,20 @@ typedef struct {
     uint64_t guid;
 
 } vanilla_SMSG_QUEST_CONFIRM_ACCEPT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_QUEST_CONFIRM_ACCEPT_write(WowWorldWriter* writer, const vanilla_SMSG_QUEST_CONFIRM_ACCEPT* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_QUEST_CONFIRM_ACCEPT_free(vanilla_SMSG_QUEST_CONFIRM_ACCEPT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUEST_CONFIRM_ACCEPT_write(WowWorldWriter* writer, const vanilla_SMSG_QUEST_CONFIRM_ACCEPT* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_QUEST_CONFIRM_ACCEPT_free(vanilla_SMSG_QUEST_CONFIRM_ACCEPT* object);
 
 typedef struct {
     uint32_t quest_id;
 
 } vanilla_CMSG_PUSHQUESTTOPARTY;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_PUSHQUESTTOPARTY_write(WowWorldWriter* writer, const vanilla_CMSG_PUSHQUESTTOPARTY* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PUSHQUESTTOPARTY_write(WowWorldWriter* writer, const vanilla_CMSG_PUSHQUESTTOPARTY* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_CMSG_LIST_INVENTORY;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_LIST_INVENTORY_write(WowWorldWriter* writer, const vanilla_CMSG_LIST_INVENTORY* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_LIST_INVENTORY_write(WowWorldWriter* writer, const vanilla_CMSG_LIST_INVENTORY* object);
 
 typedef struct {
     uint64_t vendor;
@@ -9641,8 +9641,8 @@ typedef struct {
     vanilla_ListInventoryItem* items;
 
 } vanilla_SMSG_LIST_INVENTORY;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_LIST_INVENTORY_write(WowWorldWriter* writer, const vanilla_SMSG_LIST_INVENTORY* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_LIST_INVENTORY_free(vanilla_SMSG_LIST_INVENTORY* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LIST_INVENTORY_write(WowWorldWriter* writer, const vanilla_SMSG_LIST_INVENTORY* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_LIST_INVENTORY_free(vanilla_SMSG_LIST_INVENTORY* object);
 
 typedef struct {
     uint64_t vendor;
@@ -9650,7 +9650,7 @@ typedef struct {
     uint8_t amount;
 
 } vanilla_CMSG_SELL_ITEM;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_SELL_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_SELL_ITEM* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SELL_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_SELL_ITEM* object);
 
 typedef struct {
     uint64_t guid;
@@ -9658,7 +9658,7 @@ typedef struct {
     vanilla_SellItemResult result;
 
 } vanilla_SMSG_SELL_ITEM;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SELL_ITEM_write(WowWorldWriter* writer, const vanilla_SMSG_SELL_ITEM* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SELL_ITEM_write(WowWorldWriter* writer, const vanilla_SMSG_SELL_ITEM* object);
 
 typedef struct {
     uint64_t vendor;
@@ -9667,7 +9667,7 @@ typedef struct {
     uint8_t unknown1;
 
 } vanilla_CMSG_BUY_ITEM;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_BUY_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_BUY_ITEM* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BUY_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_BUY_ITEM* object);
 
 typedef struct {
     uint64_t vendor;
@@ -9677,7 +9677,7 @@ typedef struct {
     uint8_t amount;
 
 } vanilla_CMSG_BUY_ITEM_IN_SLOT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_BUY_ITEM_IN_SLOT_write(WowWorldWriter* writer, const vanilla_CMSG_BUY_ITEM_IN_SLOT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BUY_ITEM_IN_SLOT_write(WowWorldWriter* writer, const vanilla_CMSG_BUY_ITEM_IN_SLOT* object);
 
 typedef struct {
     uint64_t guid;
@@ -9686,7 +9686,7 @@ typedef struct {
     uint32_t amount_bought;
 
 } vanilla_SMSG_BUY_ITEM;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_BUY_ITEM_write(WowWorldWriter* writer, const vanilla_SMSG_BUY_ITEM* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_BUY_ITEM_write(WowWorldWriter* writer, const vanilla_SMSG_BUY_ITEM* object);
 
 typedef struct {
     uint64_t guid;
@@ -9694,7 +9694,7 @@ typedef struct {
     vanilla_BuyResult result;
 
 } vanilla_SMSG_BUY_FAILED;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_BUY_FAILED_write(WowWorldWriter* writer, const vanilla_SMSG_BUY_FAILED* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_BUY_FAILED_write(WowWorldWriter* writer, const vanilla_SMSG_BUY_FAILED* object);
 
 typedef struct {
     uint32_t unknown1;
@@ -9704,27 +9704,27 @@ typedef struct {
     uint32_t* nodes;
 
 } vanilla_SMSG_SHOWTAXINODES;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SHOWTAXINODES_write(WowWorldWriter* writer, const vanilla_SMSG_SHOWTAXINODES* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_SHOWTAXINODES_free(vanilla_SMSG_SHOWTAXINODES* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SHOWTAXINODES_write(WowWorldWriter* writer, const vanilla_SMSG_SHOWTAXINODES* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_SHOWTAXINODES_free(vanilla_SMSG_SHOWTAXINODES* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_CMSG_TAXINODE_STATUS_QUERY;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_TAXINODE_STATUS_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_TAXINODE_STATUS_QUERY* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_TAXINODE_STATUS_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_TAXINODE_STATUS_QUERY* object);
 
 typedef struct {
     uint64_t guid;
     bool taxi_mask_node_known;
 
 } vanilla_SMSG_TAXINODE_STATUS;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_TAXINODE_STATUS_write(WowWorldWriter* writer, const vanilla_SMSG_TAXINODE_STATUS* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TAXINODE_STATUS_write(WowWorldWriter* writer, const vanilla_SMSG_TAXINODE_STATUS* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_CMSG_TAXIQUERYAVAILABLENODES;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_TAXIQUERYAVAILABLENODES_write(WowWorldWriter* writer, const vanilla_CMSG_TAXIQUERYAVAILABLENODES* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_TAXIQUERYAVAILABLENODES_write(WowWorldWriter* writer, const vanilla_CMSG_TAXIQUERYAVAILABLENODES* object);
 
 typedef struct {
     uint64_t guid;
@@ -9732,21 +9732,21 @@ typedef struct {
     uint32_t destination_node;
 
 } vanilla_CMSG_ACTIVATETAXI;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_ACTIVATETAXI_write(WowWorldWriter* writer, const vanilla_CMSG_ACTIVATETAXI* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_ACTIVATETAXI_write(WowWorldWriter* writer, const vanilla_CMSG_ACTIVATETAXI* object);
 
 typedef struct {
     vanilla_ActivateTaxiReply reply;
 
 } vanilla_SMSG_ACTIVATETAXIREPLY;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_ACTIVATETAXIREPLY_write(WowWorldWriter* writer, const vanilla_SMSG_ACTIVATETAXIREPLY* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ACTIVATETAXIREPLY_write(WowWorldWriter* writer, const vanilla_SMSG_ACTIVATETAXIREPLY* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_NEW_TAXI_PATH_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_NEW_TAXI_PATH_write(WowWorldWriter* writer);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_CMSG_TRAINER_LIST;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_TRAINER_LIST_write(WowWorldWriter* writer, const vanilla_CMSG_TRAINER_LIST* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_TRAINER_LIST_write(WowWorldWriter* writer, const vanilla_CMSG_TRAINER_LIST* object);
 
 typedef struct {
     uint64_t guid;
@@ -9756,22 +9756,22 @@ typedef struct {
     WowWorldString greeting;
 
 } vanilla_SMSG_TRAINER_LIST;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_TRAINER_LIST_write(WowWorldWriter* writer, const vanilla_SMSG_TRAINER_LIST* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_TRAINER_LIST_free(vanilla_SMSG_TRAINER_LIST* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TRAINER_LIST_write(WowWorldWriter* writer, const vanilla_SMSG_TRAINER_LIST* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_TRAINER_LIST_free(vanilla_SMSG_TRAINER_LIST* object);
 
 typedef struct {
     uint64_t guid;
     uint32_t id;
 
 } vanilla_CMSG_TRAINER_BUY_SPELL;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_TRAINER_BUY_SPELL_write(WowWorldWriter* writer, const vanilla_CMSG_TRAINER_BUY_SPELL* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_TRAINER_BUY_SPELL_write(WowWorldWriter* writer, const vanilla_CMSG_TRAINER_BUY_SPELL* object);
 
 typedef struct {
     uint64_t guid;
     uint32_t id;
 
 } vanilla_SMSG_TRAINER_BUY_SUCCEEDED;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_TRAINER_BUY_SUCCEEDED_write(WowWorldWriter* writer, const vanilla_SMSG_TRAINER_BUY_SUCCEEDED* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TRAINER_BUY_SUCCEEDED_write(WowWorldWriter* writer, const vanilla_SMSG_TRAINER_BUY_SUCCEEDED* object);
 
 typedef struct {
     uint64_t guid;
@@ -9779,43 +9779,43 @@ typedef struct {
     vanilla_TrainingFailureReason error;
 
 } vanilla_SMSG_TRAINER_BUY_FAILED;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_TRAINER_BUY_FAILED_write(WowWorldWriter* writer, const vanilla_SMSG_TRAINER_BUY_FAILED* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TRAINER_BUY_FAILED_write(WowWorldWriter* writer, const vanilla_SMSG_TRAINER_BUY_FAILED* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_CMSG_BINDER_ACTIVATE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_BINDER_ACTIVATE_write(WowWorldWriter* writer, const vanilla_CMSG_BINDER_ACTIVATE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BINDER_ACTIVATE_write(WowWorldWriter* writer, const vanilla_CMSG_BINDER_ACTIVATE* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_CMSG_BANKER_ACTIVATE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_BANKER_ACTIVATE_write(WowWorldWriter* writer, const vanilla_CMSG_BANKER_ACTIVATE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BANKER_ACTIVATE_write(WowWorldWriter* writer, const vanilla_CMSG_BANKER_ACTIVATE* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_SMSG_SHOW_BANK;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SHOW_BANK_write(WowWorldWriter* writer, const vanilla_SMSG_SHOW_BANK* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SHOW_BANK_write(WowWorldWriter* writer, const vanilla_SMSG_SHOW_BANK* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_CMSG_BUY_BANK_SLOT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_BUY_BANK_SLOT_write(WowWorldWriter* writer, const vanilla_CMSG_BUY_BANK_SLOT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BUY_BANK_SLOT_write(WowWorldWriter* writer, const vanilla_CMSG_BUY_BANK_SLOT* object);
 
 typedef struct {
     vanilla_BuyBankSlotResult result;
 
 } vanilla_SMSG_BUY_BANK_SLOT_RESULT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_BUY_BANK_SLOT_RESULT_write(WowWorldWriter* writer, const vanilla_SMSG_BUY_BANK_SLOT_RESULT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_BUY_BANK_SLOT_RESULT_write(WowWorldWriter* writer, const vanilla_SMSG_BUY_BANK_SLOT_RESULT* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_CMSG_PETITION_SHOWLIST;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_PETITION_SHOWLIST_write(WowWorldWriter* writer, const vanilla_CMSG_PETITION_SHOWLIST* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PETITION_SHOWLIST_write(WowWorldWriter* writer, const vanilla_CMSG_PETITION_SHOWLIST* object);
 
 typedef struct {
     uint64_t npc;
@@ -9823,8 +9823,8 @@ typedef struct {
     vanilla_PetitionShowlist* petitions;
 
 } vanilla_SMSG_PETITION_SHOWLIST;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_PETITION_SHOWLIST_write(WowWorldWriter* writer, const vanilla_SMSG_PETITION_SHOWLIST* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_PETITION_SHOWLIST_free(vanilla_SMSG_PETITION_SHOWLIST* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PETITION_SHOWLIST_write(WowWorldWriter* writer, const vanilla_SMSG_PETITION_SHOWLIST* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_PETITION_SHOWLIST_free(vanilla_SMSG_PETITION_SHOWLIST* object);
 
 typedef struct {
     uint64_t npc;
@@ -9847,14 +9847,14 @@ typedef struct {
     uint32_t unknown15;
 
 } vanilla_CMSG_PETITION_BUY;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_PETITION_BUY_write(WowWorldWriter* writer, const vanilla_CMSG_PETITION_BUY* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_PETITION_BUY_free(vanilla_CMSG_PETITION_BUY* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PETITION_BUY_write(WowWorldWriter* writer, const vanilla_CMSG_PETITION_BUY* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_PETITION_BUY_free(vanilla_CMSG_PETITION_BUY* object);
 
 typedef struct {
     uint64_t item;
 
 } vanilla_CMSG_PETITION_SHOW_SIGNATURES;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_PETITION_SHOW_SIGNATURES_write(WowWorldWriter* writer, const vanilla_CMSG_PETITION_SHOW_SIGNATURES* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PETITION_SHOW_SIGNATURES_write(WowWorldWriter* writer, const vanilla_CMSG_PETITION_SHOW_SIGNATURES* object);
 
 typedef struct {
     uint64_t item;
@@ -9864,15 +9864,15 @@ typedef struct {
     vanilla_PetitionSignature* signatures;
 
 } vanilla_SMSG_PETITION_SHOW_SIGNATURES;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_PETITION_SHOW_SIGNATURES_write(WowWorldWriter* writer, const vanilla_SMSG_PETITION_SHOW_SIGNATURES* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_PETITION_SHOW_SIGNATURES_free(vanilla_SMSG_PETITION_SHOW_SIGNATURES* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PETITION_SHOW_SIGNATURES_write(WowWorldWriter* writer, const vanilla_SMSG_PETITION_SHOW_SIGNATURES* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_PETITION_SHOW_SIGNATURES_free(vanilla_SMSG_PETITION_SHOW_SIGNATURES* object);
 
 typedef struct {
     uint64_t petition;
     uint8_t unknown1;
 
 } vanilla_CMSG_PETITION_SIGN;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_PETITION_SIGN_write(WowWorldWriter* writer, const vanilla_CMSG_PETITION_SIGN* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PETITION_SIGN_write(WowWorldWriter* writer, const vanilla_CMSG_PETITION_SIGN* object);
 
 typedef struct {
     uint64_t petition;
@@ -9880,40 +9880,40 @@ typedef struct {
     vanilla_PetitionResult result;
 
 } vanilla_SMSG_PETITION_SIGN_RESULTS;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_PETITION_SIGN_RESULTS_write(WowWorldWriter* writer, const vanilla_SMSG_PETITION_SIGN_RESULTS* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PETITION_SIGN_RESULTS_write(WowWorldWriter* writer, const vanilla_SMSG_PETITION_SIGN_RESULTS* object);
 
 typedef struct {
     uint64_t petition;
 
 } vanilla_MSG_PETITION_DECLINE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_PETITION_DECLINE_cmsg_write(WowWorldWriter* writer, const vanilla_MSG_PETITION_DECLINE* object);
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_PETITION_DECLINE_smsg_write(WowWorldWriter* writer, const vanilla_MSG_PETITION_DECLINE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_PETITION_DECLINE_cmsg_write(WowWorldWriter* writer, const vanilla_MSG_PETITION_DECLINE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_PETITION_DECLINE_smsg_write(WowWorldWriter* writer, const vanilla_MSG_PETITION_DECLINE* object);
 
 typedef struct {
     uint64_t petition;
     uint64_t target;
 
 } vanilla_CMSG_OFFER_PETITION;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_OFFER_PETITION_write(WowWorldWriter* writer, const vanilla_CMSG_OFFER_PETITION* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_OFFER_PETITION_write(WowWorldWriter* writer, const vanilla_CMSG_OFFER_PETITION* object);
 
 typedef struct {
     uint64_t petition;
 
 } vanilla_CMSG_TURN_IN_PETITION;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_TURN_IN_PETITION_write(WowWorldWriter* writer, const vanilla_CMSG_TURN_IN_PETITION* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_TURN_IN_PETITION_write(WowWorldWriter* writer, const vanilla_CMSG_TURN_IN_PETITION* object);
 
 typedef struct {
     vanilla_PetitionResult result;
 
 } vanilla_SMSG_TURN_IN_PETITION_RESULTS;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_TURN_IN_PETITION_RESULTS_write(WowWorldWriter* writer, const vanilla_SMSG_TURN_IN_PETITION_RESULTS* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TURN_IN_PETITION_RESULTS_write(WowWorldWriter* writer, const vanilla_SMSG_TURN_IN_PETITION_RESULTS* object);
 
 typedef struct {
     uint32_t guild_id;
     uint64_t petition;
 
 } vanilla_CMSG_PETITION_QUERY;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_PETITION_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_PETITION_QUERY* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PETITION_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_PETITION_QUERY* object);
 
 typedef struct {
     uint32_t petition_id;
@@ -9935,12 +9935,12 @@ typedef struct {
     uint32_t number_of_choices;
 
 } vanilla_SMSG_PETITION_QUERY_RESPONSE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_PETITION_QUERY_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_PETITION_QUERY_RESPONSE* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_PETITION_QUERY_RESPONSE_free(vanilla_SMSG_PETITION_QUERY_RESPONSE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PETITION_QUERY_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_PETITION_QUERY_RESPONSE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_PETITION_QUERY_RESPONSE_free(vanilla_SMSG_PETITION_QUERY_RESPONSE* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_FISH_NOT_HOOKED_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_FISH_NOT_HOOKED_write(WowWorldWriter* writer);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_FISH_ESCAPED_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_FISH_ESCAPED_write(WowWorldWriter* writer);
 
 typedef struct {
     uint32_t suggestion;
@@ -9948,32 +9948,32 @@ typedef struct {
     WowWorldString bug_type;
 
 } vanilla_CMSG_BUG;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_BUG_write(WowWorldWriter* writer, const vanilla_CMSG_BUG* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_BUG_free(vanilla_CMSG_BUG* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BUG_write(WowWorldWriter* writer, const vanilla_CMSG_BUG* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_BUG_free(vanilla_CMSG_BUG* object);
 
 typedef struct {
     WowWorldString notification;
 
 } vanilla_SMSG_NOTIFICATION;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_NOTIFICATION_write(WowWorldWriter* writer, const vanilla_SMSG_NOTIFICATION* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_NOTIFICATION_free(vanilla_SMSG_NOTIFICATION* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_NOTIFICATION_write(WowWorldWriter* writer, const vanilla_SMSG_NOTIFICATION* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_NOTIFICATION_free(vanilla_SMSG_NOTIFICATION* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_PLAYED_TIME_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PLAYED_TIME_write(WowWorldWriter* writer);
 
 typedef struct {
     uint32_t total_played_time;
     uint32_t level_played_time;
 
 } vanilla_SMSG_PLAYED_TIME;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_PLAYED_TIME_write(WowWorldWriter* writer, const vanilla_SMSG_PLAYED_TIME* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PLAYED_TIME_write(WowWorldWriter* writer, const vanilla_SMSG_PLAYED_TIME* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_QUERY_TIME_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUERY_TIME_write(WowWorldWriter* writer);
 
 typedef struct {
     uint32_t time;
 
 } vanilla_SMSG_QUERY_TIME_RESPONSE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_QUERY_TIME_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_QUERY_TIME_RESPONSE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUERY_TIME_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_QUERY_TIME_RESPONSE* object);
 
 typedef struct {
     uint64_t target;
@@ -9983,14 +9983,14 @@ typedef struct {
     float exp_group_bonus;
 
 } vanilla_SMSG_LOG_XPGAIN;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_LOG_XPGAIN_write(WowWorldWriter* writer, const vanilla_SMSG_LOG_XPGAIN* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_LOG_XPGAIN_free(vanilla_SMSG_LOG_XPGAIN* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOG_XPGAIN_write(WowWorldWriter* writer, const vanilla_SMSG_LOG_XPGAIN* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_LOG_XPGAIN_free(vanilla_SMSG_LOG_XPGAIN* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_CMSG_RECLAIM_CORPSE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_RECLAIM_CORPSE_write(WowWorldWriter* writer, const vanilla_CMSG_RECLAIM_CORPSE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_RECLAIM_CORPSE_write(WowWorldWriter* writer, const vanilla_CMSG_RECLAIM_CORPSE* object);
 
 typedef struct {
     uint8_t gift_bag_index;
@@ -9999,7 +9999,7 @@ typedef struct {
     uint8_t item_slot;
 
 } vanilla_CMSG_WRAP_ITEM;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_WRAP_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_WRAP_ITEM* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_WRAP_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_WRAP_ITEM* object);
 
 typedef struct {
     uint32_t new_level;
@@ -10016,14 +10016,14 @@ typedef struct {
     uint32_t spirit;
 
 } vanilla_SMSG_LEVELUP_INFO;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_LEVELUP_INFO_write(WowWorldWriter* writer, const vanilla_SMSG_LEVELUP_INFO* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LEVELUP_INFO_write(WowWorldWriter* writer, const vanilla_SMSG_LEVELUP_INFO* object);
 
 typedef struct {
     float position_x;
     float position_y;
 
 } vanilla_MSG_MINIMAP_PING_Client;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MINIMAP_PING_Client_write(WowWorldWriter* writer, const vanilla_MSG_MINIMAP_PING_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MINIMAP_PING_Client_write(WowWorldWriter* writer, const vanilla_MSG_MINIMAP_PING_Client* object);
 
 typedef struct {
     uint64_t guid;
@@ -10031,7 +10031,7 @@ typedef struct {
     float position_y;
 
 } vanilla_MSG_MINIMAP_PING_Server;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MINIMAP_PING_Server_write(WowWorldWriter* writer, const vanilla_MSG_MINIMAP_PING_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MINIMAP_PING_Server_write(WowWorldWriter* writer, const vanilla_MSG_MINIMAP_PING_Server* object);
 
 typedef struct {
     uint64_t guid1;
@@ -10043,7 +10043,7 @@ typedef struct {
     uint32_t unknown5;
 
 } vanilla_SMSG_RESISTLOG;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_RESISTLOG_write(WowWorldWriter* writer, const vanilla_SMSG_RESISTLOG* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_RESISTLOG_write(WowWorldWriter* writer, const vanilla_SMSG_RESISTLOG* object);
 
 typedef struct {
     uint64_t target;
@@ -10053,7 +10053,7 @@ typedef struct {
     bool show_affiliation;
 
 } vanilla_SMSG_ENCHANTMENTLOG;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_ENCHANTMENTLOG_write(WowWorldWriter* writer, const vanilla_SMSG_ENCHANTMENTLOG* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ENCHANTMENTLOG_write(WowWorldWriter* writer, const vanilla_SMSG_ENCHANTMENTLOG* object);
 
 typedef struct {
     vanilla_TimerType timer;
@@ -10064,66 +10064,66 @@ typedef struct {
     uint32_t id;
 
 } vanilla_SMSG_START_MIRROR_TIMER;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_START_MIRROR_TIMER_write(WowWorldWriter* writer, const vanilla_SMSG_START_MIRROR_TIMER* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_START_MIRROR_TIMER_write(WowWorldWriter* writer, const vanilla_SMSG_START_MIRROR_TIMER* object);
 
 typedef struct {
     vanilla_TimerType timer;
     bool is_frozen;
 
 } vanilla_SMSG_PAUSE_MIRROR_TIMER;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_PAUSE_MIRROR_TIMER_write(WowWorldWriter* writer, const vanilla_SMSG_PAUSE_MIRROR_TIMER* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PAUSE_MIRROR_TIMER_write(WowWorldWriter* writer, const vanilla_SMSG_PAUSE_MIRROR_TIMER* object);
 
 typedef struct {
     vanilla_TimerType timer;
 
 } vanilla_SMSG_STOP_MIRROR_TIMER;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_STOP_MIRROR_TIMER_write(WowWorldWriter* writer, const vanilla_SMSG_STOP_MIRROR_TIMER* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_STOP_MIRROR_TIMER_write(WowWorldWriter* writer, const vanilla_SMSG_STOP_MIRROR_TIMER* object);
 
 typedef struct {
     uint32_t sequence_id;
     uint32_t round_time_in_ms;
 
 } vanilla_CMSG_PING;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_PING_write(WowWorldWriter* writer, const vanilla_CMSG_PING* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PING_write(WowWorldWriter* writer, const vanilla_CMSG_PING* object);
 
 typedef struct {
     uint32_t sequence_id;
 
 } vanilla_SMSG_PONG;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_PONG_write(WowWorldWriter* writer, const vanilla_SMSG_PONG* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PONG_write(WowWorldWriter* writer, const vanilla_SMSG_PONG* object);
 
 typedef struct {
     uint32_t id;
     uint64_t target;
 
 } vanilla_SMSG_CLEAR_COOLDOWN;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_CLEAR_COOLDOWN_write(WowWorldWriter* writer, const vanilla_SMSG_CLEAR_COOLDOWN* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CLEAR_COOLDOWN_write(WowWorldWriter* writer, const vanilla_SMSG_CLEAR_COOLDOWN* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_SMSG_GAMEOBJECT_PAGETEXT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_GAMEOBJECT_PAGETEXT_write(WowWorldWriter* writer, const vanilla_SMSG_GAMEOBJECT_PAGETEXT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GAMEOBJECT_PAGETEXT_write(WowWorldWriter* writer, const vanilla_SMSG_GAMEOBJECT_PAGETEXT* object);
 
 typedef struct {
     vanilla_SheathState sheathed;
 
 } vanilla_CMSG_SETSHEATHED;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_SETSHEATHED_write(WowWorldWriter* writer, const vanilla_CMSG_SETSHEATHED* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SETSHEATHED_write(WowWorldWriter* writer, const vanilla_CMSG_SETSHEATHED* object);
 
 typedef struct {
     uint64_t guid;
     uint32_t delay_time;
 
 } vanilla_SMSG_SPELL_DELAYED;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SPELL_DELAYED_write(WowWorldWriter* writer, const vanilla_SMSG_SPELL_DELAYED* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELL_DELAYED_write(WowWorldWriter* writer, const vanilla_SMSG_SPELL_DELAYED* object);
 
 typedef struct {
     uint64_t guid;
     uint32_t duration;
 
 } vanilla_SMSG_ITEM_TIME_UPDATE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_ITEM_TIME_UPDATE_write(WowWorldWriter* writer, const vanilla_SMSG_ITEM_TIME_UPDATE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ITEM_TIME_UPDATE_write(WowWorldWriter* writer, const vanilla_SMSG_ITEM_TIME_UPDATE* object);
 
 typedef struct {
     uint64_t item;
@@ -10132,13 +10132,13 @@ typedef struct {
     uint64_t player;
 
 } vanilla_SMSG_ITEM_ENCHANT_TIME_UPDATE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_ITEM_ENCHANT_TIME_UPDATE_write(WowWorldWriter* writer, const vanilla_SMSG_ITEM_ENCHANT_TIME_UPDATE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ITEM_ENCHANT_TIME_UPDATE_write(WowWorldWriter* writer, const vanilla_SMSG_ITEM_ENCHANT_TIME_UPDATE* object);
 
 typedef struct {
     uint32_t server_seed;
 
 } vanilla_SMSG_AUTH_CHALLENGE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_AUTH_CHALLENGE_write(WowWorldWriter* writer, const vanilla_SMSG_AUTH_CHALLENGE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_AUTH_CHALLENGE_write(WowWorldWriter* writer, const vanilla_SMSG_AUTH_CHALLENGE* object);
 
 typedef struct {
     vanilla_WorldResult result;
@@ -10148,8 +10148,8 @@ typedef struct {
     uint32_t queue_position;
 
 } vanilla_SMSG_AUTH_RESPONSE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_AUTH_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_AUTH_RESPONSE* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_AUTH_RESPONSE_free(vanilla_SMSG_AUTH_RESPONSE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_AUTH_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_AUTH_RESPONSE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_AUTH_RESPONSE_free(vanilla_SMSG_AUTH_RESPONSE* object);
 
 typedef struct {
     uint64_t guid;
@@ -10157,14 +10157,14 @@ typedef struct {
     vanilla_SpellCastTargets targets;
 
 } vanilla_CMSG_PET_CAST_SPELL;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_PET_CAST_SPELL_write(WowWorldWriter* writer, const vanilla_CMSG_PET_CAST_SPELL* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_PET_CAST_SPELL_free(vanilla_CMSG_PET_CAST_SPELL* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PET_CAST_SPELL_write(WowWorldWriter* writer, const vanilla_CMSG_PET_CAST_SPELL* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_PET_CAST_SPELL_free(vanilla_CMSG_PET_CAST_SPELL* object);
 
 typedef struct {
     vanilla_GuildEmblemResult result;
 
 } vanilla_MSG_SAVE_GUILD_EMBLEM_Server;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_SAVE_GUILD_EMBLEM_Server_write(WowWorldWriter* writer, const vanilla_MSG_SAVE_GUILD_EMBLEM_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_SAVE_GUILD_EMBLEM_Server_write(WowWorldWriter* writer, const vanilla_MSG_SAVE_GUILD_EMBLEM_Server* object);
 
 typedef struct {
     uint64_t vendor;
@@ -10175,55 +10175,55 @@ typedef struct {
     uint32_t background_color;
 
 } vanilla_MSG_SAVE_GUILD_EMBLEM_Client;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_SAVE_GUILD_EMBLEM_Client_write(WowWorldWriter* writer, const vanilla_MSG_SAVE_GUILD_EMBLEM_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_SAVE_GUILD_EMBLEM_Client_write(WowWorldWriter* writer, const vanilla_MSG_SAVE_GUILD_EMBLEM_Client* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_MSG_TABARDVENDOR_ACTIVATE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_TABARDVENDOR_ACTIVATE_cmsg_write(WowWorldWriter* writer, const vanilla_MSG_TABARDVENDOR_ACTIVATE* object);
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_TABARDVENDOR_ACTIVATE_smsg_write(WowWorldWriter* writer, const vanilla_MSG_TABARDVENDOR_ACTIVATE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_TABARDVENDOR_ACTIVATE_cmsg_write(WowWorldWriter* writer, const vanilla_MSG_TABARDVENDOR_ACTIVATE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_TABARDVENDOR_ACTIVATE_smsg_write(WowWorldWriter* writer, const vanilla_MSG_TABARDVENDOR_ACTIVATE* object);
 
 typedef struct {
     uint64_t guid;
     uint32_t spell_art_kit;
 
 } vanilla_SMSG_PLAY_SPELL_VISUAL;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_PLAY_SPELL_VISUAL_write(WowWorldWriter* writer, const vanilla_SMSG_PLAY_SPELL_VISUAL* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PLAY_SPELL_VISUAL_write(WowWorldWriter* writer, const vanilla_SMSG_PLAY_SPELL_VISUAL* object);
 
 typedef struct {
     vanilla_Area area;
 
 } vanilla_CMSG_ZONEUPDATE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_ZONEUPDATE_write(WowWorldWriter* writer, const vanilla_CMSG_ZONEUPDATE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_ZONEUPDATE_write(WowWorldWriter* writer, const vanilla_CMSG_ZONEUPDATE* object);
 
 typedef struct {
     uint64_t player_with_killing_blow;
     uint64_t victim;
 
 } vanilla_SMSG_PARTYKILLLOG;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_PARTYKILLLOG_write(WowWorldWriter* writer, const vanilla_SMSG_PARTYKILLLOG* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PARTYKILLLOG_write(WowWorldWriter* writer, const vanilla_SMSG_PARTYKILLLOG* object);
 
 typedef struct {
     uint64_t guid;
     uint32_t spell_visual_kit;
 
 } vanilla_SMSG_PLAY_SPELL_IMPACT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_PLAY_SPELL_IMPACT_write(WowWorldWriter* writer, const vanilla_SMSG_PLAY_SPELL_IMPACT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PLAY_SPELL_IMPACT_write(WowWorldWriter* writer, const vanilla_SMSG_PLAY_SPELL_IMPACT* object);
 
 typedef struct {
     vanilla_Area area;
     uint32_t experience;
 
 } vanilla_SMSG_EXPLORATION_EXPERIENCE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_EXPLORATION_EXPERIENCE_write(WowWorldWriter* writer, const vanilla_SMSG_EXPLORATION_EXPERIENCE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_EXPLORATION_EXPERIENCE_write(WowWorldWriter* writer, const vanilla_SMSG_EXPLORATION_EXPERIENCE* object);
 
 typedef struct {
     uint32_t minimum;
     uint32_t maximum;
 
 } vanilla_MSG_RANDOM_ROLL_Client;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_RANDOM_ROLL_Client_write(WowWorldWriter* writer, const vanilla_MSG_RANDOM_ROLL_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_RANDOM_ROLL_Client_write(WowWorldWriter* writer, const vanilla_MSG_RANDOM_ROLL_Client* object);
 
 typedef struct {
     uint32_t minimum;
@@ -10232,7 +10232,7 @@ typedef struct {
     uint64_t guid;
 
 } vanilla_MSG_RANDOM_ROLL_Server;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_RANDOM_ROLL_Server_write(WowWorldWriter* writer, const vanilla_MSG_RANDOM_ROLL_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_RANDOM_ROLL_Server_write(WowWorldWriter* writer, const vanilla_MSG_RANDOM_ROLL_Server* object);
 
 typedef struct {
     uint64_t guid;
@@ -10242,62 +10242,62 @@ typedef struct {
     uint32_t resist;
 
 } vanilla_SMSG_ENVIRONMENTAL_DAMAGE_LOG;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_ENVIRONMENTAL_DAMAGE_LOG_write(WowWorldWriter* writer, const vanilla_SMSG_ENVIRONMENTAL_DAMAGE_LOG* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ENVIRONMENTAL_DAMAGE_LOG_write(WowWorldWriter* writer, const vanilla_SMSG_ENVIRONMENTAL_DAMAGE_LOG* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_LOOKING_FOR_GROUP_Client_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_LOOKING_FOR_GROUP_Client_write(WowWorldWriter* writer);
 
 typedef struct {
     uint32_t unknown1;
 
 } vanilla_MSG_LOOKING_FOR_GROUP_Server;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_LOOKING_FOR_GROUP_Server_write(WowWorldWriter* writer, const vanilla_MSG_LOOKING_FOR_GROUP_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_LOOKING_FOR_GROUP_Server_write(WowWorldWriter* writer, const vanilla_MSG_LOOKING_FOR_GROUP_Server* object);
 
 typedef struct {
     vanilla_Skill skill;
 
 } vanilla_CMSG_UNLEARN_SKILL;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_UNLEARN_SKILL_write(WowWorldWriter* writer, const vanilla_CMSG_UNLEARN_SKILL* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_UNLEARN_SKILL_write(WowWorldWriter* writer, const vanilla_CMSG_UNLEARN_SKILL* object);
 
 typedef struct {
     uint16_t spell;
 
 } vanilla_SMSG_REMOVED_SPELL;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_REMOVED_SPELL_write(WowWorldWriter* writer, const vanilla_SMSG_REMOVED_SPELL* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_REMOVED_SPELL_write(WowWorldWriter* writer, const vanilla_SMSG_REMOVED_SPELL* object);
 
 typedef struct {
     vanilla_GmTicketResponse response;
 
 } vanilla_SMSG_GMTICKET_CREATE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_GMTICKET_CREATE_write(WowWorldWriter* writer, const vanilla_SMSG_GMTICKET_CREATE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GMTICKET_CREATE_write(WowWorldWriter* writer, const vanilla_SMSG_GMTICKET_CREATE* object);
 
 typedef struct {
     vanilla_GmTicketType ticket_type;
     WowWorldString message;
 
 } vanilla_CMSG_GMTICKET_UPDATETEXT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_GMTICKET_UPDATETEXT_write(WowWorldWriter* writer, const vanilla_CMSG_GMTICKET_UPDATETEXT* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_GMTICKET_UPDATETEXT_free(vanilla_CMSG_GMTICKET_UPDATETEXT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GMTICKET_UPDATETEXT_write(WowWorldWriter* writer, const vanilla_CMSG_GMTICKET_UPDATETEXT* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GMTICKET_UPDATETEXT_free(vanilla_CMSG_GMTICKET_UPDATETEXT* object);
 
 typedef struct {
     vanilla_GmTicketResponse response;
 
 } vanilla_SMSG_GMTICKET_UPDATETEXT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_GMTICKET_UPDATETEXT_write(WowWorldWriter* writer, const vanilla_SMSG_GMTICKET_UPDATETEXT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GMTICKET_UPDATETEXT_write(WowWorldWriter* writer, const vanilla_SMSG_GMTICKET_UPDATETEXT* object);
 
 typedef struct {
     uint32_t (*data)[32];
 
 } vanilla_SMSG_ACCOUNT_DATA_TIMES;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_ACCOUNT_DATA_TIMES_write(WowWorldWriter* writer, const vanilla_SMSG_ACCOUNT_DATA_TIMES* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_ACCOUNT_DATA_TIMES_free(vanilla_SMSG_ACCOUNT_DATA_TIMES* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ACCOUNT_DATA_TIMES_write(WowWorldWriter* writer, const vanilla_SMSG_ACCOUNT_DATA_TIMES* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_ACCOUNT_DATA_TIMES_free(vanilla_SMSG_ACCOUNT_DATA_TIMES* object);
 
 typedef struct {
     uint32_t data_type;
 
 } vanilla_CMSG_REQUEST_ACCOUNT_DATA;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_REQUEST_ACCOUNT_DATA_write(WowWorldWriter* writer, const vanilla_CMSG_REQUEST_ACCOUNT_DATA* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_REQUEST_ACCOUNT_DATA_write(WowWorldWriter* writer, const vanilla_CMSG_REQUEST_ACCOUNT_DATA* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_GMTICKET_GETTICKET_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GMTICKET_GETTICKET_write(WowWorldWriter* writer);
 
 typedef struct {
     vanilla_GmTicketStatus status;
@@ -10310,22 +10310,22 @@ typedef struct {
     bool read_by_gm;
 
 } vanilla_SMSG_GMTICKET_GETTICKET;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_GMTICKET_GETTICKET_write(WowWorldWriter* writer, const vanilla_SMSG_GMTICKET_GETTICKET* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_GMTICKET_GETTICKET_free(vanilla_SMSG_GMTICKET_GETTICKET* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GMTICKET_GETTICKET_write(WowWorldWriter* writer, const vanilla_SMSG_GMTICKET_GETTICKET* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GMTICKET_GETTICKET_free(vanilla_SMSG_GMTICKET_GETTICKET* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_SMSG_GAMEOBJECT_SPAWN_ANIM;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_GAMEOBJECT_SPAWN_ANIM_write(WowWorldWriter* writer, const vanilla_SMSG_GAMEOBJECT_SPAWN_ANIM* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GAMEOBJECT_SPAWN_ANIM_write(WowWorldWriter* writer, const vanilla_SMSG_GAMEOBJECT_SPAWN_ANIM* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_SMSG_GAMEOBJECT_DESPAWN_ANIM;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_GAMEOBJECT_DESPAWN_ANIM_write(WowWorldWriter* writer, const vanilla_SMSG_GAMEOBJECT_DESPAWN_ANIM* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GAMEOBJECT_DESPAWN_ANIM_write(WowWorldWriter* writer, const vanilla_SMSG_GAMEOBJECT_DESPAWN_ANIM* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_CORPSE_QUERY_Client_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_CORPSE_QUERY_Client_write(WowWorldWriter* writer);
 
 typedef struct {
     vanilla_CorpseQueryResult result;
@@ -10334,44 +10334,44 @@ typedef struct {
     vanilla_Map corpse_map;
 
 } vanilla_MSG_CORPSE_QUERY_Server;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_CORPSE_QUERY_Server_write(WowWorldWriter* writer, const vanilla_MSG_CORPSE_QUERY_Server* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_CORPSE_QUERY_Server_free(vanilla_MSG_CORPSE_QUERY_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_CORPSE_QUERY_Server_write(WowWorldWriter* writer, const vanilla_MSG_CORPSE_QUERY_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_CORPSE_QUERY_Server_free(vanilla_MSG_CORPSE_QUERY_Server* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_GMTICKET_DELETETICKET_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GMTICKET_DELETETICKET_write(WowWorldWriter* writer);
 
 typedef struct {
     vanilla_GmTicketResponse response;
 
 } vanilla_SMSG_GMTICKET_DELETETICKET;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_GMTICKET_DELETETICKET_write(WowWorldWriter* writer, const vanilla_SMSG_GMTICKET_DELETETICKET* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GMTICKET_DELETETICKET_write(WowWorldWriter* writer, const vanilla_SMSG_GMTICKET_DELETETICKET* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_CHAT_WRONG_FACTION_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CHAT_WRONG_FACTION_write(WowWorldWriter* writer);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_GMTICKET_SYSTEMSTATUS_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GMTICKET_SYSTEMSTATUS_write(WowWorldWriter* writer);
 
 typedef struct {
     vanilla_GmTicketQueueStatus will_accept_tickets;
 
 } vanilla_SMSG_GMTICKET_SYSTEMSTATUS;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_GMTICKET_SYSTEMSTATUS_write(WowWorldWriter* writer, const vanilla_SMSG_GMTICKET_SYSTEMSTATUS* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GMTICKET_SYSTEMSTATUS_write(WowWorldWriter* writer, const vanilla_SMSG_GMTICKET_SYSTEMSTATUS* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_CMSG_SPIRIT_HEALER_ACTIVATE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_SPIRIT_HEALER_ACTIVATE_write(WowWorldWriter* writer, const vanilla_CMSG_SPIRIT_HEALER_ACTIVATE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SPIRIT_HEALER_ACTIVATE_write(WowWorldWriter* writer, const vanilla_CMSG_SPIRIT_HEALER_ACTIVATE* object);
 
 typedef struct {
     uint32_t unknown1;
 
 } vanilla_SMSG_SET_REST_START;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SET_REST_START_write(WowWorldWriter* writer, const vanilla_SMSG_SET_REST_START* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SET_REST_START_write(WowWorldWriter* writer, const vanilla_SMSG_SET_REST_START* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_SMSG_SPIRIT_HEALER_CONFIRM;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SPIRIT_HEALER_CONFIRM_write(WowWorldWriter* writer, const vanilla_SMSG_SPIRIT_HEALER_CONFIRM* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPIRIT_HEALER_CONFIRM_write(WowWorldWriter* writer, const vanilla_SMSG_SPIRIT_HEALER_CONFIRM* object);
 
 typedef struct {
     uint32_t flags;
@@ -10381,14 +10381,14 @@ typedef struct {
     WowWorldString location_name;
 
 } vanilla_SMSG_GOSSIP_POI;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_GOSSIP_POI_write(WowWorldWriter* writer, const vanilla_SMSG_GOSSIP_POI* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_GOSSIP_POI_free(vanilla_SMSG_GOSSIP_POI* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GOSSIP_POI_write(WowWorldWriter* writer, const vanilla_SMSG_GOSSIP_POI* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GOSSIP_POI_free(vanilla_SMSG_GOSSIP_POI* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_CMSG_CHAT_IGNORED;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_CHAT_IGNORED_write(WowWorldWriter* writer, const vanilla_CMSG_CHAT_IGNORED* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHAT_IGNORED_write(WowWorldWriter* writer, const vanilla_CMSG_CHAT_IGNORED* object);
 
 typedef struct {
     uint32_t rank_id;
@@ -10396,33 +10396,33 @@ typedef struct {
     WowWorldString rank_name;
 
 } vanilla_CMSG_GUILD_RANK;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_GUILD_RANK_write(WowWorldWriter* writer, const vanilla_CMSG_GUILD_RANK* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_GUILD_RANK_free(vanilla_CMSG_GUILD_RANK* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_RANK_write(WowWorldWriter* writer, const vanilla_CMSG_GUILD_RANK* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GUILD_RANK_free(vanilla_CMSG_GUILD_RANK* object);
 
 typedef struct {
     WowWorldString rank_name;
 
 } vanilla_CMSG_GUILD_ADD_RANK;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_GUILD_ADD_RANK_write(WowWorldWriter* writer, const vanilla_CMSG_GUILD_ADD_RANK* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_GUILD_ADD_RANK_free(vanilla_CMSG_GUILD_ADD_RANK* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_ADD_RANK_write(WowWorldWriter* writer, const vanilla_CMSG_GUILD_ADD_RANK* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GUILD_ADD_RANK_free(vanilla_CMSG_GUILD_ADD_RANK* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_GUILD_DEL_RANK_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_DEL_RANK_write(WowWorldWriter* writer);
 
 typedef struct {
     WowWorldString player_name;
     WowWorldString note;
 
 } vanilla_CMSG_GUILD_SET_PUBLIC_NOTE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_GUILD_SET_PUBLIC_NOTE_write(WowWorldWriter* writer, const vanilla_CMSG_GUILD_SET_PUBLIC_NOTE* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_GUILD_SET_PUBLIC_NOTE_free(vanilla_CMSG_GUILD_SET_PUBLIC_NOTE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_SET_PUBLIC_NOTE_write(WowWorldWriter* writer, const vanilla_CMSG_GUILD_SET_PUBLIC_NOTE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GUILD_SET_PUBLIC_NOTE_free(vanilla_CMSG_GUILD_SET_PUBLIC_NOTE* object);
 
 typedef struct {
     WowWorldString player_name;
     WowWorldString note;
 
 } vanilla_CMSG_GUILD_SET_OFFICER_NOTE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_GUILD_SET_OFFICER_NOTE_write(WowWorldWriter* writer, const vanilla_CMSG_GUILD_SET_OFFICER_NOTE* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_GUILD_SET_OFFICER_NOTE_free(vanilla_CMSG_GUILD_SET_OFFICER_NOTE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_SET_OFFICER_NOTE_write(WowWorldWriter* writer, const vanilla_CMSG_GUILD_SET_OFFICER_NOTE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GUILD_SET_OFFICER_NOTE_free(vanilla_CMSG_GUILD_SET_OFFICER_NOTE* object);
 
 typedef struct {
     vanilla_Map map;
@@ -10430,7 +10430,7 @@ typedef struct {
     float orientation;
 
 } vanilla_SMSG_LOGIN_VERIFY_WORLD;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_LOGIN_VERIFY_WORLD_write(WowWorldWriter* writer, const vanilla_SMSG_LOGIN_VERIFY_WORLD* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOGIN_VERIFY_WORLD_write(WowWorldWriter* writer, const vanilla_SMSG_LOGIN_VERIFY_WORLD* object);
 
 typedef struct {
     uint64_t mailbox;
@@ -10446,8 +10446,8 @@ typedef struct {
     uint32_t unknown4;
 
 } vanilla_CMSG_SEND_MAIL;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_SEND_MAIL_write(WowWorldWriter* writer, const vanilla_CMSG_SEND_MAIL* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_SEND_MAIL_free(vanilla_CMSG_SEND_MAIL* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SEND_MAIL_write(WowWorldWriter* writer, const vanilla_CMSG_SEND_MAIL* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_SEND_MAIL_free(vanilla_CMSG_SEND_MAIL* object);
 
 typedef struct {
     uint32_t mail_id;
@@ -10460,28 +10460,28 @@ typedef struct {
     uint32_t equip_error2;
 
 } vanilla_SMSG_SEND_MAIL_RESULT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SEND_MAIL_RESULT_write(WowWorldWriter* writer, const vanilla_SMSG_SEND_MAIL_RESULT* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_SEND_MAIL_RESULT_free(vanilla_SMSG_SEND_MAIL_RESULT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SEND_MAIL_RESULT_write(WowWorldWriter* writer, const vanilla_SMSG_SEND_MAIL_RESULT* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_SEND_MAIL_RESULT_free(vanilla_SMSG_SEND_MAIL_RESULT* object);
 
 typedef struct {
     uint64_t mailbox;
 
 } vanilla_CMSG_GET_MAIL_LIST;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_GET_MAIL_LIST_write(WowWorldWriter* writer, const vanilla_CMSG_GET_MAIL_LIST* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GET_MAIL_LIST_write(WowWorldWriter* writer, const vanilla_CMSG_GET_MAIL_LIST* object);
 
 typedef struct {
     uint8_t amount_of_mails;
     vanilla_Mail* mails;
 
 } vanilla_SMSG_MAIL_LIST_RESULT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_MAIL_LIST_RESULT_write(WowWorldWriter* writer, const vanilla_SMSG_MAIL_LIST_RESULT* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_MAIL_LIST_RESULT_free(vanilla_SMSG_MAIL_LIST_RESULT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MAIL_LIST_RESULT_write(WowWorldWriter* writer, const vanilla_SMSG_MAIL_LIST_RESULT* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_MAIL_LIST_RESULT_free(vanilla_SMSG_MAIL_LIST_RESULT* object);
 
 typedef struct {
     vanilla_Map map;
 
 } vanilla_CMSG_BATTLEFIELD_LIST;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_BATTLEFIELD_LIST_write(WowWorldWriter* writer, const vanilla_CMSG_BATTLEFIELD_LIST* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BATTLEFIELD_LIST_write(WowWorldWriter* writer, const vanilla_CMSG_BATTLEFIELD_LIST* object);
 
 typedef struct {
     uint64_t battlemaster;
@@ -10491,14 +10491,14 @@ typedef struct {
     uint32_t* battlegrounds;
 
 } vanilla_SMSG_BATTLEFIELD_LIST;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_BATTLEFIELD_LIST_write(WowWorldWriter* writer, const vanilla_SMSG_BATTLEFIELD_LIST* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_BATTLEFIELD_LIST_free(vanilla_SMSG_BATTLEFIELD_LIST* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_BATTLEFIELD_LIST_write(WowWorldWriter* writer, const vanilla_SMSG_BATTLEFIELD_LIST* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_BATTLEFIELD_LIST_free(vanilla_SMSG_BATTLEFIELD_LIST* object);
 
 typedef struct {
     vanilla_Map map;
 
 } vanilla_CMSG_BATTLEFIELD_JOIN;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_BATTLEFIELD_JOIN_write(WowWorldWriter* writer, const vanilla_CMSG_BATTLEFIELD_JOIN* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BATTLEFIELD_JOIN_write(WowWorldWriter* writer, const vanilla_CMSG_BATTLEFIELD_JOIN* object);
 
 typedef struct {
     uint32_t item_text_id;
@@ -10506,50 +10506,50 @@ typedef struct {
     uint32_t unknown1;
 
 } vanilla_CMSG_ITEM_TEXT_QUERY;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_ITEM_TEXT_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_ITEM_TEXT_QUERY* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_ITEM_TEXT_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_ITEM_TEXT_QUERY* object);
 
 typedef struct {
     uint32_t item_text_id;
     WowWorldString text;
 
 } vanilla_SMSG_ITEM_TEXT_QUERY_RESPONSE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_ITEM_TEXT_QUERY_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_ITEM_TEXT_QUERY_RESPONSE* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_ITEM_TEXT_QUERY_RESPONSE_free(vanilla_SMSG_ITEM_TEXT_QUERY_RESPONSE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ITEM_TEXT_QUERY_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_ITEM_TEXT_QUERY_RESPONSE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_ITEM_TEXT_QUERY_RESPONSE_free(vanilla_SMSG_ITEM_TEXT_QUERY_RESPONSE* object);
 
 typedef struct {
     uint64_t mailbox;
     uint32_t mail_id;
 
 } vanilla_CMSG_MAIL_TAKE_MONEY;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_MAIL_TAKE_MONEY_write(WowWorldWriter* writer, const vanilla_CMSG_MAIL_TAKE_MONEY* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MAIL_TAKE_MONEY_write(WowWorldWriter* writer, const vanilla_CMSG_MAIL_TAKE_MONEY* object);
 
 typedef struct {
     uint64_t mailbox;
     uint32_t mail_id;
 
 } vanilla_CMSG_MAIL_TAKE_ITEM;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_MAIL_TAKE_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_MAIL_TAKE_ITEM* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MAIL_TAKE_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_MAIL_TAKE_ITEM* object);
 
 typedef struct {
     uint64_t mailbox;
     uint32_t mail_id;
 
 } vanilla_CMSG_MAIL_MARK_AS_READ;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_MAIL_MARK_AS_READ_write(WowWorldWriter* writer, const vanilla_CMSG_MAIL_MARK_AS_READ* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MAIL_MARK_AS_READ_write(WowWorldWriter* writer, const vanilla_CMSG_MAIL_MARK_AS_READ* object);
 
 typedef struct {
     uint64_t mailbox_id;
     uint32_t mail_id;
 
 } vanilla_CMSG_MAIL_RETURN_TO_SENDER;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_MAIL_RETURN_TO_SENDER_write(WowWorldWriter* writer, const vanilla_CMSG_MAIL_RETURN_TO_SENDER* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MAIL_RETURN_TO_SENDER_write(WowWorldWriter* writer, const vanilla_CMSG_MAIL_RETURN_TO_SENDER* object);
 
 typedef struct {
     uint64_t mailbox_id;
     uint32_t mail_id;
 
 } vanilla_CMSG_MAIL_DELETE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_MAIL_DELETE_write(WowWorldWriter* writer, const vanilla_CMSG_MAIL_DELETE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MAIL_DELETE_write(WowWorldWriter* writer, const vanilla_CMSG_MAIL_DELETE* object);
 
 typedef struct {
     uint64_t mailbox;
@@ -10557,7 +10557,7 @@ typedef struct {
     uint32_t mail_template_id;
 
 } vanilla_CMSG_MAIL_CREATE_TEXT_ITEM;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_MAIL_CREATE_TEXT_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_MAIL_CREATE_TEXT_ITEM* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MAIL_CREATE_TEXT_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_MAIL_CREATE_TEXT_ITEM* object);
 
 typedef struct {
     uint32_t id;
@@ -10567,8 +10567,8 @@ typedef struct {
     vanilla_SpellLogMiss* targets;
 
 } vanilla_SMSG_SPELLLOGMISS;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SPELLLOGMISS_write(WowWorldWriter* writer, const vanilla_SMSG_SPELLLOGMISS* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_SPELLLOGMISS_free(vanilla_SMSG_SPELLLOGMISS* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELLLOGMISS_write(WowWorldWriter* writer, const vanilla_SMSG_SPELLLOGMISS* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_SPELLLOGMISS_free(vanilla_SMSG_SPELLLOGMISS* object);
 
 typedef struct {
     uint64_t caster;
@@ -10577,8 +10577,8 @@ typedef struct {
     vanilla_SpellLog* logs;
 
 } vanilla_SMSG_SPELLLOGEXECUTE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SPELLLOGEXECUTE_write(WowWorldWriter* writer, const vanilla_SMSG_SPELLLOGEXECUTE* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_SPELLLOGEXECUTE_free(vanilla_SMSG_SPELLLOGEXECUTE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELLLOGEXECUTE_write(WowWorldWriter* writer, const vanilla_SMSG_SPELLLOGEXECUTE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_SPELLLOGEXECUTE_free(vanilla_SMSG_SPELLLOGEXECUTE* object);
 
 typedef struct {
     uint64_t target;
@@ -10588,8 +10588,8 @@ typedef struct {
     vanilla_AuraLog* auras;
 
 } vanilla_SMSG_PERIODICAURALOG;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_PERIODICAURALOG_write(WowWorldWriter* writer, const vanilla_SMSG_PERIODICAURALOG* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_PERIODICAURALOG_free(vanilla_SMSG_PERIODICAURALOG* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PERIODICAURALOG_write(WowWorldWriter* writer, const vanilla_SMSG_PERIODICAURALOG* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_PERIODICAURALOG_free(vanilla_SMSG_PERIODICAURALOG* object);
 
 typedef struct {
     uint64_t victim;
@@ -10598,7 +10598,7 @@ typedef struct {
     vanilla_SpellSchool school;
 
 } vanilla_SMSG_SPELLDAMAGESHIELD;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SPELLDAMAGESHIELD_write(WowWorldWriter* writer, const vanilla_SMSG_SPELLDAMAGESHIELD* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELLDAMAGESHIELD_write(WowWorldWriter* writer, const vanilla_SMSG_SPELLDAMAGESHIELD* object);
 
 typedef struct {
     uint64_t target;
@@ -10615,14 +10615,14 @@ typedef struct {
     uint8_t extend_flag;
 
 } vanilla_SMSG_SPELLNONMELEEDAMAGELOG;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SPELLNONMELEEDAMAGELOG_write(WowWorldWriter* writer, const vanilla_SMSG_SPELLNONMELEEDAMAGELOG* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELLNONMELEEDAMAGELOG_write(WowWorldWriter* writer, const vanilla_SMSG_SPELLNONMELEEDAMAGELOG* object);
 
 typedef struct {
     vanilla_Talent talent;
     uint32_t requested_rank;
 
 } vanilla_CMSG_LEARN_TALENT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_LEARN_TALENT_write(WowWorldWriter* writer, const vanilla_CMSG_LEARN_TALENT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_LEARN_TALENT_write(WowWorldWriter* writer, const vanilla_CMSG_LEARN_TALENT* object);
 
 typedef struct {
     bool enable_pvp;
@@ -10632,26 +10632,26 @@ typedef struct {
 
     vanilla_CMSG_TOGGLE_PVP_set* set;
 } vanilla_CMSG_TOGGLE_PVP;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_TOGGLE_PVP_write(WowWorldWriter* writer, const vanilla_CMSG_TOGGLE_PVP* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_TOGGLE_PVP_write(WowWorldWriter* writer, const vanilla_CMSG_TOGGLE_PVP* object);
 
 typedef struct {
     vanilla_Area zone_id;
 
 } vanilla_SMSG_ZONE_UNDER_ATTACK;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_ZONE_UNDER_ATTACK_write(WowWorldWriter* writer, const vanilla_SMSG_ZONE_UNDER_ATTACK* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ZONE_UNDER_ATTACK_write(WowWorldWriter* writer, const vanilla_SMSG_ZONE_UNDER_ATTACK* object);
 
 typedef struct {
     uint64_t auctioneer;
 
 } vanilla_MSG_AUCTION_HELLO_Client;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_AUCTION_HELLO_Client_write(WowWorldWriter* writer, const vanilla_MSG_AUCTION_HELLO_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_AUCTION_HELLO_Client_write(WowWorldWriter* writer, const vanilla_MSG_AUCTION_HELLO_Client* object);
 
 typedef struct {
     uint64_t auctioneer;
     vanilla_AuctionHouse auction_house;
 
 } vanilla_MSG_AUCTION_HELLO_Server;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_AUCTION_HELLO_Server_write(WowWorldWriter* writer, const vanilla_MSG_AUCTION_HELLO_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_AUCTION_HELLO_Server_write(WowWorldWriter* writer, const vanilla_MSG_AUCTION_HELLO_Server* object);
 
 typedef struct {
     uint64_t auctioneer;
@@ -10661,14 +10661,14 @@ typedef struct {
     uint32_t auction_duration_in_minutes;
 
 } vanilla_CMSG_AUCTION_SELL_ITEM;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_AUCTION_SELL_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_AUCTION_SELL_ITEM* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUCTION_SELL_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_AUCTION_SELL_ITEM* object);
 
 typedef struct {
     uint64_t auctioneer;
     uint32_t auction_id;
 
 } vanilla_CMSG_AUCTION_REMOVE_ITEM;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_AUCTION_REMOVE_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_AUCTION_REMOVE_ITEM* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUCTION_REMOVE_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_AUCTION_REMOVE_ITEM* object);
 
 typedef struct {
     uint64_t auctioneer;
@@ -10683,15 +10683,15 @@ typedef struct {
     uint8_t usable;
 
 } vanilla_CMSG_AUCTION_LIST_ITEMS;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_AUCTION_LIST_ITEMS_write(WowWorldWriter* writer, const vanilla_CMSG_AUCTION_LIST_ITEMS* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_AUCTION_LIST_ITEMS_free(vanilla_CMSG_AUCTION_LIST_ITEMS* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUCTION_LIST_ITEMS_write(WowWorldWriter* writer, const vanilla_CMSG_AUCTION_LIST_ITEMS* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_AUCTION_LIST_ITEMS_free(vanilla_CMSG_AUCTION_LIST_ITEMS* object);
 
 typedef struct {
     uint64_t auctioneer;
     uint32_t list_from;
 
 } vanilla_CMSG_AUCTION_LIST_OWNER_ITEMS;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_AUCTION_LIST_OWNER_ITEMS_write(WowWorldWriter* writer, const vanilla_CMSG_AUCTION_LIST_OWNER_ITEMS* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUCTION_LIST_OWNER_ITEMS_write(WowWorldWriter* writer, const vanilla_CMSG_AUCTION_LIST_OWNER_ITEMS* object);
 
 typedef struct {
     uint64_t auctioneer;
@@ -10699,7 +10699,7 @@ typedef struct {
     uint32_t price;
 
 } vanilla_CMSG_AUCTION_PLACE_BID;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_AUCTION_PLACE_BID_write(WowWorldWriter* writer, const vanilla_CMSG_AUCTION_PLACE_BID* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUCTION_PLACE_BID_write(WowWorldWriter* writer, const vanilla_CMSG_AUCTION_PLACE_BID* object);
 
 typedef struct {
     uint32_t auction_id;
@@ -10717,8 +10717,8 @@ typedef struct {
     uint32_t auction_outbid3;
 
 } vanilla_SMSG_AUCTION_COMMAND_RESULT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_AUCTION_COMMAND_RESULT_write(WowWorldWriter* writer, const vanilla_SMSG_AUCTION_COMMAND_RESULT* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_AUCTION_COMMAND_RESULT_free(vanilla_SMSG_AUCTION_COMMAND_RESULT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_AUCTION_COMMAND_RESULT_write(WowWorldWriter* writer, const vanilla_SMSG_AUCTION_COMMAND_RESULT* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_AUCTION_COMMAND_RESULT_free(vanilla_SMSG_AUCTION_COMMAND_RESULT* object);
 
 typedef struct {
     uint32_t count;
@@ -10726,8 +10726,8 @@ typedef struct {
     uint32_t total_amount_of_auctions;
 
 } vanilla_SMSG_AUCTION_LIST_RESULT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_AUCTION_LIST_RESULT_write(WowWorldWriter* writer, const vanilla_SMSG_AUCTION_LIST_RESULT* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_AUCTION_LIST_RESULT_free(vanilla_SMSG_AUCTION_LIST_RESULT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_AUCTION_LIST_RESULT_write(WowWorldWriter* writer, const vanilla_SMSG_AUCTION_LIST_RESULT* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_AUCTION_LIST_RESULT_free(vanilla_SMSG_AUCTION_LIST_RESULT* object);
 
 typedef struct {
     uint32_t count;
@@ -10735,8 +10735,8 @@ typedef struct {
     uint32_t total_amount_of_auctions;
 
 } vanilla_SMSG_AUCTION_OWNER_LIST_RESULT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_AUCTION_OWNER_LIST_RESULT_write(WowWorldWriter* writer, const vanilla_SMSG_AUCTION_OWNER_LIST_RESULT* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_AUCTION_OWNER_LIST_RESULT_free(vanilla_SMSG_AUCTION_OWNER_LIST_RESULT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_AUCTION_OWNER_LIST_RESULT_write(WowWorldWriter* writer, const vanilla_SMSG_AUCTION_OWNER_LIST_RESULT* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_AUCTION_OWNER_LIST_RESULT_free(vanilla_SMSG_AUCTION_OWNER_LIST_RESULT* object);
 
 typedef struct {
     vanilla_AuctionHouse auction_house;
@@ -10748,7 +10748,7 @@ typedef struct {
     uint32_t item_random_property_id;
 
 } vanilla_SMSG_AUCTION_BIDDER_NOTIFICATION;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_AUCTION_BIDDER_NOTIFICATION_write(WowWorldWriter* writer, const vanilla_SMSG_AUCTION_BIDDER_NOTIFICATION* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_AUCTION_BIDDER_NOTIFICATION_write(WowWorldWriter* writer, const vanilla_SMSG_AUCTION_BIDDER_NOTIFICATION* object);
 
 typedef struct {
     uint32_t auction_id;
@@ -10759,7 +10759,7 @@ typedef struct {
     uint32_t item_random_property_id;
 
 } vanilla_SMSG_AUCTION_OWNER_NOTIFICATION;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_AUCTION_OWNER_NOTIFICATION_write(WowWorldWriter* writer, const vanilla_SMSG_AUCTION_OWNER_NOTIFICATION* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_AUCTION_OWNER_NOTIFICATION_write(WowWorldWriter* writer, const vanilla_SMSG_AUCTION_OWNER_NOTIFICATION* object);
 
 typedef struct {
     uint64_t caster;
@@ -10768,7 +10768,7 @@ typedef struct {
     vanilla_LogFormat log_format;
 
 } vanilla_SMSG_PROCRESIST;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_PROCRESIST_write(WowWorldWriter* writer, const vanilla_SMSG_PROCRESIST* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PROCRESIST_write(WowWorldWriter* writer, const vanilla_SMSG_PROCRESIST* object);
 
 typedef struct {
     uint64_t caster;
@@ -10777,8 +10777,8 @@ typedef struct {
     uint32_t* spells;
 
 } vanilla_SMSG_DISPEL_FAILED;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_DISPEL_FAILED_write(WowWorldWriter* writer, const vanilla_SMSG_DISPEL_FAILED* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_DISPEL_FAILED_free(vanilla_SMSG_DISPEL_FAILED* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_DISPEL_FAILED_write(WowWorldWriter* writer, const vanilla_SMSG_DISPEL_FAILED* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_DISPEL_FAILED_free(vanilla_SMSG_DISPEL_FAILED* object);
 
 typedef struct {
     uint64_t caster;
@@ -10787,7 +10787,7 @@ typedef struct {
     bool debug_log_format;
 
 } vanilla_SMSG_SPELLORDAMAGE_IMMUNE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SPELLORDAMAGE_IMMUNE_write(WowWorldWriter* writer, const vanilla_SMSG_SPELLORDAMAGE_IMMUNE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELLORDAMAGE_IMMUNE_write(WowWorldWriter* writer, const vanilla_SMSG_SPELLORDAMAGE_IMMUNE* object);
 
 typedef struct {
     uint64_t auctioneer;
@@ -10796,8 +10796,8 @@ typedef struct {
     uint32_t* outbid_item_ids;
 
 } vanilla_CMSG_AUCTION_LIST_BIDDER_ITEMS;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_AUCTION_LIST_BIDDER_ITEMS_write(WowWorldWriter* writer, const vanilla_CMSG_AUCTION_LIST_BIDDER_ITEMS* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_AUCTION_LIST_BIDDER_ITEMS_free(vanilla_CMSG_AUCTION_LIST_BIDDER_ITEMS* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUCTION_LIST_BIDDER_ITEMS_write(WowWorldWriter* writer, const vanilla_CMSG_AUCTION_LIST_BIDDER_ITEMS* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_AUCTION_LIST_BIDDER_ITEMS_free(vanilla_CMSG_AUCTION_LIST_BIDDER_ITEMS* object);
 
 typedef struct {
     uint32_t count;
@@ -10805,8 +10805,8 @@ typedef struct {
     uint32_t total_amount_of_auctions;
 
 } vanilla_SMSG_AUCTION_BIDDER_LIST_RESULT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_AUCTION_BIDDER_LIST_RESULT_write(WowWorldWriter* writer, const vanilla_SMSG_AUCTION_BIDDER_LIST_RESULT* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_AUCTION_BIDDER_LIST_RESULT_free(vanilla_SMSG_AUCTION_BIDDER_LIST_RESULT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_AUCTION_BIDDER_LIST_RESULT_write(WowWorldWriter* writer, const vanilla_SMSG_AUCTION_BIDDER_LIST_RESULT* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_AUCTION_BIDDER_LIST_RESULT_free(vanilla_SMSG_AUCTION_BIDDER_LIST_RESULT* object);
 
 typedef struct {
     uint8_t eff;
@@ -10814,7 +10814,7 @@ typedef struct {
     uint32_t value;
 
 } vanilla_SMSG_SET_FLAT_SPELL_MODIFIER;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SET_FLAT_SPELL_MODIFIER_write(WowWorldWriter* writer, const vanilla_SMSG_SET_FLAT_SPELL_MODIFIER* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SET_FLAT_SPELL_MODIFIER_write(WowWorldWriter* writer, const vanilla_SMSG_SET_FLAT_SPELL_MODIFIER* object);
 
 typedef struct {
     uint8_t eff;
@@ -10822,40 +10822,40 @@ typedef struct {
     uint32_t value;
 
 } vanilla_SMSG_SET_PCT_SPELL_MODIFIER;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SET_PCT_SPELL_MODIFIER_write(WowWorldWriter* writer, const vanilla_SMSG_SET_PCT_SPELL_MODIFIER* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SET_PCT_SPELL_MODIFIER_write(WowWorldWriter* writer, const vanilla_SMSG_SET_PCT_SPELL_MODIFIER* object);
 
 typedef struct {
     uint32_t item;
 
 } vanilla_CMSG_SET_AMMO;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_SET_AMMO_write(WowWorldWriter* writer, const vanilla_CMSG_SET_AMMO* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SET_AMMO_write(WowWorldWriter* writer, const vanilla_CMSG_SET_AMMO* object);
 
 typedef struct {
     uint32_t delay;
 
 } vanilla_SMSG_CORPSE_RECLAIM_DELAY;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_CORPSE_RECLAIM_DELAY_write(WowWorldWriter* writer, const vanilla_SMSG_CORPSE_RECLAIM_DELAY* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CORPSE_RECLAIM_DELAY_write(WowWorldWriter* writer, const vanilla_SMSG_CORPSE_RECLAIM_DELAY* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_CMSG_SET_ACTIVE_MOVER;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_SET_ACTIVE_MOVER_write(WowWorldWriter* writer, const vanilla_CMSG_SET_ACTIVE_MOVER* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SET_ACTIVE_MOVER_write(WowWorldWriter* writer, const vanilla_CMSG_SET_ACTIVE_MOVER* object);
 
 typedef struct {
     uint64_t guid;
     uint32_t id;
 
 } vanilla_CMSG_PET_CANCEL_AURA;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_PET_CANCEL_AURA_write(WowWorldWriter* writer, const vanilla_CMSG_PET_CANCEL_AURA* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PET_CANCEL_AURA_write(WowWorldWriter* writer, const vanilla_CMSG_PET_CANCEL_AURA* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_CANCEL_AUTO_REPEAT_SPELL_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CANCEL_AUTO_REPEAT_SPELL_write(WowWorldWriter* writer);
 
 typedef struct {
     uint64_t npc;
 
 } vanilla_MSG_LIST_STABLED_PETS_Client;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_LIST_STABLED_PETS_Client_write(WowWorldWriter* writer, const vanilla_MSG_LIST_STABLED_PETS_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_LIST_STABLED_PETS_Client_write(WowWorldWriter* writer, const vanilla_MSG_LIST_STABLED_PETS_Client* object);
 
 typedef struct {
     uint64_t npc;
@@ -10864,69 +10864,69 @@ typedef struct {
     vanilla_StabledPet* pets;
 
 } vanilla_MSG_LIST_STABLED_PETS_Server;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_LIST_STABLED_PETS_Server_write(WowWorldWriter* writer, const vanilla_MSG_LIST_STABLED_PETS_Server* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_LIST_STABLED_PETS_Server_free(vanilla_MSG_LIST_STABLED_PETS_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_LIST_STABLED_PETS_Server_write(WowWorldWriter* writer, const vanilla_MSG_LIST_STABLED_PETS_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_LIST_STABLED_PETS_Server_free(vanilla_MSG_LIST_STABLED_PETS_Server* object);
 
 typedef struct {
     uint64_t stable_master;
 
 } vanilla_CMSG_STABLE_PET;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_STABLE_PET_write(WowWorldWriter* writer, const vanilla_CMSG_STABLE_PET* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_STABLE_PET_write(WowWorldWriter* writer, const vanilla_CMSG_STABLE_PET* object);
 
 typedef struct {
     uint64_t stable_master;
     uint32_t pet_number;
 
 } vanilla_CMSG_UNSTABLE_PET;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_UNSTABLE_PET_write(WowWorldWriter* writer, const vanilla_CMSG_UNSTABLE_PET* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_UNSTABLE_PET_write(WowWorldWriter* writer, const vanilla_CMSG_UNSTABLE_PET* object);
 
 typedef struct {
     uint64_t npc;
 
 } vanilla_CMSG_BUY_STABLE_SLOT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_BUY_STABLE_SLOT_write(WowWorldWriter* writer, const vanilla_CMSG_BUY_STABLE_SLOT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BUY_STABLE_SLOT_write(WowWorldWriter* writer, const vanilla_CMSG_BUY_STABLE_SLOT* object);
 
 typedef struct {
     vanilla_StableResult result;
 
 } vanilla_SMSG_STABLE_RESULT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_STABLE_RESULT_write(WowWorldWriter* writer, const vanilla_SMSG_STABLE_RESULT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_STABLE_RESULT_write(WowWorldWriter* writer, const vanilla_SMSG_STABLE_RESULT* object);
 
 typedef struct {
     uint64_t npc;
     uint32_t pet_slot;
 
 } vanilla_CMSG_STABLE_SWAP_PET;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_STABLE_SWAP_PET_write(WowWorldWriter* writer, const vanilla_CMSG_STABLE_SWAP_PET* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_STABLE_SWAP_PET_write(WowWorldWriter* writer, const vanilla_CMSG_STABLE_SWAP_PET* object);
 
 typedef struct {
     uint64_t guid;
     vanilla_QuestPartyMessage message;
 
 } vanilla_MSG_QUEST_PUSH_RESULT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_QUEST_PUSH_RESULT_cmsg_write(WowWorldWriter* writer, const vanilla_MSG_QUEST_PUSH_RESULT* object);
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_QUEST_PUSH_RESULT_smsg_write(WowWorldWriter* writer, const vanilla_MSG_QUEST_PUSH_RESULT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_QUEST_PUSH_RESULT_cmsg_write(WowWorldWriter* writer, const vanilla_MSG_QUEST_PUSH_RESULT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_QUEST_PUSH_RESULT_smsg_write(WowWorldWriter* writer, const vanilla_MSG_QUEST_PUSH_RESULT* object);
 
 typedef struct {
     uint32_t sound_id;
 
 } vanilla_SMSG_PLAY_MUSIC;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_PLAY_MUSIC_write(WowWorldWriter* writer, const vanilla_SMSG_PLAY_MUSIC* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PLAY_MUSIC_write(WowWorldWriter* writer, const vanilla_SMSG_PLAY_MUSIC* object);
 
 typedef struct {
     uint32_t sound_id;
     uint64_t guid;
 
 } vanilla_SMSG_PLAY_OBJECT_SOUND;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_PLAY_OBJECT_SOUND_write(WowWorldWriter* writer, const vanilla_SMSG_PLAY_OBJECT_SOUND* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PLAY_OBJECT_SOUND_write(WowWorldWriter* writer, const vanilla_SMSG_PLAY_OBJECT_SOUND* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_REQUEST_PET_INFO_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_REQUEST_PET_INFO_write(WowWorldWriter* writer);
 
 typedef struct {
     vanilla_FarSightOperation operation;
 
 } vanilla_CMSG_FAR_SIGHT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_FAR_SIGHT_write(WowWorldWriter* writer, const vanilla_CMSG_FAR_SIGHT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_FAR_SIGHT_write(WowWorldWriter* writer, const vanilla_CMSG_FAR_SIGHT* object);
 
 typedef struct {
     uint64_t victim;
@@ -10935,65 +10935,65 @@ typedef struct {
     uint32_t* spells;
 
 } vanilla_SMSG_SPELLDISPELLOG;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SPELLDISPELLOG_write(WowWorldWriter* writer, const vanilla_SMSG_SPELLDISPELLOG* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_SPELLDISPELLOG_free(vanilla_SMSG_SPELLDISPELLOG* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELLDISPELLOG_write(WowWorldWriter* writer, const vanilla_SMSG_SPELLDISPELLOG* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_SPELLDISPELLOG_free(vanilla_SMSG_SPELLDISPELLOG* object);
 
 typedef struct {
     WowWorldString name;
     uint8_t group_number;
 
 } vanilla_CMSG_GROUP_CHANGE_SUB_GROUP;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_GROUP_CHANGE_SUB_GROUP_write(WowWorldWriter* writer, const vanilla_CMSG_GROUP_CHANGE_SUB_GROUP* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_GROUP_CHANGE_SUB_GROUP_free(vanilla_CMSG_GROUP_CHANGE_SUB_GROUP* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GROUP_CHANGE_SUB_GROUP_write(WowWorldWriter* writer, const vanilla_CMSG_GROUP_CHANGE_SUB_GROUP* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GROUP_CHANGE_SUB_GROUP_free(vanilla_CMSG_GROUP_CHANGE_SUB_GROUP* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_CMSG_REQUEST_PARTY_MEMBER_STATS;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_REQUEST_PARTY_MEMBER_STATS_write(WowWorldWriter* writer, const vanilla_CMSG_REQUEST_PARTY_MEMBER_STATS* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_REQUEST_PARTY_MEMBER_STATS_write(WowWorldWriter* writer, const vanilla_CMSG_REQUEST_PARTY_MEMBER_STATS* object);
 
 typedef struct {
     WowWorldString name;
     WowWorldString swap_with_name;
 
 } vanilla_CMSG_GROUP_SWAP_SUB_GROUP;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_GROUP_SWAP_SUB_GROUP_write(WowWorldWriter* writer, const vanilla_CMSG_GROUP_SWAP_SUB_GROUP* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_GROUP_SWAP_SUB_GROUP_free(vanilla_CMSG_GROUP_SWAP_SUB_GROUP* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GROUP_SWAP_SUB_GROUP_write(WowWorldWriter* writer, const vanilla_CMSG_GROUP_SWAP_SUB_GROUP* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GROUP_SWAP_SUB_GROUP_free(vanilla_CMSG_GROUP_SWAP_SUB_GROUP* object);
 
 typedef struct {
     uint8_t bag_index;
     uint8_t slot_index;
 
 } vanilla_CMSG_AUTOSTORE_BANK_ITEM;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_AUTOSTORE_BANK_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_AUTOSTORE_BANK_ITEM* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUTOSTORE_BANK_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_AUTOSTORE_BANK_ITEM* object);
 
 typedef struct {
     uint8_t bag_index;
     uint8_t slot_index;
 
 } vanilla_CMSG_AUTOBANK_ITEM;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_AUTOBANK_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_AUTOBANK_ITEM* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUTOBANK_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_AUTOBANK_ITEM* object);
 
 typedef struct {
     float unread_mails;
 
 } vanilla_MSG_QUERY_NEXT_MAIL_TIME_Server;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_QUERY_NEXT_MAIL_TIME_Server_write(WowWorldWriter* writer, const vanilla_MSG_QUERY_NEXT_MAIL_TIME_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_QUERY_NEXT_MAIL_TIME_Server_write(WowWorldWriter* writer, const vanilla_MSG_QUERY_NEXT_MAIL_TIME_Server* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_QUERY_NEXT_MAIL_TIME_Client_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_QUERY_NEXT_MAIL_TIME_Client_write(WowWorldWriter* writer);
 
 typedef struct {
     uint32_t unknown1;
 
 } vanilla_SMSG_RECEIVED_MAIL;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_RECEIVED_MAIL_write(WowWorldWriter* writer, const vanilla_SMSG_RECEIVED_MAIL* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_RECEIVED_MAIL_write(WowWorldWriter* writer, const vanilla_SMSG_RECEIVED_MAIL* object);
 
 typedef struct {
     uint32_t homebind_timer;
     vanilla_RaidGroupError error;
 
 } vanilla_SMSG_RAID_GROUP_ONLY;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_RAID_GROUP_ONLY_write(WowWorldWriter* writer, const vanilla_SMSG_RAID_GROUP_ONLY* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_RAID_GROUP_ONLY_write(WowWorldWriter* writer, const vanilla_SMSG_RAID_GROUP_ONLY* object);
 
 typedef struct {
     uint32_t honor_points;
@@ -11001,7 +11001,7 @@ typedef struct {
     vanilla_PvpRank rank;
 
 } vanilla_SMSG_PVP_CREDIT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_PVP_CREDIT_write(WowWorldWriter* writer, const vanilla_SMSG_PVP_CREDIT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PVP_CREDIT_write(WowWorldWriter* writer, const vanilla_SMSG_PVP_CREDIT* object);
 
 typedef struct {
     uint32_t item;
@@ -11009,68 +11009,68 @@ typedef struct {
     uint32_t random_property_id;
 
 } vanilla_SMSG_AUCTION_REMOVED_NOTIFICATION;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_AUCTION_REMOVED_NOTIFICATION_write(WowWorldWriter* writer, const vanilla_SMSG_AUCTION_REMOVED_NOTIFICATION* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_AUCTION_REMOVED_NOTIFICATION_write(WowWorldWriter* writer, const vanilla_SMSG_AUCTION_REMOVED_NOTIFICATION* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_GROUP_RAID_CONVERT_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GROUP_RAID_CONVERT_write(WowWorldWriter* writer);
 
 typedef struct {
     uint64_t guid;
     bool set_assistant;
 
 } vanilla_CMSG_GROUP_ASSISTANT_LEADER;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_GROUP_ASSISTANT_LEADER_write(WowWorldWriter* writer, const vanilla_CMSG_GROUP_ASSISTANT_LEADER* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GROUP_ASSISTANT_LEADER_write(WowWorldWriter* writer, const vanilla_CMSG_GROUP_ASSISTANT_LEADER* object);
 
 typedef struct {
     uint64_t guid;
     vanilla_BuybackSlot slot;
 
 } vanilla_CMSG_BUYBACK_ITEM;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_BUYBACK_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_BUYBACK_ITEM* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BUYBACK_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_BUYBACK_ITEM* object);
 
 typedef struct {
     vanilla_ServerMessageType message_type;
     WowWorldString message;
 
 } vanilla_SMSG_SERVER_MESSAGE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SERVER_MESSAGE_write(WowWorldWriter* writer, const vanilla_SMSG_SERVER_MESSAGE* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_SERVER_MESSAGE_free(vanilla_SMSG_SERVER_MESSAGE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SERVER_MESSAGE_write(WowWorldWriter* writer, const vanilla_SMSG_SERVER_MESSAGE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_SERVER_MESSAGE_free(vanilla_SMSG_SERVER_MESSAGE* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_CMSG_MEETINGSTONE_JOIN;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_MEETINGSTONE_JOIN_write(WowWorldWriter* writer, const vanilla_CMSG_MEETINGSTONE_JOIN* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MEETINGSTONE_JOIN_write(WowWorldWriter* writer, const vanilla_CMSG_MEETINGSTONE_JOIN* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_MEETINGSTONE_LEAVE_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MEETINGSTONE_LEAVE_write(WowWorldWriter* writer);
 
 typedef struct {
     vanilla_Area area;
     vanilla_MeetingStoneStatus status;
 
 } vanilla_SMSG_MEETINGSTONE_SETQUEUE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_MEETINGSTONE_SETQUEUE_write(WowWorldWriter* writer, const vanilla_SMSG_MEETINGSTONE_SETQUEUE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MEETINGSTONE_SETQUEUE_write(WowWorldWriter* writer, const vanilla_SMSG_MEETINGSTONE_SETQUEUE* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_MEETINGSTONE_INFO_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MEETINGSTONE_INFO_write(WowWorldWriter* writer);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_MEETINGSTONE_COMPLETE_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MEETINGSTONE_COMPLETE_write(WowWorldWriter* writer);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_MEETINGSTONE_IN_PROGRESS_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MEETINGSTONE_IN_PROGRESS_write(WowWorldWriter* writer);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_SMSG_MEETINGSTONE_MEMBER_ADDED;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_MEETINGSTONE_MEMBER_ADDED_write(WowWorldWriter* writer, const vanilla_SMSG_MEETINGSTONE_MEMBER_ADDED* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MEETINGSTONE_MEMBER_ADDED_write(WowWorldWriter* writer, const vanilla_SMSG_MEETINGSTONE_MEMBER_ADDED* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_CANCEL_GROWTH_AURA_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CANCEL_GROWTH_AURA_write(WowWorldWriter* writer);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_CANCEL_AUTO_REPEAT_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CANCEL_AUTO_REPEAT_write(WowWorldWriter* writer);
 
 typedef struct {
     vanilla_UnitStandState state;
 
 } vanilla_SMSG_STANDSTATE_UPDATE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_STANDSTATE_UPDATE_write(WowWorldWriter* writer, const vanilla_SMSG_STANDSTATE_UPDATE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_STANDSTATE_UPDATE_write(WowWorldWriter* writer, const vanilla_SMSG_STANDSTATE_UPDATE* object);
 
 typedef struct {
     uint64_t looted_target;
@@ -11080,7 +11080,7 @@ typedef struct {
     uint32_t item_random_suffix_id;
 
 } vanilla_SMSG_LOOT_ALL_PASSED;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_LOOT_ALL_PASSED_write(WowWorldWriter* writer, const vanilla_SMSG_LOOT_ALL_PASSED* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOOT_ALL_PASSED_write(WowWorldWriter* writer, const vanilla_SMSG_LOOT_ALL_PASSED* object);
 
 typedef struct {
     uint64_t looted_target;
@@ -11093,7 +11093,7 @@ typedef struct {
     vanilla_RollVote vote;
 
 } vanilla_SMSG_LOOT_ROLL_WON;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_LOOT_ROLL_WON_write(WowWorldWriter* writer, const vanilla_SMSG_LOOT_ROLL_WON* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOOT_ROLL_WON_write(WowWorldWriter* writer, const vanilla_SMSG_LOOT_ROLL_WON* object);
 
 typedef struct {
     uint64_t item;
@@ -11101,7 +11101,7 @@ typedef struct {
     vanilla_RollVote vote;
 
 } vanilla_CMSG_LOOT_ROLL;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_LOOT_ROLL_write(WowWorldWriter* writer, const vanilla_CMSG_LOOT_ROLL* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_LOOT_ROLL_write(WowWorldWriter* writer, const vanilla_CMSG_LOOT_ROLL* object);
 
 typedef struct {
     uint64_t creature;
@@ -11112,7 +11112,7 @@ typedef struct {
     uint32_t countdown_time;
 
 } vanilla_SMSG_LOOT_START_ROLL;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_LOOT_START_ROLL_write(WowWorldWriter* writer, const vanilla_SMSG_LOOT_START_ROLL* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOOT_START_ROLL_write(WowWorldWriter* writer, const vanilla_SMSG_LOOT_START_ROLL* object);
 
 typedef struct {
     uint64_t creature;
@@ -11125,7 +11125,7 @@ typedef struct {
     vanilla_RollVote vote;
 
 } vanilla_SMSG_LOOT_ROLL;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_LOOT_ROLL_write(WowWorldWriter* writer, const vanilla_SMSG_LOOT_ROLL* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOOT_ROLL_write(WowWorldWriter* writer, const vanilla_SMSG_LOOT_ROLL* object);
 
 typedef struct {
     uint64_t loot;
@@ -11133,63 +11133,63 @@ typedef struct {
     uint64_t player;
 
 } vanilla_CMSG_LOOT_MASTER_GIVE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_LOOT_MASTER_GIVE_write(WowWorldWriter* writer, const vanilla_CMSG_LOOT_MASTER_GIVE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_LOOT_MASTER_GIVE_write(WowWorldWriter* writer, const vanilla_CMSG_LOOT_MASTER_GIVE* object);
 
 typedef struct {
     uint8_t amount_of_players;
     uint64_t* guids;
 
 } vanilla_SMSG_LOOT_MASTER_LIST;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_LOOT_MASTER_LIST_write(WowWorldWriter* writer, const vanilla_SMSG_LOOT_MASTER_LIST* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_LOOT_MASTER_LIST_free(vanilla_SMSG_LOOT_MASTER_LIST* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOOT_MASTER_LIST_write(WowWorldWriter* writer, const vanilla_SMSG_LOOT_MASTER_LIST* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_LOOT_MASTER_LIST_free(vanilla_SMSG_LOOT_MASTER_LIST* object);
 
 typedef struct {
     uint32_t amount_of_reactions;
     vanilla_ForcedReaction* reactions;
 
 } vanilla_SMSG_SET_FORCED_REACTIONS;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SET_FORCED_REACTIONS_write(WowWorldWriter* writer, const vanilla_SMSG_SET_FORCED_REACTIONS* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_SET_FORCED_REACTIONS_free(vanilla_SMSG_SET_FORCED_REACTIONS* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SET_FORCED_REACTIONS_write(WowWorldWriter* writer, const vanilla_SMSG_SET_FORCED_REACTIONS* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_SET_FORCED_REACTIONS_free(vanilla_SMSG_SET_FORCED_REACTIONS* object);
 
 typedef struct {
     uint64_t caster;
     uint32_t id;
 
 } vanilla_SMSG_SPELL_FAILED_OTHER;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SPELL_FAILED_OTHER_write(WowWorldWriter* writer, const vanilla_SMSG_SPELL_FAILED_OTHER* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELL_FAILED_OTHER_write(WowWorldWriter* writer, const vanilla_SMSG_SPELL_FAILED_OTHER* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_SMSG_GAMEOBJECT_RESET_STATE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_GAMEOBJECT_RESET_STATE_write(WowWorldWriter* writer, const vanilla_SMSG_GAMEOBJECT_RESET_STATE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GAMEOBJECT_RESET_STATE_write(WowWorldWriter* writer, const vanilla_SMSG_GAMEOBJECT_RESET_STATE* object);
 
 typedef struct {
     uint64_t npc;
     uint64_t item;
 
 } vanilla_CMSG_REPAIR_ITEM;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_REPAIR_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_REPAIR_ITEM* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_REPAIR_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_REPAIR_ITEM* object);
 
 typedef struct {
     WowWorldString name;
 
 } vanilla_SMSG_CHAT_PLAYER_NOT_FOUND;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_CHAT_PLAYER_NOT_FOUND_write(WowWorldWriter* writer, const vanilla_SMSG_CHAT_PLAYER_NOT_FOUND* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_CHAT_PLAYER_NOT_FOUND_free(vanilla_SMSG_CHAT_PLAYER_NOT_FOUND* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CHAT_PLAYER_NOT_FOUND_write(WowWorldWriter* writer, const vanilla_SMSG_CHAT_PLAYER_NOT_FOUND* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_CHAT_PLAYER_NOT_FOUND_free(vanilla_SMSG_CHAT_PLAYER_NOT_FOUND* object);
 
 typedef struct {
     uint64_t wiping_npc;
 
 } vanilla_MSG_TALENT_WIPE_CONFIRM_Client;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_TALENT_WIPE_CONFIRM_Client_write(WowWorldWriter* writer, const vanilla_MSG_TALENT_WIPE_CONFIRM_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_TALENT_WIPE_CONFIRM_Client_write(WowWorldWriter* writer, const vanilla_MSG_TALENT_WIPE_CONFIRM_Client* object);
 
 typedef struct {
     uint64_t wiping_npc;
     uint32_t cost_in_copper;
 
 } vanilla_MSG_TALENT_WIPE_CONFIRM_Server;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_TALENT_WIPE_CONFIRM_Server_write(WowWorldWriter* writer, const vanilla_MSG_TALENT_WIPE_CONFIRM_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_TALENT_WIPE_CONFIRM_Server_write(WowWorldWriter* writer, const vanilla_MSG_TALENT_WIPE_CONFIRM_Server* object);
 
 typedef struct {
     uint64_t summoner;
@@ -11197,13 +11197,13 @@ typedef struct {
     uint32_t auto_decline_time;
 
 } vanilla_SMSG_SUMMON_REQUEST;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SUMMON_REQUEST_write(WowWorldWriter* writer, const vanilla_SMSG_SUMMON_REQUEST* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SUMMON_REQUEST_write(WowWorldWriter* writer, const vanilla_SMSG_SUMMON_REQUEST* object);
 
 typedef struct {
     uint64_t summoner;
 
 } vanilla_CMSG_SUMMON_RESPONSE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_SUMMON_RESPONSE_write(WowWorldWriter* writer, const vanilla_CMSG_SUMMON_RESPONSE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SUMMON_RESPONSE_write(WowWorldWriter* writer, const vanilla_CMSG_SUMMON_RESPONSE* object);
 
 typedef struct {
     uint64_t guid;
@@ -11219,77 +11219,77 @@ typedef struct {
     MonsterMoveSpline splines;
 
 } vanilla_SMSG_MONSTER_MOVE_TRANSPORT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_MONSTER_MOVE_TRANSPORT_write(WowWorldWriter* writer, const vanilla_SMSG_MONSTER_MOVE_TRANSPORT* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_MONSTER_MOVE_TRANSPORT_free(vanilla_SMSG_MONSTER_MOVE_TRANSPORT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MONSTER_MOVE_TRANSPORT_write(WowWorldWriter* writer, const vanilla_SMSG_MONSTER_MOVE_TRANSPORT* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_MONSTER_MOVE_TRANSPORT_free(vanilla_SMSG_MONSTER_MOVE_TRANSPORT* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_PET_BROKEN_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PET_BROKEN_write(WowWorldWriter* writer);
 
 typedef struct {
     uint64_t player;
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_FEATHER_FALL_Server;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_FEATHER_FALL_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_FEATHER_FALL_Server* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_FEATHER_FALL_Server_free(vanilla_MSG_MOVE_FEATHER_FALL_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_FEATHER_FALL_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_FEATHER_FALL_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_FEATHER_FALL_Server_free(vanilla_MSG_MOVE_FEATHER_FALL_Server* object);
 
 typedef struct {
     uint64_t player;
     vanilla_MovementInfo info;
 
 } vanilla_MSG_MOVE_WATER_WALK;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_WATER_WALK_cmsg_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_WATER_WALK* object);
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_WATER_WALK_smsg_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_WATER_WALK* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_MOVE_WATER_WALK_free(vanilla_MSG_MOVE_WATER_WALK* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_WATER_WALK_cmsg_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_WATER_WALK* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_WATER_WALK_smsg_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_WATER_WALK* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_WATER_WALK_free(vanilla_MSG_MOVE_WATER_WALK* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_SELF_RES_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SELF_RES_write(WowWorldWriter* writer);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_FEIGN_DEATH_RESISTED_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_FEIGN_DEATH_RESISTED_write(WowWorldWriter* writer);
 
 typedef struct {
     uint32_t time;
 
 } vanilla_SMSG_DUEL_COUNTDOWN;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_DUEL_COUNTDOWN_write(WowWorldWriter* writer, const vanilla_SMSG_DUEL_COUNTDOWN* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_DUEL_COUNTDOWN_write(WowWorldWriter* writer, const vanilla_SMSG_DUEL_COUNTDOWN* object);
 
 typedef struct {
     WowWorldString message;
 
 } vanilla_SMSG_AREA_TRIGGER_MESSAGE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_AREA_TRIGGER_MESSAGE_write(WowWorldWriter* writer, const vanilla_SMSG_AREA_TRIGGER_MESSAGE* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_AREA_TRIGGER_MESSAGE_free(vanilla_SMSG_AREA_TRIGGER_MESSAGE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_AREA_TRIGGER_MESSAGE_write(WowWorldWriter* writer, const vanilla_SMSG_AREA_TRIGGER_MESSAGE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_AREA_TRIGGER_MESSAGE_free(vanilla_SMSG_AREA_TRIGGER_MESSAGE* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_TOGGLE_HELM_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_TOGGLE_HELM_write(WowWorldWriter* writer);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_TOGGLE_CLOAK_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_TOGGLE_CLOAK_write(WowWorldWriter* writer);
 
 typedef struct {
     vanilla_MeetingStoneFailure reason;
 
 } vanilla_SMSG_MEETINGSTONE_JOINFAILED;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_MEETINGSTONE_JOINFAILED_write(WowWorldWriter* writer, const vanilla_SMSG_MEETINGSTONE_JOINFAILED* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MEETINGSTONE_JOINFAILED_write(WowWorldWriter* writer, const vanilla_SMSG_MEETINGSTONE_JOINFAILED* object);
 
 typedef struct {
     bool spirit_released;
 
 } vanilla_SMSG_PLAYER_SKINNED;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_PLAYER_SKINNED_write(WowWorldWriter* writer, const vanilla_SMSG_PLAYER_SKINNED* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PLAYER_SKINNED_write(WowWorldWriter* writer, const vanilla_SMSG_PLAYER_SKINNED* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_DURABILITY_DAMAGE_DEATH_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_DURABILITY_DAMAGE_DEATH_write(WowWorldWriter* writer);
 
 typedef struct {
     uint8_t action_bar;
 
 } vanilla_CMSG_SET_ACTIONBAR_TOGGLES;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_SET_ACTIONBAR_TOGGLES_write(WowWorldWriter* writer, const vanilla_CMSG_SET_ACTIONBAR_TOGGLES* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SET_ACTIONBAR_TOGGLES_write(WowWorldWriter* writer, const vanilla_CMSG_SET_ACTIONBAR_TOGGLES* object);
 
 typedef struct {
     uint64_t petition;
     WowWorldString new_name;
 
 } vanilla_MSG_PETITION_RENAME;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_PETITION_RENAME_cmsg_write(WowWorldWriter* writer, const vanilla_MSG_PETITION_RENAME* object);
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_PETITION_RENAME_smsg_write(WowWorldWriter* writer, const vanilla_MSG_PETITION_RENAME* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_PETITION_RENAME_free(vanilla_MSG_PETITION_RENAME* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_PETITION_RENAME_cmsg_write(WowWorldWriter* writer, const vanilla_MSG_PETITION_RENAME* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_PETITION_RENAME_smsg_write(WowWorldWriter* writer, const vanilla_MSG_PETITION_RENAME* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_PETITION_RENAME_free(vanilla_MSG_PETITION_RENAME* object);
 
 typedef struct {
     vanilla_Map map;
@@ -11298,43 +11298,43 @@ typedef struct {
     vanilla_WorldState* states;
 
 } vanilla_SMSG_INIT_WORLD_STATES;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_INIT_WORLD_STATES_write(WowWorldWriter* writer, const vanilla_SMSG_INIT_WORLD_STATES* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_INIT_WORLD_STATES_free(vanilla_SMSG_INIT_WORLD_STATES* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_INIT_WORLD_STATES_write(WowWorldWriter* writer, const vanilla_SMSG_INIT_WORLD_STATES* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_INIT_WORLD_STATES_free(vanilla_SMSG_INIT_WORLD_STATES* object);
 
 typedef struct {
     vanilla_WorldState state;
 
 } vanilla_SMSG_UPDATE_WORLD_STATE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_UPDATE_WORLD_STATE_write(WowWorldWriter* writer, const vanilla_SMSG_UPDATE_WORLD_STATE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_UPDATE_WORLD_STATE_write(WowWorldWriter* writer, const vanilla_SMSG_UPDATE_WORLD_STATE* object);
 
 typedef struct {
     uint32_t item;
     uint64_t guid;
 
 } vanilla_CMSG_ITEM_NAME_QUERY;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_ITEM_NAME_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_ITEM_NAME_QUERY* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_ITEM_NAME_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_ITEM_NAME_QUERY* object);
 
 typedef struct {
     uint32_t item;
     WowWorldString item_name;
 
 } vanilla_SMSG_ITEM_NAME_QUERY_RESPONSE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_ITEM_NAME_QUERY_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_ITEM_NAME_QUERY_RESPONSE* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_ITEM_NAME_QUERY_RESPONSE_free(vanilla_SMSG_ITEM_NAME_QUERY_RESPONSE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ITEM_NAME_QUERY_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_ITEM_NAME_QUERY_RESPONSE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_ITEM_NAME_QUERY_RESPONSE_free(vanilla_SMSG_ITEM_NAME_QUERY_RESPONSE* object);
 
 typedef struct {
     vanilla_PetFeedback feedback;
 
 } vanilla_SMSG_PET_ACTION_FEEDBACK;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_PET_ACTION_FEEDBACK_write(WowWorldWriter* writer, const vanilla_SMSG_PET_ACTION_FEEDBACK* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PET_ACTION_FEEDBACK_write(WowWorldWriter* writer, const vanilla_SMSG_PET_ACTION_FEEDBACK* object);
 
 typedef struct {
     uint64_t character;
     WowWorldString new_name;
 
 } vanilla_CMSG_CHAR_RENAME;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_CHAR_RENAME_write(WowWorldWriter* writer, const vanilla_CMSG_CHAR_RENAME* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_CHAR_RENAME_free(vanilla_CMSG_CHAR_RENAME* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHAR_RENAME_write(WowWorldWriter* writer, const vanilla_CMSG_CHAR_RENAME* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHAR_RENAME_free(vanilla_CMSG_CHAR_RENAME* object);
 
 typedef struct {
     vanilla_WorldResult result;
@@ -11342,8 +11342,8 @@ typedef struct {
     WowWorldString new_name;
 
 } vanilla_SMSG_CHAR_RENAME;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_CHAR_RENAME_write(WowWorldWriter* writer, const vanilla_SMSG_CHAR_RENAME* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_CHAR_RENAME_free(vanilla_SMSG_CHAR_RENAME* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CHAR_RENAME_write(WowWorldWriter* writer, const vanilla_SMSG_CHAR_RENAME* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_CHAR_RENAME_free(vanilla_SMSG_CHAR_RENAME* object);
 
 typedef struct {
     vanilla_MovementInfo info;
@@ -11351,38 +11351,38 @@ typedef struct {
     uint32_t unknown1;
 
 } vanilla_CMSG_MOVE_SPLINE_DONE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_MOVE_SPLINE_DONE_write(WowWorldWriter* writer, const vanilla_CMSG_MOVE_SPLINE_DONE* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_MOVE_SPLINE_DONE_free(vanilla_CMSG_MOVE_SPLINE_DONE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MOVE_SPLINE_DONE_write(WowWorldWriter* writer, const vanilla_CMSG_MOVE_SPLINE_DONE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_MOVE_SPLINE_DONE_free(vanilla_CMSG_MOVE_SPLINE_DONE* object);
 
 typedef struct {
     vanilla_MovementInfo info;
 
 } vanilla_CMSG_MOVE_FALL_RESET;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_MOVE_FALL_RESET_write(WowWorldWriter* writer, const vanilla_CMSG_MOVE_FALL_RESET* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_MOVE_FALL_RESET_free(vanilla_CMSG_MOVE_FALL_RESET* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MOVE_FALL_RESET_write(WowWorldWriter* writer, const vanilla_CMSG_MOVE_FALL_RESET* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_MOVE_FALL_RESET_free(vanilla_CMSG_MOVE_FALL_RESET* object);
 
 typedef struct {
     uint32_t unknown;
 
 } vanilla_SMSG_INSTANCE_SAVE_CREATED;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_INSTANCE_SAVE_CREATED_write(WowWorldWriter* writer, const vanilla_SMSG_INSTANCE_SAVE_CREATED* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_INSTANCE_SAVE_CREATED_write(WowWorldWriter* writer, const vanilla_SMSG_INSTANCE_SAVE_CREATED* object);
 
 typedef struct {
     uint32_t amount_of_raid_infos;
     vanilla_RaidInfo* raid_infos;
 
 } vanilla_SMSG_RAID_INSTANCE_INFO;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_RAID_INSTANCE_INFO_write(WowWorldWriter* writer, const vanilla_SMSG_RAID_INSTANCE_INFO* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_RAID_INSTANCE_INFO_free(vanilla_SMSG_RAID_INSTANCE_INFO* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_RAID_INSTANCE_INFO_write(WowWorldWriter* writer, const vanilla_SMSG_RAID_INSTANCE_INFO* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_RAID_INSTANCE_INFO_free(vanilla_SMSG_RAID_INSTANCE_INFO* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_REQUEST_RAID_INFO_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_REQUEST_RAID_INFO_write(WowWorldWriter* writer);
 
 typedef struct {
     uint64_t guid;
     uint32_t lag;
 
 } vanilla_CMSG_MOVE_TIME_SKIPPED;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_MOVE_TIME_SKIPPED_write(WowWorldWriter* writer, const vanilla_CMSG_MOVE_TIME_SKIPPED* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MOVE_TIME_SKIPPED_write(WowWorldWriter* writer, const vanilla_CMSG_MOVE_TIME_SKIPPED* object);
 
 typedef struct {
     uint64_t guid;
@@ -11391,8 +11391,8 @@ typedef struct {
     uint32_t apply;
 
 } vanilla_CMSG_MOVE_FEATHER_FALL_ACK;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_MOVE_FEATHER_FALL_ACK_write(WowWorldWriter* writer, const vanilla_CMSG_MOVE_FEATHER_FALL_ACK* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_MOVE_FEATHER_FALL_ACK_free(vanilla_CMSG_MOVE_FEATHER_FALL_ACK* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MOVE_FEATHER_FALL_ACK_write(WowWorldWriter* writer, const vanilla_CMSG_MOVE_FEATHER_FALL_ACK* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_MOVE_FEATHER_FALL_ACK_free(vanilla_CMSG_MOVE_FEATHER_FALL_ACK* object);
 
 typedef struct {
     uint64_t guid;
@@ -11401,24 +11401,24 @@ typedef struct {
     uint32_t apply;
 
 } vanilla_CMSG_MOVE_WATER_WALK_ACK;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_MOVE_WATER_WALK_ACK_write(WowWorldWriter* writer, const vanilla_CMSG_MOVE_WATER_WALK_ACK* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_MOVE_WATER_WALK_ACK_free(vanilla_CMSG_MOVE_WATER_WALK_ACK* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MOVE_WATER_WALK_ACK_write(WowWorldWriter* writer, const vanilla_CMSG_MOVE_WATER_WALK_ACK* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_MOVE_WATER_WALK_ACK_free(vanilla_CMSG_MOVE_WATER_WALK_ACK* object);
 
 typedef struct {
     uint64_t old_mover;
     vanilla_MovementInfo info;
 
 } vanilla_CMSG_MOVE_NOT_ACTIVE_MOVER;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_MOVE_NOT_ACTIVE_MOVER_write(WowWorldWriter* writer, const vanilla_CMSG_MOVE_NOT_ACTIVE_MOVER* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_MOVE_NOT_ACTIVE_MOVER_free(vanilla_CMSG_MOVE_NOT_ACTIVE_MOVER* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MOVE_NOT_ACTIVE_MOVER_write(WowWorldWriter* writer, const vanilla_CMSG_MOVE_NOT_ACTIVE_MOVER* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_MOVE_NOT_ACTIVE_MOVER_free(vanilla_CMSG_MOVE_NOT_ACTIVE_MOVER* object);
 
 typedef struct {
     uint32_t sound_id;
 
 } vanilla_SMSG_PLAY_SOUND;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_PLAY_SOUND_write(WowWorldWriter* writer, const vanilla_SMSG_PLAY_SOUND* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PLAY_SOUND_write(WowWorldWriter* writer, const vanilla_SMSG_PLAY_SOUND* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_BATTLEFIELD_STATUS_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BATTLEFIELD_STATUS_write(WowWorldWriter* writer);
 
 typedef struct {
     uint32_t queue_slot;
@@ -11433,21 +11433,21 @@ typedef struct {
     uint32_t time_to_bg_start_in_ms;
 
 } vanilla_SMSG_BATTLEFIELD_STATUS;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_BATTLEFIELD_STATUS_write(WowWorldWriter* writer, const vanilla_SMSG_BATTLEFIELD_STATUS* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_BATTLEFIELD_STATUS_free(vanilla_SMSG_BATTLEFIELD_STATUS* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_BATTLEFIELD_STATUS_write(WowWorldWriter* writer, const vanilla_SMSG_BATTLEFIELD_STATUS* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_BATTLEFIELD_STATUS_free(vanilla_SMSG_BATTLEFIELD_STATUS* object);
 
 typedef struct {
     vanilla_Map map;
     vanilla_BattlefieldPortAction action;
 
 } vanilla_CMSG_BATTLEFIELD_PORT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_BATTLEFIELD_PORT_write(WowWorldWriter* writer, const vanilla_CMSG_BATTLEFIELD_PORT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BATTLEFIELD_PORT_write(WowWorldWriter* writer, const vanilla_CMSG_BATTLEFIELD_PORT* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_MSG_INSPECT_HONOR_STATS_Client;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_INSPECT_HONOR_STATS_Client_write(WowWorldWriter* writer, const vanilla_MSG_INSPECT_HONOR_STATS_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_INSPECT_HONOR_STATS_Client_write(WowWorldWriter* writer, const vanilla_MSG_INSPECT_HONOR_STATS_Client* object);
 
 typedef struct {
     uint64_t guid;
@@ -11468,13 +11468,13 @@ typedef struct {
     uint8_t rank_progress_bar;
 
 } vanilla_MSG_INSPECT_HONOR_STATS_Server;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_INSPECT_HONOR_STATS_Server_write(WowWorldWriter* writer, const vanilla_MSG_INSPECT_HONOR_STATS_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_INSPECT_HONOR_STATS_Server_write(WowWorldWriter* writer, const vanilla_MSG_INSPECT_HONOR_STATS_Server* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_CMSG_BATTLEMASTER_HELLO;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_BATTLEMASTER_HELLO_write(WowWorldWriter* writer, const vanilla_CMSG_BATTLEMASTER_HELLO* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BATTLEMASTER_HELLO_write(WowWorldWriter* writer, const vanilla_CMSG_BATTLEMASTER_HELLO* object);
 
 typedef struct {
     uint64_t guid;
@@ -11482,7 +11482,7 @@ typedef struct {
     float speed;
 
 } vanilla_SMSG_FORCE_WALK_SPEED_CHANGE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_FORCE_WALK_SPEED_CHANGE_write(WowWorldWriter* writer, const vanilla_SMSG_FORCE_WALK_SPEED_CHANGE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_FORCE_WALK_SPEED_CHANGE_write(WowWorldWriter* writer, const vanilla_SMSG_FORCE_WALK_SPEED_CHANGE* object);
 
 typedef struct {
     uint64_t guid;
@@ -11491,8 +11491,8 @@ typedef struct {
     float new_speed;
 
 } vanilla_CMSG_FORCE_WALK_SPEED_CHANGE_ACK;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_FORCE_WALK_SPEED_CHANGE_ACK_write(WowWorldWriter* writer, const vanilla_CMSG_FORCE_WALK_SPEED_CHANGE_ACK* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_FORCE_WALK_SPEED_CHANGE_ACK_free(vanilla_CMSG_FORCE_WALK_SPEED_CHANGE_ACK* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_FORCE_WALK_SPEED_CHANGE_ACK_write(WowWorldWriter* writer, const vanilla_CMSG_FORCE_WALK_SPEED_CHANGE_ACK* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_FORCE_WALK_SPEED_CHANGE_ACK_free(vanilla_CMSG_FORCE_WALK_SPEED_CHANGE_ACK* object);
 
 typedef struct {
     uint64_t guid;
@@ -11500,7 +11500,7 @@ typedef struct {
     float speed;
 
 } vanilla_SMSG_FORCE_SWIM_BACK_SPEED_CHANGE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_FORCE_SWIM_BACK_SPEED_CHANGE_write(WowWorldWriter* writer, const vanilla_SMSG_FORCE_SWIM_BACK_SPEED_CHANGE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_FORCE_SWIM_BACK_SPEED_CHANGE_write(WowWorldWriter* writer, const vanilla_SMSG_FORCE_SWIM_BACK_SPEED_CHANGE* object);
 
 typedef struct {
     uint64_t guid;
@@ -11509,8 +11509,8 @@ typedef struct {
     float new_speed;
 
 } vanilla_CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK_write(WowWorldWriter* writer, const vanilla_CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK_free(vanilla_CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK_write(WowWorldWriter* writer, const vanilla_CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK_free(vanilla_CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK* object);
 
 typedef struct {
     uint64_t guid;
@@ -11518,7 +11518,7 @@ typedef struct {
     float speed;
 
 } vanilla_SMSG_FORCE_TURN_RATE_CHANGE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_FORCE_TURN_RATE_CHANGE_write(WowWorldWriter* writer, const vanilla_SMSG_FORCE_TURN_RATE_CHANGE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_FORCE_TURN_RATE_CHANGE_write(WowWorldWriter* writer, const vanilla_SMSG_FORCE_TURN_RATE_CHANGE* object);
 
 typedef struct {
     uint64_t guid;
@@ -11527,10 +11527,10 @@ typedef struct {
     float new_speed;
 
 } vanilla_CMSG_FORCE_TURN_RATE_CHANGE_ACK;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_FORCE_TURN_RATE_CHANGE_ACK_write(WowWorldWriter* writer, const vanilla_CMSG_FORCE_TURN_RATE_CHANGE_ACK* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_FORCE_TURN_RATE_CHANGE_ACK_free(vanilla_CMSG_FORCE_TURN_RATE_CHANGE_ACK* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_FORCE_TURN_RATE_CHANGE_ACK_write(WowWorldWriter* writer, const vanilla_CMSG_FORCE_TURN_RATE_CHANGE_ACK* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_FORCE_TURN_RATE_CHANGE_ACK_free(vanilla_CMSG_FORCE_TURN_RATE_CHANGE_ACK* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_PVP_LOG_DATA_Client_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_PVP_LOG_DATA_Client_write(WowWorldWriter* writer);
 
 typedef struct {
     vanilla_BattlegroundEndStatus status;
@@ -11539,57 +11539,57 @@ typedef struct {
     vanilla_BattlegroundPlayer* players;
 
 } vanilla_MSG_PVP_LOG_DATA_Server;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_PVP_LOG_DATA_Server_write(WowWorldWriter* writer, const vanilla_MSG_PVP_LOG_DATA_Server* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_PVP_LOG_DATA_Server_free(vanilla_MSG_PVP_LOG_DATA_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_PVP_LOG_DATA_Server_write(WowWorldWriter* writer, const vanilla_MSG_PVP_LOG_DATA_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_PVP_LOG_DATA_Server_free(vanilla_MSG_PVP_LOG_DATA_Server* object);
 
 typedef struct {
     vanilla_Map map;
 
 } vanilla_CMSG_LEAVE_BATTLEFIELD;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_LEAVE_BATTLEFIELD_write(WowWorldWriter* writer, const vanilla_CMSG_LEAVE_BATTLEFIELD* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_LEAVE_BATTLEFIELD_write(WowWorldWriter* writer, const vanilla_CMSG_LEAVE_BATTLEFIELD* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_CMSG_AREA_SPIRIT_HEALER_QUERY;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_AREA_SPIRIT_HEALER_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_AREA_SPIRIT_HEALER_QUERY* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AREA_SPIRIT_HEALER_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_AREA_SPIRIT_HEALER_QUERY* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_CMSG_AREA_SPIRIT_HEALER_QUEUE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_AREA_SPIRIT_HEALER_QUEUE_write(WowWorldWriter* writer, const vanilla_CMSG_AREA_SPIRIT_HEALER_QUEUE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AREA_SPIRIT_HEALER_QUEUE_write(WowWorldWriter* writer, const vanilla_CMSG_AREA_SPIRIT_HEALER_QUEUE* object);
 
 typedef struct {
     uint64_t guid;
     uint32_t next_resurrect_time;
 
 } vanilla_SMSG_AREA_SPIRIT_HEALER_TIME;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_AREA_SPIRIT_HEALER_TIME_write(WowWorldWriter* writer, const vanilla_SMSG_AREA_SPIRIT_HEALER_TIME* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_AREA_SPIRIT_HEALER_TIME_write(WowWorldWriter* writer, const vanilla_SMSG_AREA_SPIRIT_HEALER_TIME* object);
 
 typedef struct {
     uint32_t amount_of_encrypted_data;
     uint8_t* encrypted_data;
 
 } vanilla_SMSG_WARDEN_DATA;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_WARDEN_DATA_write(WowWorldWriter* writer, const vanilla_SMSG_WARDEN_DATA* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_WARDEN_DATA_free(vanilla_SMSG_WARDEN_DATA* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_WARDEN_DATA_write(WowWorldWriter* writer, const vanilla_SMSG_WARDEN_DATA* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_WARDEN_DATA_free(vanilla_SMSG_WARDEN_DATA* object);
 
 typedef struct {
     uint32_t amount_of_encrypted_data;
     uint8_t* encrypted_data;
 
 } vanilla_CMSG_WARDEN_DATA;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_WARDEN_DATA_write(WowWorldWriter* writer, const vanilla_CMSG_WARDEN_DATA* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_WARDEN_DATA_free(vanilla_CMSG_WARDEN_DATA* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_WARDEN_DATA_write(WowWorldWriter* writer, const vanilla_CMSG_WARDEN_DATA* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_WARDEN_DATA_free(vanilla_CMSG_WARDEN_DATA* object);
 
 typedef struct {
     vanilla_BgTypeId id;
 
 } vanilla_SMSG_GROUP_JOINED_BATTLEGROUND;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_GROUP_JOINED_BATTLEGROUND_write(WowWorldWriter* writer, const vanilla_SMSG_GROUP_JOINED_BATTLEGROUND* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GROUP_JOINED_BATTLEGROUND_write(WowWorldWriter* writer, const vanilla_SMSG_GROUP_JOINED_BATTLEGROUND* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_BATTLEGROUND_PLAYER_POSITIONS_Client_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_BATTLEGROUND_PLAYER_POSITIONS_Client_write(WowWorldWriter* writer);
 
 typedef struct {
     uint32_t amount_of_teammates;
@@ -11598,32 +11598,32 @@ typedef struct {
     vanilla_BattlegroundPlayerPosition* carriers;
 
 } vanilla_MSG_BATTLEGROUND_PLAYER_POSITIONS_Server;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_BATTLEGROUND_PLAYER_POSITIONS_Server_write(WowWorldWriter* writer, const vanilla_MSG_BATTLEGROUND_PLAYER_POSITIONS_Server* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_BATTLEGROUND_PLAYER_POSITIONS_Server_free(vanilla_MSG_BATTLEGROUND_PLAYER_POSITIONS_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_BATTLEGROUND_PLAYER_POSITIONS_Server_write(WowWorldWriter* writer, const vanilla_MSG_BATTLEGROUND_PLAYER_POSITIONS_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_BATTLEGROUND_PLAYER_POSITIONS_Server_free(vanilla_MSG_BATTLEGROUND_PLAYER_POSITIONS_Server* object);
 
 typedef struct {
     uint64_t pet;
 
 } vanilla_CMSG_PET_STOP_ATTACK;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_PET_STOP_ATTACK_write(WowWorldWriter* writer, const vanilla_CMSG_PET_STOP_ATTACK* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PET_STOP_ATTACK_write(WowWorldWriter* writer, const vanilla_CMSG_PET_STOP_ATTACK* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_SMSG_BINDER_CONFIRM;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_BINDER_CONFIRM_write(WowWorldWriter* writer, const vanilla_SMSG_BINDER_CONFIRM* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_BINDER_CONFIRM_write(WowWorldWriter* writer, const vanilla_SMSG_BINDER_CONFIRM* object);
 
 typedef struct {
     uint64_t player;
 
 } vanilla_SMSG_BATTLEGROUND_PLAYER_JOINED;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_BATTLEGROUND_PLAYER_JOINED_write(WowWorldWriter* writer, const vanilla_SMSG_BATTLEGROUND_PLAYER_JOINED* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_BATTLEGROUND_PLAYER_JOINED_write(WowWorldWriter* writer, const vanilla_SMSG_BATTLEGROUND_PLAYER_JOINED* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_SMSG_BATTLEGROUND_PLAYER_LEFT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_BATTLEGROUND_PLAYER_LEFT_write(WowWorldWriter* writer, const vanilla_SMSG_BATTLEGROUND_PLAYER_LEFT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_BATTLEGROUND_PLAYER_LEFT_write(WowWorldWriter* writer, const vanilla_SMSG_BATTLEGROUND_PLAYER_LEFT* object);
 
 typedef struct {
     uint64_t guid;
@@ -11632,28 +11632,28 @@ typedef struct {
     bool join_as_group;
 
 } vanilla_CMSG_BATTLEMASTER_JOIN;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_BATTLEMASTER_JOIN_write(WowWorldWriter* writer, const vanilla_CMSG_BATTLEMASTER_JOIN* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BATTLEMASTER_JOIN_write(WowWorldWriter* writer, const vanilla_CMSG_BATTLEMASTER_JOIN* object);
 
 typedef struct {
     uint32_t amount_of_addons;
     vanilla_Addon* addons;
 
 } vanilla_SMSG_ADDON_INFO;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_ADDON_INFO_write(WowWorldWriter* writer, const vanilla_SMSG_ADDON_INFO* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_ADDON_INFO_free(vanilla_SMSG_ADDON_INFO* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ADDON_INFO_write(WowWorldWriter* writer, const vanilla_SMSG_ADDON_INFO* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_ADDON_INFO_free(vanilla_SMSG_ADDON_INFO* object);
 
 typedef struct {
     uint64_t pet;
 
 } vanilla_CMSG_PET_UNLEARN;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_PET_UNLEARN_write(WowWorldWriter* writer, const vanilla_CMSG_PET_UNLEARN* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PET_UNLEARN_write(WowWorldWriter* writer, const vanilla_CMSG_PET_UNLEARN* object);
 
 typedef struct {
     uint64_t pet;
     uint32_t talent_reset_cost;
 
 } vanilla_SMSG_PET_UNLEARN_CONFIRM;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_PET_UNLEARN_CONFIRM_write(WowWorldWriter* writer, const vanilla_SMSG_PET_UNLEARN_CONFIRM* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PET_UNLEARN_CONFIRM_write(WowWorldWriter* writer, const vanilla_SMSG_PET_UNLEARN_CONFIRM* object);
 
 typedef struct {
     uint64_t player;
@@ -11680,8 +11680,8 @@ typedef struct {
     vanilla_AuraMask pet_auras;
 
 } vanilla_SMSG_PARTY_MEMBER_STATS_FULL;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_PARTY_MEMBER_STATS_FULL_write(WowWorldWriter* writer, const vanilla_SMSG_PARTY_MEMBER_STATS_FULL* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_PARTY_MEMBER_STATS_FULL_free(vanilla_SMSG_PARTY_MEMBER_STATS_FULL* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PARTY_MEMBER_STATS_FULL_write(WowWorldWriter* writer, const vanilla_SMSG_PARTY_MEMBER_STATS_FULL* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_PARTY_MEMBER_STATS_FULL_free(vanilla_SMSG_PARTY_MEMBER_STATS_FULL* object);
 
 typedef struct {
     uint64_t guid;
@@ -11689,7 +11689,7 @@ typedef struct {
     bool autocast_enabled;
 
 } vanilla_CMSG_PET_SPELL_AUTOCAST;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_PET_SPELL_AUTOCAST_write(WowWorldWriter* writer, const vanilla_CMSG_PET_SPELL_AUTOCAST* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PET_SPELL_AUTOCAST_write(WowWorldWriter* writer, const vanilla_CMSG_PET_SPELL_AUTOCAST* object);
 
 typedef struct {
     vanilla_WeatherType weather_type;
@@ -11698,7 +11698,7 @@ typedef struct {
     vanilla_WeatherChangeType change;
 
 } vanilla_SMSG_WEATHER;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_WEATHER_write(WowWorldWriter* writer, const vanilla_SMSG_WEATHER* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_WEATHER_write(WowWorldWriter* writer, const vanilla_SMSG_WEATHER* object);
 
 typedef struct {
     vanilla_RaidInstanceMessage message_type;
@@ -11706,124 +11706,124 @@ typedef struct {
     uint32_t time_left;
 
 } vanilla_SMSG_RAID_INSTANCE_MESSAGE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_RAID_INSTANCE_MESSAGE_write(WowWorldWriter* writer, const vanilla_SMSG_RAID_INSTANCE_MESSAGE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_RAID_INSTANCE_MESSAGE_write(WowWorldWriter* writer, const vanilla_SMSG_RAID_INSTANCE_MESSAGE* object);
 
 typedef struct {
     WowWorldString guild_info;
 
 } vanilla_CMSG_GUILD_INFO_TEXT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_GUILD_INFO_TEXT_write(WowWorldWriter* writer, const vanilla_CMSG_GUILD_INFO_TEXT* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_GUILD_INFO_TEXT_free(vanilla_CMSG_GUILD_INFO_TEXT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_INFO_TEXT_write(WowWorldWriter* writer, const vanilla_CMSG_GUILD_INFO_TEXT* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GUILD_INFO_TEXT_free(vanilla_CMSG_GUILD_INFO_TEXT* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_CHAT_RESTRICTED_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CHAT_RESTRICTED_write(WowWorldWriter* writer);
 
 typedef struct {
     uint64_t guid;
     float speed;
 
 } vanilla_SMSG_SPLINE_SET_RUN_SPEED;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SPLINE_SET_RUN_SPEED_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_SET_RUN_SPEED* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_SET_RUN_SPEED_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_SET_RUN_SPEED* object);
 
 typedef struct {
     uint64_t guid;
     float speed;
 
 } vanilla_SMSG_SPLINE_SET_RUN_BACK_SPEED;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SPLINE_SET_RUN_BACK_SPEED_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_SET_RUN_BACK_SPEED* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_SET_RUN_BACK_SPEED_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_SET_RUN_BACK_SPEED* object);
 
 typedef struct {
     uint64_t guid;
     float speed;
 
 } vanilla_SMSG_SPLINE_SET_SWIM_SPEED;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SPLINE_SET_SWIM_SPEED_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_SET_SWIM_SPEED* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_SET_SWIM_SPEED_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_SET_SWIM_SPEED* object);
 
 typedef struct {
     uint64_t guid;
     float speed;
 
 } vanilla_SMSG_SPLINE_SET_WALK_SPEED;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SPLINE_SET_WALK_SPEED_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_SET_WALK_SPEED* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_SET_WALK_SPEED_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_SET_WALK_SPEED* object);
 
 typedef struct {
     uint64_t guid;
     float speed;
 
 } vanilla_SMSG_SPLINE_SET_SWIM_BACK_SPEED;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SPLINE_SET_SWIM_BACK_SPEED_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_SET_SWIM_BACK_SPEED* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_SET_SWIM_BACK_SPEED_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_SET_SWIM_BACK_SPEED* object);
 
 typedef struct {
     uint64_t guid;
     float speed;
 
 } vanilla_SMSG_SPLINE_SET_TURN_RATE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SPLINE_SET_TURN_RATE_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_SET_TURN_RATE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_SET_TURN_RATE_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_SET_TURN_RATE* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_SMSG_SPLINE_MOVE_UNROOT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_UNROOT_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_MOVE_UNROOT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_UNROOT_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_MOVE_UNROOT* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_SMSG_SPLINE_MOVE_FEATHER_FALL;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_FEATHER_FALL_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_MOVE_FEATHER_FALL* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_FEATHER_FALL_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_MOVE_FEATHER_FALL* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_SMSG_SPLINE_MOVE_NORMAL_FALL;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_NORMAL_FALL_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_MOVE_NORMAL_FALL* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_NORMAL_FALL_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_MOVE_NORMAL_FALL* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_SMSG_SPLINE_MOVE_SET_HOVER;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_SET_HOVER_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_MOVE_SET_HOVER* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_SET_HOVER_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_MOVE_SET_HOVER* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_SMSG_SPLINE_MOVE_UNSET_HOVER;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_UNSET_HOVER_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_MOVE_UNSET_HOVER* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_UNSET_HOVER_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_MOVE_UNSET_HOVER* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_SMSG_SPLINE_MOVE_WATER_WALK;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_WATER_WALK_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_MOVE_WATER_WALK* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_WATER_WALK_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_MOVE_WATER_WALK* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_SMSG_SPLINE_MOVE_LAND_WALK;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_LAND_WALK_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_MOVE_LAND_WALK* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_LAND_WALK_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_MOVE_LAND_WALK* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_SMSG_SPLINE_MOVE_START_SWIM;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_START_SWIM_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_MOVE_START_SWIM* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_START_SWIM_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_MOVE_START_SWIM* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_SMSG_SPLINE_MOVE_STOP_SWIM;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_STOP_SWIM_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_MOVE_STOP_SWIM* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_STOP_SWIM_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_MOVE_STOP_SWIM* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_SMSG_SPLINE_MOVE_SET_RUN_MODE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_SET_RUN_MODE_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_MOVE_SET_RUN_MODE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_SET_RUN_MODE_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_MOVE_SET_RUN_MODE* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_SMSG_SPLINE_MOVE_SET_WALK_MODE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_SET_WALK_MODE_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_MOVE_SET_WALK_MODE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_SET_WALK_MODE_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_MOVE_SET_WALK_MODE* object);
 
 typedef struct {
     uint64_t guid;
@@ -11832,69 +11832,69 @@ typedef struct {
     uint32_t* nodes;
 
 } vanilla_CMSG_ACTIVATETAXIEXPRESS;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_ACTIVATETAXIEXPRESS_write(WowWorldWriter* writer, const vanilla_CMSG_ACTIVATETAXIEXPRESS* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_ACTIVATETAXIEXPRESS_free(vanilla_CMSG_ACTIVATETAXIEXPRESS* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_ACTIVATETAXIEXPRESS_write(WowWorldWriter* writer, const vanilla_CMSG_ACTIVATETAXIEXPRESS* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_ACTIVATETAXIEXPRESS_free(vanilla_CMSG_ACTIVATETAXIEXPRESS* object);
 
 typedef struct {
     vanilla_Faction faction;
     bool inactive;
 
 } vanilla_CMSG_SET_FACTION_INACTIVE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_SET_FACTION_INACTIVE_write(WowWorldWriter* writer, const vanilla_CMSG_SET_FACTION_INACTIVE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SET_FACTION_INACTIVE_write(WowWorldWriter* writer, const vanilla_CMSG_SET_FACTION_INACTIVE* object);
 
 typedef struct {
     vanilla_Faction faction;
 
 } vanilla_CMSG_SET_WATCHED_FACTION;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_SET_WATCHED_FACTION_write(WowWorldWriter* writer, const vanilla_CMSG_SET_WATCHED_FACTION* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SET_WATCHED_FACTION_write(WowWorldWriter* writer, const vanilla_CMSG_SET_WATCHED_FACTION* object);
 
 typedef struct {
     uint64_t player;
     uint32_t time_skipped;
 
 } vanilla_MSG_MOVE_TIME_SKIPPED_Server;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_MOVE_TIME_SKIPPED_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_TIME_SKIPPED_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_TIME_SKIPPED_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_TIME_SKIPPED_Server* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_SMSG_SPLINE_MOVE_ROOT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_ROOT_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_MOVE_ROOT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_ROOT_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_MOVE_ROOT* object);
 
 typedef struct {
     uint64_t guid;
 
 } vanilla_SMSG_INVALIDATE_PLAYER;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_INVALIDATE_PLAYER_write(WowWorldWriter* writer, const vanilla_SMSG_INVALIDATE_PLAYER* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_INVALIDATE_PLAYER_write(WowWorldWriter* writer, const vanilla_SMSG_INVALIDATE_PLAYER* object);
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_RESET_INSTANCES_write(WowWorldWriter* writer);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_RESET_INSTANCES_write(WowWorldWriter* writer);
 
 typedef struct {
     vanilla_Map map;
 
 } vanilla_SMSG_INSTANCE_RESET;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_INSTANCE_RESET_write(WowWorldWriter* writer, const vanilla_SMSG_INSTANCE_RESET* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_INSTANCE_RESET_write(WowWorldWriter* writer, const vanilla_SMSG_INSTANCE_RESET* object);
 
 typedef struct {
     vanilla_InstanceResetFailedReason reason;
     vanilla_Map map;
 
 } vanilla_SMSG_INSTANCE_RESET_FAILED;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_INSTANCE_RESET_FAILED_write(WowWorldWriter* writer, const vanilla_SMSG_INSTANCE_RESET_FAILED* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_INSTANCE_RESET_FAILED_write(WowWorldWriter* writer, const vanilla_SMSG_INSTANCE_RESET_FAILED* object);
 
 typedef struct {
     vanilla_Map map;
 
 } vanilla_SMSG_UPDATE_LAST_INSTANCE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_UPDATE_LAST_INSTANCE_write(WowWorldWriter* writer, const vanilla_SMSG_UPDATE_LAST_INSTANCE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_UPDATE_LAST_INSTANCE_write(WowWorldWriter* writer, const vanilla_SMSG_UPDATE_LAST_INSTANCE* object);
 
 typedef struct {
     vanilla_RaidTargetIndex target_index;
     uint64_t target;
 
 } vanilla_MSG_RAID_TARGET_UPDATE_Client;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_RAID_TARGET_UPDATE_Client_write(WowWorldWriter* writer, const vanilla_MSG_RAID_TARGET_UPDATE_Client* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_RAID_TARGET_UPDATE_Client_free(vanilla_MSG_RAID_TARGET_UPDATE_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_RAID_TARGET_UPDATE_Client_write(WowWorldWriter* writer, const vanilla_MSG_RAID_TARGET_UPDATE_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_RAID_TARGET_UPDATE_Client_free(vanilla_MSG_RAID_TARGET_UPDATE_Client* object);
 
 typedef struct {
     vanilla_RaidTargetUpdateType update_type;
@@ -11902,8 +11902,8 @@ typedef struct {
     vanilla_RaidTargetUpdate raid_target;
 
 } vanilla_MSG_RAID_TARGET_UPDATE_Server;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_RAID_TARGET_UPDATE_Server_write(WowWorldWriter* writer, const vanilla_MSG_RAID_TARGET_UPDATE_Server* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_MSG_RAID_TARGET_UPDATE_Server_free(vanilla_MSG_RAID_TARGET_UPDATE_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_RAID_TARGET_UPDATE_Server_write(WowWorldWriter* writer, const vanilla_MSG_RAID_TARGET_UPDATE_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_RAID_TARGET_UPDATE_Server_free(vanilla_MSG_RAID_TARGET_UPDATE_Server* object);
 
 typedef struct {
     uint8_t state;
@@ -11913,7 +11913,7 @@ typedef struct {
 
     vanilla_MSG_RAID_READY_CHECK_Client_answer* answer;
 } vanilla_MSG_RAID_READY_CHECK_Client;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_RAID_READY_CHECK_Client_write(WowWorldWriter* writer, const vanilla_MSG_RAID_READY_CHECK_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_RAID_READY_CHECK_Client_write(WowWorldWriter* writer, const vanilla_MSG_RAID_READY_CHECK_Client* object);
 
 typedef struct {
     uint64_t guid;
@@ -11924,27 +11924,27 @@ typedef struct {
 
     vanilla_MSG_RAID_READY_CHECK_Server_state_check* state_check;
 } vanilla_MSG_RAID_READY_CHECK_Server;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_MSG_RAID_READY_CHECK_Server_write(WowWorldWriter* writer, const vanilla_MSG_RAID_READY_CHECK_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_RAID_READY_CHECK_Server_write(WowWorldWriter* writer, const vanilla_MSG_RAID_READY_CHECK_Server* object);
 
 typedef struct {
     uint64_t guid;
     vanilla_PetTalkReason reason;
 
 } vanilla_SMSG_PET_ACTION_SOUND;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_PET_ACTION_SOUND_write(WowWorldWriter* writer, const vanilla_SMSG_PET_ACTION_SOUND* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PET_ACTION_SOUND_write(WowWorldWriter* writer, const vanilla_SMSG_PET_ACTION_SOUND* object);
 
 typedef struct {
     uint32_t sound_id;
     all_Vector3d position;
 
 } vanilla_SMSG_PET_DISMISS_SOUND;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_PET_DISMISS_SOUND_write(WowWorldWriter* writer, const vanilla_SMSG_PET_DISMISS_SOUND* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PET_DISMISS_SOUND_write(WowWorldWriter* writer, const vanilla_SMSG_PET_DISMISS_SOUND* object);
 
 typedef struct {
     vanilla_GmTicketStatusResponse response;
 
 } vanilla_SMSG_GM_TICKET_STATUS_UPDATE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_GM_TICKET_STATUS_UPDATE_write(WowWorldWriter* writer, const vanilla_SMSG_GM_TICKET_STATUS_UPDATE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GM_TICKET_STATUS_UPDATE_write(WowWorldWriter* writer, const vanilla_SMSG_GM_TICKET_STATUS_UPDATE* object);
 
 typedef struct {
     uint32_t survey_id;
@@ -11952,21 +11952,21 @@ typedef struct {
     WowWorldString answer_comment;
 
 } vanilla_CMSG_GMSURVEY_SUBMIT;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_CMSG_GMSURVEY_SUBMIT_write(WowWorldWriter* writer, const vanilla_CMSG_GMSURVEY_SUBMIT* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_CMSG_GMSURVEY_SUBMIT_free(vanilla_CMSG_GMSURVEY_SUBMIT* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GMSURVEY_SUBMIT_write(WowWorldWriter* writer, const vanilla_CMSG_GMSURVEY_SUBMIT* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GMSURVEY_SUBMIT_free(vanilla_CMSG_GMSURVEY_SUBMIT* object);
 
 typedef struct {
     bool player_is_saved_to_a_raid;
 
 } vanilla_SMSG_UPDATE_INSTANCE_OWNERSHIP;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_UPDATE_INSTANCE_OWNERSHIP_write(WowWorldWriter* writer, const vanilla_SMSG_UPDATE_INSTANCE_OWNERSHIP* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_UPDATE_INSTANCE_OWNERSHIP_write(WowWorldWriter* writer, const vanilla_SMSG_UPDATE_INSTANCE_OWNERSHIP* object);
 
 typedef struct {
     uint64_t target;
     uint32_t spell;
 
 } vanilla_SMSG_SPELLINSTAKILLLOG;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SPELLINSTAKILLLOG_write(WowWorldWriter* writer, const vanilla_SMSG_SPELLINSTAKILLLOG* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELLINSTAKILLLOG_write(WowWorldWriter* writer, const vanilla_SMSG_SPELLINSTAKILLLOG* object);
 
 typedef struct {
     uint64_t caster;
@@ -11975,24 +11975,24 @@ typedef struct {
     uint64_t* targets;
 
 } vanilla_SMSG_SPELL_UPDATE_CHAIN_TARGETS;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_SPELL_UPDATE_CHAIN_TARGETS_write(WowWorldWriter* writer, const vanilla_SMSG_SPELL_UPDATE_CHAIN_TARGETS* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_SPELL_UPDATE_CHAIN_TARGETS_free(vanilla_SMSG_SPELL_UPDATE_CHAIN_TARGETS* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELL_UPDATE_CHAIN_TARGETS_write(WowWorldWriter* writer, const vanilla_SMSG_SPELL_UPDATE_CHAIN_TARGETS* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_SPELL_UPDATE_CHAIN_TARGETS_free(vanilla_SMSG_SPELL_UPDATE_CHAIN_TARGETS* object);
 
 typedef struct {
     uint32_t amount_of_records;
     WowWorldString* records;
 
 } vanilla_SMSG_EXPECTED_SPAM_RECORDS;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_EXPECTED_SPAM_RECORDS_write(WowWorldWriter* writer, const vanilla_SMSG_EXPECTED_SPAM_RECORDS* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_EXPECTED_SPAM_RECORDS_free(vanilla_SMSG_EXPECTED_SPAM_RECORDS* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_EXPECTED_SPAM_RECORDS_write(WowWorldWriter* writer, const vanilla_SMSG_EXPECTED_SPAM_RECORDS* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_EXPECTED_SPAM_RECORDS_free(vanilla_SMSG_EXPECTED_SPAM_RECORDS* object);
 
 typedef struct {
     vanilla_Area area;
     WowWorldString message;
 
 } vanilla_SMSG_DEFENSE_MESSAGE;
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_SMSG_DEFENSE_MESSAGE_write(WowWorldWriter* writer, const vanilla_SMSG_DEFENSE_MESSAGE* object);
-WOWWORLDMESSAGESC_EXPORT void vanilla_SMSG_DEFENSE_MESSAGE_free(vanilla_SMSG_DEFENSE_MESSAGE* object);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_DEFENSE_MESSAGE_write(WowWorldWriter* writer, const vanilla_SMSG_DEFENSE_MESSAGE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_DEFENSE_MESSAGE_free(vanilla_SMSG_DEFENSE_MESSAGE* object);
 
 typedef enum {
     CMSG_BOOTME = 1,
@@ -12862,9 +12862,9 @@ typedef struct {
     } body;
 } VanillaClientOpcodeContainer;
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_client_opcode_read(WowWorldReader* reader, VanillaClientOpcodeContainer* opcodes);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_client_opcode_read(WowWorldReader* reader, VanillaClientOpcodeContainer* opcodes);
 
-WOWWORLDMESSAGESC_EXPORT void vanilla_client_opcode_free(VanillaClientOpcodeContainer* opcodes);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_client_opcode_free(VanillaClientOpcodeContainer* opcodes);
 
 typedef struct {
     WowVanillaWorldOpcode opcode;
@@ -13193,9 +13193,9 @@ typedef struct {
     } body;
 } VanillaServerOpcodeContainer;
 
-WOWWORLDMESSAGESC_EXPORT WowWorldResult vanilla_server_opcode_read(WowWorldReader* reader, VanillaServerOpcodeContainer* opcodes);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_server_opcode_read(WowWorldReader* reader, VanillaServerOpcodeContainer* opcodes);
 
-WOWWORLDMESSAGESC_EXPORT void vanilla_server_opcode_free(VanillaServerOpcodeContainer* opcodes);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_server_opcode_free(VanillaServerOpcodeContainer* opcodes);
 
 #ifdef __cplusplus
 }

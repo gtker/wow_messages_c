@@ -6,7 +6,7 @@ from print_struct.struct_util import (
     integer_type_to_size,
     print_if_statement_header, container_should_have_size_function, container_contains_array, )
 
-from util import first_version_as_module
+from util import first_version_as_module, is_cpp
 from writer import Writer
 
 
@@ -14,8 +14,12 @@ def print_size(s: Writer, container: model.Container, module_name: str):
     if not container_should_have_size_function(container):
         return
 
-    s.open_curly(
-        f"static size_t {module_name}_{container.name}_size(const {first_version_as_module(container.tags)}_{container.name}* object)")
+    if is_cpp():
+        s.open_curly(
+            f"static size_t {container.name}_size(const {container.name}& obj)")
+    else:
+        s.open_curly(
+            f"static size_t {module_name}_{container.name}_size(const {first_version_as_module(container.tags)}_{container.name}* object)")
 
     if container.tags.compressed:
         print_size_for_compressed_container(s, container)
@@ -115,14 +119,17 @@ def addable_size_value(
         data_type: model.DataType, extra_self: str, name: str, module_name: str, extra_indirection: str
 ) -> typing.Optional[typing.Tuple[int, typing.Optional[str]]]:
     variable_name = f"object->{extra_indirection}{name}"
+    if is_cpp():
+        variable_name = f"obj.{extra_indirection}{name}"
+
     match data_type:
         case model.DataTypeStruct(struct_data=e):
             if not e.sizes.constant_sized:
-                return 0, f"{module_name}_{e.name}_size(&{variable_name})"
+                return 0, f"{e.name}_size({variable_name})" if is_cpp() else f"{module_name}_{e.name}_size(&{variable_name})"
             else:
                 return e.sizes.maximum_size, None
         case model.DataTypeString() | model.DataTypeCstring():
-            return 1, f"STRING_SIZE({variable_name})"
+            return 1, f"{variable_name}.size()" if is_cpp() else f"STRING_SIZE({variable_name})"
         case model.DataTypeSizedCstring():
             return 4, f"STRING_SIZE({variable_name})"
         case model.DataTypePackedGUID():
@@ -234,7 +241,7 @@ def print_size_inner(s: Writer, m: model.StructMember, module_name: str, extra_i
 
                     else:
                         loop_max = ""
-                        variable_name = f"object{extra_indirection}->{d.name}"
+                        variable_name = f"obj{extra_indirection}.{d.name}" if is_cpp() else f"object{extra_indirection}->{d.name}"
 
                         fixed_prefix = "(*" if type(size) is model.ArraySizeFixed else ""
                         fixed_suffix = ")" if type(size) is model.ArraySizeFixed else ""
@@ -246,9 +253,12 @@ def print_size_inner(s: Writer, m: model.StructMember, module_name: str, extra_i
                                 loop_max = f"(int)object->{extra_indirection}{size}"
                             case model.ArraySizeEndless():
                                 loop_max = f"(int)object->amount_of_{d.name}"
-                        s.open_curly("/* C89 scope to allow variable declarations */")
-                        s.wln("int i;")
-                        s.open_curly(f"for(i = 0; i < {loop_max}; ++i)")
+                        if is_cpp():
+                            s.open_curly(f"for(const auto& v : {variable_name})")
+                        else:
+                            s.open_curly("/* C89 scope to allow variable declarations */")
+                            s.wln("int i;")
+                            s.open_curly(f"for(i = 0; i < {loop_max}; ++i)")
 
                         match inner_type:
                             case model.ArrayTypeInteger(integer_type=integer_type):
@@ -261,6 +271,7 @@ def print_size_inner(s: Writer, m: model.StructMember, module_name: str, extra_i
                                 version = first_version_as_module(e.tags)
                                 size = f"{version}_{e.name}_size(&{fixed_prefix}{variable_name}[i]{fixed_suffix})" if not e.sizes.constant_sized else str(
                                     e.sizes.maximum_size)
+                                size  = f"{e.name}_size(v)" if is_cpp() else size
                                 s.wln(
                                     f"_size += {size};")
 
@@ -274,7 +285,9 @@ def print_size_inner(s: Writer, m: model.StructMember, module_name: str, extra_i
                             case _:
                                 raise Exception(f"array size unknown type {inner_type}")
 
-                        s.closing_curly()
+                        if not is_cpp():
+                            s.closing_curly() # C89 scope
+
                         s.closing_curly()  # array scope
                 case v:
                     raise Exception(f"{v}")

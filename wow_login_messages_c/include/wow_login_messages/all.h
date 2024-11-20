@@ -62,8 +62,8 @@ typedef struct {
     WowLoginString account_name;
 
 } all_CMD_AUTH_LOGON_CHALLENGE_Client;
-WOWLOGINMESSAGESC_EXPORT WowLoginResult all_CMD_AUTH_LOGON_CHALLENGE_Client_write(WowLoginWriter* writer, const all_CMD_AUTH_LOGON_CHALLENGE_Client* object);
-WOWLOGINMESSAGESC_EXPORT void all_CMD_AUTH_LOGON_CHALLENGE_Client_free(all_CMD_AUTH_LOGON_CHALLENGE_Client* object);
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult all_CMD_AUTH_LOGON_CHALLENGE_Client_write(WowLoginWriter* writer, const all_CMD_AUTH_LOGON_CHALLENGE_Client* object);
+WOW_LOGIN_MESSAGES_C_EXPORT void all_CMD_AUTH_LOGON_CHALLENGE_Client_free(all_CMD_AUTH_LOGON_CHALLENGE_Client* object);
 
 typedef struct {
     all_ProtocolVersion protocol_version;
@@ -76,8 +76,8 @@ typedef struct {
     WowLoginString account_name;
 
 } all_CMD_AUTH_RECONNECT_CHALLENGE_Client;
-WOWLOGINMESSAGESC_EXPORT WowLoginResult all_CMD_AUTH_RECONNECT_CHALLENGE_Client_write(WowLoginWriter* writer, const all_CMD_AUTH_RECONNECT_CHALLENGE_Client* object);
-WOWLOGINMESSAGESC_EXPORT void all_CMD_AUTH_RECONNECT_CHALLENGE_Client_free(all_CMD_AUTH_RECONNECT_CHALLENGE_Client* object);
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult all_CMD_AUTH_RECONNECT_CHALLENGE_Client_write(WowLoginWriter* writer, const all_CMD_AUTH_RECONNECT_CHALLENGE_Client* object);
+WOW_LOGIN_MESSAGES_C_EXPORT void all_CMD_AUTH_RECONNECT_CHALLENGE_Client_free(all_CMD_AUTH_RECONNECT_CHALLENGE_Client* object);
 
 typedef struct {
     WowLoginOpcode opcode;
@@ -88,9 +88,9 @@ typedef struct {
     } body;
 } AllClientOpcodeContainer;
 
-WOWLOGINMESSAGESC_EXPORT WowLoginResult all_client_opcode_read(WowLoginReader* reader, AllClientOpcodeContainer* opcodes);
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult all_client_opcode_read(WowLoginReader* reader, AllClientOpcodeContainer* opcodes);
 
-WOWLOGINMESSAGESC_EXPORT void all_client_opcode_free(AllClientOpcodeContainer* opcodes);
+WOW_LOGIN_MESSAGES_C_EXPORT void all_client_opcode_free(AllClientOpcodeContainer* opcodes);
 
 #ifdef __cplusplus
 }

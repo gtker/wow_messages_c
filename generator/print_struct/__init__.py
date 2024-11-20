@@ -1,5 +1,5 @@
 from print_struct.struct_util import print_if_statement_header, container_has_c_members
-from util import first_version_as_module, get_export_define
+from util import first_version_as_module, get_export_define, is_cpp
 
 import model
 from print_struct.print_members import print_members_definitions, print_member_definition
@@ -12,19 +12,28 @@ from writer import Writer
 def print_struct(s: Writer, h: Writer, container: model.Container, module_name: str):
     first_module = first_version_as_module(container.tags)
 
-    if container_has_c_members(container):
-        if container.optional is not None:
-            h.open_curly("typedef struct")
-            for member in container.optional.members:
+    if container_has_c_members(container) or is_cpp():
+        if is_cpp():
+            h.open_curly(f"struct {container.name}")
+            for member in container.members:
                 print_member_definition(h, member, module_name)
-            h.closing_curly(f" {first_module}_{container.name}_{container.optional.name};")
-            h.newline()
+            if type(container.object_type) is not model.ObjectTypeStruct:
+                h.newline()
+                h.wln("std::vector<unsigned char> write() const;")
+            h.closing_curly(";") # struct
+        else:
+            if container.optional is not None:
+                h.open_curly("typedef struct")
+                for member in container.optional.members:
+                    print_member_definition(h, member, module_name)
+                h.closing_curly(f" {first_module}_{container.name}_{container.optional.name};")
+                h.newline()
 
-        h.open_curly(f"typedef struct")
-        print_members_definitions(h, container, module_name)
-        if container.optional is not None:
-            h.wln(f"{first_module}_{container.name}_{container.optional.name}* {container.optional.name};")
-        h.closing_curly(f" {first_module}_{container.name};")
+            h.open_curly(f"typedef struct")
+            print_members_definitions(h, container, module_name)
+            if container.optional is not None:
+                h.wln(f"{first_module}_{container.name}_{container.optional.name}* {container.optional.name};")
+            h.closing_curly(f" {first_module}_{container.name};")
 
     print_size(s, container, module_name)
 
@@ -37,7 +46,9 @@ def print_struct(s: Writer, h: Writer, container: model.Container, module_name: 
         case _:
             print_write(s, h, container, container.object_type, module_name, "")
 
-    print_free(s, h, container, module_name)
+    if not is_cpp():
+        print_free(s, h, container, module_name)
+
     h.newline()
 
 

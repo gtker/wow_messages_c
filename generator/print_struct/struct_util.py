@@ -2,7 +2,7 @@ import typing
 
 import model
 from util import pascal_case_to_snake_case, first_version_as_module, world_version_to_module_name, \
-    version_to_module_name
+    version_to_module_name, is_cpp
 from writer import Writer
 
 SKIPS = {}
@@ -164,6 +164,9 @@ def type_to_c_str(ty: model.DataType, module_name: str) -> str:
             return "bool"
 
         case model.DataTypeString() | model.DataTypeCstring() | model.DataTypeSizedCstring():
+            if is_cpp():
+                return "std::string"
+
             if module_name in {"vanilla", "tbc", "wrath"}:
                 return "WowWorldString"
 
@@ -172,18 +175,18 @@ def type_to_c_str(ty: model.DataType, module_name: str) -> str:
             return "float"
         case model.DataTypeStruct(struct_data=e):
             version = first_version_as_module(e.tags)
-            return f"{version}_{e.name}"
+            return e.name if is_cpp() else  f"{version}_{e.name}"
         case model.DataTypeEnum(type_name=type_name):
-            return f"{module_name}_{type_name}"
+            return type_name if is_cpp() else  f"{module_name}_{type_name}"
         case model.DataTypeFlag(type_name=type_name):
-            return f"{module_name}_{type_name}"
+            return type_name if is_cpp() else  f"{module_name}_{type_name}"
 
         case model.DataTypeArray(size=size, inner_type=inner_type):
             match size:
                 case model.ArraySizeFixed():
                     return f"{array_type_to_c_str(inner_type)}"
 
-            return f"{array_type_to_c_str(inner_type)}*"
+            return f"std::vector<{array_type_to_c_str(inner_type)}>" if is_cpp() else f"{array_type_to_c_str(inner_type)}*"
 
         case model.DataTypeLevel():
             return "uint8_t"
@@ -204,7 +207,7 @@ def type_to_c_str(ty: model.DataType, module_name: str) -> str:
             return "float"
 
         case model.DataTypeUpdateMask():
-            return f"{module_name}_UpdateMask"
+            return "UpdateMask" if is_cpp() else  f"{module_name}_UpdateMask"
 
         case model.DataTypeAchievementDoneArray():
             return "AchievementDoneArray"
@@ -213,7 +216,7 @@ def type_to_c_str(ty: model.DataType, module_name: str) -> str:
         case model.DataTypeAddonArray():
             return "AddonArray"
         case model.DataTypeAuraMask():
-            return f"{module_name}_AuraMask"
+            return "AuraMask" if is_cpp() else f"{module_name}_AuraMask"
 
         case model.DataTypeEnchantMask():
             return "EnchantMask"
@@ -234,7 +237,7 @@ def type_to_c_str(ty: model.DataType, module_name: str) -> str:
 def array_type_to_c_str(ty: model.ArrayType):
     match ty:
         case model.ArrayTypeCstring():
-            return "WowWorldString"
+            return "std::string" if is_cpp() else "WowWorldString"
         case model.ArrayTypeGUID():
             return "uint64_t"
         case model.ArrayTypeInteger(integer_type=integer_type):
@@ -245,7 +248,7 @@ def array_type_to_c_str(ty: model.ArrayType):
             return "uint64_t"
         case model.ArrayTypeStruct(struct_data=struct_data):
             version = first_version_as_module(struct_data.tags)
-            return f"{version}_{struct_data.name}"
+            return struct_data.name if is_cpp() else f"{version}_{struct_data.name}"
         case v:
             raise Exception(f"{v}")
 
@@ -301,16 +304,25 @@ def print_if_statement_header(
     match statement.definer_type:
         case model.DefinerType.ENUM:
             if len(statement.values) == 1:
-                s.open_curly(
-                    f"{extra_elseif}if (object->{var_name} == {first_version}_{original_type_pascal}_{statement.values[0]})"
-                )
+                if is_cpp():
+                    s.open_curly(
+                        f"{extra_elseif}if (obj.{var_name} == {original_type}::{statement.values[0]})"
+                    )
+                else:
+                    s.open_curly(
+                        f"{extra_elseif}if (object->{var_name} == {first_version}_{original_type_pascal}_{statement.values[0]})"
+                    )
             else:
                 s.w(f"{extra_elseif}if (")
                 for i, val in enumerate(statement.values):
                     if i != 0:
                         s.w_no_indent("|| ")
-                    s.w_no_indent(
-                        f"object->{var_name} == {first_version}_{original_type_pascal}_{statement.values[i]}")
+                    if is_cpp():
+                        s.w_no_indent(
+                            f"obj.{var_name} == {original_type}::{val}")
+                    else:
+                        s.w_no_indent(
+                            f"object->{var_name} == {first_version}_{original_type_pascal}_{val}")
                 s.wln_no_indent(") {")
                 s.inc_indent()
 

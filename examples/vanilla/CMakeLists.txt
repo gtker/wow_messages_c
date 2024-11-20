@@ -1,10 +1,10 @@
-add_executable(WowMessages_vanilla src/vanilla.main.c)
-target_link_libraries(WowMessages_vanilla PRIVATE WowLoginMessagesC::WowLoginMessagesC)
-set_target_properties(WowMessages_vanilla
+add_executable(wow_messages_vanilla src/vanilla.main.c)
+target_link_libraries(wow_messages_vanilla PRIVATE wow_login_messages_c::wow_login_messages_c)
+set_target_properties(wow_messages_vanilla
         PROPERTIES
         C_EXTENSIONS ON
 )
-target_compile_features(WowMessages_vanilla PUBLIC c_std_99)
+target_compile_features(wow_messages_vanilla PUBLIC c_std_99)
 
 include(FetchContent)
 FetchContent_Declare(
@@ -14,4 +14,4 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(wow_srp)
 
-target_link_libraries(WowMessages_vanilla PRIVATE WowSrp::wow_srp $<$<PLATFORM_ID:Windows>:ws2_32> $<$<PLATFORM_ID:Windows>:Bcrypt>)
+target_link_libraries(wow_messages_vanilla PRIVATE WowSrp::wow_srp $<$<PLATFORM_ID:Windows>:ws2_32> $<$<PLATFORM_ID:Windows>:Bcrypt>)
