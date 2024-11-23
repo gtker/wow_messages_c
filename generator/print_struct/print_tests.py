@@ -61,21 +61,35 @@ def print_individual_test(s: Writer, e: model.Container, test_case: model.TestCa
         s.wln("auto reader = ByteReader(buffer);")
         s.newline()
 
-        s.wln(f"const auto opcode = wow_login_messages::{function_version}::read_{function_side}_opcode(reader);")
+        s.wln(
+            f"const auto opcode = ::wow_{library_type.lower()}_messages::{function_version}::read_{function_side}_opcode(reader);")
 
-        s.open_curly("if (!opcode)")
+        s.open_curly("if (opcode.is_none())")
         s.wln(
             f'printf(__FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i} read invalid opcode");')
         s.wln("return 1;")
-        s.closing_curly() # if (!opcode)
+        s.closing_curly()  # if (opcode.is_none())
         s.newline()
 
-        s.wln(f"auto ty = std::get<wow_login_messages::{function_version}::{e.name}>(*opcode);")
-        s.wln(f"const std::vector<unsigned char> write_buffer = wow_login_messages::{function_version}::write_opcode(*opcode);")
+        s.open_curly(
+            f"if (opcode.opcode != ::wow_{library_type.lower()}_messages::{function_version}::{function_side.capitalize()}Opcode::Opcode::{opcode_id})")
+        s.wln(
+            f'printf(__FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i} read invalid opcode");')
+        s.wln("return 1;")
+        s.closing_curly()  # if (opcode.opcode)
         s.newline()
 
-        s.wln(f'wlm_test_compare_buffers(buffer.data(), write_buffer.data(), write_buffer.size(),  __FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i}");')
-        s.closing_curly() # /* name */
+        s.wln(
+            f"const std::vector<unsigned char> write_buffer = ::wow_{library_type.lower()}_messages::{function_version}::write_opcode(opcode);")
+        s.newline()
+
+        if is_world(e.tags):
+            s.wln(
+                f'world_test_compare_buffers(buffer.data(), write_buffer.data(), write_buffer.size(),  __FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i}", TEST_UTILS_SIDE_{function_side.upper()});')
+        else:
+            s.wln(
+                f'wlm_test_compare_buffers(buffer.data(), write_buffer.data(), write_buffer.size(),  __FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i}");')
+        s.closing_curly()  # /* name */
     else:
         s.open_curly("do")
         s.w("unsigned char buffer[] = {")
@@ -133,8 +147,6 @@ def print_login_test_prefix(tests: Writer, m: model.IntermediateRepresentationSc
     for v in m.distinct_login_versions_other_than_all:
         module_name = version_to_module_name(v)
         tests.wln(f"#include \"wow_login_messages{cpp}/{module_name}.h{pp}\"")
-        if is_cpp():
-            break;
 
     tests.wln("#include \"test_utils.h\"")
     tests.newline()
@@ -172,9 +184,31 @@ def print_login_test_suffix(tests: Writer):
 
 def print_world_tests(s: Writer, messages: typing.Iterator[model.Container], v: model.WorldVersion):
     module_name = world_version_to_module_name(v)
-    s.wln(f"#include \"wow_world_messages/{module_name}.h\"")
+    pp = "pp" if is_cpp() else ""
+    cpp = "_cpp" if is_cpp() else ""
+    s.wln(f"#include \"wow_world_messages{cpp}/{module_name}.h{pp}\"")
     s.wln("#include \"test_utils.h\"")
     s.newline()
+
+    if is_cpp():
+        s.write_block("""
+class ByteReader final : public wow_world_messages::Reader
+{
+public:
+    explicit ByteReader(std::vector<unsigned char> buf) : m_buf(std::move(buf)) { }
+
+    uint8_t read_u8() override
+    {
+        const uint8_t value = m_buf[m_index];
+        m_index += 1;
+
+        return value;
+    }
+
+    std::vector<unsigned char> m_buf;
+    size_t m_index = 0;
+};
+    """)
 
     s.open_curly("int main(void)")
 

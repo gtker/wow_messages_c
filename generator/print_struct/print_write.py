@@ -36,7 +36,10 @@ def print_write_struct_member(s: Writer, d: model.Definition, module_name: str, 
 
         case model.DataTypeBool(integer_type=integer_type):
             size = integer_type_to_size(integer_type)
-            s.wln(f"WRITE_BOOL{size * 8}({variable_name});")
+            if is_cpp():
+                s.wln(f"writer.write_bool{size * 8}({variable_name});")
+            else:
+                s.wln(f"WRITE_BOOL{size * 8}({variable_name});")
 
         case model.DataTypeFlag(
             type_name=type_name, integer_type=integer_type
@@ -114,13 +117,22 @@ def print_write_struct_member(s: Writer, d: model.Definition, module_name: str, 
                 s.wln(f"{wlm_prefix}_CHECK_RETURN_CODE({version}_{e.name}_write(writer, &object->{d.name}));")
 
         case model.DataTypeUpdateMask():
-            s.wln(f"{module_name}_update_mask_write(writer, &{variable_name});")
+            if is_cpp():
+                s.wln(f"{module_name}::update_mask_write(writer, {variable_name});")
+            else:
+                s.wln(f"{module_name}_update_mask_write(writer, &{variable_name});")
 
         case model.DataTypeAuraMask():
-            s.wln(f"WWM_CHECK_RETURN_CODE({module_name}_aura_mask_write(writer, &{variable_name}));")
+            if is_cpp():
+                s.wln(f"aura_mask_write(writer, {variable_name});")
+            else:
+                s.wln(f"WWM_CHECK_RETURN_CODE({module_name}_aura_mask_write(writer, &{variable_name}));")
 
         case model.DataTypeMonsterMoveSpline():
-            s.wln(f"WRITE_MONSTER_MOVE_SPLINE({variable_name});")
+            if is_cpp():
+                s.wln(f"::wow_world_messages::util::wwm_write_monster_move_spline(writer, {variable_name});")
+            else:
+                s.wln(f"WRITE_MONSTER_MOVE_SPLINE({variable_name});")
 
         case model.DataTypeEnchantMask():
             s.wln(f"WRITE_ENCHANT_MASK_{module_name}({variable_name});")
@@ -172,8 +184,7 @@ def print_write_struct_member(s: Writer, d: model.Definition, module_name: str, 
                     case v2:
                         raise Exception(f"{v2}")
 
-
-                s.closing_curly() # for (const auto& v
+                s.closing_curly()  # for (const auto& v
 
             else:
                 if compressed:
@@ -233,7 +244,8 @@ def print_write_struct_member(s: Writer, d: model.Definition, module_name: str, 
                         s.wln(f"WRITE_ARRAY({variable_name}, object->{extra_indirection}{size}, {inner});")
                     case model.ArraySizeEndless():
                         if not compressed:
-                            s.wln(f"WRITE_ARRAY({variable_name}, object->{extra_indirection}amount_of_{d.name}, {inner});")
+                            s.wln(
+                                f"WRITE_ARRAY({variable_name}, object->{extra_indirection}amount_of_{d.name}, {inner});")
                         else:
                             s.open(f"while not {d.name}_reader.at_eof():")
                     case v:
@@ -268,13 +280,14 @@ def print_write(s: Writer, h: Writer, container: Container, object_type: model.O
         prefix = "_compressed_"
 
     if is_cpp():
-        size = "128" # f"{container.name}_size(obj)"
+        size = f"{container.name}_size(obj)"
 
         if container.sizes.constant_sized:
             size = f"0x{container.sizes.maximum_size:04x}"
 
         if type(object_type) is not model.ObjectTypeStruct:
-            s.wln("const auto& obj = *this;")
+            if container_has_c_members(container):
+                s.wln("const auto& obj = *this;")
             s.wln(f"auto writer = Writer({size});")
             s.newline()
 
@@ -291,14 +304,14 @@ def print_write(s: Writer, h: Writer, container: Container, object_type: model.O
                 s.wln(f"writer.write_u16(0x{opcode:08x}); /* opcode */")
                 s.newline()
             case model.ObjectTypeCmsg(opcode=opcode):
-                size = f"(uint16_t){module_name}_{container.name}_size(object)"
+                size = f"(uint16_t){container.name}_size(obj)"
 
                 if container.sizes.constant_sized:
                     size = f"0x{container.sizes.maximum_size:04x}"
 
                 s.wln(f"writer.write_u16_be({size} + 4); /* size */")
                 s.newline()
-                s.wln(f"writer.write_u16(0x{opcode:08x}); /* opcode */")
+                s.wln(f"writer.write_u32(0x{opcode:08x}); /* opcode */")
                 s.newline()
 
     else:

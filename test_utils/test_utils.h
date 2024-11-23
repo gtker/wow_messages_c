@@ -18,6 +18,19 @@ void wlm_test_compare_buffers(const unsigned char* buffer,
                               size_t buffer_size,
                               const char* location);
 
+typedef enum
+{
+    TEST_UTILS_SIDE_SERVER,
+    TEST_UTILS_SIDE_CLIENT
+} TestUtilsSide;
+
+void world_test_compare_buffers(const unsigned char* buffer,
+                                const unsigned char* write_buffer,
+                                size_t buffer_size,
+                                const char* location,
+                                TestUtilsSide side);
+
+
 #ifdef __cplusplus
 }
 #endif

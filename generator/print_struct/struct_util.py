@@ -16,22 +16,26 @@ def print_skip(container: model.Container, reason: str):
     print(f"Skipping {container.name} because it {reason}")
 
 
-def container_contains_array(e: model.Container) -> bool:
-    for m in all_members_from_container(e):
-        match m.data_type:
-            case model.DataTypeArray():
-                return True
-
-    return False
-
-
 def container_should_print(container: model.Container) -> bool:
     if container.tags.compressed is not None:
         print_skip(container, "is compressed")
         return False
 
+    if is_cpp() and container.optional is not None:
+        print_skip(container, "cpp optional")
+        return False
+
+    if type(container.object_type) is model.ObjectTypeMsg and is_cpp():
+        print_skip(container, "cpp msg")
+        return False
+
     for member in all_members_from_container(container):
         match member.data_type:
+            case model.DataTypeStruct(struct_data=e):
+                if not container_should_print(e):
+                    print_skip(container, f"has struct {e.name}")
+                    return False
+
             case model.DataTypeArray(compressed=compressed, inner_type=inner_type, size=size):
                 if compressed:
                     print_skip(container, "has compressed array")
@@ -85,7 +89,7 @@ def container_should_have_size_function(container: model.Container):
             if container.sizes.constant_sized:
                 return False
         case _:
-            if container.manual_size_subtraction is None:
+            if container.manual_size_subtraction is None and not is_cpp():
                 return False
 
     return True
@@ -175,11 +179,12 @@ def type_to_c_str(ty: model.DataType, module_name: str) -> str:
             return "float"
         case model.DataTypeStruct(struct_data=e):
             version = first_version_as_module(e.tags)
-            return e.name if is_cpp() else  f"{version}_{e.name}"
+            separator = "::" if is_cpp() else "_"
+            return f"{version}{separator}{e.name}"
         case model.DataTypeEnum(type_name=type_name):
-            return type_name if is_cpp() else  f"{module_name}_{type_name}"
+            return type_name if is_cpp() else f"{module_name}_{type_name}"
         case model.DataTypeFlag(type_name=type_name):
-            return type_name if is_cpp() else  f"{module_name}_{type_name}"
+            return type_name if is_cpp() else f"{module_name}_{type_name}"
 
         case model.DataTypeArray(size=size, inner_type=inner_type):
             match size:
@@ -207,7 +212,7 @@ def type_to_c_str(ty: model.DataType, module_name: str) -> str:
             return "float"
 
         case model.DataTypeUpdateMask():
-            return "UpdateMask" if is_cpp() else  f"{module_name}_UpdateMask"
+            return "UpdateMask" if is_cpp() else f"{module_name}_UpdateMask"
 
         case model.DataTypeAchievementDoneArray():
             return "AchievementDoneArray"
@@ -223,7 +228,7 @@ def type_to_c_str(ty: model.DataType, module_name: str) -> str:
         case model.DataTypeInspectTalentGearMask():
             return "InspectTalentGearMask"
         case model.DataTypeMonsterMoveSpline():
-            return "MonsterMoveSpline"
+            return "std::vector<::wow_world_messages::all::Vector3d>" if is_cpp() else "MonsterMoveSpline"
         case model.DataTypeNamedGUID():
             return "NamedGUID"
         case model.DataTypeVariableItemRandomProperty():
@@ -248,7 +253,8 @@ def array_type_to_c_str(ty: model.ArrayType):
             return "uint64_t"
         case model.ArrayTypeStruct(struct_data=struct_data):
             version = first_version_as_module(struct_data.tags)
-            return struct_data.name if is_cpp() else f"{version}_{struct_data.name}"
+            separator = "::" if is_cpp() else "_"
+            return f"{version}{separator}{struct_data.name}"
         case v:
             raise Exception(f"{v}")
 
@@ -331,8 +337,12 @@ def print_if_statement_header(
             for i, val in enumerate(statement.values):
                 if i != 0:
                     s.w_no_indent("|| ")
-                s.w_no_indent(
-                    f"(object->{var_name} & {first_version}_{original_type_pascal}_{statement.values[i]}) != 0")
+                if is_cpp():
+                    s.w_no_indent(
+                        f"(obj.{var_name} & {original_type_pascal}_{val}) != 0")
+                else:
+                    s.w_no_indent(
+                        f"(object->{var_name} & {first_version}_{original_type_pascal}_{val}) != 0")
             s.wln_no_indent(") {")
             s.inc_indent()
         case _:

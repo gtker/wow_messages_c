@@ -11,6 +11,7 @@ if (BUILD_TESTING)
             wow_login_messages_c::wow_login_messages_c
             wow_world_messages_c::wow_world_messages_c
             wow_login_messages_cpp::wow_login_messages_cpp
+            wow_world_messages_cpp::wow_world_messages_cpp
     )
 
     if (BUILD_EXAMPLES)
@@ -21,3 +22,4 @@ endif ()
 add_subdirectory(wow_login_messages_c)
 add_subdirectory(wow_world_messages_c)
 add_subdirectory(wow_login_messages_cpp)
+add_subdirectory(wow_world_messages_cpp)

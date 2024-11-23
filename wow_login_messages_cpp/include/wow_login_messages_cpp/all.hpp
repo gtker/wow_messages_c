@@ -3,7 +3,8 @@
 
 #include "wow_login_messages_cpp/wow_login_messages.hpp"
 
-namespace wow_login_messages::all {
+namespace wow_login_messages {
+namespace all {
 
 enum class Locale : uint32_t {
     EN_GB = 1701726018,
@@ -50,7 +51,7 @@ struct Version {
 
 struct CMD_AUTH_LOGON_CHALLENGE_Client {
     ProtocolVersion protocol_version;
-    Version version;
+    all::Version version;
     Platform platform;
     Os os;
     Locale locale;
@@ -63,7 +64,7 @@ struct CMD_AUTH_LOGON_CHALLENGE_Client {
 
 struct CMD_AUTH_RECONNECT_CHALLENGE_Client {
     ProtocolVersion protocol_version;
-    Version version;
+    all::Version version;
     Platform platform;
     Os os;
     Locale locale;
@@ -74,14 +75,65 @@ struct CMD_AUTH_RECONNECT_CHALLENGE_Client {
     std::vector<unsigned char> write() const;
 };
 
-using ClientOpcode = std::variant<
-    CMD_AUTH_LOGON_CHALLENGE_Client,
-    CMD_AUTH_RECONNECT_CHALLENGE_Client
->;
+struct ClientOpcode {
+    enum class Opcode {
+        NONE = 0xFF,
+        CMD_AUTH_LOGON_CHALLENGE = 0,
+        CMD_AUTH_RECONNECT_CHALLENGE = 2,
+    } opcode;
 
+    union {
+        all::CMD_AUTH_LOGON_CHALLENGE_Client CMD_AUTH_LOGON_CHALLENGE;
+        all::CMD_AUTH_RECONNECT_CHALLENGE_Client CMD_AUTH_RECONNECT_CHALLENGE;
+    };
+    bool is_none() const noexcept {
+        return opcode == Opcode::NONE;
+    }
+
+    explicit ClientOpcode() : ClientOpcode(Opcode::NONE) {}
+
+    explicit ClientOpcode(Opcode op) : opcode(op) {
+        if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+            new (&this->CMD_AUTH_LOGON_CHALLENGE) all::CMD_AUTH_LOGON_CHALLENGE_Client();
+        }
+        if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+            new (&this->CMD_AUTH_RECONNECT_CHALLENGE) all::CMD_AUTH_RECONNECT_CHALLENGE_Client();
+        }
+    }
+
+    ClientOpcode(ClientOpcode&& other) noexcept {
+        this->opcode = other.opcode;
+        other.opcode = Opcode::NONE;
+        if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+            this->CMD_AUTH_LOGON_CHALLENGE = other.CMD_AUTH_LOGON_CHALLENGE;
+        }
+        if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+            this->CMD_AUTH_RECONNECT_CHALLENGE = other.CMD_AUTH_RECONNECT_CHALLENGE;
+        }
+    }
+
+    ~ClientOpcode() {
+        if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+            this->CMD_AUTH_LOGON_CHALLENGE.~CMD_AUTH_LOGON_CHALLENGE_Client();
+        }
+        if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+            this->CMD_AUTH_RECONNECT_CHALLENGE.~CMD_AUTH_RECONNECT_CHALLENGE_Client();
+        }
+    }
+
+    explicit ClientOpcode(all::CMD_AUTH_LOGON_CHALLENGE_Client&& obj) {
+        opcode = Opcode::CMD_AUTH_LOGON_CHALLENGE;
+        new (&this->CMD_AUTH_LOGON_CHALLENGE) all::CMD_AUTH_LOGON_CHALLENGE_Client (obj);
+    }
+    explicit ClientOpcode(all::CMD_AUTH_RECONNECT_CHALLENGE_Client&& obj) {
+        opcode = Opcode::CMD_AUTH_RECONNECT_CHALLENGE;
+        new (&this->CMD_AUTH_RECONNECT_CHALLENGE) all::CMD_AUTH_RECONNECT_CHALLENGE_Client (obj);
+    }
+};
 std::vector<unsigned char> write_opcode(const ClientOpcode& opcode);
 
-std::optional<ClientOpcode> read_client_opcode(Reader& reader);
+ClientOpcode read_client_opcode(Reader& reader);
 
-} /* namespace wow_login_messages::all */
-#endif /* WOW_LOGIN_MESSAGES_ALL_HPP */
+} // namespace all
+} // namespace wow_login_messages
+#endif /* WOW_LOGIN_MESSAGES_CPP_ALL_HPP */

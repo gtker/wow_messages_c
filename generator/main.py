@@ -53,6 +53,7 @@ WORLD_CPP_HEADER_DIR = f"{WORLD_CPP_PROJECT_DIR}/include/wow_world_messages_cpp"
 
 IR_FILE_PATH = f"{THIS_FILE_PATH}/wow_messages/intermediate_representation.json"
 
+
 def main():
     print("Generating python files")
     f = open(IR_FILE_PATH)
@@ -70,8 +71,6 @@ def main():
         print_login(m.login, s, tests, LOGIN_VERSION_ALL)
         for i, v in enumerate(m.distinct_login_versions_other_than_all):
             print_login(m.login, s, tests, v)
-            if is_cpp():
-                break;
 
         source_dir = LOGIN_CPP_SOURCE_DIR if is_cpp() else LOGIN_C_SOURCE_DIR
         pp = "pp" if is_cpp() else ""
@@ -84,11 +83,11 @@ def main():
         file_path = f"{source_dir}/all.test.c{pp}"
         write_file_if_not_same(tests, file_path)
 
-    print_world(m.world, m.vanilla_update_mask, WORLD_VERSION_ALL)
-    for v in VERSIONS:
-        update_mask = m.vanilla_update_mask if v == VANILLA else m.tbc_update_mask if v == TBC else m.wrath_update_mask if v == WRATH else None
-        print_world(m.world, update_mask, v)
-        break
+        print_world(m.world, m.vanilla_update_mask, WORLD_VERSION_ALL)
+        for v in VERSIONS:
+            update_mask = m.vanilla_update_mask if v == VANILLA else m.tbc_update_mask if v == TBC else m.wrath_update_mask if v == WRATH else None
+            print_world(m.world, update_mask, v)
+            break
 
     print("Finished generating files")
 
@@ -112,7 +111,8 @@ def sanitize_model(
     return m
 
 
-def print_includes(s: Writer, h: Writer, world: typing.Optional[model.WorldVersion], version_name: str):
+def print_includes(s: Writer, h: Writer, world: typing.Optional[model.WorldVersion], version_name: str,
+                   v: typing.Union[int | model.WorldVersion], m: model.Objects):
     include_dir = "wow_login_messages"
     if world is not None:
         include_dir = "wow_world_messages"
@@ -149,9 +149,30 @@ def print_includes(s: Writer, h: Writer, world: typing.Optional[model.WorldVersi
         s.wln("#include <string.h> /* memset */")
         s.newline()
 
+    if world is not None and not world_version_is_all(v):
+        if is_cpp():
+            s.open_curly("namespace wow_world_messages")
+            s.open_curly("namespace all")
+        for e in m.structs:
+            if is_world(e.tags) and first_version_as_module(e.tags) == "all":
+                s.wln("/* forward declare all struct read/write */")
+                if is_cpp():
+                    s.wln(f"::wow_world_messages::all::{e.name} {e.name}_read(Reader& reader);")
+                    s.wln(f"void {e.name}_write(Writer& writer, const ::wow_world_messages::all::{e.name}& obj);")
+                else:
+                    s.wln(f"WowWorldResult all_{e.name}_read(WowWorldReader* reader, all_{e.name}* object);")
+                    s.wln(f"WowWorldResult all_{e.name}_write(WowWorldWriter* writer, const all_{e.name}* object);")
+                s.newline()
+        if is_cpp():
+            s.closing_curly(" // namespace all")
+            s.closing_curly(" // namespace wow_world_messages")
+        s.newline()
+
     if is_cpp():
-        h.wln(f"namespace {include_file}::{version_name} {{")
-        s.wln(f"namespace {include_file}::{version_name} {{")
+        h.wln(f"namespace {include_file} {{")
+        h.wln(f"namespace {version_name} {{")
+        s.wln(f"namespace {include_file} {{")
+        s.wln(f"namespace {version_name} {{")
 
 
 def print_footer(s: Writer, h: Writer, world: typing.Optional[model.WorldVersion], version_name: str):
@@ -160,8 +181,9 @@ def print_footer(s: Writer, h: Writer, world: typing.Optional[model.WorldVersion
         include_dir = "wow_world_messages"
 
     pp = "pp" if is_cpp() else ""
+    cpp = "_CPP" if is_cpp() else ""
 
-    include_guard = f"{include_dir.upper()}_{version_name.upper()}_H{pp.upper()}"
+    include_guard = f"{include_dir.upper()}{cpp}_{version_name.upper()}_H{pp.upper()}"
 
     if not is_cpp():
         h.wln("#ifdef __cplusplus")
@@ -169,8 +191,10 @@ def print_footer(s: Writer, h: Writer, world: typing.Optional[model.WorldVersion
         h.wln("#endif /* __cplusplus */")
 
     if is_cpp():
-        h.wln(f"}} /* namespace {include_dir}::{version_name} */")
-        s.wln(f"}} /* namespace {include_dir}::{version_name} */")
+        h.wln(f"}} // namespace {version_name}")
+        h.wln(f"}} // namespace {include_dir}")
+        s.wln(f"}} // namespace {version_name}")
+        s.wln(f"}} // namespace {include_dir}")
 
     h.wln(f"#endif /* {include_guard} */")
 
@@ -194,15 +218,7 @@ def print_world(m: model.Objects, update_mask: list[model.UpdateMask], v: model.
 
     module_name = world_version_to_module_name(v)
 
-    print_includes(s, h, v, module_name)
-
-    if not world_version_is_all(v):
-        for e in m.structs:
-            if is_world(e.tags) and first_version_as_module(e.tags) == "all":
-                s.wln("/* forward declare all struct read/write */")
-                s.wln(f"WowWorldResult all_{e.name}_read(WowWorldReader* reader, all_{e.name}* object);")
-                s.wln(f"WowWorldResult all_{e.name}_write(WowWorldWriter* writer, const all_{e.name}* object);")
-                s.newline()
+    print_includes(s, h, v, module_name, v, m)
 
     for d in filter(should_print, m.enums):
         print_enum(h, d)
@@ -223,17 +239,20 @@ def print_world(m: model.Objects, update_mask: list[model.UpdateMask], v: model.
 
     print_footer(s, h, v, module_name)
 
-    file_path = f"{WORLD_C_HEADER_DIR}/{module_name}.h"
+    header_dir = WORLD_CPP_HEADER_DIR if is_cpp() else WORLD_C_HEADER_DIR
+    pp = "pp" if is_cpp() else ""
+    file_path = f"{header_dir}/{module_name}.h{pp}"
     write_file_if_not_same(h, file_path)
 
-    file_path = f"{WORLD_C_SOURCE_DIR}/{module_name}.c"
+    source_dir = WORLD_CPP_SOURCE_DIR if is_cpp() else WORLD_C_SOURCE_DIR
+    file_path = f"{source_dir}/{module_name}.c{pp}"
     write_file_if_not_same(s, file_path)
 
     if module_name != "all":
         tests = Writer()
         print_world_tests(tests, filter(should_print, m.messages), v)
 
-        file_path = f"{WORLD_C_SOURCE_DIR}/{module_name}.test.c"
+        file_path = f"{source_dir}/{module_name}.test.c{pp}"
         write_file_if_not_same(tests, file_path)
 
     print()
@@ -249,7 +268,7 @@ def print_login(m: model.Objects, s: Writer, tests: Writer, v: int):
     module_name = login_version_to_module_name(v)
 
     h_includes = Writer()
-    print_includes(s, h_includes, world=None, version_name=module_name)
+    print_includes(s, h_includes, None, module_name, v, m)
 
     def typedef_existing(s: Writer, name: str, old_version: str, new_version: str):
         if is_cpp():
@@ -259,7 +278,6 @@ def print_login(m: model.Objects, s: Writer, tests: Writer, v: int):
             s.wln(
                 f"typedef {old_version}_{name} {new_version}_{name};")
         s.newline()
-
 
     type_includes = {}
     for d in filter(should_print, m.enums):
@@ -304,11 +322,10 @@ def print_login(m: model.Objects, s: Writer, tests: Writer, v: int):
 
         print_struct(s, h, e, module_name)
 
-    for inc in type_includes:
-        name = login_version_to_module_name(inc)
-        cpp = "_cpp" if is_cpp() else ""
-        pp = "pp" if is_cpp() else ""
-        h_includes.wln(f"#include \"wow_login_messages{cpp}/{name}.h{pp}\" /* type include */")
+    if not is_cpp():
+        for inc in type_includes:
+            name = login_version_to_module_name(inc)
+            h_includes.wln(f"#include \"wow_login_messages/{name}.h\" /* type include */")
 
     h_includes.newline()
     h.prepend(h_includes)

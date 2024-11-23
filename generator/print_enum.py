@@ -29,10 +29,12 @@ def print_enum(h: Writer, enum: Definer):
     first_module = first_version_as_module(enum.tags)
 
     if is_cpp():
-        h.open_curly(f"enum class {enum.name} : {integer_type_to_c_str(enum.integer_type)}")
+        enum_type = "enum class" if enum.definer_type is model.DefinerType.ENUM else "enum"
+        h.open_curly(f"{enum_type} {enum.name} : {integer_type_to_c_str(enum.integer_type)}")
 
         for i, enumerator in enumerate(enum.enumerators):
-            h.wln(f"{enumerator.name.upper()} = {enumerator.value.value},")
+            flag_prefix = f"{enum_name_upper}_" if enum.definer_type is model.DefinerType.FLAG else ""
+            h.wln(f"{flag_prefix}{enumerator.name.upper()} = {enumerator.value.value},")
 
 
         h.closing_curly(";") # enum class

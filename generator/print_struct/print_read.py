@@ -7,7 +7,7 @@ from print_struct.struct_util import (
     print_if_statement_header,
 )
 from print_struct.struct_util import integer_type_to_short, integer_type_to_c_str
-from util import container_needs_size_in_read, first_version_as_module, get_type_prefix, is_world, is_cpp
+from util import container_needs_size_in_read, first_version_as_module, get_type_prefix, is_world, is_cpp, library_type
 from print_struct.struct_util import array_type_to_c_str
 from writer import Writer
 
@@ -23,6 +23,8 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
         else:
             if type(d.data_type) is not model.DataTypeArray:
                 s.w(f"{variable_name} = ")
+
+    util_namespace = f"::wow_world_messages::util::" if is_cpp() else ""
 
     match d.data_type:
         case model.DataTypeInteger(integer_type=integer_type):
@@ -101,7 +103,7 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
 
         case model.DataTypeGUID():
             if is_cpp():
-                s.wln_no_indent("reader.read_u32();")
+                s.wln_no_indent("reader.read_u64();")
             else:
                 s.wln(f"READ_U64({variable_name});")
 
@@ -127,7 +129,10 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
                 s.wln(f"_size += 2;")
 
         case model.DataTypePackedGUID():
-            s.wln(f"READ_PACKED_GUID({variable_name});")
+            if is_cpp():
+                s.wln_no_indent(f"reader.read_packed_guid();")
+            else:
+                s.wln(f"READ_PACKED_GUID({variable_name});")
 
             if needs_size:
                 s.wln(f"_size += packed_guid_size({d.name});")
@@ -142,10 +147,10 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
                 s.wln(f"_size += 4;")
 
         case model.DataTypeStruct(struct_data=e):
+            version = first_version_as_module(e.tags)
             if is_cpp():
-                s.wln_no_indent(f"{e.name}_read(reader);")
+                s.wln_no_indent(f"::wow_{library_type(e.tags)}_messages::{version}::{e.name}_read(reader);")
             else:
-                version = first_version_as_module(e.tags)
                 wlm_prefix = "WWM" if is_world(e.tags) else "WLM"
 
                 s.wln(f"{wlm_prefix}_CHECK_RETURN_CODE({version}_{e.name}_read(reader, &{variable_name}));")
@@ -157,22 +162,33 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
                     s.wln(f"_size += {d.name}.size();")
 
         case model.DataTypeUpdateMask():
-            s.wln(f"{module_name}_update_mask_read(reader, &{variable_name});")
+            if is_cpp():
+                s.wln_no_indent(f"{module_name}::update_mask_read(reader);")
+            else:
+                s.wln(f"{module_name}_update_mask_read(reader, &{variable_name});")
 
             if needs_size:
                 s.wln(f"_size += {d.name}.size();")
 
         case model.DataTypeAuraMask():
-            s.wln(f"WWM_CHECK_RETURN_CODE({module_name}_aura_mask_read(reader, &{variable_name}));")
+            if is_cpp():
+                this_namespace = f"::wow_world_messages::{module_name}::"
+                s.wln_no_indent(f"{this_namespace}aura_mask_read(reader);")
+            else:
+                s.wln(f"WWM_CHECK_RETURN_CODE({module_name}_aura_mask_read(reader, &{variable_name}));")
 
             if needs_size:
-                s.wln(f"_size += {module_name}_aura_mask_size({variable_name});")
+                prefix = "" if is_cpp() else f"{module_name}_"
+                s.wln(f"_size += {prefix}aura_mask_size({variable_name});")
 
         case model.DataTypeMonsterMoveSpline():
-            s.wln(f"READ_MONSTER_MOVE_SPLINE({variable_name});")
+            if is_cpp():
+                s.wln_no_indent(f"{util_namespace}wwm_read_monster_move_spline(reader);")
+            else:
+                s.wln(f"READ_MONSTER_MOVE_SPLINE({variable_name});")
 
             if needs_size:
-                s.wln(f"_size += wwm_monster_move_spline_size({variable_name})")
+                s.wln(f"_size += {util_namespace}wwm_monster_move_spline_size({variable_name})")
 
         case model.DataTypeEnchantMask():
             s.wln(f"READ_ENCHANT_MASK_{module_name}({variable_name});")
@@ -226,13 +242,15 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
             if is_cpp():
                 size_var: str = ""
                 match size:
-                    case model.ArraySizeFixed(size=size_variable_size):
-                        size_var = size_variable_size
+                    case model.ArraySizeFixed(size=size_fixed_size):
+                        s.open_curly(f"for (auto i = 0; i < {size_fixed_size}; ++i)")
                     case model.ArraySizeVariable(size=size_variable_size):
                         size_var = f"obj.{extra_indirection}{size_variable_size}"
+                        s.open_curly(f"for (auto i = 0; i < {size_var}; ++i)")
+                    case model.ArraySizeEndless():
+                        s.open_curly("while (_size < body_size)")
                     case _:
-                        raise Exception("array size endless")
-                s.open_curly(f"for (auto i = 0; i < {size_var}; ++i)")
+                        raise Exception("unknown array size")
 
                 inner: str = ""
                 match inner_type:
@@ -253,7 +271,7 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
                         inner = f"reader.read_packed_guid()"
 
                     case model.ArrayTypeStruct(struct_data=e):
-                        inner = f"{e.name}_read(reader)"
+                        inner = f"::wow_{library_type(e.tags)}_messages::{first_version_as_module(e.tags)}::{e.name}_read(reader)"
 
                     case v2:
                         raise Exception(f"{v2}")
@@ -266,7 +284,36 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
                     case _:
                         raise Exception("unknown array size")
 
-                s.closing_curly() # for (auto i
+                if needs_size or isinstance(size, model.ArraySizeEndless):
+                    s.w("_size += ")
+                    match inner_type:
+                        case model.ArrayTypeInteger(integer_type=integer_type):
+                            size = integer_type_to_size(integer_type)
+                            s.w_no_indent(str(size))
+
+                        case model.ArrayTypeGUID():
+                            s.w_no_indent(str(8))
+
+                        case model.ArrayTypeSpell():
+                            s.w_no_indent(str(4))
+
+                        case model.ArrayTypeStruct(struct_data=e):
+                            if e.sizes.constant_sized:
+                                s.w_no_indent(str(e.sizes.maximum_size))
+                            else:
+                                s.w_no_indent(f"{module_name}::{e.name}_size({variable_name}.back())")
+
+                        case model.ArrayTypeCstring():
+                            s.w_no_indent(f"{variable_name}.back().size() + 1")
+
+                        case model.ArrayTypePackedGUID():
+                            s.w_no_indent(f"{module_name}::wwm_packed_guid_size({variable_name}.back())")
+
+                        case v3:
+                            raise Exception(f"{v3}")
+                    s.wln_no_indent(";")
+                s.closing_curly()  # for (auto i
+
 
             else:
                 if compressed:
@@ -315,14 +362,18 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
                         inner = f"READ_CSTRING({fixed_prefix}{variable_name}{fixed_suffix}[i])"
 
                     case model.ArrayTypePackedGUID():
-                        inner = f"READ_PACKED_GUID({fixed_prefix}{variable_name}{fixed_suffix}[i])"
+                        if is_cpp():
+                            inner = f"reader.read_packed_guid()"
+                        else:
+                            inner = f"READ_PACKED_GUID({fixed_prefix}{variable_name}{fixed_suffix}[i])"
 
                     case v2:
                         raise Exception(f"{v2}")
 
                 match size:
                     case model.ArraySizeFixed(size=size):
-                        s.wln(f"READ_ARRAY_ALLOCATE({variable_name}, {size}, sizeof({array_type_to_c_str(inner_type)}));")
+                        s.wln(
+                            f"READ_ARRAY_ALLOCATE({variable_name}, {size}, sizeof({array_type_to_c_str(inner_type)}));")
                         s.w(f"READ_ARRAY({variable_name}, {size}, {inner});")
                     case model.ArraySizeVariable(size=size):
                         s.wln(
@@ -428,24 +479,26 @@ def print_read(s: Writer, container: Container, module_name: str):
 
     needs_size = container_needs_size_in_read(container)
 
+    body_size = ", size_t body_size" if container_needs_size_in_read(container) else ""
     if is_cpp():
-        s.open_curly(f"{container.name} {container.name}_read(Reader& reader)")
+        s.open_curly(f"{container.name} {container.name}_read(Reader& reader{body_size})")
         s.wln(f"{container.name} obj;")
+        if needs_size:
+            s.wln("size_t _size = 0;")
+
         s.newline()
 
         for m in container.members:
             print_read_member(s, m, container, needs_size, module_name, "")
 
-
         s.wln("return obj;")
 
-        s.closing_curly() # * *_read(Reader&)
+        s.closing_curly()  # * *_read(Reader&)
         s.newline()
     else:
         export = "" if is_world(container.tags) and module_name == "all" else "static "
 
         result_type = get_type_prefix(container.tags)
-        body_size = ", size_t body_size" if container_needs_size_in_read(container) else ""
         s.open_curly(
             f"{export}{result_type}Result {module_name}_{container.name}_read({result_type}Reader* reader, {first_version_as_module(container.tags)}_{container.name}* object{body_size})")
 

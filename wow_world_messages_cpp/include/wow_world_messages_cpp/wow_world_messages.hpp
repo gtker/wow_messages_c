@@ -1,7 +1,9 @@
-#ifndef WOW_LOGIN_MESSAGES_H
-#define WOW_LOGIN_MESSAGES_H
+#ifndef WWM_WOW_WORLD_MESSAGES_CPP_H
+#define WWM_WOW_WORLD_MESSAGES_CPP_H
+
 
 #include <array>
+#include <cstring>
 #include <optional>
 #include <stddef.h>
 #include <stdint.h>
@@ -9,9 +11,11 @@
 #include <variant>
 #include <vector>
 
-#include "wow_login_messages_cpp_export.h"
+#include "wow_world_messages_cpp/all.hpp"
 
-namespace wow_login_messages {
+#include "wow_world_messages_cpp_export.h"
+
+namespace wow_world_messages {
 
 class Reader
 {
@@ -42,11 +46,26 @@ public:
         return static_cast<uint64_t>(lower) | static_cast<uint64_t>(upper) << 32;
     }
 
-    virtual int32_t read_i32() { return read_u32(); }
+    virtual int32_t read_i32()
+    {
+        auto v = read_u32();
+        int32_t value;
+        std::memcpy(&value, &v, 4);
+        return value;
+    }
 
-    virtual float read_float() { return read_u32(); }
+    virtual float read_float()
+    {
+        auto v = read_u32();
+        float value;
+        std::memcpy(&value, &v, 4);
+
+        return value;
+    }
 
     virtual bool read_bool8() { return read_u8() == 1; }
+
+    virtual bool read_bool32() { return read_u32() == 1; }
 
     virtual std::string read_string()
     {
@@ -68,15 +87,41 @@ public:
         uint8_t val = read_u8();
         while (val != 0)
         {
-            str.push_back(val);
+            str.push_back(static_cast<char>(val));
             val = read_u8();
         }
 
         return str;
     }
 
+    virtual std::string read_sized_cstring()
+    {
+        const uint32_t length = read_u32();
+        (void)length; /* this could be used in a specialized method */
+        return read_cstring();
+    }
+
+    virtual uint64_t read_packed_guid()
+    {
+        uint64_t value = 0;
+
+        const auto header = read_u8();
+
+        for (int i = 0; i < 8; ++i)
+        {
+            const bool byte_has_value = (header & (1 << i)) != 0;
+            if (byte_has_value)
+            {
+                value |= read_u8() << i * 8;
+            }
+        }
+
+        return value;
+    }
+
     virtual ~Reader() = default;
 };
 
-} /* namespace wow_login_messages */
-#endif /* WOW_LOGIN_MESSAGES_H */
+} /* namespace wow_world_messages */
+
+#endif /* WWM_WOW_WORLD_MESSAGES_CPP_H */

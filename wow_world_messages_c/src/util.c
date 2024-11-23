@@ -310,7 +310,7 @@ WowWorldResult wwm_read_packed_guid(WowWorldReader* stream, uint64_t* value)
         if (byte_has_value)
         {
             index = WWM_CHECK_LENGTH(1);
-            *value = stream->source[index] << i * 8;
+            *value |= stream->source[index] << i * 8;
         }
     }
 

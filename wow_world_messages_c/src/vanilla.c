@@ -12,11 +12,12 @@ WowWorldResult all_Vector3d_write(WowWorldWriter* writer, const all_Vector3d* ob
 WowWorldResult all_Vector2d_read(WowWorldReader* reader, all_Vector2d* object);
 WowWorldResult all_Vector2d_write(WowWorldWriter* writer, const all_Vector2d* object);
 
+
 static size_t vanilla_aura_mask_size(const vanilla_AuraMask* object) {
     size_t size = 4; /* uint32_t header */
     int i;
 
-    for(i = 0; i < 32; ++i) {
+    for(i = 0; i < VANILLA_AURA_MASK_SIZE; ++i) {
         if(object->auras[i] != 0) {
             size += 2; /* uint16_t members */
         }
@@ -88,10 +89,8 @@ static WowWorldResult vanilla_update_mask_write(WowWorldWriter* stream, const va
 
     for (i = 0; i < VANILLA_HEADERS_LENGTH; ++i) {
         uint32_t header = mask->headers[i];
-        for (j = 0; j < 32; ++j) {
-            if ((header & (1 << j)) != 0) {
-                amount_of_headers = i + 1;
-            }
+        if (header != 0) {
+            amount_of_headers = i + 1;
         }
     }
 

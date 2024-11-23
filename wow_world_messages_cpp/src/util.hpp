@@ -1,0 +1,129 @@
+#ifndef WOW_WORLD_MESSAGES_CPP_UTIL_HPP
+#define WOW_WORLD_MESSAGES_CPP_UTIL_HPP
+
+#include "wow_world_messages_cpp/wow_world_messages.hpp"
+
+namespace wow_world_messages {
+
+class Writer
+{
+public:
+    explicit Writer(const size_t size) { m_buf.reserve(size); }
+
+    void write_u8(const uint8_t value) { m_buf.push_back(value); }
+
+    void write_u16(const uint16_t value)
+    {
+        m_buf.push_back(static_cast<unsigned char>(value));
+        m_buf.push_back(static_cast<unsigned char>(value >> 8));
+    }
+
+    void write_u16_be(const uint16_t value)
+    {
+        m_buf.push_back(static_cast<unsigned char>(value >> 8));
+        m_buf.push_back(static_cast<unsigned char>(value));
+    }
+
+    void write_u32(const uint32_t value)
+    {
+        m_buf.push_back(static_cast<unsigned char>(value));
+        m_buf.push_back(static_cast<unsigned char>(value >> 8));
+        m_buf.push_back(static_cast<unsigned char>(value >> 16));
+        m_buf.push_back(static_cast<unsigned char>(value >> 24));
+    }
+
+    void write_u64(const uint64_t value)
+    {
+        m_buf.push_back(static_cast<unsigned char>(value));
+        m_buf.push_back(static_cast<unsigned char>(value >> 8));
+        m_buf.push_back(static_cast<unsigned char>(value >> 16));
+        m_buf.push_back(static_cast<unsigned char>(value >> 24));
+        m_buf.push_back(static_cast<unsigned char>(value >> 32));
+        m_buf.push_back(static_cast<unsigned char>(value >> 40));
+        m_buf.push_back(static_cast<unsigned char>(value >> 48));
+        m_buf.push_back(static_cast<unsigned char>(value >> 56));
+    }
+
+    void write_i32(const int32_t value)
+    {
+        uint32_t val;
+        std::memcpy(&val, &value, 4);
+        return write_u32(val);
+    }
+
+    void write_float(const float value)
+    {
+        uint32_t val;
+        std::memcpy(&val, &value, 4);
+        return write_u32(val);
+    }
+
+    void write_bool8(const bool value) { return write_u8(value ? 1 : 0); }
+
+    void write_bool32(const bool value) { return write_u32(value ? 1 : 0); }
+
+    void write_string(const std::string& value)
+    {
+        const uint8_t length = value.size();
+        write_u8(length);
+
+        for (const auto& v : value)
+        {
+            write_u8(v);
+        }
+    }
+
+    void write_cstring(const std::string& value)
+    {
+        for (const auto& v : value)
+        {
+            write_u8(v);
+        }
+
+        write_u8(0);
+    }
+
+    void write_sized_cstring(const std::string& value)
+    {
+        write_u32(value.size() + 1);
+        write_cstring(value);
+    }
+
+    void write_packed_guid(uint64_t value)
+    {
+        uint8_t output[8];
+        int output_index = 0;
+        uint8_t header = 0;
+
+        for (int i = 0; i < 8; ++i)
+        {
+            const uint8_t v = (value >> i * 8) & 0xff;
+            const bool byte_has_value = v != 0;
+            if (byte_has_value)
+            {
+                output[output_index++] = v;
+                header |= 1 << i;
+            }
+        }
+
+        write_u8(header);
+        for (int i = 0; i < output_index; ++i)
+        {
+            write_u8(output[i]);
+        }
+    }
+
+
+    std::vector<unsigned char> m_buf;
+};
+
+namespace util {
+size_t wwm_packed_guid_size(uint64_t value);
+size_t wwm_monster_move_spline_size(const std::vector<all::Vector3d>& splines);
+void wwm_write_monster_move_spline(Writer& writer, const std::vector<all::Vector3d>& splines);
+std::vector<all::Vector3d> wwm_read_monster_move_spline(Reader& reader);
+}  // namespace util
+
+} /* namespace wow_world_messages */
+
+#endif /* WOW_WORLD_MESSAGES_CPP_UTIL_HPP */

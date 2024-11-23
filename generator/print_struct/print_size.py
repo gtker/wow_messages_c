@@ -4,7 +4,7 @@ import model
 from print_struct.print_write import print_write_member
 from print_struct.struct_util import (
     integer_type_to_size,
-    print_if_statement_header, container_should_have_size_function, container_contains_array, )
+    print_if_statement_header, container_should_have_size_function)
 
 from util import first_version_as_module, is_cpp
 from writer import Writer
@@ -107,7 +107,7 @@ def array_size_inner_values(
         case model.ArraySizeFixed(size=array_size):
             return size * int(array_size)
         case model.ArraySizeVariable(size=array_size):
-            return f"{size} * object->{extra_indirection}{array_size}"
+            return f"{size} * obj.{extra_indirection}{name}.size()" if is_cpp() else f"{size} * object->{extra_indirection}{array_size}"
         case model.ArraySizeEndless():
             return None
 
@@ -121,6 +121,7 @@ def addable_size_value(
     variable_name = f"object->{extra_indirection}{name}"
     if is_cpp():
         variable_name = f"obj.{extra_indirection}{name}"
+    namespace = "::wow_world_messages::util::" if is_cpp() else ""
 
     match data_type:
         case model.DataTypeStruct(struct_data=e):
@@ -131,9 +132,10 @@ def addable_size_value(
         case model.DataTypeString() | model.DataTypeCstring():
             return 1, f"{variable_name}.size()" if is_cpp() else f"STRING_SIZE({variable_name})"
         case model.DataTypeSizedCstring():
-            return 4, f"STRING_SIZE({variable_name})"
+            # null byte is not included in cpp count
+            return 5 if is_cpp() else 4, f"{variable_name}.size()" if is_cpp() else f"STRING_SIZE({variable_name})"
         case model.DataTypePackedGUID():
-            return 0, f"wwm_packed_guid_size({variable_name})"
+            return 0, f"{namespace}wwm_packed_guid_size({variable_name})"
         case model.DataTypeAchievementDoneArray() | model.DataTypeAchievementInProgressArray() \
              | model.DataTypeAddonArray() | model.DataTypeCacheMask() \
              | model.DataTypeVariableItemRandomProperty() \
@@ -142,11 +144,12 @@ def addable_size_value(
              | model.DataTypeEnchantMask():
             return 0, f"{extra_indirection}{name}.size()"
         case model.DataTypeUpdateMask():
-            return 0, f"{module_name}_update_mask_size(&{variable_name})"
+            return 0, f"{module_name}::update_mask_size({variable_name})" if is_cpp() else f"{module_name}_update_mask_size(&{variable_name})"
         case model.DataTypeMonsterMoveSpline():
-            return 0, f"wwm_monster_move_spline_size(&{variable_name})"
+            address_of = "" if is_cpp() else "&"
+            return 0, f"{namespace}wwm_monster_move_spline_size({address_of}{variable_name})"
         case model.DataTypeAuraMask():
-            return 0, f"{module_name}_aura_mask_size(&{variable_name})"
+            return 0, f"aura_mask_size({variable_name})" if is_cpp() else f"{module_name}_aura_mask_size(&{variable_name})"
         case model.DataTypeArray(compressed=compressed):
             if compressed:
                 return None
@@ -271,22 +274,24 @@ def print_size_inner(s: Writer, m: model.StructMember, module_name: str, extra_i
                                 version = first_version_as_module(e.tags)
                                 size = f"{version}_{e.name}_size(&{fixed_prefix}{variable_name}[i]{fixed_suffix})" if not e.sizes.constant_sized else str(
                                     e.sizes.maximum_size)
-                                size  = f"{e.name}_size(v)" if is_cpp() else size
-                                s.wln(
-                                    f"_size += {size};")
+                                size = f"{e.name}_size(v)" if is_cpp() and not e.sizes.constant_sized else size
+                                s.wln(f"_size += {size};")
 
                             case model.ArrayTypeCstring():
-                                s.wln(f"_size += STRING_SIZE({fixed_prefix}{variable_name}[i]{fixed_suffix});")
+                                s.wln("_size += " + (
+                                    f"v.size() + 1;" if is_cpp() else f"STRING_SIZE({fixed_prefix}{variable_name}[i]{fixed_suffix});"))
 
                             case model.ArrayTypePackedGUID():
+                                namespace = "wow_world_messages::util::"
                                 s.wln(
-                                    f"_size += wwm_packed_guid_size({fixed_prefix}{variable_name}[i]{fixed_suffix});")
+                                    f"_size += " + (
+                                        f"wow_world_messages::util::wwm_packed_guid_size(v);" if is_cpp() else f"wwm_packed_guid_size({fixed_prefix}{variable_name}[i]{fixed_suffix});"))
 
                             case _:
                                 raise Exception(f"array size unknown type {inner_type}")
 
                         if not is_cpp():
-                            s.closing_curly() # C89 scope
+                            s.closing_curly()  # C89 scope
 
                         s.closing_curly()  # array scope
                 case v:

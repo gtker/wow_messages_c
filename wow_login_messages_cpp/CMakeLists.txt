@@ -12,7 +12,7 @@ target_sources(wow_login_messages_cpp_wow_login_messages_cpp
         "${CMAKE_CURRENT_BINARY_DIR}/wow_login_messages_cpp_export.h"
 )
 add_library(wow_login_messages_cpp::wow_login_messages_cpp ALIAS wow_login_messages_cpp_wow_login_messages_cpp)
-target_compile_features(wow_login_messages_cpp_wow_login_messages_cpp PUBLIC cxx_std_17)
+target_compile_features(wow_login_messages_cpp_wow_login_messages_cpp PUBLIC cxx_std_11)
 set_target_properties(wow_login_messages_cpp_wow_login_messages_cpp
         PROPERTIES
         CXX_EXTENSIONS OFF

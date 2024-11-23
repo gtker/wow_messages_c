@@ -161,6 +161,13 @@ def login_version_to_module_name(v: int) -> str:
         return f"version{v}"
 
 
+def library_type(tags: model.ObjectTags) -> str:
+    if is_world(tags):
+        return "world"
+    else:
+        return "login"
+
+
 def pascal_case_to_snake_case(s: str) -> str:
     new = ""
     first_char = True
