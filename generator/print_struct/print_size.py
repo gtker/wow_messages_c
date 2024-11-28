@@ -1,7 +1,7 @@
 import typing
 
 import model
-from print_struct.print_write import print_write_member
+from print_struct.print_write import print_write_member, print_array_inner_write, print_size_for_array_inner
 from print_struct.struct_util import (
     integer_type_to_size,
     print_if_statement_header, container_should_have_size_function)
@@ -27,9 +27,10 @@ def print_size(s: Writer, container: model.Container, module_name: str):
         print_size_until_inner_members(s, container.members, container.manual_size_subtraction,
                                        True, container.optional is not None, module_name, "")
         if container.optional is not None:
-            s.open_curly(f"if(object->{container.optional.name} != NULL)")
+            deref = "obj." if is_cpp() else "object->"
+            s.open_curly(f"if({deref}{container.optional.name})" if is_cpp() else f"if({deref}{container.optional.name})")
             print_size_until_inner_members(s, container.optional.members, container.manual_size_subtraction, False,
-                                           False, module_name, f"{container.optional.name}->")
+                                           False, module_name,f"{container.optional.name}->")
             s.closing_curly()  # optional_statement_header
             s.newline()
 
@@ -226,74 +227,43 @@ def print_size_inner(s: Writer, m: model.StructMember, module_name: str, extra_i
             match d.data_type:
                 case model.DataTypeArray(compressed=compressed, inner_type=inner_type, size=size):
                     if compressed:
-                        s.wln(f"_{d.name}_fmt = ''")
-                        s.wln(f"_{d.name}_data = []")
+                        s.open_curly("/* C89 scope for compressed size */")
+                        s.wln(f"unsigned char* {d.name}_uncompressed_data = NULL;")
+                        s.wln(f"unsigned char* {d.name}_compressed_data = NULL;")
+
+                        s.wln(f"uint32_t compressed_i;")
+                        s.wln(f"size_t compressed_size = 0;")
+                        s.newline()
+                        s.wln("WowWorldWriter stack_writer;")
+                        s.wln("WowWorldWriter* writer = &stack_writer;")
                         s.newline()
 
-                        s.open(f"if len({extra_self}{d.name}) != 0:")
+                        s.open_curly(f"for(compressed_i = 0; compressed_i < object->amount_of_{d.name}; ++compressed_i)")
+                        print_size_for_array_inner(s, inner_type, f"object->{d.name}", "compressed_size")
+                        s.closing_curly() # for compressed i
+                        s.newline()
 
-                        print_array_write_inner(s, d, inner_type, f"_{d.name}_", extra_self)
+                        s.open_curly("if (compressed_size)")
 
-                        s.wln(f"_{d.name}_bytes = struct.pack(_{d.name}_fmt, *_{d.name}_data)")
-                        s.wln(f"_size += len(_{d.name}_bytes) + 4")
-                        s.close()
+                        s.wln(f"{d.name}_uncompressed_data = malloc(compressed_size);")
+                        s.wln(f"{d.name}_compressed_data = malloc(compressed_size + WWM_COMPRESS_EXTRA_LENGTH);")
+                        s.newline()
+                        s.wln(f"stack_writer = wwm_create_writer({d.name}_uncompressed_data, compressed_size);")
 
-                        s.open("else:")
-                        s.wln("_size += 4")
-                        s.close()  # else:
+                        print_array_inner_write(d, extra_indirection, "", "", inner_type, s, size, f"object->{d.name}")
+                        s.newline()
+
+                        s.wln(f"_size += wwm_compress_data({d.name}_uncompressed_data, compressed_size, {d.name}_compressed_data, compressed_size + WWM_COMPRESS_EXTRA_LENGTH);")
+                        s.newline()
+                        s.wln(f"free({d.name}_uncompressed_data);")
+                        s.wln(f"free({d.name}_compressed_data);")
+
+                        s.closing_curly() # if (compressed_size)
+
+                        s.closing_curly() # C89 scope for compressed size
 
                     else:
-                        loop_max = ""
-                        variable_name = f"obj{extra_indirection}.{d.name}" if is_cpp() else f"object{extra_indirection}->{d.name}"
-
-                        fixed_prefix = "(*" if type(size) is model.ArraySizeFixed else ""
-                        fixed_suffix = ")" if type(size) is model.ArraySizeFixed else ""
-
-                        match size:
-                            case model.ArraySizeFixed(size=size):
-                                loop_max = size
-                            case model.ArraySizeVariable(size=size):
-                                loop_max = f"(int)object->{extra_indirection}{size}"
-                            case model.ArraySizeEndless():
-                                loop_max = f"(int)object->amount_of_{d.name}"
-                        if is_cpp():
-                            s.open_curly(f"for(const auto& v : {variable_name})")
-                        else:
-                            s.open_curly("/* C89 scope to allow variable declarations */")
-                            s.wln("int i;")
-                            s.open_curly(f"for(i = 0; i < {loop_max}; ++i)")
-
-                        match inner_type:
-                            case model.ArrayTypeInteger(integer_type=integer_type):
-                                s.wln(f"_size += {integer_type_to_size(integer_type)};")
-
-                            case model.ArrayTypeSpell():
-                                s.wln(f"_size += 4;")
-
-                            case model.ArrayTypeStruct(struct_data=e):
-                                version = first_version_as_module(e.tags)
-                                size = f"{version}_{e.name}_size(&{fixed_prefix}{variable_name}[i]{fixed_suffix})" if not e.sizes.constant_sized else str(
-                                    e.sizes.maximum_size)
-                                size = f"{e.name}_size(v)" if is_cpp() and not e.sizes.constant_sized else size
-                                s.wln(f"_size += {size};")
-
-                            case model.ArrayTypeCstring():
-                                s.wln("_size += " + (
-                                    f"v.size() + 1;" if is_cpp() else f"STRING_SIZE({fixed_prefix}{variable_name}[i]{fixed_suffix});"))
-
-                            case model.ArrayTypePackedGUID():
-                                namespace = "wow_world_messages::util::"
-                                s.wln(
-                                    f"_size += " + (
-                                        f"wow_world_messages::util::wwm_packed_guid_size(v);" if is_cpp() else f"wwm_packed_guid_size({fixed_prefix}{variable_name}[i]{fixed_suffix});"))
-
-                            case _:
-                                raise Exception(f"array size unknown type {inner_type}")
-
-                        if not is_cpp():
-                            s.closing_curly()  # C89 scope
-
-                        s.closing_curly()  # array scope
+                        print_size_for_array(s, d, extra_indirection, inner_type, size)
                 case v:
                     raise Exception(f"{v}")
 
@@ -305,6 +275,54 @@ def print_size_inner(s: Writer, m: model.StructMember, module_name: str, extra_i
 
     s.newline()
 
+def array_size_inner_action(inner_type: model.ArrayType, fixed_prefix: str, fixed_suffix: str, variable_name: str) -> str:
+    match inner_type:
+        case model.ArrayTypeInteger(integer_type=integer_type):
+            return f"{integer_type_to_size(integer_type)};"
+
+        case model.ArrayTypeSpell():
+            return "4"
+
+        case model.ArrayTypeStruct(struct_data=e):
+            version = first_version_as_module(e.tags)
+            size = f"{version}_{e.name}_size(&{fixed_prefix}{variable_name}[i]{fixed_suffix})" if not e.sizes.constant_sized else str(
+                e.sizes.maximum_size)
+            return  f"{e.name}_size(v)" if is_cpp() and not e.sizes.constant_sized else size
+
+        case model.ArrayTypeCstring():
+            return f"v.size() + 1;" if is_cpp() else f"STRING_SIZE({fixed_prefix}{variable_name}[i]{fixed_suffix});"
+
+        case model.ArrayTypePackedGUID():
+            return f"wow_world_messages::util::wwm_packed_guid_size(v);" if is_cpp() else f"wwm_packed_guid_size({fixed_prefix}{variable_name}[i]{fixed_suffix});"
+
+        case _:
+            raise Exception(f"array size unknown type {inner_type}")
+
+
+def print_size_for_array(s: Writer, d: model.Definition, extra_indirection: str, inner_type: model.ArrayType, size: model.ArraySize):
+    variable_name = f"obj{extra_indirection}.{d.name}" if is_cpp() else f"object{extra_indirection}->{d.name}"
+    fixed_prefix = "(*" if type(size) is model.ArraySizeFixed else ""
+    fixed_suffix = ")" if type(size) is model.ArraySizeFixed else ""
+    match size:
+        case model.ArraySizeFixed(size=size):
+            loop_max = size
+        case model.ArraySizeVariable(size=size):
+            loop_max = f"(int)object->{extra_indirection}{size}"
+        case model.ArraySizeEndless():
+            loop_max = f"(int)object->amount_of_{d.name}"
+    if is_cpp():
+        s.open_curly(f"for(const auto& v : {variable_name})")
+    else:
+        s.open_curly("/* C89 scope to allow variable declarations */")
+        s.wln("int i;")
+        s.open_curly(f"for(i = 0; i < {loop_max}; ++i)")
+
+    s.wln(f"_size += {array_size_inner_action(inner_type, fixed_prefix, fixed_suffix, variable_name)};")
+
+    if not is_cpp():
+        s.closing_curly()  # C89 scope
+    s.closing_curly()  # array scope
+
 
 def print_size_if_statement(s: Writer, statement: model.IfStatement, is_else_if: bool, module_name: str,
                             extra_indirection: str):
@@ -312,9 +330,7 @@ def print_size_if_statement(s: Writer, statement: model.IfStatement, is_else_if:
     if is_else_if:
         extra_elseif = "else "
 
-    extra_self = "self."
-
-    print_if_statement_header(s, statement, extra_elseif, extra_self, module_name)
+    print_if_statement_header(s, statement, extra_elseif, extra_indirection, module_name)
 
     print_size_until_inner_members(s, statement.members, None, False, False, module_name, extra_indirection)
 

@@ -2,6 +2,8 @@
 
 #include <memory.h>
 
+#include "puff.c"
+
 WowWorldResult wwm_read_uint8(WowWorldReader* stream, uint8_t* value)
 {
     const size_t index = WWM_CHECK_LENGTH(1);
@@ -459,4 +461,81 @@ WOW_WORLD_MESSAGES_C_EXPORT const char* wwm_error_code_to_string(const WowWorldR
     }
 
     return "";
+}
+
+uint32_t wwm_adler32(const unsigned char *data, const size_t len)
+{
+
+    uint32_t a = 1, b = 0;
+    size_t index;
+
+#define MOD_ADLER 65521
+    for (index = 0; index < len; ++index)
+    {
+        a = (a + data[index]) % MOD_ADLER;
+        b = (b + a) % MOD_ADLER;
+    }
+#undef MOD_ADLER
+
+    return (b << 16) | a;
+}
+
+size_t wwm_compress_data(const unsigned char* src, const size_t src_length, unsigned char* dst, const size_t dst_length)
+{
+    size_t index = 0;
+    uint32_t adler32;
+
+    if (dst_length < (src_length + WWM_COMPRESS_EXTRA_LENGTH))
+    {
+        return 0;
+    }
+
+    /* zlib header */
+    dst[index] = 0x78;
+    index += 1;
+    dst[index] = 0x01;
+    index += 1;
+
+    dst[index] = 0x01; /* BFINAL and no compression */
+    index += 1;
+
+    dst[index] = (unsigned char)src_length; /* LEN */
+    index += 1;
+    dst[index] = (unsigned char)(src_length >> 8); /* LEN */
+    index += 1;
+
+    dst[index] = ((unsigned char)src_length) ^ 0xff; /* NLEN */
+    index += 1;
+    dst[index] = ((unsigned char)(src_length >> 8)) ^ 0xff; /* NLEN */
+    index += 1;
+
+    memcpy(&dst[index], src, src_length);
+    index += src_length;
+
+    adler32 = wwm_adler32(src, src_length);
+
+    dst[index] = (unsigned char)adler32;
+    index += 1;
+    dst[index] = (unsigned char)(adler32 >> 8);
+    index += 1;
+    dst[index] = (unsigned char)(adler32 >> 16);
+    index += 1;
+    dst[index] = (unsigned char)(adler32 >> 24);
+
+    return index;
+}
+
+bool wwm_decompress_data(const unsigned char* src, const size_t src_length, unsigned char* dst, const size_t dst_length)
+{
+    unsigned long source_length = (unsigned long)(src_length - 2);
+    unsigned long destination_length = (unsigned long)dst_length;
+
+    /* Skip zlib header */
+    const int ret = puff(dst, &destination_length, src + 2, &source_length);
+    if (ret != 0)
+    {
+        return false;
+    }
+
+    return true;
 }

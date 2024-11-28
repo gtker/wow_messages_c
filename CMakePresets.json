@@ -30,7 +30,9 @@
       ],
       "cacheVariables": {
         "CMAKE_C_FLAGS_INIT": "-Wall -Wpedantic -Wextra -Wno-unused-function",
-        "CMAKE_CXX_FLAGS_INIT": "-Wall -Wpedantic -Wextra -Wno-unused-function -Wno-unused-parameter -Wno-unused-function -Wno-unused-variable -Wno-sign-compare"
+        "CMAKE_CXX_FLAGS_INIT": "-Wall -Wpedantic -Wextra -Wno-unused-function -Wno-unused-parameter -Wno-unused-function -Wno-unused-variable -Wno-sign-compare",
+        "CMAKE_C_CLANG_TIDY": "clang-tidy",
+        "CMAKE_CXX_CLANG_TIDY": "clang-tidy"
       }
     },
     {
@@ -49,8 +51,8 @@
         "base-preset"
       ],
       "cacheVariables": {
-        "CMAKE_C_FLAGS_INIT": "/W4",
-        "CMAKE_CXX_FLAGS_INIT": "/W4"
+        "CMAKE_C_FLAGS_INIT": "/W4 /wd4324",
+        "CMAKE_CXX_FLAGS_INIT": "/W4 /wd4100 /wd4189 /wd4505"
       }
     }
   ],

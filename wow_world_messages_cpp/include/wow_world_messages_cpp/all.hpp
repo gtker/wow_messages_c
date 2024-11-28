@@ -1,7 +1,6 @@
 #ifndef WOW_WORLD_MESSAGES_CPP_ALL_HPP
 #define WOW_WORLD_MESSAGES_CPP_ALL_HPP
 
-#include "wow_world_messages_cpp/wow_world_messages.hpp"
 
 namespace wow_world_messages {
 namespace all {

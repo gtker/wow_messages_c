@@ -4,12 +4,11 @@
 
 #include <array>
 #include <cstring>
-#include <optional>
 #include <stddef.h>
 #include <stdint.h>
 #include <string>
-#include <variant>
 #include <vector>
+#include <memory>
 
 #include "wow_world_messages_cpp/all.hpp"
 
@@ -26,6 +25,14 @@ public:
     {
         const uint8_t lower = read_u8();
         const uint8_t upper = read_u8();
+
+        return static_cast<uint16_t>(lower) | static_cast<uint16_t>(upper) << 8;
+    }
+
+    virtual uint16_t read_u16_be()
+    {
+        const uint8_t upper = read_u8();
+        const uint8_t lower = read_u8();
 
         return static_cast<uint16_t>(lower) | static_cast<uint16_t>(upper) << 8;
     }
@@ -121,6 +128,8 @@ public:
 
     virtual ~Reader() = default;
 };
+
+struct bad_opcode_access final : std::exception {};
 
 } /* namespace wow_world_messages */
 

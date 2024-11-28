@@ -167,6 +167,23 @@ def library_type(tags: model.ObjectTags) -> str:
     else:
         return "login"
 
+def snake_case_to_pascal_case(s: str) -> str:
+    new: str = ""
+    next_upper = True
+
+    for i in s:
+        if next_upper:
+            new += i.upper()
+            next_upper = False
+            continue
+
+        if i == '_':
+            next_upper = True
+            continue
+
+        new += i
+
+    return new
 
 def pascal_case_to_snake_case(s: str) -> str:
     new = ""
@@ -223,7 +240,10 @@ def first_version_as_module(tags: model.ObjectTags) -> str:
 
 
 def get_export_define(tags: model.ObjectTags) -> str:
-    return "WOW_WORLD_MESSAGES_C_EXPORT" if is_world(tags) else "WOW_LOGIN_MESSAGES_C_EXPORT"
+    if is_cpp():
+        return "WOW_WORLD_MESSAGES_CPP_EXPORT" if is_world(tags) else "WOW_LOGIN_MESSAGES_CPP_EXPORT"
+    else:
+        return "WOW_WORLD_MESSAGES_C_EXPORT" if is_world(tags) else "WOW_LOGIN_MESSAGES_C_EXPORT"
 
 
 def get_type_prefix(tags: model.ObjectTags) -> str:

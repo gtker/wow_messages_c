@@ -2,14 +2,14 @@
 #define WOW_LOGIN_MESSAGES_H
 
 #include <array>
-#include <optional>
 #include <stddef.h>
 #include <stdint.h>
 #include <string>
-#include <variant>
 #include <vector>
 
 #include "wow_login_messages_cpp_export.h"
+
+#include <cstring>
 
 namespace wow_login_messages {
 
@@ -42,9 +42,21 @@ public:
         return static_cast<uint64_t>(lower) | static_cast<uint64_t>(upper) << 32;
     }
 
-    virtual int32_t read_i32() { return read_u32(); }
+    virtual int32_t read_i32()
+    {
+        const auto value = read_u32();
+        int32_t val;
+        memcpy(&val, &value, 4);
+        return val;
+    }
 
-    virtual float read_float() { return read_u32(); }
+    virtual float read_float()
+    {
+        const auto value = read_u32();
+        float val;
+        memcpy(&val, &value, 4);
+        return val;
+    }
 
     virtual bool read_bool8() { return read_u8() == 1; }
 
@@ -77,6 +89,8 @@ public:
 
     virtual ~Reader() = default;
 };
+
+struct bad_opcode_access final : std::exception {};
 
 } /* namespace wow_login_messages */
 #endif /* WOW_LOGIN_MESSAGES_H */

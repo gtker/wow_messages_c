@@ -1,5 +1,6 @@
-from print_struct.struct_util import print_if_statement_header, container_has_c_members
-from util import first_version_as_module, get_export_define, is_cpp
+from print_struct.struct_util import print_if_statement_header, container_has_c_members, all_members_from_container
+from util import first_version_as_module, get_export_define, is_cpp, pascal_case_to_snake_case, \
+    snake_case_to_pascal_case
 
 import model
 from print_struct.print_members import print_members_definitions, print_member_definition
@@ -15,11 +16,28 @@ def print_struct(s: Writer, h: Writer, container: model.Container, module_name: 
     if container_has_c_members(container) or is_cpp():
         if is_cpp():
             h.open_curly(f"struct {container.name}")
+            if container.optional is not None:
+                h.open_curly(f"struct {snake_case_to_pascal_case(container.optional.name)}")
+                for member in container.optional.members:
+                    print_member_definition(h, member, module_name)
+                h.closing_curly(f";")
+                h.newline()
+
             for member in container.members:
                 print_member_definition(h, member, module_name)
+
+            if container.optional is not None:
+                h.wln(f"std::unique_ptr<{snake_case_to_pascal_case(container.optional.name)}> {container.optional.name};")
+
             if type(container.object_type) is not model.ObjectTypeStruct:
                 h.newline()
-                h.wln("std::vector<unsigned char> write() const;")
+                export = get_export_define(container.tags)
+                if type(container.object_type) is model.ObjectTypeMsg:
+                    h.wln(f"{export} std::vector<unsigned char> write_smsg() const;")
+                    h.wln(f"{export} std::vector<unsigned char> write_cmsg() const;")
+                else:
+                    h.wln(f"{export} std::vector<unsigned char> write() const;")
+
             h.closing_curly(";") # struct
         else:
             if container.optional is not None:
@@ -54,8 +72,11 @@ def print_struct(s: Writer, h: Writer, container: model.Container, module_name: 
 
 def container_has_free(e: model.Container, module_name: str) -> bool:
     writer = Writer()
-    for m in e.members:
-        print_free_member(writer, m, module_name)
+
+    if e.optional is not None:
+        return True
+
+    print_free_function_body(writer, e, module_name)
 
     if writer.inner() == "":
         return False
@@ -78,43 +99,67 @@ def print_free(s: Writer, h: Writer, e: model.Container, module_name):
 
     s.open_curly(function_declaration)
 
-    for m in e.members:
-        print_free_member(s, m, module_name)
+    needs_loop = False
+    for d in all_members_from_container(e):
+        match d.data_type:
+            case model.DataTypeArray(inner_type=inner_type):
+                match inner_type:
+                    case model.ArrayTypeStruct(struct_data=struct_data):
+                        if container_has_free(struct_data, module_name):
+                            needs_loop = True
+
+    if needs_loop:
+        s.wln("size_t i;")
+        s.newline()
+
+    print_free_function_body(s, e, module_name)
 
     s.closing_curly()  # function_declaration
     s.newline()
 
 
-def print_free_member(s: Writer, m: model.StructMember, module_name: str):
+def print_free_function_body(s: Writer, e: model.Container, module_name: str):
+    for m in e.members:
+        print_free_member(s, m, module_name, "")
+    if e.optional is not None:
+        for m in e.optional.members:
+            print_free_member(s, m, module_name, f"{e.optional.name}->")
+
+        s.wln(f"free(object->{e.optional.name});")
+
+
+def print_free_member(s: Writer, m: model.StructMember, module_name: str, extra_indirection: str):
     match m:
         case model.StructMemberDefinition(_tag, definition):
-            print_free_struct_member(s, definition, module_name)
+            print_free_struct_member(s, definition, module_name, extra_indirection)
 
         case model.StructMemberIfStatement(_tag, statement):
-            print_free_if_statement(s, statement, False, module_name)
+            print_free_if_statement(s, statement, False, module_name, extra_indirection)
 
         case _:
             raise Exception("invalid struct member")
 
 
-def print_free_if_statement(s: Writer, statement: model.IfStatement, is_else_if: bool, module_name: str):
+def print_free_if_statement(s: Writer, statement: model.IfStatement, is_else_if: bool, module_name: str, extra_indirection: str):
     extra_elseif = ""
     if is_else_if:
         extra_elseif = "else "
 
-    print_if_statement_header(s, statement, extra_elseif, "self.", module_name)
+    print_if_statement_header(s, statement, extra_elseif, extra_indirection, module_name)
 
     for m in statement.members:
-        print_free_member(s, m, module_name)
+        print_free_member(s, m, module_name, extra_indirection)
 
     s.closing_curly()
 
     for elseif in statement.else_if_statements:
-        print_free_if_statement(s, elseif, True, module_name)
+        print_free_if_statement(s, elseif, True, module_name, extra_indirection)
 
 
-def print_free_struct_member(s: Writer, d: model.Definition, module_name: str):
-    variable_name = f"object->{d.name}"
+IS_INSIDE_FIXED_ARRAY = False
+
+def print_free_struct_member(s: Writer, d: model.Definition, module_name: str, extra_indirection: str):
+    variable_name = f"object->{extra_indirection}{d.name}"
     match d.data_type:
         case model.DataTypeInteger(integer_type=integer_type):
             pass
@@ -166,7 +211,7 @@ def print_free_struct_member(s: Writer, d: model.Definition, module_name: str):
             if container_has_free(e, module_name):
                 version = first_version_as_module(e.tags)
 
-                s.wln(f"{version}_{e.name}_free(&object->{d.name});")
+                s.wln(f"{version}_{e.name}_free(&{variable_name});")
 
         case model.DataTypeUpdateMask():
             pass
@@ -202,6 +247,23 @@ def print_free_struct_member(s: Writer, d: model.Definition, module_name: str):
         case model.DataTypeAchievementInProgressArray():
             s.wln(f"{d.name} = await CacheMask.read(reader)")
 
-        case model.DataTypeArray():
+        case model.DataTypeArray(inner_type=inner_type, size=size):
+            extra = ""
+            match size:
+                case model.ArraySizeFixed(size=size):
+                    loop_variable = size
+                    extra = "*"
+                case model.ArraySizeVariable(size=size):
+                    loop_variable = f"object->{size}"
+                case model.ArraySizeEndless():
+                    loop_variable = f"object->amount_of_{d.name}"
+
+            match inner_type:
+                case model.ArrayTypeStruct(struct_data=struct_data):
+                    if container_has_free(struct_data, module_name):
+                        s.open_curly(f"for (i = 0; i < {loop_variable}; ++i)")
+                        s.wln(f"{first_version_as_module(struct_data.tags)}_{struct_data.name}_free(&(({extra}{variable_name})[i]));")
+                        s.closing_curly() # for int i
+
             s.wln(f"free({variable_name});")
             s.wln(f"{variable_name} = NULL;")

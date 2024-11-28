@@ -7247,6 +7247,7 @@ typedef struct {
     vanilla_SMSG_TRANSFER_PENDING_has_transport* has_transport;
 } vanilla_SMSG_TRANSFER_PENDING;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TRANSFER_PENDING_write(WowWorldWriter* writer, const vanilla_SMSG_TRANSFER_PENDING* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_TRANSFER_PENDING_free(vanilla_SMSG_TRANSFER_PENDING* object);
 
 typedef struct {
     vanilla_Map map;
@@ -7410,6 +7411,7 @@ typedef struct {
     vanilla_SMSG_ITEM_QUERY_SINGLE_RESPONSE_found* found;
 } vanilla_SMSG_ITEM_QUERY_SINGLE_RESPONSE;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ITEM_QUERY_SINGLE_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_ITEM_QUERY_SINGLE_RESPONSE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_ITEM_QUERY_SINGLE_RESPONSE_free(vanilla_SMSG_ITEM_QUERY_SINGLE_RESPONSE* object);
 
 typedef struct {
     uint32_t page_id;
@@ -7488,6 +7490,7 @@ typedef struct {
     vanilla_SMSG_GAMEOBJECT_QUERY_RESPONSE_found* found;
 } vanilla_SMSG_GAMEOBJECT_QUERY_RESPONSE;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GAMEOBJECT_QUERY_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_GAMEOBJECT_QUERY_RESPONSE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GAMEOBJECT_QUERY_RESPONSE_free(vanilla_SMSG_GAMEOBJECT_QUERY_RESPONSE* object);
 
 typedef struct {
     uint32_t creature;
@@ -7519,6 +7522,7 @@ typedef struct {
     vanilla_SMSG_CREATURE_QUERY_RESPONSE_found* found;
 } vanilla_SMSG_CREATURE_QUERY_RESPONSE;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CREATURE_QUERY_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_CREATURE_QUERY_RESPONSE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_CREATURE_QUERY_RESPONSE_free(vanilla_SMSG_CREATURE_QUERY_RESPONSE* object);
 
 typedef struct {
     uint32_t minimum_level;
@@ -9300,6 +9304,7 @@ typedef struct {
     vanilla_CMSG_PET_SET_ACTION_extra* extra;
 } vanilla_CMSG_PET_SET_ACTION;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PET_SET_ACTION_write(WowWorldWriter* writer, const vanilla_CMSG_PET_SET_ACTION* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_PET_SET_ACTION_free(vanilla_CMSG_PET_SET_ACTION* object);
 
 typedef struct {
     uint64_t pet;
@@ -9344,6 +9349,7 @@ typedef struct {
     vanilla_SMSG_PET_SPELLS_action_bars* action_bars;
 } vanilla_SMSG_PET_SPELLS;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PET_SPELLS_write(WowWorldWriter* writer, const vanilla_SMSG_PET_SPELLS* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_PET_SPELLS_free(vanilla_SMSG_PET_SPELLS* object);
 
 typedef struct {
     uint64_t guid;
@@ -9372,6 +9378,7 @@ typedef struct {
     vanilla_CMSG_GOSSIP_SELECT_OPTION_unknown* unknown;
 } vanilla_CMSG_GOSSIP_SELECT_OPTION;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GOSSIP_SELECT_OPTION_write(WowWorldWriter* writer, const vanilla_CMSG_GOSSIP_SELECT_OPTION* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GOSSIP_SELECT_OPTION_free(vanilla_CMSG_GOSSIP_SELECT_OPTION* object);
 
 typedef struct {
     uint64_t guid;
@@ -10141,6 +10148,19 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_AUTH_CHALLENGE_write(WowWorldWriter* writer, const vanilla_SMSG_AUTH_CHALLENGE* object);
 
 typedef struct {
+    uint32_t build;
+    uint32_t server_id;
+    WowWorldString username;
+    uint32_t client_seed;
+    uint8_t (*client_proof)[20];
+    uint32_t amount_of_addon_info;
+    vanilla_AddonInfo* addon_info;
+
+} vanilla_CMSG_AUTH_SESSION;
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUTH_SESSION_write(WowWorldWriter* writer, const vanilla_CMSG_AUTH_SESSION* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_AUTH_SESSION_free(vanilla_CMSG_AUTH_SESSION* object);
+
+typedef struct {
     vanilla_WorldResult result;
     uint32_t billing_time;
     uint8_t billing_flags;
@@ -10265,6 +10285,20 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_REMOVED_SPELL_write(WowWorldWriter* writer, const vanilla_SMSG_REMOVED_SPELL* object);
 
 typedef struct {
+    vanilla_GmTicketType category;
+    vanilla_Map map;
+    all_Vector3d position;
+    WowWorldString message;
+    WowWorldString reserved_for_future_use;
+    uint32_t chat_data_line_count;
+    uint32_t amount_of_compressed_chat_data;
+    uint8_t* compressed_chat_data;
+
+} vanilla_CMSG_GMTICKET_CREATE;
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GMTICKET_CREATE_write(WowWorldWriter* writer, const vanilla_CMSG_GMTICKET_CREATE* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GMTICKET_CREATE_free(vanilla_CMSG_GMTICKET_CREATE* object);
+
+typedef struct {
     vanilla_GmTicketResponse response;
 
 } vanilla_SMSG_GMTICKET_CREATE;
@@ -10296,6 +10330,15 @@ typedef struct {
 
 } vanilla_CMSG_REQUEST_ACCOUNT_DATA;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_REQUEST_ACCOUNT_DATA_write(WowWorldWriter* writer, const vanilla_CMSG_REQUEST_ACCOUNT_DATA* object);
+
+typedef struct {
+    vanilla_AccountDataType data_type;
+    uint32_t amount_of_compressed_data;
+    uint8_t* compressed_data;
+
+} vanilla_CMSG_UPDATE_ACCOUNT_DATA;
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_UPDATE_ACCOUNT_DATA_write(WowWorldWriter* writer, const vanilla_CMSG_UPDATE_ACCOUNT_DATA* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_UPDATE_ACCOUNT_DATA_free(vanilla_CMSG_UPDATE_ACCOUNT_DATA* object);
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GMTICKET_GETTICKET_write(WowWorldWriter* writer);
 
@@ -10633,6 +10676,7 @@ typedef struct {
     vanilla_CMSG_TOGGLE_PVP_set* set;
 } vanilla_CMSG_TOGGLE_PVP;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_TOGGLE_PVP_write(WowWorldWriter* writer, const vanilla_CMSG_TOGGLE_PVP* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_TOGGLE_PVP_free(vanilla_CMSG_TOGGLE_PVP* object);
 
 typedef struct {
     vanilla_Area zone_id;
@@ -11914,6 +11958,7 @@ typedef struct {
     vanilla_MSG_RAID_READY_CHECK_Client_answer* answer;
 } vanilla_MSG_RAID_READY_CHECK_Client;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_RAID_READY_CHECK_Client_write(WowWorldWriter* writer, const vanilla_MSG_RAID_READY_CHECK_Client* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_RAID_READY_CHECK_Client_free(vanilla_MSG_RAID_READY_CHECK_Client* object);
 
 typedef struct {
     uint64_t guid;
@@ -11925,6 +11970,7 @@ typedef struct {
     vanilla_MSG_RAID_READY_CHECK_Server_state_check* state_check;
 } vanilla_MSG_RAID_READY_CHECK_Server;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_RAID_READY_CHECK_Server_write(WowWorldWriter* writer, const vanilla_MSG_RAID_READY_CHECK_Server* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_RAID_READY_CHECK_Server_free(vanilla_MSG_RAID_READY_CHECK_Server* object);
 
 typedef struct {
     uint64_t guid;
@@ -12363,6 +12409,7 @@ typedef enum {
     SMSG_ITEM_TIME_UPDATE = 490,
     SMSG_ITEM_ENCHANT_TIME_UPDATE = 491,
     SMSG_AUTH_CHALLENGE = 492,
+    CMSG_AUTH_SESSION = 493,
     SMSG_AUTH_RESPONSE = 494,
     CMSG_PET_CAST_SPELL = 496,
     MSG_SAVE_GUILD_EMBLEM = 497,
@@ -12377,11 +12424,13 @@ typedef enum {
     MSG_LOOKING_FOR_GROUP = 511,
     CMSG_UNLEARN_SKILL = 514,
     SMSG_REMOVED_SPELL = 515,
+    CMSG_GMTICKET_CREATE = 517,
     SMSG_GMTICKET_CREATE = 518,
     CMSG_GMTICKET_UPDATETEXT = 519,
     SMSG_GMTICKET_UPDATETEXT = 520,
     SMSG_ACCOUNT_DATA_TIMES = 521,
     CMSG_REQUEST_ACCOUNT_DATA = 522,
+    CMSG_UPDATE_ACCOUNT_DATA = 523,
     CMSG_GMTICKET_GETTICKET = 529,
     SMSG_GMTICKET_GETTICKET = 530,
     SMSG_GAMEOBJECT_SPAWN_ANIM = 532,
@@ -12770,14 +12819,17 @@ typedef struct {
         vanilla_MSG_MINIMAP_PING_Client MSG_MINIMAP_PING_Client;
         vanilla_CMSG_PING CMSG_PING;
         vanilla_CMSG_SETSHEATHED CMSG_SETSHEATHED;
+        vanilla_CMSG_AUTH_SESSION CMSG_AUTH_SESSION;
         vanilla_CMSG_PET_CAST_SPELL CMSG_PET_CAST_SPELL;
         vanilla_MSG_SAVE_GUILD_EMBLEM_Client MSG_SAVE_GUILD_EMBLEM_Client;
         vanilla_MSG_TABARDVENDOR_ACTIVATE MSG_TABARDVENDOR_ACTIVATE;
         vanilla_CMSG_ZONEUPDATE CMSG_ZONEUPDATE;
         vanilla_MSG_RANDOM_ROLL_Client MSG_RANDOM_ROLL_Client;
         vanilla_CMSG_UNLEARN_SKILL CMSG_UNLEARN_SKILL;
+        vanilla_CMSG_GMTICKET_CREATE CMSG_GMTICKET_CREATE;
         vanilla_CMSG_GMTICKET_UPDATETEXT CMSG_GMTICKET_UPDATETEXT;
         vanilla_CMSG_REQUEST_ACCOUNT_DATA CMSG_REQUEST_ACCOUNT_DATA;
+        vanilla_CMSG_UPDATE_ACCOUNT_DATA CMSG_UPDATE_ACCOUNT_DATA;
         vanilla_CMSG_SPIRIT_HEALER_ACTIVATE CMSG_SPIRIT_HEALER_ACTIVATE;
         vanilla_CMSG_CHAT_IGNORED CMSG_CHAT_IGNORED;
         vanilla_CMSG_GUILD_RANK CMSG_GUILD_RANK;

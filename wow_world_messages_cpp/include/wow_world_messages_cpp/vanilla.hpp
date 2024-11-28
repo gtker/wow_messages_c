@@ -7101,13 +7101,13 @@ struct WorldState {
 
 struct CMSG_BOOTME {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_DBLOOKUP {
     std::string query;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_WORLD_TELEPORT {
@@ -7116,13 +7116,13 @@ struct CMSG_WORLD_TELEPORT {
     all::Vector3d position;
     float orientation;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_TELEPORT_TO_UNIT {
     std::string name;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_CHAR_CREATE {
@@ -7136,43 +7136,43 @@ struct CMSG_CHAR_CREATE {
     uint8_t hair_color;
     uint8_t facial_hair;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_CHAR_ENUM {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_CHAR_DELETE {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_CHAR_CREATE {
     WorldResult result;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_CHAR_ENUM {
     uint8_t amount_of_characters;
     std::vector<vanilla::Character> characters;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_CHAR_DELETE {
     WorldResult result;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_PLAYER_LOGIN {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_NEW_WORLD {
@@ -7180,7 +7180,19 @@ struct SMSG_NEW_WORLD {
     all::Vector3d position;
     float orientation;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
+};
+
+struct SMSG_TRANSFER_PENDING {
+    struct HasTransport {
+        uint32_t transport;
+        Map transport_map;
+    };
+
+    Map map;
+    std::unique_ptr<HasTransport> has_transport;
+
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_TRANSFER_ABORTED {
@@ -7188,58 +7200,58 @@ struct SMSG_TRANSFER_ABORTED {
     TransferAbortReason reason;
     uint8_t argument;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_CHARACTER_LOGIN_FAILED {
     WorldResult result;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_LOGIN_SETTIMESPEED {
     uint32_t datetime;
     float timescale;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_PLAYER_LOGOUT {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_LOGOUT_REQUEST {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_LOGOUT_RESPONSE {
     LogoutResult result;
     LogoutSpeed speed;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_LOGOUT_COMPLETE {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_LOGOUT_CANCEL {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_LOGOUT_CANCEL_ACK {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_NAME_QUERY {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_NAME_QUERY_RESPONSE {
@@ -7250,14 +7262,14 @@ struct SMSG_NAME_QUERY_RESPONSE {
     Gender gender;
     Class class_type;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_PET_NAME_QUERY {
     uint32_t pet_number;
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_PET_NAME_QUERY_RESPONSE {
@@ -7265,13 +7277,13 @@ struct SMSG_PET_NAME_QUERY_RESPONSE {
     std::string name;
     uint32_t pet_name_timestamp;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_GUILD_QUERY {
     uint32_t guild_id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_GUILD_QUERY_RESPONSE {
@@ -7284,20 +7296,84 @@ struct SMSG_GUILD_QUERY_RESPONSE {
     uint32_t border_color;
     uint32_t background_color;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_ITEM_QUERY_SINGLE {
     uint32_t item;
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
+};
+
+struct SMSG_ITEM_QUERY_SINGLE_RESPONSE {
+    struct Found {
+        ItemClassAndSubClass class_and_sub_class;
+        std::string name1;
+        std::string name2;
+        std::string name3;
+        std::string name4;
+        uint32_t display_id;
+        ItemQuality quality;
+        ItemFlag flags;
+        uint32_t buy_price;
+        uint32_t sell_price;
+        InventoryType inventory_type;
+        AllowedClass allowed_class;
+        AllowedRace allowed_race;
+        uint32_t item_level;
+        uint32_t required_level;
+        Skill required_skill;
+        uint32_t required_skill_rank;
+        uint32_t required_spell;
+        uint32_t required_honor_rank;
+        uint32_t required_city_rank;
+        Faction required_faction;
+        uint32_t required_faction_rank;
+        uint32_t max_count;
+        uint32_t stackable;
+        uint32_t container_slots;
+        std::array<vanilla::ItemStat, 10> stats;
+        std::array<vanilla::ItemDamageType, 5> damages;
+        int32_t armor;
+        int32_t holy_resistance;
+        int32_t fire_resistance;
+        int32_t nature_resistance;
+        int32_t frost_resistance;
+        int32_t shadow_resistance;
+        int32_t arcane_resistance;
+        uint32_t delay;
+        uint32_t ammo_type;
+        float ranged_range_modification;
+        std::array<vanilla::ItemSpells, 5> spells;
+        Bonding bonding;
+        std::string description;
+        uint32_t page_text;
+        Language language;
+        PageTextMaterial page_text_material;
+        uint32_t start_quest;
+        uint32_t lock_id;
+        uint32_t material;
+        SheatheType sheathe_type;
+        uint32_t random_property;
+        uint32_t block;
+        ItemSet item_set;
+        uint32_t max_durability;
+        Area area;
+        Map map;
+        BagFamily bag_family;
+    };
+
+    uint32_t item;
+    std::unique_ptr<Found> found;
+
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_PAGE_TEXT_QUERY {
     uint32_t page_id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_PAGE_TEXT_QUERY_RESPONSE {
@@ -7305,13 +7381,13 @@ struct SMSG_PAGE_TEXT_QUERY_RESPONSE {
     std::string text;
     uint32_t next_page_id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_QUEST_QUERY {
     uint32_t quest_id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_QUEST_QUERY_RESPONSE {
@@ -7342,21 +7418,63 @@ struct SMSG_QUEST_QUERY_RESPONSE {
     std::array<vanilla::QuestObjective, 4> objectives;
     std::array<std::string, 4> objective_texts;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_GAMEOBJECT_QUERY {
     uint32_t entry_id;
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
+};
+
+struct SMSG_GAMEOBJECT_QUERY_RESPONSE {
+    struct Found {
+        uint32_t info_type;
+        uint32_t display_id;
+        std::string name1;
+        std::string name2;
+        std::string name3;
+        std::string name4;
+        std::string name5;
+        std::array<uint32_t, 6> raw_data;
+    };
+
+    uint32_t entry_id;
+    std::unique_ptr<Found> found;
+
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_CREATURE_QUERY {
     uint32_t creature;
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
+};
+
+struct SMSG_CREATURE_QUERY_RESPONSE {
+    struct Found {
+        std::string name1;
+        std::string name2;
+        std::string name3;
+        std::string name4;
+        std::string sub_name;
+        uint32_t type_flags;
+        uint32_t creature_type;
+        CreatureFamily creature_family;
+        uint32_t creature_rank;
+        uint32_t unknown0;
+        uint32_t spell_data_id;
+        uint32_t display_id;
+        uint8_t civilian;
+        uint8_t racial_leader;
+    };
+
+    uint32_t creature_entry;
+    std::unique_ptr<Found> found;
+
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_WHO {
@@ -7371,7 +7489,7 @@ struct CMSG_WHO {
     uint32_t amount_of_strings;
     std::vector<std::string> search_strings;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_WHO {
@@ -7379,126 +7497,126 @@ struct SMSG_WHO {
     uint32_t online_players;
     std::vector<vanilla::WhoPlayer> players;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_WHOIS {
     std::string character;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_WHOIS {
     std::string message;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_FRIEND_LIST {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_FRIEND_LIST {
     uint8_t amount_of_friends;
     std::vector<vanilla::Friend> friends;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_FRIEND_STATUS {
     FriendResult result;
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_ADD_FRIEND {
     std::string name;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_DEL_FRIEND {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_IGNORE_LIST {
     uint8_t amount_of_ignored;
     std::vector<uint64_t> ignored;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_ADD_IGNORE {
     std::string name;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_DEL_IGNORE {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_GROUP_INVITE {
     std::string name;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_GROUP_INVITE {
     std::string name;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_GROUP_ACCEPT {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_GROUP_DECLINE {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_GROUP_DECLINE {
     std::string name;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_GROUP_UNINVITE {
     std::string name;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_GROUP_UNINVITE_GUID {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_GROUP_UNINVITE {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_GROUP_SET_LEADER {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_GROUP_SET_LEADER {
     std::string name;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_LOOT_METHOD {
@@ -7506,17 +7624,34 @@ struct CMSG_LOOT_METHOD {
     uint64_t loot_master;
     ItemQuality loot_threshold;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_GROUP_DISBAND {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_GROUP_DESTROYED {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
+};
+
+struct SMSG_GROUP_LIST {
+    struct GroupNotEmpty {
+        GroupLootSetting loot_setting;
+        uint64_t master_loot;
+        ItemQuality loot_threshold;
+    };
+
+    GroupType group_type;
+    uint8_t flags;
+    uint32_t amount_of_members;
+    std::vector<vanilla::GroupListMember> members;
+    uint64_t leader;
+    std::unique_ptr<GroupNotEmpty> group_not_empty;
+
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_PARTY_MEMBER_STATS {
@@ -7544,7 +7679,7 @@ struct SMSG_PARTY_MEMBER_STATS {
     uint16_t pet_max_power;
     AuraMask pet_auras;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_PARTY_COMMAND_RESULT {
@@ -7552,41 +7687,41 @@ struct SMSG_PARTY_COMMAND_RESULT {
     std::string member;
     PartyResult result;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_GUILD_CREATE {
     std::string guild_name;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_GUILD_INVITE {
     std::string invited_player;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_GUILD_INVITE {
     std::string player_name;
     std::string guild_name;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_GUILD_ACCEPT {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_GUILD_DECLINE {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_GUILD_INFO {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_GUILD_INFO {
@@ -7597,12 +7732,12 @@ struct SMSG_GUILD_INFO {
     uint32_t amount_of_characters_in_guild;
     uint32_t amount_of_accounts_in_guild;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_GUILD_ROSTER {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_GUILD_ROSTER {
@@ -7613,47 +7748,47 @@ struct SMSG_GUILD_ROSTER {
     std::vector<uint32_t> rights;
     std::vector<vanilla::GuildMember> members;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_GUILD_PROMOTE {
     std::string player_name;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_GUILD_DEMOTE {
     std::string player_name;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_GUILD_LEAVE {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_GUILD_REMOVE {
     std::string player_name;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_GUILD_DISBAND {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_GUILD_LEADER {
     std::string new_guild_leader_name;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_GUILD_MOTD {
     std::string message_of_the_day;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_GUILD_EVENT {
@@ -7661,7 +7796,7 @@ struct SMSG_GUILD_EVENT {
     uint8_t amount_of_events;
     std::vector<std::string> event_descriptions;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_GUILD_COMMAND_RESULT {
@@ -7669,7 +7804,7 @@ struct SMSG_GUILD_COMMAND_RESULT {
     std::string string;
     GuildCommandResult result;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_MESSAGECHAT {
@@ -7679,7 +7814,7 @@ struct CMSG_MESSAGECHAT {
     std::string channel;
     std::string message;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_MESSAGECHAT {
@@ -7699,33 +7834,33 @@ struct SMSG_MESSAGECHAT {
     std::string message;
     PlayerChatTag tag;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_JOIN_CHANNEL {
     std::string channel_name;
     std::string channel_password;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_LEAVE_CHANNEL {
     std::string channel_name;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_CHANNEL_NOTIFY {
     ChatNotify notify_type;
     std::string channel_name;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_CHANNEL_LIST {
     std::string channel_name;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_CHANNEL_LIST {
@@ -7734,95 +7869,95 @@ struct SMSG_CHANNEL_LIST {
     uint32_t amount_of_members;
     std::vector<vanilla::ChannelMember> members;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_CHANNEL_PASSWORD {
     std::string channel_name;
     std::string channel_password;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_CHANNEL_SET_OWNER {
     std::string channel_name;
     std::string new_owner;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_CHANNEL_OWNER {
     std::string channel_name;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_CHANNEL_MODERATOR {
     std::string channel_name;
     std::string player_name;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_CHANNEL_UNMODERATOR {
     std::string channel_name;
     std::string player_name;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_CHANNEL_MUTE {
     std::string channel_name;
     std::string player_name;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_CHANNEL_UNMUTE {
     std::string channel_name;
     std::string player_name;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_CHANNEL_INVITE {
     std::string channel_name;
     std::string player_name;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_CHANNEL_KICK {
     std::string channel_name;
     std::string player_name;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_CHANNEL_BAN {
     std::string channel_name;
     std::string player_name;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_CHANNEL_UNBAN {
     std::string channel_name;
     std::string player_name;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_CHANNEL_ANNOUNCEMENTS {
     std::string channel_name;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_CHANNEL_MODERATE {
     std::string channel_name;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_UPDATE_OBJECT {
@@ -7830,13 +7965,13 @@ struct SMSG_UPDATE_OBJECT {
     uint8_t has_transport;
     std::vector<vanilla::Object> objects;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_DESTROY_OBJECT {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_USE_ITEM {
@@ -7845,254 +7980,254 @@ struct CMSG_USE_ITEM {
     uint8_t spell_index;
     vanilla::SpellCastTargets targets;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_OPEN_ITEM {
     uint8_t bag_index;
     uint8_t slot;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_READ_ITEM {
     uint8_t bag_index;
     uint8_t slot;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_READ_ITEM_OK {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_READ_ITEM_FAILED {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_ITEM_COOLDOWN {
     uint64_t guid;
     uint32_t id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_GAMEOBJ_USE {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_GAMEOBJECT_CUSTOM_ANIM {
     uint64_t guid;
     uint32_t animation_id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_AREATRIGGER {
     uint32_t trigger_id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_START_FORWARD_Client {
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_START_FORWARD_Server {
     uint64_t guid;
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_START_BACKWARD_Client {
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_START_BACKWARD_Server {
     uint64_t guid;
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_STOP_Client {
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_STOP_Server {
     uint64_t guid;
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_START_STRAFE_LEFT_Client {
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_START_STRAFE_LEFT_Server {
     uint64_t guid;
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_START_STRAFE_RIGHT_Client {
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_START_STRAFE_RIGHT_Server {
     uint64_t guid;
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_STOP_STRAFE_Client {
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_STOP_STRAFE_Server {
     uint64_t guid;
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_JUMP_Client {
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_JUMP_Server {
     uint64_t guid;
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_START_TURN_LEFT_Client {
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_START_TURN_LEFT_Server {
     uint64_t guid;
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_START_TURN_RIGHT_Client {
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_START_TURN_RIGHT_Server {
     uint64_t guid;
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_STOP_TURN_Client {
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_STOP_TURN_Server {
     uint64_t guid;
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_START_PITCH_UP_Client {
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_START_PITCH_UP_Server {
     uint64_t guid;
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_START_PITCH_DOWN_Client {
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_START_PITCH_DOWN_Server {
     uint64_t guid;
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_STOP_PITCH_Client {
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_STOP_PITCH_Server {
     uint64_t guid;
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_SET_RUN_MODE_Client {
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_SET_RUN_MODE_Server {
     uint64_t guid;
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_SET_WALK_MODE_Client {
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_SET_WALK_MODE_Server {
     uint64_t guid;
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_TELEPORT_ACK_Client {
@@ -8100,7 +8235,7 @@ struct MSG_MOVE_TELEPORT_ACK_Client {
     uint32_t movement_counter;
     uint32_t time;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_TELEPORT_ACK_Server {
@@ -8108,72 +8243,78 @@ struct MSG_MOVE_TELEPORT_ACK_Server {
     uint32_t movement_counter;
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_FALL_LAND_Client {
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_FALL_LAND_Server {
     uint64_t guid;
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_START_SWIM_Client {
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_START_SWIM_Server {
     uint64_t guid;
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_STOP_SWIM_Client {
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_STOP_SWIM_Server {
     uint64_t guid;
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_SET_FACING_Client {
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_SET_FACING_Server {
     uint64_t guid;
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_SET_PITCH_Client {
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_SET_PITCH_Server {
     uint64_t guid;
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
+};
+
+struct MSG_MOVE_WORLDPORT_ACK {
+
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_smsg() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_cmsg() const;
 };
 
 struct SMSG_MONSTER_MOVE {
@@ -8188,28 +8329,28 @@ struct SMSG_MONSTER_MOVE {
     uint32_t duration;
     std::vector<::wow_world_messages::all::Vector3d> splines;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_MOVE_WATER_WALK {
     uint64_t guid;
     uint32_t counter;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_MOVE_LAND_WALK {
     uint64_t guid;
     uint32_t counter;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_MOVE_SET_RAW_POSITION {
     all::Vector3d position;
     float orientation;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_FORCE_RUN_SPEED_CHANGE {
@@ -8217,7 +8358,7 @@ struct SMSG_FORCE_RUN_SPEED_CHANGE {
     uint32_t move_event;
     float speed;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_FORCE_RUN_SPEED_CHANGE_ACK {
@@ -8226,7 +8367,7 @@ struct CMSG_FORCE_RUN_SPEED_CHANGE_ACK {
     vanilla::MovementInfo info;
     float new_speed;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_FORCE_RUN_BACK_SPEED_CHANGE {
@@ -8234,7 +8375,7 @@ struct SMSG_FORCE_RUN_BACK_SPEED_CHANGE {
     uint32_t move_event;
     float speed;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK {
@@ -8243,7 +8384,7 @@ struct CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK {
     vanilla::MovementInfo info;
     float new_speed;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_FORCE_SWIM_SPEED_CHANGE {
@@ -8251,7 +8392,7 @@ struct SMSG_FORCE_SWIM_SPEED_CHANGE {
     uint32_t move_event;
     float speed;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_FORCE_SWIM_SPEED_CHANGE_ACK {
@@ -8260,14 +8401,14 @@ struct CMSG_FORCE_SWIM_SPEED_CHANGE_ACK {
     vanilla::MovementInfo info;
     float new_speed;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_FORCE_MOVE_ROOT {
     uint64_t guid;
     uint32_t counter;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_FORCE_MOVE_ROOT_ACK {
@@ -8275,14 +8416,14 @@ struct CMSG_FORCE_MOVE_ROOT_ACK {
     uint32_t movement_counter;
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_FORCE_MOVE_UNROOT {
     uint64_t guid;
     uint32_t counter;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_FORCE_MOVE_UNROOT_ACK {
@@ -8290,20 +8431,20 @@ struct CMSG_FORCE_MOVE_UNROOT_ACK {
     uint32_t movement_counter;
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_HEARTBEAT_Client {
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_HEARTBEAT_Server {
     uint64_t guid;
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_MOVE_KNOCK_BACK {
@@ -8314,7 +8455,7 @@ struct SMSG_MOVE_KNOCK_BACK {
     float horizontal_speed;
     float vertical_speed;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_MOVE_KNOCK_BACK_ACK {
@@ -8322,35 +8463,35 @@ struct CMSG_MOVE_KNOCK_BACK_ACK {
     uint32_t counter;
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_MOVE_FEATHER_FALL {
     uint64_t guid;
     uint32_t counter;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_MOVE_NORMAL_FALL {
     uint64_t guid;
     uint32_t counter;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_MOVE_SET_HOVER {
     uint64_t guid;
     uint32_t counter;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_MOVE_UNSET_HOVER {
     uint64_t guid;
     uint32_t counter;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_MOVE_HOVER_ACK {
@@ -8359,64 +8500,64 @@ struct CMSG_MOVE_HOVER_ACK {
     vanilla::MovementInfo info;
     uint32_t is_applied;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_TRIGGER_CINEMATIC {
     CinematicSequenceId cinematic_sequence_id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_NEXT_CINEMATIC_CAMERA {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_COMPLETE_CINEMATIC {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_TUTORIAL_FLAGS {
     std::array<uint32_t, 8> tutorial_data;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_TUTORIAL_FLAG {
     uint32_t tutorial_flag;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_TUTORIAL_CLEAR {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_TUTORIAL_RESET {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_STANDSTATECHANGE {
     UnitStandState animation_state;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_EMOTE {
     Emote emote;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_EMOTE {
     Emote emote;
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_TEXT_EMOTE {
@@ -8424,7 +8565,7 @@ struct CMSG_TEXT_EMOTE {
     uint32_t emote;
     uint64_t target;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_TEXT_EMOTE {
@@ -8433,20 +8574,20 @@ struct SMSG_TEXT_EMOTE {
     uint32_t emote;
     std::string name;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_AUTOSTORE_LOOT_ITEM {
     uint8_t item_slot;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_AUTOEQUIP_ITEM {
     uint8_t source_bag;
     uint8_t source_slot;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_AUTOSTORE_BAG_ITEM {
@@ -8454,7 +8595,7 @@ struct CMSG_AUTOSTORE_BAG_ITEM {
     uint8_t source_slot;
     uint8_t destination_bag;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_SWAP_ITEM {
@@ -8463,14 +8604,14 @@ struct CMSG_SWAP_ITEM {
     uint8_t source_bag;
     uint8_t source_slot;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_SWAP_INV_ITEM {
     ItemSlot source_slot;
     ItemSlot destination_slot;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_SPLIT_ITEM {
@@ -8480,14 +8621,14 @@ struct CMSG_SPLIT_ITEM {
     uint8_t destination_slot;
     uint8_t amount;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_AUTOEQUIP_ITEM_SLOT {
     uint64_t guid;
     uint8_t destination_slot;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_DESTROYITEM {
@@ -8498,7 +8639,7 @@ struct CMSG_DESTROYITEM {
     uint8_t unknown2;
     uint8_t unknown3;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_INVENTORY_CHANGE_FAILURE {
@@ -8508,62 +8649,62 @@ struct SMSG_INVENTORY_CHANGE_FAILURE {
     uint64_t item2;
     uint8_t bag_type_subclass;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_OPEN_CONTAINER {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_INSPECT {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_INSPECT {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_INITIATE_TRADE {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_BEGIN_TRADE {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_BUSY_TRADE {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_IGNORE_TRADE {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_ACCEPT_TRADE {
     uint32_t unknown1;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_UNACCEPT_TRADE {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_CANCEL_TRADE {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_SET_TRADE_ITEM {
@@ -8571,19 +8712,19 @@ struct CMSG_SET_TRADE_ITEM {
     uint8_t bag;
     uint8_t slot;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_CLEAR_TRADE_ITEM {
     uint8_t trade_slot;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_SET_TRADE_GOLD {
     uint32_t gold;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_TRADE_STATUS {
@@ -8594,7 +8735,7 @@ struct SMSG_TRADE_STATUS {
     uint32_t item_limit_category_id;
     uint8_t slot;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_TRADE_STATUS_EXTENDED {
@@ -8605,41 +8746,41 @@ struct SMSG_TRADE_STATUS_EXTENDED {
     uint32_t spell_on_lowest_slot;
     std::array<vanilla::TradeSlot, 7> trade_slots;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_INITIALIZE_FACTIONS {
     uint32_t amount_of_factions;
     std::vector<vanilla::FactionInitializer> factions;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SET_FACTION_VISIBLE {
     Faction faction;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SET_FACTION_STANDING {
     uint32_t amount_of_faction_standings;
     std::vector<vanilla::FactionStanding> faction_standings;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_SET_FACTION_ATWAR {
     Faction faction;
     FactionFlag flags;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SET_PROFICIENCY {
     ItemClass class_type;
     uint32_t item_sub_class_mask;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_SET_ACTION_BUTTON {
@@ -8648,13 +8789,13 @@ struct CMSG_SET_ACTION_BUTTON {
     uint8_t misc;
     uint8_t action_type;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_ACTION_BUTTONS {
     std::array<uint32_t, 120> data;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_INITIAL_SPELLS {
@@ -8664,33 +8805,33 @@ struct SMSG_INITIAL_SPELLS {
     uint16_t cooldown_count;
     std::vector<vanilla::CooldownSpell> cooldowns;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_LEARNED_SPELL {
     uint32_t id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SUPERCEDED_SPELL {
     uint16_t new_spell_id;
     uint16_t old_spell_id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_CAST_SPELL {
     uint32_t spell;
     vanilla::SpellCastTargets targets;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_CANCEL_CAST {
     uint32_t id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_CAST_RESULT {
@@ -8703,7 +8844,7 @@ struct SMSG_CAST_RESULT {
     uint32_t equipped_item_subclass_mask;
     uint32_t equipped_item_inventory_type_mask;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SPELL_START {
@@ -8716,7 +8857,7 @@ struct SMSG_SPELL_START {
     uint32_t ammo_display_id;
     uint32_t ammo_inventory_type;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SPELL_GO {
@@ -8732,7 +8873,7 @@ struct SMSG_SPELL_GO {
     uint32_t ammo_display_id;
     uint32_t ammo_inventory_type;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SPELL_FAILURE {
@@ -8740,7 +8881,7 @@ struct SMSG_SPELL_FAILURE {
     uint32_t spell;
     SpellCastResult result;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SPELL_COOLDOWN {
@@ -8748,27 +8889,27 @@ struct SMSG_SPELL_COOLDOWN {
     uint32_t amount_of_cooldowns;
     std::vector<vanilla::SpellCooldownStatus> cooldowns;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_COOLDOWN_EVENT {
     uint32_t id;
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_CANCEL_AURA {
     uint32_t id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_UPDATE_AURA_DURATION {
     uint8_t aura_slot;
     uint32_t aura_duration;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_PET_CAST_FAILED {
@@ -8776,63 +8917,63 @@ struct SMSG_PET_CAST_FAILED {
     uint8_t unknown1;
     SpellCastResult result;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_CHANNEL_START_Server {
     uint32_t spell;
     uint32_t duration;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_CHANNEL_UPDATE_Server {
     uint32_t time;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_CANCEL_CHANNELLING {
     uint32_t id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_AI_REACTION {
     uint64_t guid;
     AiReaction reaction;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_SET_SELECTION {
     uint64_t target;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_SET_TARGET_OBSOLETE {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_ATTACKSWING {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_ATTACKSTOP {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_ATTACKSTART {
     uint64_t attacker;
     uint64_t victim;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_ATTACKSTOP {
@@ -8840,32 +8981,32 @@ struct SMSG_ATTACKSTOP {
     uint64_t enemy;
     uint32_t unknown1;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_ATTACKSWING_NOTINRANGE {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_ATTACKSWING_BADFACING {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_ATTACKSWING_NOTSTANDING {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_ATTACKSWING_DEADTARGET {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_ATTACKSWING_CANT_ATTACK {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_ATTACKERSTATEUPDATE {
@@ -8880,12 +9021,12 @@ struct SMSG_ATTACKERSTATEUPDATE {
     uint32_t spell_id;
     uint32_t blocked_amount;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_CANCEL_COMBAT {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SPELLHEALLOG {
@@ -8895,7 +9036,7 @@ struct SMSG_SPELLHEALLOG {
     uint32_t damage;
     bool critical;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SPELLENERGIZELOG {
@@ -8905,7 +9046,7 @@ struct SMSG_SPELLENERGIZELOG {
     Power power;
     uint32_t damage;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_BINDPOINTUPDATE {
@@ -8913,26 +9054,26 @@ struct SMSG_BINDPOINTUPDATE {
     Map map;
     Area area;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_PLAYERBOUND {
     uint64_t guid;
     Area area;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_CLIENT_CONTROL_UPDATE {
     uint64_t guid;
     bool allow_movement;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_REPOP_REQUEST {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_RESURRECT_REQUEST {
@@ -8940,31 +9081,31 @@ struct SMSG_RESURRECT_REQUEST {
     std::string name;
     bool player;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_RESURRECT_RESPONSE {
     uint64_t guid;
     uint8_t status;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_LOOT {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_LOOT_MONEY {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_LOOT_RELEASE {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_LOOT_RESPONSE {
@@ -8975,31 +9116,31 @@ struct SMSG_LOOT_RESPONSE {
     uint8_t amount_of_items;
     std::vector<vanilla::LootItem> items;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_LOOT_RELEASE_RESPONSE {
     uint64_t guid;
     uint8_t unknown1;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_LOOT_REMOVED {
     uint8_t slot;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_LOOT_MONEY_NOTIFY {
     uint32_t amount;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_LOOT_CLEAR_MONEY {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_ITEM_PUSH_RESULT {
@@ -9014,30 +9155,30 @@ struct SMSG_ITEM_PUSH_RESULT {
     uint32_t item_random_property_id;
     uint32_t item_count;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_DUEL_REQUESTED {
     uint64_t initiator;
     uint64_t target;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_DUEL_OUTOFBOUNDS {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_DUEL_INBOUNDS {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_DUEL_COMPLETE {
     bool ended_without_interruption;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_DUEL_WINNER {
@@ -9045,48 +9186,62 @@ struct SMSG_DUEL_WINNER {
     std::string opponent_name;
     std::string initiator_name;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_DUEL_ACCEPTED {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_DUEL_CANCELLED {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_MOUNTRESULT {
     MountResult result;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_DISMOUNTRESULT {
     DismountResult result;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_MOUNTSPECIAL_ANIM {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_MOUNTSPECIAL_ANIM {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_PET_TAME_FAILURE {
     PetTameFailureReason reason;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
+};
+
+struct CMSG_PET_SET_ACTION {
+    struct Extra {
+        uint32_t position2;
+        uint32_t data2;
+    };
+
+    uint64_t guid;
+    uint32_t position1;
+    uint32_t data1;
+    std::unique_ptr<Extra> extra;
+
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_PET_ACTION {
@@ -9094,25 +9249,45 @@ struct CMSG_PET_ACTION {
     uint32_t data;
     uint64_t target;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_PET_ABANDON {
     uint64_t pet;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_PET_RENAME {
     uint64_t pet;
     std::string name;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_PET_NAME_INVALID {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
+};
+
+struct SMSG_PET_SPELLS {
+    struct ActionBars {
+        uint32_t duration;
+        PetReactState react;
+        PetCommandState command;
+        uint8_t unknown;
+        PetEnabled pet_enabled;
+        std::array<uint32_t, 10> action_bars;
+        uint8_t amount_of_spells;
+        std::vector<uint32_t> spells;
+        uint8_t amount_of_cooldowns;
+        std::vector<vanilla::PetSpellCooldown> cooldowns;
+    };
+
+    uint64_t pet;
+    std::unique_ptr<ActionBars> action_bars;
+
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_PET_MODE {
@@ -9122,13 +9297,25 @@ struct SMSG_PET_MODE {
     uint8_t unknown1;
     PetEnabled pet_enabled;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_GOSSIP_HELLO {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
+};
+
+struct CMSG_GOSSIP_SELECT_OPTION {
+    struct Unknown {
+        std::string code;
+    };
+
+    uint64_t guid;
+    uint32_t gossip_list_id;
+    std::unique_ptr<Unknown> unknown;
+
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_GOSSIP_MESSAGE {
@@ -9139,45 +9326,45 @@ struct SMSG_GOSSIP_MESSAGE {
     uint32_t amount_of_quests;
     std::vector<vanilla::QuestItem> quests;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_GOSSIP_COMPLETE {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_NPC_TEXT_QUERY {
     uint32_t text_id;
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_NPC_TEXT_UPDATE {
     uint32_t text_id;
     std::array<vanilla::NpcTextUpdate, 8> texts;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_QUESTGIVER_STATUS_QUERY {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_QUESTGIVER_STATUS {
     uint64_t guid;
     QuestGiverStatus status;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_QUESTGIVER_HELLO {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_QUESTGIVER_QUEST_LIST {
@@ -9188,19 +9375,19 @@ struct SMSG_QUESTGIVER_QUEST_LIST {
     uint8_t amount_of_entries;
     std::vector<vanilla::QuestItem> quest_items;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_QUESTGIVER_QUERY_QUEST {
     uint64_t guid;
     uint32_t quest_id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_QUESTGIVER_QUEST_AUTOLAUNCH {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_QUESTGIVER_QUEST_DETAILS {
@@ -9219,21 +9406,21 @@ struct SMSG_QUESTGIVER_QUEST_DETAILS {
     uint32_t amount_of_emotes;
     std::vector<vanilla::QuestDetailsEmote> emotes;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_QUESTGIVER_ACCEPT_QUEST {
     uint64_t guid;
     uint32_t quest_id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_QUESTGIVER_COMPLETE_QUEST {
     uint64_t guid;
     uint32_t quest_id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_QUESTGIVER_REQUEST_ITEMS {
@@ -9252,14 +9439,14 @@ struct SMSG_QUESTGIVER_REQUEST_ITEMS {
     uint32_t flags2;
     uint32_t flags3;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_QUESTGIVER_REQUEST_REWARD {
     uint64_t guid;
     uint32_t quest_id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_QUESTGIVER_OFFER_REWARD {
@@ -9278,7 +9465,7 @@ struct SMSG_QUESTGIVER_OFFER_REWARD {
     uint32_t reward_spell;
     uint32_t reward_spell_cast;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_QUESTGIVER_CHOOSE_REWARD {
@@ -9286,18 +9473,18 @@ struct CMSG_QUESTGIVER_CHOOSE_REWARD {
     uint32_t quest_id;
     uint32_t reward;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_QUESTGIVER_QUEST_INVALID {
     QuestFailedReason msg;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_QUESTGIVER_CANCEL {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_QUESTGIVER_QUEST_COMPLETE {
@@ -9308,50 +9495,50 @@ struct SMSG_QUESTGIVER_QUEST_COMPLETE {
     uint32_t amount_of_item_rewards;
     std::vector<vanilla::QuestItemReward> item_rewards;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_QUESTGIVER_QUEST_FAILED {
     uint32_t quest_id;
     QuestFailedReason reason;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_QUESTLOG_SWAP_QUEST {
     uint8_t slot1;
     uint8_t slot2;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_QUESTLOG_REMOVE_QUEST {
     uint8_t slot;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_QUESTLOG_FULL {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_QUESTUPDATE_FAILED {
     uint32_t quest_id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_QUESTUPDATE_FAILEDTIMER {
     uint32_t quest_id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_QUESTUPDATE_COMPLETE {
     uint32_t quest_id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_QUESTUPDATE_ADD_KILL {
@@ -9361,20 +9548,20 @@ struct SMSG_QUESTUPDATE_ADD_KILL {
     uint32_t required_kill_count;
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_QUESTUPDATE_ADD_ITEM {
     uint32_t required_item_id;
     uint32_t items_required;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_QUEST_CONFIRM_ACCEPT {
     uint32_t quest_id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_QUEST_CONFIRM_ACCEPT {
@@ -9382,19 +9569,19 @@ struct SMSG_QUEST_CONFIRM_ACCEPT {
     std::string quest_title;
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_PUSHQUESTTOPARTY {
     uint32_t quest_id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_LIST_INVENTORY {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_LIST_INVENTORY {
@@ -9402,7 +9589,7 @@ struct SMSG_LIST_INVENTORY {
     uint8_t amount_of_items;
     std::vector<vanilla::ListInventoryItem> items;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_SELL_ITEM {
@@ -9410,7 +9597,7 @@ struct CMSG_SELL_ITEM {
     uint64_t item;
     uint8_t amount;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SELL_ITEM {
@@ -9418,7 +9605,7 @@ struct SMSG_SELL_ITEM {
     uint64_t item;
     SellItemResult result;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_BUY_ITEM {
@@ -9427,7 +9614,7 @@ struct CMSG_BUY_ITEM {
     uint8_t amount;
     uint8_t unknown1;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_BUY_ITEM_IN_SLOT {
@@ -9437,7 +9624,7 @@ struct CMSG_BUY_ITEM_IN_SLOT {
     uint8_t bag_slot;
     uint8_t amount;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_BUY_ITEM {
@@ -9446,7 +9633,7 @@ struct SMSG_BUY_ITEM {
     uint32_t amount_for_sale;
     uint32_t amount_bought;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_BUY_FAILED {
@@ -9454,7 +9641,7 @@ struct SMSG_BUY_FAILED {
     uint32_t item;
     BuyResult result;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SHOWTAXINODES {
@@ -9464,26 +9651,26 @@ struct SMSG_SHOWTAXINODES {
     uint32_t amount_of_nodes;
     std::vector<uint32_t> nodes;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_TAXINODE_STATUS_QUERY {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_TAXINODE_STATUS {
     uint64_t guid;
     bool taxi_mask_node_known;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_TAXIQUERYAVAILABLENODES {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_ACTIVATETAXI {
@@ -9491,24 +9678,24 @@ struct CMSG_ACTIVATETAXI {
     uint32_t source_node;
     uint32_t destination_node;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_ACTIVATETAXIREPLY {
     ActivateTaxiReply reply;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_NEW_TAXI_PATH {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_TRAINER_LIST {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_TRAINER_LIST {
@@ -9518,21 +9705,21 @@ struct SMSG_TRAINER_LIST {
     std::vector<vanilla::TrainerSpell> spells;
     std::string greeting;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_TRAINER_BUY_SPELL {
     uint64_t guid;
     uint32_t id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_TRAINER_BUY_SUCCEEDED {
     uint64_t guid;
     uint32_t id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_TRAINER_BUY_FAILED {
@@ -9540,43 +9727,43 @@ struct SMSG_TRAINER_BUY_FAILED {
     uint32_t id;
     TrainingFailureReason error;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_BINDER_ACTIVATE {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_BANKER_ACTIVATE {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SHOW_BANK {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_BUY_BANK_SLOT {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_BUY_BANK_SLOT_RESULT {
     BuyBankSlotResult result;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_PETITION_SHOWLIST {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_PETITION_SHOWLIST {
@@ -9584,7 +9771,7 @@ struct SMSG_PETITION_SHOWLIST {
     uint8_t amount_of_petitions;
     std::vector<vanilla::PetitionShowlist> petitions;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_PETITION_BUY {
@@ -9607,13 +9794,13 @@ struct CMSG_PETITION_BUY {
     uint32_t index;
     uint32_t unknown15;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_PETITION_SHOW_SIGNATURES {
     uint64_t item;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_PETITION_SHOW_SIGNATURES {
@@ -9623,14 +9810,14 @@ struct SMSG_PETITION_SHOW_SIGNATURES {
     uint8_t amount_of_signatures;
     std::vector<vanilla::PetitionSignature> signatures;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_PETITION_SIGN {
     uint64_t petition;
     uint8_t unknown1;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_PETITION_SIGN_RESULTS {
@@ -9638,33 +9825,40 @@ struct SMSG_PETITION_SIGN_RESULTS {
     uint64_t owner;
     PetitionResult result;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
+};
+
+struct MSG_PETITION_DECLINE {
+    uint64_t petition;
+
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_smsg() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_cmsg() const;
 };
 
 struct CMSG_OFFER_PETITION {
     uint64_t petition;
     uint64_t target;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_TURN_IN_PETITION {
     uint64_t petition;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_TURN_IN_PETITION_RESULTS {
     PetitionResult result;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_PETITION_QUERY {
     uint32_t guild_id;
     uint64_t petition;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_PETITION_QUERY_RESPONSE {
@@ -9686,17 +9880,17 @@ struct SMSG_PETITION_QUERY_RESPONSE {
     uint32_t todo_amount_of_signers;
     uint32_t number_of_choices;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_FISH_NOT_HOOKED {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_FISH_ESCAPED {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_BUG {
@@ -9704,36 +9898,36 @@ struct CMSG_BUG {
     std::string content;
     std::string bug_type;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_NOTIFICATION {
     std::string notification;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_PLAYED_TIME {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_PLAYED_TIME {
     uint32_t total_played_time;
     uint32_t level_played_time;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_QUERY_TIME {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_QUERY_TIME_RESPONSE {
     uint32_t time;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_LOG_XPGAIN {
@@ -9743,13 +9937,13 @@ struct SMSG_LOG_XPGAIN {
     uint32_t experience_without_rested;
     float exp_group_bonus;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_RECLAIM_CORPSE {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_WRAP_ITEM {
@@ -9758,7 +9952,7 @@ struct CMSG_WRAP_ITEM {
     uint8_t item_bag_index;
     uint8_t item_slot;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_LEVELUP_INFO {
@@ -9775,14 +9969,14 @@ struct SMSG_LEVELUP_INFO {
     uint32_t intellect;
     uint32_t spirit;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MINIMAP_PING_Client {
     float position_x;
     float position_y;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MINIMAP_PING_Server {
@@ -9790,7 +9984,7 @@ struct MSG_MINIMAP_PING_Server {
     float position_x;
     float position_y;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_RESISTLOG {
@@ -9802,7 +9996,7 @@ struct SMSG_RESISTLOG {
     uint32_t unknown4;
     uint32_t unknown5;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_ENCHANTMENTLOG {
@@ -9812,7 +10006,7 @@ struct SMSG_ENCHANTMENTLOG {
     uint32_t spell;
     bool show_affiliation;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_START_MIRROR_TIMER {
@@ -9823,66 +10017,66 @@ struct SMSG_START_MIRROR_TIMER {
     bool is_frozen;
     uint32_t id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_PAUSE_MIRROR_TIMER {
     TimerType timer;
     bool is_frozen;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_STOP_MIRROR_TIMER {
     TimerType timer;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_PING {
     uint32_t sequence_id;
     uint32_t round_time_in_ms;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_PONG {
     uint32_t sequence_id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_CLEAR_COOLDOWN {
     uint32_t id;
     uint64_t target;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_GAMEOBJECT_PAGETEXT {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_SETSHEATHED {
     SheathState sheathed;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SPELL_DELAYED {
     uint64_t guid;
     uint32_t delay_time;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_ITEM_TIME_UPDATE {
     uint64_t guid;
     uint32_t duration;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_ITEM_ENCHANT_TIME_UPDATE {
@@ -9891,13 +10085,13 @@ struct SMSG_ITEM_ENCHANT_TIME_UPDATE {
     uint32_t duration;
     uint64_t player;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_AUTH_CHALLENGE {
     uint32_t server_seed;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_AUTH_RESPONSE {
@@ -9907,7 +10101,7 @@ struct SMSG_AUTH_RESPONSE {
     uint32_t billing_rested;
     uint32_t queue_position;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_PET_CAST_SPELL {
@@ -9915,13 +10109,13 @@ struct CMSG_PET_CAST_SPELL {
     uint32_t id;
     vanilla::SpellCastTargets targets;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_SAVE_GUILD_EMBLEM_Server {
     GuildEmblemResult result;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_SAVE_GUILD_EMBLEM_Client {
@@ -9932,48 +10126,55 @@ struct MSG_SAVE_GUILD_EMBLEM_Client {
     uint32_t border_color;
     uint32_t background_color;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
+};
+
+struct MSG_TABARDVENDOR_ACTIVATE {
+    uint64_t guid;
+
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_smsg() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_cmsg() const;
 };
 
 struct SMSG_PLAY_SPELL_VISUAL {
     uint64_t guid;
     uint32_t spell_art_kit;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_ZONEUPDATE {
     Area area;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_PARTYKILLLOG {
     uint64_t player_with_killing_blow;
     uint64_t victim;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_PLAY_SPELL_IMPACT {
     uint64_t guid;
     uint32_t spell_visual_kit;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_EXPLORATION_EXPERIENCE {
     Area area;
     uint32_t experience;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_RANDOM_ROLL_Client {
     uint32_t minimum;
     uint32_t maximum;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_RANDOM_ROLL_Server {
@@ -9982,7 +10183,7 @@ struct MSG_RANDOM_ROLL_Server {
     uint32_t actual_roll;
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_ENVIRONMENTAL_DAMAGE_LOG {
@@ -9992,66 +10193,66 @@ struct SMSG_ENVIRONMENTAL_DAMAGE_LOG {
     uint32_t absorb;
     uint32_t resist;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_LOOKING_FOR_GROUP_Client {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_LOOKING_FOR_GROUP_Server {
     uint32_t unknown1;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_UNLEARN_SKILL {
     Skill skill;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_REMOVED_SPELL {
     uint16_t spell;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_GMTICKET_CREATE {
     GmTicketResponse response;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_GMTICKET_UPDATETEXT {
     GmTicketType ticket_type;
     std::string message;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_GMTICKET_UPDATETEXT {
     GmTicketResponse response;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_ACCOUNT_DATA_TIMES {
     std::array<uint32_t, 32> data;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_REQUEST_ACCOUNT_DATA {
     uint32_t data_type;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_GMTICKET_GETTICKET {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_GMTICKET_GETTICKET {
@@ -10064,24 +10265,24 @@ struct SMSG_GMTICKET_GETTICKET {
     GmTicketEscalationStatus escalation_status;
     bool read_by_gm;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_GAMEOBJECT_SPAWN_ANIM {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_GAMEOBJECT_DESPAWN_ANIM {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_CORPSE_QUERY_Client {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_CORPSE_QUERY_Server {
@@ -10090,52 +10291,52 @@ struct MSG_CORPSE_QUERY_Server {
     all::Vector3d position;
     Map corpse_map;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_GMTICKET_DELETETICKET {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_GMTICKET_DELETETICKET {
     GmTicketResponse response;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_CHAT_WRONG_FACTION {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_GMTICKET_SYSTEMSTATUS {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_GMTICKET_SYSTEMSTATUS {
     GmTicketQueueStatus will_accept_tickets;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_SPIRIT_HEALER_ACTIVATE {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SET_REST_START {
     uint32_t unknown1;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SPIRIT_HEALER_CONFIRM {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_GOSSIP_POI {
@@ -10145,13 +10346,13 @@ struct SMSG_GOSSIP_POI {
     uint32_t data;
     std::string location_name;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_CHAT_IGNORED {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_GUILD_RANK {
@@ -10159,32 +10360,32 @@ struct CMSG_GUILD_RANK {
     uint32_t rights;
     std::string rank_name;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_GUILD_ADD_RANK {
     std::string rank_name;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_GUILD_DEL_RANK {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_GUILD_SET_PUBLIC_NOTE {
     std::string player_name;
     std::string note;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_GUILD_SET_OFFICER_NOTE {
     std::string player_name;
     std::string note;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_LOGIN_VERIFY_WORLD {
@@ -10192,7 +10393,7 @@ struct SMSG_LOGIN_VERIFY_WORLD {
     all::Vector3d position;
     float orientation;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_SEND_MAIL {
@@ -10208,7 +10409,7 @@ struct CMSG_SEND_MAIL {
     uint32_t unknown3;
     uint32_t unknown4;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SEND_MAIL_RESULT {
@@ -10221,26 +10422,26 @@ struct SMSG_SEND_MAIL_RESULT {
     MailResultTwo result2;
     uint32_t equip_error2;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_GET_MAIL_LIST {
     uint64_t mailbox;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_MAIL_LIST_RESULT {
     uint8_t amount_of_mails;
     std::vector<vanilla::Mail> mails;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_BATTLEFIELD_LIST {
     Map map;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_BATTLEFIELD_LIST {
@@ -10250,13 +10451,13 @@ struct SMSG_BATTLEFIELD_LIST {
     uint32_t number_of_battlegrounds;
     std::vector<uint32_t> battlegrounds;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_BATTLEFIELD_JOIN {
     Map map;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_ITEM_TEXT_QUERY {
@@ -10264,49 +10465,49 @@ struct CMSG_ITEM_TEXT_QUERY {
     uint32_t mail_id;
     uint32_t unknown1;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_ITEM_TEXT_QUERY_RESPONSE {
     uint32_t item_text_id;
     std::string text;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_MAIL_TAKE_MONEY {
     uint64_t mailbox;
     uint32_t mail_id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_MAIL_TAKE_ITEM {
     uint64_t mailbox;
     uint32_t mail_id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_MAIL_MARK_AS_READ {
     uint64_t mailbox;
     uint32_t mail_id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_MAIL_RETURN_TO_SENDER {
     uint64_t mailbox_id;
     uint32_t mail_id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_MAIL_DELETE {
     uint64_t mailbox_id;
     uint32_t mail_id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_MAIL_CREATE_TEXT_ITEM {
@@ -10314,7 +10515,7 @@ struct CMSG_MAIL_CREATE_TEXT_ITEM {
     uint32_t mail_id;
     uint32_t mail_template_id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SPELLLOGMISS {
@@ -10324,7 +10525,7 @@ struct SMSG_SPELLLOGMISS {
     uint32_t amount_of_targets;
     std::vector<vanilla::SpellLogMiss> targets;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SPELLLOGEXECUTE {
@@ -10333,7 +10534,7 @@ struct SMSG_SPELLLOGEXECUTE {
     uint32_t amount_of_effects;
     std::vector<vanilla::SpellLog> logs;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_PERIODICAURALOG {
@@ -10343,7 +10544,7 @@ struct SMSG_PERIODICAURALOG {
     uint32_t amount_of_auras;
     std::vector<vanilla::AuraLog> auras;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SPELLDAMAGESHIELD {
@@ -10352,7 +10553,7 @@ struct SMSG_SPELLDAMAGESHIELD {
     uint32_t damage;
     SpellSchool school;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SPELLNONMELEEDAMAGELOG {
@@ -10369,33 +10570,43 @@ struct SMSG_SPELLNONMELEEDAMAGELOG {
     HitInfo hit_info;
     uint8_t extend_flag;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_LEARN_TALENT {
     Talent talent;
     uint32_t requested_rank;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
+};
+
+struct CMSG_TOGGLE_PVP {
+    struct Set {
+        bool enable_pvp;
+    };
+
+    std::unique_ptr<Set> set;
+
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_ZONE_UNDER_ATTACK {
     Area zone_id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_AUCTION_HELLO_Client {
     uint64_t auctioneer;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_AUCTION_HELLO_Server {
     uint64_t auctioneer;
     AuctionHouse auction_house;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_AUCTION_SELL_ITEM {
@@ -10405,14 +10616,14 @@ struct CMSG_AUCTION_SELL_ITEM {
     uint32_t buyout;
     uint32_t auction_duration_in_minutes;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_AUCTION_REMOVE_ITEM {
     uint64_t auctioneer;
     uint32_t auction_id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_AUCTION_LIST_ITEMS {
@@ -10427,14 +10638,14 @@ struct CMSG_AUCTION_LIST_ITEMS {
     ItemQuality auction_quality;
     uint8_t usable;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_AUCTION_LIST_OWNER_ITEMS {
     uint64_t auctioneer;
     uint32_t list_from;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_AUCTION_PLACE_BID {
@@ -10442,7 +10653,7 @@ struct CMSG_AUCTION_PLACE_BID {
     uint32_t auction_id;
     uint32_t price;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_AUCTION_COMMAND_RESULT {
@@ -10460,7 +10671,7 @@ struct SMSG_AUCTION_COMMAND_RESULT {
     uint32_t new_bid2;
     uint32_t auction_outbid3;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_AUCTION_LIST_RESULT {
@@ -10468,7 +10679,7 @@ struct SMSG_AUCTION_LIST_RESULT {
     std::vector<vanilla::AuctionListItem> auctions;
     uint32_t total_amount_of_auctions;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_AUCTION_OWNER_LIST_RESULT {
@@ -10476,7 +10687,7 @@ struct SMSG_AUCTION_OWNER_LIST_RESULT {
     std::vector<vanilla::AuctionListItem> auctions;
     uint32_t total_amount_of_auctions;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_AUCTION_BIDDER_NOTIFICATION {
@@ -10488,7 +10699,7 @@ struct SMSG_AUCTION_BIDDER_NOTIFICATION {
     uint32_t item_template;
     uint32_t item_random_property_id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_AUCTION_OWNER_NOTIFICATION {
@@ -10499,7 +10710,7 @@ struct SMSG_AUCTION_OWNER_NOTIFICATION {
     uint32_t item;
     uint32_t item_random_property_id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_PROCRESIST {
@@ -10508,7 +10719,7 @@ struct SMSG_PROCRESIST {
     uint32_t id;
     LogFormat log_format;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_DISPEL_FAILED {
@@ -10517,7 +10728,7 @@ struct SMSG_DISPEL_FAILED {
     uint32_t amount_of_spells;
     std::vector<uint32_t> spells;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SPELLORDAMAGE_IMMUNE {
@@ -10526,7 +10737,7 @@ struct SMSG_SPELLORDAMAGE_IMMUNE {
     uint32_t id;
     bool debug_log_format;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_AUCTION_LIST_BIDDER_ITEMS {
@@ -10535,7 +10746,7 @@ struct CMSG_AUCTION_LIST_BIDDER_ITEMS {
     uint32_t amount_of_outbid_items;
     std::vector<uint32_t> outbid_item_ids;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_AUCTION_BIDDER_LIST_RESULT {
@@ -10543,7 +10754,7 @@ struct SMSG_AUCTION_BIDDER_LIST_RESULT {
     std::vector<vanilla::AuctionListItem> auctions;
     uint32_t total_amount_of_auctions;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SET_FLAT_SPELL_MODIFIER {
@@ -10551,7 +10762,7 @@ struct SMSG_SET_FLAT_SPELL_MODIFIER {
     uint8_t op;
     uint32_t value;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SET_PCT_SPELL_MODIFIER {
@@ -10559,43 +10770,43 @@ struct SMSG_SET_PCT_SPELL_MODIFIER {
     uint8_t op;
     uint32_t value;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_SET_AMMO {
     uint32_t item;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_CORPSE_RECLAIM_DELAY {
     uint32_t delay;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_SET_ACTIVE_MOVER {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_PET_CANCEL_AURA {
     uint64_t guid;
     uint32_t id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_CANCEL_AUTO_REPEAT_SPELL {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_LIST_STABLED_PETS_Client {
     uint64_t npc;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_LIST_STABLED_PETS_Server {
@@ -10604,63 +10815,71 @@ struct MSG_LIST_STABLED_PETS_Server {
     uint8_t stable_slots;
     std::vector<vanilla::StabledPet> pets;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_STABLE_PET {
     uint64_t stable_master;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_UNSTABLE_PET {
     uint64_t stable_master;
     uint32_t pet_number;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_BUY_STABLE_SLOT {
     uint64_t npc;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_STABLE_RESULT {
     StableResult result;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_STABLE_SWAP_PET {
     uint64_t npc;
     uint32_t pet_slot;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
+};
+
+struct MSG_QUEST_PUSH_RESULT {
+    uint64_t guid;
+    QuestPartyMessage message;
+
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_smsg() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_cmsg() const;
 };
 
 struct SMSG_PLAY_MUSIC {
     uint32_t sound_id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_PLAY_OBJECT_SOUND {
     uint32_t sound_id;
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_REQUEST_PET_INFO {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_FAR_SIGHT {
     FarSightOperation operation;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SPELLDISPELLOG {
@@ -10669,65 +10888,65 @@ struct SMSG_SPELLDISPELLOG {
     uint32_t amount_of_spells;
     std::vector<uint32_t> spells;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_GROUP_CHANGE_SUB_GROUP {
     std::string name;
     uint8_t group_number;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_REQUEST_PARTY_MEMBER_STATS {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_GROUP_SWAP_SUB_GROUP {
     std::string name;
     std::string swap_with_name;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_AUTOSTORE_BANK_ITEM {
     uint8_t bag_index;
     uint8_t slot_index;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_AUTOBANK_ITEM {
     uint8_t bag_index;
     uint8_t slot_index;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_QUERY_NEXT_MAIL_TIME_Server {
     float unread_mails;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_QUERY_NEXT_MAIL_TIME_Client {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_RECEIVED_MAIL {
     uint32_t unknown1;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_RAID_GROUP_ONLY {
     uint32_t homebind_timer;
     RaidGroupError error;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_PVP_CREDIT {
@@ -10735,7 +10954,7 @@ struct SMSG_PVP_CREDIT {
     uint64_t victim;
     PvpRank rank;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_AUCTION_REMOVED_NOTIFICATION {
@@ -10743,88 +10962,88 @@ struct SMSG_AUCTION_REMOVED_NOTIFICATION {
     uint32_t item_template;
     uint32_t random_property_id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_GROUP_RAID_CONVERT {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_GROUP_ASSISTANT_LEADER {
     uint64_t guid;
     bool set_assistant;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_BUYBACK_ITEM {
     uint64_t guid;
     BuybackSlot slot;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SERVER_MESSAGE {
     ServerMessageType message_type;
     std::string message;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_MEETINGSTONE_JOIN {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_MEETINGSTONE_LEAVE {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_MEETINGSTONE_SETQUEUE {
     Area area;
     MeetingStoneStatus status;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_MEETINGSTONE_INFO {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_MEETINGSTONE_COMPLETE {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_MEETINGSTONE_IN_PROGRESS {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_MEETINGSTONE_MEMBER_ADDED {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_CANCEL_GROWTH_AURA {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_CANCEL_AUTO_REPEAT {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_STANDSTATE_UPDATE {
     UnitStandState state;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_LOOT_ALL_PASSED {
@@ -10834,7 +11053,7 @@ struct SMSG_LOOT_ALL_PASSED {
     uint32_t item_random_property_id;
     uint32_t item_random_suffix_id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_LOOT_ROLL_WON {
@@ -10847,7 +11066,7 @@ struct SMSG_LOOT_ROLL_WON {
     uint8_t winning_roll;
     RollVote vote;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_LOOT_ROLL {
@@ -10855,7 +11074,7 @@ struct CMSG_LOOT_ROLL {
     uint32_t item_slot;
     RollVote vote;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_LOOT_START_ROLL {
@@ -10866,7 +11085,7 @@ struct SMSG_LOOT_START_ROLL {
     uint32_t item_random_property_id;
     uint32_t countdown_time;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_LOOT_ROLL {
@@ -10879,7 +11098,7 @@ struct SMSG_LOOT_ROLL {
     uint8_t roll_number;
     RollVote vote;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_LOOT_MASTER_GIVE {
@@ -10887,60 +11106,60 @@ struct CMSG_LOOT_MASTER_GIVE {
     uint8_t slot_id;
     uint64_t player;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_LOOT_MASTER_LIST {
     uint8_t amount_of_players;
     std::vector<uint64_t> guids;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SET_FORCED_REACTIONS {
     uint32_t amount_of_reactions;
     std::vector<vanilla::ForcedReaction> reactions;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SPELL_FAILED_OTHER {
     uint64_t caster;
     uint32_t id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_GAMEOBJECT_RESET_STATE {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_REPAIR_ITEM {
     uint64_t npc;
     uint64_t item;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_CHAT_PLAYER_NOT_FOUND {
     std::string name;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_TALENT_WIPE_CONFIRM_Client {
     uint64_t wiping_npc;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_TALENT_WIPE_CONFIRM_Server {
     uint64_t wiping_npc;
     uint32_t cost_in_copper;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SUMMON_REQUEST {
@@ -10948,13 +11167,13 @@ struct SMSG_SUMMON_REQUEST {
     Area area;
     uint32_t auto_decline_time;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_SUMMON_RESPONSE {
     uint64_t summoner;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_MONSTER_MOVE_TRANSPORT {
@@ -10970,74 +11189,90 @@ struct SMSG_MONSTER_MOVE_TRANSPORT {
     uint32_t duration;
     std::vector<::wow_world_messages::all::Vector3d> splines;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_PET_BROKEN {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_FEATHER_FALL_Server {
     uint64_t player;
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
+};
+
+struct MSG_MOVE_WATER_WALK {
+    uint64_t player;
+    vanilla::MovementInfo info;
+
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_smsg() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_cmsg() const;
 };
 
 struct CMSG_SELF_RES {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_FEIGN_DEATH_RESISTED {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_DUEL_COUNTDOWN {
     uint32_t time;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_AREA_TRIGGER_MESSAGE {
     std::string message;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_TOGGLE_HELM {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_TOGGLE_CLOAK {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_MEETINGSTONE_JOINFAILED {
     MeetingStoneFailure reason;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_PLAYER_SKINNED {
     bool spirit_released;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_DURABILITY_DAMAGE_DEATH {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_SET_ACTIONBAR_TOGGLES {
     uint8_t action_bar;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
+};
+
+struct MSG_PETITION_RENAME {
+    uint64_t petition;
+    std::string new_name;
+
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_smsg() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_cmsg() const;
 };
 
 struct SMSG_INIT_WORLD_STATES {
@@ -11046,40 +11281,40 @@ struct SMSG_INIT_WORLD_STATES {
     uint16_t amount_of_states;
     std::vector<vanilla::WorldState> states;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_UPDATE_WORLD_STATE {
     vanilla::WorldState state;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_ITEM_NAME_QUERY {
     uint32_t item;
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_ITEM_NAME_QUERY_RESPONSE {
     uint32_t item;
     std::string item_name;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_PET_ACTION_FEEDBACK {
     PetFeedback feedback;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_CHAR_RENAME {
     uint64_t character;
     std::string new_name;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_CHAR_RENAME {
@@ -11087,7 +11322,7 @@ struct SMSG_CHAR_RENAME {
     uint64_t character;
     std::string new_name;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_MOVE_SPLINE_DONE {
@@ -11095,38 +11330,38 @@ struct CMSG_MOVE_SPLINE_DONE {
     uint32_t movement_counter;
     uint32_t unknown1;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_MOVE_FALL_RESET {
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_INSTANCE_SAVE_CREATED {
     uint32_t unknown;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_RAID_INSTANCE_INFO {
     uint32_t amount_of_raid_infos;
     std::vector<vanilla::RaidInfo> raid_infos;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_REQUEST_RAID_INFO {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_MOVE_TIME_SKIPPED {
     uint64_t guid;
     uint32_t lag;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_MOVE_FEATHER_FALL_ACK {
@@ -11135,7 +11370,7 @@ struct CMSG_MOVE_FEATHER_FALL_ACK {
     vanilla::MovementInfo info;
     uint32_t apply;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_MOVE_WATER_WALK_ACK {
@@ -11144,25 +11379,25 @@ struct CMSG_MOVE_WATER_WALK_ACK {
     vanilla::MovementInfo info;
     uint32_t apply;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_MOVE_NOT_ACTIVE_MOVER {
     uint64_t old_mover;
     vanilla::MovementInfo info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_PLAY_SOUND {
     uint32_t sound_id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_BATTLEFIELD_STATUS {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_BATTLEFIELD_STATUS {
@@ -11177,20 +11412,20 @@ struct SMSG_BATTLEFIELD_STATUS {
     uint32_t time_to_bg_autoleave_in_ms;
     uint32_t time_to_bg_start_in_ms;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_BATTLEFIELD_PORT {
     Map map;
     BattlefieldPortAction action;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_INSPECT_HONOR_STATS_Client {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_INSPECT_HONOR_STATS_Server {
@@ -11211,13 +11446,13 @@ struct MSG_INSPECT_HONOR_STATS_Server {
     PvpRank last_week_standing;
     uint8_t rank_progress_bar;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_BATTLEMASTER_HELLO {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_FORCE_WALK_SPEED_CHANGE {
@@ -11225,7 +11460,7 @@ struct SMSG_FORCE_WALK_SPEED_CHANGE {
     uint32_t move_event;
     float speed;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_FORCE_WALK_SPEED_CHANGE_ACK {
@@ -11234,7 +11469,7 @@ struct CMSG_FORCE_WALK_SPEED_CHANGE_ACK {
     vanilla::MovementInfo info;
     float new_speed;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_FORCE_SWIM_BACK_SPEED_CHANGE {
@@ -11242,7 +11477,7 @@ struct SMSG_FORCE_SWIM_BACK_SPEED_CHANGE {
     uint32_t move_event;
     float speed;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK {
@@ -11251,7 +11486,7 @@ struct CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK {
     vanilla::MovementInfo info;
     float new_speed;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_FORCE_TURN_RATE_CHANGE {
@@ -11259,7 +11494,7 @@ struct SMSG_FORCE_TURN_RATE_CHANGE {
     uint32_t move_event;
     float speed;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_FORCE_TURN_RATE_CHANGE_ACK {
@@ -11268,12 +11503,12 @@ struct CMSG_FORCE_TURN_RATE_CHANGE_ACK {
     vanilla::MovementInfo info;
     float new_speed;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_PVP_LOG_DATA_Client {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_PVP_LOG_DATA_Server {
@@ -11282,57 +11517,57 @@ struct MSG_PVP_LOG_DATA_Server {
     uint32_t amount_of_players;
     std::vector<vanilla::BattlegroundPlayer> players;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_LEAVE_BATTLEFIELD {
     Map map;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_AREA_SPIRIT_HEALER_QUERY {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_AREA_SPIRIT_HEALER_QUEUE {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_AREA_SPIRIT_HEALER_TIME {
     uint64_t guid;
     uint32_t next_resurrect_time;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_WARDEN_DATA {
     uint32_t amount_of_encrypted_data;
     std::vector<uint8_t> encrypted_data;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_WARDEN_DATA {
     uint32_t amount_of_encrypted_data;
     std::vector<uint8_t> encrypted_data;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_GROUP_JOINED_BATTLEGROUND {
     BgTypeId id;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_BATTLEGROUND_PLAYER_POSITIONS_Client {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_BATTLEGROUND_PLAYER_POSITIONS_Server {
@@ -11341,31 +11576,31 @@ struct MSG_BATTLEGROUND_PLAYER_POSITIONS_Server {
     uint8_t amount_of_carriers;
     std::vector<vanilla::BattlegroundPlayerPosition> carriers;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_PET_STOP_ATTACK {
     uint64_t pet;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_BINDER_CONFIRM {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_BATTLEGROUND_PLAYER_JOINED {
     uint64_t player;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_BATTLEGROUND_PLAYER_LEFT {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_BATTLEMASTER_JOIN {
@@ -11374,27 +11609,27 @@ struct CMSG_BATTLEMASTER_JOIN {
     uint32_t instance_id;
     bool join_as_group;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_ADDON_INFO {
     uint32_t amount_of_addons;
     std::vector<vanilla::Addon> addons;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_PET_UNLEARN {
     uint64_t pet;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_PET_UNLEARN_CONFIRM {
     uint64_t pet;
     uint32_t talent_reset_cost;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_PARTY_MEMBER_STATS_FULL {
@@ -11421,7 +11656,7 @@ struct SMSG_PARTY_MEMBER_STATS_FULL {
     uint16_t pet_max_power;
     AuraMask pet_auras;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_PET_SPELL_AUTOCAST {
@@ -11429,7 +11664,7 @@ struct CMSG_PET_SPELL_AUTOCAST {
     uint32_t id;
     bool autocast_enabled;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_WEATHER {
@@ -11438,7 +11673,7 @@ struct SMSG_WEATHER {
     uint32_t sound_id;
     WeatherChangeType change;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_RAID_INSTANCE_MESSAGE {
@@ -11446,126 +11681,126 @@ struct SMSG_RAID_INSTANCE_MESSAGE {
     Map map;
     uint32_t time_left;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_GUILD_INFO_TEXT {
     std::string guild_info;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_CHAT_RESTRICTED {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SPLINE_SET_RUN_SPEED {
     uint64_t guid;
     float speed;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SPLINE_SET_RUN_BACK_SPEED {
     uint64_t guid;
     float speed;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SPLINE_SET_SWIM_SPEED {
     uint64_t guid;
     float speed;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SPLINE_SET_WALK_SPEED {
     uint64_t guid;
     float speed;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SPLINE_SET_SWIM_BACK_SPEED {
     uint64_t guid;
     float speed;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SPLINE_SET_TURN_RATE {
     uint64_t guid;
     float speed;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SPLINE_MOVE_UNROOT {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SPLINE_MOVE_FEATHER_FALL {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SPLINE_MOVE_NORMAL_FALL {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SPLINE_MOVE_SET_HOVER {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SPLINE_MOVE_UNSET_HOVER {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SPLINE_MOVE_WATER_WALK {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SPLINE_MOVE_LAND_WALK {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SPLINE_MOVE_START_SWIM {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SPLINE_MOVE_STOP_SWIM {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SPLINE_MOVE_SET_RUN_MODE {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SPLINE_MOVE_SET_WALK_MODE {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_ACTIVATETAXIEXPRESS {
@@ -11574,70 +11809,70 @@ struct CMSG_ACTIVATETAXIEXPRESS {
     uint32_t node_count;
     std::vector<uint32_t> nodes;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_SET_FACTION_INACTIVE {
     Faction faction;
     bool inactive;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_SET_WATCHED_FACTION {
     Faction faction;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_MOVE_TIME_SKIPPED_Server {
     uint64_t player;
     uint32_t time_skipped;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SPLINE_MOVE_ROOT {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_INVALIDATE_PLAYER {
     uint64_t guid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_RESET_INSTANCES {
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_INSTANCE_RESET {
     Map map;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_INSTANCE_RESET_FAILED {
     InstanceResetFailedReason reason;
     Map map;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_UPDATE_LAST_INSTANCE {
     Map map;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_RAID_TARGET_UPDATE_Client {
     RaidTargetIndex target_index;
     uint64_t target;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct MSG_RAID_TARGET_UPDATE_Server {
@@ -11645,27 +11880,48 @@ struct MSG_RAID_TARGET_UPDATE_Server {
     std::array<vanilla::RaidTargetUpdate, 8> raid_targets;
     vanilla::RaidTargetUpdate raid_target;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
+};
+
+struct MSG_RAID_READY_CHECK_Client {
+    struct Answer {
+        uint8_t state;
+    };
+
+    std::unique_ptr<Answer> answer;
+
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
+};
+
+struct MSG_RAID_READY_CHECK_Server {
+    struct StateCheck {
+        uint64_t guid;
+        uint8_t state;
+    };
+
+    std::unique_ptr<StateCheck> state_check;
+
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_PET_ACTION_SOUND {
     uint64_t guid;
     PetTalkReason reason;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_PET_DISMISS_SOUND {
     uint32_t sound_id;
     all::Vector3d position;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_GM_TICKET_STATUS_UPDATE {
     GmTicketStatusResponse response;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMSG_GMSURVEY_SUBMIT {
@@ -11673,20 +11929,20 @@ struct CMSG_GMSURVEY_SUBMIT {
     std::array<vanilla::GmSurveyQuestion, 10> questions;
     std::string answer_comment;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_UPDATE_INSTANCE_OWNERSHIP {
     bool player_is_saved_to_a_raid;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SPELLINSTAKILLLOG {
     uint64_t target;
     uint32_t spell;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SPELL_UPDATE_CHAIN_TARGETS {
@@ -11695,21 +11951,21 @@ struct SMSG_SPELL_UPDATE_CHAIN_TARGETS {
     uint32_t amount_of_targets;
     std::vector<uint64_t> targets;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_EXPECTED_SPAM_RECORDS {
     uint32_t amount_of_records;
     std::vector<std::string> records;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_DEFENSE_MESSAGE {
     Area area;
     std::string message;
 
-    std::vector<unsigned char> write() const;
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct ClientOpcode {
@@ -11805,6 +12061,7 @@ struct ClientOpcode {
         MSG_MOVE_STOP_SWIM = 203,
         MSG_MOVE_SET_FACING = 218,
         MSG_MOVE_SET_PITCH = 219,
+        MSG_MOVE_WORLDPORT_ACK = 220,
         CMSG_MOVE_SET_RAW_POSITION = 225,
         CMSG_FORCE_RUN_SPEED_CHANGE_ACK = 227,
         CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK = 229,
@@ -11859,10 +12116,12 @@ struct ClientOpcode {
         CMSG_DUEL_ACCEPTED = 364,
         CMSG_DUEL_CANCELLED = 365,
         CMSG_MOUNTSPECIAL_ANIM = 369,
+        CMSG_PET_SET_ACTION = 372,
         CMSG_PET_ACTION = 373,
         CMSG_PET_ABANDON = 374,
         CMSG_PET_RENAME = 375,
         CMSG_GOSSIP_HELLO = 379,
+        CMSG_GOSSIP_SELECT_OPTION = 380,
         CMSG_NPC_TEXT_QUERY = 383,
         CMSG_QUESTGIVER_STATUS_QUERY = 386,
         CMSG_QUESTGIVER_HELLO = 388,
@@ -11893,6 +12152,7 @@ struct ClientOpcode {
         CMSG_PETITION_BUY = 445,
         CMSG_PETITION_SHOW_SIGNATURES = 446,
         CMSG_PETITION_SIGN = 448,
+        MSG_PETITION_DECLINE = 450,
         CMSG_OFFER_PETITION = 451,
         CMSG_TURN_IN_PETITION = 452,
         CMSG_PETITION_QUERY = 454,
@@ -11906,6 +12166,7 @@ struct ClientOpcode {
         CMSG_SETSHEATHED = 480,
         CMSG_PET_CAST_SPELL = 496,
         MSG_SAVE_GUILD_EMBLEM = 497,
+        MSG_TABARDVENDOR_ACTIVATE = 498,
         CMSG_ZONEUPDATE = 500,
         MSG_RANDOM_ROLL = 507,
         MSG_LOOKING_FOR_GROUP = 511,
@@ -11935,6 +12196,7 @@ struct ClientOpcode {
         CMSG_MAIL_DELETE = 585,
         CMSG_MAIL_CREATE_TEXT_ITEM = 586,
         CMSG_LEARN_TALENT = 593,
+        CMSG_TOGGLE_PVP = 595,
         MSG_AUCTION_HELLO = 597,
         CMSG_AUCTION_SELL_ITEM = 598,
         CMSG_AUCTION_REMOVE_ITEM = 599,
@@ -11951,6 +12213,7 @@ struct ClientOpcode {
         CMSG_UNSTABLE_PET = 625,
         CMSG_BUY_STABLE_SLOT = 626,
         CMSG_STABLE_SWAP_PET = 629,
+        MSG_QUEST_PUSH_RESULT = 630,
         CMSG_REQUEST_PET_INFO = 633,
         CMSG_FAR_SIGHT = 634,
         CMSG_GROUP_CHANGE_SUB_GROUP = 638,
@@ -11971,10 +12234,12 @@ struct ClientOpcode {
         CMSG_REPAIR_ITEM = 680,
         MSG_TALENT_WIPE_CONFIRM = 682,
         CMSG_SUMMON_RESPONSE = 684,
+        MSG_MOVE_WATER_WALK = 689,
         CMSG_SELF_RES = 691,
         CMSG_TOGGLE_HELM = 697,
         CMSG_TOGGLE_CLOAK = 698,
         CMSG_SET_ACTIONBAR_TOGGLES = 703,
+        MSG_PETITION_RENAME = 705,
         CMSG_ITEM_NAME_QUERY = 708,
         CMSG_CHAR_RENAME = 711,
         CMSG_MOVE_SPLINE_DONE = 713,
@@ -12007,6 +12272,7 @@ struct ClientOpcode {
         CMSG_SET_WATCHED_FACTION = 792,
         CMSG_RESET_INSTANCES = 797,
         MSG_RAID_TARGET_UPDATE = 801,
+        MSG_RAID_READY_CHECK = 802,
         CMSG_GMSURVEY_SUBMIT = 810,
     } opcode;
 
@@ -12101,6 +12367,7 @@ struct ClientOpcode {
         vanilla::MSG_MOVE_STOP_SWIM_Client MSG_MOVE_STOP_SWIM;
         vanilla::MSG_MOVE_SET_FACING_Client MSG_MOVE_SET_FACING;
         vanilla::MSG_MOVE_SET_PITCH_Client MSG_MOVE_SET_PITCH;
+        vanilla::MSG_MOVE_WORLDPORT_ACK MSG_MOVE_WORLDPORT_ACK;
         vanilla::CMSG_MOVE_SET_RAW_POSITION CMSG_MOVE_SET_RAW_POSITION;
         vanilla::CMSG_FORCE_RUN_SPEED_CHANGE_ACK CMSG_FORCE_RUN_SPEED_CHANGE_ACK;
         vanilla::CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK;
@@ -12155,10 +12422,12 @@ struct ClientOpcode {
         vanilla::CMSG_DUEL_ACCEPTED CMSG_DUEL_ACCEPTED;
         vanilla::CMSG_DUEL_CANCELLED CMSG_DUEL_CANCELLED;
         vanilla::CMSG_MOUNTSPECIAL_ANIM CMSG_MOUNTSPECIAL_ANIM;
+        vanilla::CMSG_PET_SET_ACTION CMSG_PET_SET_ACTION;
         vanilla::CMSG_PET_ACTION CMSG_PET_ACTION;
         vanilla::CMSG_PET_ABANDON CMSG_PET_ABANDON;
         vanilla::CMSG_PET_RENAME CMSG_PET_RENAME;
         vanilla::CMSG_GOSSIP_HELLO CMSG_GOSSIP_HELLO;
+        vanilla::CMSG_GOSSIP_SELECT_OPTION CMSG_GOSSIP_SELECT_OPTION;
         vanilla::CMSG_NPC_TEXT_QUERY CMSG_NPC_TEXT_QUERY;
         vanilla::CMSG_QUESTGIVER_STATUS_QUERY CMSG_QUESTGIVER_STATUS_QUERY;
         vanilla::CMSG_QUESTGIVER_HELLO CMSG_QUESTGIVER_HELLO;
@@ -12189,6 +12458,7 @@ struct ClientOpcode {
         vanilla::CMSG_PETITION_BUY CMSG_PETITION_BUY;
         vanilla::CMSG_PETITION_SHOW_SIGNATURES CMSG_PETITION_SHOW_SIGNATURES;
         vanilla::CMSG_PETITION_SIGN CMSG_PETITION_SIGN;
+        vanilla::MSG_PETITION_DECLINE MSG_PETITION_DECLINE;
         vanilla::CMSG_OFFER_PETITION CMSG_OFFER_PETITION;
         vanilla::CMSG_TURN_IN_PETITION CMSG_TURN_IN_PETITION;
         vanilla::CMSG_PETITION_QUERY CMSG_PETITION_QUERY;
@@ -12202,6 +12472,7 @@ struct ClientOpcode {
         vanilla::CMSG_SETSHEATHED CMSG_SETSHEATHED;
         vanilla::CMSG_PET_CAST_SPELL CMSG_PET_CAST_SPELL;
         vanilla::MSG_SAVE_GUILD_EMBLEM_Client MSG_SAVE_GUILD_EMBLEM;
+        vanilla::MSG_TABARDVENDOR_ACTIVATE MSG_TABARDVENDOR_ACTIVATE;
         vanilla::CMSG_ZONEUPDATE CMSG_ZONEUPDATE;
         vanilla::MSG_RANDOM_ROLL_Client MSG_RANDOM_ROLL;
         vanilla::MSG_LOOKING_FOR_GROUP_Client MSG_LOOKING_FOR_GROUP;
@@ -12231,6 +12502,7 @@ struct ClientOpcode {
         vanilla::CMSG_MAIL_DELETE CMSG_MAIL_DELETE;
         vanilla::CMSG_MAIL_CREATE_TEXT_ITEM CMSG_MAIL_CREATE_TEXT_ITEM;
         vanilla::CMSG_LEARN_TALENT CMSG_LEARN_TALENT;
+        vanilla::CMSG_TOGGLE_PVP CMSG_TOGGLE_PVP;
         vanilla::MSG_AUCTION_HELLO_Client MSG_AUCTION_HELLO;
         vanilla::CMSG_AUCTION_SELL_ITEM CMSG_AUCTION_SELL_ITEM;
         vanilla::CMSG_AUCTION_REMOVE_ITEM CMSG_AUCTION_REMOVE_ITEM;
@@ -12247,6 +12519,7 @@ struct ClientOpcode {
         vanilla::CMSG_UNSTABLE_PET CMSG_UNSTABLE_PET;
         vanilla::CMSG_BUY_STABLE_SLOT CMSG_BUY_STABLE_SLOT;
         vanilla::CMSG_STABLE_SWAP_PET CMSG_STABLE_SWAP_PET;
+        vanilla::MSG_QUEST_PUSH_RESULT MSG_QUEST_PUSH_RESULT;
         vanilla::CMSG_REQUEST_PET_INFO CMSG_REQUEST_PET_INFO;
         vanilla::CMSG_FAR_SIGHT CMSG_FAR_SIGHT;
         vanilla::CMSG_GROUP_CHANGE_SUB_GROUP CMSG_GROUP_CHANGE_SUB_GROUP;
@@ -12267,10 +12540,12 @@ struct ClientOpcode {
         vanilla::CMSG_REPAIR_ITEM CMSG_REPAIR_ITEM;
         vanilla::MSG_TALENT_WIPE_CONFIRM_Client MSG_TALENT_WIPE_CONFIRM;
         vanilla::CMSG_SUMMON_RESPONSE CMSG_SUMMON_RESPONSE;
+        vanilla::MSG_MOVE_WATER_WALK MSG_MOVE_WATER_WALK;
         vanilla::CMSG_SELF_RES CMSG_SELF_RES;
         vanilla::CMSG_TOGGLE_HELM CMSG_TOGGLE_HELM;
         vanilla::CMSG_TOGGLE_CLOAK CMSG_TOGGLE_CLOAK;
         vanilla::CMSG_SET_ACTIONBAR_TOGGLES CMSG_SET_ACTIONBAR_TOGGLES;
+        vanilla::MSG_PETITION_RENAME MSG_PETITION_RENAME;
         vanilla::CMSG_ITEM_NAME_QUERY CMSG_ITEM_NAME_QUERY;
         vanilla::CMSG_CHAR_RENAME CMSG_CHAR_RENAME;
         vanilla::CMSG_MOVE_SPLINE_DONE CMSG_MOVE_SPLINE_DONE;
@@ -12303,1777 +12578,927 @@ struct ClientOpcode {
         vanilla::CMSG_SET_WATCHED_FACTION CMSG_SET_WATCHED_FACTION;
         vanilla::CMSG_RESET_INSTANCES CMSG_RESET_INSTANCES;
         vanilla::MSG_RAID_TARGET_UPDATE_Client MSG_RAID_TARGET_UPDATE;
+        vanilla::MSG_RAID_READY_CHECK_Client MSG_RAID_READY_CHECK;
         vanilla::CMSG_GMSURVEY_SUBMIT CMSG_GMSURVEY_SUBMIT;
     };
+
     bool is_none() const noexcept {
         return opcode == Opcode::NONE;
     }
 
-    explicit ClientOpcode() : ClientOpcode(Opcode::NONE) {}
-
-    explicit ClientOpcode(Opcode op) : opcode(op) {
-        if (opcode == Opcode::CMSG_BOOTME) {
-            new (&this->CMSG_BOOTME) vanilla::CMSG_BOOTME();
-        }
-        if (opcode == Opcode::CMSG_DBLOOKUP) {
-            new (&this->CMSG_DBLOOKUP) vanilla::CMSG_DBLOOKUP();
-        }
-        if (opcode == Opcode::CMSG_WORLD_TELEPORT) {
-            new (&this->CMSG_WORLD_TELEPORT) vanilla::CMSG_WORLD_TELEPORT();
-        }
-        if (opcode == Opcode::CMSG_TELEPORT_TO_UNIT) {
-            new (&this->CMSG_TELEPORT_TO_UNIT) vanilla::CMSG_TELEPORT_TO_UNIT();
-        }
-        if (opcode == Opcode::CMSG_CHAR_CREATE) {
-            new (&this->CMSG_CHAR_CREATE) vanilla::CMSG_CHAR_CREATE();
-        }
-        if (opcode == Opcode::CMSG_CHAR_ENUM) {
-            new (&this->CMSG_CHAR_ENUM) vanilla::CMSG_CHAR_ENUM();
-        }
-        if (opcode == Opcode::CMSG_CHAR_DELETE) {
-            new (&this->CMSG_CHAR_DELETE) vanilla::CMSG_CHAR_DELETE();
-        }
-        if (opcode == Opcode::CMSG_PLAYER_LOGIN) {
-            new (&this->CMSG_PLAYER_LOGIN) vanilla::CMSG_PLAYER_LOGIN();
-        }
-        if (opcode == Opcode::CMSG_PLAYER_LOGOUT) {
-            new (&this->CMSG_PLAYER_LOGOUT) vanilla::CMSG_PLAYER_LOGOUT();
-        }
-        if (opcode == Opcode::CMSG_LOGOUT_REQUEST) {
-            new (&this->CMSG_LOGOUT_REQUEST) vanilla::CMSG_LOGOUT_REQUEST();
-        }
-        if (opcode == Opcode::CMSG_LOGOUT_CANCEL) {
-            new (&this->CMSG_LOGOUT_CANCEL) vanilla::CMSG_LOGOUT_CANCEL();
-        }
-        if (opcode == Opcode::CMSG_NAME_QUERY) {
-            new (&this->CMSG_NAME_QUERY) vanilla::CMSG_NAME_QUERY();
-        }
-        if (opcode == Opcode::CMSG_PET_NAME_QUERY) {
-            new (&this->CMSG_PET_NAME_QUERY) vanilla::CMSG_PET_NAME_QUERY();
-        }
-        if (opcode == Opcode::CMSG_GUILD_QUERY) {
-            new (&this->CMSG_GUILD_QUERY) vanilla::CMSG_GUILD_QUERY();
-        }
-        if (opcode == Opcode::CMSG_ITEM_QUERY_SINGLE) {
-            new (&this->CMSG_ITEM_QUERY_SINGLE) vanilla::CMSG_ITEM_QUERY_SINGLE();
-        }
-        if (opcode == Opcode::CMSG_PAGE_TEXT_QUERY) {
-            new (&this->CMSG_PAGE_TEXT_QUERY) vanilla::CMSG_PAGE_TEXT_QUERY();
-        }
-        if (opcode == Opcode::CMSG_QUEST_QUERY) {
-            new (&this->CMSG_QUEST_QUERY) vanilla::CMSG_QUEST_QUERY();
-        }
-        if (opcode == Opcode::CMSG_GAMEOBJECT_QUERY) {
-            new (&this->CMSG_GAMEOBJECT_QUERY) vanilla::CMSG_GAMEOBJECT_QUERY();
-        }
-        if (opcode == Opcode::CMSG_CREATURE_QUERY) {
-            new (&this->CMSG_CREATURE_QUERY) vanilla::CMSG_CREATURE_QUERY();
-        }
-        if (opcode == Opcode::CMSG_WHO) {
-            new (&this->CMSG_WHO) vanilla::CMSG_WHO();
-        }
-        if (opcode == Opcode::CMSG_WHOIS) {
-            new (&this->CMSG_WHOIS) vanilla::CMSG_WHOIS();
-        }
-        if (opcode == Opcode::CMSG_FRIEND_LIST) {
-            new (&this->CMSG_FRIEND_LIST) vanilla::CMSG_FRIEND_LIST();
-        }
-        if (opcode == Opcode::CMSG_ADD_FRIEND) {
-            new (&this->CMSG_ADD_FRIEND) vanilla::CMSG_ADD_FRIEND();
-        }
-        if (opcode == Opcode::CMSG_DEL_FRIEND) {
-            new (&this->CMSG_DEL_FRIEND) vanilla::CMSG_DEL_FRIEND();
-        }
-        if (opcode == Opcode::CMSG_ADD_IGNORE) {
-            new (&this->CMSG_ADD_IGNORE) vanilla::CMSG_ADD_IGNORE();
-        }
-        if (opcode == Opcode::CMSG_DEL_IGNORE) {
-            new (&this->CMSG_DEL_IGNORE) vanilla::CMSG_DEL_IGNORE();
-        }
-        if (opcode == Opcode::CMSG_GROUP_INVITE) {
-            new (&this->CMSG_GROUP_INVITE) vanilla::CMSG_GROUP_INVITE();
-        }
-        if (opcode == Opcode::CMSG_GROUP_ACCEPT) {
-            new (&this->CMSG_GROUP_ACCEPT) vanilla::CMSG_GROUP_ACCEPT();
-        }
-        if (opcode == Opcode::CMSG_GROUP_DECLINE) {
-            new (&this->CMSG_GROUP_DECLINE) vanilla::CMSG_GROUP_DECLINE();
-        }
-        if (opcode == Opcode::CMSG_GROUP_UNINVITE) {
-            new (&this->CMSG_GROUP_UNINVITE) vanilla::CMSG_GROUP_UNINVITE();
-        }
-        if (opcode == Opcode::CMSG_GROUP_UNINVITE_GUID) {
-            new (&this->CMSG_GROUP_UNINVITE_GUID) vanilla::CMSG_GROUP_UNINVITE_GUID();
-        }
-        if (opcode == Opcode::CMSG_GROUP_SET_LEADER) {
-            new (&this->CMSG_GROUP_SET_LEADER) vanilla::CMSG_GROUP_SET_LEADER();
-        }
-        if (opcode == Opcode::CMSG_LOOT_METHOD) {
-            new (&this->CMSG_LOOT_METHOD) vanilla::CMSG_LOOT_METHOD();
-        }
-        if (opcode == Opcode::CMSG_GROUP_DISBAND) {
-            new (&this->CMSG_GROUP_DISBAND) vanilla::CMSG_GROUP_DISBAND();
-        }
-        if (opcode == Opcode::CMSG_GUILD_CREATE) {
-            new (&this->CMSG_GUILD_CREATE) vanilla::CMSG_GUILD_CREATE();
-        }
-        if (opcode == Opcode::CMSG_GUILD_INVITE) {
-            new (&this->CMSG_GUILD_INVITE) vanilla::CMSG_GUILD_INVITE();
-        }
-        if (opcode == Opcode::CMSG_GUILD_ACCEPT) {
-            new (&this->CMSG_GUILD_ACCEPT) vanilla::CMSG_GUILD_ACCEPT();
-        }
-        if (opcode == Opcode::CMSG_GUILD_DECLINE) {
-            new (&this->CMSG_GUILD_DECLINE) vanilla::CMSG_GUILD_DECLINE();
-        }
-        if (opcode == Opcode::CMSG_GUILD_INFO) {
-            new (&this->CMSG_GUILD_INFO) vanilla::CMSG_GUILD_INFO();
-        }
-        if (opcode == Opcode::CMSG_GUILD_ROSTER) {
-            new (&this->CMSG_GUILD_ROSTER) vanilla::CMSG_GUILD_ROSTER();
-        }
-        if (opcode == Opcode::CMSG_GUILD_PROMOTE) {
-            new (&this->CMSG_GUILD_PROMOTE) vanilla::CMSG_GUILD_PROMOTE();
-        }
-        if (opcode == Opcode::CMSG_GUILD_DEMOTE) {
-            new (&this->CMSG_GUILD_DEMOTE) vanilla::CMSG_GUILD_DEMOTE();
-        }
-        if (opcode == Opcode::CMSG_GUILD_LEAVE) {
-            new (&this->CMSG_GUILD_LEAVE) vanilla::CMSG_GUILD_LEAVE();
-        }
-        if (opcode == Opcode::CMSG_GUILD_REMOVE) {
-            new (&this->CMSG_GUILD_REMOVE) vanilla::CMSG_GUILD_REMOVE();
-        }
-        if (opcode == Opcode::CMSG_GUILD_DISBAND) {
-            new (&this->CMSG_GUILD_DISBAND) vanilla::CMSG_GUILD_DISBAND();
-        }
-        if (opcode == Opcode::CMSG_GUILD_LEADER) {
-            new (&this->CMSG_GUILD_LEADER) vanilla::CMSG_GUILD_LEADER();
-        }
-        if (opcode == Opcode::CMSG_GUILD_MOTD) {
-            new (&this->CMSG_GUILD_MOTD) vanilla::CMSG_GUILD_MOTD();
-        }
-        if (opcode == Opcode::CMSG_MESSAGECHAT) {
-            new (&this->CMSG_MESSAGECHAT) vanilla::CMSG_MESSAGECHAT();
-        }
-        if (opcode == Opcode::CMSG_JOIN_CHANNEL) {
-            new (&this->CMSG_JOIN_CHANNEL) vanilla::CMSG_JOIN_CHANNEL();
-        }
-        if (opcode == Opcode::CMSG_LEAVE_CHANNEL) {
-            new (&this->CMSG_LEAVE_CHANNEL) vanilla::CMSG_LEAVE_CHANNEL();
-        }
-        if (opcode == Opcode::CMSG_CHANNEL_LIST) {
-            new (&this->CMSG_CHANNEL_LIST) vanilla::CMSG_CHANNEL_LIST();
-        }
-        if (opcode == Opcode::CMSG_CHANNEL_PASSWORD) {
-            new (&this->CMSG_CHANNEL_PASSWORD) vanilla::CMSG_CHANNEL_PASSWORD();
-        }
-        if (opcode == Opcode::CMSG_CHANNEL_SET_OWNER) {
-            new (&this->CMSG_CHANNEL_SET_OWNER) vanilla::CMSG_CHANNEL_SET_OWNER();
-        }
-        if (opcode == Opcode::CMSG_CHANNEL_OWNER) {
-            new (&this->CMSG_CHANNEL_OWNER) vanilla::CMSG_CHANNEL_OWNER();
-        }
-        if (opcode == Opcode::CMSG_CHANNEL_MODERATOR) {
-            new (&this->CMSG_CHANNEL_MODERATOR) vanilla::CMSG_CHANNEL_MODERATOR();
-        }
-        if (opcode == Opcode::CMSG_CHANNEL_UNMODERATOR) {
-            new (&this->CMSG_CHANNEL_UNMODERATOR) vanilla::CMSG_CHANNEL_UNMODERATOR();
-        }
-        if (opcode == Opcode::CMSG_CHANNEL_MUTE) {
-            new (&this->CMSG_CHANNEL_MUTE) vanilla::CMSG_CHANNEL_MUTE();
-        }
-        if (opcode == Opcode::CMSG_CHANNEL_UNMUTE) {
-            new (&this->CMSG_CHANNEL_UNMUTE) vanilla::CMSG_CHANNEL_UNMUTE();
-        }
-        if (opcode == Opcode::CMSG_CHANNEL_INVITE) {
-            new (&this->CMSG_CHANNEL_INVITE) vanilla::CMSG_CHANNEL_INVITE();
-        }
-        if (opcode == Opcode::CMSG_CHANNEL_KICK) {
-            new (&this->CMSG_CHANNEL_KICK) vanilla::CMSG_CHANNEL_KICK();
-        }
-        if (opcode == Opcode::CMSG_CHANNEL_BAN) {
-            new (&this->CMSG_CHANNEL_BAN) vanilla::CMSG_CHANNEL_BAN();
-        }
-        if (opcode == Opcode::CMSG_CHANNEL_UNBAN) {
-            new (&this->CMSG_CHANNEL_UNBAN) vanilla::CMSG_CHANNEL_UNBAN();
-        }
-        if (opcode == Opcode::CMSG_CHANNEL_ANNOUNCEMENTS) {
-            new (&this->CMSG_CHANNEL_ANNOUNCEMENTS) vanilla::CMSG_CHANNEL_ANNOUNCEMENTS();
-        }
-        if (opcode == Opcode::CMSG_CHANNEL_MODERATE) {
-            new (&this->CMSG_CHANNEL_MODERATE) vanilla::CMSG_CHANNEL_MODERATE();
-        }
-        if (opcode == Opcode::CMSG_USE_ITEM) {
-            new (&this->CMSG_USE_ITEM) vanilla::CMSG_USE_ITEM();
-        }
-        if (opcode == Opcode::CMSG_OPEN_ITEM) {
-            new (&this->CMSG_OPEN_ITEM) vanilla::CMSG_OPEN_ITEM();
-        }
-        if (opcode == Opcode::CMSG_READ_ITEM) {
-            new (&this->CMSG_READ_ITEM) vanilla::CMSG_READ_ITEM();
-        }
-        if (opcode == Opcode::CMSG_GAMEOBJ_USE) {
-            new (&this->CMSG_GAMEOBJ_USE) vanilla::CMSG_GAMEOBJ_USE();
-        }
-        if (opcode == Opcode::CMSG_AREATRIGGER) {
-            new (&this->CMSG_AREATRIGGER) vanilla::CMSG_AREATRIGGER();
-        }
-        if (opcode == Opcode::MSG_MOVE_START_FORWARD) {
-            new (&this->MSG_MOVE_START_FORWARD) vanilla::MSG_MOVE_START_FORWARD_Client();
-        }
-        if (opcode == Opcode::MSG_MOVE_START_BACKWARD) {
-            new (&this->MSG_MOVE_START_BACKWARD) vanilla::MSG_MOVE_START_BACKWARD_Client();
-        }
-        if (opcode == Opcode::MSG_MOVE_STOP) {
-            new (&this->MSG_MOVE_STOP) vanilla::MSG_MOVE_STOP_Client();
-        }
-        if (opcode == Opcode::MSG_MOVE_START_STRAFE_LEFT) {
-            new (&this->MSG_MOVE_START_STRAFE_LEFT) vanilla::MSG_MOVE_START_STRAFE_LEFT_Client();
-        }
-        if (opcode == Opcode::MSG_MOVE_START_STRAFE_RIGHT) {
-            new (&this->MSG_MOVE_START_STRAFE_RIGHT) vanilla::MSG_MOVE_START_STRAFE_RIGHT_Client();
-        }
-        if (opcode == Opcode::MSG_MOVE_STOP_STRAFE) {
-            new (&this->MSG_MOVE_STOP_STRAFE) vanilla::MSG_MOVE_STOP_STRAFE_Client();
-        }
-        if (opcode == Opcode::MSG_MOVE_JUMP) {
-            new (&this->MSG_MOVE_JUMP) vanilla::MSG_MOVE_JUMP_Client();
-        }
-        if (opcode == Opcode::MSG_MOVE_START_TURN_LEFT) {
-            new (&this->MSG_MOVE_START_TURN_LEFT) vanilla::MSG_MOVE_START_TURN_LEFT_Client();
-        }
-        if (opcode == Opcode::MSG_MOVE_START_TURN_RIGHT) {
-            new (&this->MSG_MOVE_START_TURN_RIGHT) vanilla::MSG_MOVE_START_TURN_RIGHT_Client();
-        }
-        if (opcode == Opcode::MSG_MOVE_STOP_TURN) {
-            new (&this->MSG_MOVE_STOP_TURN) vanilla::MSG_MOVE_STOP_TURN_Client();
-        }
-        if (opcode == Opcode::MSG_MOVE_START_PITCH_UP) {
-            new (&this->MSG_MOVE_START_PITCH_UP) vanilla::MSG_MOVE_START_PITCH_UP_Client();
-        }
-        if (opcode == Opcode::MSG_MOVE_START_PITCH_DOWN) {
-            new (&this->MSG_MOVE_START_PITCH_DOWN) vanilla::MSG_MOVE_START_PITCH_DOWN_Client();
-        }
-        if (opcode == Opcode::MSG_MOVE_STOP_PITCH) {
-            new (&this->MSG_MOVE_STOP_PITCH) vanilla::MSG_MOVE_STOP_PITCH_Client();
-        }
-        if (opcode == Opcode::MSG_MOVE_SET_RUN_MODE) {
-            new (&this->MSG_MOVE_SET_RUN_MODE) vanilla::MSG_MOVE_SET_RUN_MODE_Client();
-        }
-        if (opcode == Opcode::MSG_MOVE_SET_WALK_MODE) {
-            new (&this->MSG_MOVE_SET_WALK_MODE) vanilla::MSG_MOVE_SET_WALK_MODE_Client();
-        }
-        if (opcode == Opcode::MSG_MOVE_TELEPORT_ACK) {
-            new (&this->MSG_MOVE_TELEPORT_ACK) vanilla::MSG_MOVE_TELEPORT_ACK_Client();
-        }
-        if (opcode == Opcode::MSG_MOVE_FALL_LAND) {
-            new (&this->MSG_MOVE_FALL_LAND) vanilla::MSG_MOVE_FALL_LAND_Client();
-        }
-        if (opcode == Opcode::MSG_MOVE_START_SWIM) {
-            new (&this->MSG_MOVE_START_SWIM) vanilla::MSG_MOVE_START_SWIM_Client();
-        }
-        if (opcode == Opcode::MSG_MOVE_STOP_SWIM) {
-            new (&this->MSG_MOVE_STOP_SWIM) vanilla::MSG_MOVE_STOP_SWIM_Client();
-        }
-        if (opcode == Opcode::MSG_MOVE_SET_FACING) {
-            new (&this->MSG_MOVE_SET_FACING) vanilla::MSG_MOVE_SET_FACING_Client();
-        }
-        if (opcode == Opcode::MSG_MOVE_SET_PITCH) {
-            new (&this->MSG_MOVE_SET_PITCH) vanilla::MSG_MOVE_SET_PITCH_Client();
-        }
-        if (opcode == Opcode::CMSG_MOVE_SET_RAW_POSITION) {
-            new (&this->CMSG_MOVE_SET_RAW_POSITION) vanilla::CMSG_MOVE_SET_RAW_POSITION();
-        }
-        if (opcode == Opcode::CMSG_FORCE_RUN_SPEED_CHANGE_ACK) {
-            new (&this->CMSG_FORCE_RUN_SPEED_CHANGE_ACK) vanilla::CMSG_FORCE_RUN_SPEED_CHANGE_ACK();
-        }
-        if (opcode == Opcode::CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK) {
-            new (&this->CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK) vanilla::CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK();
-        }
-        if (opcode == Opcode::CMSG_FORCE_SWIM_SPEED_CHANGE_ACK) {
-            new (&this->CMSG_FORCE_SWIM_SPEED_CHANGE_ACK) vanilla::CMSG_FORCE_SWIM_SPEED_CHANGE_ACK();
-        }
-        if (opcode == Opcode::CMSG_FORCE_MOVE_ROOT_ACK) {
-            new (&this->CMSG_FORCE_MOVE_ROOT_ACK) vanilla::CMSG_FORCE_MOVE_ROOT_ACK();
-        }
-        if (opcode == Opcode::CMSG_FORCE_MOVE_UNROOT_ACK) {
-            new (&this->CMSG_FORCE_MOVE_UNROOT_ACK) vanilla::CMSG_FORCE_MOVE_UNROOT_ACK();
-        }
-        if (opcode == Opcode::MSG_MOVE_HEARTBEAT) {
-            new (&this->MSG_MOVE_HEARTBEAT) vanilla::MSG_MOVE_HEARTBEAT_Client();
-        }
-        if (opcode == Opcode::CMSG_MOVE_KNOCK_BACK_ACK) {
-            new (&this->CMSG_MOVE_KNOCK_BACK_ACK) vanilla::CMSG_MOVE_KNOCK_BACK_ACK();
-        }
-        if (opcode == Opcode::CMSG_MOVE_HOVER_ACK) {
-            new (&this->CMSG_MOVE_HOVER_ACK) vanilla::CMSG_MOVE_HOVER_ACK();
-        }
-        if (opcode == Opcode::CMSG_NEXT_CINEMATIC_CAMERA) {
-            new (&this->CMSG_NEXT_CINEMATIC_CAMERA) vanilla::CMSG_NEXT_CINEMATIC_CAMERA();
-        }
-        if (opcode == Opcode::CMSG_COMPLETE_CINEMATIC) {
-            new (&this->CMSG_COMPLETE_CINEMATIC) vanilla::CMSG_COMPLETE_CINEMATIC();
-        }
-        if (opcode == Opcode::CMSG_TUTORIAL_FLAG) {
-            new (&this->CMSG_TUTORIAL_FLAG) vanilla::CMSG_TUTORIAL_FLAG();
-        }
-        if (opcode == Opcode::CMSG_TUTORIAL_CLEAR) {
-            new (&this->CMSG_TUTORIAL_CLEAR) vanilla::CMSG_TUTORIAL_CLEAR();
-        }
-        if (opcode == Opcode::CMSG_TUTORIAL_RESET) {
-            new (&this->CMSG_TUTORIAL_RESET) vanilla::CMSG_TUTORIAL_RESET();
-        }
-        if (opcode == Opcode::CMSG_STANDSTATECHANGE) {
-            new (&this->CMSG_STANDSTATECHANGE) vanilla::CMSG_STANDSTATECHANGE();
-        }
-        if (opcode == Opcode::CMSG_EMOTE) {
-            new (&this->CMSG_EMOTE) vanilla::CMSG_EMOTE();
-        }
-        if (opcode == Opcode::CMSG_TEXT_EMOTE) {
-            new (&this->CMSG_TEXT_EMOTE) vanilla::CMSG_TEXT_EMOTE();
-        }
-        if (opcode == Opcode::CMSG_AUTOSTORE_LOOT_ITEM) {
-            new (&this->CMSG_AUTOSTORE_LOOT_ITEM) vanilla::CMSG_AUTOSTORE_LOOT_ITEM();
-        }
-        if (opcode == Opcode::CMSG_AUTOEQUIP_ITEM) {
-            new (&this->CMSG_AUTOEQUIP_ITEM) vanilla::CMSG_AUTOEQUIP_ITEM();
-        }
-        if (opcode == Opcode::CMSG_AUTOSTORE_BAG_ITEM) {
-            new (&this->CMSG_AUTOSTORE_BAG_ITEM) vanilla::CMSG_AUTOSTORE_BAG_ITEM();
-        }
-        if (opcode == Opcode::CMSG_SWAP_ITEM) {
-            new (&this->CMSG_SWAP_ITEM) vanilla::CMSG_SWAP_ITEM();
-        }
-        if (opcode == Opcode::CMSG_SWAP_INV_ITEM) {
-            new (&this->CMSG_SWAP_INV_ITEM) vanilla::CMSG_SWAP_INV_ITEM();
-        }
-        if (opcode == Opcode::CMSG_SPLIT_ITEM) {
-            new (&this->CMSG_SPLIT_ITEM) vanilla::CMSG_SPLIT_ITEM();
-        }
-        if (opcode == Opcode::CMSG_AUTOEQUIP_ITEM_SLOT) {
-            new (&this->CMSG_AUTOEQUIP_ITEM_SLOT) vanilla::CMSG_AUTOEQUIP_ITEM_SLOT();
-        }
-        if (opcode == Opcode::CMSG_DESTROYITEM) {
-            new (&this->CMSG_DESTROYITEM) vanilla::CMSG_DESTROYITEM();
-        }
-        if (opcode == Opcode::CMSG_INSPECT) {
-            new (&this->CMSG_INSPECT) vanilla::CMSG_INSPECT();
-        }
-        if (opcode == Opcode::CMSG_INITIATE_TRADE) {
-            new (&this->CMSG_INITIATE_TRADE) vanilla::CMSG_INITIATE_TRADE();
-        }
-        if (opcode == Opcode::CMSG_BEGIN_TRADE) {
-            new (&this->CMSG_BEGIN_TRADE) vanilla::CMSG_BEGIN_TRADE();
-        }
-        if (opcode == Opcode::CMSG_BUSY_TRADE) {
-            new (&this->CMSG_BUSY_TRADE) vanilla::CMSG_BUSY_TRADE();
-        }
-        if (opcode == Opcode::CMSG_IGNORE_TRADE) {
-            new (&this->CMSG_IGNORE_TRADE) vanilla::CMSG_IGNORE_TRADE();
-        }
-        if (opcode == Opcode::CMSG_ACCEPT_TRADE) {
-            new (&this->CMSG_ACCEPT_TRADE) vanilla::CMSG_ACCEPT_TRADE();
-        }
-        if (opcode == Opcode::CMSG_UNACCEPT_TRADE) {
-            new (&this->CMSG_UNACCEPT_TRADE) vanilla::CMSG_UNACCEPT_TRADE();
-        }
-        if (opcode == Opcode::CMSG_CANCEL_TRADE) {
-            new (&this->CMSG_CANCEL_TRADE) vanilla::CMSG_CANCEL_TRADE();
-        }
-        if (opcode == Opcode::CMSG_SET_TRADE_ITEM) {
-            new (&this->CMSG_SET_TRADE_ITEM) vanilla::CMSG_SET_TRADE_ITEM();
-        }
-        if (opcode == Opcode::CMSG_CLEAR_TRADE_ITEM) {
-            new (&this->CMSG_CLEAR_TRADE_ITEM) vanilla::CMSG_CLEAR_TRADE_ITEM();
-        }
-        if (opcode == Opcode::CMSG_SET_TRADE_GOLD) {
-            new (&this->CMSG_SET_TRADE_GOLD) vanilla::CMSG_SET_TRADE_GOLD();
-        }
-        if (opcode == Opcode::CMSG_SET_FACTION_ATWAR) {
-            new (&this->CMSG_SET_FACTION_ATWAR) vanilla::CMSG_SET_FACTION_ATWAR();
-        }
-        if (opcode == Opcode::CMSG_SET_ACTION_BUTTON) {
-            new (&this->CMSG_SET_ACTION_BUTTON) vanilla::CMSG_SET_ACTION_BUTTON();
-        }
-        if (opcode == Opcode::CMSG_CAST_SPELL) {
-            new (&this->CMSG_CAST_SPELL) vanilla::CMSG_CAST_SPELL();
-        }
-        if (opcode == Opcode::CMSG_CANCEL_CAST) {
-            new (&this->CMSG_CANCEL_CAST) vanilla::CMSG_CANCEL_CAST();
-        }
-        if (opcode == Opcode::CMSG_CANCEL_AURA) {
-            new (&this->CMSG_CANCEL_AURA) vanilla::CMSG_CANCEL_AURA();
-        }
-        if (opcode == Opcode::CMSG_CANCEL_CHANNELLING) {
-            new (&this->CMSG_CANCEL_CHANNELLING) vanilla::CMSG_CANCEL_CHANNELLING();
-        }
-        if (opcode == Opcode::CMSG_SET_SELECTION) {
-            new (&this->CMSG_SET_SELECTION) vanilla::CMSG_SET_SELECTION();
-        }
-        if (opcode == Opcode::CMSG_SET_TARGET_OBSOLETE) {
-            new (&this->CMSG_SET_TARGET_OBSOLETE) vanilla::CMSG_SET_TARGET_OBSOLETE();
-        }
-        if (opcode == Opcode::CMSG_ATTACKSWING) {
-            new (&this->CMSG_ATTACKSWING) vanilla::CMSG_ATTACKSWING();
-        }
-        if (opcode == Opcode::CMSG_ATTACKSTOP) {
-            new (&this->CMSG_ATTACKSTOP) vanilla::CMSG_ATTACKSTOP();
-        }
-        if (opcode == Opcode::CMSG_REPOP_REQUEST) {
-            new (&this->CMSG_REPOP_REQUEST) vanilla::CMSG_REPOP_REQUEST();
-        }
-        if (opcode == Opcode::CMSG_RESURRECT_RESPONSE) {
-            new (&this->CMSG_RESURRECT_RESPONSE) vanilla::CMSG_RESURRECT_RESPONSE();
-        }
-        if (opcode == Opcode::CMSG_LOOT) {
-            new (&this->CMSG_LOOT) vanilla::CMSG_LOOT();
-        }
-        if (opcode == Opcode::CMSG_LOOT_MONEY) {
-            new (&this->CMSG_LOOT_MONEY) vanilla::CMSG_LOOT_MONEY();
-        }
-        if (opcode == Opcode::CMSG_LOOT_RELEASE) {
-            new (&this->CMSG_LOOT_RELEASE) vanilla::CMSG_LOOT_RELEASE();
-        }
-        if (opcode == Opcode::CMSG_DUEL_ACCEPTED) {
-            new (&this->CMSG_DUEL_ACCEPTED) vanilla::CMSG_DUEL_ACCEPTED();
-        }
-        if (opcode == Opcode::CMSG_DUEL_CANCELLED) {
-            new (&this->CMSG_DUEL_CANCELLED) vanilla::CMSG_DUEL_CANCELLED();
-        }
-        if (opcode == Opcode::CMSG_MOUNTSPECIAL_ANIM) {
-            new (&this->CMSG_MOUNTSPECIAL_ANIM) vanilla::CMSG_MOUNTSPECIAL_ANIM();
-        }
-        if (opcode == Opcode::CMSG_PET_ACTION) {
-            new (&this->CMSG_PET_ACTION) vanilla::CMSG_PET_ACTION();
-        }
-        if (opcode == Opcode::CMSG_PET_ABANDON) {
-            new (&this->CMSG_PET_ABANDON) vanilla::CMSG_PET_ABANDON();
-        }
-        if (opcode == Opcode::CMSG_PET_RENAME) {
-            new (&this->CMSG_PET_RENAME) vanilla::CMSG_PET_RENAME();
-        }
-        if (opcode == Opcode::CMSG_GOSSIP_HELLO) {
-            new (&this->CMSG_GOSSIP_HELLO) vanilla::CMSG_GOSSIP_HELLO();
-        }
-        if (opcode == Opcode::CMSG_NPC_TEXT_QUERY) {
-            new (&this->CMSG_NPC_TEXT_QUERY) vanilla::CMSG_NPC_TEXT_QUERY();
-        }
-        if (opcode == Opcode::CMSG_QUESTGIVER_STATUS_QUERY) {
-            new (&this->CMSG_QUESTGIVER_STATUS_QUERY) vanilla::CMSG_QUESTGIVER_STATUS_QUERY();
-        }
-        if (opcode == Opcode::CMSG_QUESTGIVER_HELLO) {
-            new (&this->CMSG_QUESTGIVER_HELLO) vanilla::CMSG_QUESTGIVER_HELLO();
-        }
-        if (opcode == Opcode::CMSG_QUESTGIVER_QUERY_QUEST) {
-            new (&this->CMSG_QUESTGIVER_QUERY_QUEST) vanilla::CMSG_QUESTGIVER_QUERY_QUEST();
-        }
-        if (opcode == Opcode::CMSG_QUESTGIVER_QUEST_AUTOLAUNCH) {
-            new (&this->CMSG_QUESTGIVER_QUEST_AUTOLAUNCH) vanilla::CMSG_QUESTGIVER_QUEST_AUTOLAUNCH();
-        }
-        if (opcode == Opcode::CMSG_QUESTGIVER_ACCEPT_QUEST) {
-            new (&this->CMSG_QUESTGIVER_ACCEPT_QUEST) vanilla::CMSG_QUESTGIVER_ACCEPT_QUEST();
-        }
-        if (opcode == Opcode::CMSG_QUESTGIVER_COMPLETE_QUEST) {
-            new (&this->CMSG_QUESTGIVER_COMPLETE_QUEST) vanilla::CMSG_QUESTGIVER_COMPLETE_QUEST();
-        }
-        if (opcode == Opcode::CMSG_QUESTGIVER_REQUEST_REWARD) {
-            new (&this->CMSG_QUESTGIVER_REQUEST_REWARD) vanilla::CMSG_QUESTGIVER_REQUEST_REWARD();
-        }
-        if (opcode == Opcode::CMSG_QUESTGIVER_CHOOSE_REWARD) {
-            new (&this->CMSG_QUESTGIVER_CHOOSE_REWARD) vanilla::CMSG_QUESTGIVER_CHOOSE_REWARD();
-        }
-        if (opcode == Opcode::CMSG_QUESTGIVER_CANCEL) {
-            new (&this->CMSG_QUESTGIVER_CANCEL) vanilla::CMSG_QUESTGIVER_CANCEL();
-        }
-        if (opcode == Opcode::CMSG_QUESTLOG_SWAP_QUEST) {
-            new (&this->CMSG_QUESTLOG_SWAP_QUEST) vanilla::CMSG_QUESTLOG_SWAP_QUEST();
-        }
-        if (opcode == Opcode::CMSG_QUESTLOG_REMOVE_QUEST) {
-            new (&this->CMSG_QUESTLOG_REMOVE_QUEST) vanilla::CMSG_QUESTLOG_REMOVE_QUEST();
-        }
-        if (opcode == Opcode::CMSG_QUEST_CONFIRM_ACCEPT) {
-            new (&this->CMSG_QUEST_CONFIRM_ACCEPT) vanilla::CMSG_QUEST_CONFIRM_ACCEPT();
-        }
-        if (opcode == Opcode::CMSG_PUSHQUESTTOPARTY) {
-            new (&this->CMSG_PUSHQUESTTOPARTY) vanilla::CMSG_PUSHQUESTTOPARTY();
-        }
-        if (opcode == Opcode::CMSG_LIST_INVENTORY) {
-            new (&this->CMSG_LIST_INVENTORY) vanilla::CMSG_LIST_INVENTORY();
-        }
-        if (opcode == Opcode::CMSG_SELL_ITEM) {
-            new (&this->CMSG_SELL_ITEM) vanilla::CMSG_SELL_ITEM();
-        }
-        if (opcode == Opcode::CMSG_BUY_ITEM) {
-            new (&this->CMSG_BUY_ITEM) vanilla::CMSG_BUY_ITEM();
-        }
-        if (opcode == Opcode::CMSG_BUY_ITEM_IN_SLOT) {
-            new (&this->CMSG_BUY_ITEM_IN_SLOT) vanilla::CMSG_BUY_ITEM_IN_SLOT();
-        }
-        if (opcode == Opcode::CMSG_TAXINODE_STATUS_QUERY) {
-            new (&this->CMSG_TAXINODE_STATUS_QUERY) vanilla::CMSG_TAXINODE_STATUS_QUERY();
-        }
-        if (opcode == Opcode::CMSG_TAXIQUERYAVAILABLENODES) {
-            new (&this->CMSG_TAXIQUERYAVAILABLENODES) vanilla::CMSG_TAXIQUERYAVAILABLENODES();
-        }
-        if (opcode == Opcode::CMSG_ACTIVATETAXI) {
-            new (&this->CMSG_ACTIVATETAXI) vanilla::CMSG_ACTIVATETAXI();
-        }
-        if (opcode == Opcode::CMSG_TRAINER_LIST) {
-            new (&this->CMSG_TRAINER_LIST) vanilla::CMSG_TRAINER_LIST();
-        }
-        if (opcode == Opcode::CMSG_TRAINER_BUY_SPELL) {
-            new (&this->CMSG_TRAINER_BUY_SPELL) vanilla::CMSG_TRAINER_BUY_SPELL();
-        }
-        if (opcode == Opcode::CMSG_BINDER_ACTIVATE) {
-            new (&this->CMSG_BINDER_ACTIVATE) vanilla::CMSG_BINDER_ACTIVATE();
-        }
-        if (opcode == Opcode::CMSG_BANKER_ACTIVATE) {
-            new (&this->CMSG_BANKER_ACTIVATE) vanilla::CMSG_BANKER_ACTIVATE();
-        }
-        if (opcode == Opcode::CMSG_BUY_BANK_SLOT) {
-            new (&this->CMSG_BUY_BANK_SLOT) vanilla::CMSG_BUY_BANK_SLOT();
-        }
-        if (opcode == Opcode::CMSG_PETITION_SHOWLIST) {
-            new (&this->CMSG_PETITION_SHOWLIST) vanilla::CMSG_PETITION_SHOWLIST();
-        }
-        if (opcode == Opcode::CMSG_PETITION_BUY) {
-            new (&this->CMSG_PETITION_BUY) vanilla::CMSG_PETITION_BUY();
-        }
-        if (opcode == Opcode::CMSG_PETITION_SHOW_SIGNATURES) {
-            new (&this->CMSG_PETITION_SHOW_SIGNATURES) vanilla::CMSG_PETITION_SHOW_SIGNATURES();
-        }
-        if (opcode == Opcode::CMSG_PETITION_SIGN) {
-            new (&this->CMSG_PETITION_SIGN) vanilla::CMSG_PETITION_SIGN();
-        }
-        if (opcode == Opcode::CMSG_OFFER_PETITION) {
-            new (&this->CMSG_OFFER_PETITION) vanilla::CMSG_OFFER_PETITION();
-        }
-        if (opcode == Opcode::CMSG_TURN_IN_PETITION) {
-            new (&this->CMSG_TURN_IN_PETITION) vanilla::CMSG_TURN_IN_PETITION();
-        }
-        if (opcode == Opcode::CMSG_PETITION_QUERY) {
-            new (&this->CMSG_PETITION_QUERY) vanilla::CMSG_PETITION_QUERY();
-        }
-        if (opcode == Opcode::CMSG_BUG) {
-            new (&this->CMSG_BUG) vanilla::CMSG_BUG();
-        }
-        if (opcode == Opcode::CMSG_PLAYED_TIME) {
-            new (&this->CMSG_PLAYED_TIME) vanilla::CMSG_PLAYED_TIME();
-        }
-        if (opcode == Opcode::CMSG_QUERY_TIME) {
-            new (&this->CMSG_QUERY_TIME) vanilla::CMSG_QUERY_TIME();
-        }
-        if (opcode == Opcode::CMSG_RECLAIM_CORPSE) {
-            new (&this->CMSG_RECLAIM_CORPSE) vanilla::CMSG_RECLAIM_CORPSE();
-        }
-        if (opcode == Opcode::CMSG_WRAP_ITEM) {
-            new (&this->CMSG_WRAP_ITEM) vanilla::CMSG_WRAP_ITEM();
-        }
-        if (opcode == Opcode::MSG_MINIMAP_PING) {
-            new (&this->MSG_MINIMAP_PING) vanilla::MSG_MINIMAP_PING_Client();
-        }
-        if (opcode == Opcode::CMSG_PING) {
-            new (&this->CMSG_PING) vanilla::CMSG_PING();
-        }
-        if (opcode == Opcode::CMSG_SETSHEATHED) {
-            new (&this->CMSG_SETSHEATHED) vanilla::CMSG_SETSHEATHED();
-        }
-        if (opcode == Opcode::CMSG_PET_CAST_SPELL) {
-            new (&this->CMSG_PET_CAST_SPELL) vanilla::CMSG_PET_CAST_SPELL();
-        }
-        if (opcode == Opcode::MSG_SAVE_GUILD_EMBLEM) {
-            new (&this->MSG_SAVE_GUILD_EMBLEM) vanilla::MSG_SAVE_GUILD_EMBLEM_Client();
-        }
-        if (opcode == Opcode::CMSG_ZONEUPDATE) {
-            new (&this->CMSG_ZONEUPDATE) vanilla::CMSG_ZONEUPDATE();
-        }
-        if (opcode == Opcode::MSG_RANDOM_ROLL) {
-            new (&this->MSG_RANDOM_ROLL) vanilla::MSG_RANDOM_ROLL_Client();
-        }
-        if (opcode == Opcode::MSG_LOOKING_FOR_GROUP) {
-            new (&this->MSG_LOOKING_FOR_GROUP) vanilla::MSG_LOOKING_FOR_GROUP_Client();
-        }
-        if (opcode == Opcode::CMSG_UNLEARN_SKILL) {
-            new (&this->CMSG_UNLEARN_SKILL) vanilla::CMSG_UNLEARN_SKILL();
-        }
-        if (opcode == Opcode::CMSG_GMTICKET_UPDATETEXT) {
-            new (&this->CMSG_GMTICKET_UPDATETEXT) vanilla::CMSG_GMTICKET_UPDATETEXT();
-        }
-        if (opcode == Opcode::CMSG_REQUEST_ACCOUNT_DATA) {
-            new (&this->CMSG_REQUEST_ACCOUNT_DATA) vanilla::CMSG_REQUEST_ACCOUNT_DATA();
-        }
-        if (opcode == Opcode::CMSG_GMTICKET_GETTICKET) {
-            new (&this->CMSG_GMTICKET_GETTICKET) vanilla::CMSG_GMTICKET_GETTICKET();
-        }
-        if (opcode == Opcode::MSG_CORPSE_QUERY) {
-            new (&this->MSG_CORPSE_QUERY) vanilla::MSG_CORPSE_QUERY_Client();
-        }
-        if (opcode == Opcode::CMSG_GMTICKET_DELETETICKET) {
-            new (&this->CMSG_GMTICKET_DELETETICKET) vanilla::CMSG_GMTICKET_DELETETICKET();
-        }
-        if (opcode == Opcode::CMSG_GMTICKET_SYSTEMSTATUS) {
-            new (&this->CMSG_GMTICKET_SYSTEMSTATUS) vanilla::CMSG_GMTICKET_SYSTEMSTATUS();
-        }
-        if (opcode == Opcode::CMSG_SPIRIT_HEALER_ACTIVATE) {
-            new (&this->CMSG_SPIRIT_HEALER_ACTIVATE) vanilla::CMSG_SPIRIT_HEALER_ACTIVATE();
-        }
-        if (opcode == Opcode::CMSG_CHAT_IGNORED) {
-            new (&this->CMSG_CHAT_IGNORED) vanilla::CMSG_CHAT_IGNORED();
-        }
-        if (opcode == Opcode::CMSG_GUILD_RANK) {
-            new (&this->CMSG_GUILD_RANK) vanilla::CMSG_GUILD_RANK();
-        }
-        if (opcode == Opcode::CMSG_GUILD_ADD_RANK) {
-            new (&this->CMSG_GUILD_ADD_RANK) vanilla::CMSG_GUILD_ADD_RANK();
-        }
-        if (opcode == Opcode::CMSG_GUILD_DEL_RANK) {
-            new (&this->CMSG_GUILD_DEL_RANK) vanilla::CMSG_GUILD_DEL_RANK();
-        }
-        if (opcode == Opcode::CMSG_GUILD_SET_PUBLIC_NOTE) {
-            new (&this->CMSG_GUILD_SET_PUBLIC_NOTE) vanilla::CMSG_GUILD_SET_PUBLIC_NOTE();
-        }
-        if (opcode == Opcode::CMSG_GUILD_SET_OFFICER_NOTE) {
-            new (&this->CMSG_GUILD_SET_OFFICER_NOTE) vanilla::CMSG_GUILD_SET_OFFICER_NOTE();
-        }
-        if (opcode == Opcode::CMSG_SEND_MAIL) {
-            new (&this->CMSG_SEND_MAIL) vanilla::CMSG_SEND_MAIL();
-        }
-        if (opcode == Opcode::CMSG_GET_MAIL_LIST) {
-            new (&this->CMSG_GET_MAIL_LIST) vanilla::CMSG_GET_MAIL_LIST();
-        }
-        if (opcode == Opcode::CMSG_BATTLEFIELD_LIST) {
-            new (&this->CMSG_BATTLEFIELD_LIST) vanilla::CMSG_BATTLEFIELD_LIST();
-        }
-        if (opcode == Opcode::CMSG_BATTLEFIELD_JOIN) {
-            new (&this->CMSG_BATTLEFIELD_JOIN) vanilla::CMSG_BATTLEFIELD_JOIN();
-        }
-        if (opcode == Opcode::CMSG_ITEM_TEXT_QUERY) {
-            new (&this->CMSG_ITEM_TEXT_QUERY) vanilla::CMSG_ITEM_TEXT_QUERY();
-        }
-        if (opcode == Opcode::CMSG_MAIL_TAKE_MONEY) {
-            new (&this->CMSG_MAIL_TAKE_MONEY) vanilla::CMSG_MAIL_TAKE_MONEY();
-        }
-        if (opcode == Opcode::CMSG_MAIL_TAKE_ITEM) {
-            new (&this->CMSG_MAIL_TAKE_ITEM) vanilla::CMSG_MAIL_TAKE_ITEM();
-        }
-        if (opcode == Opcode::CMSG_MAIL_MARK_AS_READ) {
-            new (&this->CMSG_MAIL_MARK_AS_READ) vanilla::CMSG_MAIL_MARK_AS_READ();
-        }
-        if (opcode == Opcode::CMSG_MAIL_RETURN_TO_SENDER) {
-            new (&this->CMSG_MAIL_RETURN_TO_SENDER) vanilla::CMSG_MAIL_RETURN_TO_SENDER();
-        }
-        if (opcode == Opcode::CMSG_MAIL_DELETE) {
-            new (&this->CMSG_MAIL_DELETE) vanilla::CMSG_MAIL_DELETE();
-        }
-        if (opcode == Opcode::CMSG_MAIL_CREATE_TEXT_ITEM) {
-            new (&this->CMSG_MAIL_CREATE_TEXT_ITEM) vanilla::CMSG_MAIL_CREATE_TEXT_ITEM();
-        }
-        if (opcode == Opcode::CMSG_LEARN_TALENT) {
-            new (&this->CMSG_LEARN_TALENT) vanilla::CMSG_LEARN_TALENT();
-        }
-        if (opcode == Opcode::MSG_AUCTION_HELLO) {
-            new (&this->MSG_AUCTION_HELLO) vanilla::MSG_AUCTION_HELLO_Client();
-        }
-        if (opcode == Opcode::CMSG_AUCTION_SELL_ITEM) {
-            new (&this->CMSG_AUCTION_SELL_ITEM) vanilla::CMSG_AUCTION_SELL_ITEM();
-        }
-        if (opcode == Opcode::CMSG_AUCTION_REMOVE_ITEM) {
-            new (&this->CMSG_AUCTION_REMOVE_ITEM) vanilla::CMSG_AUCTION_REMOVE_ITEM();
-        }
-        if (opcode == Opcode::CMSG_AUCTION_LIST_ITEMS) {
-            new (&this->CMSG_AUCTION_LIST_ITEMS) vanilla::CMSG_AUCTION_LIST_ITEMS();
-        }
-        if (opcode == Opcode::CMSG_AUCTION_LIST_OWNER_ITEMS) {
-            new (&this->CMSG_AUCTION_LIST_OWNER_ITEMS) vanilla::CMSG_AUCTION_LIST_OWNER_ITEMS();
-        }
-        if (opcode == Opcode::CMSG_AUCTION_PLACE_BID) {
-            new (&this->CMSG_AUCTION_PLACE_BID) vanilla::CMSG_AUCTION_PLACE_BID();
-        }
-        if (opcode == Opcode::CMSG_AUCTION_LIST_BIDDER_ITEMS) {
-            new (&this->CMSG_AUCTION_LIST_BIDDER_ITEMS) vanilla::CMSG_AUCTION_LIST_BIDDER_ITEMS();
-        }
-        if (opcode == Opcode::CMSG_SET_AMMO) {
-            new (&this->CMSG_SET_AMMO) vanilla::CMSG_SET_AMMO();
-        }
-        if (opcode == Opcode::CMSG_SET_ACTIVE_MOVER) {
-            new (&this->CMSG_SET_ACTIVE_MOVER) vanilla::CMSG_SET_ACTIVE_MOVER();
-        }
-        if (opcode == Opcode::CMSG_PET_CANCEL_AURA) {
-            new (&this->CMSG_PET_CANCEL_AURA) vanilla::CMSG_PET_CANCEL_AURA();
-        }
-        if (opcode == Opcode::CMSG_CANCEL_AUTO_REPEAT_SPELL) {
-            new (&this->CMSG_CANCEL_AUTO_REPEAT_SPELL) vanilla::CMSG_CANCEL_AUTO_REPEAT_SPELL();
-        }
-        if (opcode == Opcode::MSG_LIST_STABLED_PETS) {
-            new (&this->MSG_LIST_STABLED_PETS) vanilla::MSG_LIST_STABLED_PETS_Client();
-        }
-        if (opcode == Opcode::CMSG_STABLE_PET) {
-            new (&this->CMSG_STABLE_PET) vanilla::CMSG_STABLE_PET();
-        }
-        if (opcode == Opcode::CMSG_UNSTABLE_PET) {
-            new (&this->CMSG_UNSTABLE_PET) vanilla::CMSG_UNSTABLE_PET();
-        }
-        if (opcode == Opcode::CMSG_BUY_STABLE_SLOT) {
-            new (&this->CMSG_BUY_STABLE_SLOT) vanilla::CMSG_BUY_STABLE_SLOT();
-        }
-        if (opcode == Opcode::CMSG_STABLE_SWAP_PET) {
-            new (&this->CMSG_STABLE_SWAP_PET) vanilla::CMSG_STABLE_SWAP_PET();
-        }
-        if (opcode == Opcode::CMSG_REQUEST_PET_INFO) {
-            new (&this->CMSG_REQUEST_PET_INFO) vanilla::CMSG_REQUEST_PET_INFO();
-        }
-        if (opcode == Opcode::CMSG_FAR_SIGHT) {
-            new (&this->CMSG_FAR_SIGHT) vanilla::CMSG_FAR_SIGHT();
-        }
-        if (opcode == Opcode::CMSG_GROUP_CHANGE_SUB_GROUP) {
-            new (&this->CMSG_GROUP_CHANGE_SUB_GROUP) vanilla::CMSG_GROUP_CHANGE_SUB_GROUP();
-        }
-        if (opcode == Opcode::CMSG_REQUEST_PARTY_MEMBER_STATS) {
-            new (&this->CMSG_REQUEST_PARTY_MEMBER_STATS) vanilla::CMSG_REQUEST_PARTY_MEMBER_STATS();
-        }
-        if (opcode == Opcode::CMSG_GROUP_SWAP_SUB_GROUP) {
-            new (&this->CMSG_GROUP_SWAP_SUB_GROUP) vanilla::CMSG_GROUP_SWAP_SUB_GROUP();
-        }
-        if (opcode == Opcode::CMSG_AUTOSTORE_BANK_ITEM) {
-            new (&this->CMSG_AUTOSTORE_BANK_ITEM) vanilla::CMSG_AUTOSTORE_BANK_ITEM();
-        }
-        if (opcode == Opcode::CMSG_AUTOBANK_ITEM) {
-            new (&this->CMSG_AUTOBANK_ITEM) vanilla::CMSG_AUTOBANK_ITEM();
-        }
-        if (opcode == Opcode::MSG_QUERY_NEXT_MAIL_TIME) {
-            new (&this->MSG_QUERY_NEXT_MAIL_TIME) vanilla::MSG_QUERY_NEXT_MAIL_TIME_Client();
-        }
-        if (opcode == Opcode::CMSG_GROUP_RAID_CONVERT) {
-            new (&this->CMSG_GROUP_RAID_CONVERT) vanilla::CMSG_GROUP_RAID_CONVERT();
-        }
-        if (opcode == Opcode::CMSG_GROUP_ASSISTANT_LEADER) {
-            new (&this->CMSG_GROUP_ASSISTANT_LEADER) vanilla::CMSG_GROUP_ASSISTANT_LEADER();
-        }
-        if (opcode == Opcode::CMSG_BUYBACK_ITEM) {
-            new (&this->CMSG_BUYBACK_ITEM) vanilla::CMSG_BUYBACK_ITEM();
-        }
-        if (opcode == Opcode::CMSG_MEETINGSTONE_JOIN) {
-            new (&this->CMSG_MEETINGSTONE_JOIN) vanilla::CMSG_MEETINGSTONE_JOIN();
-        }
-        if (opcode == Opcode::CMSG_MEETINGSTONE_LEAVE) {
-            new (&this->CMSG_MEETINGSTONE_LEAVE) vanilla::CMSG_MEETINGSTONE_LEAVE();
-        }
-        if (opcode == Opcode::CMSG_MEETINGSTONE_INFO) {
-            new (&this->CMSG_MEETINGSTONE_INFO) vanilla::CMSG_MEETINGSTONE_INFO();
-        }
-        if (opcode == Opcode::CMSG_CANCEL_GROWTH_AURA) {
-            new (&this->CMSG_CANCEL_GROWTH_AURA) vanilla::CMSG_CANCEL_GROWTH_AURA();
-        }
-        if (opcode == Opcode::CMSG_LOOT_ROLL) {
-            new (&this->CMSG_LOOT_ROLL) vanilla::CMSG_LOOT_ROLL();
-        }
-        if (opcode == Opcode::CMSG_LOOT_MASTER_GIVE) {
-            new (&this->CMSG_LOOT_MASTER_GIVE) vanilla::CMSG_LOOT_MASTER_GIVE();
-        }
-        if (opcode == Opcode::CMSG_REPAIR_ITEM) {
-            new (&this->CMSG_REPAIR_ITEM) vanilla::CMSG_REPAIR_ITEM();
-        }
-        if (opcode == Opcode::MSG_TALENT_WIPE_CONFIRM) {
-            new (&this->MSG_TALENT_WIPE_CONFIRM) vanilla::MSG_TALENT_WIPE_CONFIRM_Client();
-        }
-        if (opcode == Opcode::CMSG_SUMMON_RESPONSE) {
-            new (&this->CMSG_SUMMON_RESPONSE) vanilla::CMSG_SUMMON_RESPONSE();
-        }
-        if (opcode == Opcode::CMSG_SELF_RES) {
-            new (&this->CMSG_SELF_RES) vanilla::CMSG_SELF_RES();
-        }
-        if (opcode == Opcode::CMSG_TOGGLE_HELM) {
-            new (&this->CMSG_TOGGLE_HELM) vanilla::CMSG_TOGGLE_HELM();
-        }
-        if (opcode == Opcode::CMSG_TOGGLE_CLOAK) {
-            new (&this->CMSG_TOGGLE_CLOAK) vanilla::CMSG_TOGGLE_CLOAK();
-        }
-        if (opcode == Opcode::CMSG_SET_ACTIONBAR_TOGGLES) {
-            new (&this->CMSG_SET_ACTIONBAR_TOGGLES) vanilla::CMSG_SET_ACTIONBAR_TOGGLES();
-        }
-        if (opcode == Opcode::CMSG_ITEM_NAME_QUERY) {
-            new (&this->CMSG_ITEM_NAME_QUERY) vanilla::CMSG_ITEM_NAME_QUERY();
-        }
-        if (opcode == Opcode::CMSG_CHAR_RENAME) {
-            new (&this->CMSG_CHAR_RENAME) vanilla::CMSG_CHAR_RENAME();
-        }
-        if (opcode == Opcode::CMSG_MOVE_SPLINE_DONE) {
-            new (&this->CMSG_MOVE_SPLINE_DONE) vanilla::CMSG_MOVE_SPLINE_DONE();
-        }
-        if (opcode == Opcode::CMSG_MOVE_FALL_RESET) {
-            new (&this->CMSG_MOVE_FALL_RESET) vanilla::CMSG_MOVE_FALL_RESET();
-        }
-        if (opcode == Opcode::CMSG_REQUEST_RAID_INFO) {
-            new (&this->CMSG_REQUEST_RAID_INFO) vanilla::CMSG_REQUEST_RAID_INFO();
-        }
-        if (opcode == Opcode::CMSG_MOVE_TIME_SKIPPED) {
-            new (&this->CMSG_MOVE_TIME_SKIPPED) vanilla::CMSG_MOVE_TIME_SKIPPED();
-        }
-        if (opcode == Opcode::CMSG_MOVE_FEATHER_FALL_ACK) {
-            new (&this->CMSG_MOVE_FEATHER_FALL_ACK) vanilla::CMSG_MOVE_FEATHER_FALL_ACK();
-        }
-        if (opcode == Opcode::CMSG_MOVE_WATER_WALK_ACK) {
-            new (&this->CMSG_MOVE_WATER_WALK_ACK) vanilla::CMSG_MOVE_WATER_WALK_ACK();
-        }
-        if (opcode == Opcode::CMSG_MOVE_NOT_ACTIVE_MOVER) {
-            new (&this->CMSG_MOVE_NOT_ACTIVE_MOVER) vanilla::CMSG_MOVE_NOT_ACTIVE_MOVER();
-        }
-        if (opcode == Opcode::CMSG_BATTLEFIELD_STATUS) {
-            new (&this->CMSG_BATTLEFIELD_STATUS) vanilla::CMSG_BATTLEFIELD_STATUS();
-        }
-        if (opcode == Opcode::CMSG_BATTLEFIELD_PORT) {
-            new (&this->CMSG_BATTLEFIELD_PORT) vanilla::CMSG_BATTLEFIELD_PORT();
-        }
-        if (opcode == Opcode::MSG_INSPECT_HONOR_STATS) {
-            new (&this->MSG_INSPECT_HONOR_STATS) vanilla::MSG_INSPECT_HONOR_STATS_Client();
-        }
-        if (opcode == Opcode::CMSG_BATTLEMASTER_HELLO) {
-            new (&this->CMSG_BATTLEMASTER_HELLO) vanilla::CMSG_BATTLEMASTER_HELLO();
-        }
-        if (opcode == Opcode::CMSG_FORCE_WALK_SPEED_CHANGE_ACK) {
-            new (&this->CMSG_FORCE_WALK_SPEED_CHANGE_ACK) vanilla::CMSG_FORCE_WALK_SPEED_CHANGE_ACK();
-        }
-        if (opcode == Opcode::CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK) {
-            new (&this->CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK) vanilla::CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK();
-        }
-        if (opcode == Opcode::CMSG_FORCE_TURN_RATE_CHANGE_ACK) {
-            new (&this->CMSG_FORCE_TURN_RATE_CHANGE_ACK) vanilla::CMSG_FORCE_TURN_RATE_CHANGE_ACK();
-        }
-        if (opcode == Opcode::MSG_PVP_LOG_DATA) {
-            new (&this->MSG_PVP_LOG_DATA) vanilla::MSG_PVP_LOG_DATA_Client();
-        }
-        if (opcode == Opcode::CMSG_LEAVE_BATTLEFIELD) {
-            new (&this->CMSG_LEAVE_BATTLEFIELD) vanilla::CMSG_LEAVE_BATTLEFIELD();
-        }
-        if (opcode == Opcode::CMSG_AREA_SPIRIT_HEALER_QUERY) {
-            new (&this->CMSG_AREA_SPIRIT_HEALER_QUERY) vanilla::CMSG_AREA_SPIRIT_HEALER_QUERY();
-        }
-        if (opcode == Opcode::CMSG_AREA_SPIRIT_HEALER_QUEUE) {
-            new (&this->CMSG_AREA_SPIRIT_HEALER_QUEUE) vanilla::CMSG_AREA_SPIRIT_HEALER_QUEUE();
-        }
-        if (opcode == Opcode::CMSG_WARDEN_DATA) {
-            new (&this->CMSG_WARDEN_DATA) vanilla::CMSG_WARDEN_DATA();
-        }
-        if (opcode == Opcode::MSG_BATTLEGROUND_PLAYER_POSITIONS) {
-            new (&this->MSG_BATTLEGROUND_PLAYER_POSITIONS) vanilla::MSG_BATTLEGROUND_PLAYER_POSITIONS_Client();
-        }
-        if (opcode == Opcode::CMSG_PET_STOP_ATTACK) {
-            new (&this->CMSG_PET_STOP_ATTACK) vanilla::CMSG_PET_STOP_ATTACK();
-        }
-        if (opcode == Opcode::CMSG_BATTLEMASTER_JOIN) {
-            new (&this->CMSG_BATTLEMASTER_JOIN) vanilla::CMSG_BATTLEMASTER_JOIN();
-        }
-        if (opcode == Opcode::CMSG_PET_UNLEARN) {
-            new (&this->CMSG_PET_UNLEARN) vanilla::CMSG_PET_UNLEARN();
-        }
-        if (opcode == Opcode::CMSG_PET_SPELL_AUTOCAST) {
-            new (&this->CMSG_PET_SPELL_AUTOCAST) vanilla::CMSG_PET_SPELL_AUTOCAST();
-        }
-        if (opcode == Opcode::CMSG_GUILD_INFO_TEXT) {
-            new (&this->CMSG_GUILD_INFO_TEXT) vanilla::CMSG_GUILD_INFO_TEXT();
-        }
-        if (opcode == Opcode::CMSG_ACTIVATETAXIEXPRESS) {
-            new (&this->CMSG_ACTIVATETAXIEXPRESS) vanilla::CMSG_ACTIVATETAXIEXPRESS();
-        }
-        if (opcode == Opcode::CMSG_SET_FACTION_INACTIVE) {
-            new (&this->CMSG_SET_FACTION_INACTIVE) vanilla::CMSG_SET_FACTION_INACTIVE();
-        }
-        if (opcode == Opcode::CMSG_SET_WATCHED_FACTION) {
-            new (&this->CMSG_SET_WATCHED_FACTION) vanilla::CMSG_SET_WATCHED_FACTION();
-        }
-        if (opcode == Opcode::CMSG_RESET_INSTANCES) {
-            new (&this->CMSG_RESET_INSTANCES) vanilla::CMSG_RESET_INSTANCES();
-        }
-        if (opcode == Opcode::MSG_RAID_TARGET_UPDATE) {
-            new (&this->MSG_RAID_TARGET_UPDATE) vanilla::MSG_RAID_TARGET_UPDATE_Client();
-        }
-        if (opcode == Opcode::CMSG_GMSURVEY_SUBMIT) {
-            new (&this->CMSG_GMSURVEY_SUBMIT) vanilla::CMSG_GMSURVEY_SUBMIT();
-        }
-    }
+    explicit ClientOpcode() : opcode(Opcode::NONE), CMSG_BOOTME() {}
 
     ClientOpcode(ClientOpcode&& other) noexcept {
         this->opcode = other.opcode;
         other.opcode = Opcode::NONE;
         if (opcode == Opcode::CMSG_BOOTME) {
-            this->CMSG_BOOTME = other.CMSG_BOOTME;
+            this->CMSG_BOOTME = std::move(other.CMSG_BOOTME);
         }
         if (opcode == Opcode::CMSG_DBLOOKUP) {
-            this->CMSG_DBLOOKUP = other.CMSG_DBLOOKUP;
+            this->CMSG_DBLOOKUP = std::move(other.CMSG_DBLOOKUP);
         }
         if (opcode == Opcode::CMSG_WORLD_TELEPORT) {
-            this->CMSG_WORLD_TELEPORT = other.CMSG_WORLD_TELEPORT;
+            this->CMSG_WORLD_TELEPORT = std::move(other.CMSG_WORLD_TELEPORT);
         }
         if (opcode == Opcode::CMSG_TELEPORT_TO_UNIT) {
-            this->CMSG_TELEPORT_TO_UNIT = other.CMSG_TELEPORT_TO_UNIT;
+            this->CMSG_TELEPORT_TO_UNIT = std::move(other.CMSG_TELEPORT_TO_UNIT);
         }
         if (opcode == Opcode::CMSG_CHAR_CREATE) {
-            this->CMSG_CHAR_CREATE = other.CMSG_CHAR_CREATE;
+            this->CMSG_CHAR_CREATE = std::move(other.CMSG_CHAR_CREATE);
         }
         if (opcode == Opcode::CMSG_CHAR_ENUM) {
-            this->CMSG_CHAR_ENUM = other.CMSG_CHAR_ENUM;
+            this->CMSG_CHAR_ENUM = std::move(other.CMSG_CHAR_ENUM);
         }
         if (opcode == Opcode::CMSG_CHAR_DELETE) {
-            this->CMSG_CHAR_DELETE = other.CMSG_CHAR_DELETE;
+            this->CMSG_CHAR_DELETE = std::move(other.CMSG_CHAR_DELETE);
         }
         if (opcode == Opcode::CMSG_PLAYER_LOGIN) {
-            this->CMSG_PLAYER_LOGIN = other.CMSG_PLAYER_LOGIN;
+            this->CMSG_PLAYER_LOGIN = std::move(other.CMSG_PLAYER_LOGIN);
         }
         if (opcode == Opcode::CMSG_PLAYER_LOGOUT) {
-            this->CMSG_PLAYER_LOGOUT = other.CMSG_PLAYER_LOGOUT;
+            this->CMSG_PLAYER_LOGOUT = std::move(other.CMSG_PLAYER_LOGOUT);
         }
         if (opcode == Opcode::CMSG_LOGOUT_REQUEST) {
-            this->CMSG_LOGOUT_REQUEST = other.CMSG_LOGOUT_REQUEST;
+            this->CMSG_LOGOUT_REQUEST = std::move(other.CMSG_LOGOUT_REQUEST);
         }
         if (opcode == Opcode::CMSG_LOGOUT_CANCEL) {
-            this->CMSG_LOGOUT_CANCEL = other.CMSG_LOGOUT_CANCEL;
+            this->CMSG_LOGOUT_CANCEL = std::move(other.CMSG_LOGOUT_CANCEL);
         }
         if (opcode == Opcode::CMSG_NAME_QUERY) {
-            this->CMSG_NAME_QUERY = other.CMSG_NAME_QUERY;
+            this->CMSG_NAME_QUERY = std::move(other.CMSG_NAME_QUERY);
         }
         if (opcode == Opcode::CMSG_PET_NAME_QUERY) {
-            this->CMSG_PET_NAME_QUERY = other.CMSG_PET_NAME_QUERY;
+            this->CMSG_PET_NAME_QUERY = std::move(other.CMSG_PET_NAME_QUERY);
         }
         if (opcode == Opcode::CMSG_GUILD_QUERY) {
-            this->CMSG_GUILD_QUERY = other.CMSG_GUILD_QUERY;
+            this->CMSG_GUILD_QUERY = std::move(other.CMSG_GUILD_QUERY);
         }
         if (opcode == Opcode::CMSG_ITEM_QUERY_SINGLE) {
-            this->CMSG_ITEM_QUERY_SINGLE = other.CMSG_ITEM_QUERY_SINGLE;
+            this->CMSG_ITEM_QUERY_SINGLE = std::move(other.CMSG_ITEM_QUERY_SINGLE);
         }
         if (opcode == Opcode::CMSG_PAGE_TEXT_QUERY) {
-            this->CMSG_PAGE_TEXT_QUERY = other.CMSG_PAGE_TEXT_QUERY;
+            this->CMSG_PAGE_TEXT_QUERY = std::move(other.CMSG_PAGE_TEXT_QUERY);
         }
         if (opcode == Opcode::CMSG_QUEST_QUERY) {
-            this->CMSG_QUEST_QUERY = other.CMSG_QUEST_QUERY;
+            this->CMSG_QUEST_QUERY = std::move(other.CMSG_QUEST_QUERY);
         }
         if (opcode == Opcode::CMSG_GAMEOBJECT_QUERY) {
-            this->CMSG_GAMEOBJECT_QUERY = other.CMSG_GAMEOBJECT_QUERY;
+            this->CMSG_GAMEOBJECT_QUERY = std::move(other.CMSG_GAMEOBJECT_QUERY);
         }
         if (opcode == Opcode::CMSG_CREATURE_QUERY) {
-            this->CMSG_CREATURE_QUERY = other.CMSG_CREATURE_QUERY;
+            this->CMSG_CREATURE_QUERY = std::move(other.CMSG_CREATURE_QUERY);
         }
         if (opcode == Opcode::CMSG_WHO) {
-            this->CMSG_WHO = other.CMSG_WHO;
+            this->CMSG_WHO = std::move(other.CMSG_WHO);
         }
         if (opcode == Opcode::CMSG_WHOIS) {
-            this->CMSG_WHOIS = other.CMSG_WHOIS;
+            this->CMSG_WHOIS = std::move(other.CMSG_WHOIS);
         }
         if (opcode == Opcode::CMSG_FRIEND_LIST) {
-            this->CMSG_FRIEND_LIST = other.CMSG_FRIEND_LIST;
+            this->CMSG_FRIEND_LIST = std::move(other.CMSG_FRIEND_LIST);
         }
         if (opcode == Opcode::CMSG_ADD_FRIEND) {
-            this->CMSG_ADD_FRIEND = other.CMSG_ADD_FRIEND;
+            this->CMSG_ADD_FRIEND = std::move(other.CMSG_ADD_FRIEND);
         }
         if (opcode == Opcode::CMSG_DEL_FRIEND) {
-            this->CMSG_DEL_FRIEND = other.CMSG_DEL_FRIEND;
+            this->CMSG_DEL_FRIEND = std::move(other.CMSG_DEL_FRIEND);
         }
         if (opcode == Opcode::CMSG_ADD_IGNORE) {
-            this->CMSG_ADD_IGNORE = other.CMSG_ADD_IGNORE;
+            this->CMSG_ADD_IGNORE = std::move(other.CMSG_ADD_IGNORE);
         }
         if (opcode == Opcode::CMSG_DEL_IGNORE) {
-            this->CMSG_DEL_IGNORE = other.CMSG_DEL_IGNORE;
+            this->CMSG_DEL_IGNORE = std::move(other.CMSG_DEL_IGNORE);
         }
         if (opcode == Opcode::CMSG_GROUP_INVITE) {
-            this->CMSG_GROUP_INVITE = other.CMSG_GROUP_INVITE;
+            this->CMSG_GROUP_INVITE = std::move(other.CMSG_GROUP_INVITE);
         }
         if (opcode == Opcode::CMSG_GROUP_ACCEPT) {
-            this->CMSG_GROUP_ACCEPT = other.CMSG_GROUP_ACCEPT;
+            this->CMSG_GROUP_ACCEPT = std::move(other.CMSG_GROUP_ACCEPT);
         }
         if (opcode == Opcode::CMSG_GROUP_DECLINE) {
-            this->CMSG_GROUP_DECLINE = other.CMSG_GROUP_DECLINE;
+            this->CMSG_GROUP_DECLINE = std::move(other.CMSG_GROUP_DECLINE);
         }
         if (opcode == Opcode::CMSG_GROUP_UNINVITE) {
-            this->CMSG_GROUP_UNINVITE = other.CMSG_GROUP_UNINVITE;
+            this->CMSG_GROUP_UNINVITE = std::move(other.CMSG_GROUP_UNINVITE);
         }
         if (opcode == Opcode::CMSG_GROUP_UNINVITE_GUID) {
-            this->CMSG_GROUP_UNINVITE_GUID = other.CMSG_GROUP_UNINVITE_GUID;
+            this->CMSG_GROUP_UNINVITE_GUID = std::move(other.CMSG_GROUP_UNINVITE_GUID);
         }
         if (opcode == Opcode::CMSG_GROUP_SET_LEADER) {
-            this->CMSG_GROUP_SET_LEADER = other.CMSG_GROUP_SET_LEADER;
+            this->CMSG_GROUP_SET_LEADER = std::move(other.CMSG_GROUP_SET_LEADER);
         }
         if (opcode == Opcode::CMSG_LOOT_METHOD) {
-            this->CMSG_LOOT_METHOD = other.CMSG_LOOT_METHOD;
+            this->CMSG_LOOT_METHOD = std::move(other.CMSG_LOOT_METHOD);
         }
         if (opcode == Opcode::CMSG_GROUP_DISBAND) {
-            this->CMSG_GROUP_DISBAND = other.CMSG_GROUP_DISBAND;
+            this->CMSG_GROUP_DISBAND = std::move(other.CMSG_GROUP_DISBAND);
         }
         if (opcode == Opcode::CMSG_GUILD_CREATE) {
-            this->CMSG_GUILD_CREATE = other.CMSG_GUILD_CREATE;
+            this->CMSG_GUILD_CREATE = std::move(other.CMSG_GUILD_CREATE);
         }
         if (opcode == Opcode::CMSG_GUILD_INVITE) {
-            this->CMSG_GUILD_INVITE = other.CMSG_GUILD_INVITE;
+            this->CMSG_GUILD_INVITE = std::move(other.CMSG_GUILD_INVITE);
         }
         if (opcode == Opcode::CMSG_GUILD_ACCEPT) {
-            this->CMSG_GUILD_ACCEPT = other.CMSG_GUILD_ACCEPT;
+            this->CMSG_GUILD_ACCEPT = std::move(other.CMSG_GUILD_ACCEPT);
         }
         if (opcode == Opcode::CMSG_GUILD_DECLINE) {
-            this->CMSG_GUILD_DECLINE = other.CMSG_GUILD_DECLINE;
+            this->CMSG_GUILD_DECLINE = std::move(other.CMSG_GUILD_DECLINE);
         }
         if (opcode == Opcode::CMSG_GUILD_INFO) {
-            this->CMSG_GUILD_INFO = other.CMSG_GUILD_INFO;
+            this->CMSG_GUILD_INFO = std::move(other.CMSG_GUILD_INFO);
         }
         if (opcode == Opcode::CMSG_GUILD_ROSTER) {
-            this->CMSG_GUILD_ROSTER = other.CMSG_GUILD_ROSTER;
+            this->CMSG_GUILD_ROSTER = std::move(other.CMSG_GUILD_ROSTER);
         }
         if (opcode == Opcode::CMSG_GUILD_PROMOTE) {
-            this->CMSG_GUILD_PROMOTE = other.CMSG_GUILD_PROMOTE;
+            this->CMSG_GUILD_PROMOTE = std::move(other.CMSG_GUILD_PROMOTE);
         }
         if (opcode == Opcode::CMSG_GUILD_DEMOTE) {
-            this->CMSG_GUILD_DEMOTE = other.CMSG_GUILD_DEMOTE;
+            this->CMSG_GUILD_DEMOTE = std::move(other.CMSG_GUILD_DEMOTE);
         }
         if (opcode == Opcode::CMSG_GUILD_LEAVE) {
-            this->CMSG_GUILD_LEAVE = other.CMSG_GUILD_LEAVE;
+            this->CMSG_GUILD_LEAVE = std::move(other.CMSG_GUILD_LEAVE);
         }
         if (opcode == Opcode::CMSG_GUILD_REMOVE) {
-            this->CMSG_GUILD_REMOVE = other.CMSG_GUILD_REMOVE;
+            this->CMSG_GUILD_REMOVE = std::move(other.CMSG_GUILD_REMOVE);
         }
         if (opcode == Opcode::CMSG_GUILD_DISBAND) {
-            this->CMSG_GUILD_DISBAND = other.CMSG_GUILD_DISBAND;
+            this->CMSG_GUILD_DISBAND = std::move(other.CMSG_GUILD_DISBAND);
         }
         if (opcode == Opcode::CMSG_GUILD_LEADER) {
-            this->CMSG_GUILD_LEADER = other.CMSG_GUILD_LEADER;
+            this->CMSG_GUILD_LEADER = std::move(other.CMSG_GUILD_LEADER);
         }
         if (opcode == Opcode::CMSG_GUILD_MOTD) {
-            this->CMSG_GUILD_MOTD = other.CMSG_GUILD_MOTD;
+            this->CMSG_GUILD_MOTD = std::move(other.CMSG_GUILD_MOTD);
         }
         if (opcode == Opcode::CMSG_MESSAGECHAT) {
-            this->CMSG_MESSAGECHAT = other.CMSG_MESSAGECHAT;
+            this->CMSG_MESSAGECHAT = std::move(other.CMSG_MESSAGECHAT);
         }
         if (opcode == Opcode::CMSG_JOIN_CHANNEL) {
-            this->CMSG_JOIN_CHANNEL = other.CMSG_JOIN_CHANNEL;
+            this->CMSG_JOIN_CHANNEL = std::move(other.CMSG_JOIN_CHANNEL);
         }
         if (opcode == Opcode::CMSG_LEAVE_CHANNEL) {
-            this->CMSG_LEAVE_CHANNEL = other.CMSG_LEAVE_CHANNEL;
+            this->CMSG_LEAVE_CHANNEL = std::move(other.CMSG_LEAVE_CHANNEL);
         }
         if (opcode == Opcode::CMSG_CHANNEL_LIST) {
-            this->CMSG_CHANNEL_LIST = other.CMSG_CHANNEL_LIST;
+            this->CMSG_CHANNEL_LIST = std::move(other.CMSG_CHANNEL_LIST);
         }
         if (opcode == Opcode::CMSG_CHANNEL_PASSWORD) {
-            this->CMSG_CHANNEL_PASSWORD = other.CMSG_CHANNEL_PASSWORD;
+            this->CMSG_CHANNEL_PASSWORD = std::move(other.CMSG_CHANNEL_PASSWORD);
         }
         if (opcode == Opcode::CMSG_CHANNEL_SET_OWNER) {
-            this->CMSG_CHANNEL_SET_OWNER = other.CMSG_CHANNEL_SET_OWNER;
+            this->CMSG_CHANNEL_SET_OWNER = std::move(other.CMSG_CHANNEL_SET_OWNER);
         }
         if (opcode == Opcode::CMSG_CHANNEL_OWNER) {
-            this->CMSG_CHANNEL_OWNER = other.CMSG_CHANNEL_OWNER;
+            this->CMSG_CHANNEL_OWNER = std::move(other.CMSG_CHANNEL_OWNER);
         }
         if (opcode == Opcode::CMSG_CHANNEL_MODERATOR) {
-            this->CMSG_CHANNEL_MODERATOR = other.CMSG_CHANNEL_MODERATOR;
+            this->CMSG_CHANNEL_MODERATOR = std::move(other.CMSG_CHANNEL_MODERATOR);
         }
         if (opcode == Opcode::CMSG_CHANNEL_UNMODERATOR) {
-            this->CMSG_CHANNEL_UNMODERATOR = other.CMSG_CHANNEL_UNMODERATOR;
+            this->CMSG_CHANNEL_UNMODERATOR = std::move(other.CMSG_CHANNEL_UNMODERATOR);
         }
         if (opcode == Opcode::CMSG_CHANNEL_MUTE) {
-            this->CMSG_CHANNEL_MUTE = other.CMSG_CHANNEL_MUTE;
+            this->CMSG_CHANNEL_MUTE = std::move(other.CMSG_CHANNEL_MUTE);
         }
         if (opcode == Opcode::CMSG_CHANNEL_UNMUTE) {
-            this->CMSG_CHANNEL_UNMUTE = other.CMSG_CHANNEL_UNMUTE;
+            this->CMSG_CHANNEL_UNMUTE = std::move(other.CMSG_CHANNEL_UNMUTE);
         }
         if (opcode == Opcode::CMSG_CHANNEL_INVITE) {
-            this->CMSG_CHANNEL_INVITE = other.CMSG_CHANNEL_INVITE;
+            this->CMSG_CHANNEL_INVITE = std::move(other.CMSG_CHANNEL_INVITE);
         }
         if (opcode == Opcode::CMSG_CHANNEL_KICK) {
-            this->CMSG_CHANNEL_KICK = other.CMSG_CHANNEL_KICK;
+            this->CMSG_CHANNEL_KICK = std::move(other.CMSG_CHANNEL_KICK);
         }
         if (opcode == Opcode::CMSG_CHANNEL_BAN) {
-            this->CMSG_CHANNEL_BAN = other.CMSG_CHANNEL_BAN;
+            this->CMSG_CHANNEL_BAN = std::move(other.CMSG_CHANNEL_BAN);
         }
         if (opcode == Opcode::CMSG_CHANNEL_UNBAN) {
-            this->CMSG_CHANNEL_UNBAN = other.CMSG_CHANNEL_UNBAN;
+            this->CMSG_CHANNEL_UNBAN = std::move(other.CMSG_CHANNEL_UNBAN);
         }
         if (opcode == Opcode::CMSG_CHANNEL_ANNOUNCEMENTS) {
-            this->CMSG_CHANNEL_ANNOUNCEMENTS = other.CMSG_CHANNEL_ANNOUNCEMENTS;
+            this->CMSG_CHANNEL_ANNOUNCEMENTS = std::move(other.CMSG_CHANNEL_ANNOUNCEMENTS);
         }
         if (opcode == Opcode::CMSG_CHANNEL_MODERATE) {
-            this->CMSG_CHANNEL_MODERATE = other.CMSG_CHANNEL_MODERATE;
+            this->CMSG_CHANNEL_MODERATE = std::move(other.CMSG_CHANNEL_MODERATE);
         }
         if (opcode == Opcode::CMSG_USE_ITEM) {
-            this->CMSG_USE_ITEM = other.CMSG_USE_ITEM;
+            this->CMSG_USE_ITEM = std::move(other.CMSG_USE_ITEM);
         }
         if (opcode == Opcode::CMSG_OPEN_ITEM) {
-            this->CMSG_OPEN_ITEM = other.CMSG_OPEN_ITEM;
+            this->CMSG_OPEN_ITEM = std::move(other.CMSG_OPEN_ITEM);
         }
         if (opcode == Opcode::CMSG_READ_ITEM) {
-            this->CMSG_READ_ITEM = other.CMSG_READ_ITEM;
+            this->CMSG_READ_ITEM = std::move(other.CMSG_READ_ITEM);
         }
         if (opcode == Opcode::CMSG_GAMEOBJ_USE) {
-            this->CMSG_GAMEOBJ_USE = other.CMSG_GAMEOBJ_USE;
+            this->CMSG_GAMEOBJ_USE = std::move(other.CMSG_GAMEOBJ_USE);
         }
         if (opcode == Opcode::CMSG_AREATRIGGER) {
-            this->CMSG_AREATRIGGER = other.CMSG_AREATRIGGER;
+            this->CMSG_AREATRIGGER = std::move(other.CMSG_AREATRIGGER);
         }
         if (opcode == Opcode::MSG_MOVE_START_FORWARD) {
-            this->MSG_MOVE_START_FORWARD = other.MSG_MOVE_START_FORWARD;
+            this->MSG_MOVE_START_FORWARD = std::move(other.MSG_MOVE_START_FORWARD);
         }
         if (opcode == Opcode::MSG_MOVE_START_BACKWARD) {
-            this->MSG_MOVE_START_BACKWARD = other.MSG_MOVE_START_BACKWARD;
+            this->MSG_MOVE_START_BACKWARD = std::move(other.MSG_MOVE_START_BACKWARD);
         }
         if (opcode == Opcode::MSG_MOVE_STOP) {
-            this->MSG_MOVE_STOP = other.MSG_MOVE_STOP;
+            this->MSG_MOVE_STOP = std::move(other.MSG_MOVE_STOP);
         }
         if (opcode == Opcode::MSG_MOVE_START_STRAFE_LEFT) {
-            this->MSG_MOVE_START_STRAFE_LEFT = other.MSG_MOVE_START_STRAFE_LEFT;
+            this->MSG_MOVE_START_STRAFE_LEFT = std::move(other.MSG_MOVE_START_STRAFE_LEFT);
         }
         if (opcode == Opcode::MSG_MOVE_START_STRAFE_RIGHT) {
-            this->MSG_MOVE_START_STRAFE_RIGHT = other.MSG_MOVE_START_STRAFE_RIGHT;
+            this->MSG_MOVE_START_STRAFE_RIGHT = std::move(other.MSG_MOVE_START_STRAFE_RIGHT);
         }
         if (opcode == Opcode::MSG_MOVE_STOP_STRAFE) {
-            this->MSG_MOVE_STOP_STRAFE = other.MSG_MOVE_STOP_STRAFE;
+            this->MSG_MOVE_STOP_STRAFE = std::move(other.MSG_MOVE_STOP_STRAFE);
         }
         if (opcode == Opcode::MSG_MOVE_JUMP) {
-            this->MSG_MOVE_JUMP = other.MSG_MOVE_JUMP;
+            this->MSG_MOVE_JUMP = std::move(other.MSG_MOVE_JUMP);
         }
         if (opcode == Opcode::MSG_MOVE_START_TURN_LEFT) {
-            this->MSG_MOVE_START_TURN_LEFT = other.MSG_MOVE_START_TURN_LEFT;
+            this->MSG_MOVE_START_TURN_LEFT = std::move(other.MSG_MOVE_START_TURN_LEFT);
         }
         if (opcode == Opcode::MSG_MOVE_START_TURN_RIGHT) {
-            this->MSG_MOVE_START_TURN_RIGHT = other.MSG_MOVE_START_TURN_RIGHT;
+            this->MSG_MOVE_START_TURN_RIGHT = std::move(other.MSG_MOVE_START_TURN_RIGHT);
         }
         if (opcode == Opcode::MSG_MOVE_STOP_TURN) {
-            this->MSG_MOVE_STOP_TURN = other.MSG_MOVE_STOP_TURN;
+            this->MSG_MOVE_STOP_TURN = std::move(other.MSG_MOVE_STOP_TURN);
         }
         if (opcode == Opcode::MSG_MOVE_START_PITCH_UP) {
-            this->MSG_MOVE_START_PITCH_UP = other.MSG_MOVE_START_PITCH_UP;
+            this->MSG_MOVE_START_PITCH_UP = std::move(other.MSG_MOVE_START_PITCH_UP);
         }
         if (opcode == Opcode::MSG_MOVE_START_PITCH_DOWN) {
-            this->MSG_MOVE_START_PITCH_DOWN = other.MSG_MOVE_START_PITCH_DOWN;
+            this->MSG_MOVE_START_PITCH_DOWN = std::move(other.MSG_MOVE_START_PITCH_DOWN);
         }
         if (opcode == Opcode::MSG_MOVE_STOP_PITCH) {
-            this->MSG_MOVE_STOP_PITCH = other.MSG_MOVE_STOP_PITCH;
+            this->MSG_MOVE_STOP_PITCH = std::move(other.MSG_MOVE_STOP_PITCH);
         }
         if (opcode == Opcode::MSG_MOVE_SET_RUN_MODE) {
-            this->MSG_MOVE_SET_RUN_MODE = other.MSG_MOVE_SET_RUN_MODE;
+            this->MSG_MOVE_SET_RUN_MODE = std::move(other.MSG_MOVE_SET_RUN_MODE);
         }
         if (opcode == Opcode::MSG_MOVE_SET_WALK_MODE) {
-            this->MSG_MOVE_SET_WALK_MODE = other.MSG_MOVE_SET_WALK_MODE;
+            this->MSG_MOVE_SET_WALK_MODE = std::move(other.MSG_MOVE_SET_WALK_MODE);
         }
         if (opcode == Opcode::MSG_MOVE_TELEPORT_ACK) {
-            this->MSG_MOVE_TELEPORT_ACK = other.MSG_MOVE_TELEPORT_ACK;
+            this->MSG_MOVE_TELEPORT_ACK = std::move(other.MSG_MOVE_TELEPORT_ACK);
         }
         if (opcode == Opcode::MSG_MOVE_FALL_LAND) {
-            this->MSG_MOVE_FALL_LAND = other.MSG_MOVE_FALL_LAND;
+            this->MSG_MOVE_FALL_LAND = std::move(other.MSG_MOVE_FALL_LAND);
         }
         if (opcode == Opcode::MSG_MOVE_START_SWIM) {
-            this->MSG_MOVE_START_SWIM = other.MSG_MOVE_START_SWIM;
+            this->MSG_MOVE_START_SWIM = std::move(other.MSG_MOVE_START_SWIM);
         }
         if (opcode == Opcode::MSG_MOVE_STOP_SWIM) {
-            this->MSG_MOVE_STOP_SWIM = other.MSG_MOVE_STOP_SWIM;
+            this->MSG_MOVE_STOP_SWIM = std::move(other.MSG_MOVE_STOP_SWIM);
         }
         if (opcode == Opcode::MSG_MOVE_SET_FACING) {
-            this->MSG_MOVE_SET_FACING = other.MSG_MOVE_SET_FACING;
+            this->MSG_MOVE_SET_FACING = std::move(other.MSG_MOVE_SET_FACING);
         }
         if (opcode == Opcode::MSG_MOVE_SET_PITCH) {
-            this->MSG_MOVE_SET_PITCH = other.MSG_MOVE_SET_PITCH;
+            this->MSG_MOVE_SET_PITCH = std::move(other.MSG_MOVE_SET_PITCH);
+        }
+        if (opcode == Opcode::MSG_MOVE_WORLDPORT_ACK) {
+            this->MSG_MOVE_WORLDPORT_ACK = std::move(other.MSG_MOVE_WORLDPORT_ACK);
         }
         if (opcode == Opcode::CMSG_MOVE_SET_RAW_POSITION) {
-            this->CMSG_MOVE_SET_RAW_POSITION = other.CMSG_MOVE_SET_RAW_POSITION;
+            this->CMSG_MOVE_SET_RAW_POSITION = std::move(other.CMSG_MOVE_SET_RAW_POSITION);
         }
         if (opcode == Opcode::CMSG_FORCE_RUN_SPEED_CHANGE_ACK) {
-            this->CMSG_FORCE_RUN_SPEED_CHANGE_ACK = other.CMSG_FORCE_RUN_SPEED_CHANGE_ACK;
+            this->CMSG_FORCE_RUN_SPEED_CHANGE_ACK = std::move(other.CMSG_FORCE_RUN_SPEED_CHANGE_ACK);
         }
         if (opcode == Opcode::CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK) {
-            this->CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK = other.CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK;
+            this->CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK = std::move(other.CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK);
         }
         if (opcode == Opcode::CMSG_FORCE_SWIM_SPEED_CHANGE_ACK) {
-            this->CMSG_FORCE_SWIM_SPEED_CHANGE_ACK = other.CMSG_FORCE_SWIM_SPEED_CHANGE_ACK;
+            this->CMSG_FORCE_SWIM_SPEED_CHANGE_ACK = std::move(other.CMSG_FORCE_SWIM_SPEED_CHANGE_ACK);
         }
         if (opcode == Opcode::CMSG_FORCE_MOVE_ROOT_ACK) {
-            this->CMSG_FORCE_MOVE_ROOT_ACK = other.CMSG_FORCE_MOVE_ROOT_ACK;
+            this->CMSG_FORCE_MOVE_ROOT_ACK = std::move(other.CMSG_FORCE_MOVE_ROOT_ACK);
         }
         if (opcode == Opcode::CMSG_FORCE_MOVE_UNROOT_ACK) {
-            this->CMSG_FORCE_MOVE_UNROOT_ACK = other.CMSG_FORCE_MOVE_UNROOT_ACK;
+            this->CMSG_FORCE_MOVE_UNROOT_ACK = std::move(other.CMSG_FORCE_MOVE_UNROOT_ACK);
         }
         if (opcode == Opcode::MSG_MOVE_HEARTBEAT) {
-            this->MSG_MOVE_HEARTBEAT = other.MSG_MOVE_HEARTBEAT;
+            this->MSG_MOVE_HEARTBEAT = std::move(other.MSG_MOVE_HEARTBEAT);
         }
         if (opcode == Opcode::CMSG_MOVE_KNOCK_BACK_ACK) {
-            this->CMSG_MOVE_KNOCK_BACK_ACK = other.CMSG_MOVE_KNOCK_BACK_ACK;
+            this->CMSG_MOVE_KNOCK_BACK_ACK = std::move(other.CMSG_MOVE_KNOCK_BACK_ACK);
         }
         if (opcode == Opcode::CMSG_MOVE_HOVER_ACK) {
-            this->CMSG_MOVE_HOVER_ACK = other.CMSG_MOVE_HOVER_ACK;
+            this->CMSG_MOVE_HOVER_ACK = std::move(other.CMSG_MOVE_HOVER_ACK);
         }
         if (opcode == Opcode::CMSG_NEXT_CINEMATIC_CAMERA) {
-            this->CMSG_NEXT_CINEMATIC_CAMERA = other.CMSG_NEXT_CINEMATIC_CAMERA;
+            this->CMSG_NEXT_CINEMATIC_CAMERA = std::move(other.CMSG_NEXT_CINEMATIC_CAMERA);
         }
         if (opcode == Opcode::CMSG_COMPLETE_CINEMATIC) {
-            this->CMSG_COMPLETE_CINEMATIC = other.CMSG_COMPLETE_CINEMATIC;
+            this->CMSG_COMPLETE_CINEMATIC = std::move(other.CMSG_COMPLETE_CINEMATIC);
         }
         if (opcode == Opcode::CMSG_TUTORIAL_FLAG) {
-            this->CMSG_TUTORIAL_FLAG = other.CMSG_TUTORIAL_FLAG;
+            this->CMSG_TUTORIAL_FLAG = std::move(other.CMSG_TUTORIAL_FLAG);
         }
         if (opcode == Opcode::CMSG_TUTORIAL_CLEAR) {
-            this->CMSG_TUTORIAL_CLEAR = other.CMSG_TUTORIAL_CLEAR;
+            this->CMSG_TUTORIAL_CLEAR = std::move(other.CMSG_TUTORIAL_CLEAR);
         }
         if (opcode == Opcode::CMSG_TUTORIAL_RESET) {
-            this->CMSG_TUTORIAL_RESET = other.CMSG_TUTORIAL_RESET;
+            this->CMSG_TUTORIAL_RESET = std::move(other.CMSG_TUTORIAL_RESET);
         }
         if (opcode == Opcode::CMSG_STANDSTATECHANGE) {
-            this->CMSG_STANDSTATECHANGE = other.CMSG_STANDSTATECHANGE;
+            this->CMSG_STANDSTATECHANGE = std::move(other.CMSG_STANDSTATECHANGE);
         }
         if (opcode == Opcode::CMSG_EMOTE) {
-            this->CMSG_EMOTE = other.CMSG_EMOTE;
+            this->CMSG_EMOTE = std::move(other.CMSG_EMOTE);
         }
         if (opcode == Opcode::CMSG_TEXT_EMOTE) {
-            this->CMSG_TEXT_EMOTE = other.CMSG_TEXT_EMOTE;
+            this->CMSG_TEXT_EMOTE = std::move(other.CMSG_TEXT_EMOTE);
         }
         if (opcode == Opcode::CMSG_AUTOSTORE_LOOT_ITEM) {
-            this->CMSG_AUTOSTORE_LOOT_ITEM = other.CMSG_AUTOSTORE_LOOT_ITEM;
+            this->CMSG_AUTOSTORE_LOOT_ITEM = std::move(other.CMSG_AUTOSTORE_LOOT_ITEM);
         }
         if (opcode == Opcode::CMSG_AUTOEQUIP_ITEM) {
-            this->CMSG_AUTOEQUIP_ITEM = other.CMSG_AUTOEQUIP_ITEM;
+            this->CMSG_AUTOEQUIP_ITEM = std::move(other.CMSG_AUTOEQUIP_ITEM);
         }
         if (opcode == Opcode::CMSG_AUTOSTORE_BAG_ITEM) {
-            this->CMSG_AUTOSTORE_BAG_ITEM = other.CMSG_AUTOSTORE_BAG_ITEM;
+            this->CMSG_AUTOSTORE_BAG_ITEM = std::move(other.CMSG_AUTOSTORE_BAG_ITEM);
         }
         if (opcode == Opcode::CMSG_SWAP_ITEM) {
-            this->CMSG_SWAP_ITEM = other.CMSG_SWAP_ITEM;
+            this->CMSG_SWAP_ITEM = std::move(other.CMSG_SWAP_ITEM);
         }
         if (opcode == Opcode::CMSG_SWAP_INV_ITEM) {
-            this->CMSG_SWAP_INV_ITEM = other.CMSG_SWAP_INV_ITEM;
+            this->CMSG_SWAP_INV_ITEM = std::move(other.CMSG_SWAP_INV_ITEM);
         }
         if (opcode == Opcode::CMSG_SPLIT_ITEM) {
-            this->CMSG_SPLIT_ITEM = other.CMSG_SPLIT_ITEM;
+            this->CMSG_SPLIT_ITEM = std::move(other.CMSG_SPLIT_ITEM);
         }
         if (opcode == Opcode::CMSG_AUTOEQUIP_ITEM_SLOT) {
-            this->CMSG_AUTOEQUIP_ITEM_SLOT = other.CMSG_AUTOEQUIP_ITEM_SLOT;
+            this->CMSG_AUTOEQUIP_ITEM_SLOT = std::move(other.CMSG_AUTOEQUIP_ITEM_SLOT);
         }
         if (opcode == Opcode::CMSG_DESTROYITEM) {
-            this->CMSG_DESTROYITEM = other.CMSG_DESTROYITEM;
+            this->CMSG_DESTROYITEM = std::move(other.CMSG_DESTROYITEM);
         }
         if (opcode == Opcode::CMSG_INSPECT) {
-            this->CMSG_INSPECT = other.CMSG_INSPECT;
+            this->CMSG_INSPECT = std::move(other.CMSG_INSPECT);
         }
         if (opcode == Opcode::CMSG_INITIATE_TRADE) {
-            this->CMSG_INITIATE_TRADE = other.CMSG_INITIATE_TRADE;
+            this->CMSG_INITIATE_TRADE = std::move(other.CMSG_INITIATE_TRADE);
         }
         if (opcode == Opcode::CMSG_BEGIN_TRADE) {
-            this->CMSG_BEGIN_TRADE = other.CMSG_BEGIN_TRADE;
+            this->CMSG_BEGIN_TRADE = std::move(other.CMSG_BEGIN_TRADE);
         }
         if (opcode == Opcode::CMSG_BUSY_TRADE) {
-            this->CMSG_BUSY_TRADE = other.CMSG_BUSY_TRADE;
+            this->CMSG_BUSY_TRADE = std::move(other.CMSG_BUSY_TRADE);
         }
         if (opcode == Opcode::CMSG_IGNORE_TRADE) {
-            this->CMSG_IGNORE_TRADE = other.CMSG_IGNORE_TRADE;
+            this->CMSG_IGNORE_TRADE = std::move(other.CMSG_IGNORE_TRADE);
         }
         if (opcode == Opcode::CMSG_ACCEPT_TRADE) {
-            this->CMSG_ACCEPT_TRADE = other.CMSG_ACCEPT_TRADE;
+            this->CMSG_ACCEPT_TRADE = std::move(other.CMSG_ACCEPT_TRADE);
         }
         if (opcode == Opcode::CMSG_UNACCEPT_TRADE) {
-            this->CMSG_UNACCEPT_TRADE = other.CMSG_UNACCEPT_TRADE;
+            this->CMSG_UNACCEPT_TRADE = std::move(other.CMSG_UNACCEPT_TRADE);
         }
         if (opcode == Opcode::CMSG_CANCEL_TRADE) {
-            this->CMSG_CANCEL_TRADE = other.CMSG_CANCEL_TRADE;
+            this->CMSG_CANCEL_TRADE = std::move(other.CMSG_CANCEL_TRADE);
         }
         if (opcode == Opcode::CMSG_SET_TRADE_ITEM) {
-            this->CMSG_SET_TRADE_ITEM = other.CMSG_SET_TRADE_ITEM;
+            this->CMSG_SET_TRADE_ITEM = std::move(other.CMSG_SET_TRADE_ITEM);
         }
         if (opcode == Opcode::CMSG_CLEAR_TRADE_ITEM) {
-            this->CMSG_CLEAR_TRADE_ITEM = other.CMSG_CLEAR_TRADE_ITEM;
+            this->CMSG_CLEAR_TRADE_ITEM = std::move(other.CMSG_CLEAR_TRADE_ITEM);
         }
         if (opcode == Opcode::CMSG_SET_TRADE_GOLD) {
-            this->CMSG_SET_TRADE_GOLD = other.CMSG_SET_TRADE_GOLD;
+            this->CMSG_SET_TRADE_GOLD = std::move(other.CMSG_SET_TRADE_GOLD);
         }
         if (opcode == Opcode::CMSG_SET_FACTION_ATWAR) {
-            this->CMSG_SET_FACTION_ATWAR = other.CMSG_SET_FACTION_ATWAR;
+            this->CMSG_SET_FACTION_ATWAR = std::move(other.CMSG_SET_FACTION_ATWAR);
         }
         if (opcode == Opcode::CMSG_SET_ACTION_BUTTON) {
-            this->CMSG_SET_ACTION_BUTTON = other.CMSG_SET_ACTION_BUTTON;
+            this->CMSG_SET_ACTION_BUTTON = std::move(other.CMSG_SET_ACTION_BUTTON);
         }
         if (opcode == Opcode::CMSG_CAST_SPELL) {
-            this->CMSG_CAST_SPELL = other.CMSG_CAST_SPELL;
+            this->CMSG_CAST_SPELL = std::move(other.CMSG_CAST_SPELL);
         }
         if (opcode == Opcode::CMSG_CANCEL_CAST) {
-            this->CMSG_CANCEL_CAST = other.CMSG_CANCEL_CAST;
+            this->CMSG_CANCEL_CAST = std::move(other.CMSG_CANCEL_CAST);
         }
         if (opcode == Opcode::CMSG_CANCEL_AURA) {
-            this->CMSG_CANCEL_AURA = other.CMSG_CANCEL_AURA;
+            this->CMSG_CANCEL_AURA = std::move(other.CMSG_CANCEL_AURA);
         }
         if (opcode == Opcode::CMSG_CANCEL_CHANNELLING) {
-            this->CMSG_CANCEL_CHANNELLING = other.CMSG_CANCEL_CHANNELLING;
+            this->CMSG_CANCEL_CHANNELLING = std::move(other.CMSG_CANCEL_CHANNELLING);
         }
         if (opcode == Opcode::CMSG_SET_SELECTION) {
-            this->CMSG_SET_SELECTION = other.CMSG_SET_SELECTION;
+            this->CMSG_SET_SELECTION = std::move(other.CMSG_SET_SELECTION);
         }
         if (opcode == Opcode::CMSG_SET_TARGET_OBSOLETE) {
-            this->CMSG_SET_TARGET_OBSOLETE = other.CMSG_SET_TARGET_OBSOLETE;
+            this->CMSG_SET_TARGET_OBSOLETE = std::move(other.CMSG_SET_TARGET_OBSOLETE);
         }
         if (opcode == Opcode::CMSG_ATTACKSWING) {
-            this->CMSG_ATTACKSWING = other.CMSG_ATTACKSWING;
+            this->CMSG_ATTACKSWING = std::move(other.CMSG_ATTACKSWING);
         }
         if (opcode == Opcode::CMSG_ATTACKSTOP) {
-            this->CMSG_ATTACKSTOP = other.CMSG_ATTACKSTOP;
+            this->CMSG_ATTACKSTOP = std::move(other.CMSG_ATTACKSTOP);
         }
         if (opcode == Opcode::CMSG_REPOP_REQUEST) {
-            this->CMSG_REPOP_REQUEST = other.CMSG_REPOP_REQUEST;
+            this->CMSG_REPOP_REQUEST = std::move(other.CMSG_REPOP_REQUEST);
         }
         if (opcode == Opcode::CMSG_RESURRECT_RESPONSE) {
-            this->CMSG_RESURRECT_RESPONSE = other.CMSG_RESURRECT_RESPONSE;
+            this->CMSG_RESURRECT_RESPONSE = std::move(other.CMSG_RESURRECT_RESPONSE);
         }
         if (opcode == Opcode::CMSG_LOOT) {
-            this->CMSG_LOOT = other.CMSG_LOOT;
+            this->CMSG_LOOT = std::move(other.CMSG_LOOT);
         }
         if (opcode == Opcode::CMSG_LOOT_MONEY) {
-            this->CMSG_LOOT_MONEY = other.CMSG_LOOT_MONEY;
+            this->CMSG_LOOT_MONEY = std::move(other.CMSG_LOOT_MONEY);
         }
         if (opcode == Opcode::CMSG_LOOT_RELEASE) {
-            this->CMSG_LOOT_RELEASE = other.CMSG_LOOT_RELEASE;
+            this->CMSG_LOOT_RELEASE = std::move(other.CMSG_LOOT_RELEASE);
         }
         if (opcode == Opcode::CMSG_DUEL_ACCEPTED) {
-            this->CMSG_DUEL_ACCEPTED = other.CMSG_DUEL_ACCEPTED;
+            this->CMSG_DUEL_ACCEPTED = std::move(other.CMSG_DUEL_ACCEPTED);
         }
         if (opcode == Opcode::CMSG_DUEL_CANCELLED) {
-            this->CMSG_DUEL_CANCELLED = other.CMSG_DUEL_CANCELLED;
+            this->CMSG_DUEL_CANCELLED = std::move(other.CMSG_DUEL_CANCELLED);
         }
         if (opcode == Opcode::CMSG_MOUNTSPECIAL_ANIM) {
-            this->CMSG_MOUNTSPECIAL_ANIM = other.CMSG_MOUNTSPECIAL_ANIM;
+            this->CMSG_MOUNTSPECIAL_ANIM = std::move(other.CMSG_MOUNTSPECIAL_ANIM);
+        }
+        if (opcode == Opcode::CMSG_PET_SET_ACTION) {
+            this->CMSG_PET_SET_ACTION = std::move(other.CMSG_PET_SET_ACTION);
         }
         if (opcode == Opcode::CMSG_PET_ACTION) {
-            this->CMSG_PET_ACTION = other.CMSG_PET_ACTION;
+            this->CMSG_PET_ACTION = std::move(other.CMSG_PET_ACTION);
         }
         if (opcode == Opcode::CMSG_PET_ABANDON) {
-            this->CMSG_PET_ABANDON = other.CMSG_PET_ABANDON;
+            this->CMSG_PET_ABANDON = std::move(other.CMSG_PET_ABANDON);
         }
         if (opcode == Opcode::CMSG_PET_RENAME) {
-            this->CMSG_PET_RENAME = other.CMSG_PET_RENAME;
+            this->CMSG_PET_RENAME = std::move(other.CMSG_PET_RENAME);
         }
         if (opcode == Opcode::CMSG_GOSSIP_HELLO) {
-            this->CMSG_GOSSIP_HELLO = other.CMSG_GOSSIP_HELLO;
+            this->CMSG_GOSSIP_HELLO = std::move(other.CMSG_GOSSIP_HELLO);
+        }
+        if (opcode == Opcode::CMSG_GOSSIP_SELECT_OPTION) {
+            this->CMSG_GOSSIP_SELECT_OPTION = std::move(other.CMSG_GOSSIP_SELECT_OPTION);
         }
         if (opcode == Opcode::CMSG_NPC_TEXT_QUERY) {
-            this->CMSG_NPC_TEXT_QUERY = other.CMSG_NPC_TEXT_QUERY;
+            this->CMSG_NPC_TEXT_QUERY = std::move(other.CMSG_NPC_TEXT_QUERY);
         }
         if (opcode == Opcode::CMSG_QUESTGIVER_STATUS_QUERY) {
-            this->CMSG_QUESTGIVER_STATUS_QUERY = other.CMSG_QUESTGIVER_STATUS_QUERY;
+            this->CMSG_QUESTGIVER_STATUS_QUERY = std::move(other.CMSG_QUESTGIVER_STATUS_QUERY);
         }
         if (opcode == Opcode::CMSG_QUESTGIVER_HELLO) {
-            this->CMSG_QUESTGIVER_HELLO = other.CMSG_QUESTGIVER_HELLO;
+            this->CMSG_QUESTGIVER_HELLO = std::move(other.CMSG_QUESTGIVER_HELLO);
         }
         if (opcode == Opcode::CMSG_QUESTGIVER_QUERY_QUEST) {
-            this->CMSG_QUESTGIVER_QUERY_QUEST = other.CMSG_QUESTGIVER_QUERY_QUEST;
+            this->CMSG_QUESTGIVER_QUERY_QUEST = std::move(other.CMSG_QUESTGIVER_QUERY_QUEST);
         }
         if (opcode == Opcode::CMSG_QUESTGIVER_QUEST_AUTOLAUNCH) {
-            this->CMSG_QUESTGIVER_QUEST_AUTOLAUNCH = other.CMSG_QUESTGIVER_QUEST_AUTOLAUNCH;
+            this->CMSG_QUESTGIVER_QUEST_AUTOLAUNCH = std::move(other.CMSG_QUESTGIVER_QUEST_AUTOLAUNCH);
         }
         if (opcode == Opcode::CMSG_QUESTGIVER_ACCEPT_QUEST) {
-            this->CMSG_QUESTGIVER_ACCEPT_QUEST = other.CMSG_QUESTGIVER_ACCEPT_QUEST;
+            this->CMSG_QUESTGIVER_ACCEPT_QUEST = std::move(other.CMSG_QUESTGIVER_ACCEPT_QUEST);
         }
         if (opcode == Opcode::CMSG_QUESTGIVER_COMPLETE_QUEST) {
-            this->CMSG_QUESTGIVER_COMPLETE_QUEST = other.CMSG_QUESTGIVER_COMPLETE_QUEST;
+            this->CMSG_QUESTGIVER_COMPLETE_QUEST = std::move(other.CMSG_QUESTGIVER_COMPLETE_QUEST);
         }
         if (opcode == Opcode::CMSG_QUESTGIVER_REQUEST_REWARD) {
-            this->CMSG_QUESTGIVER_REQUEST_REWARD = other.CMSG_QUESTGIVER_REQUEST_REWARD;
+            this->CMSG_QUESTGIVER_REQUEST_REWARD = std::move(other.CMSG_QUESTGIVER_REQUEST_REWARD);
         }
         if (opcode == Opcode::CMSG_QUESTGIVER_CHOOSE_REWARD) {
-            this->CMSG_QUESTGIVER_CHOOSE_REWARD = other.CMSG_QUESTGIVER_CHOOSE_REWARD;
+            this->CMSG_QUESTGIVER_CHOOSE_REWARD = std::move(other.CMSG_QUESTGIVER_CHOOSE_REWARD);
         }
         if (opcode == Opcode::CMSG_QUESTGIVER_CANCEL) {
-            this->CMSG_QUESTGIVER_CANCEL = other.CMSG_QUESTGIVER_CANCEL;
+            this->CMSG_QUESTGIVER_CANCEL = std::move(other.CMSG_QUESTGIVER_CANCEL);
         }
         if (opcode == Opcode::CMSG_QUESTLOG_SWAP_QUEST) {
-            this->CMSG_QUESTLOG_SWAP_QUEST = other.CMSG_QUESTLOG_SWAP_QUEST;
+            this->CMSG_QUESTLOG_SWAP_QUEST = std::move(other.CMSG_QUESTLOG_SWAP_QUEST);
         }
         if (opcode == Opcode::CMSG_QUESTLOG_REMOVE_QUEST) {
-            this->CMSG_QUESTLOG_REMOVE_QUEST = other.CMSG_QUESTLOG_REMOVE_QUEST;
+            this->CMSG_QUESTLOG_REMOVE_QUEST = std::move(other.CMSG_QUESTLOG_REMOVE_QUEST);
         }
         if (opcode == Opcode::CMSG_QUEST_CONFIRM_ACCEPT) {
-            this->CMSG_QUEST_CONFIRM_ACCEPT = other.CMSG_QUEST_CONFIRM_ACCEPT;
+            this->CMSG_QUEST_CONFIRM_ACCEPT = std::move(other.CMSG_QUEST_CONFIRM_ACCEPT);
         }
         if (opcode == Opcode::CMSG_PUSHQUESTTOPARTY) {
-            this->CMSG_PUSHQUESTTOPARTY = other.CMSG_PUSHQUESTTOPARTY;
+            this->CMSG_PUSHQUESTTOPARTY = std::move(other.CMSG_PUSHQUESTTOPARTY);
         }
         if (opcode == Opcode::CMSG_LIST_INVENTORY) {
-            this->CMSG_LIST_INVENTORY = other.CMSG_LIST_INVENTORY;
+            this->CMSG_LIST_INVENTORY = std::move(other.CMSG_LIST_INVENTORY);
         }
         if (opcode == Opcode::CMSG_SELL_ITEM) {
-            this->CMSG_SELL_ITEM = other.CMSG_SELL_ITEM;
+            this->CMSG_SELL_ITEM = std::move(other.CMSG_SELL_ITEM);
         }
         if (opcode == Opcode::CMSG_BUY_ITEM) {
-            this->CMSG_BUY_ITEM = other.CMSG_BUY_ITEM;
+            this->CMSG_BUY_ITEM = std::move(other.CMSG_BUY_ITEM);
         }
         if (opcode == Opcode::CMSG_BUY_ITEM_IN_SLOT) {
-            this->CMSG_BUY_ITEM_IN_SLOT = other.CMSG_BUY_ITEM_IN_SLOT;
+            this->CMSG_BUY_ITEM_IN_SLOT = std::move(other.CMSG_BUY_ITEM_IN_SLOT);
         }
         if (opcode == Opcode::CMSG_TAXINODE_STATUS_QUERY) {
-            this->CMSG_TAXINODE_STATUS_QUERY = other.CMSG_TAXINODE_STATUS_QUERY;
+            this->CMSG_TAXINODE_STATUS_QUERY = std::move(other.CMSG_TAXINODE_STATUS_QUERY);
         }
         if (opcode == Opcode::CMSG_TAXIQUERYAVAILABLENODES) {
-            this->CMSG_TAXIQUERYAVAILABLENODES = other.CMSG_TAXIQUERYAVAILABLENODES;
+            this->CMSG_TAXIQUERYAVAILABLENODES = std::move(other.CMSG_TAXIQUERYAVAILABLENODES);
         }
         if (opcode == Opcode::CMSG_ACTIVATETAXI) {
-            this->CMSG_ACTIVATETAXI = other.CMSG_ACTIVATETAXI;
+            this->CMSG_ACTIVATETAXI = std::move(other.CMSG_ACTIVATETAXI);
         }
         if (opcode == Opcode::CMSG_TRAINER_LIST) {
-            this->CMSG_TRAINER_LIST = other.CMSG_TRAINER_LIST;
+            this->CMSG_TRAINER_LIST = std::move(other.CMSG_TRAINER_LIST);
         }
         if (opcode == Opcode::CMSG_TRAINER_BUY_SPELL) {
-            this->CMSG_TRAINER_BUY_SPELL = other.CMSG_TRAINER_BUY_SPELL;
+            this->CMSG_TRAINER_BUY_SPELL = std::move(other.CMSG_TRAINER_BUY_SPELL);
         }
         if (opcode == Opcode::CMSG_BINDER_ACTIVATE) {
-            this->CMSG_BINDER_ACTIVATE = other.CMSG_BINDER_ACTIVATE;
+            this->CMSG_BINDER_ACTIVATE = std::move(other.CMSG_BINDER_ACTIVATE);
         }
         if (opcode == Opcode::CMSG_BANKER_ACTIVATE) {
-            this->CMSG_BANKER_ACTIVATE = other.CMSG_BANKER_ACTIVATE;
+            this->CMSG_BANKER_ACTIVATE = std::move(other.CMSG_BANKER_ACTIVATE);
         }
         if (opcode == Opcode::CMSG_BUY_BANK_SLOT) {
-            this->CMSG_BUY_BANK_SLOT = other.CMSG_BUY_BANK_SLOT;
+            this->CMSG_BUY_BANK_SLOT = std::move(other.CMSG_BUY_BANK_SLOT);
         }
         if (opcode == Opcode::CMSG_PETITION_SHOWLIST) {
-            this->CMSG_PETITION_SHOWLIST = other.CMSG_PETITION_SHOWLIST;
+            this->CMSG_PETITION_SHOWLIST = std::move(other.CMSG_PETITION_SHOWLIST);
         }
         if (opcode == Opcode::CMSG_PETITION_BUY) {
-            this->CMSG_PETITION_BUY = other.CMSG_PETITION_BUY;
+            this->CMSG_PETITION_BUY = std::move(other.CMSG_PETITION_BUY);
         }
         if (opcode == Opcode::CMSG_PETITION_SHOW_SIGNATURES) {
-            this->CMSG_PETITION_SHOW_SIGNATURES = other.CMSG_PETITION_SHOW_SIGNATURES;
+            this->CMSG_PETITION_SHOW_SIGNATURES = std::move(other.CMSG_PETITION_SHOW_SIGNATURES);
         }
         if (opcode == Opcode::CMSG_PETITION_SIGN) {
-            this->CMSG_PETITION_SIGN = other.CMSG_PETITION_SIGN;
+            this->CMSG_PETITION_SIGN = std::move(other.CMSG_PETITION_SIGN);
+        }
+        if (opcode == Opcode::MSG_PETITION_DECLINE) {
+            this->MSG_PETITION_DECLINE = std::move(other.MSG_PETITION_DECLINE);
         }
         if (opcode == Opcode::CMSG_OFFER_PETITION) {
-            this->CMSG_OFFER_PETITION = other.CMSG_OFFER_PETITION;
+            this->CMSG_OFFER_PETITION = std::move(other.CMSG_OFFER_PETITION);
         }
         if (opcode == Opcode::CMSG_TURN_IN_PETITION) {
-            this->CMSG_TURN_IN_PETITION = other.CMSG_TURN_IN_PETITION;
+            this->CMSG_TURN_IN_PETITION = std::move(other.CMSG_TURN_IN_PETITION);
         }
         if (opcode == Opcode::CMSG_PETITION_QUERY) {
-            this->CMSG_PETITION_QUERY = other.CMSG_PETITION_QUERY;
+            this->CMSG_PETITION_QUERY = std::move(other.CMSG_PETITION_QUERY);
         }
         if (opcode == Opcode::CMSG_BUG) {
-            this->CMSG_BUG = other.CMSG_BUG;
+            this->CMSG_BUG = std::move(other.CMSG_BUG);
         }
         if (opcode == Opcode::CMSG_PLAYED_TIME) {
-            this->CMSG_PLAYED_TIME = other.CMSG_PLAYED_TIME;
+            this->CMSG_PLAYED_TIME = std::move(other.CMSG_PLAYED_TIME);
         }
         if (opcode == Opcode::CMSG_QUERY_TIME) {
-            this->CMSG_QUERY_TIME = other.CMSG_QUERY_TIME;
+            this->CMSG_QUERY_TIME = std::move(other.CMSG_QUERY_TIME);
         }
         if (opcode == Opcode::CMSG_RECLAIM_CORPSE) {
-            this->CMSG_RECLAIM_CORPSE = other.CMSG_RECLAIM_CORPSE;
+            this->CMSG_RECLAIM_CORPSE = std::move(other.CMSG_RECLAIM_CORPSE);
         }
         if (opcode == Opcode::CMSG_WRAP_ITEM) {
-            this->CMSG_WRAP_ITEM = other.CMSG_WRAP_ITEM;
+            this->CMSG_WRAP_ITEM = std::move(other.CMSG_WRAP_ITEM);
         }
         if (opcode == Opcode::MSG_MINIMAP_PING) {
-            this->MSG_MINIMAP_PING = other.MSG_MINIMAP_PING;
+            this->MSG_MINIMAP_PING = std::move(other.MSG_MINIMAP_PING);
         }
         if (opcode == Opcode::CMSG_PING) {
-            this->CMSG_PING = other.CMSG_PING;
+            this->CMSG_PING = std::move(other.CMSG_PING);
         }
         if (opcode == Opcode::CMSG_SETSHEATHED) {
-            this->CMSG_SETSHEATHED = other.CMSG_SETSHEATHED;
+            this->CMSG_SETSHEATHED = std::move(other.CMSG_SETSHEATHED);
         }
         if (opcode == Opcode::CMSG_PET_CAST_SPELL) {
-            this->CMSG_PET_CAST_SPELL = other.CMSG_PET_CAST_SPELL;
+            this->CMSG_PET_CAST_SPELL = std::move(other.CMSG_PET_CAST_SPELL);
         }
         if (opcode == Opcode::MSG_SAVE_GUILD_EMBLEM) {
-            this->MSG_SAVE_GUILD_EMBLEM = other.MSG_SAVE_GUILD_EMBLEM;
+            this->MSG_SAVE_GUILD_EMBLEM = std::move(other.MSG_SAVE_GUILD_EMBLEM);
+        }
+        if (opcode == Opcode::MSG_TABARDVENDOR_ACTIVATE) {
+            this->MSG_TABARDVENDOR_ACTIVATE = std::move(other.MSG_TABARDVENDOR_ACTIVATE);
         }
         if (opcode == Opcode::CMSG_ZONEUPDATE) {
-            this->CMSG_ZONEUPDATE = other.CMSG_ZONEUPDATE;
+            this->CMSG_ZONEUPDATE = std::move(other.CMSG_ZONEUPDATE);
         }
         if (opcode == Opcode::MSG_RANDOM_ROLL) {
-            this->MSG_RANDOM_ROLL = other.MSG_RANDOM_ROLL;
+            this->MSG_RANDOM_ROLL = std::move(other.MSG_RANDOM_ROLL);
         }
         if (opcode == Opcode::MSG_LOOKING_FOR_GROUP) {
-            this->MSG_LOOKING_FOR_GROUP = other.MSG_LOOKING_FOR_GROUP;
+            this->MSG_LOOKING_FOR_GROUP = std::move(other.MSG_LOOKING_FOR_GROUP);
         }
         if (opcode == Opcode::CMSG_UNLEARN_SKILL) {
-            this->CMSG_UNLEARN_SKILL = other.CMSG_UNLEARN_SKILL;
+            this->CMSG_UNLEARN_SKILL = std::move(other.CMSG_UNLEARN_SKILL);
         }
         if (opcode == Opcode::CMSG_GMTICKET_UPDATETEXT) {
-            this->CMSG_GMTICKET_UPDATETEXT = other.CMSG_GMTICKET_UPDATETEXT;
+            this->CMSG_GMTICKET_UPDATETEXT = std::move(other.CMSG_GMTICKET_UPDATETEXT);
         }
         if (opcode == Opcode::CMSG_REQUEST_ACCOUNT_DATA) {
-            this->CMSG_REQUEST_ACCOUNT_DATA = other.CMSG_REQUEST_ACCOUNT_DATA;
+            this->CMSG_REQUEST_ACCOUNT_DATA = std::move(other.CMSG_REQUEST_ACCOUNT_DATA);
         }
         if (opcode == Opcode::CMSG_GMTICKET_GETTICKET) {
-            this->CMSG_GMTICKET_GETTICKET = other.CMSG_GMTICKET_GETTICKET;
+            this->CMSG_GMTICKET_GETTICKET = std::move(other.CMSG_GMTICKET_GETTICKET);
         }
         if (opcode == Opcode::MSG_CORPSE_QUERY) {
-            this->MSG_CORPSE_QUERY = other.MSG_CORPSE_QUERY;
+            this->MSG_CORPSE_QUERY = std::move(other.MSG_CORPSE_QUERY);
         }
         if (opcode == Opcode::CMSG_GMTICKET_DELETETICKET) {
-            this->CMSG_GMTICKET_DELETETICKET = other.CMSG_GMTICKET_DELETETICKET;
+            this->CMSG_GMTICKET_DELETETICKET = std::move(other.CMSG_GMTICKET_DELETETICKET);
         }
         if (opcode == Opcode::CMSG_GMTICKET_SYSTEMSTATUS) {
-            this->CMSG_GMTICKET_SYSTEMSTATUS = other.CMSG_GMTICKET_SYSTEMSTATUS;
+            this->CMSG_GMTICKET_SYSTEMSTATUS = std::move(other.CMSG_GMTICKET_SYSTEMSTATUS);
         }
         if (opcode == Opcode::CMSG_SPIRIT_HEALER_ACTIVATE) {
-            this->CMSG_SPIRIT_HEALER_ACTIVATE = other.CMSG_SPIRIT_HEALER_ACTIVATE;
+            this->CMSG_SPIRIT_HEALER_ACTIVATE = std::move(other.CMSG_SPIRIT_HEALER_ACTIVATE);
         }
         if (opcode == Opcode::CMSG_CHAT_IGNORED) {
-            this->CMSG_CHAT_IGNORED = other.CMSG_CHAT_IGNORED;
+            this->CMSG_CHAT_IGNORED = std::move(other.CMSG_CHAT_IGNORED);
         }
         if (opcode == Opcode::CMSG_GUILD_RANK) {
-            this->CMSG_GUILD_RANK = other.CMSG_GUILD_RANK;
+            this->CMSG_GUILD_RANK = std::move(other.CMSG_GUILD_RANK);
         }
         if (opcode == Opcode::CMSG_GUILD_ADD_RANK) {
-            this->CMSG_GUILD_ADD_RANK = other.CMSG_GUILD_ADD_RANK;
+            this->CMSG_GUILD_ADD_RANK = std::move(other.CMSG_GUILD_ADD_RANK);
         }
         if (opcode == Opcode::CMSG_GUILD_DEL_RANK) {
-            this->CMSG_GUILD_DEL_RANK = other.CMSG_GUILD_DEL_RANK;
+            this->CMSG_GUILD_DEL_RANK = std::move(other.CMSG_GUILD_DEL_RANK);
         }
         if (opcode == Opcode::CMSG_GUILD_SET_PUBLIC_NOTE) {
-            this->CMSG_GUILD_SET_PUBLIC_NOTE = other.CMSG_GUILD_SET_PUBLIC_NOTE;
+            this->CMSG_GUILD_SET_PUBLIC_NOTE = std::move(other.CMSG_GUILD_SET_PUBLIC_NOTE);
         }
         if (opcode == Opcode::CMSG_GUILD_SET_OFFICER_NOTE) {
-            this->CMSG_GUILD_SET_OFFICER_NOTE = other.CMSG_GUILD_SET_OFFICER_NOTE;
+            this->CMSG_GUILD_SET_OFFICER_NOTE = std::move(other.CMSG_GUILD_SET_OFFICER_NOTE);
         }
         if (opcode == Opcode::CMSG_SEND_MAIL) {
-            this->CMSG_SEND_MAIL = other.CMSG_SEND_MAIL;
+            this->CMSG_SEND_MAIL = std::move(other.CMSG_SEND_MAIL);
         }
         if (opcode == Opcode::CMSG_GET_MAIL_LIST) {
-            this->CMSG_GET_MAIL_LIST = other.CMSG_GET_MAIL_LIST;
+            this->CMSG_GET_MAIL_LIST = std::move(other.CMSG_GET_MAIL_LIST);
         }
         if (opcode == Opcode::CMSG_BATTLEFIELD_LIST) {
-            this->CMSG_BATTLEFIELD_LIST = other.CMSG_BATTLEFIELD_LIST;
+            this->CMSG_BATTLEFIELD_LIST = std::move(other.CMSG_BATTLEFIELD_LIST);
         }
         if (opcode == Opcode::CMSG_BATTLEFIELD_JOIN) {
-            this->CMSG_BATTLEFIELD_JOIN = other.CMSG_BATTLEFIELD_JOIN;
+            this->CMSG_BATTLEFIELD_JOIN = std::move(other.CMSG_BATTLEFIELD_JOIN);
         }
         if (opcode == Opcode::CMSG_ITEM_TEXT_QUERY) {
-            this->CMSG_ITEM_TEXT_QUERY = other.CMSG_ITEM_TEXT_QUERY;
+            this->CMSG_ITEM_TEXT_QUERY = std::move(other.CMSG_ITEM_TEXT_QUERY);
         }
         if (opcode == Opcode::CMSG_MAIL_TAKE_MONEY) {
-            this->CMSG_MAIL_TAKE_MONEY = other.CMSG_MAIL_TAKE_MONEY;
+            this->CMSG_MAIL_TAKE_MONEY = std::move(other.CMSG_MAIL_TAKE_MONEY);
         }
         if (opcode == Opcode::CMSG_MAIL_TAKE_ITEM) {
-            this->CMSG_MAIL_TAKE_ITEM = other.CMSG_MAIL_TAKE_ITEM;
+            this->CMSG_MAIL_TAKE_ITEM = std::move(other.CMSG_MAIL_TAKE_ITEM);
         }
         if (opcode == Opcode::CMSG_MAIL_MARK_AS_READ) {
-            this->CMSG_MAIL_MARK_AS_READ = other.CMSG_MAIL_MARK_AS_READ;
+            this->CMSG_MAIL_MARK_AS_READ = std::move(other.CMSG_MAIL_MARK_AS_READ);
         }
         if (opcode == Opcode::CMSG_MAIL_RETURN_TO_SENDER) {
-            this->CMSG_MAIL_RETURN_TO_SENDER = other.CMSG_MAIL_RETURN_TO_SENDER;
+            this->CMSG_MAIL_RETURN_TO_SENDER = std::move(other.CMSG_MAIL_RETURN_TO_SENDER);
         }
         if (opcode == Opcode::CMSG_MAIL_DELETE) {
-            this->CMSG_MAIL_DELETE = other.CMSG_MAIL_DELETE;
+            this->CMSG_MAIL_DELETE = std::move(other.CMSG_MAIL_DELETE);
         }
         if (opcode == Opcode::CMSG_MAIL_CREATE_TEXT_ITEM) {
-            this->CMSG_MAIL_CREATE_TEXT_ITEM = other.CMSG_MAIL_CREATE_TEXT_ITEM;
+            this->CMSG_MAIL_CREATE_TEXT_ITEM = std::move(other.CMSG_MAIL_CREATE_TEXT_ITEM);
         }
         if (opcode == Opcode::CMSG_LEARN_TALENT) {
-            this->CMSG_LEARN_TALENT = other.CMSG_LEARN_TALENT;
+            this->CMSG_LEARN_TALENT = std::move(other.CMSG_LEARN_TALENT);
+        }
+        if (opcode == Opcode::CMSG_TOGGLE_PVP) {
+            this->CMSG_TOGGLE_PVP = std::move(other.CMSG_TOGGLE_PVP);
         }
         if (opcode == Opcode::MSG_AUCTION_HELLO) {
-            this->MSG_AUCTION_HELLO = other.MSG_AUCTION_HELLO;
+            this->MSG_AUCTION_HELLO = std::move(other.MSG_AUCTION_HELLO);
         }
         if (opcode == Opcode::CMSG_AUCTION_SELL_ITEM) {
-            this->CMSG_AUCTION_SELL_ITEM = other.CMSG_AUCTION_SELL_ITEM;
+            this->CMSG_AUCTION_SELL_ITEM = std::move(other.CMSG_AUCTION_SELL_ITEM);
         }
         if (opcode == Opcode::CMSG_AUCTION_REMOVE_ITEM) {
-            this->CMSG_AUCTION_REMOVE_ITEM = other.CMSG_AUCTION_REMOVE_ITEM;
+            this->CMSG_AUCTION_REMOVE_ITEM = std::move(other.CMSG_AUCTION_REMOVE_ITEM);
         }
         if (opcode == Opcode::CMSG_AUCTION_LIST_ITEMS) {
-            this->CMSG_AUCTION_LIST_ITEMS = other.CMSG_AUCTION_LIST_ITEMS;
+            this->CMSG_AUCTION_LIST_ITEMS = std::move(other.CMSG_AUCTION_LIST_ITEMS);
         }
         if (opcode == Opcode::CMSG_AUCTION_LIST_OWNER_ITEMS) {
-            this->CMSG_AUCTION_LIST_OWNER_ITEMS = other.CMSG_AUCTION_LIST_OWNER_ITEMS;
+            this->CMSG_AUCTION_LIST_OWNER_ITEMS = std::move(other.CMSG_AUCTION_LIST_OWNER_ITEMS);
         }
         if (opcode == Opcode::CMSG_AUCTION_PLACE_BID) {
-            this->CMSG_AUCTION_PLACE_BID = other.CMSG_AUCTION_PLACE_BID;
+            this->CMSG_AUCTION_PLACE_BID = std::move(other.CMSG_AUCTION_PLACE_BID);
         }
         if (opcode == Opcode::CMSG_AUCTION_LIST_BIDDER_ITEMS) {
-            this->CMSG_AUCTION_LIST_BIDDER_ITEMS = other.CMSG_AUCTION_LIST_BIDDER_ITEMS;
+            this->CMSG_AUCTION_LIST_BIDDER_ITEMS = std::move(other.CMSG_AUCTION_LIST_BIDDER_ITEMS);
         }
         if (opcode == Opcode::CMSG_SET_AMMO) {
-            this->CMSG_SET_AMMO = other.CMSG_SET_AMMO;
+            this->CMSG_SET_AMMO = std::move(other.CMSG_SET_AMMO);
         }
         if (opcode == Opcode::CMSG_SET_ACTIVE_MOVER) {
-            this->CMSG_SET_ACTIVE_MOVER = other.CMSG_SET_ACTIVE_MOVER;
+            this->CMSG_SET_ACTIVE_MOVER = std::move(other.CMSG_SET_ACTIVE_MOVER);
         }
         if (opcode == Opcode::CMSG_PET_CANCEL_AURA) {
-            this->CMSG_PET_CANCEL_AURA = other.CMSG_PET_CANCEL_AURA;
+            this->CMSG_PET_CANCEL_AURA = std::move(other.CMSG_PET_CANCEL_AURA);
         }
         if (opcode == Opcode::CMSG_CANCEL_AUTO_REPEAT_SPELL) {
-            this->CMSG_CANCEL_AUTO_REPEAT_SPELL = other.CMSG_CANCEL_AUTO_REPEAT_SPELL;
+            this->CMSG_CANCEL_AUTO_REPEAT_SPELL = std::move(other.CMSG_CANCEL_AUTO_REPEAT_SPELL);
         }
         if (opcode == Opcode::MSG_LIST_STABLED_PETS) {
-            this->MSG_LIST_STABLED_PETS = other.MSG_LIST_STABLED_PETS;
+            this->MSG_LIST_STABLED_PETS = std::move(other.MSG_LIST_STABLED_PETS);
         }
         if (opcode == Opcode::CMSG_STABLE_PET) {
-            this->CMSG_STABLE_PET = other.CMSG_STABLE_PET;
+            this->CMSG_STABLE_PET = std::move(other.CMSG_STABLE_PET);
         }
         if (opcode == Opcode::CMSG_UNSTABLE_PET) {
-            this->CMSG_UNSTABLE_PET = other.CMSG_UNSTABLE_PET;
+            this->CMSG_UNSTABLE_PET = std::move(other.CMSG_UNSTABLE_PET);
         }
         if (opcode == Opcode::CMSG_BUY_STABLE_SLOT) {
-            this->CMSG_BUY_STABLE_SLOT = other.CMSG_BUY_STABLE_SLOT;
+            this->CMSG_BUY_STABLE_SLOT = std::move(other.CMSG_BUY_STABLE_SLOT);
         }
         if (opcode == Opcode::CMSG_STABLE_SWAP_PET) {
-            this->CMSG_STABLE_SWAP_PET = other.CMSG_STABLE_SWAP_PET;
+            this->CMSG_STABLE_SWAP_PET = std::move(other.CMSG_STABLE_SWAP_PET);
+        }
+        if (opcode == Opcode::MSG_QUEST_PUSH_RESULT) {
+            this->MSG_QUEST_PUSH_RESULT = std::move(other.MSG_QUEST_PUSH_RESULT);
         }
         if (opcode == Opcode::CMSG_REQUEST_PET_INFO) {
-            this->CMSG_REQUEST_PET_INFO = other.CMSG_REQUEST_PET_INFO;
+            this->CMSG_REQUEST_PET_INFO = std::move(other.CMSG_REQUEST_PET_INFO);
         }
         if (opcode == Opcode::CMSG_FAR_SIGHT) {
-            this->CMSG_FAR_SIGHT = other.CMSG_FAR_SIGHT;
+            this->CMSG_FAR_SIGHT = std::move(other.CMSG_FAR_SIGHT);
         }
         if (opcode == Opcode::CMSG_GROUP_CHANGE_SUB_GROUP) {
-            this->CMSG_GROUP_CHANGE_SUB_GROUP = other.CMSG_GROUP_CHANGE_SUB_GROUP;
+            this->CMSG_GROUP_CHANGE_SUB_GROUP = std::move(other.CMSG_GROUP_CHANGE_SUB_GROUP);
         }
         if (opcode == Opcode::CMSG_REQUEST_PARTY_MEMBER_STATS) {
-            this->CMSG_REQUEST_PARTY_MEMBER_STATS = other.CMSG_REQUEST_PARTY_MEMBER_STATS;
+            this->CMSG_REQUEST_PARTY_MEMBER_STATS = std::move(other.CMSG_REQUEST_PARTY_MEMBER_STATS);
         }
         if (opcode == Opcode::CMSG_GROUP_SWAP_SUB_GROUP) {
-            this->CMSG_GROUP_SWAP_SUB_GROUP = other.CMSG_GROUP_SWAP_SUB_GROUP;
+            this->CMSG_GROUP_SWAP_SUB_GROUP = std::move(other.CMSG_GROUP_SWAP_SUB_GROUP);
         }
         if (opcode == Opcode::CMSG_AUTOSTORE_BANK_ITEM) {
-            this->CMSG_AUTOSTORE_BANK_ITEM = other.CMSG_AUTOSTORE_BANK_ITEM;
+            this->CMSG_AUTOSTORE_BANK_ITEM = std::move(other.CMSG_AUTOSTORE_BANK_ITEM);
         }
         if (opcode == Opcode::CMSG_AUTOBANK_ITEM) {
-            this->CMSG_AUTOBANK_ITEM = other.CMSG_AUTOBANK_ITEM;
+            this->CMSG_AUTOBANK_ITEM = std::move(other.CMSG_AUTOBANK_ITEM);
         }
         if (opcode == Opcode::MSG_QUERY_NEXT_MAIL_TIME) {
-            this->MSG_QUERY_NEXT_MAIL_TIME = other.MSG_QUERY_NEXT_MAIL_TIME;
+            this->MSG_QUERY_NEXT_MAIL_TIME = std::move(other.MSG_QUERY_NEXT_MAIL_TIME);
         }
         if (opcode == Opcode::CMSG_GROUP_RAID_CONVERT) {
-            this->CMSG_GROUP_RAID_CONVERT = other.CMSG_GROUP_RAID_CONVERT;
+            this->CMSG_GROUP_RAID_CONVERT = std::move(other.CMSG_GROUP_RAID_CONVERT);
         }
         if (opcode == Opcode::CMSG_GROUP_ASSISTANT_LEADER) {
-            this->CMSG_GROUP_ASSISTANT_LEADER = other.CMSG_GROUP_ASSISTANT_LEADER;
+            this->CMSG_GROUP_ASSISTANT_LEADER = std::move(other.CMSG_GROUP_ASSISTANT_LEADER);
         }
         if (opcode == Opcode::CMSG_BUYBACK_ITEM) {
-            this->CMSG_BUYBACK_ITEM = other.CMSG_BUYBACK_ITEM;
+            this->CMSG_BUYBACK_ITEM = std::move(other.CMSG_BUYBACK_ITEM);
         }
         if (opcode == Opcode::CMSG_MEETINGSTONE_JOIN) {
-            this->CMSG_MEETINGSTONE_JOIN = other.CMSG_MEETINGSTONE_JOIN;
+            this->CMSG_MEETINGSTONE_JOIN = std::move(other.CMSG_MEETINGSTONE_JOIN);
         }
         if (opcode == Opcode::CMSG_MEETINGSTONE_LEAVE) {
-            this->CMSG_MEETINGSTONE_LEAVE = other.CMSG_MEETINGSTONE_LEAVE;
+            this->CMSG_MEETINGSTONE_LEAVE = std::move(other.CMSG_MEETINGSTONE_LEAVE);
         }
         if (opcode == Opcode::CMSG_MEETINGSTONE_INFO) {
-            this->CMSG_MEETINGSTONE_INFO = other.CMSG_MEETINGSTONE_INFO;
+            this->CMSG_MEETINGSTONE_INFO = std::move(other.CMSG_MEETINGSTONE_INFO);
         }
         if (opcode == Opcode::CMSG_CANCEL_GROWTH_AURA) {
-            this->CMSG_CANCEL_GROWTH_AURA = other.CMSG_CANCEL_GROWTH_AURA;
+            this->CMSG_CANCEL_GROWTH_AURA = std::move(other.CMSG_CANCEL_GROWTH_AURA);
         }
         if (opcode == Opcode::CMSG_LOOT_ROLL) {
-            this->CMSG_LOOT_ROLL = other.CMSG_LOOT_ROLL;
+            this->CMSG_LOOT_ROLL = std::move(other.CMSG_LOOT_ROLL);
         }
         if (opcode == Opcode::CMSG_LOOT_MASTER_GIVE) {
-            this->CMSG_LOOT_MASTER_GIVE = other.CMSG_LOOT_MASTER_GIVE;
+            this->CMSG_LOOT_MASTER_GIVE = std::move(other.CMSG_LOOT_MASTER_GIVE);
         }
         if (opcode == Opcode::CMSG_REPAIR_ITEM) {
-            this->CMSG_REPAIR_ITEM = other.CMSG_REPAIR_ITEM;
+            this->CMSG_REPAIR_ITEM = std::move(other.CMSG_REPAIR_ITEM);
         }
         if (opcode == Opcode::MSG_TALENT_WIPE_CONFIRM) {
-            this->MSG_TALENT_WIPE_CONFIRM = other.MSG_TALENT_WIPE_CONFIRM;
+            this->MSG_TALENT_WIPE_CONFIRM = std::move(other.MSG_TALENT_WIPE_CONFIRM);
         }
         if (opcode == Opcode::CMSG_SUMMON_RESPONSE) {
-            this->CMSG_SUMMON_RESPONSE = other.CMSG_SUMMON_RESPONSE;
+            this->CMSG_SUMMON_RESPONSE = std::move(other.CMSG_SUMMON_RESPONSE);
+        }
+        if (opcode == Opcode::MSG_MOVE_WATER_WALK) {
+            this->MSG_MOVE_WATER_WALK = std::move(other.MSG_MOVE_WATER_WALK);
         }
         if (opcode == Opcode::CMSG_SELF_RES) {
-            this->CMSG_SELF_RES = other.CMSG_SELF_RES;
+            this->CMSG_SELF_RES = std::move(other.CMSG_SELF_RES);
         }
         if (opcode == Opcode::CMSG_TOGGLE_HELM) {
-            this->CMSG_TOGGLE_HELM = other.CMSG_TOGGLE_HELM;
+            this->CMSG_TOGGLE_HELM = std::move(other.CMSG_TOGGLE_HELM);
         }
         if (opcode == Opcode::CMSG_TOGGLE_CLOAK) {
-            this->CMSG_TOGGLE_CLOAK = other.CMSG_TOGGLE_CLOAK;
+            this->CMSG_TOGGLE_CLOAK = std::move(other.CMSG_TOGGLE_CLOAK);
         }
         if (opcode == Opcode::CMSG_SET_ACTIONBAR_TOGGLES) {
-            this->CMSG_SET_ACTIONBAR_TOGGLES = other.CMSG_SET_ACTIONBAR_TOGGLES;
+            this->CMSG_SET_ACTIONBAR_TOGGLES = std::move(other.CMSG_SET_ACTIONBAR_TOGGLES);
+        }
+        if (opcode == Opcode::MSG_PETITION_RENAME) {
+            this->MSG_PETITION_RENAME = std::move(other.MSG_PETITION_RENAME);
         }
         if (opcode == Opcode::CMSG_ITEM_NAME_QUERY) {
-            this->CMSG_ITEM_NAME_QUERY = other.CMSG_ITEM_NAME_QUERY;
+            this->CMSG_ITEM_NAME_QUERY = std::move(other.CMSG_ITEM_NAME_QUERY);
         }
         if (opcode == Opcode::CMSG_CHAR_RENAME) {
-            this->CMSG_CHAR_RENAME = other.CMSG_CHAR_RENAME;
+            this->CMSG_CHAR_RENAME = std::move(other.CMSG_CHAR_RENAME);
         }
         if (opcode == Opcode::CMSG_MOVE_SPLINE_DONE) {
-            this->CMSG_MOVE_SPLINE_DONE = other.CMSG_MOVE_SPLINE_DONE;
+            this->CMSG_MOVE_SPLINE_DONE = std::move(other.CMSG_MOVE_SPLINE_DONE);
         }
         if (opcode == Opcode::CMSG_MOVE_FALL_RESET) {
-            this->CMSG_MOVE_FALL_RESET = other.CMSG_MOVE_FALL_RESET;
+            this->CMSG_MOVE_FALL_RESET = std::move(other.CMSG_MOVE_FALL_RESET);
         }
         if (opcode == Opcode::CMSG_REQUEST_RAID_INFO) {
-            this->CMSG_REQUEST_RAID_INFO = other.CMSG_REQUEST_RAID_INFO;
+            this->CMSG_REQUEST_RAID_INFO = std::move(other.CMSG_REQUEST_RAID_INFO);
         }
         if (opcode == Opcode::CMSG_MOVE_TIME_SKIPPED) {
-            this->CMSG_MOVE_TIME_SKIPPED = other.CMSG_MOVE_TIME_SKIPPED;
+            this->CMSG_MOVE_TIME_SKIPPED = std::move(other.CMSG_MOVE_TIME_SKIPPED);
         }
         if (opcode == Opcode::CMSG_MOVE_FEATHER_FALL_ACK) {
-            this->CMSG_MOVE_FEATHER_FALL_ACK = other.CMSG_MOVE_FEATHER_FALL_ACK;
+            this->CMSG_MOVE_FEATHER_FALL_ACK = std::move(other.CMSG_MOVE_FEATHER_FALL_ACK);
         }
         if (opcode == Opcode::CMSG_MOVE_WATER_WALK_ACK) {
-            this->CMSG_MOVE_WATER_WALK_ACK = other.CMSG_MOVE_WATER_WALK_ACK;
+            this->CMSG_MOVE_WATER_WALK_ACK = std::move(other.CMSG_MOVE_WATER_WALK_ACK);
         }
         if (opcode == Opcode::CMSG_MOVE_NOT_ACTIVE_MOVER) {
-            this->CMSG_MOVE_NOT_ACTIVE_MOVER = other.CMSG_MOVE_NOT_ACTIVE_MOVER;
+            this->CMSG_MOVE_NOT_ACTIVE_MOVER = std::move(other.CMSG_MOVE_NOT_ACTIVE_MOVER);
         }
         if (opcode == Opcode::CMSG_BATTLEFIELD_STATUS) {
-            this->CMSG_BATTLEFIELD_STATUS = other.CMSG_BATTLEFIELD_STATUS;
+            this->CMSG_BATTLEFIELD_STATUS = std::move(other.CMSG_BATTLEFIELD_STATUS);
         }
         if (opcode == Opcode::CMSG_BATTLEFIELD_PORT) {
-            this->CMSG_BATTLEFIELD_PORT = other.CMSG_BATTLEFIELD_PORT;
+            this->CMSG_BATTLEFIELD_PORT = std::move(other.CMSG_BATTLEFIELD_PORT);
         }
         if (opcode == Opcode::MSG_INSPECT_HONOR_STATS) {
-            this->MSG_INSPECT_HONOR_STATS = other.MSG_INSPECT_HONOR_STATS;
+            this->MSG_INSPECT_HONOR_STATS = std::move(other.MSG_INSPECT_HONOR_STATS);
         }
         if (opcode == Opcode::CMSG_BATTLEMASTER_HELLO) {
-            this->CMSG_BATTLEMASTER_HELLO = other.CMSG_BATTLEMASTER_HELLO;
+            this->CMSG_BATTLEMASTER_HELLO = std::move(other.CMSG_BATTLEMASTER_HELLO);
         }
         if (opcode == Opcode::CMSG_FORCE_WALK_SPEED_CHANGE_ACK) {
-            this->CMSG_FORCE_WALK_SPEED_CHANGE_ACK = other.CMSG_FORCE_WALK_SPEED_CHANGE_ACK;
+            this->CMSG_FORCE_WALK_SPEED_CHANGE_ACK = std::move(other.CMSG_FORCE_WALK_SPEED_CHANGE_ACK);
         }
         if (opcode == Opcode::CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK) {
-            this->CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK = other.CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK;
+            this->CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK = std::move(other.CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK);
         }
         if (opcode == Opcode::CMSG_FORCE_TURN_RATE_CHANGE_ACK) {
-            this->CMSG_FORCE_TURN_RATE_CHANGE_ACK = other.CMSG_FORCE_TURN_RATE_CHANGE_ACK;
+            this->CMSG_FORCE_TURN_RATE_CHANGE_ACK = std::move(other.CMSG_FORCE_TURN_RATE_CHANGE_ACK);
         }
         if (opcode == Opcode::MSG_PVP_LOG_DATA) {
-            this->MSG_PVP_LOG_DATA = other.MSG_PVP_LOG_DATA;
+            this->MSG_PVP_LOG_DATA = std::move(other.MSG_PVP_LOG_DATA);
         }
         if (opcode == Opcode::CMSG_LEAVE_BATTLEFIELD) {
-            this->CMSG_LEAVE_BATTLEFIELD = other.CMSG_LEAVE_BATTLEFIELD;
+            this->CMSG_LEAVE_BATTLEFIELD = std::move(other.CMSG_LEAVE_BATTLEFIELD);
         }
         if (opcode == Opcode::CMSG_AREA_SPIRIT_HEALER_QUERY) {
-            this->CMSG_AREA_SPIRIT_HEALER_QUERY = other.CMSG_AREA_SPIRIT_HEALER_QUERY;
+            this->CMSG_AREA_SPIRIT_HEALER_QUERY = std::move(other.CMSG_AREA_SPIRIT_HEALER_QUERY);
         }
         if (opcode == Opcode::CMSG_AREA_SPIRIT_HEALER_QUEUE) {
-            this->CMSG_AREA_SPIRIT_HEALER_QUEUE = other.CMSG_AREA_SPIRIT_HEALER_QUEUE;
+            this->CMSG_AREA_SPIRIT_HEALER_QUEUE = std::move(other.CMSG_AREA_SPIRIT_HEALER_QUEUE);
         }
         if (opcode == Opcode::CMSG_WARDEN_DATA) {
-            this->CMSG_WARDEN_DATA = other.CMSG_WARDEN_DATA;
+            this->CMSG_WARDEN_DATA = std::move(other.CMSG_WARDEN_DATA);
         }
         if (opcode == Opcode::MSG_BATTLEGROUND_PLAYER_POSITIONS) {
-            this->MSG_BATTLEGROUND_PLAYER_POSITIONS = other.MSG_BATTLEGROUND_PLAYER_POSITIONS;
+            this->MSG_BATTLEGROUND_PLAYER_POSITIONS = std::move(other.MSG_BATTLEGROUND_PLAYER_POSITIONS);
         }
         if (opcode == Opcode::CMSG_PET_STOP_ATTACK) {
-            this->CMSG_PET_STOP_ATTACK = other.CMSG_PET_STOP_ATTACK;
+            this->CMSG_PET_STOP_ATTACK = std::move(other.CMSG_PET_STOP_ATTACK);
         }
         if (opcode == Opcode::CMSG_BATTLEMASTER_JOIN) {
-            this->CMSG_BATTLEMASTER_JOIN = other.CMSG_BATTLEMASTER_JOIN;
+            this->CMSG_BATTLEMASTER_JOIN = std::move(other.CMSG_BATTLEMASTER_JOIN);
         }
         if (opcode == Opcode::CMSG_PET_UNLEARN) {
-            this->CMSG_PET_UNLEARN = other.CMSG_PET_UNLEARN;
+            this->CMSG_PET_UNLEARN = std::move(other.CMSG_PET_UNLEARN);
         }
         if (opcode == Opcode::CMSG_PET_SPELL_AUTOCAST) {
-            this->CMSG_PET_SPELL_AUTOCAST = other.CMSG_PET_SPELL_AUTOCAST;
+            this->CMSG_PET_SPELL_AUTOCAST = std::move(other.CMSG_PET_SPELL_AUTOCAST);
         }
         if (opcode == Opcode::CMSG_GUILD_INFO_TEXT) {
-            this->CMSG_GUILD_INFO_TEXT = other.CMSG_GUILD_INFO_TEXT;
+            this->CMSG_GUILD_INFO_TEXT = std::move(other.CMSG_GUILD_INFO_TEXT);
         }
         if (opcode == Opcode::CMSG_ACTIVATETAXIEXPRESS) {
-            this->CMSG_ACTIVATETAXIEXPRESS = other.CMSG_ACTIVATETAXIEXPRESS;
+            this->CMSG_ACTIVATETAXIEXPRESS = std::move(other.CMSG_ACTIVATETAXIEXPRESS);
         }
         if (opcode == Opcode::CMSG_SET_FACTION_INACTIVE) {
-            this->CMSG_SET_FACTION_INACTIVE = other.CMSG_SET_FACTION_INACTIVE;
+            this->CMSG_SET_FACTION_INACTIVE = std::move(other.CMSG_SET_FACTION_INACTIVE);
         }
         if (opcode == Opcode::CMSG_SET_WATCHED_FACTION) {
-            this->CMSG_SET_WATCHED_FACTION = other.CMSG_SET_WATCHED_FACTION;
+            this->CMSG_SET_WATCHED_FACTION = std::move(other.CMSG_SET_WATCHED_FACTION);
         }
         if (opcode == Opcode::CMSG_RESET_INSTANCES) {
-            this->CMSG_RESET_INSTANCES = other.CMSG_RESET_INSTANCES;
+            this->CMSG_RESET_INSTANCES = std::move(other.CMSG_RESET_INSTANCES);
         }
         if (opcode == Opcode::MSG_RAID_TARGET_UPDATE) {
-            this->MSG_RAID_TARGET_UPDATE = other.MSG_RAID_TARGET_UPDATE;
+            this->MSG_RAID_TARGET_UPDATE = std::move(other.MSG_RAID_TARGET_UPDATE);
+        }
+        if (opcode == Opcode::MSG_RAID_READY_CHECK) {
+            this->MSG_RAID_READY_CHECK = std::move(other.MSG_RAID_READY_CHECK);
         }
         if (opcode == Opcode::CMSG_GMSURVEY_SUBMIT) {
-            this->CMSG_GMSURVEY_SUBMIT = other.CMSG_GMSURVEY_SUBMIT;
+            this->CMSG_GMSURVEY_SUBMIT = std::move(other.CMSG_GMSURVEY_SUBMIT);
         }
     }
 
@@ -14348,6 +13773,9 @@ struct ClientOpcode {
         if (opcode == Opcode::MSG_MOVE_SET_PITCH) {
             this->MSG_MOVE_SET_PITCH.~MSG_MOVE_SET_PITCH_Client();
         }
+        if (opcode == Opcode::MSG_MOVE_WORLDPORT_ACK) {
+            this->MSG_MOVE_WORLDPORT_ACK.~MSG_MOVE_WORLDPORT_ACK();
+        }
         if (opcode == Opcode::CMSG_MOVE_SET_RAW_POSITION) {
             this->CMSG_MOVE_SET_RAW_POSITION.~CMSG_MOVE_SET_RAW_POSITION();
         }
@@ -14510,6 +13938,9 @@ struct ClientOpcode {
         if (opcode == Opcode::CMSG_MOUNTSPECIAL_ANIM) {
             this->CMSG_MOUNTSPECIAL_ANIM.~CMSG_MOUNTSPECIAL_ANIM();
         }
+        if (opcode == Opcode::CMSG_PET_SET_ACTION) {
+            this->CMSG_PET_SET_ACTION.~CMSG_PET_SET_ACTION();
+        }
         if (opcode == Opcode::CMSG_PET_ACTION) {
             this->CMSG_PET_ACTION.~CMSG_PET_ACTION();
         }
@@ -14521,6 +13952,9 @@ struct ClientOpcode {
         }
         if (opcode == Opcode::CMSG_GOSSIP_HELLO) {
             this->CMSG_GOSSIP_HELLO.~CMSG_GOSSIP_HELLO();
+        }
+        if (opcode == Opcode::CMSG_GOSSIP_SELECT_OPTION) {
+            this->CMSG_GOSSIP_SELECT_OPTION.~CMSG_GOSSIP_SELECT_OPTION();
         }
         if (opcode == Opcode::CMSG_NPC_TEXT_QUERY) {
             this->CMSG_NPC_TEXT_QUERY.~CMSG_NPC_TEXT_QUERY();
@@ -14612,6 +14046,9 @@ struct ClientOpcode {
         if (opcode == Opcode::CMSG_PETITION_SIGN) {
             this->CMSG_PETITION_SIGN.~CMSG_PETITION_SIGN();
         }
+        if (opcode == Opcode::MSG_PETITION_DECLINE) {
+            this->MSG_PETITION_DECLINE.~MSG_PETITION_DECLINE();
+        }
         if (opcode == Opcode::CMSG_OFFER_PETITION) {
             this->CMSG_OFFER_PETITION.~CMSG_OFFER_PETITION();
         }
@@ -14650,6 +14087,9 @@ struct ClientOpcode {
         }
         if (opcode == Opcode::MSG_SAVE_GUILD_EMBLEM) {
             this->MSG_SAVE_GUILD_EMBLEM.~MSG_SAVE_GUILD_EMBLEM_Client();
+        }
+        if (opcode == Opcode::MSG_TABARDVENDOR_ACTIVATE) {
+            this->MSG_TABARDVENDOR_ACTIVATE.~MSG_TABARDVENDOR_ACTIVATE();
         }
         if (opcode == Opcode::CMSG_ZONEUPDATE) {
             this->CMSG_ZONEUPDATE.~CMSG_ZONEUPDATE();
@@ -14738,6 +14178,9 @@ struct ClientOpcode {
         if (opcode == Opcode::CMSG_LEARN_TALENT) {
             this->CMSG_LEARN_TALENT.~CMSG_LEARN_TALENT();
         }
+        if (opcode == Opcode::CMSG_TOGGLE_PVP) {
+            this->CMSG_TOGGLE_PVP.~CMSG_TOGGLE_PVP();
+        }
         if (opcode == Opcode::MSG_AUCTION_HELLO) {
             this->MSG_AUCTION_HELLO.~MSG_AUCTION_HELLO_Client();
         }
@@ -14785,6 +14228,9 @@ struct ClientOpcode {
         }
         if (opcode == Opcode::CMSG_STABLE_SWAP_PET) {
             this->CMSG_STABLE_SWAP_PET.~CMSG_STABLE_SWAP_PET();
+        }
+        if (opcode == Opcode::MSG_QUEST_PUSH_RESULT) {
+            this->MSG_QUEST_PUSH_RESULT.~MSG_QUEST_PUSH_RESULT();
         }
         if (opcode == Opcode::CMSG_REQUEST_PET_INFO) {
             this->CMSG_REQUEST_PET_INFO.~CMSG_REQUEST_PET_INFO();
@@ -14846,6 +14292,9 @@ struct ClientOpcode {
         if (opcode == Opcode::CMSG_SUMMON_RESPONSE) {
             this->CMSG_SUMMON_RESPONSE.~CMSG_SUMMON_RESPONSE();
         }
+        if (opcode == Opcode::MSG_MOVE_WATER_WALK) {
+            this->MSG_MOVE_WATER_WALK.~MSG_MOVE_WATER_WALK();
+        }
         if (opcode == Opcode::CMSG_SELF_RES) {
             this->CMSG_SELF_RES.~CMSG_SELF_RES();
         }
@@ -14857,6 +14306,9 @@ struct ClientOpcode {
         }
         if (opcode == Opcode::CMSG_SET_ACTIONBAR_TOGGLES) {
             this->CMSG_SET_ACTIONBAR_TOGGLES.~CMSG_SET_ACTIONBAR_TOGGLES();
+        }
+        if (opcode == Opcode::MSG_PETITION_RENAME) {
+            this->MSG_PETITION_RENAME.~MSG_PETITION_RENAME();
         }
         if (opcode == Opcode::CMSG_ITEM_NAME_QUERY) {
             this->CMSG_ITEM_NAME_QUERY.~CMSG_ITEM_NAME_QUERY();
@@ -14954,6 +14406,9 @@ struct ClientOpcode {
         if (opcode == Opcode::MSG_RAID_TARGET_UPDATE) {
             this->MSG_RAID_TARGET_UPDATE.~MSG_RAID_TARGET_UPDATE_Client();
         }
+        if (opcode == Opcode::MSG_RAID_READY_CHECK) {
+            this->MSG_RAID_READY_CHECK.~MSG_RAID_READY_CHECK_Client();
+        }
         if (opcode == Opcode::CMSG_GMSURVEY_SUBMIT) {
             this->CMSG_GMSURVEY_SUBMIT.~CMSG_GMSURVEY_SUBMIT();
         }
@@ -14961,1180 +14416,2442 @@ struct ClientOpcode {
 
     explicit ClientOpcode(vanilla::CMSG_BOOTME&& obj) {
         opcode = Opcode::CMSG_BOOTME;
-        new (&this->CMSG_BOOTME) vanilla::CMSG_BOOTME (obj);
+        new (&this->CMSG_BOOTME) vanilla::CMSG_BOOTME (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_DBLOOKUP&& obj) {
         opcode = Opcode::CMSG_DBLOOKUP;
-        new (&this->CMSG_DBLOOKUP) vanilla::CMSG_DBLOOKUP (obj);
+        new (&this->CMSG_DBLOOKUP) vanilla::CMSG_DBLOOKUP (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_WORLD_TELEPORT&& obj) {
         opcode = Opcode::CMSG_WORLD_TELEPORT;
-        new (&this->CMSG_WORLD_TELEPORT) vanilla::CMSG_WORLD_TELEPORT (obj);
+        new (&this->CMSG_WORLD_TELEPORT) vanilla::CMSG_WORLD_TELEPORT (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_TELEPORT_TO_UNIT&& obj) {
         opcode = Opcode::CMSG_TELEPORT_TO_UNIT;
-        new (&this->CMSG_TELEPORT_TO_UNIT) vanilla::CMSG_TELEPORT_TO_UNIT (obj);
+        new (&this->CMSG_TELEPORT_TO_UNIT) vanilla::CMSG_TELEPORT_TO_UNIT (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_CHAR_CREATE&& obj) {
         opcode = Opcode::CMSG_CHAR_CREATE;
-        new (&this->CMSG_CHAR_CREATE) vanilla::CMSG_CHAR_CREATE (obj);
+        new (&this->CMSG_CHAR_CREATE) vanilla::CMSG_CHAR_CREATE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_CHAR_ENUM&& obj) {
         opcode = Opcode::CMSG_CHAR_ENUM;
-        new (&this->CMSG_CHAR_ENUM) vanilla::CMSG_CHAR_ENUM (obj);
+        new (&this->CMSG_CHAR_ENUM) vanilla::CMSG_CHAR_ENUM (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_CHAR_DELETE&& obj) {
         opcode = Opcode::CMSG_CHAR_DELETE;
-        new (&this->CMSG_CHAR_DELETE) vanilla::CMSG_CHAR_DELETE (obj);
+        new (&this->CMSG_CHAR_DELETE) vanilla::CMSG_CHAR_DELETE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_PLAYER_LOGIN&& obj) {
         opcode = Opcode::CMSG_PLAYER_LOGIN;
-        new (&this->CMSG_PLAYER_LOGIN) vanilla::CMSG_PLAYER_LOGIN (obj);
+        new (&this->CMSG_PLAYER_LOGIN) vanilla::CMSG_PLAYER_LOGIN (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_PLAYER_LOGOUT&& obj) {
         opcode = Opcode::CMSG_PLAYER_LOGOUT;
-        new (&this->CMSG_PLAYER_LOGOUT) vanilla::CMSG_PLAYER_LOGOUT (obj);
+        new (&this->CMSG_PLAYER_LOGOUT) vanilla::CMSG_PLAYER_LOGOUT (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_LOGOUT_REQUEST&& obj) {
         opcode = Opcode::CMSG_LOGOUT_REQUEST;
-        new (&this->CMSG_LOGOUT_REQUEST) vanilla::CMSG_LOGOUT_REQUEST (obj);
+        new (&this->CMSG_LOGOUT_REQUEST) vanilla::CMSG_LOGOUT_REQUEST (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_LOGOUT_CANCEL&& obj) {
         opcode = Opcode::CMSG_LOGOUT_CANCEL;
-        new (&this->CMSG_LOGOUT_CANCEL) vanilla::CMSG_LOGOUT_CANCEL (obj);
+        new (&this->CMSG_LOGOUT_CANCEL) vanilla::CMSG_LOGOUT_CANCEL (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_NAME_QUERY&& obj) {
         opcode = Opcode::CMSG_NAME_QUERY;
-        new (&this->CMSG_NAME_QUERY) vanilla::CMSG_NAME_QUERY (obj);
+        new (&this->CMSG_NAME_QUERY) vanilla::CMSG_NAME_QUERY (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_PET_NAME_QUERY&& obj) {
         opcode = Opcode::CMSG_PET_NAME_QUERY;
-        new (&this->CMSG_PET_NAME_QUERY) vanilla::CMSG_PET_NAME_QUERY (obj);
+        new (&this->CMSG_PET_NAME_QUERY) vanilla::CMSG_PET_NAME_QUERY (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_GUILD_QUERY&& obj) {
         opcode = Opcode::CMSG_GUILD_QUERY;
-        new (&this->CMSG_GUILD_QUERY) vanilla::CMSG_GUILD_QUERY (obj);
+        new (&this->CMSG_GUILD_QUERY) vanilla::CMSG_GUILD_QUERY (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_ITEM_QUERY_SINGLE&& obj) {
         opcode = Opcode::CMSG_ITEM_QUERY_SINGLE;
-        new (&this->CMSG_ITEM_QUERY_SINGLE) vanilla::CMSG_ITEM_QUERY_SINGLE (obj);
+        new (&this->CMSG_ITEM_QUERY_SINGLE) vanilla::CMSG_ITEM_QUERY_SINGLE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_PAGE_TEXT_QUERY&& obj) {
         opcode = Opcode::CMSG_PAGE_TEXT_QUERY;
-        new (&this->CMSG_PAGE_TEXT_QUERY) vanilla::CMSG_PAGE_TEXT_QUERY (obj);
+        new (&this->CMSG_PAGE_TEXT_QUERY) vanilla::CMSG_PAGE_TEXT_QUERY (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_QUEST_QUERY&& obj) {
         opcode = Opcode::CMSG_QUEST_QUERY;
-        new (&this->CMSG_QUEST_QUERY) vanilla::CMSG_QUEST_QUERY (obj);
+        new (&this->CMSG_QUEST_QUERY) vanilla::CMSG_QUEST_QUERY (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_GAMEOBJECT_QUERY&& obj) {
         opcode = Opcode::CMSG_GAMEOBJECT_QUERY;
-        new (&this->CMSG_GAMEOBJECT_QUERY) vanilla::CMSG_GAMEOBJECT_QUERY (obj);
+        new (&this->CMSG_GAMEOBJECT_QUERY) vanilla::CMSG_GAMEOBJECT_QUERY (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_CREATURE_QUERY&& obj) {
         opcode = Opcode::CMSG_CREATURE_QUERY;
-        new (&this->CMSG_CREATURE_QUERY) vanilla::CMSG_CREATURE_QUERY (obj);
+        new (&this->CMSG_CREATURE_QUERY) vanilla::CMSG_CREATURE_QUERY (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_WHO&& obj) {
         opcode = Opcode::CMSG_WHO;
-        new (&this->CMSG_WHO) vanilla::CMSG_WHO (obj);
+        new (&this->CMSG_WHO) vanilla::CMSG_WHO (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_WHOIS&& obj) {
         opcode = Opcode::CMSG_WHOIS;
-        new (&this->CMSG_WHOIS) vanilla::CMSG_WHOIS (obj);
+        new (&this->CMSG_WHOIS) vanilla::CMSG_WHOIS (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_FRIEND_LIST&& obj) {
         opcode = Opcode::CMSG_FRIEND_LIST;
-        new (&this->CMSG_FRIEND_LIST) vanilla::CMSG_FRIEND_LIST (obj);
+        new (&this->CMSG_FRIEND_LIST) vanilla::CMSG_FRIEND_LIST (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_ADD_FRIEND&& obj) {
         opcode = Opcode::CMSG_ADD_FRIEND;
-        new (&this->CMSG_ADD_FRIEND) vanilla::CMSG_ADD_FRIEND (obj);
+        new (&this->CMSG_ADD_FRIEND) vanilla::CMSG_ADD_FRIEND (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_DEL_FRIEND&& obj) {
         opcode = Opcode::CMSG_DEL_FRIEND;
-        new (&this->CMSG_DEL_FRIEND) vanilla::CMSG_DEL_FRIEND (obj);
+        new (&this->CMSG_DEL_FRIEND) vanilla::CMSG_DEL_FRIEND (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_ADD_IGNORE&& obj) {
         opcode = Opcode::CMSG_ADD_IGNORE;
-        new (&this->CMSG_ADD_IGNORE) vanilla::CMSG_ADD_IGNORE (obj);
+        new (&this->CMSG_ADD_IGNORE) vanilla::CMSG_ADD_IGNORE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_DEL_IGNORE&& obj) {
         opcode = Opcode::CMSG_DEL_IGNORE;
-        new (&this->CMSG_DEL_IGNORE) vanilla::CMSG_DEL_IGNORE (obj);
+        new (&this->CMSG_DEL_IGNORE) vanilla::CMSG_DEL_IGNORE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_GROUP_INVITE&& obj) {
         opcode = Opcode::CMSG_GROUP_INVITE;
-        new (&this->CMSG_GROUP_INVITE) vanilla::CMSG_GROUP_INVITE (obj);
+        new (&this->CMSG_GROUP_INVITE) vanilla::CMSG_GROUP_INVITE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_GROUP_ACCEPT&& obj) {
         opcode = Opcode::CMSG_GROUP_ACCEPT;
-        new (&this->CMSG_GROUP_ACCEPT) vanilla::CMSG_GROUP_ACCEPT (obj);
+        new (&this->CMSG_GROUP_ACCEPT) vanilla::CMSG_GROUP_ACCEPT (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_GROUP_DECLINE&& obj) {
         opcode = Opcode::CMSG_GROUP_DECLINE;
-        new (&this->CMSG_GROUP_DECLINE) vanilla::CMSG_GROUP_DECLINE (obj);
+        new (&this->CMSG_GROUP_DECLINE) vanilla::CMSG_GROUP_DECLINE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_GROUP_UNINVITE&& obj) {
         opcode = Opcode::CMSG_GROUP_UNINVITE;
-        new (&this->CMSG_GROUP_UNINVITE) vanilla::CMSG_GROUP_UNINVITE (obj);
+        new (&this->CMSG_GROUP_UNINVITE) vanilla::CMSG_GROUP_UNINVITE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_GROUP_UNINVITE_GUID&& obj) {
         opcode = Opcode::CMSG_GROUP_UNINVITE_GUID;
-        new (&this->CMSG_GROUP_UNINVITE_GUID) vanilla::CMSG_GROUP_UNINVITE_GUID (obj);
+        new (&this->CMSG_GROUP_UNINVITE_GUID) vanilla::CMSG_GROUP_UNINVITE_GUID (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_GROUP_SET_LEADER&& obj) {
         opcode = Opcode::CMSG_GROUP_SET_LEADER;
-        new (&this->CMSG_GROUP_SET_LEADER) vanilla::CMSG_GROUP_SET_LEADER (obj);
+        new (&this->CMSG_GROUP_SET_LEADER) vanilla::CMSG_GROUP_SET_LEADER (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_LOOT_METHOD&& obj) {
         opcode = Opcode::CMSG_LOOT_METHOD;
-        new (&this->CMSG_LOOT_METHOD) vanilla::CMSG_LOOT_METHOD (obj);
+        new (&this->CMSG_LOOT_METHOD) vanilla::CMSG_LOOT_METHOD (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_GROUP_DISBAND&& obj) {
         opcode = Opcode::CMSG_GROUP_DISBAND;
-        new (&this->CMSG_GROUP_DISBAND) vanilla::CMSG_GROUP_DISBAND (obj);
+        new (&this->CMSG_GROUP_DISBAND) vanilla::CMSG_GROUP_DISBAND (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_GUILD_CREATE&& obj) {
         opcode = Opcode::CMSG_GUILD_CREATE;
-        new (&this->CMSG_GUILD_CREATE) vanilla::CMSG_GUILD_CREATE (obj);
+        new (&this->CMSG_GUILD_CREATE) vanilla::CMSG_GUILD_CREATE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_GUILD_INVITE&& obj) {
         opcode = Opcode::CMSG_GUILD_INVITE;
-        new (&this->CMSG_GUILD_INVITE) vanilla::CMSG_GUILD_INVITE (obj);
+        new (&this->CMSG_GUILD_INVITE) vanilla::CMSG_GUILD_INVITE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_GUILD_ACCEPT&& obj) {
         opcode = Opcode::CMSG_GUILD_ACCEPT;
-        new (&this->CMSG_GUILD_ACCEPT) vanilla::CMSG_GUILD_ACCEPT (obj);
+        new (&this->CMSG_GUILD_ACCEPT) vanilla::CMSG_GUILD_ACCEPT (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_GUILD_DECLINE&& obj) {
         opcode = Opcode::CMSG_GUILD_DECLINE;
-        new (&this->CMSG_GUILD_DECLINE) vanilla::CMSG_GUILD_DECLINE (obj);
+        new (&this->CMSG_GUILD_DECLINE) vanilla::CMSG_GUILD_DECLINE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_GUILD_INFO&& obj) {
         opcode = Opcode::CMSG_GUILD_INFO;
-        new (&this->CMSG_GUILD_INFO) vanilla::CMSG_GUILD_INFO (obj);
+        new (&this->CMSG_GUILD_INFO) vanilla::CMSG_GUILD_INFO (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_GUILD_ROSTER&& obj) {
         opcode = Opcode::CMSG_GUILD_ROSTER;
-        new (&this->CMSG_GUILD_ROSTER) vanilla::CMSG_GUILD_ROSTER (obj);
+        new (&this->CMSG_GUILD_ROSTER) vanilla::CMSG_GUILD_ROSTER (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_GUILD_PROMOTE&& obj) {
         opcode = Opcode::CMSG_GUILD_PROMOTE;
-        new (&this->CMSG_GUILD_PROMOTE) vanilla::CMSG_GUILD_PROMOTE (obj);
+        new (&this->CMSG_GUILD_PROMOTE) vanilla::CMSG_GUILD_PROMOTE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_GUILD_DEMOTE&& obj) {
         opcode = Opcode::CMSG_GUILD_DEMOTE;
-        new (&this->CMSG_GUILD_DEMOTE) vanilla::CMSG_GUILD_DEMOTE (obj);
+        new (&this->CMSG_GUILD_DEMOTE) vanilla::CMSG_GUILD_DEMOTE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_GUILD_LEAVE&& obj) {
         opcode = Opcode::CMSG_GUILD_LEAVE;
-        new (&this->CMSG_GUILD_LEAVE) vanilla::CMSG_GUILD_LEAVE (obj);
+        new (&this->CMSG_GUILD_LEAVE) vanilla::CMSG_GUILD_LEAVE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_GUILD_REMOVE&& obj) {
         opcode = Opcode::CMSG_GUILD_REMOVE;
-        new (&this->CMSG_GUILD_REMOVE) vanilla::CMSG_GUILD_REMOVE (obj);
+        new (&this->CMSG_GUILD_REMOVE) vanilla::CMSG_GUILD_REMOVE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_GUILD_DISBAND&& obj) {
         opcode = Opcode::CMSG_GUILD_DISBAND;
-        new (&this->CMSG_GUILD_DISBAND) vanilla::CMSG_GUILD_DISBAND (obj);
+        new (&this->CMSG_GUILD_DISBAND) vanilla::CMSG_GUILD_DISBAND (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_GUILD_LEADER&& obj) {
         opcode = Opcode::CMSG_GUILD_LEADER;
-        new (&this->CMSG_GUILD_LEADER) vanilla::CMSG_GUILD_LEADER (obj);
+        new (&this->CMSG_GUILD_LEADER) vanilla::CMSG_GUILD_LEADER (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_GUILD_MOTD&& obj) {
         opcode = Opcode::CMSG_GUILD_MOTD;
-        new (&this->CMSG_GUILD_MOTD) vanilla::CMSG_GUILD_MOTD (obj);
+        new (&this->CMSG_GUILD_MOTD) vanilla::CMSG_GUILD_MOTD (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_MESSAGECHAT&& obj) {
         opcode = Opcode::CMSG_MESSAGECHAT;
-        new (&this->CMSG_MESSAGECHAT) vanilla::CMSG_MESSAGECHAT (obj);
+        new (&this->CMSG_MESSAGECHAT) vanilla::CMSG_MESSAGECHAT (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_JOIN_CHANNEL&& obj) {
         opcode = Opcode::CMSG_JOIN_CHANNEL;
-        new (&this->CMSG_JOIN_CHANNEL) vanilla::CMSG_JOIN_CHANNEL (obj);
+        new (&this->CMSG_JOIN_CHANNEL) vanilla::CMSG_JOIN_CHANNEL (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_LEAVE_CHANNEL&& obj) {
         opcode = Opcode::CMSG_LEAVE_CHANNEL;
-        new (&this->CMSG_LEAVE_CHANNEL) vanilla::CMSG_LEAVE_CHANNEL (obj);
+        new (&this->CMSG_LEAVE_CHANNEL) vanilla::CMSG_LEAVE_CHANNEL (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_CHANNEL_LIST&& obj) {
         opcode = Opcode::CMSG_CHANNEL_LIST;
-        new (&this->CMSG_CHANNEL_LIST) vanilla::CMSG_CHANNEL_LIST (obj);
+        new (&this->CMSG_CHANNEL_LIST) vanilla::CMSG_CHANNEL_LIST (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_CHANNEL_PASSWORD&& obj) {
         opcode = Opcode::CMSG_CHANNEL_PASSWORD;
-        new (&this->CMSG_CHANNEL_PASSWORD) vanilla::CMSG_CHANNEL_PASSWORD (obj);
+        new (&this->CMSG_CHANNEL_PASSWORD) vanilla::CMSG_CHANNEL_PASSWORD (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_CHANNEL_SET_OWNER&& obj) {
         opcode = Opcode::CMSG_CHANNEL_SET_OWNER;
-        new (&this->CMSG_CHANNEL_SET_OWNER) vanilla::CMSG_CHANNEL_SET_OWNER (obj);
+        new (&this->CMSG_CHANNEL_SET_OWNER) vanilla::CMSG_CHANNEL_SET_OWNER (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_CHANNEL_OWNER&& obj) {
         opcode = Opcode::CMSG_CHANNEL_OWNER;
-        new (&this->CMSG_CHANNEL_OWNER) vanilla::CMSG_CHANNEL_OWNER (obj);
+        new (&this->CMSG_CHANNEL_OWNER) vanilla::CMSG_CHANNEL_OWNER (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_CHANNEL_MODERATOR&& obj) {
         opcode = Opcode::CMSG_CHANNEL_MODERATOR;
-        new (&this->CMSG_CHANNEL_MODERATOR) vanilla::CMSG_CHANNEL_MODERATOR (obj);
+        new (&this->CMSG_CHANNEL_MODERATOR) vanilla::CMSG_CHANNEL_MODERATOR (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_CHANNEL_UNMODERATOR&& obj) {
         opcode = Opcode::CMSG_CHANNEL_UNMODERATOR;
-        new (&this->CMSG_CHANNEL_UNMODERATOR) vanilla::CMSG_CHANNEL_UNMODERATOR (obj);
+        new (&this->CMSG_CHANNEL_UNMODERATOR) vanilla::CMSG_CHANNEL_UNMODERATOR (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_CHANNEL_MUTE&& obj) {
         opcode = Opcode::CMSG_CHANNEL_MUTE;
-        new (&this->CMSG_CHANNEL_MUTE) vanilla::CMSG_CHANNEL_MUTE (obj);
+        new (&this->CMSG_CHANNEL_MUTE) vanilla::CMSG_CHANNEL_MUTE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_CHANNEL_UNMUTE&& obj) {
         opcode = Opcode::CMSG_CHANNEL_UNMUTE;
-        new (&this->CMSG_CHANNEL_UNMUTE) vanilla::CMSG_CHANNEL_UNMUTE (obj);
+        new (&this->CMSG_CHANNEL_UNMUTE) vanilla::CMSG_CHANNEL_UNMUTE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_CHANNEL_INVITE&& obj) {
         opcode = Opcode::CMSG_CHANNEL_INVITE;
-        new (&this->CMSG_CHANNEL_INVITE) vanilla::CMSG_CHANNEL_INVITE (obj);
+        new (&this->CMSG_CHANNEL_INVITE) vanilla::CMSG_CHANNEL_INVITE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_CHANNEL_KICK&& obj) {
         opcode = Opcode::CMSG_CHANNEL_KICK;
-        new (&this->CMSG_CHANNEL_KICK) vanilla::CMSG_CHANNEL_KICK (obj);
+        new (&this->CMSG_CHANNEL_KICK) vanilla::CMSG_CHANNEL_KICK (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_CHANNEL_BAN&& obj) {
         opcode = Opcode::CMSG_CHANNEL_BAN;
-        new (&this->CMSG_CHANNEL_BAN) vanilla::CMSG_CHANNEL_BAN (obj);
+        new (&this->CMSG_CHANNEL_BAN) vanilla::CMSG_CHANNEL_BAN (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_CHANNEL_UNBAN&& obj) {
         opcode = Opcode::CMSG_CHANNEL_UNBAN;
-        new (&this->CMSG_CHANNEL_UNBAN) vanilla::CMSG_CHANNEL_UNBAN (obj);
+        new (&this->CMSG_CHANNEL_UNBAN) vanilla::CMSG_CHANNEL_UNBAN (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_CHANNEL_ANNOUNCEMENTS&& obj) {
         opcode = Opcode::CMSG_CHANNEL_ANNOUNCEMENTS;
-        new (&this->CMSG_CHANNEL_ANNOUNCEMENTS) vanilla::CMSG_CHANNEL_ANNOUNCEMENTS (obj);
+        new (&this->CMSG_CHANNEL_ANNOUNCEMENTS) vanilla::CMSG_CHANNEL_ANNOUNCEMENTS (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_CHANNEL_MODERATE&& obj) {
         opcode = Opcode::CMSG_CHANNEL_MODERATE;
-        new (&this->CMSG_CHANNEL_MODERATE) vanilla::CMSG_CHANNEL_MODERATE (obj);
+        new (&this->CMSG_CHANNEL_MODERATE) vanilla::CMSG_CHANNEL_MODERATE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_USE_ITEM&& obj) {
         opcode = Opcode::CMSG_USE_ITEM;
-        new (&this->CMSG_USE_ITEM) vanilla::CMSG_USE_ITEM (obj);
+        new (&this->CMSG_USE_ITEM) vanilla::CMSG_USE_ITEM (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_OPEN_ITEM&& obj) {
         opcode = Opcode::CMSG_OPEN_ITEM;
-        new (&this->CMSG_OPEN_ITEM) vanilla::CMSG_OPEN_ITEM (obj);
+        new (&this->CMSG_OPEN_ITEM) vanilla::CMSG_OPEN_ITEM (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_READ_ITEM&& obj) {
         opcode = Opcode::CMSG_READ_ITEM;
-        new (&this->CMSG_READ_ITEM) vanilla::CMSG_READ_ITEM (obj);
+        new (&this->CMSG_READ_ITEM) vanilla::CMSG_READ_ITEM (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_GAMEOBJ_USE&& obj) {
         opcode = Opcode::CMSG_GAMEOBJ_USE;
-        new (&this->CMSG_GAMEOBJ_USE) vanilla::CMSG_GAMEOBJ_USE (obj);
+        new (&this->CMSG_GAMEOBJ_USE) vanilla::CMSG_GAMEOBJ_USE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_AREATRIGGER&& obj) {
         opcode = Opcode::CMSG_AREATRIGGER;
-        new (&this->CMSG_AREATRIGGER) vanilla::CMSG_AREATRIGGER (obj);
+        new (&this->CMSG_AREATRIGGER) vanilla::CMSG_AREATRIGGER (std::move(obj));
     }
     explicit ClientOpcode(vanilla::MSG_MOVE_START_FORWARD_Client&& obj) {
         opcode = Opcode::MSG_MOVE_START_FORWARD;
-        new (&this->MSG_MOVE_START_FORWARD) vanilla::MSG_MOVE_START_FORWARD_Client (obj);
+        new (&this->MSG_MOVE_START_FORWARD) vanilla::MSG_MOVE_START_FORWARD_Client (std::move(obj));
     }
     explicit ClientOpcode(vanilla::MSG_MOVE_START_BACKWARD_Client&& obj) {
         opcode = Opcode::MSG_MOVE_START_BACKWARD;
-        new (&this->MSG_MOVE_START_BACKWARD) vanilla::MSG_MOVE_START_BACKWARD_Client (obj);
+        new (&this->MSG_MOVE_START_BACKWARD) vanilla::MSG_MOVE_START_BACKWARD_Client (std::move(obj));
     }
     explicit ClientOpcode(vanilla::MSG_MOVE_STOP_Client&& obj) {
         opcode = Opcode::MSG_MOVE_STOP;
-        new (&this->MSG_MOVE_STOP) vanilla::MSG_MOVE_STOP_Client (obj);
+        new (&this->MSG_MOVE_STOP) vanilla::MSG_MOVE_STOP_Client (std::move(obj));
     }
     explicit ClientOpcode(vanilla::MSG_MOVE_START_STRAFE_LEFT_Client&& obj) {
         opcode = Opcode::MSG_MOVE_START_STRAFE_LEFT;
-        new (&this->MSG_MOVE_START_STRAFE_LEFT) vanilla::MSG_MOVE_START_STRAFE_LEFT_Client (obj);
+        new (&this->MSG_MOVE_START_STRAFE_LEFT) vanilla::MSG_MOVE_START_STRAFE_LEFT_Client (std::move(obj));
     }
     explicit ClientOpcode(vanilla::MSG_MOVE_START_STRAFE_RIGHT_Client&& obj) {
         opcode = Opcode::MSG_MOVE_START_STRAFE_RIGHT;
-        new (&this->MSG_MOVE_START_STRAFE_RIGHT) vanilla::MSG_MOVE_START_STRAFE_RIGHT_Client (obj);
+        new (&this->MSG_MOVE_START_STRAFE_RIGHT) vanilla::MSG_MOVE_START_STRAFE_RIGHT_Client (std::move(obj));
     }
     explicit ClientOpcode(vanilla::MSG_MOVE_STOP_STRAFE_Client&& obj) {
         opcode = Opcode::MSG_MOVE_STOP_STRAFE;
-        new (&this->MSG_MOVE_STOP_STRAFE) vanilla::MSG_MOVE_STOP_STRAFE_Client (obj);
+        new (&this->MSG_MOVE_STOP_STRAFE) vanilla::MSG_MOVE_STOP_STRAFE_Client (std::move(obj));
     }
     explicit ClientOpcode(vanilla::MSG_MOVE_JUMP_Client&& obj) {
         opcode = Opcode::MSG_MOVE_JUMP;
-        new (&this->MSG_MOVE_JUMP) vanilla::MSG_MOVE_JUMP_Client (obj);
+        new (&this->MSG_MOVE_JUMP) vanilla::MSG_MOVE_JUMP_Client (std::move(obj));
     }
     explicit ClientOpcode(vanilla::MSG_MOVE_START_TURN_LEFT_Client&& obj) {
         opcode = Opcode::MSG_MOVE_START_TURN_LEFT;
-        new (&this->MSG_MOVE_START_TURN_LEFT) vanilla::MSG_MOVE_START_TURN_LEFT_Client (obj);
+        new (&this->MSG_MOVE_START_TURN_LEFT) vanilla::MSG_MOVE_START_TURN_LEFT_Client (std::move(obj));
     }
     explicit ClientOpcode(vanilla::MSG_MOVE_START_TURN_RIGHT_Client&& obj) {
         opcode = Opcode::MSG_MOVE_START_TURN_RIGHT;
-        new (&this->MSG_MOVE_START_TURN_RIGHT) vanilla::MSG_MOVE_START_TURN_RIGHT_Client (obj);
+        new (&this->MSG_MOVE_START_TURN_RIGHT) vanilla::MSG_MOVE_START_TURN_RIGHT_Client (std::move(obj));
     }
     explicit ClientOpcode(vanilla::MSG_MOVE_STOP_TURN_Client&& obj) {
         opcode = Opcode::MSG_MOVE_STOP_TURN;
-        new (&this->MSG_MOVE_STOP_TURN) vanilla::MSG_MOVE_STOP_TURN_Client (obj);
+        new (&this->MSG_MOVE_STOP_TURN) vanilla::MSG_MOVE_STOP_TURN_Client (std::move(obj));
     }
     explicit ClientOpcode(vanilla::MSG_MOVE_START_PITCH_UP_Client&& obj) {
         opcode = Opcode::MSG_MOVE_START_PITCH_UP;
-        new (&this->MSG_MOVE_START_PITCH_UP) vanilla::MSG_MOVE_START_PITCH_UP_Client (obj);
+        new (&this->MSG_MOVE_START_PITCH_UP) vanilla::MSG_MOVE_START_PITCH_UP_Client (std::move(obj));
     }
     explicit ClientOpcode(vanilla::MSG_MOVE_START_PITCH_DOWN_Client&& obj) {
         opcode = Opcode::MSG_MOVE_START_PITCH_DOWN;
-        new (&this->MSG_MOVE_START_PITCH_DOWN) vanilla::MSG_MOVE_START_PITCH_DOWN_Client (obj);
+        new (&this->MSG_MOVE_START_PITCH_DOWN) vanilla::MSG_MOVE_START_PITCH_DOWN_Client (std::move(obj));
     }
     explicit ClientOpcode(vanilla::MSG_MOVE_STOP_PITCH_Client&& obj) {
         opcode = Opcode::MSG_MOVE_STOP_PITCH;
-        new (&this->MSG_MOVE_STOP_PITCH) vanilla::MSG_MOVE_STOP_PITCH_Client (obj);
+        new (&this->MSG_MOVE_STOP_PITCH) vanilla::MSG_MOVE_STOP_PITCH_Client (std::move(obj));
     }
     explicit ClientOpcode(vanilla::MSG_MOVE_SET_RUN_MODE_Client&& obj) {
         opcode = Opcode::MSG_MOVE_SET_RUN_MODE;
-        new (&this->MSG_MOVE_SET_RUN_MODE) vanilla::MSG_MOVE_SET_RUN_MODE_Client (obj);
+        new (&this->MSG_MOVE_SET_RUN_MODE) vanilla::MSG_MOVE_SET_RUN_MODE_Client (std::move(obj));
     }
     explicit ClientOpcode(vanilla::MSG_MOVE_SET_WALK_MODE_Client&& obj) {
         opcode = Opcode::MSG_MOVE_SET_WALK_MODE;
-        new (&this->MSG_MOVE_SET_WALK_MODE) vanilla::MSG_MOVE_SET_WALK_MODE_Client (obj);
+        new (&this->MSG_MOVE_SET_WALK_MODE) vanilla::MSG_MOVE_SET_WALK_MODE_Client (std::move(obj));
     }
     explicit ClientOpcode(vanilla::MSG_MOVE_TELEPORT_ACK_Client&& obj) {
         opcode = Opcode::MSG_MOVE_TELEPORT_ACK;
-        new (&this->MSG_MOVE_TELEPORT_ACK) vanilla::MSG_MOVE_TELEPORT_ACK_Client (obj);
+        new (&this->MSG_MOVE_TELEPORT_ACK) vanilla::MSG_MOVE_TELEPORT_ACK_Client (std::move(obj));
     }
     explicit ClientOpcode(vanilla::MSG_MOVE_FALL_LAND_Client&& obj) {
         opcode = Opcode::MSG_MOVE_FALL_LAND;
-        new (&this->MSG_MOVE_FALL_LAND) vanilla::MSG_MOVE_FALL_LAND_Client (obj);
+        new (&this->MSG_MOVE_FALL_LAND) vanilla::MSG_MOVE_FALL_LAND_Client (std::move(obj));
     }
     explicit ClientOpcode(vanilla::MSG_MOVE_START_SWIM_Client&& obj) {
         opcode = Opcode::MSG_MOVE_START_SWIM;
-        new (&this->MSG_MOVE_START_SWIM) vanilla::MSG_MOVE_START_SWIM_Client (obj);
+        new (&this->MSG_MOVE_START_SWIM) vanilla::MSG_MOVE_START_SWIM_Client (std::move(obj));
     }
     explicit ClientOpcode(vanilla::MSG_MOVE_STOP_SWIM_Client&& obj) {
         opcode = Opcode::MSG_MOVE_STOP_SWIM;
-        new (&this->MSG_MOVE_STOP_SWIM) vanilla::MSG_MOVE_STOP_SWIM_Client (obj);
+        new (&this->MSG_MOVE_STOP_SWIM) vanilla::MSG_MOVE_STOP_SWIM_Client (std::move(obj));
     }
     explicit ClientOpcode(vanilla::MSG_MOVE_SET_FACING_Client&& obj) {
         opcode = Opcode::MSG_MOVE_SET_FACING;
-        new (&this->MSG_MOVE_SET_FACING) vanilla::MSG_MOVE_SET_FACING_Client (obj);
+        new (&this->MSG_MOVE_SET_FACING) vanilla::MSG_MOVE_SET_FACING_Client (std::move(obj));
     }
     explicit ClientOpcode(vanilla::MSG_MOVE_SET_PITCH_Client&& obj) {
         opcode = Opcode::MSG_MOVE_SET_PITCH;
-        new (&this->MSG_MOVE_SET_PITCH) vanilla::MSG_MOVE_SET_PITCH_Client (obj);
+        new (&this->MSG_MOVE_SET_PITCH) vanilla::MSG_MOVE_SET_PITCH_Client (std::move(obj));
+    }
+    explicit ClientOpcode(vanilla::MSG_MOVE_WORLDPORT_ACK&& obj) {
+        opcode = Opcode::MSG_MOVE_WORLDPORT_ACK;
+        new (&this->MSG_MOVE_WORLDPORT_ACK) vanilla::MSG_MOVE_WORLDPORT_ACK (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_MOVE_SET_RAW_POSITION&& obj) {
         opcode = Opcode::CMSG_MOVE_SET_RAW_POSITION;
-        new (&this->CMSG_MOVE_SET_RAW_POSITION) vanilla::CMSG_MOVE_SET_RAW_POSITION (obj);
+        new (&this->CMSG_MOVE_SET_RAW_POSITION) vanilla::CMSG_MOVE_SET_RAW_POSITION (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_FORCE_RUN_SPEED_CHANGE_ACK&& obj) {
         opcode = Opcode::CMSG_FORCE_RUN_SPEED_CHANGE_ACK;
-        new (&this->CMSG_FORCE_RUN_SPEED_CHANGE_ACK) vanilla::CMSG_FORCE_RUN_SPEED_CHANGE_ACK (obj);
+        new (&this->CMSG_FORCE_RUN_SPEED_CHANGE_ACK) vanilla::CMSG_FORCE_RUN_SPEED_CHANGE_ACK (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK&& obj) {
         opcode = Opcode::CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK;
-        new (&this->CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK) vanilla::CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK (obj);
+        new (&this->CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK) vanilla::CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_FORCE_SWIM_SPEED_CHANGE_ACK&& obj) {
         opcode = Opcode::CMSG_FORCE_SWIM_SPEED_CHANGE_ACK;
-        new (&this->CMSG_FORCE_SWIM_SPEED_CHANGE_ACK) vanilla::CMSG_FORCE_SWIM_SPEED_CHANGE_ACK (obj);
+        new (&this->CMSG_FORCE_SWIM_SPEED_CHANGE_ACK) vanilla::CMSG_FORCE_SWIM_SPEED_CHANGE_ACK (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_FORCE_MOVE_ROOT_ACK&& obj) {
         opcode = Opcode::CMSG_FORCE_MOVE_ROOT_ACK;
-        new (&this->CMSG_FORCE_MOVE_ROOT_ACK) vanilla::CMSG_FORCE_MOVE_ROOT_ACK (obj);
+        new (&this->CMSG_FORCE_MOVE_ROOT_ACK) vanilla::CMSG_FORCE_MOVE_ROOT_ACK (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_FORCE_MOVE_UNROOT_ACK&& obj) {
         opcode = Opcode::CMSG_FORCE_MOVE_UNROOT_ACK;
-        new (&this->CMSG_FORCE_MOVE_UNROOT_ACK) vanilla::CMSG_FORCE_MOVE_UNROOT_ACK (obj);
+        new (&this->CMSG_FORCE_MOVE_UNROOT_ACK) vanilla::CMSG_FORCE_MOVE_UNROOT_ACK (std::move(obj));
     }
     explicit ClientOpcode(vanilla::MSG_MOVE_HEARTBEAT_Client&& obj) {
         opcode = Opcode::MSG_MOVE_HEARTBEAT;
-        new (&this->MSG_MOVE_HEARTBEAT) vanilla::MSG_MOVE_HEARTBEAT_Client (obj);
+        new (&this->MSG_MOVE_HEARTBEAT) vanilla::MSG_MOVE_HEARTBEAT_Client (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_MOVE_KNOCK_BACK_ACK&& obj) {
         opcode = Opcode::CMSG_MOVE_KNOCK_BACK_ACK;
-        new (&this->CMSG_MOVE_KNOCK_BACK_ACK) vanilla::CMSG_MOVE_KNOCK_BACK_ACK (obj);
+        new (&this->CMSG_MOVE_KNOCK_BACK_ACK) vanilla::CMSG_MOVE_KNOCK_BACK_ACK (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_MOVE_HOVER_ACK&& obj) {
         opcode = Opcode::CMSG_MOVE_HOVER_ACK;
-        new (&this->CMSG_MOVE_HOVER_ACK) vanilla::CMSG_MOVE_HOVER_ACK (obj);
+        new (&this->CMSG_MOVE_HOVER_ACK) vanilla::CMSG_MOVE_HOVER_ACK (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_NEXT_CINEMATIC_CAMERA&& obj) {
         opcode = Opcode::CMSG_NEXT_CINEMATIC_CAMERA;
-        new (&this->CMSG_NEXT_CINEMATIC_CAMERA) vanilla::CMSG_NEXT_CINEMATIC_CAMERA (obj);
+        new (&this->CMSG_NEXT_CINEMATIC_CAMERA) vanilla::CMSG_NEXT_CINEMATIC_CAMERA (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_COMPLETE_CINEMATIC&& obj) {
         opcode = Opcode::CMSG_COMPLETE_CINEMATIC;
-        new (&this->CMSG_COMPLETE_CINEMATIC) vanilla::CMSG_COMPLETE_CINEMATIC (obj);
+        new (&this->CMSG_COMPLETE_CINEMATIC) vanilla::CMSG_COMPLETE_CINEMATIC (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_TUTORIAL_FLAG&& obj) {
         opcode = Opcode::CMSG_TUTORIAL_FLAG;
-        new (&this->CMSG_TUTORIAL_FLAG) vanilla::CMSG_TUTORIAL_FLAG (obj);
+        new (&this->CMSG_TUTORIAL_FLAG) vanilla::CMSG_TUTORIAL_FLAG (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_TUTORIAL_CLEAR&& obj) {
         opcode = Opcode::CMSG_TUTORIAL_CLEAR;
-        new (&this->CMSG_TUTORIAL_CLEAR) vanilla::CMSG_TUTORIAL_CLEAR (obj);
+        new (&this->CMSG_TUTORIAL_CLEAR) vanilla::CMSG_TUTORIAL_CLEAR (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_TUTORIAL_RESET&& obj) {
         opcode = Opcode::CMSG_TUTORIAL_RESET;
-        new (&this->CMSG_TUTORIAL_RESET) vanilla::CMSG_TUTORIAL_RESET (obj);
+        new (&this->CMSG_TUTORIAL_RESET) vanilla::CMSG_TUTORIAL_RESET (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_STANDSTATECHANGE&& obj) {
         opcode = Opcode::CMSG_STANDSTATECHANGE;
-        new (&this->CMSG_STANDSTATECHANGE) vanilla::CMSG_STANDSTATECHANGE (obj);
+        new (&this->CMSG_STANDSTATECHANGE) vanilla::CMSG_STANDSTATECHANGE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_EMOTE&& obj) {
         opcode = Opcode::CMSG_EMOTE;
-        new (&this->CMSG_EMOTE) vanilla::CMSG_EMOTE (obj);
+        new (&this->CMSG_EMOTE) vanilla::CMSG_EMOTE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_TEXT_EMOTE&& obj) {
         opcode = Opcode::CMSG_TEXT_EMOTE;
-        new (&this->CMSG_TEXT_EMOTE) vanilla::CMSG_TEXT_EMOTE (obj);
+        new (&this->CMSG_TEXT_EMOTE) vanilla::CMSG_TEXT_EMOTE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_AUTOSTORE_LOOT_ITEM&& obj) {
         opcode = Opcode::CMSG_AUTOSTORE_LOOT_ITEM;
-        new (&this->CMSG_AUTOSTORE_LOOT_ITEM) vanilla::CMSG_AUTOSTORE_LOOT_ITEM (obj);
+        new (&this->CMSG_AUTOSTORE_LOOT_ITEM) vanilla::CMSG_AUTOSTORE_LOOT_ITEM (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_AUTOEQUIP_ITEM&& obj) {
         opcode = Opcode::CMSG_AUTOEQUIP_ITEM;
-        new (&this->CMSG_AUTOEQUIP_ITEM) vanilla::CMSG_AUTOEQUIP_ITEM (obj);
+        new (&this->CMSG_AUTOEQUIP_ITEM) vanilla::CMSG_AUTOEQUIP_ITEM (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_AUTOSTORE_BAG_ITEM&& obj) {
         opcode = Opcode::CMSG_AUTOSTORE_BAG_ITEM;
-        new (&this->CMSG_AUTOSTORE_BAG_ITEM) vanilla::CMSG_AUTOSTORE_BAG_ITEM (obj);
+        new (&this->CMSG_AUTOSTORE_BAG_ITEM) vanilla::CMSG_AUTOSTORE_BAG_ITEM (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_SWAP_ITEM&& obj) {
         opcode = Opcode::CMSG_SWAP_ITEM;
-        new (&this->CMSG_SWAP_ITEM) vanilla::CMSG_SWAP_ITEM (obj);
+        new (&this->CMSG_SWAP_ITEM) vanilla::CMSG_SWAP_ITEM (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_SWAP_INV_ITEM&& obj) {
         opcode = Opcode::CMSG_SWAP_INV_ITEM;
-        new (&this->CMSG_SWAP_INV_ITEM) vanilla::CMSG_SWAP_INV_ITEM (obj);
+        new (&this->CMSG_SWAP_INV_ITEM) vanilla::CMSG_SWAP_INV_ITEM (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_SPLIT_ITEM&& obj) {
         opcode = Opcode::CMSG_SPLIT_ITEM;
-        new (&this->CMSG_SPLIT_ITEM) vanilla::CMSG_SPLIT_ITEM (obj);
+        new (&this->CMSG_SPLIT_ITEM) vanilla::CMSG_SPLIT_ITEM (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_AUTOEQUIP_ITEM_SLOT&& obj) {
         opcode = Opcode::CMSG_AUTOEQUIP_ITEM_SLOT;
-        new (&this->CMSG_AUTOEQUIP_ITEM_SLOT) vanilla::CMSG_AUTOEQUIP_ITEM_SLOT (obj);
+        new (&this->CMSG_AUTOEQUIP_ITEM_SLOT) vanilla::CMSG_AUTOEQUIP_ITEM_SLOT (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_DESTROYITEM&& obj) {
         opcode = Opcode::CMSG_DESTROYITEM;
-        new (&this->CMSG_DESTROYITEM) vanilla::CMSG_DESTROYITEM (obj);
+        new (&this->CMSG_DESTROYITEM) vanilla::CMSG_DESTROYITEM (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_INSPECT&& obj) {
         opcode = Opcode::CMSG_INSPECT;
-        new (&this->CMSG_INSPECT) vanilla::CMSG_INSPECT (obj);
+        new (&this->CMSG_INSPECT) vanilla::CMSG_INSPECT (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_INITIATE_TRADE&& obj) {
         opcode = Opcode::CMSG_INITIATE_TRADE;
-        new (&this->CMSG_INITIATE_TRADE) vanilla::CMSG_INITIATE_TRADE (obj);
+        new (&this->CMSG_INITIATE_TRADE) vanilla::CMSG_INITIATE_TRADE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_BEGIN_TRADE&& obj) {
         opcode = Opcode::CMSG_BEGIN_TRADE;
-        new (&this->CMSG_BEGIN_TRADE) vanilla::CMSG_BEGIN_TRADE (obj);
+        new (&this->CMSG_BEGIN_TRADE) vanilla::CMSG_BEGIN_TRADE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_BUSY_TRADE&& obj) {
         opcode = Opcode::CMSG_BUSY_TRADE;
-        new (&this->CMSG_BUSY_TRADE) vanilla::CMSG_BUSY_TRADE (obj);
+        new (&this->CMSG_BUSY_TRADE) vanilla::CMSG_BUSY_TRADE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_IGNORE_TRADE&& obj) {
         opcode = Opcode::CMSG_IGNORE_TRADE;
-        new (&this->CMSG_IGNORE_TRADE) vanilla::CMSG_IGNORE_TRADE (obj);
+        new (&this->CMSG_IGNORE_TRADE) vanilla::CMSG_IGNORE_TRADE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_ACCEPT_TRADE&& obj) {
         opcode = Opcode::CMSG_ACCEPT_TRADE;
-        new (&this->CMSG_ACCEPT_TRADE) vanilla::CMSG_ACCEPT_TRADE (obj);
+        new (&this->CMSG_ACCEPT_TRADE) vanilla::CMSG_ACCEPT_TRADE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_UNACCEPT_TRADE&& obj) {
         opcode = Opcode::CMSG_UNACCEPT_TRADE;
-        new (&this->CMSG_UNACCEPT_TRADE) vanilla::CMSG_UNACCEPT_TRADE (obj);
+        new (&this->CMSG_UNACCEPT_TRADE) vanilla::CMSG_UNACCEPT_TRADE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_CANCEL_TRADE&& obj) {
         opcode = Opcode::CMSG_CANCEL_TRADE;
-        new (&this->CMSG_CANCEL_TRADE) vanilla::CMSG_CANCEL_TRADE (obj);
+        new (&this->CMSG_CANCEL_TRADE) vanilla::CMSG_CANCEL_TRADE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_SET_TRADE_ITEM&& obj) {
         opcode = Opcode::CMSG_SET_TRADE_ITEM;
-        new (&this->CMSG_SET_TRADE_ITEM) vanilla::CMSG_SET_TRADE_ITEM (obj);
+        new (&this->CMSG_SET_TRADE_ITEM) vanilla::CMSG_SET_TRADE_ITEM (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_CLEAR_TRADE_ITEM&& obj) {
         opcode = Opcode::CMSG_CLEAR_TRADE_ITEM;
-        new (&this->CMSG_CLEAR_TRADE_ITEM) vanilla::CMSG_CLEAR_TRADE_ITEM (obj);
+        new (&this->CMSG_CLEAR_TRADE_ITEM) vanilla::CMSG_CLEAR_TRADE_ITEM (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_SET_TRADE_GOLD&& obj) {
         opcode = Opcode::CMSG_SET_TRADE_GOLD;
-        new (&this->CMSG_SET_TRADE_GOLD) vanilla::CMSG_SET_TRADE_GOLD (obj);
+        new (&this->CMSG_SET_TRADE_GOLD) vanilla::CMSG_SET_TRADE_GOLD (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_SET_FACTION_ATWAR&& obj) {
         opcode = Opcode::CMSG_SET_FACTION_ATWAR;
-        new (&this->CMSG_SET_FACTION_ATWAR) vanilla::CMSG_SET_FACTION_ATWAR (obj);
+        new (&this->CMSG_SET_FACTION_ATWAR) vanilla::CMSG_SET_FACTION_ATWAR (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_SET_ACTION_BUTTON&& obj) {
         opcode = Opcode::CMSG_SET_ACTION_BUTTON;
-        new (&this->CMSG_SET_ACTION_BUTTON) vanilla::CMSG_SET_ACTION_BUTTON (obj);
+        new (&this->CMSG_SET_ACTION_BUTTON) vanilla::CMSG_SET_ACTION_BUTTON (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_CAST_SPELL&& obj) {
         opcode = Opcode::CMSG_CAST_SPELL;
-        new (&this->CMSG_CAST_SPELL) vanilla::CMSG_CAST_SPELL (obj);
+        new (&this->CMSG_CAST_SPELL) vanilla::CMSG_CAST_SPELL (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_CANCEL_CAST&& obj) {
         opcode = Opcode::CMSG_CANCEL_CAST;
-        new (&this->CMSG_CANCEL_CAST) vanilla::CMSG_CANCEL_CAST (obj);
+        new (&this->CMSG_CANCEL_CAST) vanilla::CMSG_CANCEL_CAST (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_CANCEL_AURA&& obj) {
         opcode = Opcode::CMSG_CANCEL_AURA;
-        new (&this->CMSG_CANCEL_AURA) vanilla::CMSG_CANCEL_AURA (obj);
+        new (&this->CMSG_CANCEL_AURA) vanilla::CMSG_CANCEL_AURA (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_CANCEL_CHANNELLING&& obj) {
         opcode = Opcode::CMSG_CANCEL_CHANNELLING;
-        new (&this->CMSG_CANCEL_CHANNELLING) vanilla::CMSG_CANCEL_CHANNELLING (obj);
+        new (&this->CMSG_CANCEL_CHANNELLING) vanilla::CMSG_CANCEL_CHANNELLING (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_SET_SELECTION&& obj) {
         opcode = Opcode::CMSG_SET_SELECTION;
-        new (&this->CMSG_SET_SELECTION) vanilla::CMSG_SET_SELECTION (obj);
+        new (&this->CMSG_SET_SELECTION) vanilla::CMSG_SET_SELECTION (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_SET_TARGET_OBSOLETE&& obj) {
         opcode = Opcode::CMSG_SET_TARGET_OBSOLETE;
-        new (&this->CMSG_SET_TARGET_OBSOLETE) vanilla::CMSG_SET_TARGET_OBSOLETE (obj);
+        new (&this->CMSG_SET_TARGET_OBSOLETE) vanilla::CMSG_SET_TARGET_OBSOLETE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_ATTACKSWING&& obj) {
         opcode = Opcode::CMSG_ATTACKSWING;
-        new (&this->CMSG_ATTACKSWING) vanilla::CMSG_ATTACKSWING (obj);
+        new (&this->CMSG_ATTACKSWING) vanilla::CMSG_ATTACKSWING (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_ATTACKSTOP&& obj) {
         opcode = Opcode::CMSG_ATTACKSTOP;
-        new (&this->CMSG_ATTACKSTOP) vanilla::CMSG_ATTACKSTOP (obj);
+        new (&this->CMSG_ATTACKSTOP) vanilla::CMSG_ATTACKSTOP (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_REPOP_REQUEST&& obj) {
         opcode = Opcode::CMSG_REPOP_REQUEST;
-        new (&this->CMSG_REPOP_REQUEST) vanilla::CMSG_REPOP_REQUEST (obj);
+        new (&this->CMSG_REPOP_REQUEST) vanilla::CMSG_REPOP_REQUEST (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_RESURRECT_RESPONSE&& obj) {
         opcode = Opcode::CMSG_RESURRECT_RESPONSE;
-        new (&this->CMSG_RESURRECT_RESPONSE) vanilla::CMSG_RESURRECT_RESPONSE (obj);
+        new (&this->CMSG_RESURRECT_RESPONSE) vanilla::CMSG_RESURRECT_RESPONSE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_LOOT&& obj) {
         opcode = Opcode::CMSG_LOOT;
-        new (&this->CMSG_LOOT) vanilla::CMSG_LOOT (obj);
+        new (&this->CMSG_LOOT) vanilla::CMSG_LOOT (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_LOOT_MONEY&& obj) {
         opcode = Opcode::CMSG_LOOT_MONEY;
-        new (&this->CMSG_LOOT_MONEY) vanilla::CMSG_LOOT_MONEY (obj);
+        new (&this->CMSG_LOOT_MONEY) vanilla::CMSG_LOOT_MONEY (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_LOOT_RELEASE&& obj) {
         opcode = Opcode::CMSG_LOOT_RELEASE;
-        new (&this->CMSG_LOOT_RELEASE) vanilla::CMSG_LOOT_RELEASE (obj);
+        new (&this->CMSG_LOOT_RELEASE) vanilla::CMSG_LOOT_RELEASE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_DUEL_ACCEPTED&& obj) {
         opcode = Opcode::CMSG_DUEL_ACCEPTED;
-        new (&this->CMSG_DUEL_ACCEPTED) vanilla::CMSG_DUEL_ACCEPTED (obj);
+        new (&this->CMSG_DUEL_ACCEPTED) vanilla::CMSG_DUEL_ACCEPTED (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_DUEL_CANCELLED&& obj) {
         opcode = Opcode::CMSG_DUEL_CANCELLED;
-        new (&this->CMSG_DUEL_CANCELLED) vanilla::CMSG_DUEL_CANCELLED (obj);
+        new (&this->CMSG_DUEL_CANCELLED) vanilla::CMSG_DUEL_CANCELLED (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_MOUNTSPECIAL_ANIM&& obj) {
         opcode = Opcode::CMSG_MOUNTSPECIAL_ANIM;
-        new (&this->CMSG_MOUNTSPECIAL_ANIM) vanilla::CMSG_MOUNTSPECIAL_ANIM (obj);
+        new (&this->CMSG_MOUNTSPECIAL_ANIM) vanilla::CMSG_MOUNTSPECIAL_ANIM (std::move(obj));
+    }
+    explicit ClientOpcode(vanilla::CMSG_PET_SET_ACTION&& obj) {
+        opcode = Opcode::CMSG_PET_SET_ACTION;
+        new (&this->CMSG_PET_SET_ACTION) vanilla::CMSG_PET_SET_ACTION (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_PET_ACTION&& obj) {
         opcode = Opcode::CMSG_PET_ACTION;
-        new (&this->CMSG_PET_ACTION) vanilla::CMSG_PET_ACTION (obj);
+        new (&this->CMSG_PET_ACTION) vanilla::CMSG_PET_ACTION (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_PET_ABANDON&& obj) {
         opcode = Opcode::CMSG_PET_ABANDON;
-        new (&this->CMSG_PET_ABANDON) vanilla::CMSG_PET_ABANDON (obj);
+        new (&this->CMSG_PET_ABANDON) vanilla::CMSG_PET_ABANDON (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_PET_RENAME&& obj) {
         opcode = Opcode::CMSG_PET_RENAME;
-        new (&this->CMSG_PET_RENAME) vanilla::CMSG_PET_RENAME (obj);
+        new (&this->CMSG_PET_RENAME) vanilla::CMSG_PET_RENAME (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_GOSSIP_HELLO&& obj) {
         opcode = Opcode::CMSG_GOSSIP_HELLO;
-        new (&this->CMSG_GOSSIP_HELLO) vanilla::CMSG_GOSSIP_HELLO (obj);
+        new (&this->CMSG_GOSSIP_HELLO) vanilla::CMSG_GOSSIP_HELLO (std::move(obj));
+    }
+    explicit ClientOpcode(vanilla::CMSG_GOSSIP_SELECT_OPTION&& obj) {
+        opcode = Opcode::CMSG_GOSSIP_SELECT_OPTION;
+        new (&this->CMSG_GOSSIP_SELECT_OPTION) vanilla::CMSG_GOSSIP_SELECT_OPTION (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_NPC_TEXT_QUERY&& obj) {
         opcode = Opcode::CMSG_NPC_TEXT_QUERY;
-        new (&this->CMSG_NPC_TEXT_QUERY) vanilla::CMSG_NPC_TEXT_QUERY (obj);
+        new (&this->CMSG_NPC_TEXT_QUERY) vanilla::CMSG_NPC_TEXT_QUERY (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_QUESTGIVER_STATUS_QUERY&& obj) {
         opcode = Opcode::CMSG_QUESTGIVER_STATUS_QUERY;
-        new (&this->CMSG_QUESTGIVER_STATUS_QUERY) vanilla::CMSG_QUESTGIVER_STATUS_QUERY (obj);
+        new (&this->CMSG_QUESTGIVER_STATUS_QUERY) vanilla::CMSG_QUESTGIVER_STATUS_QUERY (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_QUESTGIVER_HELLO&& obj) {
         opcode = Opcode::CMSG_QUESTGIVER_HELLO;
-        new (&this->CMSG_QUESTGIVER_HELLO) vanilla::CMSG_QUESTGIVER_HELLO (obj);
+        new (&this->CMSG_QUESTGIVER_HELLO) vanilla::CMSG_QUESTGIVER_HELLO (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_QUESTGIVER_QUERY_QUEST&& obj) {
         opcode = Opcode::CMSG_QUESTGIVER_QUERY_QUEST;
-        new (&this->CMSG_QUESTGIVER_QUERY_QUEST) vanilla::CMSG_QUESTGIVER_QUERY_QUEST (obj);
+        new (&this->CMSG_QUESTGIVER_QUERY_QUEST) vanilla::CMSG_QUESTGIVER_QUERY_QUEST (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_QUESTGIVER_QUEST_AUTOLAUNCH&& obj) {
         opcode = Opcode::CMSG_QUESTGIVER_QUEST_AUTOLAUNCH;
-        new (&this->CMSG_QUESTGIVER_QUEST_AUTOLAUNCH) vanilla::CMSG_QUESTGIVER_QUEST_AUTOLAUNCH (obj);
+        new (&this->CMSG_QUESTGIVER_QUEST_AUTOLAUNCH) vanilla::CMSG_QUESTGIVER_QUEST_AUTOLAUNCH (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_QUESTGIVER_ACCEPT_QUEST&& obj) {
         opcode = Opcode::CMSG_QUESTGIVER_ACCEPT_QUEST;
-        new (&this->CMSG_QUESTGIVER_ACCEPT_QUEST) vanilla::CMSG_QUESTGIVER_ACCEPT_QUEST (obj);
+        new (&this->CMSG_QUESTGIVER_ACCEPT_QUEST) vanilla::CMSG_QUESTGIVER_ACCEPT_QUEST (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_QUESTGIVER_COMPLETE_QUEST&& obj) {
         opcode = Opcode::CMSG_QUESTGIVER_COMPLETE_QUEST;
-        new (&this->CMSG_QUESTGIVER_COMPLETE_QUEST) vanilla::CMSG_QUESTGIVER_COMPLETE_QUEST (obj);
+        new (&this->CMSG_QUESTGIVER_COMPLETE_QUEST) vanilla::CMSG_QUESTGIVER_COMPLETE_QUEST (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_QUESTGIVER_REQUEST_REWARD&& obj) {
         opcode = Opcode::CMSG_QUESTGIVER_REQUEST_REWARD;
-        new (&this->CMSG_QUESTGIVER_REQUEST_REWARD) vanilla::CMSG_QUESTGIVER_REQUEST_REWARD (obj);
+        new (&this->CMSG_QUESTGIVER_REQUEST_REWARD) vanilla::CMSG_QUESTGIVER_REQUEST_REWARD (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_QUESTGIVER_CHOOSE_REWARD&& obj) {
         opcode = Opcode::CMSG_QUESTGIVER_CHOOSE_REWARD;
-        new (&this->CMSG_QUESTGIVER_CHOOSE_REWARD) vanilla::CMSG_QUESTGIVER_CHOOSE_REWARD (obj);
+        new (&this->CMSG_QUESTGIVER_CHOOSE_REWARD) vanilla::CMSG_QUESTGIVER_CHOOSE_REWARD (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_QUESTGIVER_CANCEL&& obj) {
         opcode = Opcode::CMSG_QUESTGIVER_CANCEL;
-        new (&this->CMSG_QUESTGIVER_CANCEL) vanilla::CMSG_QUESTGIVER_CANCEL (obj);
+        new (&this->CMSG_QUESTGIVER_CANCEL) vanilla::CMSG_QUESTGIVER_CANCEL (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_QUESTLOG_SWAP_QUEST&& obj) {
         opcode = Opcode::CMSG_QUESTLOG_SWAP_QUEST;
-        new (&this->CMSG_QUESTLOG_SWAP_QUEST) vanilla::CMSG_QUESTLOG_SWAP_QUEST (obj);
+        new (&this->CMSG_QUESTLOG_SWAP_QUEST) vanilla::CMSG_QUESTLOG_SWAP_QUEST (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_QUESTLOG_REMOVE_QUEST&& obj) {
         opcode = Opcode::CMSG_QUESTLOG_REMOVE_QUEST;
-        new (&this->CMSG_QUESTLOG_REMOVE_QUEST) vanilla::CMSG_QUESTLOG_REMOVE_QUEST (obj);
+        new (&this->CMSG_QUESTLOG_REMOVE_QUEST) vanilla::CMSG_QUESTLOG_REMOVE_QUEST (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_QUEST_CONFIRM_ACCEPT&& obj) {
         opcode = Opcode::CMSG_QUEST_CONFIRM_ACCEPT;
-        new (&this->CMSG_QUEST_CONFIRM_ACCEPT) vanilla::CMSG_QUEST_CONFIRM_ACCEPT (obj);
+        new (&this->CMSG_QUEST_CONFIRM_ACCEPT) vanilla::CMSG_QUEST_CONFIRM_ACCEPT (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_PUSHQUESTTOPARTY&& obj) {
         opcode = Opcode::CMSG_PUSHQUESTTOPARTY;
-        new (&this->CMSG_PUSHQUESTTOPARTY) vanilla::CMSG_PUSHQUESTTOPARTY (obj);
+        new (&this->CMSG_PUSHQUESTTOPARTY) vanilla::CMSG_PUSHQUESTTOPARTY (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_LIST_INVENTORY&& obj) {
         opcode = Opcode::CMSG_LIST_INVENTORY;
-        new (&this->CMSG_LIST_INVENTORY) vanilla::CMSG_LIST_INVENTORY (obj);
+        new (&this->CMSG_LIST_INVENTORY) vanilla::CMSG_LIST_INVENTORY (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_SELL_ITEM&& obj) {
         opcode = Opcode::CMSG_SELL_ITEM;
-        new (&this->CMSG_SELL_ITEM) vanilla::CMSG_SELL_ITEM (obj);
+        new (&this->CMSG_SELL_ITEM) vanilla::CMSG_SELL_ITEM (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_BUY_ITEM&& obj) {
         opcode = Opcode::CMSG_BUY_ITEM;
-        new (&this->CMSG_BUY_ITEM) vanilla::CMSG_BUY_ITEM (obj);
+        new (&this->CMSG_BUY_ITEM) vanilla::CMSG_BUY_ITEM (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_BUY_ITEM_IN_SLOT&& obj) {
         opcode = Opcode::CMSG_BUY_ITEM_IN_SLOT;
-        new (&this->CMSG_BUY_ITEM_IN_SLOT) vanilla::CMSG_BUY_ITEM_IN_SLOT (obj);
+        new (&this->CMSG_BUY_ITEM_IN_SLOT) vanilla::CMSG_BUY_ITEM_IN_SLOT (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_TAXINODE_STATUS_QUERY&& obj) {
         opcode = Opcode::CMSG_TAXINODE_STATUS_QUERY;
-        new (&this->CMSG_TAXINODE_STATUS_QUERY) vanilla::CMSG_TAXINODE_STATUS_QUERY (obj);
+        new (&this->CMSG_TAXINODE_STATUS_QUERY) vanilla::CMSG_TAXINODE_STATUS_QUERY (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_TAXIQUERYAVAILABLENODES&& obj) {
         opcode = Opcode::CMSG_TAXIQUERYAVAILABLENODES;
-        new (&this->CMSG_TAXIQUERYAVAILABLENODES) vanilla::CMSG_TAXIQUERYAVAILABLENODES (obj);
+        new (&this->CMSG_TAXIQUERYAVAILABLENODES) vanilla::CMSG_TAXIQUERYAVAILABLENODES (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_ACTIVATETAXI&& obj) {
         opcode = Opcode::CMSG_ACTIVATETAXI;
-        new (&this->CMSG_ACTIVATETAXI) vanilla::CMSG_ACTIVATETAXI (obj);
+        new (&this->CMSG_ACTIVATETAXI) vanilla::CMSG_ACTIVATETAXI (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_TRAINER_LIST&& obj) {
         opcode = Opcode::CMSG_TRAINER_LIST;
-        new (&this->CMSG_TRAINER_LIST) vanilla::CMSG_TRAINER_LIST (obj);
+        new (&this->CMSG_TRAINER_LIST) vanilla::CMSG_TRAINER_LIST (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_TRAINER_BUY_SPELL&& obj) {
         opcode = Opcode::CMSG_TRAINER_BUY_SPELL;
-        new (&this->CMSG_TRAINER_BUY_SPELL) vanilla::CMSG_TRAINER_BUY_SPELL (obj);
+        new (&this->CMSG_TRAINER_BUY_SPELL) vanilla::CMSG_TRAINER_BUY_SPELL (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_BINDER_ACTIVATE&& obj) {
         opcode = Opcode::CMSG_BINDER_ACTIVATE;
-        new (&this->CMSG_BINDER_ACTIVATE) vanilla::CMSG_BINDER_ACTIVATE (obj);
+        new (&this->CMSG_BINDER_ACTIVATE) vanilla::CMSG_BINDER_ACTIVATE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_BANKER_ACTIVATE&& obj) {
         opcode = Opcode::CMSG_BANKER_ACTIVATE;
-        new (&this->CMSG_BANKER_ACTIVATE) vanilla::CMSG_BANKER_ACTIVATE (obj);
+        new (&this->CMSG_BANKER_ACTIVATE) vanilla::CMSG_BANKER_ACTIVATE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_BUY_BANK_SLOT&& obj) {
         opcode = Opcode::CMSG_BUY_BANK_SLOT;
-        new (&this->CMSG_BUY_BANK_SLOT) vanilla::CMSG_BUY_BANK_SLOT (obj);
+        new (&this->CMSG_BUY_BANK_SLOT) vanilla::CMSG_BUY_BANK_SLOT (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_PETITION_SHOWLIST&& obj) {
         opcode = Opcode::CMSG_PETITION_SHOWLIST;
-        new (&this->CMSG_PETITION_SHOWLIST) vanilla::CMSG_PETITION_SHOWLIST (obj);
+        new (&this->CMSG_PETITION_SHOWLIST) vanilla::CMSG_PETITION_SHOWLIST (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_PETITION_BUY&& obj) {
         opcode = Opcode::CMSG_PETITION_BUY;
-        new (&this->CMSG_PETITION_BUY) vanilla::CMSG_PETITION_BUY (obj);
+        new (&this->CMSG_PETITION_BUY) vanilla::CMSG_PETITION_BUY (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_PETITION_SHOW_SIGNATURES&& obj) {
         opcode = Opcode::CMSG_PETITION_SHOW_SIGNATURES;
-        new (&this->CMSG_PETITION_SHOW_SIGNATURES) vanilla::CMSG_PETITION_SHOW_SIGNATURES (obj);
+        new (&this->CMSG_PETITION_SHOW_SIGNATURES) vanilla::CMSG_PETITION_SHOW_SIGNATURES (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_PETITION_SIGN&& obj) {
         opcode = Opcode::CMSG_PETITION_SIGN;
-        new (&this->CMSG_PETITION_SIGN) vanilla::CMSG_PETITION_SIGN (obj);
+        new (&this->CMSG_PETITION_SIGN) vanilla::CMSG_PETITION_SIGN (std::move(obj));
+    }
+    explicit ClientOpcode(vanilla::MSG_PETITION_DECLINE&& obj) {
+        opcode = Opcode::MSG_PETITION_DECLINE;
+        new (&this->MSG_PETITION_DECLINE) vanilla::MSG_PETITION_DECLINE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_OFFER_PETITION&& obj) {
         opcode = Opcode::CMSG_OFFER_PETITION;
-        new (&this->CMSG_OFFER_PETITION) vanilla::CMSG_OFFER_PETITION (obj);
+        new (&this->CMSG_OFFER_PETITION) vanilla::CMSG_OFFER_PETITION (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_TURN_IN_PETITION&& obj) {
         opcode = Opcode::CMSG_TURN_IN_PETITION;
-        new (&this->CMSG_TURN_IN_PETITION) vanilla::CMSG_TURN_IN_PETITION (obj);
+        new (&this->CMSG_TURN_IN_PETITION) vanilla::CMSG_TURN_IN_PETITION (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_PETITION_QUERY&& obj) {
         opcode = Opcode::CMSG_PETITION_QUERY;
-        new (&this->CMSG_PETITION_QUERY) vanilla::CMSG_PETITION_QUERY (obj);
+        new (&this->CMSG_PETITION_QUERY) vanilla::CMSG_PETITION_QUERY (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_BUG&& obj) {
         opcode = Opcode::CMSG_BUG;
-        new (&this->CMSG_BUG) vanilla::CMSG_BUG (obj);
+        new (&this->CMSG_BUG) vanilla::CMSG_BUG (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_PLAYED_TIME&& obj) {
         opcode = Opcode::CMSG_PLAYED_TIME;
-        new (&this->CMSG_PLAYED_TIME) vanilla::CMSG_PLAYED_TIME (obj);
+        new (&this->CMSG_PLAYED_TIME) vanilla::CMSG_PLAYED_TIME (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_QUERY_TIME&& obj) {
         opcode = Opcode::CMSG_QUERY_TIME;
-        new (&this->CMSG_QUERY_TIME) vanilla::CMSG_QUERY_TIME (obj);
+        new (&this->CMSG_QUERY_TIME) vanilla::CMSG_QUERY_TIME (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_RECLAIM_CORPSE&& obj) {
         opcode = Opcode::CMSG_RECLAIM_CORPSE;
-        new (&this->CMSG_RECLAIM_CORPSE) vanilla::CMSG_RECLAIM_CORPSE (obj);
+        new (&this->CMSG_RECLAIM_CORPSE) vanilla::CMSG_RECLAIM_CORPSE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_WRAP_ITEM&& obj) {
         opcode = Opcode::CMSG_WRAP_ITEM;
-        new (&this->CMSG_WRAP_ITEM) vanilla::CMSG_WRAP_ITEM (obj);
+        new (&this->CMSG_WRAP_ITEM) vanilla::CMSG_WRAP_ITEM (std::move(obj));
     }
     explicit ClientOpcode(vanilla::MSG_MINIMAP_PING_Client&& obj) {
         opcode = Opcode::MSG_MINIMAP_PING;
-        new (&this->MSG_MINIMAP_PING) vanilla::MSG_MINIMAP_PING_Client (obj);
+        new (&this->MSG_MINIMAP_PING) vanilla::MSG_MINIMAP_PING_Client (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_PING&& obj) {
         opcode = Opcode::CMSG_PING;
-        new (&this->CMSG_PING) vanilla::CMSG_PING (obj);
+        new (&this->CMSG_PING) vanilla::CMSG_PING (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_SETSHEATHED&& obj) {
         opcode = Opcode::CMSG_SETSHEATHED;
-        new (&this->CMSG_SETSHEATHED) vanilla::CMSG_SETSHEATHED (obj);
+        new (&this->CMSG_SETSHEATHED) vanilla::CMSG_SETSHEATHED (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_PET_CAST_SPELL&& obj) {
         opcode = Opcode::CMSG_PET_CAST_SPELL;
-        new (&this->CMSG_PET_CAST_SPELL) vanilla::CMSG_PET_CAST_SPELL (obj);
+        new (&this->CMSG_PET_CAST_SPELL) vanilla::CMSG_PET_CAST_SPELL (std::move(obj));
     }
     explicit ClientOpcode(vanilla::MSG_SAVE_GUILD_EMBLEM_Client&& obj) {
         opcode = Opcode::MSG_SAVE_GUILD_EMBLEM;
-        new (&this->MSG_SAVE_GUILD_EMBLEM) vanilla::MSG_SAVE_GUILD_EMBLEM_Client (obj);
+        new (&this->MSG_SAVE_GUILD_EMBLEM) vanilla::MSG_SAVE_GUILD_EMBLEM_Client (std::move(obj));
+    }
+    explicit ClientOpcode(vanilla::MSG_TABARDVENDOR_ACTIVATE&& obj) {
+        opcode = Opcode::MSG_TABARDVENDOR_ACTIVATE;
+        new (&this->MSG_TABARDVENDOR_ACTIVATE) vanilla::MSG_TABARDVENDOR_ACTIVATE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_ZONEUPDATE&& obj) {
         opcode = Opcode::CMSG_ZONEUPDATE;
-        new (&this->CMSG_ZONEUPDATE) vanilla::CMSG_ZONEUPDATE (obj);
+        new (&this->CMSG_ZONEUPDATE) vanilla::CMSG_ZONEUPDATE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::MSG_RANDOM_ROLL_Client&& obj) {
         opcode = Opcode::MSG_RANDOM_ROLL;
-        new (&this->MSG_RANDOM_ROLL) vanilla::MSG_RANDOM_ROLL_Client (obj);
+        new (&this->MSG_RANDOM_ROLL) vanilla::MSG_RANDOM_ROLL_Client (std::move(obj));
     }
     explicit ClientOpcode(vanilla::MSG_LOOKING_FOR_GROUP_Client&& obj) {
         opcode = Opcode::MSG_LOOKING_FOR_GROUP;
-        new (&this->MSG_LOOKING_FOR_GROUP) vanilla::MSG_LOOKING_FOR_GROUP_Client (obj);
+        new (&this->MSG_LOOKING_FOR_GROUP) vanilla::MSG_LOOKING_FOR_GROUP_Client (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_UNLEARN_SKILL&& obj) {
         opcode = Opcode::CMSG_UNLEARN_SKILL;
-        new (&this->CMSG_UNLEARN_SKILL) vanilla::CMSG_UNLEARN_SKILL (obj);
+        new (&this->CMSG_UNLEARN_SKILL) vanilla::CMSG_UNLEARN_SKILL (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_GMTICKET_UPDATETEXT&& obj) {
         opcode = Opcode::CMSG_GMTICKET_UPDATETEXT;
-        new (&this->CMSG_GMTICKET_UPDATETEXT) vanilla::CMSG_GMTICKET_UPDATETEXT (obj);
+        new (&this->CMSG_GMTICKET_UPDATETEXT) vanilla::CMSG_GMTICKET_UPDATETEXT (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_REQUEST_ACCOUNT_DATA&& obj) {
         opcode = Opcode::CMSG_REQUEST_ACCOUNT_DATA;
-        new (&this->CMSG_REQUEST_ACCOUNT_DATA) vanilla::CMSG_REQUEST_ACCOUNT_DATA (obj);
+        new (&this->CMSG_REQUEST_ACCOUNT_DATA) vanilla::CMSG_REQUEST_ACCOUNT_DATA (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_GMTICKET_GETTICKET&& obj) {
         opcode = Opcode::CMSG_GMTICKET_GETTICKET;
-        new (&this->CMSG_GMTICKET_GETTICKET) vanilla::CMSG_GMTICKET_GETTICKET (obj);
+        new (&this->CMSG_GMTICKET_GETTICKET) vanilla::CMSG_GMTICKET_GETTICKET (std::move(obj));
     }
     explicit ClientOpcode(vanilla::MSG_CORPSE_QUERY_Client&& obj) {
         opcode = Opcode::MSG_CORPSE_QUERY;
-        new (&this->MSG_CORPSE_QUERY) vanilla::MSG_CORPSE_QUERY_Client (obj);
+        new (&this->MSG_CORPSE_QUERY) vanilla::MSG_CORPSE_QUERY_Client (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_GMTICKET_DELETETICKET&& obj) {
         opcode = Opcode::CMSG_GMTICKET_DELETETICKET;
-        new (&this->CMSG_GMTICKET_DELETETICKET) vanilla::CMSG_GMTICKET_DELETETICKET (obj);
+        new (&this->CMSG_GMTICKET_DELETETICKET) vanilla::CMSG_GMTICKET_DELETETICKET (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_GMTICKET_SYSTEMSTATUS&& obj) {
         opcode = Opcode::CMSG_GMTICKET_SYSTEMSTATUS;
-        new (&this->CMSG_GMTICKET_SYSTEMSTATUS) vanilla::CMSG_GMTICKET_SYSTEMSTATUS (obj);
+        new (&this->CMSG_GMTICKET_SYSTEMSTATUS) vanilla::CMSG_GMTICKET_SYSTEMSTATUS (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_SPIRIT_HEALER_ACTIVATE&& obj) {
         opcode = Opcode::CMSG_SPIRIT_HEALER_ACTIVATE;
-        new (&this->CMSG_SPIRIT_HEALER_ACTIVATE) vanilla::CMSG_SPIRIT_HEALER_ACTIVATE (obj);
+        new (&this->CMSG_SPIRIT_HEALER_ACTIVATE) vanilla::CMSG_SPIRIT_HEALER_ACTIVATE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_CHAT_IGNORED&& obj) {
         opcode = Opcode::CMSG_CHAT_IGNORED;
-        new (&this->CMSG_CHAT_IGNORED) vanilla::CMSG_CHAT_IGNORED (obj);
+        new (&this->CMSG_CHAT_IGNORED) vanilla::CMSG_CHAT_IGNORED (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_GUILD_RANK&& obj) {
         opcode = Opcode::CMSG_GUILD_RANK;
-        new (&this->CMSG_GUILD_RANK) vanilla::CMSG_GUILD_RANK (obj);
+        new (&this->CMSG_GUILD_RANK) vanilla::CMSG_GUILD_RANK (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_GUILD_ADD_RANK&& obj) {
         opcode = Opcode::CMSG_GUILD_ADD_RANK;
-        new (&this->CMSG_GUILD_ADD_RANK) vanilla::CMSG_GUILD_ADD_RANK (obj);
+        new (&this->CMSG_GUILD_ADD_RANK) vanilla::CMSG_GUILD_ADD_RANK (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_GUILD_DEL_RANK&& obj) {
         opcode = Opcode::CMSG_GUILD_DEL_RANK;
-        new (&this->CMSG_GUILD_DEL_RANK) vanilla::CMSG_GUILD_DEL_RANK (obj);
+        new (&this->CMSG_GUILD_DEL_RANK) vanilla::CMSG_GUILD_DEL_RANK (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_GUILD_SET_PUBLIC_NOTE&& obj) {
         opcode = Opcode::CMSG_GUILD_SET_PUBLIC_NOTE;
-        new (&this->CMSG_GUILD_SET_PUBLIC_NOTE) vanilla::CMSG_GUILD_SET_PUBLIC_NOTE (obj);
+        new (&this->CMSG_GUILD_SET_PUBLIC_NOTE) vanilla::CMSG_GUILD_SET_PUBLIC_NOTE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_GUILD_SET_OFFICER_NOTE&& obj) {
         opcode = Opcode::CMSG_GUILD_SET_OFFICER_NOTE;
-        new (&this->CMSG_GUILD_SET_OFFICER_NOTE) vanilla::CMSG_GUILD_SET_OFFICER_NOTE (obj);
+        new (&this->CMSG_GUILD_SET_OFFICER_NOTE) vanilla::CMSG_GUILD_SET_OFFICER_NOTE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_SEND_MAIL&& obj) {
         opcode = Opcode::CMSG_SEND_MAIL;
-        new (&this->CMSG_SEND_MAIL) vanilla::CMSG_SEND_MAIL (obj);
+        new (&this->CMSG_SEND_MAIL) vanilla::CMSG_SEND_MAIL (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_GET_MAIL_LIST&& obj) {
         opcode = Opcode::CMSG_GET_MAIL_LIST;
-        new (&this->CMSG_GET_MAIL_LIST) vanilla::CMSG_GET_MAIL_LIST (obj);
+        new (&this->CMSG_GET_MAIL_LIST) vanilla::CMSG_GET_MAIL_LIST (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_BATTLEFIELD_LIST&& obj) {
         opcode = Opcode::CMSG_BATTLEFIELD_LIST;
-        new (&this->CMSG_BATTLEFIELD_LIST) vanilla::CMSG_BATTLEFIELD_LIST (obj);
+        new (&this->CMSG_BATTLEFIELD_LIST) vanilla::CMSG_BATTLEFIELD_LIST (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_BATTLEFIELD_JOIN&& obj) {
         opcode = Opcode::CMSG_BATTLEFIELD_JOIN;
-        new (&this->CMSG_BATTLEFIELD_JOIN) vanilla::CMSG_BATTLEFIELD_JOIN (obj);
+        new (&this->CMSG_BATTLEFIELD_JOIN) vanilla::CMSG_BATTLEFIELD_JOIN (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_ITEM_TEXT_QUERY&& obj) {
         opcode = Opcode::CMSG_ITEM_TEXT_QUERY;
-        new (&this->CMSG_ITEM_TEXT_QUERY) vanilla::CMSG_ITEM_TEXT_QUERY (obj);
+        new (&this->CMSG_ITEM_TEXT_QUERY) vanilla::CMSG_ITEM_TEXT_QUERY (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_MAIL_TAKE_MONEY&& obj) {
         opcode = Opcode::CMSG_MAIL_TAKE_MONEY;
-        new (&this->CMSG_MAIL_TAKE_MONEY) vanilla::CMSG_MAIL_TAKE_MONEY (obj);
+        new (&this->CMSG_MAIL_TAKE_MONEY) vanilla::CMSG_MAIL_TAKE_MONEY (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_MAIL_TAKE_ITEM&& obj) {
         opcode = Opcode::CMSG_MAIL_TAKE_ITEM;
-        new (&this->CMSG_MAIL_TAKE_ITEM) vanilla::CMSG_MAIL_TAKE_ITEM (obj);
+        new (&this->CMSG_MAIL_TAKE_ITEM) vanilla::CMSG_MAIL_TAKE_ITEM (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_MAIL_MARK_AS_READ&& obj) {
         opcode = Opcode::CMSG_MAIL_MARK_AS_READ;
-        new (&this->CMSG_MAIL_MARK_AS_READ) vanilla::CMSG_MAIL_MARK_AS_READ (obj);
+        new (&this->CMSG_MAIL_MARK_AS_READ) vanilla::CMSG_MAIL_MARK_AS_READ (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_MAIL_RETURN_TO_SENDER&& obj) {
         opcode = Opcode::CMSG_MAIL_RETURN_TO_SENDER;
-        new (&this->CMSG_MAIL_RETURN_TO_SENDER) vanilla::CMSG_MAIL_RETURN_TO_SENDER (obj);
+        new (&this->CMSG_MAIL_RETURN_TO_SENDER) vanilla::CMSG_MAIL_RETURN_TO_SENDER (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_MAIL_DELETE&& obj) {
         opcode = Opcode::CMSG_MAIL_DELETE;
-        new (&this->CMSG_MAIL_DELETE) vanilla::CMSG_MAIL_DELETE (obj);
+        new (&this->CMSG_MAIL_DELETE) vanilla::CMSG_MAIL_DELETE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_MAIL_CREATE_TEXT_ITEM&& obj) {
         opcode = Opcode::CMSG_MAIL_CREATE_TEXT_ITEM;
-        new (&this->CMSG_MAIL_CREATE_TEXT_ITEM) vanilla::CMSG_MAIL_CREATE_TEXT_ITEM (obj);
+        new (&this->CMSG_MAIL_CREATE_TEXT_ITEM) vanilla::CMSG_MAIL_CREATE_TEXT_ITEM (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_LEARN_TALENT&& obj) {
         opcode = Opcode::CMSG_LEARN_TALENT;
-        new (&this->CMSG_LEARN_TALENT) vanilla::CMSG_LEARN_TALENT (obj);
+        new (&this->CMSG_LEARN_TALENT) vanilla::CMSG_LEARN_TALENT (std::move(obj));
+    }
+    explicit ClientOpcode(vanilla::CMSG_TOGGLE_PVP&& obj) {
+        opcode = Opcode::CMSG_TOGGLE_PVP;
+        new (&this->CMSG_TOGGLE_PVP) vanilla::CMSG_TOGGLE_PVP (std::move(obj));
     }
     explicit ClientOpcode(vanilla::MSG_AUCTION_HELLO_Client&& obj) {
         opcode = Opcode::MSG_AUCTION_HELLO;
-        new (&this->MSG_AUCTION_HELLO) vanilla::MSG_AUCTION_HELLO_Client (obj);
+        new (&this->MSG_AUCTION_HELLO) vanilla::MSG_AUCTION_HELLO_Client (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_AUCTION_SELL_ITEM&& obj) {
         opcode = Opcode::CMSG_AUCTION_SELL_ITEM;
-        new (&this->CMSG_AUCTION_SELL_ITEM) vanilla::CMSG_AUCTION_SELL_ITEM (obj);
+        new (&this->CMSG_AUCTION_SELL_ITEM) vanilla::CMSG_AUCTION_SELL_ITEM (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_AUCTION_REMOVE_ITEM&& obj) {
         opcode = Opcode::CMSG_AUCTION_REMOVE_ITEM;
-        new (&this->CMSG_AUCTION_REMOVE_ITEM) vanilla::CMSG_AUCTION_REMOVE_ITEM (obj);
+        new (&this->CMSG_AUCTION_REMOVE_ITEM) vanilla::CMSG_AUCTION_REMOVE_ITEM (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_AUCTION_LIST_ITEMS&& obj) {
         opcode = Opcode::CMSG_AUCTION_LIST_ITEMS;
-        new (&this->CMSG_AUCTION_LIST_ITEMS) vanilla::CMSG_AUCTION_LIST_ITEMS (obj);
+        new (&this->CMSG_AUCTION_LIST_ITEMS) vanilla::CMSG_AUCTION_LIST_ITEMS (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_AUCTION_LIST_OWNER_ITEMS&& obj) {
         opcode = Opcode::CMSG_AUCTION_LIST_OWNER_ITEMS;
-        new (&this->CMSG_AUCTION_LIST_OWNER_ITEMS) vanilla::CMSG_AUCTION_LIST_OWNER_ITEMS (obj);
+        new (&this->CMSG_AUCTION_LIST_OWNER_ITEMS) vanilla::CMSG_AUCTION_LIST_OWNER_ITEMS (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_AUCTION_PLACE_BID&& obj) {
         opcode = Opcode::CMSG_AUCTION_PLACE_BID;
-        new (&this->CMSG_AUCTION_PLACE_BID) vanilla::CMSG_AUCTION_PLACE_BID (obj);
+        new (&this->CMSG_AUCTION_PLACE_BID) vanilla::CMSG_AUCTION_PLACE_BID (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_AUCTION_LIST_BIDDER_ITEMS&& obj) {
         opcode = Opcode::CMSG_AUCTION_LIST_BIDDER_ITEMS;
-        new (&this->CMSG_AUCTION_LIST_BIDDER_ITEMS) vanilla::CMSG_AUCTION_LIST_BIDDER_ITEMS (obj);
+        new (&this->CMSG_AUCTION_LIST_BIDDER_ITEMS) vanilla::CMSG_AUCTION_LIST_BIDDER_ITEMS (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_SET_AMMO&& obj) {
         opcode = Opcode::CMSG_SET_AMMO;
-        new (&this->CMSG_SET_AMMO) vanilla::CMSG_SET_AMMO (obj);
+        new (&this->CMSG_SET_AMMO) vanilla::CMSG_SET_AMMO (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_SET_ACTIVE_MOVER&& obj) {
         opcode = Opcode::CMSG_SET_ACTIVE_MOVER;
-        new (&this->CMSG_SET_ACTIVE_MOVER) vanilla::CMSG_SET_ACTIVE_MOVER (obj);
+        new (&this->CMSG_SET_ACTIVE_MOVER) vanilla::CMSG_SET_ACTIVE_MOVER (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_PET_CANCEL_AURA&& obj) {
         opcode = Opcode::CMSG_PET_CANCEL_AURA;
-        new (&this->CMSG_PET_CANCEL_AURA) vanilla::CMSG_PET_CANCEL_AURA (obj);
+        new (&this->CMSG_PET_CANCEL_AURA) vanilla::CMSG_PET_CANCEL_AURA (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_CANCEL_AUTO_REPEAT_SPELL&& obj) {
         opcode = Opcode::CMSG_CANCEL_AUTO_REPEAT_SPELL;
-        new (&this->CMSG_CANCEL_AUTO_REPEAT_SPELL) vanilla::CMSG_CANCEL_AUTO_REPEAT_SPELL (obj);
+        new (&this->CMSG_CANCEL_AUTO_REPEAT_SPELL) vanilla::CMSG_CANCEL_AUTO_REPEAT_SPELL (std::move(obj));
     }
     explicit ClientOpcode(vanilla::MSG_LIST_STABLED_PETS_Client&& obj) {
         opcode = Opcode::MSG_LIST_STABLED_PETS;
-        new (&this->MSG_LIST_STABLED_PETS) vanilla::MSG_LIST_STABLED_PETS_Client (obj);
+        new (&this->MSG_LIST_STABLED_PETS) vanilla::MSG_LIST_STABLED_PETS_Client (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_STABLE_PET&& obj) {
         opcode = Opcode::CMSG_STABLE_PET;
-        new (&this->CMSG_STABLE_PET) vanilla::CMSG_STABLE_PET (obj);
+        new (&this->CMSG_STABLE_PET) vanilla::CMSG_STABLE_PET (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_UNSTABLE_PET&& obj) {
         opcode = Opcode::CMSG_UNSTABLE_PET;
-        new (&this->CMSG_UNSTABLE_PET) vanilla::CMSG_UNSTABLE_PET (obj);
+        new (&this->CMSG_UNSTABLE_PET) vanilla::CMSG_UNSTABLE_PET (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_BUY_STABLE_SLOT&& obj) {
         opcode = Opcode::CMSG_BUY_STABLE_SLOT;
-        new (&this->CMSG_BUY_STABLE_SLOT) vanilla::CMSG_BUY_STABLE_SLOT (obj);
+        new (&this->CMSG_BUY_STABLE_SLOT) vanilla::CMSG_BUY_STABLE_SLOT (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_STABLE_SWAP_PET&& obj) {
         opcode = Opcode::CMSG_STABLE_SWAP_PET;
-        new (&this->CMSG_STABLE_SWAP_PET) vanilla::CMSG_STABLE_SWAP_PET (obj);
+        new (&this->CMSG_STABLE_SWAP_PET) vanilla::CMSG_STABLE_SWAP_PET (std::move(obj));
+    }
+    explicit ClientOpcode(vanilla::MSG_QUEST_PUSH_RESULT&& obj) {
+        opcode = Opcode::MSG_QUEST_PUSH_RESULT;
+        new (&this->MSG_QUEST_PUSH_RESULT) vanilla::MSG_QUEST_PUSH_RESULT (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_REQUEST_PET_INFO&& obj) {
         opcode = Opcode::CMSG_REQUEST_PET_INFO;
-        new (&this->CMSG_REQUEST_PET_INFO) vanilla::CMSG_REQUEST_PET_INFO (obj);
+        new (&this->CMSG_REQUEST_PET_INFO) vanilla::CMSG_REQUEST_PET_INFO (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_FAR_SIGHT&& obj) {
         opcode = Opcode::CMSG_FAR_SIGHT;
-        new (&this->CMSG_FAR_SIGHT) vanilla::CMSG_FAR_SIGHT (obj);
+        new (&this->CMSG_FAR_SIGHT) vanilla::CMSG_FAR_SIGHT (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_GROUP_CHANGE_SUB_GROUP&& obj) {
         opcode = Opcode::CMSG_GROUP_CHANGE_SUB_GROUP;
-        new (&this->CMSG_GROUP_CHANGE_SUB_GROUP) vanilla::CMSG_GROUP_CHANGE_SUB_GROUP (obj);
+        new (&this->CMSG_GROUP_CHANGE_SUB_GROUP) vanilla::CMSG_GROUP_CHANGE_SUB_GROUP (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_REQUEST_PARTY_MEMBER_STATS&& obj) {
         opcode = Opcode::CMSG_REQUEST_PARTY_MEMBER_STATS;
-        new (&this->CMSG_REQUEST_PARTY_MEMBER_STATS) vanilla::CMSG_REQUEST_PARTY_MEMBER_STATS (obj);
+        new (&this->CMSG_REQUEST_PARTY_MEMBER_STATS) vanilla::CMSG_REQUEST_PARTY_MEMBER_STATS (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_GROUP_SWAP_SUB_GROUP&& obj) {
         opcode = Opcode::CMSG_GROUP_SWAP_SUB_GROUP;
-        new (&this->CMSG_GROUP_SWAP_SUB_GROUP) vanilla::CMSG_GROUP_SWAP_SUB_GROUP (obj);
+        new (&this->CMSG_GROUP_SWAP_SUB_GROUP) vanilla::CMSG_GROUP_SWAP_SUB_GROUP (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_AUTOSTORE_BANK_ITEM&& obj) {
         opcode = Opcode::CMSG_AUTOSTORE_BANK_ITEM;
-        new (&this->CMSG_AUTOSTORE_BANK_ITEM) vanilla::CMSG_AUTOSTORE_BANK_ITEM (obj);
+        new (&this->CMSG_AUTOSTORE_BANK_ITEM) vanilla::CMSG_AUTOSTORE_BANK_ITEM (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_AUTOBANK_ITEM&& obj) {
         opcode = Opcode::CMSG_AUTOBANK_ITEM;
-        new (&this->CMSG_AUTOBANK_ITEM) vanilla::CMSG_AUTOBANK_ITEM (obj);
+        new (&this->CMSG_AUTOBANK_ITEM) vanilla::CMSG_AUTOBANK_ITEM (std::move(obj));
     }
     explicit ClientOpcode(vanilla::MSG_QUERY_NEXT_MAIL_TIME_Client&& obj) {
         opcode = Opcode::MSG_QUERY_NEXT_MAIL_TIME;
-        new (&this->MSG_QUERY_NEXT_MAIL_TIME) vanilla::MSG_QUERY_NEXT_MAIL_TIME_Client (obj);
+        new (&this->MSG_QUERY_NEXT_MAIL_TIME) vanilla::MSG_QUERY_NEXT_MAIL_TIME_Client (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_GROUP_RAID_CONVERT&& obj) {
         opcode = Opcode::CMSG_GROUP_RAID_CONVERT;
-        new (&this->CMSG_GROUP_RAID_CONVERT) vanilla::CMSG_GROUP_RAID_CONVERT (obj);
+        new (&this->CMSG_GROUP_RAID_CONVERT) vanilla::CMSG_GROUP_RAID_CONVERT (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_GROUP_ASSISTANT_LEADER&& obj) {
         opcode = Opcode::CMSG_GROUP_ASSISTANT_LEADER;
-        new (&this->CMSG_GROUP_ASSISTANT_LEADER) vanilla::CMSG_GROUP_ASSISTANT_LEADER (obj);
+        new (&this->CMSG_GROUP_ASSISTANT_LEADER) vanilla::CMSG_GROUP_ASSISTANT_LEADER (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_BUYBACK_ITEM&& obj) {
         opcode = Opcode::CMSG_BUYBACK_ITEM;
-        new (&this->CMSG_BUYBACK_ITEM) vanilla::CMSG_BUYBACK_ITEM (obj);
+        new (&this->CMSG_BUYBACK_ITEM) vanilla::CMSG_BUYBACK_ITEM (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_MEETINGSTONE_JOIN&& obj) {
         opcode = Opcode::CMSG_MEETINGSTONE_JOIN;
-        new (&this->CMSG_MEETINGSTONE_JOIN) vanilla::CMSG_MEETINGSTONE_JOIN (obj);
+        new (&this->CMSG_MEETINGSTONE_JOIN) vanilla::CMSG_MEETINGSTONE_JOIN (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_MEETINGSTONE_LEAVE&& obj) {
         opcode = Opcode::CMSG_MEETINGSTONE_LEAVE;
-        new (&this->CMSG_MEETINGSTONE_LEAVE) vanilla::CMSG_MEETINGSTONE_LEAVE (obj);
+        new (&this->CMSG_MEETINGSTONE_LEAVE) vanilla::CMSG_MEETINGSTONE_LEAVE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_MEETINGSTONE_INFO&& obj) {
         opcode = Opcode::CMSG_MEETINGSTONE_INFO;
-        new (&this->CMSG_MEETINGSTONE_INFO) vanilla::CMSG_MEETINGSTONE_INFO (obj);
+        new (&this->CMSG_MEETINGSTONE_INFO) vanilla::CMSG_MEETINGSTONE_INFO (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_CANCEL_GROWTH_AURA&& obj) {
         opcode = Opcode::CMSG_CANCEL_GROWTH_AURA;
-        new (&this->CMSG_CANCEL_GROWTH_AURA) vanilla::CMSG_CANCEL_GROWTH_AURA (obj);
+        new (&this->CMSG_CANCEL_GROWTH_AURA) vanilla::CMSG_CANCEL_GROWTH_AURA (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_LOOT_ROLL&& obj) {
         opcode = Opcode::CMSG_LOOT_ROLL;
-        new (&this->CMSG_LOOT_ROLL) vanilla::CMSG_LOOT_ROLL (obj);
+        new (&this->CMSG_LOOT_ROLL) vanilla::CMSG_LOOT_ROLL (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_LOOT_MASTER_GIVE&& obj) {
         opcode = Opcode::CMSG_LOOT_MASTER_GIVE;
-        new (&this->CMSG_LOOT_MASTER_GIVE) vanilla::CMSG_LOOT_MASTER_GIVE (obj);
+        new (&this->CMSG_LOOT_MASTER_GIVE) vanilla::CMSG_LOOT_MASTER_GIVE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_REPAIR_ITEM&& obj) {
         opcode = Opcode::CMSG_REPAIR_ITEM;
-        new (&this->CMSG_REPAIR_ITEM) vanilla::CMSG_REPAIR_ITEM (obj);
+        new (&this->CMSG_REPAIR_ITEM) vanilla::CMSG_REPAIR_ITEM (std::move(obj));
     }
     explicit ClientOpcode(vanilla::MSG_TALENT_WIPE_CONFIRM_Client&& obj) {
         opcode = Opcode::MSG_TALENT_WIPE_CONFIRM;
-        new (&this->MSG_TALENT_WIPE_CONFIRM) vanilla::MSG_TALENT_WIPE_CONFIRM_Client (obj);
+        new (&this->MSG_TALENT_WIPE_CONFIRM) vanilla::MSG_TALENT_WIPE_CONFIRM_Client (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_SUMMON_RESPONSE&& obj) {
         opcode = Opcode::CMSG_SUMMON_RESPONSE;
-        new (&this->CMSG_SUMMON_RESPONSE) vanilla::CMSG_SUMMON_RESPONSE (obj);
+        new (&this->CMSG_SUMMON_RESPONSE) vanilla::CMSG_SUMMON_RESPONSE (std::move(obj));
+    }
+    explicit ClientOpcode(vanilla::MSG_MOVE_WATER_WALK&& obj) {
+        opcode = Opcode::MSG_MOVE_WATER_WALK;
+        new (&this->MSG_MOVE_WATER_WALK) vanilla::MSG_MOVE_WATER_WALK (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_SELF_RES&& obj) {
         opcode = Opcode::CMSG_SELF_RES;
-        new (&this->CMSG_SELF_RES) vanilla::CMSG_SELF_RES (obj);
+        new (&this->CMSG_SELF_RES) vanilla::CMSG_SELF_RES (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_TOGGLE_HELM&& obj) {
         opcode = Opcode::CMSG_TOGGLE_HELM;
-        new (&this->CMSG_TOGGLE_HELM) vanilla::CMSG_TOGGLE_HELM (obj);
+        new (&this->CMSG_TOGGLE_HELM) vanilla::CMSG_TOGGLE_HELM (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_TOGGLE_CLOAK&& obj) {
         opcode = Opcode::CMSG_TOGGLE_CLOAK;
-        new (&this->CMSG_TOGGLE_CLOAK) vanilla::CMSG_TOGGLE_CLOAK (obj);
+        new (&this->CMSG_TOGGLE_CLOAK) vanilla::CMSG_TOGGLE_CLOAK (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_SET_ACTIONBAR_TOGGLES&& obj) {
         opcode = Opcode::CMSG_SET_ACTIONBAR_TOGGLES;
-        new (&this->CMSG_SET_ACTIONBAR_TOGGLES) vanilla::CMSG_SET_ACTIONBAR_TOGGLES (obj);
+        new (&this->CMSG_SET_ACTIONBAR_TOGGLES) vanilla::CMSG_SET_ACTIONBAR_TOGGLES (std::move(obj));
+    }
+    explicit ClientOpcode(vanilla::MSG_PETITION_RENAME&& obj) {
+        opcode = Opcode::MSG_PETITION_RENAME;
+        new (&this->MSG_PETITION_RENAME) vanilla::MSG_PETITION_RENAME (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_ITEM_NAME_QUERY&& obj) {
         opcode = Opcode::CMSG_ITEM_NAME_QUERY;
-        new (&this->CMSG_ITEM_NAME_QUERY) vanilla::CMSG_ITEM_NAME_QUERY (obj);
+        new (&this->CMSG_ITEM_NAME_QUERY) vanilla::CMSG_ITEM_NAME_QUERY (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_CHAR_RENAME&& obj) {
         opcode = Opcode::CMSG_CHAR_RENAME;
-        new (&this->CMSG_CHAR_RENAME) vanilla::CMSG_CHAR_RENAME (obj);
+        new (&this->CMSG_CHAR_RENAME) vanilla::CMSG_CHAR_RENAME (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_MOVE_SPLINE_DONE&& obj) {
         opcode = Opcode::CMSG_MOVE_SPLINE_DONE;
-        new (&this->CMSG_MOVE_SPLINE_DONE) vanilla::CMSG_MOVE_SPLINE_DONE (obj);
+        new (&this->CMSG_MOVE_SPLINE_DONE) vanilla::CMSG_MOVE_SPLINE_DONE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_MOVE_FALL_RESET&& obj) {
         opcode = Opcode::CMSG_MOVE_FALL_RESET;
-        new (&this->CMSG_MOVE_FALL_RESET) vanilla::CMSG_MOVE_FALL_RESET (obj);
+        new (&this->CMSG_MOVE_FALL_RESET) vanilla::CMSG_MOVE_FALL_RESET (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_REQUEST_RAID_INFO&& obj) {
         opcode = Opcode::CMSG_REQUEST_RAID_INFO;
-        new (&this->CMSG_REQUEST_RAID_INFO) vanilla::CMSG_REQUEST_RAID_INFO (obj);
+        new (&this->CMSG_REQUEST_RAID_INFO) vanilla::CMSG_REQUEST_RAID_INFO (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_MOVE_TIME_SKIPPED&& obj) {
         opcode = Opcode::CMSG_MOVE_TIME_SKIPPED;
-        new (&this->CMSG_MOVE_TIME_SKIPPED) vanilla::CMSG_MOVE_TIME_SKIPPED (obj);
+        new (&this->CMSG_MOVE_TIME_SKIPPED) vanilla::CMSG_MOVE_TIME_SKIPPED (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_MOVE_FEATHER_FALL_ACK&& obj) {
         opcode = Opcode::CMSG_MOVE_FEATHER_FALL_ACK;
-        new (&this->CMSG_MOVE_FEATHER_FALL_ACK) vanilla::CMSG_MOVE_FEATHER_FALL_ACK (obj);
+        new (&this->CMSG_MOVE_FEATHER_FALL_ACK) vanilla::CMSG_MOVE_FEATHER_FALL_ACK (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_MOVE_WATER_WALK_ACK&& obj) {
         opcode = Opcode::CMSG_MOVE_WATER_WALK_ACK;
-        new (&this->CMSG_MOVE_WATER_WALK_ACK) vanilla::CMSG_MOVE_WATER_WALK_ACK (obj);
+        new (&this->CMSG_MOVE_WATER_WALK_ACK) vanilla::CMSG_MOVE_WATER_WALK_ACK (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_MOVE_NOT_ACTIVE_MOVER&& obj) {
         opcode = Opcode::CMSG_MOVE_NOT_ACTIVE_MOVER;
-        new (&this->CMSG_MOVE_NOT_ACTIVE_MOVER) vanilla::CMSG_MOVE_NOT_ACTIVE_MOVER (obj);
+        new (&this->CMSG_MOVE_NOT_ACTIVE_MOVER) vanilla::CMSG_MOVE_NOT_ACTIVE_MOVER (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_BATTLEFIELD_STATUS&& obj) {
         opcode = Opcode::CMSG_BATTLEFIELD_STATUS;
-        new (&this->CMSG_BATTLEFIELD_STATUS) vanilla::CMSG_BATTLEFIELD_STATUS (obj);
+        new (&this->CMSG_BATTLEFIELD_STATUS) vanilla::CMSG_BATTLEFIELD_STATUS (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_BATTLEFIELD_PORT&& obj) {
         opcode = Opcode::CMSG_BATTLEFIELD_PORT;
-        new (&this->CMSG_BATTLEFIELD_PORT) vanilla::CMSG_BATTLEFIELD_PORT (obj);
+        new (&this->CMSG_BATTLEFIELD_PORT) vanilla::CMSG_BATTLEFIELD_PORT (std::move(obj));
     }
     explicit ClientOpcode(vanilla::MSG_INSPECT_HONOR_STATS_Client&& obj) {
         opcode = Opcode::MSG_INSPECT_HONOR_STATS;
-        new (&this->MSG_INSPECT_HONOR_STATS) vanilla::MSG_INSPECT_HONOR_STATS_Client (obj);
+        new (&this->MSG_INSPECT_HONOR_STATS) vanilla::MSG_INSPECT_HONOR_STATS_Client (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_BATTLEMASTER_HELLO&& obj) {
         opcode = Opcode::CMSG_BATTLEMASTER_HELLO;
-        new (&this->CMSG_BATTLEMASTER_HELLO) vanilla::CMSG_BATTLEMASTER_HELLO (obj);
+        new (&this->CMSG_BATTLEMASTER_HELLO) vanilla::CMSG_BATTLEMASTER_HELLO (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_FORCE_WALK_SPEED_CHANGE_ACK&& obj) {
         opcode = Opcode::CMSG_FORCE_WALK_SPEED_CHANGE_ACK;
-        new (&this->CMSG_FORCE_WALK_SPEED_CHANGE_ACK) vanilla::CMSG_FORCE_WALK_SPEED_CHANGE_ACK (obj);
+        new (&this->CMSG_FORCE_WALK_SPEED_CHANGE_ACK) vanilla::CMSG_FORCE_WALK_SPEED_CHANGE_ACK (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK&& obj) {
         opcode = Opcode::CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK;
-        new (&this->CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK) vanilla::CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK (obj);
+        new (&this->CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK) vanilla::CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_FORCE_TURN_RATE_CHANGE_ACK&& obj) {
         opcode = Opcode::CMSG_FORCE_TURN_RATE_CHANGE_ACK;
-        new (&this->CMSG_FORCE_TURN_RATE_CHANGE_ACK) vanilla::CMSG_FORCE_TURN_RATE_CHANGE_ACK (obj);
+        new (&this->CMSG_FORCE_TURN_RATE_CHANGE_ACK) vanilla::CMSG_FORCE_TURN_RATE_CHANGE_ACK (std::move(obj));
     }
     explicit ClientOpcode(vanilla::MSG_PVP_LOG_DATA_Client&& obj) {
         opcode = Opcode::MSG_PVP_LOG_DATA;
-        new (&this->MSG_PVP_LOG_DATA) vanilla::MSG_PVP_LOG_DATA_Client (obj);
+        new (&this->MSG_PVP_LOG_DATA) vanilla::MSG_PVP_LOG_DATA_Client (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_LEAVE_BATTLEFIELD&& obj) {
         opcode = Opcode::CMSG_LEAVE_BATTLEFIELD;
-        new (&this->CMSG_LEAVE_BATTLEFIELD) vanilla::CMSG_LEAVE_BATTLEFIELD (obj);
+        new (&this->CMSG_LEAVE_BATTLEFIELD) vanilla::CMSG_LEAVE_BATTLEFIELD (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_AREA_SPIRIT_HEALER_QUERY&& obj) {
         opcode = Opcode::CMSG_AREA_SPIRIT_HEALER_QUERY;
-        new (&this->CMSG_AREA_SPIRIT_HEALER_QUERY) vanilla::CMSG_AREA_SPIRIT_HEALER_QUERY (obj);
+        new (&this->CMSG_AREA_SPIRIT_HEALER_QUERY) vanilla::CMSG_AREA_SPIRIT_HEALER_QUERY (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_AREA_SPIRIT_HEALER_QUEUE&& obj) {
         opcode = Opcode::CMSG_AREA_SPIRIT_HEALER_QUEUE;
-        new (&this->CMSG_AREA_SPIRIT_HEALER_QUEUE) vanilla::CMSG_AREA_SPIRIT_HEALER_QUEUE (obj);
+        new (&this->CMSG_AREA_SPIRIT_HEALER_QUEUE) vanilla::CMSG_AREA_SPIRIT_HEALER_QUEUE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_WARDEN_DATA&& obj) {
         opcode = Opcode::CMSG_WARDEN_DATA;
-        new (&this->CMSG_WARDEN_DATA) vanilla::CMSG_WARDEN_DATA (obj);
+        new (&this->CMSG_WARDEN_DATA) vanilla::CMSG_WARDEN_DATA (std::move(obj));
     }
     explicit ClientOpcode(vanilla::MSG_BATTLEGROUND_PLAYER_POSITIONS_Client&& obj) {
         opcode = Opcode::MSG_BATTLEGROUND_PLAYER_POSITIONS;
-        new (&this->MSG_BATTLEGROUND_PLAYER_POSITIONS) vanilla::MSG_BATTLEGROUND_PLAYER_POSITIONS_Client (obj);
+        new (&this->MSG_BATTLEGROUND_PLAYER_POSITIONS) vanilla::MSG_BATTLEGROUND_PLAYER_POSITIONS_Client (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_PET_STOP_ATTACK&& obj) {
         opcode = Opcode::CMSG_PET_STOP_ATTACK;
-        new (&this->CMSG_PET_STOP_ATTACK) vanilla::CMSG_PET_STOP_ATTACK (obj);
+        new (&this->CMSG_PET_STOP_ATTACK) vanilla::CMSG_PET_STOP_ATTACK (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_BATTLEMASTER_JOIN&& obj) {
         opcode = Opcode::CMSG_BATTLEMASTER_JOIN;
-        new (&this->CMSG_BATTLEMASTER_JOIN) vanilla::CMSG_BATTLEMASTER_JOIN (obj);
+        new (&this->CMSG_BATTLEMASTER_JOIN) vanilla::CMSG_BATTLEMASTER_JOIN (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_PET_UNLEARN&& obj) {
         opcode = Opcode::CMSG_PET_UNLEARN;
-        new (&this->CMSG_PET_UNLEARN) vanilla::CMSG_PET_UNLEARN (obj);
+        new (&this->CMSG_PET_UNLEARN) vanilla::CMSG_PET_UNLEARN (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_PET_SPELL_AUTOCAST&& obj) {
         opcode = Opcode::CMSG_PET_SPELL_AUTOCAST;
-        new (&this->CMSG_PET_SPELL_AUTOCAST) vanilla::CMSG_PET_SPELL_AUTOCAST (obj);
+        new (&this->CMSG_PET_SPELL_AUTOCAST) vanilla::CMSG_PET_SPELL_AUTOCAST (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_GUILD_INFO_TEXT&& obj) {
         opcode = Opcode::CMSG_GUILD_INFO_TEXT;
-        new (&this->CMSG_GUILD_INFO_TEXT) vanilla::CMSG_GUILD_INFO_TEXT (obj);
+        new (&this->CMSG_GUILD_INFO_TEXT) vanilla::CMSG_GUILD_INFO_TEXT (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_ACTIVATETAXIEXPRESS&& obj) {
         opcode = Opcode::CMSG_ACTIVATETAXIEXPRESS;
-        new (&this->CMSG_ACTIVATETAXIEXPRESS) vanilla::CMSG_ACTIVATETAXIEXPRESS (obj);
+        new (&this->CMSG_ACTIVATETAXIEXPRESS) vanilla::CMSG_ACTIVATETAXIEXPRESS (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_SET_FACTION_INACTIVE&& obj) {
         opcode = Opcode::CMSG_SET_FACTION_INACTIVE;
-        new (&this->CMSG_SET_FACTION_INACTIVE) vanilla::CMSG_SET_FACTION_INACTIVE (obj);
+        new (&this->CMSG_SET_FACTION_INACTIVE) vanilla::CMSG_SET_FACTION_INACTIVE (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_SET_WATCHED_FACTION&& obj) {
         opcode = Opcode::CMSG_SET_WATCHED_FACTION;
-        new (&this->CMSG_SET_WATCHED_FACTION) vanilla::CMSG_SET_WATCHED_FACTION (obj);
+        new (&this->CMSG_SET_WATCHED_FACTION) vanilla::CMSG_SET_WATCHED_FACTION (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_RESET_INSTANCES&& obj) {
         opcode = Opcode::CMSG_RESET_INSTANCES;
-        new (&this->CMSG_RESET_INSTANCES) vanilla::CMSG_RESET_INSTANCES (obj);
+        new (&this->CMSG_RESET_INSTANCES) vanilla::CMSG_RESET_INSTANCES (std::move(obj));
     }
     explicit ClientOpcode(vanilla::MSG_RAID_TARGET_UPDATE_Client&& obj) {
         opcode = Opcode::MSG_RAID_TARGET_UPDATE;
-        new (&this->MSG_RAID_TARGET_UPDATE) vanilla::MSG_RAID_TARGET_UPDATE_Client (obj);
+        new (&this->MSG_RAID_TARGET_UPDATE) vanilla::MSG_RAID_TARGET_UPDATE_Client (std::move(obj));
+    }
+    explicit ClientOpcode(vanilla::MSG_RAID_READY_CHECK_Client&& obj) {
+        opcode = Opcode::MSG_RAID_READY_CHECK;
+        new (&this->MSG_RAID_READY_CHECK) vanilla::MSG_RAID_READY_CHECK_Client (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_GMSURVEY_SUBMIT&& obj) {
         opcode = Opcode::CMSG_GMSURVEY_SUBMIT;
-        new (&this->CMSG_GMSURVEY_SUBMIT) vanilla::CMSG_GMSURVEY_SUBMIT (obj);
+        new (&this->CMSG_GMSURVEY_SUBMIT) vanilla::CMSG_GMSURVEY_SUBMIT (std::move(obj));
     }
-};
-std::vector<unsigned char> write_opcode(const ClientOpcode& opcode);
 
-ClientOpcode read_client_opcode(Reader& reader);
+    template<typename T>
+    // NOLINTNEXTLINE
+    T& get(); // All possible types have been specialized
+
+    template<typename T>
+    // NOLINTNEXTLINE
+    T* get_if(); // All possible types have been specialized
+};
+
+template<>
+vanilla::CMSG_BOOTME* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_BOOTME& ClientOpcode::get();
+template<>
+vanilla::CMSG_DBLOOKUP* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_DBLOOKUP& ClientOpcode::get();
+template<>
+vanilla::CMSG_WORLD_TELEPORT* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_WORLD_TELEPORT& ClientOpcode::get();
+template<>
+vanilla::CMSG_TELEPORT_TO_UNIT* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_TELEPORT_TO_UNIT& ClientOpcode::get();
+template<>
+vanilla::CMSG_CHAR_CREATE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_CHAR_CREATE& ClientOpcode::get();
+template<>
+vanilla::CMSG_CHAR_ENUM* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_CHAR_ENUM& ClientOpcode::get();
+template<>
+vanilla::CMSG_CHAR_DELETE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_CHAR_DELETE& ClientOpcode::get();
+template<>
+vanilla::CMSG_PLAYER_LOGIN* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_PLAYER_LOGIN& ClientOpcode::get();
+template<>
+vanilla::CMSG_PLAYER_LOGOUT* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_PLAYER_LOGOUT& ClientOpcode::get();
+template<>
+vanilla::CMSG_LOGOUT_REQUEST* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_LOGOUT_REQUEST& ClientOpcode::get();
+template<>
+vanilla::CMSG_LOGOUT_CANCEL* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_LOGOUT_CANCEL& ClientOpcode::get();
+template<>
+vanilla::CMSG_NAME_QUERY* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_NAME_QUERY& ClientOpcode::get();
+template<>
+vanilla::CMSG_PET_NAME_QUERY* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_PET_NAME_QUERY& ClientOpcode::get();
+template<>
+vanilla::CMSG_GUILD_QUERY* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GUILD_QUERY& ClientOpcode::get();
+template<>
+vanilla::CMSG_ITEM_QUERY_SINGLE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_ITEM_QUERY_SINGLE& ClientOpcode::get();
+template<>
+vanilla::CMSG_PAGE_TEXT_QUERY* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_PAGE_TEXT_QUERY& ClientOpcode::get();
+template<>
+vanilla::CMSG_QUEST_QUERY* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_QUEST_QUERY& ClientOpcode::get();
+template<>
+vanilla::CMSG_GAMEOBJECT_QUERY* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GAMEOBJECT_QUERY& ClientOpcode::get();
+template<>
+vanilla::CMSG_CREATURE_QUERY* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_CREATURE_QUERY& ClientOpcode::get();
+template<>
+vanilla::CMSG_WHO* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_WHO& ClientOpcode::get();
+template<>
+vanilla::CMSG_WHOIS* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_WHOIS& ClientOpcode::get();
+template<>
+vanilla::CMSG_FRIEND_LIST* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_FRIEND_LIST& ClientOpcode::get();
+template<>
+vanilla::CMSG_ADD_FRIEND* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_ADD_FRIEND& ClientOpcode::get();
+template<>
+vanilla::CMSG_DEL_FRIEND* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_DEL_FRIEND& ClientOpcode::get();
+template<>
+vanilla::CMSG_ADD_IGNORE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_ADD_IGNORE& ClientOpcode::get();
+template<>
+vanilla::CMSG_DEL_IGNORE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_DEL_IGNORE& ClientOpcode::get();
+template<>
+vanilla::CMSG_GROUP_INVITE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GROUP_INVITE& ClientOpcode::get();
+template<>
+vanilla::CMSG_GROUP_ACCEPT* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GROUP_ACCEPT& ClientOpcode::get();
+template<>
+vanilla::CMSG_GROUP_DECLINE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GROUP_DECLINE& ClientOpcode::get();
+template<>
+vanilla::CMSG_GROUP_UNINVITE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GROUP_UNINVITE& ClientOpcode::get();
+template<>
+vanilla::CMSG_GROUP_UNINVITE_GUID* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GROUP_UNINVITE_GUID& ClientOpcode::get();
+template<>
+vanilla::CMSG_GROUP_SET_LEADER* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GROUP_SET_LEADER& ClientOpcode::get();
+template<>
+vanilla::CMSG_LOOT_METHOD* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_LOOT_METHOD& ClientOpcode::get();
+template<>
+vanilla::CMSG_GROUP_DISBAND* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GROUP_DISBAND& ClientOpcode::get();
+template<>
+vanilla::CMSG_GUILD_CREATE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GUILD_CREATE& ClientOpcode::get();
+template<>
+vanilla::CMSG_GUILD_INVITE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GUILD_INVITE& ClientOpcode::get();
+template<>
+vanilla::CMSG_GUILD_ACCEPT* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GUILD_ACCEPT& ClientOpcode::get();
+template<>
+vanilla::CMSG_GUILD_DECLINE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GUILD_DECLINE& ClientOpcode::get();
+template<>
+vanilla::CMSG_GUILD_INFO* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GUILD_INFO& ClientOpcode::get();
+template<>
+vanilla::CMSG_GUILD_ROSTER* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GUILD_ROSTER& ClientOpcode::get();
+template<>
+vanilla::CMSG_GUILD_PROMOTE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GUILD_PROMOTE& ClientOpcode::get();
+template<>
+vanilla::CMSG_GUILD_DEMOTE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GUILD_DEMOTE& ClientOpcode::get();
+template<>
+vanilla::CMSG_GUILD_LEAVE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GUILD_LEAVE& ClientOpcode::get();
+template<>
+vanilla::CMSG_GUILD_REMOVE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GUILD_REMOVE& ClientOpcode::get();
+template<>
+vanilla::CMSG_GUILD_DISBAND* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GUILD_DISBAND& ClientOpcode::get();
+template<>
+vanilla::CMSG_GUILD_LEADER* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GUILD_LEADER& ClientOpcode::get();
+template<>
+vanilla::CMSG_GUILD_MOTD* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GUILD_MOTD& ClientOpcode::get();
+template<>
+vanilla::CMSG_MESSAGECHAT* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_MESSAGECHAT& ClientOpcode::get();
+template<>
+vanilla::CMSG_JOIN_CHANNEL* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_JOIN_CHANNEL& ClientOpcode::get();
+template<>
+vanilla::CMSG_LEAVE_CHANNEL* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_LEAVE_CHANNEL& ClientOpcode::get();
+template<>
+vanilla::CMSG_CHANNEL_LIST* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_CHANNEL_LIST& ClientOpcode::get();
+template<>
+vanilla::CMSG_CHANNEL_PASSWORD* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_CHANNEL_PASSWORD& ClientOpcode::get();
+template<>
+vanilla::CMSG_CHANNEL_SET_OWNER* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_CHANNEL_SET_OWNER& ClientOpcode::get();
+template<>
+vanilla::CMSG_CHANNEL_OWNER* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_CHANNEL_OWNER& ClientOpcode::get();
+template<>
+vanilla::CMSG_CHANNEL_MODERATOR* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_CHANNEL_MODERATOR& ClientOpcode::get();
+template<>
+vanilla::CMSG_CHANNEL_UNMODERATOR* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_CHANNEL_UNMODERATOR& ClientOpcode::get();
+template<>
+vanilla::CMSG_CHANNEL_MUTE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_CHANNEL_MUTE& ClientOpcode::get();
+template<>
+vanilla::CMSG_CHANNEL_UNMUTE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_CHANNEL_UNMUTE& ClientOpcode::get();
+template<>
+vanilla::CMSG_CHANNEL_INVITE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_CHANNEL_INVITE& ClientOpcode::get();
+template<>
+vanilla::CMSG_CHANNEL_KICK* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_CHANNEL_KICK& ClientOpcode::get();
+template<>
+vanilla::CMSG_CHANNEL_BAN* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_CHANNEL_BAN& ClientOpcode::get();
+template<>
+vanilla::CMSG_CHANNEL_UNBAN* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_CHANNEL_UNBAN& ClientOpcode::get();
+template<>
+vanilla::CMSG_CHANNEL_ANNOUNCEMENTS* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_CHANNEL_ANNOUNCEMENTS& ClientOpcode::get();
+template<>
+vanilla::CMSG_CHANNEL_MODERATE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_CHANNEL_MODERATE& ClientOpcode::get();
+template<>
+vanilla::CMSG_USE_ITEM* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_USE_ITEM& ClientOpcode::get();
+template<>
+vanilla::CMSG_OPEN_ITEM* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_OPEN_ITEM& ClientOpcode::get();
+template<>
+vanilla::CMSG_READ_ITEM* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_READ_ITEM& ClientOpcode::get();
+template<>
+vanilla::CMSG_GAMEOBJ_USE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GAMEOBJ_USE& ClientOpcode::get();
+template<>
+vanilla::CMSG_AREATRIGGER* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_AREATRIGGER& ClientOpcode::get();
+template<>
+vanilla::MSG_MOVE_START_FORWARD_Client* ClientOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_START_FORWARD_Client& ClientOpcode::get();
+template<>
+vanilla::MSG_MOVE_START_BACKWARD_Client* ClientOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_START_BACKWARD_Client& ClientOpcode::get();
+template<>
+vanilla::MSG_MOVE_STOP_Client* ClientOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_STOP_Client& ClientOpcode::get();
+template<>
+vanilla::MSG_MOVE_START_STRAFE_LEFT_Client* ClientOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_START_STRAFE_LEFT_Client& ClientOpcode::get();
+template<>
+vanilla::MSG_MOVE_START_STRAFE_RIGHT_Client* ClientOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_START_STRAFE_RIGHT_Client& ClientOpcode::get();
+template<>
+vanilla::MSG_MOVE_STOP_STRAFE_Client* ClientOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_STOP_STRAFE_Client& ClientOpcode::get();
+template<>
+vanilla::MSG_MOVE_JUMP_Client* ClientOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_JUMP_Client& ClientOpcode::get();
+template<>
+vanilla::MSG_MOVE_START_TURN_LEFT_Client* ClientOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_START_TURN_LEFT_Client& ClientOpcode::get();
+template<>
+vanilla::MSG_MOVE_START_TURN_RIGHT_Client* ClientOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_START_TURN_RIGHT_Client& ClientOpcode::get();
+template<>
+vanilla::MSG_MOVE_STOP_TURN_Client* ClientOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_STOP_TURN_Client& ClientOpcode::get();
+template<>
+vanilla::MSG_MOVE_START_PITCH_UP_Client* ClientOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_START_PITCH_UP_Client& ClientOpcode::get();
+template<>
+vanilla::MSG_MOVE_START_PITCH_DOWN_Client* ClientOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_START_PITCH_DOWN_Client& ClientOpcode::get();
+template<>
+vanilla::MSG_MOVE_STOP_PITCH_Client* ClientOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_STOP_PITCH_Client& ClientOpcode::get();
+template<>
+vanilla::MSG_MOVE_SET_RUN_MODE_Client* ClientOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_SET_RUN_MODE_Client& ClientOpcode::get();
+template<>
+vanilla::MSG_MOVE_SET_WALK_MODE_Client* ClientOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_SET_WALK_MODE_Client& ClientOpcode::get();
+template<>
+vanilla::MSG_MOVE_TELEPORT_ACK_Client* ClientOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_TELEPORT_ACK_Client& ClientOpcode::get();
+template<>
+vanilla::MSG_MOVE_FALL_LAND_Client* ClientOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_FALL_LAND_Client& ClientOpcode::get();
+template<>
+vanilla::MSG_MOVE_START_SWIM_Client* ClientOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_START_SWIM_Client& ClientOpcode::get();
+template<>
+vanilla::MSG_MOVE_STOP_SWIM_Client* ClientOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_STOP_SWIM_Client& ClientOpcode::get();
+template<>
+vanilla::MSG_MOVE_SET_FACING_Client* ClientOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_SET_FACING_Client& ClientOpcode::get();
+template<>
+vanilla::MSG_MOVE_SET_PITCH_Client* ClientOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_SET_PITCH_Client& ClientOpcode::get();
+template<>
+vanilla::MSG_MOVE_WORLDPORT_ACK* ClientOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_WORLDPORT_ACK& ClientOpcode::get();
+template<>
+vanilla::CMSG_MOVE_SET_RAW_POSITION* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_MOVE_SET_RAW_POSITION& ClientOpcode::get();
+template<>
+vanilla::CMSG_FORCE_RUN_SPEED_CHANGE_ACK* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_FORCE_RUN_SPEED_CHANGE_ACK& ClientOpcode::get();
+template<>
+vanilla::CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK& ClientOpcode::get();
+template<>
+vanilla::CMSG_FORCE_SWIM_SPEED_CHANGE_ACK* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_FORCE_SWIM_SPEED_CHANGE_ACK& ClientOpcode::get();
+template<>
+vanilla::CMSG_FORCE_MOVE_ROOT_ACK* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_FORCE_MOVE_ROOT_ACK& ClientOpcode::get();
+template<>
+vanilla::CMSG_FORCE_MOVE_UNROOT_ACK* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_FORCE_MOVE_UNROOT_ACK& ClientOpcode::get();
+template<>
+vanilla::MSG_MOVE_HEARTBEAT_Client* ClientOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_HEARTBEAT_Client& ClientOpcode::get();
+template<>
+vanilla::CMSG_MOVE_KNOCK_BACK_ACK* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_MOVE_KNOCK_BACK_ACK& ClientOpcode::get();
+template<>
+vanilla::CMSG_MOVE_HOVER_ACK* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_MOVE_HOVER_ACK& ClientOpcode::get();
+template<>
+vanilla::CMSG_NEXT_CINEMATIC_CAMERA* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_NEXT_CINEMATIC_CAMERA& ClientOpcode::get();
+template<>
+vanilla::CMSG_COMPLETE_CINEMATIC* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_COMPLETE_CINEMATIC& ClientOpcode::get();
+template<>
+vanilla::CMSG_TUTORIAL_FLAG* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_TUTORIAL_FLAG& ClientOpcode::get();
+template<>
+vanilla::CMSG_TUTORIAL_CLEAR* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_TUTORIAL_CLEAR& ClientOpcode::get();
+template<>
+vanilla::CMSG_TUTORIAL_RESET* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_TUTORIAL_RESET& ClientOpcode::get();
+template<>
+vanilla::CMSG_STANDSTATECHANGE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_STANDSTATECHANGE& ClientOpcode::get();
+template<>
+vanilla::CMSG_EMOTE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_EMOTE& ClientOpcode::get();
+template<>
+vanilla::CMSG_TEXT_EMOTE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_TEXT_EMOTE& ClientOpcode::get();
+template<>
+vanilla::CMSG_AUTOSTORE_LOOT_ITEM* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_AUTOSTORE_LOOT_ITEM& ClientOpcode::get();
+template<>
+vanilla::CMSG_AUTOEQUIP_ITEM* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_AUTOEQUIP_ITEM& ClientOpcode::get();
+template<>
+vanilla::CMSG_AUTOSTORE_BAG_ITEM* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_AUTOSTORE_BAG_ITEM& ClientOpcode::get();
+template<>
+vanilla::CMSG_SWAP_ITEM* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_SWAP_ITEM& ClientOpcode::get();
+template<>
+vanilla::CMSG_SWAP_INV_ITEM* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_SWAP_INV_ITEM& ClientOpcode::get();
+template<>
+vanilla::CMSG_SPLIT_ITEM* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_SPLIT_ITEM& ClientOpcode::get();
+template<>
+vanilla::CMSG_AUTOEQUIP_ITEM_SLOT* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_AUTOEQUIP_ITEM_SLOT& ClientOpcode::get();
+template<>
+vanilla::CMSG_DESTROYITEM* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_DESTROYITEM& ClientOpcode::get();
+template<>
+vanilla::CMSG_INSPECT* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_INSPECT& ClientOpcode::get();
+template<>
+vanilla::CMSG_INITIATE_TRADE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_INITIATE_TRADE& ClientOpcode::get();
+template<>
+vanilla::CMSG_BEGIN_TRADE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_BEGIN_TRADE& ClientOpcode::get();
+template<>
+vanilla::CMSG_BUSY_TRADE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_BUSY_TRADE& ClientOpcode::get();
+template<>
+vanilla::CMSG_IGNORE_TRADE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_IGNORE_TRADE& ClientOpcode::get();
+template<>
+vanilla::CMSG_ACCEPT_TRADE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_ACCEPT_TRADE& ClientOpcode::get();
+template<>
+vanilla::CMSG_UNACCEPT_TRADE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_UNACCEPT_TRADE& ClientOpcode::get();
+template<>
+vanilla::CMSG_CANCEL_TRADE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_CANCEL_TRADE& ClientOpcode::get();
+template<>
+vanilla::CMSG_SET_TRADE_ITEM* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_SET_TRADE_ITEM& ClientOpcode::get();
+template<>
+vanilla::CMSG_CLEAR_TRADE_ITEM* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_CLEAR_TRADE_ITEM& ClientOpcode::get();
+template<>
+vanilla::CMSG_SET_TRADE_GOLD* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_SET_TRADE_GOLD& ClientOpcode::get();
+template<>
+vanilla::CMSG_SET_FACTION_ATWAR* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_SET_FACTION_ATWAR& ClientOpcode::get();
+template<>
+vanilla::CMSG_SET_ACTION_BUTTON* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_SET_ACTION_BUTTON& ClientOpcode::get();
+template<>
+vanilla::CMSG_CAST_SPELL* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_CAST_SPELL& ClientOpcode::get();
+template<>
+vanilla::CMSG_CANCEL_CAST* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_CANCEL_CAST& ClientOpcode::get();
+template<>
+vanilla::CMSG_CANCEL_AURA* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_CANCEL_AURA& ClientOpcode::get();
+template<>
+vanilla::CMSG_CANCEL_CHANNELLING* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_CANCEL_CHANNELLING& ClientOpcode::get();
+template<>
+vanilla::CMSG_SET_SELECTION* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_SET_SELECTION& ClientOpcode::get();
+template<>
+vanilla::CMSG_SET_TARGET_OBSOLETE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_SET_TARGET_OBSOLETE& ClientOpcode::get();
+template<>
+vanilla::CMSG_ATTACKSWING* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_ATTACKSWING& ClientOpcode::get();
+template<>
+vanilla::CMSG_ATTACKSTOP* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_ATTACKSTOP& ClientOpcode::get();
+template<>
+vanilla::CMSG_REPOP_REQUEST* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_REPOP_REQUEST& ClientOpcode::get();
+template<>
+vanilla::CMSG_RESURRECT_RESPONSE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_RESURRECT_RESPONSE& ClientOpcode::get();
+template<>
+vanilla::CMSG_LOOT* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_LOOT& ClientOpcode::get();
+template<>
+vanilla::CMSG_LOOT_MONEY* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_LOOT_MONEY& ClientOpcode::get();
+template<>
+vanilla::CMSG_LOOT_RELEASE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_LOOT_RELEASE& ClientOpcode::get();
+template<>
+vanilla::CMSG_DUEL_ACCEPTED* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_DUEL_ACCEPTED& ClientOpcode::get();
+template<>
+vanilla::CMSG_DUEL_CANCELLED* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_DUEL_CANCELLED& ClientOpcode::get();
+template<>
+vanilla::CMSG_MOUNTSPECIAL_ANIM* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_MOUNTSPECIAL_ANIM& ClientOpcode::get();
+template<>
+vanilla::CMSG_PET_SET_ACTION* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_PET_SET_ACTION& ClientOpcode::get();
+template<>
+vanilla::CMSG_PET_ACTION* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_PET_ACTION& ClientOpcode::get();
+template<>
+vanilla::CMSG_PET_ABANDON* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_PET_ABANDON& ClientOpcode::get();
+template<>
+vanilla::CMSG_PET_RENAME* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_PET_RENAME& ClientOpcode::get();
+template<>
+vanilla::CMSG_GOSSIP_HELLO* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GOSSIP_HELLO& ClientOpcode::get();
+template<>
+vanilla::CMSG_GOSSIP_SELECT_OPTION* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GOSSIP_SELECT_OPTION& ClientOpcode::get();
+template<>
+vanilla::CMSG_NPC_TEXT_QUERY* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_NPC_TEXT_QUERY& ClientOpcode::get();
+template<>
+vanilla::CMSG_QUESTGIVER_STATUS_QUERY* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_QUESTGIVER_STATUS_QUERY& ClientOpcode::get();
+template<>
+vanilla::CMSG_QUESTGIVER_HELLO* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_QUESTGIVER_HELLO& ClientOpcode::get();
+template<>
+vanilla::CMSG_QUESTGIVER_QUERY_QUEST* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_QUESTGIVER_QUERY_QUEST& ClientOpcode::get();
+template<>
+vanilla::CMSG_QUESTGIVER_QUEST_AUTOLAUNCH* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_QUESTGIVER_QUEST_AUTOLAUNCH& ClientOpcode::get();
+template<>
+vanilla::CMSG_QUESTGIVER_ACCEPT_QUEST* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_QUESTGIVER_ACCEPT_QUEST& ClientOpcode::get();
+template<>
+vanilla::CMSG_QUESTGIVER_COMPLETE_QUEST* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_QUESTGIVER_COMPLETE_QUEST& ClientOpcode::get();
+template<>
+vanilla::CMSG_QUESTGIVER_REQUEST_REWARD* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_QUESTGIVER_REQUEST_REWARD& ClientOpcode::get();
+template<>
+vanilla::CMSG_QUESTGIVER_CHOOSE_REWARD* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_QUESTGIVER_CHOOSE_REWARD& ClientOpcode::get();
+template<>
+vanilla::CMSG_QUESTGIVER_CANCEL* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_QUESTGIVER_CANCEL& ClientOpcode::get();
+template<>
+vanilla::CMSG_QUESTLOG_SWAP_QUEST* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_QUESTLOG_SWAP_QUEST& ClientOpcode::get();
+template<>
+vanilla::CMSG_QUESTLOG_REMOVE_QUEST* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_QUESTLOG_REMOVE_QUEST& ClientOpcode::get();
+template<>
+vanilla::CMSG_QUEST_CONFIRM_ACCEPT* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_QUEST_CONFIRM_ACCEPT& ClientOpcode::get();
+template<>
+vanilla::CMSG_PUSHQUESTTOPARTY* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_PUSHQUESTTOPARTY& ClientOpcode::get();
+template<>
+vanilla::CMSG_LIST_INVENTORY* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_LIST_INVENTORY& ClientOpcode::get();
+template<>
+vanilla::CMSG_SELL_ITEM* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_SELL_ITEM& ClientOpcode::get();
+template<>
+vanilla::CMSG_BUY_ITEM* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_BUY_ITEM& ClientOpcode::get();
+template<>
+vanilla::CMSG_BUY_ITEM_IN_SLOT* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_BUY_ITEM_IN_SLOT& ClientOpcode::get();
+template<>
+vanilla::CMSG_TAXINODE_STATUS_QUERY* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_TAXINODE_STATUS_QUERY& ClientOpcode::get();
+template<>
+vanilla::CMSG_TAXIQUERYAVAILABLENODES* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_TAXIQUERYAVAILABLENODES& ClientOpcode::get();
+template<>
+vanilla::CMSG_ACTIVATETAXI* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_ACTIVATETAXI& ClientOpcode::get();
+template<>
+vanilla::CMSG_TRAINER_LIST* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_TRAINER_LIST& ClientOpcode::get();
+template<>
+vanilla::CMSG_TRAINER_BUY_SPELL* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_TRAINER_BUY_SPELL& ClientOpcode::get();
+template<>
+vanilla::CMSG_BINDER_ACTIVATE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_BINDER_ACTIVATE& ClientOpcode::get();
+template<>
+vanilla::CMSG_BANKER_ACTIVATE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_BANKER_ACTIVATE& ClientOpcode::get();
+template<>
+vanilla::CMSG_BUY_BANK_SLOT* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_BUY_BANK_SLOT& ClientOpcode::get();
+template<>
+vanilla::CMSG_PETITION_SHOWLIST* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_PETITION_SHOWLIST& ClientOpcode::get();
+template<>
+vanilla::CMSG_PETITION_BUY* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_PETITION_BUY& ClientOpcode::get();
+template<>
+vanilla::CMSG_PETITION_SHOW_SIGNATURES* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_PETITION_SHOW_SIGNATURES& ClientOpcode::get();
+template<>
+vanilla::CMSG_PETITION_SIGN* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_PETITION_SIGN& ClientOpcode::get();
+template<>
+vanilla::MSG_PETITION_DECLINE* ClientOpcode::get_if();
+template<>
+vanilla::MSG_PETITION_DECLINE& ClientOpcode::get();
+template<>
+vanilla::CMSG_OFFER_PETITION* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_OFFER_PETITION& ClientOpcode::get();
+template<>
+vanilla::CMSG_TURN_IN_PETITION* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_TURN_IN_PETITION& ClientOpcode::get();
+template<>
+vanilla::CMSG_PETITION_QUERY* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_PETITION_QUERY& ClientOpcode::get();
+template<>
+vanilla::CMSG_BUG* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_BUG& ClientOpcode::get();
+template<>
+vanilla::CMSG_PLAYED_TIME* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_PLAYED_TIME& ClientOpcode::get();
+template<>
+vanilla::CMSG_QUERY_TIME* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_QUERY_TIME& ClientOpcode::get();
+template<>
+vanilla::CMSG_RECLAIM_CORPSE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_RECLAIM_CORPSE& ClientOpcode::get();
+template<>
+vanilla::CMSG_WRAP_ITEM* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_WRAP_ITEM& ClientOpcode::get();
+template<>
+vanilla::MSG_MINIMAP_PING_Client* ClientOpcode::get_if();
+template<>
+vanilla::MSG_MINIMAP_PING_Client& ClientOpcode::get();
+template<>
+vanilla::CMSG_PING* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_PING& ClientOpcode::get();
+template<>
+vanilla::CMSG_SETSHEATHED* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_SETSHEATHED& ClientOpcode::get();
+template<>
+vanilla::CMSG_PET_CAST_SPELL* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_PET_CAST_SPELL& ClientOpcode::get();
+template<>
+vanilla::MSG_SAVE_GUILD_EMBLEM_Client* ClientOpcode::get_if();
+template<>
+vanilla::MSG_SAVE_GUILD_EMBLEM_Client& ClientOpcode::get();
+template<>
+vanilla::MSG_TABARDVENDOR_ACTIVATE* ClientOpcode::get_if();
+template<>
+vanilla::MSG_TABARDVENDOR_ACTIVATE& ClientOpcode::get();
+template<>
+vanilla::CMSG_ZONEUPDATE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_ZONEUPDATE& ClientOpcode::get();
+template<>
+vanilla::MSG_RANDOM_ROLL_Client* ClientOpcode::get_if();
+template<>
+vanilla::MSG_RANDOM_ROLL_Client& ClientOpcode::get();
+template<>
+vanilla::MSG_LOOKING_FOR_GROUP_Client* ClientOpcode::get_if();
+template<>
+vanilla::MSG_LOOKING_FOR_GROUP_Client& ClientOpcode::get();
+template<>
+vanilla::CMSG_UNLEARN_SKILL* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_UNLEARN_SKILL& ClientOpcode::get();
+template<>
+vanilla::CMSG_GMTICKET_UPDATETEXT* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GMTICKET_UPDATETEXT& ClientOpcode::get();
+template<>
+vanilla::CMSG_REQUEST_ACCOUNT_DATA* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_REQUEST_ACCOUNT_DATA& ClientOpcode::get();
+template<>
+vanilla::CMSG_GMTICKET_GETTICKET* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GMTICKET_GETTICKET& ClientOpcode::get();
+template<>
+vanilla::MSG_CORPSE_QUERY_Client* ClientOpcode::get_if();
+template<>
+vanilla::MSG_CORPSE_QUERY_Client& ClientOpcode::get();
+template<>
+vanilla::CMSG_GMTICKET_DELETETICKET* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GMTICKET_DELETETICKET& ClientOpcode::get();
+template<>
+vanilla::CMSG_GMTICKET_SYSTEMSTATUS* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GMTICKET_SYSTEMSTATUS& ClientOpcode::get();
+template<>
+vanilla::CMSG_SPIRIT_HEALER_ACTIVATE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_SPIRIT_HEALER_ACTIVATE& ClientOpcode::get();
+template<>
+vanilla::CMSG_CHAT_IGNORED* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_CHAT_IGNORED& ClientOpcode::get();
+template<>
+vanilla::CMSG_GUILD_RANK* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GUILD_RANK& ClientOpcode::get();
+template<>
+vanilla::CMSG_GUILD_ADD_RANK* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GUILD_ADD_RANK& ClientOpcode::get();
+template<>
+vanilla::CMSG_GUILD_DEL_RANK* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GUILD_DEL_RANK& ClientOpcode::get();
+template<>
+vanilla::CMSG_GUILD_SET_PUBLIC_NOTE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GUILD_SET_PUBLIC_NOTE& ClientOpcode::get();
+template<>
+vanilla::CMSG_GUILD_SET_OFFICER_NOTE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GUILD_SET_OFFICER_NOTE& ClientOpcode::get();
+template<>
+vanilla::CMSG_SEND_MAIL* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_SEND_MAIL& ClientOpcode::get();
+template<>
+vanilla::CMSG_GET_MAIL_LIST* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GET_MAIL_LIST& ClientOpcode::get();
+template<>
+vanilla::CMSG_BATTLEFIELD_LIST* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_BATTLEFIELD_LIST& ClientOpcode::get();
+template<>
+vanilla::CMSG_BATTLEFIELD_JOIN* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_BATTLEFIELD_JOIN& ClientOpcode::get();
+template<>
+vanilla::CMSG_ITEM_TEXT_QUERY* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_ITEM_TEXT_QUERY& ClientOpcode::get();
+template<>
+vanilla::CMSG_MAIL_TAKE_MONEY* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_MAIL_TAKE_MONEY& ClientOpcode::get();
+template<>
+vanilla::CMSG_MAIL_TAKE_ITEM* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_MAIL_TAKE_ITEM& ClientOpcode::get();
+template<>
+vanilla::CMSG_MAIL_MARK_AS_READ* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_MAIL_MARK_AS_READ& ClientOpcode::get();
+template<>
+vanilla::CMSG_MAIL_RETURN_TO_SENDER* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_MAIL_RETURN_TO_SENDER& ClientOpcode::get();
+template<>
+vanilla::CMSG_MAIL_DELETE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_MAIL_DELETE& ClientOpcode::get();
+template<>
+vanilla::CMSG_MAIL_CREATE_TEXT_ITEM* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_MAIL_CREATE_TEXT_ITEM& ClientOpcode::get();
+template<>
+vanilla::CMSG_LEARN_TALENT* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_LEARN_TALENT& ClientOpcode::get();
+template<>
+vanilla::CMSG_TOGGLE_PVP* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_TOGGLE_PVP& ClientOpcode::get();
+template<>
+vanilla::MSG_AUCTION_HELLO_Client* ClientOpcode::get_if();
+template<>
+vanilla::MSG_AUCTION_HELLO_Client& ClientOpcode::get();
+template<>
+vanilla::CMSG_AUCTION_SELL_ITEM* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_AUCTION_SELL_ITEM& ClientOpcode::get();
+template<>
+vanilla::CMSG_AUCTION_REMOVE_ITEM* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_AUCTION_REMOVE_ITEM& ClientOpcode::get();
+template<>
+vanilla::CMSG_AUCTION_LIST_ITEMS* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_AUCTION_LIST_ITEMS& ClientOpcode::get();
+template<>
+vanilla::CMSG_AUCTION_LIST_OWNER_ITEMS* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_AUCTION_LIST_OWNER_ITEMS& ClientOpcode::get();
+template<>
+vanilla::CMSG_AUCTION_PLACE_BID* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_AUCTION_PLACE_BID& ClientOpcode::get();
+template<>
+vanilla::CMSG_AUCTION_LIST_BIDDER_ITEMS* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_AUCTION_LIST_BIDDER_ITEMS& ClientOpcode::get();
+template<>
+vanilla::CMSG_SET_AMMO* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_SET_AMMO& ClientOpcode::get();
+template<>
+vanilla::CMSG_SET_ACTIVE_MOVER* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_SET_ACTIVE_MOVER& ClientOpcode::get();
+template<>
+vanilla::CMSG_PET_CANCEL_AURA* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_PET_CANCEL_AURA& ClientOpcode::get();
+template<>
+vanilla::CMSG_CANCEL_AUTO_REPEAT_SPELL* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_CANCEL_AUTO_REPEAT_SPELL& ClientOpcode::get();
+template<>
+vanilla::MSG_LIST_STABLED_PETS_Client* ClientOpcode::get_if();
+template<>
+vanilla::MSG_LIST_STABLED_PETS_Client& ClientOpcode::get();
+template<>
+vanilla::CMSG_STABLE_PET* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_STABLE_PET& ClientOpcode::get();
+template<>
+vanilla::CMSG_UNSTABLE_PET* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_UNSTABLE_PET& ClientOpcode::get();
+template<>
+vanilla::CMSG_BUY_STABLE_SLOT* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_BUY_STABLE_SLOT& ClientOpcode::get();
+template<>
+vanilla::CMSG_STABLE_SWAP_PET* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_STABLE_SWAP_PET& ClientOpcode::get();
+template<>
+vanilla::MSG_QUEST_PUSH_RESULT* ClientOpcode::get_if();
+template<>
+vanilla::MSG_QUEST_PUSH_RESULT& ClientOpcode::get();
+template<>
+vanilla::CMSG_REQUEST_PET_INFO* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_REQUEST_PET_INFO& ClientOpcode::get();
+template<>
+vanilla::CMSG_FAR_SIGHT* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_FAR_SIGHT& ClientOpcode::get();
+template<>
+vanilla::CMSG_GROUP_CHANGE_SUB_GROUP* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GROUP_CHANGE_SUB_GROUP& ClientOpcode::get();
+template<>
+vanilla::CMSG_REQUEST_PARTY_MEMBER_STATS* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_REQUEST_PARTY_MEMBER_STATS& ClientOpcode::get();
+template<>
+vanilla::CMSG_GROUP_SWAP_SUB_GROUP* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GROUP_SWAP_SUB_GROUP& ClientOpcode::get();
+template<>
+vanilla::CMSG_AUTOSTORE_BANK_ITEM* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_AUTOSTORE_BANK_ITEM& ClientOpcode::get();
+template<>
+vanilla::CMSG_AUTOBANK_ITEM* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_AUTOBANK_ITEM& ClientOpcode::get();
+template<>
+vanilla::MSG_QUERY_NEXT_MAIL_TIME_Client* ClientOpcode::get_if();
+template<>
+vanilla::MSG_QUERY_NEXT_MAIL_TIME_Client& ClientOpcode::get();
+template<>
+vanilla::CMSG_GROUP_RAID_CONVERT* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GROUP_RAID_CONVERT& ClientOpcode::get();
+template<>
+vanilla::CMSG_GROUP_ASSISTANT_LEADER* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GROUP_ASSISTANT_LEADER& ClientOpcode::get();
+template<>
+vanilla::CMSG_BUYBACK_ITEM* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_BUYBACK_ITEM& ClientOpcode::get();
+template<>
+vanilla::CMSG_MEETINGSTONE_JOIN* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_MEETINGSTONE_JOIN& ClientOpcode::get();
+template<>
+vanilla::CMSG_MEETINGSTONE_LEAVE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_MEETINGSTONE_LEAVE& ClientOpcode::get();
+template<>
+vanilla::CMSG_MEETINGSTONE_INFO* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_MEETINGSTONE_INFO& ClientOpcode::get();
+template<>
+vanilla::CMSG_CANCEL_GROWTH_AURA* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_CANCEL_GROWTH_AURA& ClientOpcode::get();
+template<>
+vanilla::CMSG_LOOT_ROLL* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_LOOT_ROLL& ClientOpcode::get();
+template<>
+vanilla::CMSG_LOOT_MASTER_GIVE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_LOOT_MASTER_GIVE& ClientOpcode::get();
+template<>
+vanilla::CMSG_REPAIR_ITEM* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_REPAIR_ITEM& ClientOpcode::get();
+template<>
+vanilla::MSG_TALENT_WIPE_CONFIRM_Client* ClientOpcode::get_if();
+template<>
+vanilla::MSG_TALENT_WIPE_CONFIRM_Client& ClientOpcode::get();
+template<>
+vanilla::CMSG_SUMMON_RESPONSE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_SUMMON_RESPONSE& ClientOpcode::get();
+template<>
+vanilla::MSG_MOVE_WATER_WALK* ClientOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_WATER_WALK& ClientOpcode::get();
+template<>
+vanilla::CMSG_SELF_RES* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_SELF_RES& ClientOpcode::get();
+template<>
+vanilla::CMSG_TOGGLE_HELM* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_TOGGLE_HELM& ClientOpcode::get();
+template<>
+vanilla::CMSG_TOGGLE_CLOAK* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_TOGGLE_CLOAK& ClientOpcode::get();
+template<>
+vanilla::CMSG_SET_ACTIONBAR_TOGGLES* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_SET_ACTIONBAR_TOGGLES& ClientOpcode::get();
+template<>
+vanilla::MSG_PETITION_RENAME* ClientOpcode::get_if();
+template<>
+vanilla::MSG_PETITION_RENAME& ClientOpcode::get();
+template<>
+vanilla::CMSG_ITEM_NAME_QUERY* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_ITEM_NAME_QUERY& ClientOpcode::get();
+template<>
+vanilla::CMSG_CHAR_RENAME* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_CHAR_RENAME& ClientOpcode::get();
+template<>
+vanilla::CMSG_MOVE_SPLINE_DONE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_MOVE_SPLINE_DONE& ClientOpcode::get();
+template<>
+vanilla::CMSG_MOVE_FALL_RESET* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_MOVE_FALL_RESET& ClientOpcode::get();
+template<>
+vanilla::CMSG_REQUEST_RAID_INFO* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_REQUEST_RAID_INFO& ClientOpcode::get();
+template<>
+vanilla::CMSG_MOVE_TIME_SKIPPED* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_MOVE_TIME_SKIPPED& ClientOpcode::get();
+template<>
+vanilla::CMSG_MOVE_FEATHER_FALL_ACK* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_MOVE_FEATHER_FALL_ACK& ClientOpcode::get();
+template<>
+vanilla::CMSG_MOVE_WATER_WALK_ACK* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_MOVE_WATER_WALK_ACK& ClientOpcode::get();
+template<>
+vanilla::CMSG_MOVE_NOT_ACTIVE_MOVER* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_MOVE_NOT_ACTIVE_MOVER& ClientOpcode::get();
+template<>
+vanilla::CMSG_BATTLEFIELD_STATUS* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_BATTLEFIELD_STATUS& ClientOpcode::get();
+template<>
+vanilla::CMSG_BATTLEFIELD_PORT* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_BATTLEFIELD_PORT& ClientOpcode::get();
+template<>
+vanilla::MSG_INSPECT_HONOR_STATS_Client* ClientOpcode::get_if();
+template<>
+vanilla::MSG_INSPECT_HONOR_STATS_Client& ClientOpcode::get();
+template<>
+vanilla::CMSG_BATTLEMASTER_HELLO* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_BATTLEMASTER_HELLO& ClientOpcode::get();
+template<>
+vanilla::CMSG_FORCE_WALK_SPEED_CHANGE_ACK* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_FORCE_WALK_SPEED_CHANGE_ACK& ClientOpcode::get();
+template<>
+vanilla::CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK& ClientOpcode::get();
+template<>
+vanilla::CMSG_FORCE_TURN_RATE_CHANGE_ACK* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_FORCE_TURN_RATE_CHANGE_ACK& ClientOpcode::get();
+template<>
+vanilla::MSG_PVP_LOG_DATA_Client* ClientOpcode::get_if();
+template<>
+vanilla::MSG_PVP_LOG_DATA_Client& ClientOpcode::get();
+template<>
+vanilla::CMSG_LEAVE_BATTLEFIELD* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_LEAVE_BATTLEFIELD& ClientOpcode::get();
+template<>
+vanilla::CMSG_AREA_SPIRIT_HEALER_QUERY* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_AREA_SPIRIT_HEALER_QUERY& ClientOpcode::get();
+template<>
+vanilla::CMSG_AREA_SPIRIT_HEALER_QUEUE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_AREA_SPIRIT_HEALER_QUEUE& ClientOpcode::get();
+template<>
+vanilla::CMSG_WARDEN_DATA* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_WARDEN_DATA& ClientOpcode::get();
+template<>
+vanilla::MSG_BATTLEGROUND_PLAYER_POSITIONS_Client* ClientOpcode::get_if();
+template<>
+vanilla::MSG_BATTLEGROUND_PLAYER_POSITIONS_Client& ClientOpcode::get();
+template<>
+vanilla::CMSG_PET_STOP_ATTACK* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_PET_STOP_ATTACK& ClientOpcode::get();
+template<>
+vanilla::CMSG_BATTLEMASTER_JOIN* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_BATTLEMASTER_JOIN& ClientOpcode::get();
+template<>
+vanilla::CMSG_PET_UNLEARN* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_PET_UNLEARN& ClientOpcode::get();
+template<>
+vanilla::CMSG_PET_SPELL_AUTOCAST* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_PET_SPELL_AUTOCAST& ClientOpcode::get();
+template<>
+vanilla::CMSG_GUILD_INFO_TEXT* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GUILD_INFO_TEXT& ClientOpcode::get();
+template<>
+vanilla::CMSG_ACTIVATETAXIEXPRESS* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_ACTIVATETAXIEXPRESS& ClientOpcode::get();
+template<>
+vanilla::CMSG_SET_FACTION_INACTIVE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_SET_FACTION_INACTIVE& ClientOpcode::get();
+template<>
+vanilla::CMSG_SET_WATCHED_FACTION* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_SET_WATCHED_FACTION& ClientOpcode::get();
+template<>
+vanilla::CMSG_RESET_INSTANCES* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_RESET_INSTANCES& ClientOpcode::get();
+template<>
+vanilla::MSG_RAID_TARGET_UPDATE_Client* ClientOpcode::get_if();
+template<>
+vanilla::MSG_RAID_TARGET_UPDATE_Client& ClientOpcode::get();
+template<>
+vanilla::MSG_RAID_READY_CHECK_Client* ClientOpcode::get_if();
+template<>
+vanilla::MSG_RAID_READY_CHECK_Client& ClientOpcode::get();
+template<>
+vanilla::CMSG_GMSURVEY_SUBMIT* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GMSURVEY_SUBMIT& ClientOpcode::get();
+
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const ClientOpcode& opcode);
+
+WOW_WORLD_MESSAGES_CPP_EXPORT ClientOpcode read_client_opcode(Reader& reader);
 
 struct ServerOpcode {
     enum class Opcode {
@@ -16143,6 +16860,7 @@ struct ServerOpcode {
         SMSG_CHAR_ENUM = 59,
         SMSG_CHAR_DELETE = 60,
         SMSG_NEW_WORLD = 62,
+        SMSG_TRANSFER_PENDING = 63,
         SMSG_TRANSFER_ABORTED = 64,
         SMSG_CHARACTER_LOGIN_FAILED = 65,
         SMSG_LOGIN_SETTIMESPEED = 66,
@@ -16152,8 +16870,11 @@ struct ServerOpcode {
         SMSG_NAME_QUERY_RESPONSE = 81,
         SMSG_PET_NAME_QUERY_RESPONSE = 83,
         SMSG_GUILD_QUERY_RESPONSE = 85,
+        SMSG_ITEM_QUERY_SINGLE_RESPONSE = 88,
         SMSG_PAGE_TEXT_QUERY_RESPONSE = 91,
         SMSG_QUEST_QUERY_RESPONSE = 93,
+        SMSG_GAMEOBJECT_QUERY_RESPONSE = 95,
+        SMSG_CREATURE_QUERY_RESPONSE = 97,
         SMSG_WHO = 99,
         SMSG_WHOIS = 101,
         SMSG_FRIEND_LIST = 103,
@@ -16164,6 +16885,7 @@ struct ServerOpcode {
         SMSG_GROUP_UNINVITE = 119,
         SMSG_GROUP_SET_LEADER = 121,
         SMSG_GROUP_DESTROYED = 124,
+        SMSG_GROUP_LIST = 125,
         SMSG_PARTY_MEMBER_STATS = 126,
         SMSG_PARTY_COMMAND_RESULT = 127,
         SMSG_GUILD_INVITE = 131,
@@ -16201,6 +16923,7 @@ struct ServerOpcode {
         MSG_MOVE_STOP_SWIM = 203,
         MSG_MOVE_SET_FACING = 218,
         MSG_MOVE_SET_PITCH = 219,
+        MSG_MOVE_WORLDPORT_ACK = 220,
         SMSG_MONSTER_MOVE = 221,
         SMSG_MOVE_WATER_WALK = 222,
         SMSG_MOVE_LAND_WALK = 223,
@@ -16274,6 +16997,7 @@ struct ServerOpcode {
         SMSG_MOUNTSPECIAL_ANIM = 370,
         SMSG_PET_TAME_FAILURE = 371,
         SMSG_PET_NAME_INVALID = 376,
+        SMSG_PET_SPELLS = 377,
         SMSG_PET_MODE = 378,
         SMSG_GOSSIP_MESSAGE = 381,
         SMSG_GOSSIP_COMPLETE = 382,
@@ -16309,6 +17033,7 @@ struct ServerOpcode {
         SMSG_PETITION_SHOWLIST = 444,
         SMSG_PETITION_SHOW_SIGNATURES = 447,
         SMSG_PETITION_SIGN_RESULTS = 449,
+        MSG_PETITION_DECLINE = 450,
         SMSG_TURN_IN_PETITION_RESULTS = 453,
         SMSG_PETITION_QUERY_RESPONSE = 455,
         SMSG_FISH_NOT_HOOKED = 456,
@@ -16333,6 +17058,7 @@ struct ServerOpcode {
         SMSG_AUTH_CHALLENGE = 492,
         SMSG_AUTH_RESPONSE = 494,
         MSG_SAVE_GUILD_EMBLEM = 497,
+        MSG_TABARDVENDOR_ACTIVATE = 498,
         SMSG_PLAY_SPELL_VISUAL = 499,
         SMSG_PARTYKILLLOG = 501,
         SMSG_PLAY_SPELL_IMPACT = 503,
@@ -16380,6 +17106,7 @@ struct ServerOpcode {
         SMSG_CORPSE_RECLAIM_DELAY = 617,
         MSG_LIST_STABLED_PETS = 623,
         SMSG_STABLE_RESULT = 627,
+        MSG_QUEST_PUSH_RESULT = 630,
         SMSG_PLAY_MUSIC = 631,
         SMSG_PLAY_OBJECT_SOUND = 632,
         SMSG_SPELLDISPELLOG = 635,
@@ -16409,12 +17136,14 @@ struct ServerOpcode {
         SMSG_MONSTER_MOVE_TRANSPORT = 686,
         SMSG_PET_BROKEN = 687,
         MSG_MOVE_FEATHER_FALL = 688,
+        MSG_MOVE_WATER_WALK = 689,
         SMSG_FEIGN_DEATH_RESISTED = 692,
         SMSG_DUEL_COUNTDOWN = 695,
         SMSG_AREA_TRIGGER_MESSAGE = 696,
         SMSG_MEETINGSTONE_JOINFAILED = 699,
         SMSG_PLAYER_SKINNED = 700,
         SMSG_DURABILITY_DAMAGE_DEATH = 701,
+        MSG_PETITION_RENAME = 705,
         SMSG_INIT_WORLD_STATES = 706,
         SMSG_UPDATE_WORLD_STATE = 707,
         SMSG_ITEM_NAME_QUERY_RESPONSE = 709,
@@ -16466,6 +17195,7 @@ struct ServerOpcode {
         SMSG_INSTANCE_RESET_FAILED = 799,
         SMSG_UPDATE_LAST_INSTANCE = 800,
         MSG_RAID_TARGET_UPDATE = 801,
+        MSG_RAID_READY_CHECK = 802,
         SMSG_PET_ACTION_SOUND = 804,
         SMSG_PET_DISMISS_SOUND = 805,
         SMSG_GM_TICKET_STATUS_UPDATE = 808,
@@ -16481,6 +17211,7 @@ struct ServerOpcode {
         vanilla::SMSG_CHAR_ENUM SMSG_CHAR_ENUM;
         vanilla::SMSG_CHAR_DELETE SMSG_CHAR_DELETE;
         vanilla::SMSG_NEW_WORLD SMSG_NEW_WORLD;
+        vanilla::SMSG_TRANSFER_PENDING SMSG_TRANSFER_PENDING;
         vanilla::SMSG_TRANSFER_ABORTED SMSG_TRANSFER_ABORTED;
         vanilla::SMSG_CHARACTER_LOGIN_FAILED SMSG_CHARACTER_LOGIN_FAILED;
         vanilla::SMSG_LOGIN_SETTIMESPEED SMSG_LOGIN_SETTIMESPEED;
@@ -16490,8 +17221,11 @@ struct ServerOpcode {
         vanilla::SMSG_NAME_QUERY_RESPONSE SMSG_NAME_QUERY_RESPONSE;
         vanilla::SMSG_PET_NAME_QUERY_RESPONSE SMSG_PET_NAME_QUERY_RESPONSE;
         vanilla::SMSG_GUILD_QUERY_RESPONSE SMSG_GUILD_QUERY_RESPONSE;
+        vanilla::SMSG_ITEM_QUERY_SINGLE_RESPONSE SMSG_ITEM_QUERY_SINGLE_RESPONSE;
         vanilla::SMSG_PAGE_TEXT_QUERY_RESPONSE SMSG_PAGE_TEXT_QUERY_RESPONSE;
         vanilla::SMSG_QUEST_QUERY_RESPONSE SMSG_QUEST_QUERY_RESPONSE;
+        vanilla::SMSG_GAMEOBJECT_QUERY_RESPONSE SMSG_GAMEOBJECT_QUERY_RESPONSE;
+        vanilla::SMSG_CREATURE_QUERY_RESPONSE SMSG_CREATURE_QUERY_RESPONSE;
         vanilla::SMSG_WHO SMSG_WHO;
         vanilla::SMSG_WHOIS SMSG_WHOIS;
         vanilla::SMSG_FRIEND_LIST SMSG_FRIEND_LIST;
@@ -16502,6 +17236,7 @@ struct ServerOpcode {
         vanilla::SMSG_GROUP_UNINVITE SMSG_GROUP_UNINVITE;
         vanilla::SMSG_GROUP_SET_LEADER SMSG_GROUP_SET_LEADER;
         vanilla::SMSG_GROUP_DESTROYED SMSG_GROUP_DESTROYED;
+        vanilla::SMSG_GROUP_LIST SMSG_GROUP_LIST;
         vanilla::SMSG_PARTY_MEMBER_STATS SMSG_PARTY_MEMBER_STATS;
         vanilla::SMSG_PARTY_COMMAND_RESULT SMSG_PARTY_COMMAND_RESULT;
         vanilla::SMSG_GUILD_INVITE SMSG_GUILD_INVITE;
@@ -16539,6 +17274,7 @@ struct ServerOpcode {
         vanilla::MSG_MOVE_STOP_SWIM_Server MSG_MOVE_STOP_SWIM;
         vanilla::MSG_MOVE_SET_FACING_Server MSG_MOVE_SET_FACING;
         vanilla::MSG_MOVE_SET_PITCH_Server MSG_MOVE_SET_PITCH;
+        vanilla::MSG_MOVE_WORLDPORT_ACK MSG_MOVE_WORLDPORT_ACK;
         vanilla::SMSG_MONSTER_MOVE SMSG_MONSTER_MOVE;
         vanilla::SMSG_MOVE_WATER_WALK SMSG_MOVE_WATER_WALK;
         vanilla::SMSG_MOVE_LAND_WALK SMSG_MOVE_LAND_WALK;
@@ -16612,6 +17348,7 @@ struct ServerOpcode {
         vanilla::SMSG_MOUNTSPECIAL_ANIM SMSG_MOUNTSPECIAL_ANIM;
         vanilla::SMSG_PET_TAME_FAILURE SMSG_PET_TAME_FAILURE;
         vanilla::SMSG_PET_NAME_INVALID SMSG_PET_NAME_INVALID;
+        vanilla::SMSG_PET_SPELLS SMSG_PET_SPELLS;
         vanilla::SMSG_PET_MODE SMSG_PET_MODE;
         vanilla::SMSG_GOSSIP_MESSAGE SMSG_GOSSIP_MESSAGE;
         vanilla::SMSG_GOSSIP_COMPLETE SMSG_GOSSIP_COMPLETE;
@@ -16647,6 +17384,7 @@ struct ServerOpcode {
         vanilla::SMSG_PETITION_SHOWLIST SMSG_PETITION_SHOWLIST;
         vanilla::SMSG_PETITION_SHOW_SIGNATURES SMSG_PETITION_SHOW_SIGNATURES;
         vanilla::SMSG_PETITION_SIGN_RESULTS SMSG_PETITION_SIGN_RESULTS;
+        vanilla::MSG_PETITION_DECLINE MSG_PETITION_DECLINE;
         vanilla::SMSG_TURN_IN_PETITION_RESULTS SMSG_TURN_IN_PETITION_RESULTS;
         vanilla::SMSG_PETITION_QUERY_RESPONSE SMSG_PETITION_QUERY_RESPONSE;
         vanilla::SMSG_FISH_NOT_HOOKED SMSG_FISH_NOT_HOOKED;
@@ -16671,6 +17409,7 @@ struct ServerOpcode {
         vanilla::SMSG_AUTH_CHALLENGE SMSG_AUTH_CHALLENGE;
         vanilla::SMSG_AUTH_RESPONSE SMSG_AUTH_RESPONSE;
         vanilla::MSG_SAVE_GUILD_EMBLEM_Server MSG_SAVE_GUILD_EMBLEM;
+        vanilla::MSG_TABARDVENDOR_ACTIVATE MSG_TABARDVENDOR_ACTIVATE;
         vanilla::SMSG_PLAY_SPELL_VISUAL SMSG_PLAY_SPELL_VISUAL;
         vanilla::SMSG_PARTYKILLLOG SMSG_PARTYKILLLOG;
         vanilla::SMSG_PLAY_SPELL_IMPACT SMSG_PLAY_SPELL_IMPACT;
@@ -16718,6 +17457,7 @@ struct ServerOpcode {
         vanilla::SMSG_CORPSE_RECLAIM_DELAY SMSG_CORPSE_RECLAIM_DELAY;
         vanilla::MSG_LIST_STABLED_PETS_Server MSG_LIST_STABLED_PETS;
         vanilla::SMSG_STABLE_RESULT SMSG_STABLE_RESULT;
+        vanilla::MSG_QUEST_PUSH_RESULT MSG_QUEST_PUSH_RESULT;
         vanilla::SMSG_PLAY_MUSIC SMSG_PLAY_MUSIC;
         vanilla::SMSG_PLAY_OBJECT_SOUND SMSG_PLAY_OBJECT_SOUND;
         vanilla::SMSG_SPELLDISPELLOG SMSG_SPELLDISPELLOG;
@@ -16747,12 +17487,14 @@ struct ServerOpcode {
         vanilla::SMSG_MONSTER_MOVE_TRANSPORT SMSG_MONSTER_MOVE_TRANSPORT;
         vanilla::SMSG_PET_BROKEN SMSG_PET_BROKEN;
         vanilla::MSG_MOVE_FEATHER_FALL_Server MSG_MOVE_FEATHER_FALL;
+        vanilla::MSG_MOVE_WATER_WALK MSG_MOVE_WATER_WALK;
         vanilla::SMSG_FEIGN_DEATH_RESISTED SMSG_FEIGN_DEATH_RESISTED;
         vanilla::SMSG_DUEL_COUNTDOWN SMSG_DUEL_COUNTDOWN;
         vanilla::SMSG_AREA_TRIGGER_MESSAGE SMSG_AREA_TRIGGER_MESSAGE;
         vanilla::SMSG_MEETINGSTONE_JOINFAILED SMSG_MEETINGSTONE_JOINFAILED;
         vanilla::SMSG_PLAYER_SKINNED SMSG_PLAYER_SKINNED;
         vanilla::SMSG_DURABILITY_DAMAGE_DEATH SMSG_DURABILITY_DAMAGE_DEATH;
+        vanilla::MSG_PETITION_RENAME MSG_PETITION_RENAME;
         vanilla::SMSG_INIT_WORLD_STATES SMSG_INIT_WORLD_STATES;
         vanilla::SMSG_UPDATE_WORLD_STATE SMSG_UPDATE_WORLD_STATE;
         vanilla::SMSG_ITEM_NAME_QUERY_RESPONSE SMSG_ITEM_NAME_QUERY_RESPONSE;
@@ -16804,6 +17546,7 @@ struct ServerOpcode {
         vanilla::SMSG_INSTANCE_RESET_FAILED SMSG_INSTANCE_RESET_FAILED;
         vanilla::SMSG_UPDATE_LAST_INSTANCE SMSG_UPDATE_LAST_INSTANCE;
         vanilla::MSG_RAID_TARGET_UPDATE_Server MSG_RAID_TARGET_UPDATE;
+        vanilla::MSG_RAID_READY_CHECK_Server MSG_RAID_READY_CHECK;
         vanilla::SMSG_PET_ACTION_SOUND SMSG_PET_ACTION_SOUND;
         vanilla::SMSG_PET_DISMISS_SOUND SMSG_PET_DISMISS_SOUND;
         vanilla::SMSG_GM_TICKET_STATUS_UPDATE SMSG_GM_TICKET_STATUS_UPDATE;
@@ -16813,2027 +17556,1059 @@ struct ServerOpcode {
         vanilla::SMSG_EXPECTED_SPAM_RECORDS SMSG_EXPECTED_SPAM_RECORDS;
         vanilla::SMSG_DEFENSE_MESSAGE SMSG_DEFENSE_MESSAGE;
     };
+
     bool is_none() const noexcept {
         return opcode == Opcode::NONE;
     }
 
-    explicit ServerOpcode() : ServerOpcode(Opcode::NONE) {}
-
-    explicit ServerOpcode(Opcode op) : opcode(op) {
-        if (opcode == Opcode::SMSG_CHAR_CREATE) {
-            new (&this->SMSG_CHAR_CREATE) vanilla::SMSG_CHAR_CREATE();
-        }
-        if (opcode == Opcode::SMSG_CHAR_ENUM) {
-            new (&this->SMSG_CHAR_ENUM) vanilla::SMSG_CHAR_ENUM();
-        }
-        if (opcode == Opcode::SMSG_CHAR_DELETE) {
-            new (&this->SMSG_CHAR_DELETE) vanilla::SMSG_CHAR_DELETE();
-        }
-        if (opcode == Opcode::SMSG_NEW_WORLD) {
-            new (&this->SMSG_NEW_WORLD) vanilla::SMSG_NEW_WORLD();
-        }
-        if (opcode == Opcode::SMSG_TRANSFER_ABORTED) {
-            new (&this->SMSG_TRANSFER_ABORTED) vanilla::SMSG_TRANSFER_ABORTED();
-        }
-        if (opcode == Opcode::SMSG_CHARACTER_LOGIN_FAILED) {
-            new (&this->SMSG_CHARACTER_LOGIN_FAILED) vanilla::SMSG_CHARACTER_LOGIN_FAILED();
-        }
-        if (opcode == Opcode::SMSG_LOGIN_SETTIMESPEED) {
-            new (&this->SMSG_LOGIN_SETTIMESPEED) vanilla::SMSG_LOGIN_SETTIMESPEED();
-        }
-        if (opcode == Opcode::SMSG_LOGOUT_RESPONSE) {
-            new (&this->SMSG_LOGOUT_RESPONSE) vanilla::SMSG_LOGOUT_RESPONSE();
-        }
-        if (opcode == Opcode::SMSG_LOGOUT_COMPLETE) {
-            new (&this->SMSG_LOGOUT_COMPLETE) vanilla::SMSG_LOGOUT_COMPLETE();
-        }
-        if (opcode == Opcode::SMSG_LOGOUT_CANCEL_ACK) {
-            new (&this->SMSG_LOGOUT_CANCEL_ACK) vanilla::SMSG_LOGOUT_CANCEL_ACK();
-        }
-        if (opcode == Opcode::SMSG_NAME_QUERY_RESPONSE) {
-            new (&this->SMSG_NAME_QUERY_RESPONSE) vanilla::SMSG_NAME_QUERY_RESPONSE();
-        }
-        if (opcode == Opcode::SMSG_PET_NAME_QUERY_RESPONSE) {
-            new (&this->SMSG_PET_NAME_QUERY_RESPONSE) vanilla::SMSG_PET_NAME_QUERY_RESPONSE();
-        }
-        if (opcode == Opcode::SMSG_GUILD_QUERY_RESPONSE) {
-            new (&this->SMSG_GUILD_QUERY_RESPONSE) vanilla::SMSG_GUILD_QUERY_RESPONSE();
-        }
-        if (opcode == Opcode::SMSG_PAGE_TEXT_QUERY_RESPONSE) {
-            new (&this->SMSG_PAGE_TEXT_QUERY_RESPONSE) vanilla::SMSG_PAGE_TEXT_QUERY_RESPONSE();
-        }
-        if (opcode == Opcode::SMSG_QUEST_QUERY_RESPONSE) {
-            new (&this->SMSG_QUEST_QUERY_RESPONSE) vanilla::SMSG_QUEST_QUERY_RESPONSE();
-        }
-        if (opcode == Opcode::SMSG_WHO) {
-            new (&this->SMSG_WHO) vanilla::SMSG_WHO();
-        }
-        if (opcode == Opcode::SMSG_WHOIS) {
-            new (&this->SMSG_WHOIS) vanilla::SMSG_WHOIS();
-        }
-        if (opcode == Opcode::SMSG_FRIEND_LIST) {
-            new (&this->SMSG_FRIEND_LIST) vanilla::SMSG_FRIEND_LIST();
-        }
-        if (opcode == Opcode::SMSG_FRIEND_STATUS) {
-            new (&this->SMSG_FRIEND_STATUS) vanilla::SMSG_FRIEND_STATUS();
-        }
-        if (opcode == Opcode::SMSG_IGNORE_LIST) {
-            new (&this->SMSG_IGNORE_LIST) vanilla::SMSG_IGNORE_LIST();
-        }
-        if (opcode == Opcode::SMSG_GROUP_INVITE) {
-            new (&this->SMSG_GROUP_INVITE) vanilla::SMSG_GROUP_INVITE();
-        }
-        if (opcode == Opcode::SMSG_GROUP_DECLINE) {
-            new (&this->SMSG_GROUP_DECLINE) vanilla::SMSG_GROUP_DECLINE();
-        }
-        if (opcode == Opcode::SMSG_GROUP_UNINVITE) {
-            new (&this->SMSG_GROUP_UNINVITE) vanilla::SMSG_GROUP_UNINVITE();
-        }
-        if (opcode == Opcode::SMSG_GROUP_SET_LEADER) {
-            new (&this->SMSG_GROUP_SET_LEADER) vanilla::SMSG_GROUP_SET_LEADER();
-        }
-        if (opcode == Opcode::SMSG_GROUP_DESTROYED) {
-            new (&this->SMSG_GROUP_DESTROYED) vanilla::SMSG_GROUP_DESTROYED();
-        }
-        if (opcode == Opcode::SMSG_PARTY_MEMBER_STATS) {
-            new (&this->SMSG_PARTY_MEMBER_STATS) vanilla::SMSG_PARTY_MEMBER_STATS();
-        }
-        if (opcode == Opcode::SMSG_PARTY_COMMAND_RESULT) {
-            new (&this->SMSG_PARTY_COMMAND_RESULT) vanilla::SMSG_PARTY_COMMAND_RESULT();
-        }
-        if (opcode == Opcode::SMSG_GUILD_INVITE) {
-            new (&this->SMSG_GUILD_INVITE) vanilla::SMSG_GUILD_INVITE();
-        }
-        if (opcode == Opcode::SMSG_GUILD_INFO) {
-            new (&this->SMSG_GUILD_INFO) vanilla::SMSG_GUILD_INFO();
-        }
-        if (opcode == Opcode::SMSG_GUILD_ROSTER) {
-            new (&this->SMSG_GUILD_ROSTER) vanilla::SMSG_GUILD_ROSTER();
-        }
-        if (opcode == Opcode::SMSG_GUILD_EVENT) {
-            new (&this->SMSG_GUILD_EVENT) vanilla::SMSG_GUILD_EVENT();
-        }
-        if (opcode == Opcode::SMSG_GUILD_COMMAND_RESULT) {
-            new (&this->SMSG_GUILD_COMMAND_RESULT) vanilla::SMSG_GUILD_COMMAND_RESULT();
-        }
-        if (opcode == Opcode::SMSG_MESSAGECHAT) {
-            new (&this->SMSG_MESSAGECHAT) vanilla::SMSG_MESSAGECHAT();
-        }
-        if (opcode == Opcode::SMSG_CHANNEL_NOTIFY) {
-            new (&this->SMSG_CHANNEL_NOTIFY) vanilla::SMSG_CHANNEL_NOTIFY();
-        }
-        if (opcode == Opcode::SMSG_CHANNEL_LIST) {
-            new (&this->SMSG_CHANNEL_LIST) vanilla::SMSG_CHANNEL_LIST();
-        }
-        if (opcode == Opcode::SMSG_UPDATE_OBJECT) {
-            new (&this->SMSG_UPDATE_OBJECT) vanilla::SMSG_UPDATE_OBJECT();
-        }
-        if (opcode == Opcode::SMSG_DESTROY_OBJECT) {
-            new (&this->SMSG_DESTROY_OBJECT) vanilla::SMSG_DESTROY_OBJECT();
-        }
-        if (opcode == Opcode::SMSG_READ_ITEM_OK) {
-            new (&this->SMSG_READ_ITEM_OK) vanilla::SMSG_READ_ITEM_OK();
-        }
-        if (opcode == Opcode::SMSG_READ_ITEM_FAILED) {
-            new (&this->SMSG_READ_ITEM_FAILED) vanilla::SMSG_READ_ITEM_FAILED();
-        }
-        if (opcode == Opcode::SMSG_ITEM_COOLDOWN) {
-            new (&this->SMSG_ITEM_COOLDOWN) vanilla::SMSG_ITEM_COOLDOWN();
-        }
-        if (opcode == Opcode::SMSG_GAMEOBJECT_CUSTOM_ANIM) {
-            new (&this->SMSG_GAMEOBJECT_CUSTOM_ANIM) vanilla::SMSG_GAMEOBJECT_CUSTOM_ANIM();
-        }
-        if (opcode == Opcode::MSG_MOVE_START_FORWARD) {
-            new (&this->MSG_MOVE_START_FORWARD) vanilla::MSG_MOVE_START_FORWARD_Server();
-        }
-        if (opcode == Opcode::MSG_MOVE_START_BACKWARD) {
-            new (&this->MSG_MOVE_START_BACKWARD) vanilla::MSG_MOVE_START_BACKWARD_Server();
-        }
-        if (opcode == Opcode::MSG_MOVE_STOP) {
-            new (&this->MSG_MOVE_STOP) vanilla::MSG_MOVE_STOP_Server();
-        }
-        if (opcode == Opcode::MSG_MOVE_START_STRAFE_LEFT) {
-            new (&this->MSG_MOVE_START_STRAFE_LEFT) vanilla::MSG_MOVE_START_STRAFE_LEFT_Server();
-        }
-        if (opcode == Opcode::MSG_MOVE_START_STRAFE_RIGHT) {
-            new (&this->MSG_MOVE_START_STRAFE_RIGHT) vanilla::MSG_MOVE_START_STRAFE_RIGHT_Server();
-        }
-        if (opcode == Opcode::MSG_MOVE_STOP_STRAFE) {
-            new (&this->MSG_MOVE_STOP_STRAFE) vanilla::MSG_MOVE_STOP_STRAFE_Server();
-        }
-        if (opcode == Opcode::MSG_MOVE_JUMP) {
-            new (&this->MSG_MOVE_JUMP) vanilla::MSG_MOVE_JUMP_Server();
-        }
-        if (opcode == Opcode::MSG_MOVE_START_TURN_LEFT) {
-            new (&this->MSG_MOVE_START_TURN_LEFT) vanilla::MSG_MOVE_START_TURN_LEFT_Server();
-        }
-        if (opcode == Opcode::MSG_MOVE_START_TURN_RIGHT) {
-            new (&this->MSG_MOVE_START_TURN_RIGHT) vanilla::MSG_MOVE_START_TURN_RIGHT_Server();
-        }
-        if (opcode == Opcode::MSG_MOVE_STOP_TURN) {
-            new (&this->MSG_MOVE_STOP_TURN) vanilla::MSG_MOVE_STOP_TURN_Server();
-        }
-        if (opcode == Opcode::MSG_MOVE_START_PITCH_UP) {
-            new (&this->MSG_MOVE_START_PITCH_UP) vanilla::MSG_MOVE_START_PITCH_UP_Server();
-        }
-        if (opcode == Opcode::MSG_MOVE_START_PITCH_DOWN) {
-            new (&this->MSG_MOVE_START_PITCH_DOWN) vanilla::MSG_MOVE_START_PITCH_DOWN_Server();
-        }
-        if (opcode == Opcode::MSG_MOVE_STOP_PITCH) {
-            new (&this->MSG_MOVE_STOP_PITCH) vanilla::MSG_MOVE_STOP_PITCH_Server();
-        }
-        if (opcode == Opcode::MSG_MOVE_SET_RUN_MODE) {
-            new (&this->MSG_MOVE_SET_RUN_MODE) vanilla::MSG_MOVE_SET_RUN_MODE_Server();
-        }
-        if (opcode == Opcode::MSG_MOVE_SET_WALK_MODE) {
-            new (&this->MSG_MOVE_SET_WALK_MODE) vanilla::MSG_MOVE_SET_WALK_MODE_Server();
-        }
-        if (opcode == Opcode::MSG_MOVE_TELEPORT_ACK) {
-            new (&this->MSG_MOVE_TELEPORT_ACK) vanilla::MSG_MOVE_TELEPORT_ACK_Server();
-        }
-        if (opcode == Opcode::MSG_MOVE_FALL_LAND) {
-            new (&this->MSG_MOVE_FALL_LAND) vanilla::MSG_MOVE_FALL_LAND_Server();
-        }
-        if (opcode == Opcode::MSG_MOVE_START_SWIM) {
-            new (&this->MSG_MOVE_START_SWIM) vanilla::MSG_MOVE_START_SWIM_Server();
-        }
-        if (opcode == Opcode::MSG_MOVE_STOP_SWIM) {
-            new (&this->MSG_MOVE_STOP_SWIM) vanilla::MSG_MOVE_STOP_SWIM_Server();
-        }
-        if (opcode == Opcode::MSG_MOVE_SET_FACING) {
-            new (&this->MSG_MOVE_SET_FACING) vanilla::MSG_MOVE_SET_FACING_Server();
-        }
-        if (opcode == Opcode::MSG_MOVE_SET_PITCH) {
-            new (&this->MSG_MOVE_SET_PITCH) vanilla::MSG_MOVE_SET_PITCH_Server();
-        }
-        if (opcode == Opcode::SMSG_MONSTER_MOVE) {
-            new (&this->SMSG_MONSTER_MOVE) vanilla::SMSG_MONSTER_MOVE();
-        }
-        if (opcode == Opcode::SMSG_MOVE_WATER_WALK) {
-            new (&this->SMSG_MOVE_WATER_WALK) vanilla::SMSG_MOVE_WATER_WALK();
-        }
-        if (opcode == Opcode::SMSG_MOVE_LAND_WALK) {
-            new (&this->SMSG_MOVE_LAND_WALK) vanilla::SMSG_MOVE_LAND_WALK();
-        }
-        if (opcode == Opcode::SMSG_FORCE_RUN_SPEED_CHANGE) {
-            new (&this->SMSG_FORCE_RUN_SPEED_CHANGE) vanilla::SMSG_FORCE_RUN_SPEED_CHANGE();
-        }
-        if (opcode == Opcode::SMSG_FORCE_RUN_BACK_SPEED_CHANGE) {
-            new (&this->SMSG_FORCE_RUN_BACK_SPEED_CHANGE) vanilla::SMSG_FORCE_RUN_BACK_SPEED_CHANGE();
-        }
-        if (opcode == Opcode::SMSG_FORCE_SWIM_SPEED_CHANGE) {
-            new (&this->SMSG_FORCE_SWIM_SPEED_CHANGE) vanilla::SMSG_FORCE_SWIM_SPEED_CHANGE();
-        }
-        if (opcode == Opcode::SMSG_FORCE_MOVE_ROOT) {
-            new (&this->SMSG_FORCE_MOVE_ROOT) vanilla::SMSG_FORCE_MOVE_ROOT();
-        }
-        if (opcode == Opcode::SMSG_FORCE_MOVE_UNROOT) {
-            new (&this->SMSG_FORCE_MOVE_UNROOT) vanilla::SMSG_FORCE_MOVE_UNROOT();
-        }
-        if (opcode == Opcode::MSG_MOVE_HEARTBEAT) {
-            new (&this->MSG_MOVE_HEARTBEAT) vanilla::MSG_MOVE_HEARTBEAT_Server();
-        }
-        if (opcode == Opcode::SMSG_MOVE_KNOCK_BACK) {
-            new (&this->SMSG_MOVE_KNOCK_BACK) vanilla::SMSG_MOVE_KNOCK_BACK();
-        }
-        if (opcode == Opcode::SMSG_MOVE_FEATHER_FALL) {
-            new (&this->SMSG_MOVE_FEATHER_FALL) vanilla::SMSG_MOVE_FEATHER_FALL();
-        }
-        if (opcode == Opcode::SMSG_MOVE_NORMAL_FALL) {
-            new (&this->SMSG_MOVE_NORMAL_FALL) vanilla::SMSG_MOVE_NORMAL_FALL();
-        }
-        if (opcode == Opcode::SMSG_MOVE_SET_HOVER) {
-            new (&this->SMSG_MOVE_SET_HOVER) vanilla::SMSG_MOVE_SET_HOVER();
-        }
-        if (opcode == Opcode::SMSG_MOVE_UNSET_HOVER) {
-            new (&this->SMSG_MOVE_UNSET_HOVER) vanilla::SMSG_MOVE_UNSET_HOVER();
-        }
-        if (opcode == Opcode::SMSG_TRIGGER_CINEMATIC) {
-            new (&this->SMSG_TRIGGER_CINEMATIC) vanilla::SMSG_TRIGGER_CINEMATIC();
-        }
-        if (opcode == Opcode::SMSG_TUTORIAL_FLAGS) {
-            new (&this->SMSG_TUTORIAL_FLAGS) vanilla::SMSG_TUTORIAL_FLAGS();
-        }
-        if (opcode == Opcode::SMSG_EMOTE) {
-            new (&this->SMSG_EMOTE) vanilla::SMSG_EMOTE();
-        }
-        if (opcode == Opcode::SMSG_TEXT_EMOTE) {
-            new (&this->SMSG_TEXT_EMOTE) vanilla::SMSG_TEXT_EMOTE();
-        }
-        if (opcode == Opcode::SMSG_INVENTORY_CHANGE_FAILURE) {
-            new (&this->SMSG_INVENTORY_CHANGE_FAILURE) vanilla::SMSG_INVENTORY_CHANGE_FAILURE();
-        }
-        if (opcode == Opcode::SMSG_OPEN_CONTAINER) {
-            new (&this->SMSG_OPEN_CONTAINER) vanilla::SMSG_OPEN_CONTAINER();
-        }
-        if (opcode == Opcode::SMSG_INSPECT) {
-            new (&this->SMSG_INSPECT) vanilla::SMSG_INSPECT();
-        }
-        if (opcode == Opcode::SMSG_TRADE_STATUS) {
-            new (&this->SMSG_TRADE_STATUS) vanilla::SMSG_TRADE_STATUS();
-        }
-        if (opcode == Opcode::SMSG_TRADE_STATUS_EXTENDED) {
-            new (&this->SMSG_TRADE_STATUS_EXTENDED) vanilla::SMSG_TRADE_STATUS_EXTENDED();
-        }
-        if (opcode == Opcode::SMSG_INITIALIZE_FACTIONS) {
-            new (&this->SMSG_INITIALIZE_FACTIONS) vanilla::SMSG_INITIALIZE_FACTIONS();
-        }
-        if (opcode == Opcode::SMSG_SET_FACTION_VISIBLE) {
-            new (&this->SMSG_SET_FACTION_VISIBLE) vanilla::SMSG_SET_FACTION_VISIBLE();
-        }
-        if (opcode == Opcode::SMSG_SET_FACTION_STANDING) {
-            new (&this->SMSG_SET_FACTION_STANDING) vanilla::SMSG_SET_FACTION_STANDING();
-        }
-        if (opcode == Opcode::SMSG_SET_PROFICIENCY) {
-            new (&this->SMSG_SET_PROFICIENCY) vanilla::SMSG_SET_PROFICIENCY();
-        }
-        if (opcode == Opcode::SMSG_ACTION_BUTTONS) {
-            new (&this->SMSG_ACTION_BUTTONS) vanilla::SMSG_ACTION_BUTTONS();
-        }
-        if (opcode == Opcode::SMSG_INITIAL_SPELLS) {
-            new (&this->SMSG_INITIAL_SPELLS) vanilla::SMSG_INITIAL_SPELLS();
-        }
-        if (opcode == Opcode::SMSG_LEARNED_SPELL) {
-            new (&this->SMSG_LEARNED_SPELL) vanilla::SMSG_LEARNED_SPELL();
-        }
-        if (opcode == Opcode::SMSG_SUPERCEDED_SPELL) {
-            new (&this->SMSG_SUPERCEDED_SPELL) vanilla::SMSG_SUPERCEDED_SPELL();
-        }
-        if (opcode == Opcode::SMSG_CAST_RESULT) {
-            new (&this->SMSG_CAST_RESULT) vanilla::SMSG_CAST_RESULT();
-        }
-        if (opcode == Opcode::SMSG_SPELL_START) {
-            new (&this->SMSG_SPELL_START) vanilla::SMSG_SPELL_START();
-        }
-        if (opcode == Opcode::SMSG_SPELL_GO) {
-            new (&this->SMSG_SPELL_GO) vanilla::SMSG_SPELL_GO();
-        }
-        if (opcode == Opcode::SMSG_SPELL_FAILURE) {
-            new (&this->SMSG_SPELL_FAILURE) vanilla::SMSG_SPELL_FAILURE();
-        }
-        if (opcode == Opcode::SMSG_SPELL_COOLDOWN) {
-            new (&this->SMSG_SPELL_COOLDOWN) vanilla::SMSG_SPELL_COOLDOWN();
-        }
-        if (opcode == Opcode::SMSG_COOLDOWN_EVENT) {
-            new (&this->SMSG_COOLDOWN_EVENT) vanilla::SMSG_COOLDOWN_EVENT();
-        }
-        if (opcode == Opcode::SMSG_UPDATE_AURA_DURATION) {
-            new (&this->SMSG_UPDATE_AURA_DURATION) vanilla::SMSG_UPDATE_AURA_DURATION();
-        }
-        if (opcode == Opcode::SMSG_PET_CAST_FAILED) {
-            new (&this->SMSG_PET_CAST_FAILED) vanilla::SMSG_PET_CAST_FAILED();
-        }
-        if (opcode == Opcode::MSG_CHANNEL_START) {
-            new (&this->MSG_CHANNEL_START) vanilla::MSG_CHANNEL_START_Server();
-        }
-        if (opcode == Opcode::MSG_CHANNEL_UPDATE) {
-            new (&this->MSG_CHANNEL_UPDATE) vanilla::MSG_CHANNEL_UPDATE_Server();
-        }
-        if (opcode == Opcode::SMSG_AI_REACTION) {
-            new (&this->SMSG_AI_REACTION) vanilla::SMSG_AI_REACTION();
-        }
-        if (opcode == Opcode::SMSG_ATTACKSTART) {
-            new (&this->SMSG_ATTACKSTART) vanilla::SMSG_ATTACKSTART();
-        }
-        if (opcode == Opcode::SMSG_ATTACKSTOP) {
-            new (&this->SMSG_ATTACKSTOP) vanilla::SMSG_ATTACKSTOP();
-        }
-        if (opcode == Opcode::SMSG_ATTACKSWING_NOTINRANGE) {
-            new (&this->SMSG_ATTACKSWING_NOTINRANGE) vanilla::SMSG_ATTACKSWING_NOTINRANGE();
-        }
-        if (opcode == Opcode::SMSG_ATTACKSWING_BADFACING) {
-            new (&this->SMSG_ATTACKSWING_BADFACING) vanilla::SMSG_ATTACKSWING_BADFACING();
-        }
-        if (opcode == Opcode::SMSG_ATTACKSWING_NOTSTANDING) {
-            new (&this->SMSG_ATTACKSWING_NOTSTANDING) vanilla::SMSG_ATTACKSWING_NOTSTANDING();
-        }
-        if (opcode == Opcode::SMSG_ATTACKSWING_DEADTARGET) {
-            new (&this->SMSG_ATTACKSWING_DEADTARGET) vanilla::SMSG_ATTACKSWING_DEADTARGET();
-        }
-        if (opcode == Opcode::SMSG_ATTACKSWING_CANT_ATTACK) {
-            new (&this->SMSG_ATTACKSWING_CANT_ATTACK) vanilla::SMSG_ATTACKSWING_CANT_ATTACK();
-        }
-        if (opcode == Opcode::SMSG_ATTACKERSTATEUPDATE) {
-            new (&this->SMSG_ATTACKERSTATEUPDATE) vanilla::SMSG_ATTACKERSTATEUPDATE();
-        }
-        if (opcode == Opcode::SMSG_CANCEL_COMBAT) {
-            new (&this->SMSG_CANCEL_COMBAT) vanilla::SMSG_CANCEL_COMBAT();
-        }
-        if (opcode == Opcode::SMSG_SPELLHEALLOG) {
-            new (&this->SMSG_SPELLHEALLOG) vanilla::SMSG_SPELLHEALLOG();
-        }
-        if (opcode == Opcode::SMSG_SPELLENERGIZELOG) {
-            new (&this->SMSG_SPELLENERGIZELOG) vanilla::SMSG_SPELLENERGIZELOG();
-        }
-        if (opcode == Opcode::SMSG_BINDPOINTUPDATE) {
-            new (&this->SMSG_BINDPOINTUPDATE) vanilla::SMSG_BINDPOINTUPDATE();
-        }
-        if (opcode == Opcode::SMSG_PLAYERBOUND) {
-            new (&this->SMSG_PLAYERBOUND) vanilla::SMSG_PLAYERBOUND();
-        }
-        if (opcode == Opcode::SMSG_CLIENT_CONTROL_UPDATE) {
-            new (&this->SMSG_CLIENT_CONTROL_UPDATE) vanilla::SMSG_CLIENT_CONTROL_UPDATE();
-        }
-        if (opcode == Opcode::SMSG_RESURRECT_REQUEST) {
-            new (&this->SMSG_RESURRECT_REQUEST) vanilla::SMSG_RESURRECT_REQUEST();
-        }
-        if (opcode == Opcode::SMSG_LOOT_RESPONSE) {
-            new (&this->SMSG_LOOT_RESPONSE) vanilla::SMSG_LOOT_RESPONSE();
-        }
-        if (opcode == Opcode::SMSG_LOOT_RELEASE_RESPONSE) {
-            new (&this->SMSG_LOOT_RELEASE_RESPONSE) vanilla::SMSG_LOOT_RELEASE_RESPONSE();
-        }
-        if (opcode == Opcode::SMSG_LOOT_REMOVED) {
-            new (&this->SMSG_LOOT_REMOVED) vanilla::SMSG_LOOT_REMOVED();
-        }
-        if (opcode == Opcode::SMSG_LOOT_MONEY_NOTIFY) {
-            new (&this->SMSG_LOOT_MONEY_NOTIFY) vanilla::SMSG_LOOT_MONEY_NOTIFY();
-        }
-        if (opcode == Opcode::SMSG_LOOT_CLEAR_MONEY) {
-            new (&this->SMSG_LOOT_CLEAR_MONEY) vanilla::SMSG_LOOT_CLEAR_MONEY();
-        }
-        if (opcode == Opcode::SMSG_ITEM_PUSH_RESULT) {
-            new (&this->SMSG_ITEM_PUSH_RESULT) vanilla::SMSG_ITEM_PUSH_RESULT();
-        }
-        if (opcode == Opcode::SMSG_DUEL_REQUESTED) {
-            new (&this->SMSG_DUEL_REQUESTED) vanilla::SMSG_DUEL_REQUESTED();
-        }
-        if (opcode == Opcode::SMSG_DUEL_OUTOFBOUNDS) {
-            new (&this->SMSG_DUEL_OUTOFBOUNDS) vanilla::SMSG_DUEL_OUTOFBOUNDS();
-        }
-        if (opcode == Opcode::SMSG_DUEL_INBOUNDS) {
-            new (&this->SMSG_DUEL_INBOUNDS) vanilla::SMSG_DUEL_INBOUNDS();
-        }
-        if (opcode == Opcode::SMSG_DUEL_COMPLETE) {
-            new (&this->SMSG_DUEL_COMPLETE) vanilla::SMSG_DUEL_COMPLETE();
-        }
-        if (opcode == Opcode::SMSG_DUEL_WINNER) {
-            new (&this->SMSG_DUEL_WINNER) vanilla::SMSG_DUEL_WINNER();
-        }
-        if (opcode == Opcode::SMSG_MOUNTRESULT) {
-            new (&this->SMSG_MOUNTRESULT) vanilla::SMSG_MOUNTRESULT();
-        }
-        if (opcode == Opcode::SMSG_DISMOUNTRESULT) {
-            new (&this->SMSG_DISMOUNTRESULT) vanilla::SMSG_DISMOUNTRESULT();
-        }
-        if (opcode == Opcode::SMSG_MOUNTSPECIAL_ANIM) {
-            new (&this->SMSG_MOUNTSPECIAL_ANIM) vanilla::SMSG_MOUNTSPECIAL_ANIM();
-        }
-        if (opcode == Opcode::SMSG_PET_TAME_FAILURE) {
-            new (&this->SMSG_PET_TAME_FAILURE) vanilla::SMSG_PET_TAME_FAILURE();
-        }
-        if (opcode == Opcode::SMSG_PET_NAME_INVALID) {
-            new (&this->SMSG_PET_NAME_INVALID) vanilla::SMSG_PET_NAME_INVALID();
-        }
-        if (opcode == Opcode::SMSG_PET_MODE) {
-            new (&this->SMSG_PET_MODE) vanilla::SMSG_PET_MODE();
-        }
-        if (opcode == Opcode::SMSG_GOSSIP_MESSAGE) {
-            new (&this->SMSG_GOSSIP_MESSAGE) vanilla::SMSG_GOSSIP_MESSAGE();
-        }
-        if (opcode == Opcode::SMSG_GOSSIP_COMPLETE) {
-            new (&this->SMSG_GOSSIP_COMPLETE) vanilla::SMSG_GOSSIP_COMPLETE();
-        }
-        if (opcode == Opcode::SMSG_NPC_TEXT_UPDATE) {
-            new (&this->SMSG_NPC_TEXT_UPDATE) vanilla::SMSG_NPC_TEXT_UPDATE();
-        }
-        if (opcode == Opcode::SMSG_QUESTGIVER_STATUS) {
-            new (&this->SMSG_QUESTGIVER_STATUS) vanilla::SMSG_QUESTGIVER_STATUS();
-        }
-        if (opcode == Opcode::SMSG_QUESTGIVER_QUEST_LIST) {
-            new (&this->SMSG_QUESTGIVER_QUEST_LIST) vanilla::SMSG_QUESTGIVER_QUEST_LIST();
-        }
-        if (opcode == Opcode::SMSG_QUESTGIVER_QUEST_DETAILS) {
-            new (&this->SMSG_QUESTGIVER_QUEST_DETAILS) vanilla::SMSG_QUESTGIVER_QUEST_DETAILS();
-        }
-        if (opcode == Opcode::SMSG_QUESTGIVER_REQUEST_ITEMS) {
-            new (&this->SMSG_QUESTGIVER_REQUEST_ITEMS) vanilla::SMSG_QUESTGIVER_REQUEST_ITEMS();
-        }
-        if (opcode == Opcode::SMSG_QUESTGIVER_OFFER_REWARD) {
-            new (&this->SMSG_QUESTGIVER_OFFER_REWARD) vanilla::SMSG_QUESTGIVER_OFFER_REWARD();
-        }
-        if (opcode == Opcode::SMSG_QUESTGIVER_QUEST_INVALID) {
-            new (&this->SMSG_QUESTGIVER_QUEST_INVALID) vanilla::SMSG_QUESTGIVER_QUEST_INVALID();
-        }
-        if (opcode == Opcode::SMSG_QUESTGIVER_QUEST_COMPLETE) {
-            new (&this->SMSG_QUESTGIVER_QUEST_COMPLETE) vanilla::SMSG_QUESTGIVER_QUEST_COMPLETE();
-        }
-        if (opcode == Opcode::SMSG_QUESTGIVER_QUEST_FAILED) {
-            new (&this->SMSG_QUESTGIVER_QUEST_FAILED) vanilla::SMSG_QUESTGIVER_QUEST_FAILED();
-        }
-        if (opcode == Opcode::SMSG_QUESTLOG_FULL) {
-            new (&this->SMSG_QUESTLOG_FULL) vanilla::SMSG_QUESTLOG_FULL();
-        }
-        if (opcode == Opcode::SMSG_QUESTUPDATE_FAILED) {
-            new (&this->SMSG_QUESTUPDATE_FAILED) vanilla::SMSG_QUESTUPDATE_FAILED();
-        }
-        if (opcode == Opcode::SMSG_QUESTUPDATE_FAILEDTIMER) {
-            new (&this->SMSG_QUESTUPDATE_FAILEDTIMER) vanilla::SMSG_QUESTUPDATE_FAILEDTIMER();
-        }
-        if (opcode == Opcode::SMSG_QUESTUPDATE_COMPLETE) {
-            new (&this->SMSG_QUESTUPDATE_COMPLETE) vanilla::SMSG_QUESTUPDATE_COMPLETE();
-        }
-        if (opcode == Opcode::SMSG_QUESTUPDATE_ADD_KILL) {
-            new (&this->SMSG_QUESTUPDATE_ADD_KILL) vanilla::SMSG_QUESTUPDATE_ADD_KILL();
-        }
-        if (opcode == Opcode::SMSG_QUESTUPDATE_ADD_ITEM) {
-            new (&this->SMSG_QUESTUPDATE_ADD_ITEM) vanilla::SMSG_QUESTUPDATE_ADD_ITEM();
-        }
-        if (opcode == Opcode::SMSG_QUEST_CONFIRM_ACCEPT) {
-            new (&this->SMSG_QUEST_CONFIRM_ACCEPT) vanilla::SMSG_QUEST_CONFIRM_ACCEPT();
-        }
-        if (opcode == Opcode::SMSG_LIST_INVENTORY) {
-            new (&this->SMSG_LIST_INVENTORY) vanilla::SMSG_LIST_INVENTORY();
-        }
-        if (opcode == Opcode::SMSG_SELL_ITEM) {
-            new (&this->SMSG_SELL_ITEM) vanilla::SMSG_SELL_ITEM();
-        }
-        if (opcode == Opcode::SMSG_BUY_ITEM) {
-            new (&this->SMSG_BUY_ITEM) vanilla::SMSG_BUY_ITEM();
-        }
-        if (opcode == Opcode::SMSG_BUY_FAILED) {
-            new (&this->SMSG_BUY_FAILED) vanilla::SMSG_BUY_FAILED();
-        }
-        if (opcode == Opcode::SMSG_SHOWTAXINODES) {
-            new (&this->SMSG_SHOWTAXINODES) vanilla::SMSG_SHOWTAXINODES();
-        }
-        if (opcode == Opcode::SMSG_TAXINODE_STATUS) {
-            new (&this->SMSG_TAXINODE_STATUS) vanilla::SMSG_TAXINODE_STATUS();
-        }
-        if (opcode == Opcode::SMSG_ACTIVATETAXIREPLY) {
-            new (&this->SMSG_ACTIVATETAXIREPLY) vanilla::SMSG_ACTIVATETAXIREPLY();
-        }
-        if (opcode == Opcode::SMSG_NEW_TAXI_PATH) {
-            new (&this->SMSG_NEW_TAXI_PATH) vanilla::SMSG_NEW_TAXI_PATH();
-        }
-        if (opcode == Opcode::SMSG_TRAINER_LIST) {
-            new (&this->SMSG_TRAINER_LIST) vanilla::SMSG_TRAINER_LIST();
-        }
-        if (opcode == Opcode::SMSG_TRAINER_BUY_SUCCEEDED) {
-            new (&this->SMSG_TRAINER_BUY_SUCCEEDED) vanilla::SMSG_TRAINER_BUY_SUCCEEDED();
-        }
-        if (opcode == Opcode::SMSG_TRAINER_BUY_FAILED) {
-            new (&this->SMSG_TRAINER_BUY_FAILED) vanilla::SMSG_TRAINER_BUY_FAILED();
-        }
-        if (opcode == Opcode::SMSG_SHOW_BANK) {
-            new (&this->SMSG_SHOW_BANK) vanilla::SMSG_SHOW_BANK();
-        }
-        if (opcode == Opcode::SMSG_BUY_BANK_SLOT_RESULT) {
-            new (&this->SMSG_BUY_BANK_SLOT_RESULT) vanilla::SMSG_BUY_BANK_SLOT_RESULT();
-        }
-        if (opcode == Opcode::SMSG_PETITION_SHOWLIST) {
-            new (&this->SMSG_PETITION_SHOWLIST) vanilla::SMSG_PETITION_SHOWLIST();
-        }
-        if (opcode == Opcode::SMSG_PETITION_SHOW_SIGNATURES) {
-            new (&this->SMSG_PETITION_SHOW_SIGNATURES) vanilla::SMSG_PETITION_SHOW_SIGNATURES();
-        }
-        if (opcode == Opcode::SMSG_PETITION_SIGN_RESULTS) {
-            new (&this->SMSG_PETITION_SIGN_RESULTS) vanilla::SMSG_PETITION_SIGN_RESULTS();
-        }
-        if (opcode == Opcode::SMSG_TURN_IN_PETITION_RESULTS) {
-            new (&this->SMSG_TURN_IN_PETITION_RESULTS) vanilla::SMSG_TURN_IN_PETITION_RESULTS();
-        }
-        if (opcode == Opcode::SMSG_PETITION_QUERY_RESPONSE) {
-            new (&this->SMSG_PETITION_QUERY_RESPONSE) vanilla::SMSG_PETITION_QUERY_RESPONSE();
-        }
-        if (opcode == Opcode::SMSG_FISH_NOT_HOOKED) {
-            new (&this->SMSG_FISH_NOT_HOOKED) vanilla::SMSG_FISH_NOT_HOOKED();
-        }
-        if (opcode == Opcode::SMSG_FISH_ESCAPED) {
-            new (&this->SMSG_FISH_ESCAPED) vanilla::SMSG_FISH_ESCAPED();
-        }
-        if (opcode == Opcode::SMSG_NOTIFICATION) {
-            new (&this->SMSG_NOTIFICATION) vanilla::SMSG_NOTIFICATION();
-        }
-        if (opcode == Opcode::SMSG_PLAYED_TIME) {
-            new (&this->SMSG_PLAYED_TIME) vanilla::SMSG_PLAYED_TIME();
-        }
-        if (opcode == Opcode::SMSG_QUERY_TIME_RESPONSE) {
-            new (&this->SMSG_QUERY_TIME_RESPONSE) vanilla::SMSG_QUERY_TIME_RESPONSE();
-        }
-        if (opcode == Opcode::SMSG_LOG_XPGAIN) {
-            new (&this->SMSG_LOG_XPGAIN) vanilla::SMSG_LOG_XPGAIN();
-        }
-        if (opcode == Opcode::SMSG_LEVELUP_INFO) {
-            new (&this->SMSG_LEVELUP_INFO) vanilla::SMSG_LEVELUP_INFO();
-        }
-        if (opcode == Opcode::MSG_MINIMAP_PING) {
-            new (&this->MSG_MINIMAP_PING) vanilla::MSG_MINIMAP_PING_Server();
-        }
-        if (opcode == Opcode::SMSG_RESISTLOG) {
-            new (&this->SMSG_RESISTLOG) vanilla::SMSG_RESISTLOG();
-        }
-        if (opcode == Opcode::SMSG_ENCHANTMENTLOG) {
-            new (&this->SMSG_ENCHANTMENTLOG) vanilla::SMSG_ENCHANTMENTLOG();
-        }
-        if (opcode == Opcode::SMSG_START_MIRROR_TIMER) {
-            new (&this->SMSG_START_MIRROR_TIMER) vanilla::SMSG_START_MIRROR_TIMER();
-        }
-        if (opcode == Opcode::SMSG_PAUSE_MIRROR_TIMER) {
-            new (&this->SMSG_PAUSE_MIRROR_TIMER) vanilla::SMSG_PAUSE_MIRROR_TIMER();
-        }
-        if (opcode == Opcode::SMSG_STOP_MIRROR_TIMER) {
-            new (&this->SMSG_STOP_MIRROR_TIMER) vanilla::SMSG_STOP_MIRROR_TIMER();
-        }
-        if (opcode == Opcode::SMSG_PONG) {
-            new (&this->SMSG_PONG) vanilla::SMSG_PONG();
-        }
-        if (opcode == Opcode::SMSG_CLEAR_COOLDOWN) {
-            new (&this->SMSG_CLEAR_COOLDOWN) vanilla::SMSG_CLEAR_COOLDOWN();
-        }
-        if (opcode == Opcode::SMSG_GAMEOBJECT_PAGETEXT) {
-            new (&this->SMSG_GAMEOBJECT_PAGETEXT) vanilla::SMSG_GAMEOBJECT_PAGETEXT();
-        }
-        if (opcode == Opcode::SMSG_SPELL_DELAYED) {
-            new (&this->SMSG_SPELL_DELAYED) vanilla::SMSG_SPELL_DELAYED();
-        }
-        if (opcode == Opcode::SMSG_ITEM_TIME_UPDATE) {
-            new (&this->SMSG_ITEM_TIME_UPDATE) vanilla::SMSG_ITEM_TIME_UPDATE();
-        }
-        if (opcode == Opcode::SMSG_ITEM_ENCHANT_TIME_UPDATE) {
-            new (&this->SMSG_ITEM_ENCHANT_TIME_UPDATE) vanilla::SMSG_ITEM_ENCHANT_TIME_UPDATE();
-        }
-        if (opcode == Opcode::SMSG_AUTH_CHALLENGE) {
-            new (&this->SMSG_AUTH_CHALLENGE) vanilla::SMSG_AUTH_CHALLENGE();
-        }
-        if (opcode == Opcode::SMSG_AUTH_RESPONSE) {
-            new (&this->SMSG_AUTH_RESPONSE) vanilla::SMSG_AUTH_RESPONSE();
-        }
-        if (opcode == Opcode::MSG_SAVE_GUILD_EMBLEM) {
-            new (&this->MSG_SAVE_GUILD_EMBLEM) vanilla::MSG_SAVE_GUILD_EMBLEM_Server();
-        }
-        if (opcode == Opcode::SMSG_PLAY_SPELL_VISUAL) {
-            new (&this->SMSG_PLAY_SPELL_VISUAL) vanilla::SMSG_PLAY_SPELL_VISUAL();
-        }
-        if (opcode == Opcode::SMSG_PARTYKILLLOG) {
-            new (&this->SMSG_PARTYKILLLOG) vanilla::SMSG_PARTYKILLLOG();
-        }
-        if (opcode == Opcode::SMSG_PLAY_SPELL_IMPACT) {
-            new (&this->SMSG_PLAY_SPELL_IMPACT) vanilla::SMSG_PLAY_SPELL_IMPACT();
-        }
-        if (opcode == Opcode::SMSG_EXPLORATION_EXPERIENCE) {
-            new (&this->SMSG_EXPLORATION_EXPERIENCE) vanilla::SMSG_EXPLORATION_EXPERIENCE();
-        }
-        if (opcode == Opcode::MSG_RANDOM_ROLL) {
-            new (&this->MSG_RANDOM_ROLL) vanilla::MSG_RANDOM_ROLL_Server();
-        }
-        if (opcode == Opcode::SMSG_ENVIRONMENTAL_DAMAGE_LOG) {
-            new (&this->SMSG_ENVIRONMENTAL_DAMAGE_LOG) vanilla::SMSG_ENVIRONMENTAL_DAMAGE_LOG();
-        }
-        if (opcode == Opcode::MSG_LOOKING_FOR_GROUP) {
-            new (&this->MSG_LOOKING_FOR_GROUP) vanilla::MSG_LOOKING_FOR_GROUP_Server();
-        }
-        if (opcode == Opcode::SMSG_REMOVED_SPELL) {
-            new (&this->SMSG_REMOVED_SPELL) vanilla::SMSG_REMOVED_SPELL();
-        }
-        if (opcode == Opcode::SMSG_GMTICKET_CREATE) {
-            new (&this->SMSG_GMTICKET_CREATE) vanilla::SMSG_GMTICKET_CREATE();
-        }
-        if (opcode == Opcode::SMSG_GMTICKET_UPDATETEXT) {
-            new (&this->SMSG_GMTICKET_UPDATETEXT) vanilla::SMSG_GMTICKET_UPDATETEXT();
-        }
-        if (opcode == Opcode::SMSG_ACCOUNT_DATA_TIMES) {
-            new (&this->SMSG_ACCOUNT_DATA_TIMES) vanilla::SMSG_ACCOUNT_DATA_TIMES();
-        }
-        if (opcode == Opcode::SMSG_GMTICKET_GETTICKET) {
-            new (&this->SMSG_GMTICKET_GETTICKET) vanilla::SMSG_GMTICKET_GETTICKET();
-        }
-        if (opcode == Opcode::SMSG_GAMEOBJECT_SPAWN_ANIM) {
-            new (&this->SMSG_GAMEOBJECT_SPAWN_ANIM) vanilla::SMSG_GAMEOBJECT_SPAWN_ANIM();
-        }
-        if (opcode == Opcode::SMSG_GAMEOBJECT_DESPAWN_ANIM) {
-            new (&this->SMSG_GAMEOBJECT_DESPAWN_ANIM) vanilla::SMSG_GAMEOBJECT_DESPAWN_ANIM();
-        }
-        if (opcode == Opcode::MSG_CORPSE_QUERY) {
-            new (&this->MSG_CORPSE_QUERY) vanilla::MSG_CORPSE_QUERY_Server();
-        }
-        if (opcode == Opcode::SMSG_GMTICKET_DELETETICKET) {
-            new (&this->SMSG_GMTICKET_DELETETICKET) vanilla::SMSG_GMTICKET_DELETETICKET();
-        }
-        if (opcode == Opcode::SMSG_CHAT_WRONG_FACTION) {
-            new (&this->SMSG_CHAT_WRONG_FACTION) vanilla::SMSG_CHAT_WRONG_FACTION();
-        }
-        if (opcode == Opcode::SMSG_GMTICKET_SYSTEMSTATUS) {
-            new (&this->SMSG_GMTICKET_SYSTEMSTATUS) vanilla::SMSG_GMTICKET_SYSTEMSTATUS();
-        }
-        if (opcode == Opcode::SMSG_SET_REST_START) {
-            new (&this->SMSG_SET_REST_START) vanilla::SMSG_SET_REST_START();
-        }
-        if (opcode == Opcode::SMSG_SPIRIT_HEALER_CONFIRM) {
-            new (&this->SMSG_SPIRIT_HEALER_CONFIRM) vanilla::SMSG_SPIRIT_HEALER_CONFIRM();
-        }
-        if (opcode == Opcode::SMSG_GOSSIP_POI) {
-            new (&this->SMSG_GOSSIP_POI) vanilla::SMSG_GOSSIP_POI();
-        }
-        if (opcode == Opcode::SMSG_LOGIN_VERIFY_WORLD) {
-            new (&this->SMSG_LOGIN_VERIFY_WORLD) vanilla::SMSG_LOGIN_VERIFY_WORLD();
-        }
-        if (opcode == Opcode::SMSG_SEND_MAIL_RESULT) {
-            new (&this->SMSG_SEND_MAIL_RESULT) vanilla::SMSG_SEND_MAIL_RESULT();
-        }
-        if (opcode == Opcode::SMSG_MAIL_LIST_RESULT) {
-            new (&this->SMSG_MAIL_LIST_RESULT) vanilla::SMSG_MAIL_LIST_RESULT();
-        }
-        if (opcode == Opcode::SMSG_BATTLEFIELD_LIST) {
-            new (&this->SMSG_BATTLEFIELD_LIST) vanilla::SMSG_BATTLEFIELD_LIST();
-        }
-        if (opcode == Opcode::SMSG_ITEM_TEXT_QUERY_RESPONSE) {
-            new (&this->SMSG_ITEM_TEXT_QUERY_RESPONSE) vanilla::SMSG_ITEM_TEXT_QUERY_RESPONSE();
-        }
-        if (opcode == Opcode::SMSG_SPELLLOGMISS) {
-            new (&this->SMSG_SPELLLOGMISS) vanilla::SMSG_SPELLLOGMISS();
-        }
-        if (opcode == Opcode::SMSG_SPELLLOGEXECUTE) {
-            new (&this->SMSG_SPELLLOGEXECUTE) vanilla::SMSG_SPELLLOGEXECUTE();
-        }
-        if (opcode == Opcode::SMSG_PERIODICAURALOG) {
-            new (&this->SMSG_PERIODICAURALOG) vanilla::SMSG_PERIODICAURALOG();
-        }
-        if (opcode == Opcode::SMSG_SPELLDAMAGESHIELD) {
-            new (&this->SMSG_SPELLDAMAGESHIELD) vanilla::SMSG_SPELLDAMAGESHIELD();
-        }
-        if (opcode == Opcode::SMSG_SPELLNONMELEEDAMAGELOG) {
-            new (&this->SMSG_SPELLNONMELEEDAMAGELOG) vanilla::SMSG_SPELLNONMELEEDAMAGELOG();
-        }
-        if (opcode == Opcode::SMSG_ZONE_UNDER_ATTACK) {
-            new (&this->SMSG_ZONE_UNDER_ATTACK) vanilla::SMSG_ZONE_UNDER_ATTACK();
-        }
-        if (opcode == Opcode::MSG_AUCTION_HELLO) {
-            new (&this->MSG_AUCTION_HELLO) vanilla::MSG_AUCTION_HELLO_Server();
-        }
-        if (opcode == Opcode::SMSG_AUCTION_COMMAND_RESULT) {
-            new (&this->SMSG_AUCTION_COMMAND_RESULT) vanilla::SMSG_AUCTION_COMMAND_RESULT();
-        }
-        if (opcode == Opcode::SMSG_AUCTION_LIST_RESULT) {
-            new (&this->SMSG_AUCTION_LIST_RESULT) vanilla::SMSG_AUCTION_LIST_RESULT();
-        }
-        if (opcode == Opcode::SMSG_AUCTION_OWNER_LIST_RESULT) {
-            new (&this->SMSG_AUCTION_OWNER_LIST_RESULT) vanilla::SMSG_AUCTION_OWNER_LIST_RESULT();
-        }
-        if (opcode == Opcode::SMSG_AUCTION_BIDDER_NOTIFICATION) {
-            new (&this->SMSG_AUCTION_BIDDER_NOTIFICATION) vanilla::SMSG_AUCTION_BIDDER_NOTIFICATION();
-        }
-        if (opcode == Opcode::SMSG_AUCTION_OWNER_NOTIFICATION) {
-            new (&this->SMSG_AUCTION_OWNER_NOTIFICATION) vanilla::SMSG_AUCTION_OWNER_NOTIFICATION();
-        }
-        if (opcode == Opcode::SMSG_PROCRESIST) {
-            new (&this->SMSG_PROCRESIST) vanilla::SMSG_PROCRESIST();
-        }
-        if (opcode == Opcode::SMSG_DISPEL_FAILED) {
-            new (&this->SMSG_DISPEL_FAILED) vanilla::SMSG_DISPEL_FAILED();
-        }
-        if (opcode == Opcode::SMSG_SPELLORDAMAGE_IMMUNE) {
-            new (&this->SMSG_SPELLORDAMAGE_IMMUNE) vanilla::SMSG_SPELLORDAMAGE_IMMUNE();
-        }
-        if (opcode == Opcode::SMSG_AUCTION_BIDDER_LIST_RESULT) {
-            new (&this->SMSG_AUCTION_BIDDER_LIST_RESULT) vanilla::SMSG_AUCTION_BIDDER_LIST_RESULT();
-        }
-        if (opcode == Opcode::SMSG_SET_FLAT_SPELL_MODIFIER) {
-            new (&this->SMSG_SET_FLAT_SPELL_MODIFIER) vanilla::SMSG_SET_FLAT_SPELL_MODIFIER();
-        }
-        if (opcode == Opcode::SMSG_SET_PCT_SPELL_MODIFIER) {
-            new (&this->SMSG_SET_PCT_SPELL_MODIFIER) vanilla::SMSG_SET_PCT_SPELL_MODIFIER();
-        }
-        if (opcode == Opcode::SMSG_CORPSE_RECLAIM_DELAY) {
-            new (&this->SMSG_CORPSE_RECLAIM_DELAY) vanilla::SMSG_CORPSE_RECLAIM_DELAY();
-        }
-        if (opcode == Opcode::MSG_LIST_STABLED_PETS) {
-            new (&this->MSG_LIST_STABLED_PETS) vanilla::MSG_LIST_STABLED_PETS_Server();
-        }
-        if (opcode == Opcode::SMSG_STABLE_RESULT) {
-            new (&this->SMSG_STABLE_RESULT) vanilla::SMSG_STABLE_RESULT();
-        }
-        if (opcode == Opcode::SMSG_PLAY_MUSIC) {
-            new (&this->SMSG_PLAY_MUSIC) vanilla::SMSG_PLAY_MUSIC();
-        }
-        if (opcode == Opcode::SMSG_PLAY_OBJECT_SOUND) {
-            new (&this->SMSG_PLAY_OBJECT_SOUND) vanilla::SMSG_PLAY_OBJECT_SOUND();
-        }
-        if (opcode == Opcode::SMSG_SPELLDISPELLOG) {
-            new (&this->SMSG_SPELLDISPELLOG) vanilla::SMSG_SPELLDISPELLOG();
-        }
-        if (opcode == Opcode::MSG_QUERY_NEXT_MAIL_TIME) {
-            new (&this->MSG_QUERY_NEXT_MAIL_TIME) vanilla::MSG_QUERY_NEXT_MAIL_TIME_Server();
-        }
-        if (opcode == Opcode::SMSG_RECEIVED_MAIL) {
-            new (&this->SMSG_RECEIVED_MAIL) vanilla::SMSG_RECEIVED_MAIL();
-        }
-        if (opcode == Opcode::SMSG_RAID_GROUP_ONLY) {
-            new (&this->SMSG_RAID_GROUP_ONLY) vanilla::SMSG_RAID_GROUP_ONLY();
-        }
-        if (opcode == Opcode::SMSG_PVP_CREDIT) {
-            new (&this->SMSG_PVP_CREDIT) vanilla::SMSG_PVP_CREDIT();
-        }
-        if (opcode == Opcode::SMSG_AUCTION_REMOVED_NOTIFICATION) {
-            new (&this->SMSG_AUCTION_REMOVED_NOTIFICATION) vanilla::SMSG_AUCTION_REMOVED_NOTIFICATION();
-        }
-        if (opcode == Opcode::SMSG_SERVER_MESSAGE) {
-            new (&this->SMSG_SERVER_MESSAGE) vanilla::SMSG_SERVER_MESSAGE();
-        }
-        if (opcode == Opcode::SMSG_MEETINGSTONE_SETQUEUE) {
-            new (&this->SMSG_MEETINGSTONE_SETQUEUE) vanilla::SMSG_MEETINGSTONE_SETQUEUE();
-        }
-        if (opcode == Opcode::SMSG_MEETINGSTONE_COMPLETE) {
-            new (&this->SMSG_MEETINGSTONE_COMPLETE) vanilla::SMSG_MEETINGSTONE_COMPLETE();
-        }
-        if (opcode == Opcode::SMSG_MEETINGSTONE_IN_PROGRESS) {
-            new (&this->SMSG_MEETINGSTONE_IN_PROGRESS) vanilla::SMSG_MEETINGSTONE_IN_PROGRESS();
-        }
-        if (opcode == Opcode::SMSG_MEETINGSTONE_MEMBER_ADDED) {
-            new (&this->SMSG_MEETINGSTONE_MEMBER_ADDED) vanilla::SMSG_MEETINGSTONE_MEMBER_ADDED();
-        }
-        if (opcode == Opcode::SMSG_CANCEL_AUTO_REPEAT) {
-            new (&this->SMSG_CANCEL_AUTO_REPEAT) vanilla::SMSG_CANCEL_AUTO_REPEAT();
-        }
-        if (opcode == Opcode::SMSG_STANDSTATE_UPDATE) {
-            new (&this->SMSG_STANDSTATE_UPDATE) vanilla::SMSG_STANDSTATE_UPDATE();
-        }
-        if (opcode == Opcode::SMSG_LOOT_ALL_PASSED) {
-            new (&this->SMSG_LOOT_ALL_PASSED) vanilla::SMSG_LOOT_ALL_PASSED();
-        }
-        if (opcode == Opcode::SMSG_LOOT_ROLL_WON) {
-            new (&this->SMSG_LOOT_ROLL_WON) vanilla::SMSG_LOOT_ROLL_WON();
-        }
-        if (opcode == Opcode::SMSG_LOOT_START_ROLL) {
-            new (&this->SMSG_LOOT_START_ROLL) vanilla::SMSG_LOOT_START_ROLL();
-        }
-        if (opcode == Opcode::SMSG_LOOT_ROLL) {
-            new (&this->SMSG_LOOT_ROLL) vanilla::SMSG_LOOT_ROLL();
-        }
-        if (opcode == Opcode::SMSG_LOOT_MASTER_LIST) {
-            new (&this->SMSG_LOOT_MASTER_LIST) vanilla::SMSG_LOOT_MASTER_LIST();
-        }
-        if (opcode == Opcode::SMSG_SET_FORCED_REACTIONS) {
-            new (&this->SMSG_SET_FORCED_REACTIONS) vanilla::SMSG_SET_FORCED_REACTIONS();
-        }
-        if (opcode == Opcode::SMSG_SPELL_FAILED_OTHER) {
-            new (&this->SMSG_SPELL_FAILED_OTHER) vanilla::SMSG_SPELL_FAILED_OTHER();
-        }
-        if (opcode == Opcode::SMSG_GAMEOBJECT_RESET_STATE) {
-            new (&this->SMSG_GAMEOBJECT_RESET_STATE) vanilla::SMSG_GAMEOBJECT_RESET_STATE();
-        }
-        if (opcode == Opcode::SMSG_CHAT_PLAYER_NOT_FOUND) {
-            new (&this->SMSG_CHAT_PLAYER_NOT_FOUND) vanilla::SMSG_CHAT_PLAYER_NOT_FOUND();
-        }
-        if (opcode == Opcode::MSG_TALENT_WIPE_CONFIRM) {
-            new (&this->MSG_TALENT_WIPE_CONFIRM) vanilla::MSG_TALENT_WIPE_CONFIRM_Server();
-        }
-        if (opcode == Opcode::SMSG_SUMMON_REQUEST) {
-            new (&this->SMSG_SUMMON_REQUEST) vanilla::SMSG_SUMMON_REQUEST();
-        }
-        if (opcode == Opcode::SMSG_MONSTER_MOVE_TRANSPORT) {
-            new (&this->SMSG_MONSTER_MOVE_TRANSPORT) vanilla::SMSG_MONSTER_MOVE_TRANSPORT();
-        }
-        if (opcode == Opcode::SMSG_PET_BROKEN) {
-            new (&this->SMSG_PET_BROKEN) vanilla::SMSG_PET_BROKEN();
-        }
-        if (opcode == Opcode::MSG_MOVE_FEATHER_FALL) {
-            new (&this->MSG_MOVE_FEATHER_FALL) vanilla::MSG_MOVE_FEATHER_FALL_Server();
-        }
-        if (opcode == Opcode::SMSG_FEIGN_DEATH_RESISTED) {
-            new (&this->SMSG_FEIGN_DEATH_RESISTED) vanilla::SMSG_FEIGN_DEATH_RESISTED();
-        }
-        if (opcode == Opcode::SMSG_DUEL_COUNTDOWN) {
-            new (&this->SMSG_DUEL_COUNTDOWN) vanilla::SMSG_DUEL_COUNTDOWN();
-        }
-        if (opcode == Opcode::SMSG_AREA_TRIGGER_MESSAGE) {
-            new (&this->SMSG_AREA_TRIGGER_MESSAGE) vanilla::SMSG_AREA_TRIGGER_MESSAGE();
-        }
-        if (opcode == Opcode::SMSG_MEETINGSTONE_JOINFAILED) {
-            new (&this->SMSG_MEETINGSTONE_JOINFAILED) vanilla::SMSG_MEETINGSTONE_JOINFAILED();
-        }
-        if (opcode == Opcode::SMSG_PLAYER_SKINNED) {
-            new (&this->SMSG_PLAYER_SKINNED) vanilla::SMSG_PLAYER_SKINNED();
-        }
-        if (opcode == Opcode::SMSG_DURABILITY_DAMAGE_DEATH) {
-            new (&this->SMSG_DURABILITY_DAMAGE_DEATH) vanilla::SMSG_DURABILITY_DAMAGE_DEATH();
-        }
-        if (opcode == Opcode::SMSG_INIT_WORLD_STATES) {
-            new (&this->SMSG_INIT_WORLD_STATES) vanilla::SMSG_INIT_WORLD_STATES();
-        }
-        if (opcode == Opcode::SMSG_UPDATE_WORLD_STATE) {
-            new (&this->SMSG_UPDATE_WORLD_STATE) vanilla::SMSG_UPDATE_WORLD_STATE();
-        }
-        if (opcode == Opcode::SMSG_ITEM_NAME_QUERY_RESPONSE) {
-            new (&this->SMSG_ITEM_NAME_QUERY_RESPONSE) vanilla::SMSG_ITEM_NAME_QUERY_RESPONSE();
-        }
-        if (opcode == Opcode::SMSG_PET_ACTION_FEEDBACK) {
-            new (&this->SMSG_PET_ACTION_FEEDBACK) vanilla::SMSG_PET_ACTION_FEEDBACK();
-        }
-        if (opcode == Opcode::SMSG_CHAR_RENAME) {
-            new (&this->SMSG_CHAR_RENAME) vanilla::SMSG_CHAR_RENAME();
-        }
-        if (opcode == Opcode::SMSG_INSTANCE_SAVE_CREATED) {
-            new (&this->SMSG_INSTANCE_SAVE_CREATED) vanilla::SMSG_INSTANCE_SAVE_CREATED();
-        }
-        if (opcode == Opcode::SMSG_RAID_INSTANCE_INFO) {
-            new (&this->SMSG_RAID_INSTANCE_INFO) vanilla::SMSG_RAID_INSTANCE_INFO();
-        }
-        if (opcode == Opcode::SMSG_PLAY_SOUND) {
-            new (&this->SMSG_PLAY_SOUND) vanilla::SMSG_PLAY_SOUND();
-        }
-        if (opcode == Opcode::SMSG_BATTLEFIELD_STATUS) {
-            new (&this->SMSG_BATTLEFIELD_STATUS) vanilla::SMSG_BATTLEFIELD_STATUS();
-        }
-        if (opcode == Opcode::MSG_INSPECT_HONOR_STATS) {
-            new (&this->MSG_INSPECT_HONOR_STATS) vanilla::MSG_INSPECT_HONOR_STATS_Server();
-        }
-        if (opcode == Opcode::SMSG_FORCE_WALK_SPEED_CHANGE) {
-            new (&this->SMSG_FORCE_WALK_SPEED_CHANGE) vanilla::SMSG_FORCE_WALK_SPEED_CHANGE();
-        }
-        if (opcode == Opcode::SMSG_FORCE_SWIM_BACK_SPEED_CHANGE) {
-            new (&this->SMSG_FORCE_SWIM_BACK_SPEED_CHANGE) vanilla::SMSG_FORCE_SWIM_BACK_SPEED_CHANGE();
-        }
-        if (opcode == Opcode::SMSG_FORCE_TURN_RATE_CHANGE) {
-            new (&this->SMSG_FORCE_TURN_RATE_CHANGE) vanilla::SMSG_FORCE_TURN_RATE_CHANGE();
-        }
-        if (opcode == Opcode::MSG_PVP_LOG_DATA) {
-            new (&this->MSG_PVP_LOG_DATA) vanilla::MSG_PVP_LOG_DATA_Server();
-        }
-        if (opcode == Opcode::SMSG_AREA_SPIRIT_HEALER_TIME) {
-            new (&this->SMSG_AREA_SPIRIT_HEALER_TIME) vanilla::SMSG_AREA_SPIRIT_HEALER_TIME();
-        }
-        if (opcode == Opcode::SMSG_WARDEN_DATA) {
-            new (&this->SMSG_WARDEN_DATA) vanilla::SMSG_WARDEN_DATA();
-        }
-        if (opcode == Opcode::SMSG_GROUP_JOINED_BATTLEGROUND) {
-            new (&this->SMSG_GROUP_JOINED_BATTLEGROUND) vanilla::SMSG_GROUP_JOINED_BATTLEGROUND();
-        }
-        if (opcode == Opcode::MSG_BATTLEGROUND_PLAYER_POSITIONS) {
-            new (&this->MSG_BATTLEGROUND_PLAYER_POSITIONS) vanilla::MSG_BATTLEGROUND_PLAYER_POSITIONS_Server();
-        }
-        if (opcode == Opcode::SMSG_BINDER_CONFIRM) {
-            new (&this->SMSG_BINDER_CONFIRM) vanilla::SMSG_BINDER_CONFIRM();
-        }
-        if (opcode == Opcode::SMSG_BATTLEGROUND_PLAYER_JOINED) {
-            new (&this->SMSG_BATTLEGROUND_PLAYER_JOINED) vanilla::SMSG_BATTLEGROUND_PLAYER_JOINED();
-        }
-        if (opcode == Opcode::SMSG_BATTLEGROUND_PLAYER_LEFT) {
-            new (&this->SMSG_BATTLEGROUND_PLAYER_LEFT) vanilla::SMSG_BATTLEGROUND_PLAYER_LEFT();
-        }
-        if (opcode == Opcode::SMSG_ADDON_INFO) {
-            new (&this->SMSG_ADDON_INFO) vanilla::SMSG_ADDON_INFO();
-        }
-        if (opcode == Opcode::SMSG_PET_UNLEARN_CONFIRM) {
-            new (&this->SMSG_PET_UNLEARN_CONFIRM) vanilla::SMSG_PET_UNLEARN_CONFIRM();
-        }
-        if (opcode == Opcode::SMSG_PARTY_MEMBER_STATS_FULL) {
-            new (&this->SMSG_PARTY_MEMBER_STATS_FULL) vanilla::SMSG_PARTY_MEMBER_STATS_FULL();
-        }
-        if (opcode == Opcode::SMSG_WEATHER) {
-            new (&this->SMSG_WEATHER) vanilla::SMSG_WEATHER();
-        }
-        if (opcode == Opcode::SMSG_RAID_INSTANCE_MESSAGE) {
-            new (&this->SMSG_RAID_INSTANCE_MESSAGE) vanilla::SMSG_RAID_INSTANCE_MESSAGE();
-        }
-        if (opcode == Opcode::SMSG_CHAT_RESTRICTED) {
-            new (&this->SMSG_CHAT_RESTRICTED) vanilla::SMSG_CHAT_RESTRICTED();
-        }
-        if (opcode == Opcode::SMSG_SPLINE_SET_RUN_SPEED) {
-            new (&this->SMSG_SPLINE_SET_RUN_SPEED) vanilla::SMSG_SPLINE_SET_RUN_SPEED();
-        }
-        if (opcode == Opcode::SMSG_SPLINE_SET_RUN_BACK_SPEED) {
-            new (&this->SMSG_SPLINE_SET_RUN_BACK_SPEED) vanilla::SMSG_SPLINE_SET_RUN_BACK_SPEED();
-        }
-        if (opcode == Opcode::SMSG_SPLINE_SET_SWIM_SPEED) {
-            new (&this->SMSG_SPLINE_SET_SWIM_SPEED) vanilla::SMSG_SPLINE_SET_SWIM_SPEED();
-        }
-        if (opcode == Opcode::SMSG_SPLINE_SET_WALK_SPEED) {
-            new (&this->SMSG_SPLINE_SET_WALK_SPEED) vanilla::SMSG_SPLINE_SET_WALK_SPEED();
-        }
-        if (opcode == Opcode::SMSG_SPLINE_SET_SWIM_BACK_SPEED) {
-            new (&this->SMSG_SPLINE_SET_SWIM_BACK_SPEED) vanilla::SMSG_SPLINE_SET_SWIM_BACK_SPEED();
-        }
-        if (opcode == Opcode::SMSG_SPLINE_SET_TURN_RATE) {
-            new (&this->SMSG_SPLINE_SET_TURN_RATE) vanilla::SMSG_SPLINE_SET_TURN_RATE();
-        }
-        if (opcode == Opcode::SMSG_SPLINE_MOVE_UNROOT) {
-            new (&this->SMSG_SPLINE_MOVE_UNROOT) vanilla::SMSG_SPLINE_MOVE_UNROOT();
-        }
-        if (opcode == Opcode::SMSG_SPLINE_MOVE_FEATHER_FALL) {
-            new (&this->SMSG_SPLINE_MOVE_FEATHER_FALL) vanilla::SMSG_SPLINE_MOVE_FEATHER_FALL();
-        }
-        if (opcode == Opcode::SMSG_SPLINE_MOVE_NORMAL_FALL) {
-            new (&this->SMSG_SPLINE_MOVE_NORMAL_FALL) vanilla::SMSG_SPLINE_MOVE_NORMAL_FALL();
-        }
-        if (opcode == Opcode::SMSG_SPLINE_MOVE_SET_HOVER) {
-            new (&this->SMSG_SPLINE_MOVE_SET_HOVER) vanilla::SMSG_SPLINE_MOVE_SET_HOVER();
-        }
-        if (opcode == Opcode::SMSG_SPLINE_MOVE_UNSET_HOVER) {
-            new (&this->SMSG_SPLINE_MOVE_UNSET_HOVER) vanilla::SMSG_SPLINE_MOVE_UNSET_HOVER();
-        }
-        if (opcode == Opcode::SMSG_SPLINE_MOVE_WATER_WALK) {
-            new (&this->SMSG_SPLINE_MOVE_WATER_WALK) vanilla::SMSG_SPLINE_MOVE_WATER_WALK();
-        }
-        if (opcode == Opcode::SMSG_SPLINE_MOVE_LAND_WALK) {
-            new (&this->SMSG_SPLINE_MOVE_LAND_WALK) vanilla::SMSG_SPLINE_MOVE_LAND_WALK();
-        }
-        if (opcode == Opcode::SMSG_SPLINE_MOVE_START_SWIM) {
-            new (&this->SMSG_SPLINE_MOVE_START_SWIM) vanilla::SMSG_SPLINE_MOVE_START_SWIM();
-        }
-        if (opcode == Opcode::SMSG_SPLINE_MOVE_STOP_SWIM) {
-            new (&this->SMSG_SPLINE_MOVE_STOP_SWIM) vanilla::SMSG_SPLINE_MOVE_STOP_SWIM();
-        }
-        if (opcode == Opcode::SMSG_SPLINE_MOVE_SET_RUN_MODE) {
-            new (&this->SMSG_SPLINE_MOVE_SET_RUN_MODE) vanilla::SMSG_SPLINE_MOVE_SET_RUN_MODE();
-        }
-        if (opcode == Opcode::SMSG_SPLINE_MOVE_SET_WALK_MODE) {
-            new (&this->SMSG_SPLINE_MOVE_SET_WALK_MODE) vanilla::SMSG_SPLINE_MOVE_SET_WALK_MODE();
-        }
-        if (opcode == Opcode::MSG_MOVE_TIME_SKIPPED) {
-            new (&this->MSG_MOVE_TIME_SKIPPED) vanilla::MSG_MOVE_TIME_SKIPPED_Server();
-        }
-        if (opcode == Opcode::SMSG_SPLINE_MOVE_ROOT) {
-            new (&this->SMSG_SPLINE_MOVE_ROOT) vanilla::SMSG_SPLINE_MOVE_ROOT();
-        }
-        if (opcode == Opcode::SMSG_INVALIDATE_PLAYER) {
-            new (&this->SMSG_INVALIDATE_PLAYER) vanilla::SMSG_INVALIDATE_PLAYER();
-        }
-        if (opcode == Opcode::SMSG_INSTANCE_RESET) {
-            new (&this->SMSG_INSTANCE_RESET) vanilla::SMSG_INSTANCE_RESET();
-        }
-        if (opcode == Opcode::SMSG_INSTANCE_RESET_FAILED) {
-            new (&this->SMSG_INSTANCE_RESET_FAILED) vanilla::SMSG_INSTANCE_RESET_FAILED();
-        }
-        if (opcode == Opcode::SMSG_UPDATE_LAST_INSTANCE) {
-            new (&this->SMSG_UPDATE_LAST_INSTANCE) vanilla::SMSG_UPDATE_LAST_INSTANCE();
-        }
-        if (opcode == Opcode::MSG_RAID_TARGET_UPDATE) {
-            new (&this->MSG_RAID_TARGET_UPDATE) vanilla::MSG_RAID_TARGET_UPDATE_Server();
-        }
-        if (opcode == Opcode::SMSG_PET_ACTION_SOUND) {
-            new (&this->SMSG_PET_ACTION_SOUND) vanilla::SMSG_PET_ACTION_SOUND();
-        }
-        if (opcode == Opcode::SMSG_PET_DISMISS_SOUND) {
-            new (&this->SMSG_PET_DISMISS_SOUND) vanilla::SMSG_PET_DISMISS_SOUND();
-        }
-        if (opcode == Opcode::SMSG_GM_TICKET_STATUS_UPDATE) {
-            new (&this->SMSG_GM_TICKET_STATUS_UPDATE) vanilla::SMSG_GM_TICKET_STATUS_UPDATE();
-        }
-        if (opcode == Opcode::SMSG_UPDATE_INSTANCE_OWNERSHIP) {
-            new (&this->SMSG_UPDATE_INSTANCE_OWNERSHIP) vanilla::SMSG_UPDATE_INSTANCE_OWNERSHIP();
-        }
-        if (opcode == Opcode::SMSG_SPELLINSTAKILLLOG) {
-            new (&this->SMSG_SPELLINSTAKILLLOG) vanilla::SMSG_SPELLINSTAKILLLOG();
-        }
-        if (opcode == Opcode::SMSG_SPELL_UPDATE_CHAIN_TARGETS) {
-            new (&this->SMSG_SPELL_UPDATE_CHAIN_TARGETS) vanilla::SMSG_SPELL_UPDATE_CHAIN_TARGETS();
-        }
-        if (opcode == Opcode::SMSG_EXPECTED_SPAM_RECORDS) {
-            new (&this->SMSG_EXPECTED_SPAM_RECORDS) vanilla::SMSG_EXPECTED_SPAM_RECORDS();
-        }
-        if (opcode == Opcode::SMSG_DEFENSE_MESSAGE) {
-            new (&this->SMSG_DEFENSE_MESSAGE) vanilla::SMSG_DEFENSE_MESSAGE();
-        }
-    }
+    explicit ServerOpcode() : opcode(Opcode::NONE), SMSG_CHAR_CREATE() {}
 
     ServerOpcode(ServerOpcode&& other) noexcept {
         this->opcode = other.opcode;
         other.opcode = Opcode::NONE;
         if (opcode == Opcode::SMSG_CHAR_CREATE) {
-            this->SMSG_CHAR_CREATE = other.SMSG_CHAR_CREATE;
+            this->SMSG_CHAR_CREATE = std::move(other.SMSG_CHAR_CREATE);
         }
         if (opcode == Opcode::SMSG_CHAR_ENUM) {
-            this->SMSG_CHAR_ENUM = other.SMSG_CHAR_ENUM;
+            this->SMSG_CHAR_ENUM = std::move(other.SMSG_CHAR_ENUM);
         }
         if (opcode == Opcode::SMSG_CHAR_DELETE) {
-            this->SMSG_CHAR_DELETE = other.SMSG_CHAR_DELETE;
+            this->SMSG_CHAR_DELETE = std::move(other.SMSG_CHAR_DELETE);
         }
         if (opcode == Opcode::SMSG_NEW_WORLD) {
-            this->SMSG_NEW_WORLD = other.SMSG_NEW_WORLD;
+            this->SMSG_NEW_WORLD = std::move(other.SMSG_NEW_WORLD);
+        }
+        if (opcode == Opcode::SMSG_TRANSFER_PENDING) {
+            this->SMSG_TRANSFER_PENDING = std::move(other.SMSG_TRANSFER_PENDING);
         }
         if (opcode == Opcode::SMSG_TRANSFER_ABORTED) {
-            this->SMSG_TRANSFER_ABORTED = other.SMSG_TRANSFER_ABORTED;
+            this->SMSG_TRANSFER_ABORTED = std::move(other.SMSG_TRANSFER_ABORTED);
         }
         if (opcode == Opcode::SMSG_CHARACTER_LOGIN_FAILED) {
-            this->SMSG_CHARACTER_LOGIN_FAILED = other.SMSG_CHARACTER_LOGIN_FAILED;
+            this->SMSG_CHARACTER_LOGIN_FAILED = std::move(other.SMSG_CHARACTER_LOGIN_FAILED);
         }
         if (opcode == Opcode::SMSG_LOGIN_SETTIMESPEED) {
-            this->SMSG_LOGIN_SETTIMESPEED = other.SMSG_LOGIN_SETTIMESPEED;
+            this->SMSG_LOGIN_SETTIMESPEED = std::move(other.SMSG_LOGIN_SETTIMESPEED);
         }
         if (opcode == Opcode::SMSG_LOGOUT_RESPONSE) {
-            this->SMSG_LOGOUT_RESPONSE = other.SMSG_LOGOUT_RESPONSE;
+            this->SMSG_LOGOUT_RESPONSE = std::move(other.SMSG_LOGOUT_RESPONSE);
         }
         if (opcode == Opcode::SMSG_LOGOUT_COMPLETE) {
-            this->SMSG_LOGOUT_COMPLETE = other.SMSG_LOGOUT_COMPLETE;
+            this->SMSG_LOGOUT_COMPLETE = std::move(other.SMSG_LOGOUT_COMPLETE);
         }
         if (opcode == Opcode::SMSG_LOGOUT_CANCEL_ACK) {
-            this->SMSG_LOGOUT_CANCEL_ACK = other.SMSG_LOGOUT_CANCEL_ACK;
+            this->SMSG_LOGOUT_CANCEL_ACK = std::move(other.SMSG_LOGOUT_CANCEL_ACK);
         }
         if (opcode == Opcode::SMSG_NAME_QUERY_RESPONSE) {
-            this->SMSG_NAME_QUERY_RESPONSE = other.SMSG_NAME_QUERY_RESPONSE;
+            this->SMSG_NAME_QUERY_RESPONSE = std::move(other.SMSG_NAME_QUERY_RESPONSE);
         }
         if (opcode == Opcode::SMSG_PET_NAME_QUERY_RESPONSE) {
-            this->SMSG_PET_NAME_QUERY_RESPONSE = other.SMSG_PET_NAME_QUERY_RESPONSE;
+            this->SMSG_PET_NAME_QUERY_RESPONSE = std::move(other.SMSG_PET_NAME_QUERY_RESPONSE);
         }
         if (opcode == Opcode::SMSG_GUILD_QUERY_RESPONSE) {
-            this->SMSG_GUILD_QUERY_RESPONSE = other.SMSG_GUILD_QUERY_RESPONSE;
+            this->SMSG_GUILD_QUERY_RESPONSE = std::move(other.SMSG_GUILD_QUERY_RESPONSE);
+        }
+        if (opcode == Opcode::SMSG_ITEM_QUERY_SINGLE_RESPONSE) {
+            this->SMSG_ITEM_QUERY_SINGLE_RESPONSE = std::move(other.SMSG_ITEM_QUERY_SINGLE_RESPONSE);
         }
         if (opcode == Opcode::SMSG_PAGE_TEXT_QUERY_RESPONSE) {
-            this->SMSG_PAGE_TEXT_QUERY_RESPONSE = other.SMSG_PAGE_TEXT_QUERY_RESPONSE;
+            this->SMSG_PAGE_TEXT_QUERY_RESPONSE = std::move(other.SMSG_PAGE_TEXT_QUERY_RESPONSE);
         }
         if (opcode == Opcode::SMSG_QUEST_QUERY_RESPONSE) {
-            this->SMSG_QUEST_QUERY_RESPONSE = other.SMSG_QUEST_QUERY_RESPONSE;
+            this->SMSG_QUEST_QUERY_RESPONSE = std::move(other.SMSG_QUEST_QUERY_RESPONSE);
+        }
+        if (opcode == Opcode::SMSG_GAMEOBJECT_QUERY_RESPONSE) {
+            this->SMSG_GAMEOBJECT_QUERY_RESPONSE = std::move(other.SMSG_GAMEOBJECT_QUERY_RESPONSE);
+        }
+        if (opcode == Opcode::SMSG_CREATURE_QUERY_RESPONSE) {
+            this->SMSG_CREATURE_QUERY_RESPONSE = std::move(other.SMSG_CREATURE_QUERY_RESPONSE);
         }
         if (opcode == Opcode::SMSG_WHO) {
-            this->SMSG_WHO = other.SMSG_WHO;
+            this->SMSG_WHO = std::move(other.SMSG_WHO);
         }
         if (opcode == Opcode::SMSG_WHOIS) {
-            this->SMSG_WHOIS = other.SMSG_WHOIS;
+            this->SMSG_WHOIS = std::move(other.SMSG_WHOIS);
         }
         if (opcode == Opcode::SMSG_FRIEND_LIST) {
-            this->SMSG_FRIEND_LIST = other.SMSG_FRIEND_LIST;
+            this->SMSG_FRIEND_LIST = std::move(other.SMSG_FRIEND_LIST);
         }
         if (opcode == Opcode::SMSG_FRIEND_STATUS) {
-            this->SMSG_FRIEND_STATUS = other.SMSG_FRIEND_STATUS;
+            this->SMSG_FRIEND_STATUS = std::move(other.SMSG_FRIEND_STATUS);
         }
         if (opcode == Opcode::SMSG_IGNORE_LIST) {
-            this->SMSG_IGNORE_LIST = other.SMSG_IGNORE_LIST;
+            this->SMSG_IGNORE_LIST = std::move(other.SMSG_IGNORE_LIST);
         }
         if (opcode == Opcode::SMSG_GROUP_INVITE) {
-            this->SMSG_GROUP_INVITE = other.SMSG_GROUP_INVITE;
+            this->SMSG_GROUP_INVITE = std::move(other.SMSG_GROUP_INVITE);
         }
         if (opcode == Opcode::SMSG_GROUP_DECLINE) {
-            this->SMSG_GROUP_DECLINE = other.SMSG_GROUP_DECLINE;
+            this->SMSG_GROUP_DECLINE = std::move(other.SMSG_GROUP_DECLINE);
         }
         if (opcode == Opcode::SMSG_GROUP_UNINVITE) {
-            this->SMSG_GROUP_UNINVITE = other.SMSG_GROUP_UNINVITE;
+            this->SMSG_GROUP_UNINVITE = std::move(other.SMSG_GROUP_UNINVITE);
         }
         if (opcode == Opcode::SMSG_GROUP_SET_LEADER) {
-            this->SMSG_GROUP_SET_LEADER = other.SMSG_GROUP_SET_LEADER;
+            this->SMSG_GROUP_SET_LEADER = std::move(other.SMSG_GROUP_SET_LEADER);
         }
         if (opcode == Opcode::SMSG_GROUP_DESTROYED) {
-            this->SMSG_GROUP_DESTROYED = other.SMSG_GROUP_DESTROYED;
+            this->SMSG_GROUP_DESTROYED = std::move(other.SMSG_GROUP_DESTROYED);
+        }
+        if (opcode == Opcode::SMSG_GROUP_LIST) {
+            this->SMSG_GROUP_LIST = std::move(other.SMSG_GROUP_LIST);
         }
         if (opcode == Opcode::SMSG_PARTY_MEMBER_STATS) {
-            this->SMSG_PARTY_MEMBER_STATS = other.SMSG_PARTY_MEMBER_STATS;
+            this->SMSG_PARTY_MEMBER_STATS = std::move(other.SMSG_PARTY_MEMBER_STATS);
         }
         if (opcode == Opcode::SMSG_PARTY_COMMAND_RESULT) {
-            this->SMSG_PARTY_COMMAND_RESULT = other.SMSG_PARTY_COMMAND_RESULT;
+            this->SMSG_PARTY_COMMAND_RESULT = std::move(other.SMSG_PARTY_COMMAND_RESULT);
         }
         if (opcode == Opcode::SMSG_GUILD_INVITE) {
-            this->SMSG_GUILD_INVITE = other.SMSG_GUILD_INVITE;
+            this->SMSG_GUILD_INVITE = std::move(other.SMSG_GUILD_INVITE);
         }
         if (opcode == Opcode::SMSG_GUILD_INFO) {
-            this->SMSG_GUILD_INFO = other.SMSG_GUILD_INFO;
+            this->SMSG_GUILD_INFO = std::move(other.SMSG_GUILD_INFO);
         }
         if (opcode == Opcode::SMSG_GUILD_ROSTER) {
-            this->SMSG_GUILD_ROSTER = other.SMSG_GUILD_ROSTER;
+            this->SMSG_GUILD_ROSTER = std::move(other.SMSG_GUILD_ROSTER);
         }
         if (opcode == Opcode::SMSG_GUILD_EVENT) {
-            this->SMSG_GUILD_EVENT = other.SMSG_GUILD_EVENT;
+            this->SMSG_GUILD_EVENT = std::move(other.SMSG_GUILD_EVENT);
         }
         if (opcode == Opcode::SMSG_GUILD_COMMAND_RESULT) {
-            this->SMSG_GUILD_COMMAND_RESULT = other.SMSG_GUILD_COMMAND_RESULT;
+            this->SMSG_GUILD_COMMAND_RESULT = std::move(other.SMSG_GUILD_COMMAND_RESULT);
         }
         if (opcode == Opcode::SMSG_MESSAGECHAT) {
-            this->SMSG_MESSAGECHAT = other.SMSG_MESSAGECHAT;
+            this->SMSG_MESSAGECHAT = std::move(other.SMSG_MESSAGECHAT);
         }
         if (opcode == Opcode::SMSG_CHANNEL_NOTIFY) {
-            this->SMSG_CHANNEL_NOTIFY = other.SMSG_CHANNEL_NOTIFY;
+            this->SMSG_CHANNEL_NOTIFY = std::move(other.SMSG_CHANNEL_NOTIFY);
         }
         if (opcode == Opcode::SMSG_CHANNEL_LIST) {
-            this->SMSG_CHANNEL_LIST = other.SMSG_CHANNEL_LIST;
+            this->SMSG_CHANNEL_LIST = std::move(other.SMSG_CHANNEL_LIST);
         }
         if (opcode == Opcode::SMSG_UPDATE_OBJECT) {
-            this->SMSG_UPDATE_OBJECT = other.SMSG_UPDATE_OBJECT;
+            this->SMSG_UPDATE_OBJECT = std::move(other.SMSG_UPDATE_OBJECT);
         }
         if (opcode == Opcode::SMSG_DESTROY_OBJECT) {
-            this->SMSG_DESTROY_OBJECT = other.SMSG_DESTROY_OBJECT;
+            this->SMSG_DESTROY_OBJECT = std::move(other.SMSG_DESTROY_OBJECT);
         }
         if (opcode == Opcode::SMSG_READ_ITEM_OK) {
-            this->SMSG_READ_ITEM_OK = other.SMSG_READ_ITEM_OK;
+            this->SMSG_READ_ITEM_OK = std::move(other.SMSG_READ_ITEM_OK);
         }
         if (opcode == Opcode::SMSG_READ_ITEM_FAILED) {
-            this->SMSG_READ_ITEM_FAILED = other.SMSG_READ_ITEM_FAILED;
+            this->SMSG_READ_ITEM_FAILED = std::move(other.SMSG_READ_ITEM_FAILED);
         }
         if (opcode == Opcode::SMSG_ITEM_COOLDOWN) {
-            this->SMSG_ITEM_COOLDOWN = other.SMSG_ITEM_COOLDOWN;
+            this->SMSG_ITEM_COOLDOWN = std::move(other.SMSG_ITEM_COOLDOWN);
         }
         if (opcode == Opcode::SMSG_GAMEOBJECT_CUSTOM_ANIM) {
-            this->SMSG_GAMEOBJECT_CUSTOM_ANIM = other.SMSG_GAMEOBJECT_CUSTOM_ANIM;
+            this->SMSG_GAMEOBJECT_CUSTOM_ANIM = std::move(other.SMSG_GAMEOBJECT_CUSTOM_ANIM);
         }
         if (opcode == Opcode::MSG_MOVE_START_FORWARD) {
-            this->MSG_MOVE_START_FORWARD = other.MSG_MOVE_START_FORWARD;
+            this->MSG_MOVE_START_FORWARD = std::move(other.MSG_MOVE_START_FORWARD);
         }
         if (opcode == Opcode::MSG_MOVE_START_BACKWARD) {
-            this->MSG_MOVE_START_BACKWARD = other.MSG_MOVE_START_BACKWARD;
+            this->MSG_MOVE_START_BACKWARD = std::move(other.MSG_MOVE_START_BACKWARD);
         }
         if (opcode == Opcode::MSG_MOVE_STOP) {
-            this->MSG_MOVE_STOP = other.MSG_MOVE_STOP;
+            this->MSG_MOVE_STOP = std::move(other.MSG_MOVE_STOP);
         }
         if (opcode == Opcode::MSG_MOVE_START_STRAFE_LEFT) {
-            this->MSG_MOVE_START_STRAFE_LEFT = other.MSG_MOVE_START_STRAFE_LEFT;
+            this->MSG_MOVE_START_STRAFE_LEFT = std::move(other.MSG_MOVE_START_STRAFE_LEFT);
         }
         if (opcode == Opcode::MSG_MOVE_START_STRAFE_RIGHT) {
-            this->MSG_MOVE_START_STRAFE_RIGHT = other.MSG_MOVE_START_STRAFE_RIGHT;
+            this->MSG_MOVE_START_STRAFE_RIGHT = std::move(other.MSG_MOVE_START_STRAFE_RIGHT);
         }
         if (opcode == Opcode::MSG_MOVE_STOP_STRAFE) {
-            this->MSG_MOVE_STOP_STRAFE = other.MSG_MOVE_STOP_STRAFE;
+            this->MSG_MOVE_STOP_STRAFE = std::move(other.MSG_MOVE_STOP_STRAFE);
         }
         if (opcode == Opcode::MSG_MOVE_JUMP) {
-            this->MSG_MOVE_JUMP = other.MSG_MOVE_JUMP;
+            this->MSG_MOVE_JUMP = std::move(other.MSG_MOVE_JUMP);
         }
         if (opcode == Opcode::MSG_MOVE_START_TURN_LEFT) {
-            this->MSG_MOVE_START_TURN_LEFT = other.MSG_MOVE_START_TURN_LEFT;
+            this->MSG_MOVE_START_TURN_LEFT = std::move(other.MSG_MOVE_START_TURN_LEFT);
         }
         if (opcode == Opcode::MSG_MOVE_START_TURN_RIGHT) {
-            this->MSG_MOVE_START_TURN_RIGHT = other.MSG_MOVE_START_TURN_RIGHT;
+            this->MSG_MOVE_START_TURN_RIGHT = std::move(other.MSG_MOVE_START_TURN_RIGHT);
         }
         if (opcode == Opcode::MSG_MOVE_STOP_TURN) {
-            this->MSG_MOVE_STOP_TURN = other.MSG_MOVE_STOP_TURN;
+            this->MSG_MOVE_STOP_TURN = std::move(other.MSG_MOVE_STOP_TURN);
         }
         if (opcode == Opcode::MSG_MOVE_START_PITCH_UP) {
-            this->MSG_MOVE_START_PITCH_UP = other.MSG_MOVE_START_PITCH_UP;
+            this->MSG_MOVE_START_PITCH_UP = std::move(other.MSG_MOVE_START_PITCH_UP);
         }
         if (opcode == Opcode::MSG_MOVE_START_PITCH_DOWN) {
-            this->MSG_MOVE_START_PITCH_DOWN = other.MSG_MOVE_START_PITCH_DOWN;
+            this->MSG_MOVE_START_PITCH_DOWN = std::move(other.MSG_MOVE_START_PITCH_DOWN);
         }
         if (opcode == Opcode::MSG_MOVE_STOP_PITCH) {
-            this->MSG_MOVE_STOP_PITCH = other.MSG_MOVE_STOP_PITCH;
+            this->MSG_MOVE_STOP_PITCH = std::move(other.MSG_MOVE_STOP_PITCH);
         }
         if (opcode == Opcode::MSG_MOVE_SET_RUN_MODE) {
-            this->MSG_MOVE_SET_RUN_MODE = other.MSG_MOVE_SET_RUN_MODE;
+            this->MSG_MOVE_SET_RUN_MODE = std::move(other.MSG_MOVE_SET_RUN_MODE);
         }
         if (opcode == Opcode::MSG_MOVE_SET_WALK_MODE) {
-            this->MSG_MOVE_SET_WALK_MODE = other.MSG_MOVE_SET_WALK_MODE;
+            this->MSG_MOVE_SET_WALK_MODE = std::move(other.MSG_MOVE_SET_WALK_MODE);
         }
         if (opcode == Opcode::MSG_MOVE_TELEPORT_ACK) {
-            this->MSG_MOVE_TELEPORT_ACK = other.MSG_MOVE_TELEPORT_ACK;
+            this->MSG_MOVE_TELEPORT_ACK = std::move(other.MSG_MOVE_TELEPORT_ACK);
         }
         if (opcode == Opcode::MSG_MOVE_FALL_LAND) {
-            this->MSG_MOVE_FALL_LAND = other.MSG_MOVE_FALL_LAND;
+            this->MSG_MOVE_FALL_LAND = std::move(other.MSG_MOVE_FALL_LAND);
         }
         if (opcode == Opcode::MSG_MOVE_START_SWIM) {
-            this->MSG_MOVE_START_SWIM = other.MSG_MOVE_START_SWIM;
+            this->MSG_MOVE_START_SWIM = std::move(other.MSG_MOVE_START_SWIM);
         }
         if (opcode == Opcode::MSG_MOVE_STOP_SWIM) {
-            this->MSG_MOVE_STOP_SWIM = other.MSG_MOVE_STOP_SWIM;
+            this->MSG_MOVE_STOP_SWIM = std::move(other.MSG_MOVE_STOP_SWIM);
         }
         if (opcode == Opcode::MSG_MOVE_SET_FACING) {
-            this->MSG_MOVE_SET_FACING = other.MSG_MOVE_SET_FACING;
+            this->MSG_MOVE_SET_FACING = std::move(other.MSG_MOVE_SET_FACING);
         }
         if (opcode == Opcode::MSG_MOVE_SET_PITCH) {
-            this->MSG_MOVE_SET_PITCH = other.MSG_MOVE_SET_PITCH;
+            this->MSG_MOVE_SET_PITCH = std::move(other.MSG_MOVE_SET_PITCH);
+        }
+        if (opcode == Opcode::MSG_MOVE_WORLDPORT_ACK) {
+            this->MSG_MOVE_WORLDPORT_ACK = std::move(other.MSG_MOVE_WORLDPORT_ACK);
         }
         if (opcode == Opcode::SMSG_MONSTER_MOVE) {
-            this->SMSG_MONSTER_MOVE = other.SMSG_MONSTER_MOVE;
+            this->SMSG_MONSTER_MOVE = std::move(other.SMSG_MONSTER_MOVE);
         }
         if (opcode == Opcode::SMSG_MOVE_WATER_WALK) {
-            this->SMSG_MOVE_WATER_WALK = other.SMSG_MOVE_WATER_WALK;
+            this->SMSG_MOVE_WATER_WALK = std::move(other.SMSG_MOVE_WATER_WALK);
         }
         if (opcode == Opcode::SMSG_MOVE_LAND_WALK) {
-            this->SMSG_MOVE_LAND_WALK = other.SMSG_MOVE_LAND_WALK;
+            this->SMSG_MOVE_LAND_WALK = std::move(other.SMSG_MOVE_LAND_WALK);
         }
         if (opcode == Opcode::SMSG_FORCE_RUN_SPEED_CHANGE) {
-            this->SMSG_FORCE_RUN_SPEED_CHANGE = other.SMSG_FORCE_RUN_SPEED_CHANGE;
+            this->SMSG_FORCE_RUN_SPEED_CHANGE = std::move(other.SMSG_FORCE_RUN_SPEED_CHANGE);
         }
         if (opcode == Opcode::SMSG_FORCE_RUN_BACK_SPEED_CHANGE) {
-            this->SMSG_FORCE_RUN_BACK_SPEED_CHANGE = other.SMSG_FORCE_RUN_BACK_SPEED_CHANGE;
+            this->SMSG_FORCE_RUN_BACK_SPEED_CHANGE = std::move(other.SMSG_FORCE_RUN_BACK_SPEED_CHANGE);
         }
         if (opcode == Opcode::SMSG_FORCE_SWIM_SPEED_CHANGE) {
-            this->SMSG_FORCE_SWIM_SPEED_CHANGE = other.SMSG_FORCE_SWIM_SPEED_CHANGE;
+            this->SMSG_FORCE_SWIM_SPEED_CHANGE = std::move(other.SMSG_FORCE_SWIM_SPEED_CHANGE);
         }
         if (opcode == Opcode::SMSG_FORCE_MOVE_ROOT) {
-            this->SMSG_FORCE_MOVE_ROOT = other.SMSG_FORCE_MOVE_ROOT;
+            this->SMSG_FORCE_MOVE_ROOT = std::move(other.SMSG_FORCE_MOVE_ROOT);
         }
         if (opcode == Opcode::SMSG_FORCE_MOVE_UNROOT) {
-            this->SMSG_FORCE_MOVE_UNROOT = other.SMSG_FORCE_MOVE_UNROOT;
+            this->SMSG_FORCE_MOVE_UNROOT = std::move(other.SMSG_FORCE_MOVE_UNROOT);
         }
         if (opcode == Opcode::MSG_MOVE_HEARTBEAT) {
-            this->MSG_MOVE_HEARTBEAT = other.MSG_MOVE_HEARTBEAT;
+            this->MSG_MOVE_HEARTBEAT = std::move(other.MSG_MOVE_HEARTBEAT);
         }
         if (opcode == Opcode::SMSG_MOVE_KNOCK_BACK) {
-            this->SMSG_MOVE_KNOCK_BACK = other.SMSG_MOVE_KNOCK_BACK;
+            this->SMSG_MOVE_KNOCK_BACK = std::move(other.SMSG_MOVE_KNOCK_BACK);
         }
         if (opcode == Opcode::SMSG_MOVE_FEATHER_FALL) {
-            this->SMSG_MOVE_FEATHER_FALL = other.SMSG_MOVE_FEATHER_FALL;
+            this->SMSG_MOVE_FEATHER_FALL = std::move(other.SMSG_MOVE_FEATHER_FALL);
         }
         if (opcode == Opcode::SMSG_MOVE_NORMAL_FALL) {
-            this->SMSG_MOVE_NORMAL_FALL = other.SMSG_MOVE_NORMAL_FALL;
+            this->SMSG_MOVE_NORMAL_FALL = std::move(other.SMSG_MOVE_NORMAL_FALL);
         }
         if (opcode == Opcode::SMSG_MOVE_SET_HOVER) {
-            this->SMSG_MOVE_SET_HOVER = other.SMSG_MOVE_SET_HOVER;
+            this->SMSG_MOVE_SET_HOVER = std::move(other.SMSG_MOVE_SET_HOVER);
         }
         if (opcode == Opcode::SMSG_MOVE_UNSET_HOVER) {
-            this->SMSG_MOVE_UNSET_HOVER = other.SMSG_MOVE_UNSET_HOVER;
+            this->SMSG_MOVE_UNSET_HOVER = std::move(other.SMSG_MOVE_UNSET_HOVER);
         }
         if (opcode == Opcode::SMSG_TRIGGER_CINEMATIC) {
-            this->SMSG_TRIGGER_CINEMATIC = other.SMSG_TRIGGER_CINEMATIC;
+            this->SMSG_TRIGGER_CINEMATIC = std::move(other.SMSG_TRIGGER_CINEMATIC);
         }
         if (opcode == Opcode::SMSG_TUTORIAL_FLAGS) {
-            this->SMSG_TUTORIAL_FLAGS = other.SMSG_TUTORIAL_FLAGS;
+            this->SMSG_TUTORIAL_FLAGS = std::move(other.SMSG_TUTORIAL_FLAGS);
         }
         if (opcode == Opcode::SMSG_EMOTE) {
-            this->SMSG_EMOTE = other.SMSG_EMOTE;
+            this->SMSG_EMOTE = std::move(other.SMSG_EMOTE);
         }
         if (opcode == Opcode::SMSG_TEXT_EMOTE) {
-            this->SMSG_TEXT_EMOTE = other.SMSG_TEXT_EMOTE;
+            this->SMSG_TEXT_EMOTE = std::move(other.SMSG_TEXT_EMOTE);
         }
         if (opcode == Opcode::SMSG_INVENTORY_CHANGE_FAILURE) {
-            this->SMSG_INVENTORY_CHANGE_FAILURE = other.SMSG_INVENTORY_CHANGE_FAILURE;
+            this->SMSG_INVENTORY_CHANGE_FAILURE = std::move(other.SMSG_INVENTORY_CHANGE_FAILURE);
         }
         if (opcode == Opcode::SMSG_OPEN_CONTAINER) {
-            this->SMSG_OPEN_CONTAINER = other.SMSG_OPEN_CONTAINER;
+            this->SMSG_OPEN_CONTAINER = std::move(other.SMSG_OPEN_CONTAINER);
         }
         if (opcode == Opcode::SMSG_INSPECT) {
-            this->SMSG_INSPECT = other.SMSG_INSPECT;
+            this->SMSG_INSPECT = std::move(other.SMSG_INSPECT);
         }
         if (opcode == Opcode::SMSG_TRADE_STATUS) {
-            this->SMSG_TRADE_STATUS = other.SMSG_TRADE_STATUS;
+            this->SMSG_TRADE_STATUS = std::move(other.SMSG_TRADE_STATUS);
         }
         if (opcode == Opcode::SMSG_TRADE_STATUS_EXTENDED) {
-            this->SMSG_TRADE_STATUS_EXTENDED = other.SMSG_TRADE_STATUS_EXTENDED;
+            this->SMSG_TRADE_STATUS_EXTENDED = std::move(other.SMSG_TRADE_STATUS_EXTENDED);
         }
         if (opcode == Opcode::SMSG_INITIALIZE_FACTIONS) {
-            this->SMSG_INITIALIZE_FACTIONS = other.SMSG_INITIALIZE_FACTIONS;
+            this->SMSG_INITIALIZE_FACTIONS = std::move(other.SMSG_INITIALIZE_FACTIONS);
         }
         if (opcode == Opcode::SMSG_SET_FACTION_VISIBLE) {
-            this->SMSG_SET_FACTION_VISIBLE = other.SMSG_SET_FACTION_VISIBLE;
+            this->SMSG_SET_FACTION_VISIBLE = std::move(other.SMSG_SET_FACTION_VISIBLE);
         }
         if (opcode == Opcode::SMSG_SET_FACTION_STANDING) {
-            this->SMSG_SET_FACTION_STANDING = other.SMSG_SET_FACTION_STANDING;
+            this->SMSG_SET_FACTION_STANDING = std::move(other.SMSG_SET_FACTION_STANDING);
         }
         if (opcode == Opcode::SMSG_SET_PROFICIENCY) {
-            this->SMSG_SET_PROFICIENCY = other.SMSG_SET_PROFICIENCY;
+            this->SMSG_SET_PROFICIENCY = std::move(other.SMSG_SET_PROFICIENCY);
         }
         if (opcode == Opcode::SMSG_ACTION_BUTTONS) {
-            this->SMSG_ACTION_BUTTONS = other.SMSG_ACTION_BUTTONS;
+            this->SMSG_ACTION_BUTTONS = std::move(other.SMSG_ACTION_BUTTONS);
         }
         if (opcode == Opcode::SMSG_INITIAL_SPELLS) {
-            this->SMSG_INITIAL_SPELLS = other.SMSG_INITIAL_SPELLS;
+            this->SMSG_INITIAL_SPELLS = std::move(other.SMSG_INITIAL_SPELLS);
         }
         if (opcode == Opcode::SMSG_LEARNED_SPELL) {
-            this->SMSG_LEARNED_SPELL = other.SMSG_LEARNED_SPELL;
+            this->SMSG_LEARNED_SPELL = std::move(other.SMSG_LEARNED_SPELL);
         }
         if (opcode == Opcode::SMSG_SUPERCEDED_SPELL) {
-            this->SMSG_SUPERCEDED_SPELL = other.SMSG_SUPERCEDED_SPELL;
+            this->SMSG_SUPERCEDED_SPELL = std::move(other.SMSG_SUPERCEDED_SPELL);
         }
         if (opcode == Opcode::SMSG_CAST_RESULT) {
-            this->SMSG_CAST_RESULT = other.SMSG_CAST_RESULT;
+            this->SMSG_CAST_RESULT = std::move(other.SMSG_CAST_RESULT);
         }
         if (opcode == Opcode::SMSG_SPELL_START) {
-            this->SMSG_SPELL_START = other.SMSG_SPELL_START;
+            this->SMSG_SPELL_START = std::move(other.SMSG_SPELL_START);
         }
         if (opcode == Opcode::SMSG_SPELL_GO) {
-            this->SMSG_SPELL_GO = other.SMSG_SPELL_GO;
+            this->SMSG_SPELL_GO = std::move(other.SMSG_SPELL_GO);
         }
         if (opcode == Opcode::SMSG_SPELL_FAILURE) {
-            this->SMSG_SPELL_FAILURE = other.SMSG_SPELL_FAILURE;
+            this->SMSG_SPELL_FAILURE = std::move(other.SMSG_SPELL_FAILURE);
         }
         if (opcode == Opcode::SMSG_SPELL_COOLDOWN) {
-            this->SMSG_SPELL_COOLDOWN = other.SMSG_SPELL_COOLDOWN;
+            this->SMSG_SPELL_COOLDOWN = std::move(other.SMSG_SPELL_COOLDOWN);
         }
         if (opcode == Opcode::SMSG_COOLDOWN_EVENT) {
-            this->SMSG_COOLDOWN_EVENT = other.SMSG_COOLDOWN_EVENT;
+            this->SMSG_COOLDOWN_EVENT = std::move(other.SMSG_COOLDOWN_EVENT);
         }
         if (opcode == Opcode::SMSG_UPDATE_AURA_DURATION) {
-            this->SMSG_UPDATE_AURA_DURATION = other.SMSG_UPDATE_AURA_DURATION;
+            this->SMSG_UPDATE_AURA_DURATION = std::move(other.SMSG_UPDATE_AURA_DURATION);
         }
         if (opcode == Opcode::SMSG_PET_CAST_FAILED) {
-            this->SMSG_PET_CAST_FAILED = other.SMSG_PET_CAST_FAILED;
+            this->SMSG_PET_CAST_FAILED = std::move(other.SMSG_PET_CAST_FAILED);
         }
         if (opcode == Opcode::MSG_CHANNEL_START) {
-            this->MSG_CHANNEL_START = other.MSG_CHANNEL_START;
+            this->MSG_CHANNEL_START = std::move(other.MSG_CHANNEL_START);
         }
         if (opcode == Opcode::MSG_CHANNEL_UPDATE) {
-            this->MSG_CHANNEL_UPDATE = other.MSG_CHANNEL_UPDATE;
+            this->MSG_CHANNEL_UPDATE = std::move(other.MSG_CHANNEL_UPDATE);
         }
         if (opcode == Opcode::SMSG_AI_REACTION) {
-            this->SMSG_AI_REACTION = other.SMSG_AI_REACTION;
+            this->SMSG_AI_REACTION = std::move(other.SMSG_AI_REACTION);
         }
         if (opcode == Opcode::SMSG_ATTACKSTART) {
-            this->SMSG_ATTACKSTART = other.SMSG_ATTACKSTART;
+            this->SMSG_ATTACKSTART = std::move(other.SMSG_ATTACKSTART);
         }
         if (opcode == Opcode::SMSG_ATTACKSTOP) {
-            this->SMSG_ATTACKSTOP = other.SMSG_ATTACKSTOP;
+            this->SMSG_ATTACKSTOP = std::move(other.SMSG_ATTACKSTOP);
         }
         if (opcode == Opcode::SMSG_ATTACKSWING_NOTINRANGE) {
-            this->SMSG_ATTACKSWING_NOTINRANGE = other.SMSG_ATTACKSWING_NOTINRANGE;
+            this->SMSG_ATTACKSWING_NOTINRANGE = std::move(other.SMSG_ATTACKSWING_NOTINRANGE);
         }
         if (opcode == Opcode::SMSG_ATTACKSWING_BADFACING) {
-            this->SMSG_ATTACKSWING_BADFACING = other.SMSG_ATTACKSWING_BADFACING;
+            this->SMSG_ATTACKSWING_BADFACING = std::move(other.SMSG_ATTACKSWING_BADFACING);
         }
         if (opcode == Opcode::SMSG_ATTACKSWING_NOTSTANDING) {
-            this->SMSG_ATTACKSWING_NOTSTANDING = other.SMSG_ATTACKSWING_NOTSTANDING;
+            this->SMSG_ATTACKSWING_NOTSTANDING = std::move(other.SMSG_ATTACKSWING_NOTSTANDING);
         }
         if (opcode == Opcode::SMSG_ATTACKSWING_DEADTARGET) {
-            this->SMSG_ATTACKSWING_DEADTARGET = other.SMSG_ATTACKSWING_DEADTARGET;
+            this->SMSG_ATTACKSWING_DEADTARGET = std::move(other.SMSG_ATTACKSWING_DEADTARGET);
         }
         if (opcode == Opcode::SMSG_ATTACKSWING_CANT_ATTACK) {
-            this->SMSG_ATTACKSWING_CANT_ATTACK = other.SMSG_ATTACKSWING_CANT_ATTACK;
+            this->SMSG_ATTACKSWING_CANT_ATTACK = std::move(other.SMSG_ATTACKSWING_CANT_ATTACK);
         }
         if (opcode == Opcode::SMSG_ATTACKERSTATEUPDATE) {
-            this->SMSG_ATTACKERSTATEUPDATE = other.SMSG_ATTACKERSTATEUPDATE;
+            this->SMSG_ATTACKERSTATEUPDATE = std::move(other.SMSG_ATTACKERSTATEUPDATE);
         }
         if (opcode == Opcode::SMSG_CANCEL_COMBAT) {
-            this->SMSG_CANCEL_COMBAT = other.SMSG_CANCEL_COMBAT;
+            this->SMSG_CANCEL_COMBAT = std::move(other.SMSG_CANCEL_COMBAT);
         }
         if (opcode == Opcode::SMSG_SPELLHEALLOG) {
-            this->SMSG_SPELLHEALLOG = other.SMSG_SPELLHEALLOG;
+            this->SMSG_SPELLHEALLOG = std::move(other.SMSG_SPELLHEALLOG);
         }
         if (opcode == Opcode::SMSG_SPELLENERGIZELOG) {
-            this->SMSG_SPELLENERGIZELOG = other.SMSG_SPELLENERGIZELOG;
+            this->SMSG_SPELLENERGIZELOG = std::move(other.SMSG_SPELLENERGIZELOG);
         }
         if (opcode == Opcode::SMSG_BINDPOINTUPDATE) {
-            this->SMSG_BINDPOINTUPDATE = other.SMSG_BINDPOINTUPDATE;
+            this->SMSG_BINDPOINTUPDATE = std::move(other.SMSG_BINDPOINTUPDATE);
         }
         if (opcode == Opcode::SMSG_PLAYERBOUND) {
-            this->SMSG_PLAYERBOUND = other.SMSG_PLAYERBOUND;
+            this->SMSG_PLAYERBOUND = std::move(other.SMSG_PLAYERBOUND);
         }
         if (opcode == Opcode::SMSG_CLIENT_CONTROL_UPDATE) {
-            this->SMSG_CLIENT_CONTROL_UPDATE = other.SMSG_CLIENT_CONTROL_UPDATE;
+            this->SMSG_CLIENT_CONTROL_UPDATE = std::move(other.SMSG_CLIENT_CONTROL_UPDATE);
         }
         if (opcode == Opcode::SMSG_RESURRECT_REQUEST) {
-            this->SMSG_RESURRECT_REQUEST = other.SMSG_RESURRECT_REQUEST;
+            this->SMSG_RESURRECT_REQUEST = std::move(other.SMSG_RESURRECT_REQUEST);
         }
         if (opcode == Opcode::SMSG_LOOT_RESPONSE) {
-            this->SMSG_LOOT_RESPONSE = other.SMSG_LOOT_RESPONSE;
+            this->SMSG_LOOT_RESPONSE = std::move(other.SMSG_LOOT_RESPONSE);
         }
         if (opcode == Opcode::SMSG_LOOT_RELEASE_RESPONSE) {
-            this->SMSG_LOOT_RELEASE_RESPONSE = other.SMSG_LOOT_RELEASE_RESPONSE;
+            this->SMSG_LOOT_RELEASE_RESPONSE = std::move(other.SMSG_LOOT_RELEASE_RESPONSE);
         }
         if (opcode == Opcode::SMSG_LOOT_REMOVED) {
-            this->SMSG_LOOT_REMOVED = other.SMSG_LOOT_REMOVED;
+            this->SMSG_LOOT_REMOVED = std::move(other.SMSG_LOOT_REMOVED);
         }
         if (opcode == Opcode::SMSG_LOOT_MONEY_NOTIFY) {
-            this->SMSG_LOOT_MONEY_NOTIFY = other.SMSG_LOOT_MONEY_NOTIFY;
+            this->SMSG_LOOT_MONEY_NOTIFY = std::move(other.SMSG_LOOT_MONEY_NOTIFY);
         }
         if (opcode == Opcode::SMSG_LOOT_CLEAR_MONEY) {
-            this->SMSG_LOOT_CLEAR_MONEY = other.SMSG_LOOT_CLEAR_MONEY;
+            this->SMSG_LOOT_CLEAR_MONEY = std::move(other.SMSG_LOOT_CLEAR_MONEY);
         }
         if (opcode == Opcode::SMSG_ITEM_PUSH_RESULT) {
-            this->SMSG_ITEM_PUSH_RESULT = other.SMSG_ITEM_PUSH_RESULT;
+            this->SMSG_ITEM_PUSH_RESULT = std::move(other.SMSG_ITEM_PUSH_RESULT);
         }
         if (opcode == Opcode::SMSG_DUEL_REQUESTED) {
-            this->SMSG_DUEL_REQUESTED = other.SMSG_DUEL_REQUESTED;
+            this->SMSG_DUEL_REQUESTED = std::move(other.SMSG_DUEL_REQUESTED);
         }
         if (opcode == Opcode::SMSG_DUEL_OUTOFBOUNDS) {
-            this->SMSG_DUEL_OUTOFBOUNDS = other.SMSG_DUEL_OUTOFBOUNDS;
+            this->SMSG_DUEL_OUTOFBOUNDS = std::move(other.SMSG_DUEL_OUTOFBOUNDS);
         }
         if (opcode == Opcode::SMSG_DUEL_INBOUNDS) {
-            this->SMSG_DUEL_INBOUNDS = other.SMSG_DUEL_INBOUNDS;
+            this->SMSG_DUEL_INBOUNDS = std::move(other.SMSG_DUEL_INBOUNDS);
         }
         if (opcode == Opcode::SMSG_DUEL_COMPLETE) {
-            this->SMSG_DUEL_COMPLETE = other.SMSG_DUEL_COMPLETE;
+            this->SMSG_DUEL_COMPLETE = std::move(other.SMSG_DUEL_COMPLETE);
         }
         if (opcode == Opcode::SMSG_DUEL_WINNER) {
-            this->SMSG_DUEL_WINNER = other.SMSG_DUEL_WINNER;
+            this->SMSG_DUEL_WINNER = std::move(other.SMSG_DUEL_WINNER);
         }
         if (opcode == Opcode::SMSG_MOUNTRESULT) {
-            this->SMSG_MOUNTRESULT = other.SMSG_MOUNTRESULT;
+            this->SMSG_MOUNTRESULT = std::move(other.SMSG_MOUNTRESULT);
         }
         if (opcode == Opcode::SMSG_DISMOUNTRESULT) {
-            this->SMSG_DISMOUNTRESULT = other.SMSG_DISMOUNTRESULT;
+            this->SMSG_DISMOUNTRESULT = std::move(other.SMSG_DISMOUNTRESULT);
         }
         if (opcode == Opcode::SMSG_MOUNTSPECIAL_ANIM) {
-            this->SMSG_MOUNTSPECIAL_ANIM = other.SMSG_MOUNTSPECIAL_ANIM;
+            this->SMSG_MOUNTSPECIAL_ANIM = std::move(other.SMSG_MOUNTSPECIAL_ANIM);
         }
         if (opcode == Opcode::SMSG_PET_TAME_FAILURE) {
-            this->SMSG_PET_TAME_FAILURE = other.SMSG_PET_TAME_FAILURE;
+            this->SMSG_PET_TAME_FAILURE = std::move(other.SMSG_PET_TAME_FAILURE);
         }
         if (opcode == Opcode::SMSG_PET_NAME_INVALID) {
-            this->SMSG_PET_NAME_INVALID = other.SMSG_PET_NAME_INVALID;
+            this->SMSG_PET_NAME_INVALID = std::move(other.SMSG_PET_NAME_INVALID);
+        }
+        if (opcode == Opcode::SMSG_PET_SPELLS) {
+            this->SMSG_PET_SPELLS = std::move(other.SMSG_PET_SPELLS);
         }
         if (opcode == Opcode::SMSG_PET_MODE) {
-            this->SMSG_PET_MODE = other.SMSG_PET_MODE;
+            this->SMSG_PET_MODE = std::move(other.SMSG_PET_MODE);
         }
         if (opcode == Opcode::SMSG_GOSSIP_MESSAGE) {
-            this->SMSG_GOSSIP_MESSAGE = other.SMSG_GOSSIP_MESSAGE;
+            this->SMSG_GOSSIP_MESSAGE = std::move(other.SMSG_GOSSIP_MESSAGE);
         }
         if (opcode == Opcode::SMSG_GOSSIP_COMPLETE) {
-            this->SMSG_GOSSIP_COMPLETE = other.SMSG_GOSSIP_COMPLETE;
+            this->SMSG_GOSSIP_COMPLETE = std::move(other.SMSG_GOSSIP_COMPLETE);
         }
         if (opcode == Opcode::SMSG_NPC_TEXT_UPDATE) {
-            this->SMSG_NPC_TEXT_UPDATE = other.SMSG_NPC_TEXT_UPDATE;
+            this->SMSG_NPC_TEXT_UPDATE = std::move(other.SMSG_NPC_TEXT_UPDATE);
         }
         if (opcode == Opcode::SMSG_QUESTGIVER_STATUS) {
-            this->SMSG_QUESTGIVER_STATUS = other.SMSG_QUESTGIVER_STATUS;
+            this->SMSG_QUESTGIVER_STATUS = std::move(other.SMSG_QUESTGIVER_STATUS);
         }
         if (opcode == Opcode::SMSG_QUESTGIVER_QUEST_LIST) {
-            this->SMSG_QUESTGIVER_QUEST_LIST = other.SMSG_QUESTGIVER_QUEST_LIST;
+            this->SMSG_QUESTGIVER_QUEST_LIST = std::move(other.SMSG_QUESTGIVER_QUEST_LIST);
         }
         if (opcode == Opcode::SMSG_QUESTGIVER_QUEST_DETAILS) {
-            this->SMSG_QUESTGIVER_QUEST_DETAILS = other.SMSG_QUESTGIVER_QUEST_DETAILS;
+            this->SMSG_QUESTGIVER_QUEST_DETAILS = std::move(other.SMSG_QUESTGIVER_QUEST_DETAILS);
         }
         if (opcode == Opcode::SMSG_QUESTGIVER_REQUEST_ITEMS) {
-            this->SMSG_QUESTGIVER_REQUEST_ITEMS = other.SMSG_QUESTGIVER_REQUEST_ITEMS;
+            this->SMSG_QUESTGIVER_REQUEST_ITEMS = std::move(other.SMSG_QUESTGIVER_REQUEST_ITEMS);
         }
         if (opcode == Opcode::SMSG_QUESTGIVER_OFFER_REWARD) {
-            this->SMSG_QUESTGIVER_OFFER_REWARD = other.SMSG_QUESTGIVER_OFFER_REWARD;
+            this->SMSG_QUESTGIVER_OFFER_REWARD = std::move(other.SMSG_QUESTGIVER_OFFER_REWARD);
         }
         if (opcode == Opcode::SMSG_QUESTGIVER_QUEST_INVALID) {
-            this->SMSG_QUESTGIVER_QUEST_INVALID = other.SMSG_QUESTGIVER_QUEST_INVALID;
+            this->SMSG_QUESTGIVER_QUEST_INVALID = std::move(other.SMSG_QUESTGIVER_QUEST_INVALID);
         }
         if (opcode == Opcode::SMSG_QUESTGIVER_QUEST_COMPLETE) {
-            this->SMSG_QUESTGIVER_QUEST_COMPLETE = other.SMSG_QUESTGIVER_QUEST_COMPLETE;
+            this->SMSG_QUESTGIVER_QUEST_COMPLETE = std::move(other.SMSG_QUESTGIVER_QUEST_COMPLETE);
         }
         if (opcode == Opcode::SMSG_QUESTGIVER_QUEST_FAILED) {
-            this->SMSG_QUESTGIVER_QUEST_FAILED = other.SMSG_QUESTGIVER_QUEST_FAILED;
+            this->SMSG_QUESTGIVER_QUEST_FAILED = std::move(other.SMSG_QUESTGIVER_QUEST_FAILED);
         }
         if (opcode == Opcode::SMSG_QUESTLOG_FULL) {
-            this->SMSG_QUESTLOG_FULL = other.SMSG_QUESTLOG_FULL;
+            this->SMSG_QUESTLOG_FULL = std::move(other.SMSG_QUESTLOG_FULL);
         }
         if (opcode == Opcode::SMSG_QUESTUPDATE_FAILED) {
-            this->SMSG_QUESTUPDATE_FAILED = other.SMSG_QUESTUPDATE_FAILED;
+            this->SMSG_QUESTUPDATE_FAILED = std::move(other.SMSG_QUESTUPDATE_FAILED);
         }
         if (opcode == Opcode::SMSG_QUESTUPDATE_FAILEDTIMER) {
-            this->SMSG_QUESTUPDATE_FAILEDTIMER = other.SMSG_QUESTUPDATE_FAILEDTIMER;
+            this->SMSG_QUESTUPDATE_FAILEDTIMER = std::move(other.SMSG_QUESTUPDATE_FAILEDTIMER);
         }
         if (opcode == Opcode::SMSG_QUESTUPDATE_COMPLETE) {
-            this->SMSG_QUESTUPDATE_COMPLETE = other.SMSG_QUESTUPDATE_COMPLETE;
+            this->SMSG_QUESTUPDATE_COMPLETE = std::move(other.SMSG_QUESTUPDATE_COMPLETE);
         }
         if (opcode == Opcode::SMSG_QUESTUPDATE_ADD_KILL) {
-            this->SMSG_QUESTUPDATE_ADD_KILL = other.SMSG_QUESTUPDATE_ADD_KILL;
+            this->SMSG_QUESTUPDATE_ADD_KILL = std::move(other.SMSG_QUESTUPDATE_ADD_KILL);
         }
         if (opcode == Opcode::SMSG_QUESTUPDATE_ADD_ITEM) {
-            this->SMSG_QUESTUPDATE_ADD_ITEM = other.SMSG_QUESTUPDATE_ADD_ITEM;
+            this->SMSG_QUESTUPDATE_ADD_ITEM = std::move(other.SMSG_QUESTUPDATE_ADD_ITEM);
         }
         if (opcode == Opcode::SMSG_QUEST_CONFIRM_ACCEPT) {
-            this->SMSG_QUEST_CONFIRM_ACCEPT = other.SMSG_QUEST_CONFIRM_ACCEPT;
+            this->SMSG_QUEST_CONFIRM_ACCEPT = std::move(other.SMSG_QUEST_CONFIRM_ACCEPT);
         }
         if (opcode == Opcode::SMSG_LIST_INVENTORY) {
-            this->SMSG_LIST_INVENTORY = other.SMSG_LIST_INVENTORY;
+            this->SMSG_LIST_INVENTORY = std::move(other.SMSG_LIST_INVENTORY);
         }
         if (opcode == Opcode::SMSG_SELL_ITEM) {
-            this->SMSG_SELL_ITEM = other.SMSG_SELL_ITEM;
+            this->SMSG_SELL_ITEM = std::move(other.SMSG_SELL_ITEM);
         }
         if (opcode == Opcode::SMSG_BUY_ITEM) {
-            this->SMSG_BUY_ITEM = other.SMSG_BUY_ITEM;
+            this->SMSG_BUY_ITEM = std::move(other.SMSG_BUY_ITEM);
         }
         if (opcode == Opcode::SMSG_BUY_FAILED) {
-            this->SMSG_BUY_FAILED = other.SMSG_BUY_FAILED;
+            this->SMSG_BUY_FAILED = std::move(other.SMSG_BUY_FAILED);
         }
         if (opcode == Opcode::SMSG_SHOWTAXINODES) {
-            this->SMSG_SHOWTAXINODES = other.SMSG_SHOWTAXINODES;
+            this->SMSG_SHOWTAXINODES = std::move(other.SMSG_SHOWTAXINODES);
         }
         if (opcode == Opcode::SMSG_TAXINODE_STATUS) {
-            this->SMSG_TAXINODE_STATUS = other.SMSG_TAXINODE_STATUS;
+            this->SMSG_TAXINODE_STATUS = std::move(other.SMSG_TAXINODE_STATUS);
         }
         if (opcode == Opcode::SMSG_ACTIVATETAXIREPLY) {
-            this->SMSG_ACTIVATETAXIREPLY = other.SMSG_ACTIVATETAXIREPLY;
+            this->SMSG_ACTIVATETAXIREPLY = std::move(other.SMSG_ACTIVATETAXIREPLY);
         }
         if (opcode == Opcode::SMSG_NEW_TAXI_PATH) {
-            this->SMSG_NEW_TAXI_PATH = other.SMSG_NEW_TAXI_PATH;
+            this->SMSG_NEW_TAXI_PATH = std::move(other.SMSG_NEW_TAXI_PATH);
         }
         if (opcode == Opcode::SMSG_TRAINER_LIST) {
-            this->SMSG_TRAINER_LIST = other.SMSG_TRAINER_LIST;
+            this->SMSG_TRAINER_LIST = std::move(other.SMSG_TRAINER_LIST);
         }
         if (opcode == Opcode::SMSG_TRAINER_BUY_SUCCEEDED) {
-            this->SMSG_TRAINER_BUY_SUCCEEDED = other.SMSG_TRAINER_BUY_SUCCEEDED;
+            this->SMSG_TRAINER_BUY_SUCCEEDED = std::move(other.SMSG_TRAINER_BUY_SUCCEEDED);
         }
         if (opcode == Opcode::SMSG_TRAINER_BUY_FAILED) {
-            this->SMSG_TRAINER_BUY_FAILED = other.SMSG_TRAINER_BUY_FAILED;
+            this->SMSG_TRAINER_BUY_FAILED = std::move(other.SMSG_TRAINER_BUY_FAILED);
         }
         if (opcode == Opcode::SMSG_SHOW_BANK) {
-            this->SMSG_SHOW_BANK = other.SMSG_SHOW_BANK;
+            this->SMSG_SHOW_BANK = std::move(other.SMSG_SHOW_BANK);
         }
         if (opcode == Opcode::SMSG_BUY_BANK_SLOT_RESULT) {
-            this->SMSG_BUY_BANK_SLOT_RESULT = other.SMSG_BUY_BANK_SLOT_RESULT;
+            this->SMSG_BUY_BANK_SLOT_RESULT = std::move(other.SMSG_BUY_BANK_SLOT_RESULT);
         }
         if (opcode == Opcode::SMSG_PETITION_SHOWLIST) {
-            this->SMSG_PETITION_SHOWLIST = other.SMSG_PETITION_SHOWLIST;
+            this->SMSG_PETITION_SHOWLIST = std::move(other.SMSG_PETITION_SHOWLIST);
         }
         if (opcode == Opcode::SMSG_PETITION_SHOW_SIGNATURES) {
-            this->SMSG_PETITION_SHOW_SIGNATURES = other.SMSG_PETITION_SHOW_SIGNATURES;
+            this->SMSG_PETITION_SHOW_SIGNATURES = std::move(other.SMSG_PETITION_SHOW_SIGNATURES);
         }
         if (opcode == Opcode::SMSG_PETITION_SIGN_RESULTS) {
-            this->SMSG_PETITION_SIGN_RESULTS = other.SMSG_PETITION_SIGN_RESULTS;
+            this->SMSG_PETITION_SIGN_RESULTS = std::move(other.SMSG_PETITION_SIGN_RESULTS);
+        }
+        if (opcode == Opcode::MSG_PETITION_DECLINE) {
+            this->MSG_PETITION_DECLINE = std::move(other.MSG_PETITION_DECLINE);
         }
         if (opcode == Opcode::SMSG_TURN_IN_PETITION_RESULTS) {
-            this->SMSG_TURN_IN_PETITION_RESULTS = other.SMSG_TURN_IN_PETITION_RESULTS;
+            this->SMSG_TURN_IN_PETITION_RESULTS = std::move(other.SMSG_TURN_IN_PETITION_RESULTS);
         }
         if (opcode == Opcode::SMSG_PETITION_QUERY_RESPONSE) {
-            this->SMSG_PETITION_QUERY_RESPONSE = other.SMSG_PETITION_QUERY_RESPONSE;
+            this->SMSG_PETITION_QUERY_RESPONSE = std::move(other.SMSG_PETITION_QUERY_RESPONSE);
         }
         if (opcode == Opcode::SMSG_FISH_NOT_HOOKED) {
-            this->SMSG_FISH_NOT_HOOKED = other.SMSG_FISH_NOT_HOOKED;
+            this->SMSG_FISH_NOT_HOOKED = std::move(other.SMSG_FISH_NOT_HOOKED);
         }
         if (opcode == Opcode::SMSG_FISH_ESCAPED) {
-            this->SMSG_FISH_ESCAPED = other.SMSG_FISH_ESCAPED;
+            this->SMSG_FISH_ESCAPED = std::move(other.SMSG_FISH_ESCAPED);
         }
         if (opcode == Opcode::SMSG_NOTIFICATION) {
-            this->SMSG_NOTIFICATION = other.SMSG_NOTIFICATION;
+            this->SMSG_NOTIFICATION = std::move(other.SMSG_NOTIFICATION);
         }
         if (opcode == Opcode::SMSG_PLAYED_TIME) {
-            this->SMSG_PLAYED_TIME = other.SMSG_PLAYED_TIME;
+            this->SMSG_PLAYED_TIME = std::move(other.SMSG_PLAYED_TIME);
         }
         if (opcode == Opcode::SMSG_QUERY_TIME_RESPONSE) {
-            this->SMSG_QUERY_TIME_RESPONSE = other.SMSG_QUERY_TIME_RESPONSE;
+            this->SMSG_QUERY_TIME_RESPONSE = std::move(other.SMSG_QUERY_TIME_RESPONSE);
         }
         if (opcode == Opcode::SMSG_LOG_XPGAIN) {
-            this->SMSG_LOG_XPGAIN = other.SMSG_LOG_XPGAIN;
+            this->SMSG_LOG_XPGAIN = std::move(other.SMSG_LOG_XPGAIN);
         }
         if (opcode == Opcode::SMSG_LEVELUP_INFO) {
-            this->SMSG_LEVELUP_INFO = other.SMSG_LEVELUP_INFO;
+            this->SMSG_LEVELUP_INFO = std::move(other.SMSG_LEVELUP_INFO);
         }
         if (opcode == Opcode::MSG_MINIMAP_PING) {
-            this->MSG_MINIMAP_PING = other.MSG_MINIMAP_PING;
+            this->MSG_MINIMAP_PING = std::move(other.MSG_MINIMAP_PING);
         }
         if (opcode == Opcode::SMSG_RESISTLOG) {
-            this->SMSG_RESISTLOG = other.SMSG_RESISTLOG;
+            this->SMSG_RESISTLOG = std::move(other.SMSG_RESISTLOG);
         }
         if (opcode == Opcode::SMSG_ENCHANTMENTLOG) {
-            this->SMSG_ENCHANTMENTLOG = other.SMSG_ENCHANTMENTLOG;
+            this->SMSG_ENCHANTMENTLOG = std::move(other.SMSG_ENCHANTMENTLOG);
         }
         if (opcode == Opcode::SMSG_START_MIRROR_TIMER) {
-            this->SMSG_START_MIRROR_TIMER = other.SMSG_START_MIRROR_TIMER;
+            this->SMSG_START_MIRROR_TIMER = std::move(other.SMSG_START_MIRROR_TIMER);
         }
         if (opcode == Opcode::SMSG_PAUSE_MIRROR_TIMER) {
-            this->SMSG_PAUSE_MIRROR_TIMER = other.SMSG_PAUSE_MIRROR_TIMER;
+            this->SMSG_PAUSE_MIRROR_TIMER = std::move(other.SMSG_PAUSE_MIRROR_TIMER);
         }
         if (opcode == Opcode::SMSG_STOP_MIRROR_TIMER) {
-            this->SMSG_STOP_MIRROR_TIMER = other.SMSG_STOP_MIRROR_TIMER;
+            this->SMSG_STOP_MIRROR_TIMER = std::move(other.SMSG_STOP_MIRROR_TIMER);
         }
         if (opcode == Opcode::SMSG_PONG) {
-            this->SMSG_PONG = other.SMSG_PONG;
+            this->SMSG_PONG = std::move(other.SMSG_PONG);
         }
         if (opcode == Opcode::SMSG_CLEAR_COOLDOWN) {
-            this->SMSG_CLEAR_COOLDOWN = other.SMSG_CLEAR_COOLDOWN;
+            this->SMSG_CLEAR_COOLDOWN = std::move(other.SMSG_CLEAR_COOLDOWN);
         }
         if (opcode == Opcode::SMSG_GAMEOBJECT_PAGETEXT) {
-            this->SMSG_GAMEOBJECT_PAGETEXT = other.SMSG_GAMEOBJECT_PAGETEXT;
+            this->SMSG_GAMEOBJECT_PAGETEXT = std::move(other.SMSG_GAMEOBJECT_PAGETEXT);
         }
         if (opcode == Opcode::SMSG_SPELL_DELAYED) {
-            this->SMSG_SPELL_DELAYED = other.SMSG_SPELL_DELAYED;
+            this->SMSG_SPELL_DELAYED = std::move(other.SMSG_SPELL_DELAYED);
         }
         if (opcode == Opcode::SMSG_ITEM_TIME_UPDATE) {
-            this->SMSG_ITEM_TIME_UPDATE = other.SMSG_ITEM_TIME_UPDATE;
+            this->SMSG_ITEM_TIME_UPDATE = std::move(other.SMSG_ITEM_TIME_UPDATE);
         }
         if (opcode == Opcode::SMSG_ITEM_ENCHANT_TIME_UPDATE) {
-            this->SMSG_ITEM_ENCHANT_TIME_UPDATE = other.SMSG_ITEM_ENCHANT_TIME_UPDATE;
+            this->SMSG_ITEM_ENCHANT_TIME_UPDATE = std::move(other.SMSG_ITEM_ENCHANT_TIME_UPDATE);
         }
         if (opcode == Opcode::SMSG_AUTH_CHALLENGE) {
-            this->SMSG_AUTH_CHALLENGE = other.SMSG_AUTH_CHALLENGE;
+            this->SMSG_AUTH_CHALLENGE = std::move(other.SMSG_AUTH_CHALLENGE);
         }
         if (opcode == Opcode::SMSG_AUTH_RESPONSE) {
-            this->SMSG_AUTH_RESPONSE = other.SMSG_AUTH_RESPONSE;
+            this->SMSG_AUTH_RESPONSE = std::move(other.SMSG_AUTH_RESPONSE);
         }
         if (opcode == Opcode::MSG_SAVE_GUILD_EMBLEM) {
-            this->MSG_SAVE_GUILD_EMBLEM = other.MSG_SAVE_GUILD_EMBLEM;
+            this->MSG_SAVE_GUILD_EMBLEM = std::move(other.MSG_SAVE_GUILD_EMBLEM);
+        }
+        if (opcode == Opcode::MSG_TABARDVENDOR_ACTIVATE) {
+            this->MSG_TABARDVENDOR_ACTIVATE = std::move(other.MSG_TABARDVENDOR_ACTIVATE);
         }
         if (opcode == Opcode::SMSG_PLAY_SPELL_VISUAL) {
-            this->SMSG_PLAY_SPELL_VISUAL = other.SMSG_PLAY_SPELL_VISUAL;
+            this->SMSG_PLAY_SPELL_VISUAL = std::move(other.SMSG_PLAY_SPELL_VISUAL);
         }
         if (opcode == Opcode::SMSG_PARTYKILLLOG) {
-            this->SMSG_PARTYKILLLOG = other.SMSG_PARTYKILLLOG;
+            this->SMSG_PARTYKILLLOG = std::move(other.SMSG_PARTYKILLLOG);
         }
         if (opcode == Opcode::SMSG_PLAY_SPELL_IMPACT) {
-            this->SMSG_PLAY_SPELL_IMPACT = other.SMSG_PLAY_SPELL_IMPACT;
+            this->SMSG_PLAY_SPELL_IMPACT = std::move(other.SMSG_PLAY_SPELL_IMPACT);
         }
         if (opcode == Opcode::SMSG_EXPLORATION_EXPERIENCE) {
-            this->SMSG_EXPLORATION_EXPERIENCE = other.SMSG_EXPLORATION_EXPERIENCE;
+            this->SMSG_EXPLORATION_EXPERIENCE = std::move(other.SMSG_EXPLORATION_EXPERIENCE);
         }
         if (opcode == Opcode::MSG_RANDOM_ROLL) {
-            this->MSG_RANDOM_ROLL = other.MSG_RANDOM_ROLL;
+            this->MSG_RANDOM_ROLL = std::move(other.MSG_RANDOM_ROLL);
         }
         if (opcode == Opcode::SMSG_ENVIRONMENTAL_DAMAGE_LOG) {
-            this->SMSG_ENVIRONMENTAL_DAMAGE_LOG = other.SMSG_ENVIRONMENTAL_DAMAGE_LOG;
+            this->SMSG_ENVIRONMENTAL_DAMAGE_LOG = std::move(other.SMSG_ENVIRONMENTAL_DAMAGE_LOG);
         }
         if (opcode == Opcode::MSG_LOOKING_FOR_GROUP) {
-            this->MSG_LOOKING_FOR_GROUP = other.MSG_LOOKING_FOR_GROUP;
+            this->MSG_LOOKING_FOR_GROUP = std::move(other.MSG_LOOKING_FOR_GROUP);
         }
         if (opcode == Opcode::SMSG_REMOVED_SPELL) {
-            this->SMSG_REMOVED_SPELL = other.SMSG_REMOVED_SPELL;
+            this->SMSG_REMOVED_SPELL = std::move(other.SMSG_REMOVED_SPELL);
         }
         if (opcode == Opcode::SMSG_GMTICKET_CREATE) {
-            this->SMSG_GMTICKET_CREATE = other.SMSG_GMTICKET_CREATE;
+            this->SMSG_GMTICKET_CREATE = std::move(other.SMSG_GMTICKET_CREATE);
         }
         if (opcode == Opcode::SMSG_GMTICKET_UPDATETEXT) {
-            this->SMSG_GMTICKET_UPDATETEXT = other.SMSG_GMTICKET_UPDATETEXT;
+            this->SMSG_GMTICKET_UPDATETEXT = std::move(other.SMSG_GMTICKET_UPDATETEXT);
         }
         if (opcode == Opcode::SMSG_ACCOUNT_DATA_TIMES) {
-            this->SMSG_ACCOUNT_DATA_TIMES = other.SMSG_ACCOUNT_DATA_TIMES;
+            this->SMSG_ACCOUNT_DATA_TIMES = std::move(other.SMSG_ACCOUNT_DATA_TIMES);
         }
         if (opcode == Opcode::SMSG_GMTICKET_GETTICKET) {
-            this->SMSG_GMTICKET_GETTICKET = other.SMSG_GMTICKET_GETTICKET;
+            this->SMSG_GMTICKET_GETTICKET = std::move(other.SMSG_GMTICKET_GETTICKET);
         }
         if (opcode == Opcode::SMSG_GAMEOBJECT_SPAWN_ANIM) {
-            this->SMSG_GAMEOBJECT_SPAWN_ANIM = other.SMSG_GAMEOBJECT_SPAWN_ANIM;
+            this->SMSG_GAMEOBJECT_SPAWN_ANIM = std::move(other.SMSG_GAMEOBJECT_SPAWN_ANIM);
         }
         if (opcode == Opcode::SMSG_GAMEOBJECT_DESPAWN_ANIM) {
-            this->SMSG_GAMEOBJECT_DESPAWN_ANIM = other.SMSG_GAMEOBJECT_DESPAWN_ANIM;
+            this->SMSG_GAMEOBJECT_DESPAWN_ANIM = std::move(other.SMSG_GAMEOBJECT_DESPAWN_ANIM);
         }
         if (opcode == Opcode::MSG_CORPSE_QUERY) {
-            this->MSG_CORPSE_QUERY = other.MSG_CORPSE_QUERY;
+            this->MSG_CORPSE_QUERY = std::move(other.MSG_CORPSE_QUERY);
         }
         if (opcode == Opcode::SMSG_GMTICKET_DELETETICKET) {
-            this->SMSG_GMTICKET_DELETETICKET = other.SMSG_GMTICKET_DELETETICKET;
+            this->SMSG_GMTICKET_DELETETICKET = std::move(other.SMSG_GMTICKET_DELETETICKET);
         }
         if (opcode == Opcode::SMSG_CHAT_WRONG_FACTION) {
-            this->SMSG_CHAT_WRONG_FACTION = other.SMSG_CHAT_WRONG_FACTION;
+            this->SMSG_CHAT_WRONG_FACTION = std::move(other.SMSG_CHAT_WRONG_FACTION);
         }
         if (opcode == Opcode::SMSG_GMTICKET_SYSTEMSTATUS) {
-            this->SMSG_GMTICKET_SYSTEMSTATUS = other.SMSG_GMTICKET_SYSTEMSTATUS;
+            this->SMSG_GMTICKET_SYSTEMSTATUS = std::move(other.SMSG_GMTICKET_SYSTEMSTATUS);
         }
         if (opcode == Opcode::SMSG_SET_REST_START) {
-            this->SMSG_SET_REST_START = other.SMSG_SET_REST_START;
+            this->SMSG_SET_REST_START = std::move(other.SMSG_SET_REST_START);
         }
         if (opcode == Opcode::SMSG_SPIRIT_HEALER_CONFIRM) {
-            this->SMSG_SPIRIT_HEALER_CONFIRM = other.SMSG_SPIRIT_HEALER_CONFIRM;
+            this->SMSG_SPIRIT_HEALER_CONFIRM = std::move(other.SMSG_SPIRIT_HEALER_CONFIRM);
         }
         if (opcode == Opcode::SMSG_GOSSIP_POI) {
-            this->SMSG_GOSSIP_POI = other.SMSG_GOSSIP_POI;
+            this->SMSG_GOSSIP_POI = std::move(other.SMSG_GOSSIP_POI);
         }
         if (opcode == Opcode::SMSG_LOGIN_VERIFY_WORLD) {
-            this->SMSG_LOGIN_VERIFY_WORLD = other.SMSG_LOGIN_VERIFY_WORLD;
+            this->SMSG_LOGIN_VERIFY_WORLD = std::move(other.SMSG_LOGIN_VERIFY_WORLD);
         }
         if (opcode == Opcode::SMSG_SEND_MAIL_RESULT) {
-            this->SMSG_SEND_MAIL_RESULT = other.SMSG_SEND_MAIL_RESULT;
+            this->SMSG_SEND_MAIL_RESULT = std::move(other.SMSG_SEND_MAIL_RESULT);
         }
         if (opcode == Opcode::SMSG_MAIL_LIST_RESULT) {
-            this->SMSG_MAIL_LIST_RESULT = other.SMSG_MAIL_LIST_RESULT;
+            this->SMSG_MAIL_LIST_RESULT = std::move(other.SMSG_MAIL_LIST_RESULT);
         }
         if (opcode == Opcode::SMSG_BATTLEFIELD_LIST) {
-            this->SMSG_BATTLEFIELD_LIST = other.SMSG_BATTLEFIELD_LIST;
+            this->SMSG_BATTLEFIELD_LIST = std::move(other.SMSG_BATTLEFIELD_LIST);
         }
         if (opcode == Opcode::SMSG_ITEM_TEXT_QUERY_RESPONSE) {
-            this->SMSG_ITEM_TEXT_QUERY_RESPONSE = other.SMSG_ITEM_TEXT_QUERY_RESPONSE;
+            this->SMSG_ITEM_TEXT_QUERY_RESPONSE = std::move(other.SMSG_ITEM_TEXT_QUERY_RESPONSE);
         }
         if (opcode == Opcode::SMSG_SPELLLOGMISS) {
-            this->SMSG_SPELLLOGMISS = other.SMSG_SPELLLOGMISS;
+            this->SMSG_SPELLLOGMISS = std::move(other.SMSG_SPELLLOGMISS);
         }
         if (opcode == Opcode::SMSG_SPELLLOGEXECUTE) {
-            this->SMSG_SPELLLOGEXECUTE = other.SMSG_SPELLLOGEXECUTE;
+            this->SMSG_SPELLLOGEXECUTE = std::move(other.SMSG_SPELLLOGEXECUTE);
         }
         if (opcode == Opcode::SMSG_PERIODICAURALOG) {
-            this->SMSG_PERIODICAURALOG = other.SMSG_PERIODICAURALOG;
+            this->SMSG_PERIODICAURALOG = std::move(other.SMSG_PERIODICAURALOG);
         }
         if (opcode == Opcode::SMSG_SPELLDAMAGESHIELD) {
-            this->SMSG_SPELLDAMAGESHIELD = other.SMSG_SPELLDAMAGESHIELD;
+            this->SMSG_SPELLDAMAGESHIELD = std::move(other.SMSG_SPELLDAMAGESHIELD);
         }
         if (opcode == Opcode::SMSG_SPELLNONMELEEDAMAGELOG) {
-            this->SMSG_SPELLNONMELEEDAMAGELOG = other.SMSG_SPELLNONMELEEDAMAGELOG;
+            this->SMSG_SPELLNONMELEEDAMAGELOG = std::move(other.SMSG_SPELLNONMELEEDAMAGELOG);
         }
         if (opcode == Opcode::SMSG_ZONE_UNDER_ATTACK) {
-            this->SMSG_ZONE_UNDER_ATTACK = other.SMSG_ZONE_UNDER_ATTACK;
+            this->SMSG_ZONE_UNDER_ATTACK = std::move(other.SMSG_ZONE_UNDER_ATTACK);
         }
         if (opcode == Opcode::MSG_AUCTION_HELLO) {
-            this->MSG_AUCTION_HELLO = other.MSG_AUCTION_HELLO;
+            this->MSG_AUCTION_HELLO = std::move(other.MSG_AUCTION_HELLO);
         }
         if (opcode == Opcode::SMSG_AUCTION_COMMAND_RESULT) {
-            this->SMSG_AUCTION_COMMAND_RESULT = other.SMSG_AUCTION_COMMAND_RESULT;
+            this->SMSG_AUCTION_COMMAND_RESULT = std::move(other.SMSG_AUCTION_COMMAND_RESULT);
         }
         if (opcode == Opcode::SMSG_AUCTION_LIST_RESULT) {
-            this->SMSG_AUCTION_LIST_RESULT = other.SMSG_AUCTION_LIST_RESULT;
+            this->SMSG_AUCTION_LIST_RESULT = std::move(other.SMSG_AUCTION_LIST_RESULT);
         }
         if (opcode == Opcode::SMSG_AUCTION_OWNER_LIST_RESULT) {
-            this->SMSG_AUCTION_OWNER_LIST_RESULT = other.SMSG_AUCTION_OWNER_LIST_RESULT;
+            this->SMSG_AUCTION_OWNER_LIST_RESULT = std::move(other.SMSG_AUCTION_OWNER_LIST_RESULT);
         }
         if (opcode == Opcode::SMSG_AUCTION_BIDDER_NOTIFICATION) {
-            this->SMSG_AUCTION_BIDDER_NOTIFICATION = other.SMSG_AUCTION_BIDDER_NOTIFICATION;
+            this->SMSG_AUCTION_BIDDER_NOTIFICATION = std::move(other.SMSG_AUCTION_BIDDER_NOTIFICATION);
         }
         if (opcode == Opcode::SMSG_AUCTION_OWNER_NOTIFICATION) {
-            this->SMSG_AUCTION_OWNER_NOTIFICATION = other.SMSG_AUCTION_OWNER_NOTIFICATION;
+            this->SMSG_AUCTION_OWNER_NOTIFICATION = std::move(other.SMSG_AUCTION_OWNER_NOTIFICATION);
         }
         if (opcode == Opcode::SMSG_PROCRESIST) {
-            this->SMSG_PROCRESIST = other.SMSG_PROCRESIST;
+            this->SMSG_PROCRESIST = std::move(other.SMSG_PROCRESIST);
         }
         if (opcode == Opcode::SMSG_DISPEL_FAILED) {
-            this->SMSG_DISPEL_FAILED = other.SMSG_DISPEL_FAILED;
+            this->SMSG_DISPEL_FAILED = std::move(other.SMSG_DISPEL_FAILED);
         }
         if (opcode == Opcode::SMSG_SPELLORDAMAGE_IMMUNE) {
-            this->SMSG_SPELLORDAMAGE_IMMUNE = other.SMSG_SPELLORDAMAGE_IMMUNE;
+            this->SMSG_SPELLORDAMAGE_IMMUNE = std::move(other.SMSG_SPELLORDAMAGE_IMMUNE);
         }
         if (opcode == Opcode::SMSG_AUCTION_BIDDER_LIST_RESULT) {
-            this->SMSG_AUCTION_BIDDER_LIST_RESULT = other.SMSG_AUCTION_BIDDER_LIST_RESULT;
+            this->SMSG_AUCTION_BIDDER_LIST_RESULT = std::move(other.SMSG_AUCTION_BIDDER_LIST_RESULT);
         }
         if (opcode == Opcode::SMSG_SET_FLAT_SPELL_MODIFIER) {
-            this->SMSG_SET_FLAT_SPELL_MODIFIER = other.SMSG_SET_FLAT_SPELL_MODIFIER;
+            this->SMSG_SET_FLAT_SPELL_MODIFIER = std::move(other.SMSG_SET_FLAT_SPELL_MODIFIER);
         }
         if (opcode == Opcode::SMSG_SET_PCT_SPELL_MODIFIER) {
-            this->SMSG_SET_PCT_SPELL_MODIFIER = other.SMSG_SET_PCT_SPELL_MODIFIER;
+            this->SMSG_SET_PCT_SPELL_MODIFIER = std::move(other.SMSG_SET_PCT_SPELL_MODIFIER);
         }
         if (opcode == Opcode::SMSG_CORPSE_RECLAIM_DELAY) {
-            this->SMSG_CORPSE_RECLAIM_DELAY = other.SMSG_CORPSE_RECLAIM_DELAY;
+            this->SMSG_CORPSE_RECLAIM_DELAY = std::move(other.SMSG_CORPSE_RECLAIM_DELAY);
         }
         if (opcode == Opcode::MSG_LIST_STABLED_PETS) {
-            this->MSG_LIST_STABLED_PETS = other.MSG_LIST_STABLED_PETS;
+            this->MSG_LIST_STABLED_PETS = std::move(other.MSG_LIST_STABLED_PETS);
         }
         if (opcode == Opcode::SMSG_STABLE_RESULT) {
-            this->SMSG_STABLE_RESULT = other.SMSG_STABLE_RESULT;
+            this->SMSG_STABLE_RESULT = std::move(other.SMSG_STABLE_RESULT);
+        }
+        if (opcode == Opcode::MSG_QUEST_PUSH_RESULT) {
+            this->MSG_QUEST_PUSH_RESULT = std::move(other.MSG_QUEST_PUSH_RESULT);
         }
         if (opcode == Opcode::SMSG_PLAY_MUSIC) {
-            this->SMSG_PLAY_MUSIC = other.SMSG_PLAY_MUSIC;
+            this->SMSG_PLAY_MUSIC = std::move(other.SMSG_PLAY_MUSIC);
         }
         if (opcode == Opcode::SMSG_PLAY_OBJECT_SOUND) {
-            this->SMSG_PLAY_OBJECT_SOUND = other.SMSG_PLAY_OBJECT_SOUND;
+            this->SMSG_PLAY_OBJECT_SOUND = std::move(other.SMSG_PLAY_OBJECT_SOUND);
         }
         if (opcode == Opcode::SMSG_SPELLDISPELLOG) {
-            this->SMSG_SPELLDISPELLOG = other.SMSG_SPELLDISPELLOG;
+            this->SMSG_SPELLDISPELLOG = std::move(other.SMSG_SPELLDISPELLOG);
         }
         if (opcode == Opcode::MSG_QUERY_NEXT_MAIL_TIME) {
-            this->MSG_QUERY_NEXT_MAIL_TIME = other.MSG_QUERY_NEXT_MAIL_TIME;
+            this->MSG_QUERY_NEXT_MAIL_TIME = std::move(other.MSG_QUERY_NEXT_MAIL_TIME);
         }
         if (opcode == Opcode::SMSG_RECEIVED_MAIL) {
-            this->SMSG_RECEIVED_MAIL = other.SMSG_RECEIVED_MAIL;
+            this->SMSG_RECEIVED_MAIL = std::move(other.SMSG_RECEIVED_MAIL);
         }
         if (opcode == Opcode::SMSG_RAID_GROUP_ONLY) {
-            this->SMSG_RAID_GROUP_ONLY = other.SMSG_RAID_GROUP_ONLY;
+            this->SMSG_RAID_GROUP_ONLY = std::move(other.SMSG_RAID_GROUP_ONLY);
         }
         if (opcode == Opcode::SMSG_PVP_CREDIT) {
-            this->SMSG_PVP_CREDIT = other.SMSG_PVP_CREDIT;
+            this->SMSG_PVP_CREDIT = std::move(other.SMSG_PVP_CREDIT);
         }
         if (opcode == Opcode::SMSG_AUCTION_REMOVED_NOTIFICATION) {
-            this->SMSG_AUCTION_REMOVED_NOTIFICATION = other.SMSG_AUCTION_REMOVED_NOTIFICATION;
+            this->SMSG_AUCTION_REMOVED_NOTIFICATION = std::move(other.SMSG_AUCTION_REMOVED_NOTIFICATION);
         }
         if (opcode == Opcode::SMSG_SERVER_MESSAGE) {
-            this->SMSG_SERVER_MESSAGE = other.SMSG_SERVER_MESSAGE;
+            this->SMSG_SERVER_MESSAGE = std::move(other.SMSG_SERVER_MESSAGE);
         }
         if (opcode == Opcode::SMSG_MEETINGSTONE_SETQUEUE) {
-            this->SMSG_MEETINGSTONE_SETQUEUE = other.SMSG_MEETINGSTONE_SETQUEUE;
+            this->SMSG_MEETINGSTONE_SETQUEUE = std::move(other.SMSG_MEETINGSTONE_SETQUEUE);
         }
         if (opcode == Opcode::SMSG_MEETINGSTONE_COMPLETE) {
-            this->SMSG_MEETINGSTONE_COMPLETE = other.SMSG_MEETINGSTONE_COMPLETE;
+            this->SMSG_MEETINGSTONE_COMPLETE = std::move(other.SMSG_MEETINGSTONE_COMPLETE);
         }
         if (opcode == Opcode::SMSG_MEETINGSTONE_IN_PROGRESS) {
-            this->SMSG_MEETINGSTONE_IN_PROGRESS = other.SMSG_MEETINGSTONE_IN_PROGRESS;
+            this->SMSG_MEETINGSTONE_IN_PROGRESS = std::move(other.SMSG_MEETINGSTONE_IN_PROGRESS);
         }
         if (opcode == Opcode::SMSG_MEETINGSTONE_MEMBER_ADDED) {
-            this->SMSG_MEETINGSTONE_MEMBER_ADDED = other.SMSG_MEETINGSTONE_MEMBER_ADDED;
+            this->SMSG_MEETINGSTONE_MEMBER_ADDED = std::move(other.SMSG_MEETINGSTONE_MEMBER_ADDED);
         }
         if (opcode == Opcode::SMSG_CANCEL_AUTO_REPEAT) {
-            this->SMSG_CANCEL_AUTO_REPEAT = other.SMSG_CANCEL_AUTO_REPEAT;
+            this->SMSG_CANCEL_AUTO_REPEAT = std::move(other.SMSG_CANCEL_AUTO_REPEAT);
         }
         if (opcode == Opcode::SMSG_STANDSTATE_UPDATE) {
-            this->SMSG_STANDSTATE_UPDATE = other.SMSG_STANDSTATE_UPDATE;
+            this->SMSG_STANDSTATE_UPDATE = std::move(other.SMSG_STANDSTATE_UPDATE);
         }
         if (opcode == Opcode::SMSG_LOOT_ALL_PASSED) {
-            this->SMSG_LOOT_ALL_PASSED = other.SMSG_LOOT_ALL_PASSED;
+            this->SMSG_LOOT_ALL_PASSED = std::move(other.SMSG_LOOT_ALL_PASSED);
         }
         if (opcode == Opcode::SMSG_LOOT_ROLL_WON) {
-            this->SMSG_LOOT_ROLL_WON = other.SMSG_LOOT_ROLL_WON;
+            this->SMSG_LOOT_ROLL_WON = std::move(other.SMSG_LOOT_ROLL_WON);
         }
         if (opcode == Opcode::SMSG_LOOT_START_ROLL) {
-            this->SMSG_LOOT_START_ROLL = other.SMSG_LOOT_START_ROLL;
+            this->SMSG_LOOT_START_ROLL = std::move(other.SMSG_LOOT_START_ROLL);
         }
         if (opcode == Opcode::SMSG_LOOT_ROLL) {
-            this->SMSG_LOOT_ROLL = other.SMSG_LOOT_ROLL;
+            this->SMSG_LOOT_ROLL = std::move(other.SMSG_LOOT_ROLL);
         }
         if (opcode == Opcode::SMSG_LOOT_MASTER_LIST) {
-            this->SMSG_LOOT_MASTER_LIST = other.SMSG_LOOT_MASTER_LIST;
+            this->SMSG_LOOT_MASTER_LIST = std::move(other.SMSG_LOOT_MASTER_LIST);
         }
         if (opcode == Opcode::SMSG_SET_FORCED_REACTIONS) {
-            this->SMSG_SET_FORCED_REACTIONS = other.SMSG_SET_FORCED_REACTIONS;
+            this->SMSG_SET_FORCED_REACTIONS = std::move(other.SMSG_SET_FORCED_REACTIONS);
         }
         if (opcode == Opcode::SMSG_SPELL_FAILED_OTHER) {
-            this->SMSG_SPELL_FAILED_OTHER = other.SMSG_SPELL_FAILED_OTHER;
+            this->SMSG_SPELL_FAILED_OTHER = std::move(other.SMSG_SPELL_FAILED_OTHER);
         }
         if (opcode == Opcode::SMSG_GAMEOBJECT_RESET_STATE) {
-            this->SMSG_GAMEOBJECT_RESET_STATE = other.SMSG_GAMEOBJECT_RESET_STATE;
+            this->SMSG_GAMEOBJECT_RESET_STATE = std::move(other.SMSG_GAMEOBJECT_RESET_STATE);
         }
         if (opcode == Opcode::SMSG_CHAT_PLAYER_NOT_FOUND) {
-            this->SMSG_CHAT_PLAYER_NOT_FOUND = other.SMSG_CHAT_PLAYER_NOT_FOUND;
+            this->SMSG_CHAT_PLAYER_NOT_FOUND = std::move(other.SMSG_CHAT_PLAYER_NOT_FOUND);
         }
         if (opcode == Opcode::MSG_TALENT_WIPE_CONFIRM) {
-            this->MSG_TALENT_WIPE_CONFIRM = other.MSG_TALENT_WIPE_CONFIRM;
+            this->MSG_TALENT_WIPE_CONFIRM = std::move(other.MSG_TALENT_WIPE_CONFIRM);
         }
         if (opcode == Opcode::SMSG_SUMMON_REQUEST) {
-            this->SMSG_SUMMON_REQUEST = other.SMSG_SUMMON_REQUEST;
+            this->SMSG_SUMMON_REQUEST = std::move(other.SMSG_SUMMON_REQUEST);
         }
         if (opcode == Opcode::SMSG_MONSTER_MOVE_TRANSPORT) {
-            this->SMSG_MONSTER_MOVE_TRANSPORT = other.SMSG_MONSTER_MOVE_TRANSPORT;
+            this->SMSG_MONSTER_MOVE_TRANSPORT = std::move(other.SMSG_MONSTER_MOVE_TRANSPORT);
         }
         if (opcode == Opcode::SMSG_PET_BROKEN) {
-            this->SMSG_PET_BROKEN = other.SMSG_PET_BROKEN;
+            this->SMSG_PET_BROKEN = std::move(other.SMSG_PET_BROKEN);
         }
         if (opcode == Opcode::MSG_MOVE_FEATHER_FALL) {
-            this->MSG_MOVE_FEATHER_FALL = other.MSG_MOVE_FEATHER_FALL;
+            this->MSG_MOVE_FEATHER_FALL = std::move(other.MSG_MOVE_FEATHER_FALL);
+        }
+        if (opcode == Opcode::MSG_MOVE_WATER_WALK) {
+            this->MSG_MOVE_WATER_WALK = std::move(other.MSG_MOVE_WATER_WALK);
         }
         if (opcode == Opcode::SMSG_FEIGN_DEATH_RESISTED) {
-            this->SMSG_FEIGN_DEATH_RESISTED = other.SMSG_FEIGN_DEATH_RESISTED;
+            this->SMSG_FEIGN_DEATH_RESISTED = std::move(other.SMSG_FEIGN_DEATH_RESISTED);
         }
         if (opcode == Opcode::SMSG_DUEL_COUNTDOWN) {
-            this->SMSG_DUEL_COUNTDOWN = other.SMSG_DUEL_COUNTDOWN;
+            this->SMSG_DUEL_COUNTDOWN = std::move(other.SMSG_DUEL_COUNTDOWN);
         }
         if (opcode == Opcode::SMSG_AREA_TRIGGER_MESSAGE) {
-            this->SMSG_AREA_TRIGGER_MESSAGE = other.SMSG_AREA_TRIGGER_MESSAGE;
+            this->SMSG_AREA_TRIGGER_MESSAGE = std::move(other.SMSG_AREA_TRIGGER_MESSAGE);
         }
         if (opcode == Opcode::SMSG_MEETINGSTONE_JOINFAILED) {
-            this->SMSG_MEETINGSTONE_JOINFAILED = other.SMSG_MEETINGSTONE_JOINFAILED;
+            this->SMSG_MEETINGSTONE_JOINFAILED = std::move(other.SMSG_MEETINGSTONE_JOINFAILED);
         }
         if (opcode == Opcode::SMSG_PLAYER_SKINNED) {
-            this->SMSG_PLAYER_SKINNED = other.SMSG_PLAYER_SKINNED;
+            this->SMSG_PLAYER_SKINNED = std::move(other.SMSG_PLAYER_SKINNED);
         }
         if (opcode == Opcode::SMSG_DURABILITY_DAMAGE_DEATH) {
-            this->SMSG_DURABILITY_DAMAGE_DEATH = other.SMSG_DURABILITY_DAMAGE_DEATH;
+            this->SMSG_DURABILITY_DAMAGE_DEATH = std::move(other.SMSG_DURABILITY_DAMAGE_DEATH);
+        }
+        if (opcode == Opcode::MSG_PETITION_RENAME) {
+            this->MSG_PETITION_RENAME = std::move(other.MSG_PETITION_RENAME);
         }
         if (opcode == Opcode::SMSG_INIT_WORLD_STATES) {
-            this->SMSG_INIT_WORLD_STATES = other.SMSG_INIT_WORLD_STATES;
+            this->SMSG_INIT_WORLD_STATES = std::move(other.SMSG_INIT_WORLD_STATES);
         }
         if (opcode == Opcode::SMSG_UPDATE_WORLD_STATE) {
-            this->SMSG_UPDATE_WORLD_STATE = other.SMSG_UPDATE_WORLD_STATE;
+            this->SMSG_UPDATE_WORLD_STATE = std::move(other.SMSG_UPDATE_WORLD_STATE);
         }
         if (opcode == Opcode::SMSG_ITEM_NAME_QUERY_RESPONSE) {
-            this->SMSG_ITEM_NAME_QUERY_RESPONSE = other.SMSG_ITEM_NAME_QUERY_RESPONSE;
+            this->SMSG_ITEM_NAME_QUERY_RESPONSE = std::move(other.SMSG_ITEM_NAME_QUERY_RESPONSE);
         }
         if (opcode == Opcode::SMSG_PET_ACTION_FEEDBACK) {
-            this->SMSG_PET_ACTION_FEEDBACK = other.SMSG_PET_ACTION_FEEDBACK;
+            this->SMSG_PET_ACTION_FEEDBACK = std::move(other.SMSG_PET_ACTION_FEEDBACK);
         }
         if (opcode == Opcode::SMSG_CHAR_RENAME) {
-            this->SMSG_CHAR_RENAME = other.SMSG_CHAR_RENAME;
+            this->SMSG_CHAR_RENAME = std::move(other.SMSG_CHAR_RENAME);
         }
         if (opcode == Opcode::SMSG_INSTANCE_SAVE_CREATED) {
-            this->SMSG_INSTANCE_SAVE_CREATED = other.SMSG_INSTANCE_SAVE_CREATED;
+            this->SMSG_INSTANCE_SAVE_CREATED = std::move(other.SMSG_INSTANCE_SAVE_CREATED);
         }
         if (opcode == Opcode::SMSG_RAID_INSTANCE_INFO) {
-            this->SMSG_RAID_INSTANCE_INFO = other.SMSG_RAID_INSTANCE_INFO;
+            this->SMSG_RAID_INSTANCE_INFO = std::move(other.SMSG_RAID_INSTANCE_INFO);
         }
         if (opcode == Opcode::SMSG_PLAY_SOUND) {
-            this->SMSG_PLAY_SOUND = other.SMSG_PLAY_SOUND;
+            this->SMSG_PLAY_SOUND = std::move(other.SMSG_PLAY_SOUND);
         }
         if (opcode == Opcode::SMSG_BATTLEFIELD_STATUS) {
-            this->SMSG_BATTLEFIELD_STATUS = other.SMSG_BATTLEFIELD_STATUS;
+            this->SMSG_BATTLEFIELD_STATUS = std::move(other.SMSG_BATTLEFIELD_STATUS);
         }
         if (opcode == Opcode::MSG_INSPECT_HONOR_STATS) {
-            this->MSG_INSPECT_HONOR_STATS = other.MSG_INSPECT_HONOR_STATS;
+            this->MSG_INSPECT_HONOR_STATS = std::move(other.MSG_INSPECT_HONOR_STATS);
         }
         if (opcode == Opcode::SMSG_FORCE_WALK_SPEED_CHANGE) {
-            this->SMSG_FORCE_WALK_SPEED_CHANGE = other.SMSG_FORCE_WALK_SPEED_CHANGE;
+            this->SMSG_FORCE_WALK_SPEED_CHANGE = std::move(other.SMSG_FORCE_WALK_SPEED_CHANGE);
         }
         if (opcode == Opcode::SMSG_FORCE_SWIM_BACK_SPEED_CHANGE) {
-            this->SMSG_FORCE_SWIM_BACK_SPEED_CHANGE = other.SMSG_FORCE_SWIM_BACK_SPEED_CHANGE;
+            this->SMSG_FORCE_SWIM_BACK_SPEED_CHANGE = std::move(other.SMSG_FORCE_SWIM_BACK_SPEED_CHANGE);
         }
         if (opcode == Opcode::SMSG_FORCE_TURN_RATE_CHANGE) {
-            this->SMSG_FORCE_TURN_RATE_CHANGE = other.SMSG_FORCE_TURN_RATE_CHANGE;
+            this->SMSG_FORCE_TURN_RATE_CHANGE = std::move(other.SMSG_FORCE_TURN_RATE_CHANGE);
         }
         if (opcode == Opcode::MSG_PVP_LOG_DATA) {
-            this->MSG_PVP_LOG_DATA = other.MSG_PVP_LOG_DATA;
+            this->MSG_PVP_LOG_DATA = std::move(other.MSG_PVP_LOG_DATA);
         }
         if (opcode == Opcode::SMSG_AREA_SPIRIT_HEALER_TIME) {
-            this->SMSG_AREA_SPIRIT_HEALER_TIME = other.SMSG_AREA_SPIRIT_HEALER_TIME;
+            this->SMSG_AREA_SPIRIT_HEALER_TIME = std::move(other.SMSG_AREA_SPIRIT_HEALER_TIME);
         }
         if (opcode == Opcode::SMSG_WARDEN_DATA) {
-            this->SMSG_WARDEN_DATA = other.SMSG_WARDEN_DATA;
+            this->SMSG_WARDEN_DATA = std::move(other.SMSG_WARDEN_DATA);
         }
         if (opcode == Opcode::SMSG_GROUP_JOINED_BATTLEGROUND) {
-            this->SMSG_GROUP_JOINED_BATTLEGROUND = other.SMSG_GROUP_JOINED_BATTLEGROUND;
+            this->SMSG_GROUP_JOINED_BATTLEGROUND = std::move(other.SMSG_GROUP_JOINED_BATTLEGROUND);
         }
         if (opcode == Opcode::MSG_BATTLEGROUND_PLAYER_POSITIONS) {
-            this->MSG_BATTLEGROUND_PLAYER_POSITIONS = other.MSG_BATTLEGROUND_PLAYER_POSITIONS;
+            this->MSG_BATTLEGROUND_PLAYER_POSITIONS = std::move(other.MSG_BATTLEGROUND_PLAYER_POSITIONS);
         }
         if (opcode == Opcode::SMSG_BINDER_CONFIRM) {
-            this->SMSG_BINDER_CONFIRM = other.SMSG_BINDER_CONFIRM;
+            this->SMSG_BINDER_CONFIRM = std::move(other.SMSG_BINDER_CONFIRM);
         }
         if (opcode == Opcode::SMSG_BATTLEGROUND_PLAYER_JOINED) {
-            this->SMSG_BATTLEGROUND_PLAYER_JOINED = other.SMSG_BATTLEGROUND_PLAYER_JOINED;
+            this->SMSG_BATTLEGROUND_PLAYER_JOINED = std::move(other.SMSG_BATTLEGROUND_PLAYER_JOINED);
         }
         if (opcode == Opcode::SMSG_BATTLEGROUND_PLAYER_LEFT) {
-            this->SMSG_BATTLEGROUND_PLAYER_LEFT = other.SMSG_BATTLEGROUND_PLAYER_LEFT;
+            this->SMSG_BATTLEGROUND_PLAYER_LEFT = std::move(other.SMSG_BATTLEGROUND_PLAYER_LEFT);
         }
         if (opcode == Opcode::SMSG_ADDON_INFO) {
-            this->SMSG_ADDON_INFO = other.SMSG_ADDON_INFO;
+            this->SMSG_ADDON_INFO = std::move(other.SMSG_ADDON_INFO);
         }
         if (opcode == Opcode::SMSG_PET_UNLEARN_CONFIRM) {
-            this->SMSG_PET_UNLEARN_CONFIRM = other.SMSG_PET_UNLEARN_CONFIRM;
+            this->SMSG_PET_UNLEARN_CONFIRM = std::move(other.SMSG_PET_UNLEARN_CONFIRM);
         }
         if (opcode == Opcode::SMSG_PARTY_MEMBER_STATS_FULL) {
-            this->SMSG_PARTY_MEMBER_STATS_FULL = other.SMSG_PARTY_MEMBER_STATS_FULL;
+            this->SMSG_PARTY_MEMBER_STATS_FULL = std::move(other.SMSG_PARTY_MEMBER_STATS_FULL);
         }
         if (opcode == Opcode::SMSG_WEATHER) {
-            this->SMSG_WEATHER = other.SMSG_WEATHER;
+            this->SMSG_WEATHER = std::move(other.SMSG_WEATHER);
         }
         if (opcode == Opcode::SMSG_RAID_INSTANCE_MESSAGE) {
-            this->SMSG_RAID_INSTANCE_MESSAGE = other.SMSG_RAID_INSTANCE_MESSAGE;
+            this->SMSG_RAID_INSTANCE_MESSAGE = std::move(other.SMSG_RAID_INSTANCE_MESSAGE);
         }
         if (opcode == Opcode::SMSG_CHAT_RESTRICTED) {
-            this->SMSG_CHAT_RESTRICTED = other.SMSG_CHAT_RESTRICTED;
+            this->SMSG_CHAT_RESTRICTED = std::move(other.SMSG_CHAT_RESTRICTED);
         }
         if (opcode == Opcode::SMSG_SPLINE_SET_RUN_SPEED) {
-            this->SMSG_SPLINE_SET_RUN_SPEED = other.SMSG_SPLINE_SET_RUN_SPEED;
+            this->SMSG_SPLINE_SET_RUN_SPEED = std::move(other.SMSG_SPLINE_SET_RUN_SPEED);
         }
         if (opcode == Opcode::SMSG_SPLINE_SET_RUN_BACK_SPEED) {
-            this->SMSG_SPLINE_SET_RUN_BACK_SPEED = other.SMSG_SPLINE_SET_RUN_BACK_SPEED;
+            this->SMSG_SPLINE_SET_RUN_BACK_SPEED = std::move(other.SMSG_SPLINE_SET_RUN_BACK_SPEED);
         }
         if (opcode == Opcode::SMSG_SPLINE_SET_SWIM_SPEED) {
-            this->SMSG_SPLINE_SET_SWIM_SPEED = other.SMSG_SPLINE_SET_SWIM_SPEED;
+            this->SMSG_SPLINE_SET_SWIM_SPEED = std::move(other.SMSG_SPLINE_SET_SWIM_SPEED);
         }
         if (opcode == Opcode::SMSG_SPLINE_SET_WALK_SPEED) {
-            this->SMSG_SPLINE_SET_WALK_SPEED = other.SMSG_SPLINE_SET_WALK_SPEED;
+            this->SMSG_SPLINE_SET_WALK_SPEED = std::move(other.SMSG_SPLINE_SET_WALK_SPEED);
         }
         if (opcode == Opcode::SMSG_SPLINE_SET_SWIM_BACK_SPEED) {
-            this->SMSG_SPLINE_SET_SWIM_BACK_SPEED = other.SMSG_SPLINE_SET_SWIM_BACK_SPEED;
+            this->SMSG_SPLINE_SET_SWIM_BACK_SPEED = std::move(other.SMSG_SPLINE_SET_SWIM_BACK_SPEED);
         }
         if (opcode == Opcode::SMSG_SPLINE_SET_TURN_RATE) {
-            this->SMSG_SPLINE_SET_TURN_RATE = other.SMSG_SPLINE_SET_TURN_RATE;
+            this->SMSG_SPLINE_SET_TURN_RATE = std::move(other.SMSG_SPLINE_SET_TURN_RATE);
         }
         if (opcode == Opcode::SMSG_SPLINE_MOVE_UNROOT) {
-            this->SMSG_SPLINE_MOVE_UNROOT = other.SMSG_SPLINE_MOVE_UNROOT;
+            this->SMSG_SPLINE_MOVE_UNROOT = std::move(other.SMSG_SPLINE_MOVE_UNROOT);
         }
         if (opcode == Opcode::SMSG_SPLINE_MOVE_FEATHER_FALL) {
-            this->SMSG_SPLINE_MOVE_FEATHER_FALL = other.SMSG_SPLINE_MOVE_FEATHER_FALL;
+            this->SMSG_SPLINE_MOVE_FEATHER_FALL = std::move(other.SMSG_SPLINE_MOVE_FEATHER_FALL);
         }
         if (opcode == Opcode::SMSG_SPLINE_MOVE_NORMAL_FALL) {
-            this->SMSG_SPLINE_MOVE_NORMAL_FALL = other.SMSG_SPLINE_MOVE_NORMAL_FALL;
+            this->SMSG_SPLINE_MOVE_NORMAL_FALL = std::move(other.SMSG_SPLINE_MOVE_NORMAL_FALL);
         }
         if (opcode == Opcode::SMSG_SPLINE_MOVE_SET_HOVER) {
-            this->SMSG_SPLINE_MOVE_SET_HOVER = other.SMSG_SPLINE_MOVE_SET_HOVER;
+            this->SMSG_SPLINE_MOVE_SET_HOVER = std::move(other.SMSG_SPLINE_MOVE_SET_HOVER);
         }
         if (opcode == Opcode::SMSG_SPLINE_MOVE_UNSET_HOVER) {
-            this->SMSG_SPLINE_MOVE_UNSET_HOVER = other.SMSG_SPLINE_MOVE_UNSET_HOVER;
+            this->SMSG_SPLINE_MOVE_UNSET_HOVER = std::move(other.SMSG_SPLINE_MOVE_UNSET_HOVER);
         }
         if (opcode == Opcode::SMSG_SPLINE_MOVE_WATER_WALK) {
-            this->SMSG_SPLINE_MOVE_WATER_WALK = other.SMSG_SPLINE_MOVE_WATER_WALK;
+            this->SMSG_SPLINE_MOVE_WATER_WALK = std::move(other.SMSG_SPLINE_MOVE_WATER_WALK);
         }
         if (opcode == Opcode::SMSG_SPLINE_MOVE_LAND_WALK) {
-            this->SMSG_SPLINE_MOVE_LAND_WALK = other.SMSG_SPLINE_MOVE_LAND_WALK;
+            this->SMSG_SPLINE_MOVE_LAND_WALK = std::move(other.SMSG_SPLINE_MOVE_LAND_WALK);
         }
         if (opcode == Opcode::SMSG_SPLINE_MOVE_START_SWIM) {
-            this->SMSG_SPLINE_MOVE_START_SWIM = other.SMSG_SPLINE_MOVE_START_SWIM;
+            this->SMSG_SPLINE_MOVE_START_SWIM = std::move(other.SMSG_SPLINE_MOVE_START_SWIM);
         }
         if (opcode == Opcode::SMSG_SPLINE_MOVE_STOP_SWIM) {
-            this->SMSG_SPLINE_MOVE_STOP_SWIM = other.SMSG_SPLINE_MOVE_STOP_SWIM;
+            this->SMSG_SPLINE_MOVE_STOP_SWIM = std::move(other.SMSG_SPLINE_MOVE_STOP_SWIM);
         }
         if (opcode == Opcode::SMSG_SPLINE_MOVE_SET_RUN_MODE) {
-            this->SMSG_SPLINE_MOVE_SET_RUN_MODE = other.SMSG_SPLINE_MOVE_SET_RUN_MODE;
+            this->SMSG_SPLINE_MOVE_SET_RUN_MODE = std::move(other.SMSG_SPLINE_MOVE_SET_RUN_MODE);
         }
         if (opcode == Opcode::SMSG_SPLINE_MOVE_SET_WALK_MODE) {
-            this->SMSG_SPLINE_MOVE_SET_WALK_MODE = other.SMSG_SPLINE_MOVE_SET_WALK_MODE;
+            this->SMSG_SPLINE_MOVE_SET_WALK_MODE = std::move(other.SMSG_SPLINE_MOVE_SET_WALK_MODE);
         }
         if (opcode == Opcode::MSG_MOVE_TIME_SKIPPED) {
-            this->MSG_MOVE_TIME_SKIPPED = other.MSG_MOVE_TIME_SKIPPED;
+            this->MSG_MOVE_TIME_SKIPPED = std::move(other.MSG_MOVE_TIME_SKIPPED);
         }
         if (opcode == Opcode::SMSG_SPLINE_MOVE_ROOT) {
-            this->SMSG_SPLINE_MOVE_ROOT = other.SMSG_SPLINE_MOVE_ROOT;
+            this->SMSG_SPLINE_MOVE_ROOT = std::move(other.SMSG_SPLINE_MOVE_ROOT);
         }
         if (opcode == Opcode::SMSG_INVALIDATE_PLAYER) {
-            this->SMSG_INVALIDATE_PLAYER = other.SMSG_INVALIDATE_PLAYER;
+            this->SMSG_INVALIDATE_PLAYER = std::move(other.SMSG_INVALIDATE_PLAYER);
         }
         if (opcode == Opcode::SMSG_INSTANCE_RESET) {
-            this->SMSG_INSTANCE_RESET = other.SMSG_INSTANCE_RESET;
+            this->SMSG_INSTANCE_RESET = std::move(other.SMSG_INSTANCE_RESET);
         }
         if (opcode == Opcode::SMSG_INSTANCE_RESET_FAILED) {
-            this->SMSG_INSTANCE_RESET_FAILED = other.SMSG_INSTANCE_RESET_FAILED;
+            this->SMSG_INSTANCE_RESET_FAILED = std::move(other.SMSG_INSTANCE_RESET_FAILED);
         }
         if (opcode == Opcode::SMSG_UPDATE_LAST_INSTANCE) {
-            this->SMSG_UPDATE_LAST_INSTANCE = other.SMSG_UPDATE_LAST_INSTANCE;
+            this->SMSG_UPDATE_LAST_INSTANCE = std::move(other.SMSG_UPDATE_LAST_INSTANCE);
         }
         if (opcode == Opcode::MSG_RAID_TARGET_UPDATE) {
-            this->MSG_RAID_TARGET_UPDATE = other.MSG_RAID_TARGET_UPDATE;
+            this->MSG_RAID_TARGET_UPDATE = std::move(other.MSG_RAID_TARGET_UPDATE);
+        }
+        if (opcode == Opcode::MSG_RAID_READY_CHECK) {
+            this->MSG_RAID_READY_CHECK = std::move(other.MSG_RAID_READY_CHECK);
         }
         if (opcode == Opcode::SMSG_PET_ACTION_SOUND) {
-            this->SMSG_PET_ACTION_SOUND = other.SMSG_PET_ACTION_SOUND;
+            this->SMSG_PET_ACTION_SOUND = std::move(other.SMSG_PET_ACTION_SOUND);
         }
         if (opcode == Opcode::SMSG_PET_DISMISS_SOUND) {
-            this->SMSG_PET_DISMISS_SOUND = other.SMSG_PET_DISMISS_SOUND;
+            this->SMSG_PET_DISMISS_SOUND = std::move(other.SMSG_PET_DISMISS_SOUND);
         }
         if (opcode == Opcode::SMSG_GM_TICKET_STATUS_UPDATE) {
-            this->SMSG_GM_TICKET_STATUS_UPDATE = other.SMSG_GM_TICKET_STATUS_UPDATE;
+            this->SMSG_GM_TICKET_STATUS_UPDATE = std::move(other.SMSG_GM_TICKET_STATUS_UPDATE);
         }
         if (opcode == Opcode::SMSG_UPDATE_INSTANCE_OWNERSHIP) {
-            this->SMSG_UPDATE_INSTANCE_OWNERSHIP = other.SMSG_UPDATE_INSTANCE_OWNERSHIP;
+            this->SMSG_UPDATE_INSTANCE_OWNERSHIP = std::move(other.SMSG_UPDATE_INSTANCE_OWNERSHIP);
         }
         if (opcode == Opcode::SMSG_SPELLINSTAKILLLOG) {
-            this->SMSG_SPELLINSTAKILLLOG = other.SMSG_SPELLINSTAKILLLOG;
+            this->SMSG_SPELLINSTAKILLLOG = std::move(other.SMSG_SPELLINSTAKILLLOG);
         }
         if (opcode == Opcode::SMSG_SPELL_UPDATE_CHAIN_TARGETS) {
-            this->SMSG_SPELL_UPDATE_CHAIN_TARGETS = other.SMSG_SPELL_UPDATE_CHAIN_TARGETS;
+            this->SMSG_SPELL_UPDATE_CHAIN_TARGETS = std::move(other.SMSG_SPELL_UPDATE_CHAIN_TARGETS);
         }
         if (opcode == Opcode::SMSG_EXPECTED_SPAM_RECORDS) {
-            this->SMSG_EXPECTED_SPAM_RECORDS = other.SMSG_EXPECTED_SPAM_RECORDS;
+            this->SMSG_EXPECTED_SPAM_RECORDS = std::move(other.SMSG_EXPECTED_SPAM_RECORDS);
         }
         if (opcode == Opcode::SMSG_DEFENSE_MESSAGE) {
-            this->SMSG_DEFENSE_MESSAGE = other.SMSG_DEFENSE_MESSAGE;
+            this->SMSG_DEFENSE_MESSAGE = std::move(other.SMSG_DEFENSE_MESSAGE);
         }
     }
 
@@ -18849,6 +18624,9 @@ struct ServerOpcode {
         }
         if (opcode == Opcode::SMSG_NEW_WORLD) {
             this->SMSG_NEW_WORLD.~SMSG_NEW_WORLD();
+        }
+        if (opcode == Opcode::SMSG_TRANSFER_PENDING) {
+            this->SMSG_TRANSFER_PENDING.~SMSG_TRANSFER_PENDING();
         }
         if (opcode == Opcode::SMSG_TRANSFER_ABORTED) {
             this->SMSG_TRANSFER_ABORTED.~SMSG_TRANSFER_ABORTED();
@@ -18877,11 +18655,20 @@ struct ServerOpcode {
         if (opcode == Opcode::SMSG_GUILD_QUERY_RESPONSE) {
             this->SMSG_GUILD_QUERY_RESPONSE.~SMSG_GUILD_QUERY_RESPONSE();
         }
+        if (opcode == Opcode::SMSG_ITEM_QUERY_SINGLE_RESPONSE) {
+            this->SMSG_ITEM_QUERY_SINGLE_RESPONSE.~SMSG_ITEM_QUERY_SINGLE_RESPONSE();
+        }
         if (opcode == Opcode::SMSG_PAGE_TEXT_QUERY_RESPONSE) {
             this->SMSG_PAGE_TEXT_QUERY_RESPONSE.~SMSG_PAGE_TEXT_QUERY_RESPONSE();
         }
         if (opcode == Opcode::SMSG_QUEST_QUERY_RESPONSE) {
             this->SMSG_QUEST_QUERY_RESPONSE.~SMSG_QUEST_QUERY_RESPONSE();
+        }
+        if (opcode == Opcode::SMSG_GAMEOBJECT_QUERY_RESPONSE) {
+            this->SMSG_GAMEOBJECT_QUERY_RESPONSE.~SMSG_GAMEOBJECT_QUERY_RESPONSE();
+        }
+        if (opcode == Opcode::SMSG_CREATURE_QUERY_RESPONSE) {
+            this->SMSG_CREATURE_QUERY_RESPONSE.~SMSG_CREATURE_QUERY_RESPONSE();
         }
         if (opcode == Opcode::SMSG_WHO) {
             this->SMSG_WHO.~SMSG_WHO();
@@ -18912,6 +18699,9 @@ struct ServerOpcode {
         }
         if (opcode == Opcode::SMSG_GROUP_DESTROYED) {
             this->SMSG_GROUP_DESTROYED.~SMSG_GROUP_DESTROYED();
+        }
+        if (opcode == Opcode::SMSG_GROUP_LIST) {
+            this->SMSG_GROUP_LIST.~SMSG_GROUP_LIST();
         }
         if (opcode == Opcode::SMSG_PARTY_MEMBER_STATS) {
             this->SMSG_PARTY_MEMBER_STATS.~SMSG_PARTY_MEMBER_STATS();
@@ -19023,6 +18813,9 @@ struct ServerOpcode {
         }
         if (opcode == Opcode::MSG_MOVE_SET_PITCH) {
             this->MSG_MOVE_SET_PITCH.~MSG_MOVE_SET_PITCH_Server();
+        }
+        if (opcode == Opcode::MSG_MOVE_WORLDPORT_ACK) {
+            this->MSG_MOVE_WORLDPORT_ACK.~MSG_MOVE_WORLDPORT_ACK();
         }
         if (opcode == Opcode::SMSG_MONSTER_MOVE) {
             this->SMSG_MONSTER_MOVE.~SMSG_MONSTER_MOVE();
@@ -19243,6 +19036,9 @@ struct ServerOpcode {
         if (opcode == Opcode::SMSG_PET_NAME_INVALID) {
             this->SMSG_PET_NAME_INVALID.~SMSG_PET_NAME_INVALID();
         }
+        if (opcode == Opcode::SMSG_PET_SPELLS) {
+            this->SMSG_PET_SPELLS.~SMSG_PET_SPELLS();
+        }
         if (opcode == Opcode::SMSG_PET_MODE) {
             this->SMSG_PET_MODE.~SMSG_PET_MODE();
         }
@@ -19348,6 +19144,9 @@ struct ServerOpcode {
         if (opcode == Opcode::SMSG_PETITION_SIGN_RESULTS) {
             this->SMSG_PETITION_SIGN_RESULTS.~SMSG_PETITION_SIGN_RESULTS();
         }
+        if (opcode == Opcode::MSG_PETITION_DECLINE) {
+            this->MSG_PETITION_DECLINE.~MSG_PETITION_DECLINE();
+        }
         if (opcode == Opcode::SMSG_TURN_IN_PETITION_RESULTS) {
             this->SMSG_TURN_IN_PETITION_RESULTS.~SMSG_TURN_IN_PETITION_RESULTS();
         }
@@ -19419,6 +19218,9 @@ struct ServerOpcode {
         }
         if (opcode == Opcode::MSG_SAVE_GUILD_EMBLEM) {
             this->MSG_SAVE_GUILD_EMBLEM.~MSG_SAVE_GUILD_EMBLEM_Server();
+        }
+        if (opcode == Opcode::MSG_TABARDVENDOR_ACTIVATE) {
+            this->MSG_TABARDVENDOR_ACTIVATE.~MSG_TABARDVENDOR_ACTIVATE();
         }
         if (opcode == Opcode::SMSG_PLAY_SPELL_VISUAL) {
             this->SMSG_PLAY_SPELL_VISUAL.~SMSG_PLAY_SPELL_VISUAL();
@@ -19561,6 +19363,9 @@ struct ServerOpcode {
         if (opcode == Opcode::SMSG_STABLE_RESULT) {
             this->SMSG_STABLE_RESULT.~SMSG_STABLE_RESULT();
         }
+        if (opcode == Opcode::MSG_QUEST_PUSH_RESULT) {
+            this->MSG_QUEST_PUSH_RESULT.~MSG_QUEST_PUSH_RESULT();
+        }
         if (opcode == Opcode::SMSG_PLAY_MUSIC) {
             this->SMSG_PLAY_MUSIC.~SMSG_PLAY_MUSIC();
         }
@@ -19648,6 +19453,9 @@ struct ServerOpcode {
         if (opcode == Opcode::MSG_MOVE_FEATHER_FALL) {
             this->MSG_MOVE_FEATHER_FALL.~MSG_MOVE_FEATHER_FALL_Server();
         }
+        if (opcode == Opcode::MSG_MOVE_WATER_WALK) {
+            this->MSG_MOVE_WATER_WALK.~MSG_MOVE_WATER_WALK();
+        }
         if (opcode == Opcode::SMSG_FEIGN_DEATH_RESISTED) {
             this->SMSG_FEIGN_DEATH_RESISTED.~SMSG_FEIGN_DEATH_RESISTED();
         }
@@ -19665,6 +19473,9 @@ struct ServerOpcode {
         }
         if (opcode == Opcode::SMSG_DURABILITY_DAMAGE_DEATH) {
             this->SMSG_DURABILITY_DAMAGE_DEATH.~SMSG_DURABILITY_DAMAGE_DEATH();
+        }
+        if (opcode == Opcode::MSG_PETITION_RENAME) {
+            this->MSG_PETITION_RENAME.~MSG_PETITION_RENAME();
         }
         if (opcode == Opcode::SMSG_INIT_WORLD_STATES) {
             this->SMSG_INIT_WORLD_STATES.~SMSG_INIT_WORLD_STATES();
@@ -19819,6 +19630,9 @@ struct ServerOpcode {
         if (opcode == Opcode::MSG_RAID_TARGET_UPDATE) {
             this->MSG_RAID_TARGET_UPDATE.~MSG_RAID_TARGET_UPDATE_Server();
         }
+        if (opcode == Opcode::MSG_RAID_READY_CHECK) {
+            this->MSG_RAID_READY_CHECK.~MSG_RAID_READY_CHECK_Server();
+        }
         if (opcode == Opcode::SMSG_PET_ACTION_SOUND) {
             this->SMSG_PET_ACTION_SOUND.~SMSG_PET_ACTION_SOUND();
         }
@@ -19847,1348 +19661,2802 @@ struct ServerOpcode {
 
     explicit ServerOpcode(vanilla::SMSG_CHAR_CREATE&& obj) {
         opcode = Opcode::SMSG_CHAR_CREATE;
-        new (&this->SMSG_CHAR_CREATE) vanilla::SMSG_CHAR_CREATE (obj);
+        new (&this->SMSG_CHAR_CREATE) vanilla::SMSG_CHAR_CREATE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_CHAR_ENUM&& obj) {
         opcode = Opcode::SMSG_CHAR_ENUM;
-        new (&this->SMSG_CHAR_ENUM) vanilla::SMSG_CHAR_ENUM (obj);
+        new (&this->SMSG_CHAR_ENUM) vanilla::SMSG_CHAR_ENUM (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_CHAR_DELETE&& obj) {
         opcode = Opcode::SMSG_CHAR_DELETE;
-        new (&this->SMSG_CHAR_DELETE) vanilla::SMSG_CHAR_DELETE (obj);
+        new (&this->SMSG_CHAR_DELETE) vanilla::SMSG_CHAR_DELETE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_NEW_WORLD&& obj) {
         opcode = Opcode::SMSG_NEW_WORLD;
-        new (&this->SMSG_NEW_WORLD) vanilla::SMSG_NEW_WORLD (obj);
+        new (&this->SMSG_NEW_WORLD) vanilla::SMSG_NEW_WORLD (std::move(obj));
+    }
+    explicit ServerOpcode(vanilla::SMSG_TRANSFER_PENDING&& obj) {
+        opcode = Opcode::SMSG_TRANSFER_PENDING;
+        new (&this->SMSG_TRANSFER_PENDING) vanilla::SMSG_TRANSFER_PENDING (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_TRANSFER_ABORTED&& obj) {
         opcode = Opcode::SMSG_TRANSFER_ABORTED;
-        new (&this->SMSG_TRANSFER_ABORTED) vanilla::SMSG_TRANSFER_ABORTED (obj);
+        new (&this->SMSG_TRANSFER_ABORTED) vanilla::SMSG_TRANSFER_ABORTED (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_CHARACTER_LOGIN_FAILED&& obj) {
         opcode = Opcode::SMSG_CHARACTER_LOGIN_FAILED;
-        new (&this->SMSG_CHARACTER_LOGIN_FAILED) vanilla::SMSG_CHARACTER_LOGIN_FAILED (obj);
+        new (&this->SMSG_CHARACTER_LOGIN_FAILED) vanilla::SMSG_CHARACTER_LOGIN_FAILED (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_LOGIN_SETTIMESPEED&& obj) {
         opcode = Opcode::SMSG_LOGIN_SETTIMESPEED;
-        new (&this->SMSG_LOGIN_SETTIMESPEED) vanilla::SMSG_LOGIN_SETTIMESPEED (obj);
+        new (&this->SMSG_LOGIN_SETTIMESPEED) vanilla::SMSG_LOGIN_SETTIMESPEED (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_LOGOUT_RESPONSE&& obj) {
         opcode = Opcode::SMSG_LOGOUT_RESPONSE;
-        new (&this->SMSG_LOGOUT_RESPONSE) vanilla::SMSG_LOGOUT_RESPONSE (obj);
+        new (&this->SMSG_LOGOUT_RESPONSE) vanilla::SMSG_LOGOUT_RESPONSE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_LOGOUT_COMPLETE&& obj) {
         opcode = Opcode::SMSG_LOGOUT_COMPLETE;
-        new (&this->SMSG_LOGOUT_COMPLETE) vanilla::SMSG_LOGOUT_COMPLETE (obj);
+        new (&this->SMSG_LOGOUT_COMPLETE) vanilla::SMSG_LOGOUT_COMPLETE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_LOGOUT_CANCEL_ACK&& obj) {
         opcode = Opcode::SMSG_LOGOUT_CANCEL_ACK;
-        new (&this->SMSG_LOGOUT_CANCEL_ACK) vanilla::SMSG_LOGOUT_CANCEL_ACK (obj);
+        new (&this->SMSG_LOGOUT_CANCEL_ACK) vanilla::SMSG_LOGOUT_CANCEL_ACK (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_NAME_QUERY_RESPONSE&& obj) {
         opcode = Opcode::SMSG_NAME_QUERY_RESPONSE;
-        new (&this->SMSG_NAME_QUERY_RESPONSE) vanilla::SMSG_NAME_QUERY_RESPONSE (obj);
+        new (&this->SMSG_NAME_QUERY_RESPONSE) vanilla::SMSG_NAME_QUERY_RESPONSE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_PET_NAME_QUERY_RESPONSE&& obj) {
         opcode = Opcode::SMSG_PET_NAME_QUERY_RESPONSE;
-        new (&this->SMSG_PET_NAME_QUERY_RESPONSE) vanilla::SMSG_PET_NAME_QUERY_RESPONSE (obj);
+        new (&this->SMSG_PET_NAME_QUERY_RESPONSE) vanilla::SMSG_PET_NAME_QUERY_RESPONSE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_GUILD_QUERY_RESPONSE&& obj) {
         opcode = Opcode::SMSG_GUILD_QUERY_RESPONSE;
-        new (&this->SMSG_GUILD_QUERY_RESPONSE) vanilla::SMSG_GUILD_QUERY_RESPONSE (obj);
+        new (&this->SMSG_GUILD_QUERY_RESPONSE) vanilla::SMSG_GUILD_QUERY_RESPONSE (std::move(obj));
+    }
+    explicit ServerOpcode(vanilla::SMSG_ITEM_QUERY_SINGLE_RESPONSE&& obj) {
+        opcode = Opcode::SMSG_ITEM_QUERY_SINGLE_RESPONSE;
+        new (&this->SMSG_ITEM_QUERY_SINGLE_RESPONSE) vanilla::SMSG_ITEM_QUERY_SINGLE_RESPONSE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_PAGE_TEXT_QUERY_RESPONSE&& obj) {
         opcode = Opcode::SMSG_PAGE_TEXT_QUERY_RESPONSE;
-        new (&this->SMSG_PAGE_TEXT_QUERY_RESPONSE) vanilla::SMSG_PAGE_TEXT_QUERY_RESPONSE (obj);
+        new (&this->SMSG_PAGE_TEXT_QUERY_RESPONSE) vanilla::SMSG_PAGE_TEXT_QUERY_RESPONSE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_QUEST_QUERY_RESPONSE&& obj) {
         opcode = Opcode::SMSG_QUEST_QUERY_RESPONSE;
-        new (&this->SMSG_QUEST_QUERY_RESPONSE) vanilla::SMSG_QUEST_QUERY_RESPONSE (obj);
+        new (&this->SMSG_QUEST_QUERY_RESPONSE) vanilla::SMSG_QUEST_QUERY_RESPONSE (std::move(obj));
+    }
+    explicit ServerOpcode(vanilla::SMSG_GAMEOBJECT_QUERY_RESPONSE&& obj) {
+        opcode = Opcode::SMSG_GAMEOBJECT_QUERY_RESPONSE;
+        new (&this->SMSG_GAMEOBJECT_QUERY_RESPONSE) vanilla::SMSG_GAMEOBJECT_QUERY_RESPONSE (std::move(obj));
+    }
+    explicit ServerOpcode(vanilla::SMSG_CREATURE_QUERY_RESPONSE&& obj) {
+        opcode = Opcode::SMSG_CREATURE_QUERY_RESPONSE;
+        new (&this->SMSG_CREATURE_QUERY_RESPONSE) vanilla::SMSG_CREATURE_QUERY_RESPONSE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_WHO&& obj) {
         opcode = Opcode::SMSG_WHO;
-        new (&this->SMSG_WHO) vanilla::SMSG_WHO (obj);
+        new (&this->SMSG_WHO) vanilla::SMSG_WHO (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_WHOIS&& obj) {
         opcode = Opcode::SMSG_WHOIS;
-        new (&this->SMSG_WHOIS) vanilla::SMSG_WHOIS (obj);
+        new (&this->SMSG_WHOIS) vanilla::SMSG_WHOIS (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_FRIEND_LIST&& obj) {
         opcode = Opcode::SMSG_FRIEND_LIST;
-        new (&this->SMSG_FRIEND_LIST) vanilla::SMSG_FRIEND_LIST (obj);
+        new (&this->SMSG_FRIEND_LIST) vanilla::SMSG_FRIEND_LIST (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_FRIEND_STATUS&& obj) {
         opcode = Opcode::SMSG_FRIEND_STATUS;
-        new (&this->SMSG_FRIEND_STATUS) vanilla::SMSG_FRIEND_STATUS (obj);
+        new (&this->SMSG_FRIEND_STATUS) vanilla::SMSG_FRIEND_STATUS (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_IGNORE_LIST&& obj) {
         opcode = Opcode::SMSG_IGNORE_LIST;
-        new (&this->SMSG_IGNORE_LIST) vanilla::SMSG_IGNORE_LIST (obj);
+        new (&this->SMSG_IGNORE_LIST) vanilla::SMSG_IGNORE_LIST (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_GROUP_INVITE&& obj) {
         opcode = Opcode::SMSG_GROUP_INVITE;
-        new (&this->SMSG_GROUP_INVITE) vanilla::SMSG_GROUP_INVITE (obj);
+        new (&this->SMSG_GROUP_INVITE) vanilla::SMSG_GROUP_INVITE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_GROUP_DECLINE&& obj) {
         opcode = Opcode::SMSG_GROUP_DECLINE;
-        new (&this->SMSG_GROUP_DECLINE) vanilla::SMSG_GROUP_DECLINE (obj);
+        new (&this->SMSG_GROUP_DECLINE) vanilla::SMSG_GROUP_DECLINE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_GROUP_UNINVITE&& obj) {
         opcode = Opcode::SMSG_GROUP_UNINVITE;
-        new (&this->SMSG_GROUP_UNINVITE) vanilla::SMSG_GROUP_UNINVITE (obj);
+        new (&this->SMSG_GROUP_UNINVITE) vanilla::SMSG_GROUP_UNINVITE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_GROUP_SET_LEADER&& obj) {
         opcode = Opcode::SMSG_GROUP_SET_LEADER;
-        new (&this->SMSG_GROUP_SET_LEADER) vanilla::SMSG_GROUP_SET_LEADER (obj);
+        new (&this->SMSG_GROUP_SET_LEADER) vanilla::SMSG_GROUP_SET_LEADER (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_GROUP_DESTROYED&& obj) {
         opcode = Opcode::SMSG_GROUP_DESTROYED;
-        new (&this->SMSG_GROUP_DESTROYED) vanilla::SMSG_GROUP_DESTROYED (obj);
+        new (&this->SMSG_GROUP_DESTROYED) vanilla::SMSG_GROUP_DESTROYED (std::move(obj));
+    }
+    explicit ServerOpcode(vanilla::SMSG_GROUP_LIST&& obj) {
+        opcode = Opcode::SMSG_GROUP_LIST;
+        new (&this->SMSG_GROUP_LIST) vanilla::SMSG_GROUP_LIST (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_PARTY_MEMBER_STATS&& obj) {
         opcode = Opcode::SMSG_PARTY_MEMBER_STATS;
-        new (&this->SMSG_PARTY_MEMBER_STATS) vanilla::SMSG_PARTY_MEMBER_STATS (obj);
+        new (&this->SMSG_PARTY_MEMBER_STATS) vanilla::SMSG_PARTY_MEMBER_STATS (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_PARTY_COMMAND_RESULT&& obj) {
         opcode = Opcode::SMSG_PARTY_COMMAND_RESULT;
-        new (&this->SMSG_PARTY_COMMAND_RESULT) vanilla::SMSG_PARTY_COMMAND_RESULT (obj);
+        new (&this->SMSG_PARTY_COMMAND_RESULT) vanilla::SMSG_PARTY_COMMAND_RESULT (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_GUILD_INVITE&& obj) {
         opcode = Opcode::SMSG_GUILD_INVITE;
-        new (&this->SMSG_GUILD_INVITE) vanilla::SMSG_GUILD_INVITE (obj);
+        new (&this->SMSG_GUILD_INVITE) vanilla::SMSG_GUILD_INVITE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_GUILD_INFO&& obj) {
         opcode = Opcode::SMSG_GUILD_INFO;
-        new (&this->SMSG_GUILD_INFO) vanilla::SMSG_GUILD_INFO (obj);
+        new (&this->SMSG_GUILD_INFO) vanilla::SMSG_GUILD_INFO (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_GUILD_ROSTER&& obj) {
         opcode = Opcode::SMSG_GUILD_ROSTER;
-        new (&this->SMSG_GUILD_ROSTER) vanilla::SMSG_GUILD_ROSTER (obj);
+        new (&this->SMSG_GUILD_ROSTER) vanilla::SMSG_GUILD_ROSTER (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_GUILD_EVENT&& obj) {
         opcode = Opcode::SMSG_GUILD_EVENT;
-        new (&this->SMSG_GUILD_EVENT) vanilla::SMSG_GUILD_EVENT (obj);
+        new (&this->SMSG_GUILD_EVENT) vanilla::SMSG_GUILD_EVENT (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_GUILD_COMMAND_RESULT&& obj) {
         opcode = Opcode::SMSG_GUILD_COMMAND_RESULT;
-        new (&this->SMSG_GUILD_COMMAND_RESULT) vanilla::SMSG_GUILD_COMMAND_RESULT (obj);
+        new (&this->SMSG_GUILD_COMMAND_RESULT) vanilla::SMSG_GUILD_COMMAND_RESULT (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_MESSAGECHAT&& obj) {
         opcode = Opcode::SMSG_MESSAGECHAT;
-        new (&this->SMSG_MESSAGECHAT) vanilla::SMSG_MESSAGECHAT (obj);
+        new (&this->SMSG_MESSAGECHAT) vanilla::SMSG_MESSAGECHAT (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_CHANNEL_NOTIFY&& obj) {
         opcode = Opcode::SMSG_CHANNEL_NOTIFY;
-        new (&this->SMSG_CHANNEL_NOTIFY) vanilla::SMSG_CHANNEL_NOTIFY (obj);
+        new (&this->SMSG_CHANNEL_NOTIFY) vanilla::SMSG_CHANNEL_NOTIFY (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_CHANNEL_LIST&& obj) {
         opcode = Opcode::SMSG_CHANNEL_LIST;
-        new (&this->SMSG_CHANNEL_LIST) vanilla::SMSG_CHANNEL_LIST (obj);
+        new (&this->SMSG_CHANNEL_LIST) vanilla::SMSG_CHANNEL_LIST (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_UPDATE_OBJECT&& obj) {
         opcode = Opcode::SMSG_UPDATE_OBJECT;
-        new (&this->SMSG_UPDATE_OBJECT) vanilla::SMSG_UPDATE_OBJECT (obj);
+        new (&this->SMSG_UPDATE_OBJECT) vanilla::SMSG_UPDATE_OBJECT (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_DESTROY_OBJECT&& obj) {
         opcode = Opcode::SMSG_DESTROY_OBJECT;
-        new (&this->SMSG_DESTROY_OBJECT) vanilla::SMSG_DESTROY_OBJECT (obj);
+        new (&this->SMSG_DESTROY_OBJECT) vanilla::SMSG_DESTROY_OBJECT (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_READ_ITEM_OK&& obj) {
         opcode = Opcode::SMSG_READ_ITEM_OK;
-        new (&this->SMSG_READ_ITEM_OK) vanilla::SMSG_READ_ITEM_OK (obj);
+        new (&this->SMSG_READ_ITEM_OK) vanilla::SMSG_READ_ITEM_OK (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_READ_ITEM_FAILED&& obj) {
         opcode = Opcode::SMSG_READ_ITEM_FAILED;
-        new (&this->SMSG_READ_ITEM_FAILED) vanilla::SMSG_READ_ITEM_FAILED (obj);
+        new (&this->SMSG_READ_ITEM_FAILED) vanilla::SMSG_READ_ITEM_FAILED (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_ITEM_COOLDOWN&& obj) {
         opcode = Opcode::SMSG_ITEM_COOLDOWN;
-        new (&this->SMSG_ITEM_COOLDOWN) vanilla::SMSG_ITEM_COOLDOWN (obj);
+        new (&this->SMSG_ITEM_COOLDOWN) vanilla::SMSG_ITEM_COOLDOWN (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_GAMEOBJECT_CUSTOM_ANIM&& obj) {
         opcode = Opcode::SMSG_GAMEOBJECT_CUSTOM_ANIM;
-        new (&this->SMSG_GAMEOBJECT_CUSTOM_ANIM) vanilla::SMSG_GAMEOBJECT_CUSTOM_ANIM (obj);
+        new (&this->SMSG_GAMEOBJECT_CUSTOM_ANIM) vanilla::SMSG_GAMEOBJECT_CUSTOM_ANIM (std::move(obj));
     }
     explicit ServerOpcode(vanilla::MSG_MOVE_START_FORWARD_Server&& obj) {
         opcode = Opcode::MSG_MOVE_START_FORWARD;
-        new (&this->MSG_MOVE_START_FORWARD) vanilla::MSG_MOVE_START_FORWARD_Server (obj);
+        new (&this->MSG_MOVE_START_FORWARD) vanilla::MSG_MOVE_START_FORWARD_Server (std::move(obj));
     }
     explicit ServerOpcode(vanilla::MSG_MOVE_START_BACKWARD_Server&& obj) {
         opcode = Opcode::MSG_MOVE_START_BACKWARD;
-        new (&this->MSG_MOVE_START_BACKWARD) vanilla::MSG_MOVE_START_BACKWARD_Server (obj);
+        new (&this->MSG_MOVE_START_BACKWARD) vanilla::MSG_MOVE_START_BACKWARD_Server (std::move(obj));
     }
     explicit ServerOpcode(vanilla::MSG_MOVE_STOP_Server&& obj) {
         opcode = Opcode::MSG_MOVE_STOP;
-        new (&this->MSG_MOVE_STOP) vanilla::MSG_MOVE_STOP_Server (obj);
+        new (&this->MSG_MOVE_STOP) vanilla::MSG_MOVE_STOP_Server (std::move(obj));
     }
     explicit ServerOpcode(vanilla::MSG_MOVE_START_STRAFE_LEFT_Server&& obj) {
         opcode = Opcode::MSG_MOVE_START_STRAFE_LEFT;
-        new (&this->MSG_MOVE_START_STRAFE_LEFT) vanilla::MSG_MOVE_START_STRAFE_LEFT_Server (obj);
+        new (&this->MSG_MOVE_START_STRAFE_LEFT) vanilla::MSG_MOVE_START_STRAFE_LEFT_Server (std::move(obj));
     }
     explicit ServerOpcode(vanilla::MSG_MOVE_START_STRAFE_RIGHT_Server&& obj) {
         opcode = Opcode::MSG_MOVE_START_STRAFE_RIGHT;
-        new (&this->MSG_MOVE_START_STRAFE_RIGHT) vanilla::MSG_MOVE_START_STRAFE_RIGHT_Server (obj);
+        new (&this->MSG_MOVE_START_STRAFE_RIGHT) vanilla::MSG_MOVE_START_STRAFE_RIGHT_Server (std::move(obj));
     }
     explicit ServerOpcode(vanilla::MSG_MOVE_STOP_STRAFE_Server&& obj) {
         opcode = Opcode::MSG_MOVE_STOP_STRAFE;
-        new (&this->MSG_MOVE_STOP_STRAFE) vanilla::MSG_MOVE_STOP_STRAFE_Server (obj);
+        new (&this->MSG_MOVE_STOP_STRAFE) vanilla::MSG_MOVE_STOP_STRAFE_Server (std::move(obj));
     }
     explicit ServerOpcode(vanilla::MSG_MOVE_JUMP_Server&& obj) {
         opcode = Opcode::MSG_MOVE_JUMP;
-        new (&this->MSG_MOVE_JUMP) vanilla::MSG_MOVE_JUMP_Server (obj);
+        new (&this->MSG_MOVE_JUMP) vanilla::MSG_MOVE_JUMP_Server (std::move(obj));
     }
     explicit ServerOpcode(vanilla::MSG_MOVE_START_TURN_LEFT_Server&& obj) {
         opcode = Opcode::MSG_MOVE_START_TURN_LEFT;
-        new (&this->MSG_MOVE_START_TURN_LEFT) vanilla::MSG_MOVE_START_TURN_LEFT_Server (obj);
+        new (&this->MSG_MOVE_START_TURN_LEFT) vanilla::MSG_MOVE_START_TURN_LEFT_Server (std::move(obj));
     }
     explicit ServerOpcode(vanilla::MSG_MOVE_START_TURN_RIGHT_Server&& obj) {
         opcode = Opcode::MSG_MOVE_START_TURN_RIGHT;
-        new (&this->MSG_MOVE_START_TURN_RIGHT) vanilla::MSG_MOVE_START_TURN_RIGHT_Server (obj);
+        new (&this->MSG_MOVE_START_TURN_RIGHT) vanilla::MSG_MOVE_START_TURN_RIGHT_Server (std::move(obj));
     }
     explicit ServerOpcode(vanilla::MSG_MOVE_STOP_TURN_Server&& obj) {
         opcode = Opcode::MSG_MOVE_STOP_TURN;
-        new (&this->MSG_MOVE_STOP_TURN) vanilla::MSG_MOVE_STOP_TURN_Server (obj);
+        new (&this->MSG_MOVE_STOP_TURN) vanilla::MSG_MOVE_STOP_TURN_Server (std::move(obj));
     }
     explicit ServerOpcode(vanilla::MSG_MOVE_START_PITCH_UP_Server&& obj) {
         opcode = Opcode::MSG_MOVE_START_PITCH_UP;
-        new (&this->MSG_MOVE_START_PITCH_UP) vanilla::MSG_MOVE_START_PITCH_UP_Server (obj);
+        new (&this->MSG_MOVE_START_PITCH_UP) vanilla::MSG_MOVE_START_PITCH_UP_Server (std::move(obj));
     }
     explicit ServerOpcode(vanilla::MSG_MOVE_START_PITCH_DOWN_Server&& obj) {
         opcode = Opcode::MSG_MOVE_START_PITCH_DOWN;
-        new (&this->MSG_MOVE_START_PITCH_DOWN) vanilla::MSG_MOVE_START_PITCH_DOWN_Server (obj);
+        new (&this->MSG_MOVE_START_PITCH_DOWN) vanilla::MSG_MOVE_START_PITCH_DOWN_Server (std::move(obj));
     }
     explicit ServerOpcode(vanilla::MSG_MOVE_STOP_PITCH_Server&& obj) {
         opcode = Opcode::MSG_MOVE_STOP_PITCH;
-        new (&this->MSG_MOVE_STOP_PITCH) vanilla::MSG_MOVE_STOP_PITCH_Server (obj);
+        new (&this->MSG_MOVE_STOP_PITCH) vanilla::MSG_MOVE_STOP_PITCH_Server (std::move(obj));
     }
     explicit ServerOpcode(vanilla::MSG_MOVE_SET_RUN_MODE_Server&& obj) {
         opcode = Opcode::MSG_MOVE_SET_RUN_MODE;
-        new (&this->MSG_MOVE_SET_RUN_MODE) vanilla::MSG_MOVE_SET_RUN_MODE_Server (obj);
+        new (&this->MSG_MOVE_SET_RUN_MODE) vanilla::MSG_MOVE_SET_RUN_MODE_Server (std::move(obj));
     }
     explicit ServerOpcode(vanilla::MSG_MOVE_SET_WALK_MODE_Server&& obj) {
         opcode = Opcode::MSG_MOVE_SET_WALK_MODE;
-        new (&this->MSG_MOVE_SET_WALK_MODE) vanilla::MSG_MOVE_SET_WALK_MODE_Server (obj);
+        new (&this->MSG_MOVE_SET_WALK_MODE) vanilla::MSG_MOVE_SET_WALK_MODE_Server (std::move(obj));
     }
     explicit ServerOpcode(vanilla::MSG_MOVE_TELEPORT_ACK_Server&& obj) {
         opcode = Opcode::MSG_MOVE_TELEPORT_ACK;
-        new (&this->MSG_MOVE_TELEPORT_ACK) vanilla::MSG_MOVE_TELEPORT_ACK_Server (obj);
+        new (&this->MSG_MOVE_TELEPORT_ACK) vanilla::MSG_MOVE_TELEPORT_ACK_Server (std::move(obj));
     }
     explicit ServerOpcode(vanilla::MSG_MOVE_FALL_LAND_Server&& obj) {
         opcode = Opcode::MSG_MOVE_FALL_LAND;
-        new (&this->MSG_MOVE_FALL_LAND) vanilla::MSG_MOVE_FALL_LAND_Server (obj);
+        new (&this->MSG_MOVE_FALL_LAND) vanilla::MSG_MOVE_FALL_LAND_Server (std::move(obj));
     }
     explicit ServerOpcode(vanilla::MSG_MOVE_START_SWIM_Server&& obj) {
         opcode = Opcode::MSG_MOVE_START_SWIM;
-        new (&this->MSG_MOVE_START_SWIM) vanilla::MSG_MOVE_START_SWIM_Server (obj);
+        new (&this->MSG_MOVE_START_SWIM) vanilla::MSG_MOVE_START_SWIM_Server (std::move(obj));
     }
     explicit ServerOpcode(vanilla::MSG_MOVE_STOP_SWIM_Server&& obj) {
         opcode = Opcode::MSG_MOVE_STOP_SWIM;
-        new (&this->MSG_MOVE_STOP_SWIM) vanilla::MSG_MOVE_STOP_SWIM_Server (obj);
+        new (&this->MSG_MOVE_STOP_SWIM) vanilla::MSG_MOVE_STOP_SWIM_Server (std::move(obj));
     }
     explicit ServerOpcode(vanilla::MSG_MOVE_SET_FACING_Server&& obj) {
         opcode = Opcode::MSG_MOVE_SET_FACING;
-        new (&this->MSG_MOVE_SET_FACING) vanilla::MSG_MOVE_SET_FACING_Server (obj);
+        new (&this->MSG_MOVE_SET_FACING) vanilla::MSG_MOVE_SET_FACING_Server (std::move(obj));
     }
     explicit ServerOpcode(vanilla::MSG_MOVE_SET_PITCH_Server&& obj) {
         opcode = Opcode::MSG_MOVE_SET_PITCH;
-        new (&this->MSG_MOVE_SET_PITCH) vanilla::MSG_MOVE_SET_PITCH_Server (obj);
+        new (&this->MSG_MOVE_SET_PITCH) vanilla::MSG_MOVE_SET_PITCH_Server (std::move(obj));
+    }
+    explicit ServerOpcode(vanilla::MSG_MOVE_WORLDPORT_ACK&& obj) {
+        opcode = Opcode::MSG_MOVE_WORLDPORT_ACK;
+        new (&this->MSG_MOVE_WORLDPORT_ACK) vanilla::MSG_MOVE_WORLDPORT_ACK (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_MONSTER_MOVE&& obj) {
         opcode = Opcode::SMSG_MONSTER_MOVE;
-        new (&this->SMSG_MONSTER_MOVE) vanilla::SMSG_MONSTER_MOVE (obj);
+        new (&this->SMSG_MONSTER_MOVE) vanilla::SMSG_MONSTER_MOVE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_MOVE_WATER_WALK&& obj) {
         opcode = Opcode::SMSG_MOVE_WATER_WALK;
-        new (&this->SMSG_MOVE_WATER_WALK) vanilla::SMSG_MOVE_WATER_WALK (obj);
+        new (&this->SMSG_MOVE_WATER_WALK) vanilla::SMSG_MOVE_WATER_WALK (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_MOVE_LAND_WALK&& obj) {
         opcode = Opcode::SMSG_MOVE_LAND_WALK;
-        new (&this->SMSG_MOVE_LAND_WALK) vanilla::SMSG_MOVE_LAND_WALK (obj);
+        new (&this->SMSG_MOVE_LAND_WALK) vanilla::SMSG_MOVE_LAND_WALK (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_FORCE_RUN_SPEED_CHANGE&& obj) {
         opcode = Opcode::SMSG_FORCE_RUN_SPEED_CHANGE;
-        new (&this->SMSG_FORCE_RUN_SPEED_CHANGE) vanilla::SMSG_FORCE_RUN_SPEED_CHANGE (obj);
+        new (&this->SMSG_FORCE_RUN_SPEED_CHANGE) vanilla::SMSG_FORCE_RUN_SPEED_CHANGE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_FORCE_RUN_BACK_SPEED_CHANGE&& obj) {
         opcode = Opcode::SMSG_FORCE_RUN_BACK_SPEED_CHANGE;
-        new (&this->SMSG_FORCE_RUN_BACK_SPEED_CHANGE) vanilla::SMSG_FORCE_RUN_BACK_SPEED_CHANGE (obj);
+        new (&this->SMSG_FORCE_RUN_BACK_SPEED_CHANGE) vanilla::SMSG_FORCE_RUN_BACK_SPEED_CHANGE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_FORCE_SWIM_SPEED_CHANGE&& obj) {
         opcode = Opcode::SMSG_FORCE_SWIM_SPEED_CHANGE;
-        new (&this->SMSG_FORCE_SWIM_SPEED_CHANGE) vanilla::SMSG_FORCE_SWIM_SPEED_CHANGE (obj);
+        new (&this->SMSG_FORCE_SWIM_SPEED_CHANGE) vanilla::SMSG_FORCE_SWIM_SPEED_CHANGE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_FORCE_MOVE_ROOT&& obj) {
         opcode = Opcode::SMSG_FORCE_MOVE_ROOT;
-        new (&this->SMSG_FORCE_MOVE_ROOT) vanilla::SMSG_FORCE_MOVE_ROOT (obj);
+        new (&this->SMSG_FORCE_MOVE_ROOT) vanilla::SMSG_FORCE_MOVE_ROOT (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_FORCE_MOVE_UNROOT&& obj) {
         opcode = Opcode::SMSG_FORCE_MOVE_UNROOT;
-        new (&this->SMSG_FORCE_MOVE_UNROOT) vanilla::SMSG_FORCE_MOVE_UNROOT (obj);
+        new (&this->SMSG_FORCE_MOVE_UNROOT) vanilla::SMSG_FORCE_MOVE_UNROOT (std::move(obj));
     }
     explicit ServerOpcode(vanilla::MSG_MOVE_HEARTBEAT_Server&& obj) {
         opcode = Opcode::MSG_MOVE_HEARTBEAT;
-        new (&this->MSG_MOVE_HEARTBEAT) vanilla::MSG_MOVE_HEARTBEAT_Server (obj);
+        new (&this->MSG_MOVE_HEARTBEAT) vanilla::MSG_MOVE_HEARTBEAT_Server (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_MOVE_KNOCK_BACK&& obj) {
         opcode = Opcode::SMSG_MOVE_KNOCK_BACK;
-        new (&this->SMSG_MOVE_KNOCK_BACK) vanilla::SMSG_MOVE_KNOCK_BACK (obj);
+        new (&this->SMSG_MOVE_KNOCK_BACK) vanilla::SMSG_MOVE_KNOCK_BACK (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_MOVE_FEATHER_FALL&& obj) {
         opcode = Opcode::SMSG_MOVE_FEATHER_FALL;
-        new (&this->SMSG_MOVE_FEATHER_FALL) vanilla::SMSG_MOVE_FEATHER_FALL (obj);
+        new (&this->SMSG_MOVE_FEATHER_FALL) vanilla::SMSG_MOVE_FEATHER_FALL (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_MOVE_NORMAL_FALL&& obj) {
         opcode = Opcode::SMSG_MOVE_NORMAL_FALL;
-        new (&this->SMSG_MOVE_NORMAL_FALL) vanilla::SMSG_MOVE_NORMAL_FALL (obj);
+        new (&this->SMSG_MOVE_NORMAL_FALL) vanilla::SMSG_MOVE_NORMAL_FALL (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_MOVE_SET_HOVER&& obj) {
         opcode = Opcode::SMSG_MOVE_SET_HOVER;
-        new (&this->SMSG_MOVE_SET_HOVER) vanilla::SMSG_MOVE_SET_HOVER (obj);
+        new (&this->SMSG_MOVE_SET_HOVER) vanilla::SMSG_MOVE_SET_HOVER (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_MOVE_UNSET_HOVER&& obj) {
         opcode = Opcode::SMSG_MOVE_UNSET_HOVER;
-        new (&this->SMSG_MOVE_UNSET_HOVER) vanilla::SMSG_MOVE_UNSET_HOVER (obj);
+        new (&this->SMSG_MOVE_UNSET_HOVER) vanilla::SMSG_MOVE_UNSET_HOVER (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_TRIGGER_CINEMATIC&& obj) {
         opcode = Opcode::SMSG_TRIGGER_CINEMATIC;
-        new (&this->SMSG_TRIGGER_CINEMATIC) vanilla::SMSG_TRIGGER_CINEMATIC (obj);
+        new (&this->SMSG_TRIGGER_CINEMATIC) vanilla::SMSG_TRIGGER_CINEMATIC (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_TUTORIAL_FLAGS&& obj) {
         opcode = Opcode::SMSG_TUTORIAL_FLAGS;
-        new (&this->SMSG_TUTORIAL_FLAGS) vanilla::SMSG_TUTORIAL_FLAGS (obj);
+        new (&this->SMSG_TUTORIAL_FLAGS) vanilla::SMSG_TUTORIAL_FLAGS (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_EMOTE&& obj) {
         opcode = Opcode::SMSG_EMOTE;
-        new (&this->SMSG_EMOTE) vanilla::SMSG_EMOTE (obj);
+        new (&this->SMSG_EMOTE) vanilla::SMSG_EMOTE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_TEXT_EMOTE&& obj) {
         opcode = Opcode::SMSG_TEXT_EMOTE;
-        new (&this->SMSG_TEXT_EMOTE) vanilla::SMSG_TEXT_EMOTE (obj);
+        new (&this->SMSG_TEXT_EMOTE) vanilla::SMSG_TEXT_EMOTE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_INVENTORY_CHANGE_FAILURE&& obj) {
         opcode = Opcode::SMSG_INVENTORY_CHANGE_FAILURE;
-        new (&this->SMSG_INVENTORY_CHANGE_FAILURE) vanilla::SMSG_INVENTORY_CHANGE_FAILURE (obj);
+        new (&this->SMSG_INVENTORY_CHANGE_FAILURE) vanilla::SMSG_INVENTORY_CHANGE_FAILURE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_OPEN_CONTAINER&& obj) {
         opcode = Opcode::SMSG_OPEN_CONTAINER;
-        new (&this->SMSG_OPEN_CONTAINER) vanilla::SMSG_OPEN_CONTAINER (obj);
+        new (&this->SMSG_OPEN_CONTAINER) vanilla::SMSG_OPEN_CONTAINER (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_INSPECT&& obj) {
         opcode = Opcode::SMSG_INSPECT;
-        new (&this->SMSG_INSPECT) vanilla::SMSG_INSPECT (obj);
+        new (&this->SMSG_INSPECT) vanilla::SMSG_INSPECT (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_TRADE_STATUS&& obj) {
         opcode = Opcode::SMSG_TRADE_STATUS;
-        new (&this->SMSG_TRADE_STATUS) vanilla::SMSG_TRADE_STATUS (obj);
+        new (&this->SMSG_TRADE_STATUS) vanilla::SMSG_TRADE_STATUS (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_TRADE_STATUS_EXTENDED&& obj) {
         opcode = Opcode::SMSG_TRADE_STATUS_EXTENDED;
-        new (&this->SMSG_TRADE_STATUS_EXTENDED) vanilla::SMSG_TRADE_STATUS_EXTENDED (obj);
+        new (&this->SMSG_TRADE_STATUS_EXTENDED) vanilla::SMSG_TRADE_STATUS_EXTENDED (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_INITIALIZE_FACTIONS&& obj) {
         opcode = Opcode::SMSG_INITIALIZE_FACTIONS;
-        new (&this->SMSG_INITIALIZE_FACTIONS) vanilla::SMSG_INITIALIZE_FACTIONS (obj);
+        new (&this->SMSG_INITIALIZE_FACTIONS) vanilla::SMSG_INITIALIZE_FACTIONS (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SET_FACTION_VISIBLE&& obj) {
         opcode = Opcode::SMSG_SET_FACTION_VISIBLE;
-        new (&this->SMSG_SET_FACTION_VISIBLE) vanilla::SMSG_SET_FACTION_VISIBLE (obj);
+        new (&this->SMSG_SET_FACTION_VISIBLE) vanilla::SMSG_SET_FACTION_VISIBLE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SET_FACTION_STANDING&& obj) {
         opcode = Opcode::SMSG_SET_FACTION_STANDING;
-        new (&this->SMSG_SET_FACTION_STANDING) vanilla::SMSG_SET_FACTION_STANDING (obj);
+        new (&this->SMSG_SET_FACTION_STANDING) vanilla::SMSG_SET_FACTION_STANDING (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SET_PROFICIENCY&& obj) {
         opcode = Opcode::SMSG_SET_PROFICIENCY;
-        new (&this->SMSG_SET_PROFICIENCY) vanilla::SMSG_SET_PROFICIENCY (obj);
+        new (&this->SMSG_SET_PROFICIENCY) vanilla::SMSG_SET_PROFICIENCY (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_ACTION_BUTTONS&& obj) {
         opcode = Opcode::SMSG_ACTION_BUTTONS;
-        new (&this->SMSG_ACTION_BUTTONS) vanilla::SMSG_ACTION_BUTTONS (obj);
+        new (&this->SMSG_ACTION_BUTTONS) vanilla::SMSG_ACTION_BUTTONS (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_INITIAL_SPELLS&& obj) {
         opcode = Opcode::SMSG_INITIAL_SPELLS;
-        new (&this->SMSG_INITIAL_SPELLS) vanilla::SMSG_INITIAL_SPELLS (obj);
+        new (&this->SMSG_INITIAL_SPELLS) vanilla::SMSG_INITIAL_SPELLS (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_LEARNED_SPELL&& obj) {
         opcode = Opcode::SMSG_LEARNED_SPELL;
-        new (&this->SMSG_LEARNED_SPELL) vanilla::SMSG_LEARNED_SPELL (obj);
+        new (&this->SMSG_LEARNED_SPELL) vanilla::SMSG_LEARNED_SPELL (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SUPERCEDED_SPELL&& obj) {
         opcode = Opcode::SMSG_SUPERCEDED_SPELL;
-        new (&this->SMSG_SUPERCEDED_SPELL) vanilla::SMSG_SUPERCEDED_SPELL (obj);
+        new (&this->SMSG_SUPERCEDED_SPELL) vanilla::SMSG_SUPERCEDED_SPELL (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_CAST_RESULT&& obj) {
         opcode = Opcode::SMSG_CAST_RESULT;
-        new (&this->SMSG_CAST_RESULT) vanilla::SMSG_CAST_RESULT (obj);
+        new (&this->SMSG_CAST_RESULT) vanilla::SMSG_CAST_RESULT (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SPELL_START&& obj) {
         opcode = Opcode::SMSG_SPELL_START;
-        new (&this->SMSG_SPELL_START) vanilla::SMSG_SPELL_START (obj);
+        new (&this->SMSG_SPELL_START) vanilla::SMSG_SPELL_START (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SPELL_GO&& obj) {
         opcode = Opcode::SMSG_SPELL_GO;
-        new (&this->SMSG_SPELL_GO) vanilla::SMSG_SPELL_GO (obj);
+        new (&this->SMSG_SPELL_GO) vanilla::SMSG_SPELL_GO (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SPELL_FAILURE&& obj) {
         opcode = Opcode::SMSG_SPELL_FAILURE;
-        new (&this->SMSG_SPELL_FAILURE) vanilla::SMSG_SPELL_FAILURE (obj);
+        new (&this->SMSG_SPELL_FAILURE) vanilla::SMSG_SPELL_FAILURE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SPELL_COOLDOWN&& obj) {
         opcode = Opcode::SMSG_SPELL_COOLDOWN;
-        new (&this->SMSG_SPELL_COOLDOWN) vanilla::SMSG_SPELL_COOLDOWN (obj);
+        new (&this->SMSG_SPELL_COOLDOWN) vanilla::SMSG_SPELL_COOLDOWN (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_COOLDOWN_EVENT&& obj) {
         opcode = Opcode::SMSG_COOLDOWN_EVENT;
-        new (&this->SMSG_COOLDOWN_EVENT) vanilla::SMSG_COOLDOWN_EVENT (obj);
+        new (&this->SMSG_COOLDOWN_EVENT) vanilla::SMSG_COOLDOWN_EVENT (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_UPDATE_AURA_DURATION&& obj) {
         opcode = Opcode::SMSG_UPDATE_AURA_DURATION;
-        new (&this->SMSG_UPDATE_AURA_DURATION) vanilla::SMSG_UPDATE_AURA_DURATION (obj);
+        new (&this->SMSG_UPDATE_AURA_DURATION) vanilla::SMSG_UPDATE_AURA_DURATION (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_PET_CAST_FAILED&& obj) {
         opcode = Opcode::SMSG_PET_CAST_FAILED;
-        new (&this->SMSG_PET_CAST_FAILED) vanilla::SMSG_PET_CAST_FAILED (obj);
+        new (&this->SMSG_PET_CAST_FAILED) vanilla::SMSG_PET_CAST_FAILED (std::move(obj));
     }
     explicit ServerOpcode(vanilla::MSG_CHANNEL_START_Server&& obj) {
         opcode = Opcode::MSG_CHANNEL_START;
-        new (&this->MSG_CHANNEL_START) vanilla::MSG_CHANNEL_START_Server (obj);
+        new (&this->MSG_CHANNEL_START) vanilla::MSG_CHANNEL_START_Server (std::move(obj));
     }
     explicit ServerOpcode(vanilla::MSG_CHANNEL_UPDATE_Server&& obj) {
         opcode = Opcode::MSG_CHANNEL_UPDATE;
-        new (&this->MSG_CHANNEL_UPDATE) vanilla::MSG_CHANNEL_UPDATE_Server (obj);
+        new (&this->MSG_CHANNEL_UPDATE) vanilla::MSG_CHANNEL_UPDATE_Server (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_AI_REACTION&& obj) {
         opcode = Opcode::SMSG_AI_REACTION;
-        new (&this->SMSG_AI_REACTION) vanilla::SMSG_AI_REACTION (obj);
+        new (&this->SMSG_AI_REACTION) vanilla::SMSG_AI_REACTION (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_ATTACKSTART&& obj) {
         opcode = Opcode::SMSG_ATTACKSTART;
-        new (&this->SMSG_ATTACKSTART) vanilla::SMSG_ATTACKSTART (obj);
+        new (&this->SMSG_ATTACKSTART) vanilla::SMSG_ATTACKSTART (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_ATTACKSTOP&& obj) {
         opcode = Opcode::SMSG_ATTACKSTOP;
-        new (&this->SMSG_ATTACKSTOP) vanilla::SMSG_ATTACKSTOP (obj);
+        new (&this->SMSG_ATTACKSTOP) vanilla::SMSG_ATTACKSTOP (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_ATTACKSWING_NOTINRANGE&& obj) {
         opcode = Opcode::SMSG_ATTACKSWING_NOTINRANGE;
-        new (&this->SMSG_ATTACKSWING_NOTINRANGE) vanilla::SMSG_ATTACKSWING_NOTINRANGE (obj);
+        new (&this->SMSG_ATTACKSWING_NOTINRANGE) vanilla::SMSG_ATTACKSWING_NOTINRANGE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_ATTACKSWING_BADFACING&& obj) {
         opcode = Opcode::SMSG_ATTACKSWING_BADFACING;
-        new (&this->SMSG_ATTACKSWING_BADFACING) vanilla::SMSG_ATTACKSWING_BADFACING (obj);
+        new (&this->SMSG_ATTACKSWING_BADFACING) vanilla::SMSG_ATTACKSWING_BADFACING (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_ATTACKSWING_NOTSTANDING&& obj) {
         opcode = Opcode::SMSG_ATTACKSWING_NOTSTANDING;
-        new (&this->SMSG_ATTACKSWING_NOTSTANDING) vanilla::SMSG_ATTACKSWING_NOTSTANDING (obj);
+        new (&this->SMSG_ATTACKSWING_NOTSTANDING) vanilla::SMSG_ATTACKSWING_NOTSTANDING (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_ATTACKSWING_DEADTARGET&& obj) {
         opcode = Opcode::SMSG_ATTACKSWING_DEADTARGET;
-        new (&this->SMSG_ATTACKSWING_DEADTARGET) vanilla::SMSG_ATTACKSWING_DEADTARGET (obj);
+        new (&this->SMSG_ATTACKSWING_DEADTARGET) vanilla::SMSG_ATTACKSWING_DEADTARGET (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_ATTACKSWING_CANT_ATTACK&& obj) {
         opcode = Opcode::SMSG_ATTACKSWING_CANT_ATTACK;
-        new (&this->SMSG_ATTACKSWING_CANT_ATTACK) vanilla::SMSG_ATTACKSWING_CANT_ATTACK (obj);
+        new (&this->SMSG_ATTACKSWING_CANT_ATTACK) vanilla::SMSG_ATTACKSWING_CANT_ATTACK (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_ATTACKERSTATEUPDATE&& obj) {
         opcode = Opcode::SMSG_ATTACKERSTATEUPDATE;
-        new (&this->SMSG_ATTACKERSTATEUPDATE) vanilla::SMSG_ATTACKERSTATEUPDATE (obj);
+        new (&this->SMSG_ATTACKERSTATEUPDATE) vanilla::SMSG_ATTACKERSTATEUPDATE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_CANCEL_COMBAT&& obj) {
         opcode = Opcode::SMSG_CANCEL_COMBAT;
-        new (&this->SMSG_CANCEL_COMBAT) vanilla::SMSG_CANCEL_COMBAT (obj);
+        new (&this->SMSG_CANCEL_COMBAT) vanilla::SMSG_CANCEL_COMBAT (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SPELLHEALLOG&& obj) {
         opcode = Opcode::SMSG_SPELLHEALLOG;
-        new (&this->SMSG_SPELLHEALLOG) vanilla::SMSG_SPELLHEALLOG (obj);
+        new (&this->SMSG_SPELLHEALLOG) vanilla::SMSG_SPELLHEALLOG (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SPELLENERGIZELOG&& obj) {
         opcode = Opcode::SMSG_SPELLENERGIZELOG;
-        new (&this->SMSG_SPELLENERGIZELOG) vanilla::SMSG_SPELLENERGIZELOG (obj);
+        new (&this->SMSG_SPELLENERGIZELOG) vanilla::SMSG_SPELLENERGIZELOG (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_BINDPOINTUPDATE&& obj) {
         opcode = Opcode::SMSG_BINDPOINTUPDATE;
-        new (&this->SMSG_BINDPOINTUPDATE) vanilla::SMSG_BINDPOINTUPDATE (obj);
+        new (&this->SMSG_BINDPOINTUPDATE) vanilla::SMSG_BINDPOINTUPDATE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_PLAYERBOUND&& obj) {
         opcode = Opcode::SMSG_PLAYERBOUND;
-        new (&this->SMSG_PLAYERBOUND) vanilla::SMSG_PLAYERBOUND (obj);
+        new (&this->SMSG_PLAYERBOUND) vanilla::SMSG_PLAYERBOUND (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_CLIENT_CONTROL_UPDATE&& obj) {
         opcode = Opcode::SMSG_CLIENT_CONTROL_UPDATE;
-        new (&this->SMSG_CLIENT_CONTROL_UPDATE) vanilla::SMSG_CLIENT_CONTROL_UPDATE (obj);
+        new (&this->SMSG_CLIENT_CONTROL_UPDATE) vanilla::SMSG_CLIENT_CONTROL_UPDATE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_RESURRECT_REQUEST&& obj) {
         opcode = Opcode::SMSG_RESURRECT_REQUEST;
-        new (&this->SMSG_RESURRECT_REQUEST) vanilla::SMSG_RESURRECT_REQUEST (obj);
+        new (&this->SMSG_RESURRECT_REQUEST) vanilla::SMSG_RESURRECT_REQUEST (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_LOOT_RESPONSE&& obj) {
         opcode = Opcode::SMSG_LOOT_RESPONSE;
-        new (&this->SMSG_LOOT_RESPONSE) vanilla::SMSG_LOOT_RESPONSE (obj);
+        new (&this->SMSG_LOOT_RESPONSE) vanilla::SMSG_LOOT_RESPONSE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_LOOT_RELEASE_RESPONSE&& obj) {
         opcode = Opcode::SMSG_LOOT_RELEASE_RESPONSE;
-        new (&this->SMSG_LOOT_RELEASE_RESPONSE) vanilla::SMSG_LOOT_RELEASE_RESPONSE (obj);
+        new (&this->SMSG_LOOT_RELEASE_RESPONSE) vanilla::SMSG_LOOT_RELEASE_RESPONSE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_LOOT_REMOVED&& obj) {
         opcode = Opcode::SMSG_LOOT_REMOVED;
-        new (&this->SMSG_LOOT_REMOVED) vanilla::SMSG_LOOT_REMOVED (obj);
+        new (&this->SMSG_LOOT_REMOVED) vanilla::SMSG_LOOT_REMOVED (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_LOOT_MONEY_NOTIFY&& obj) {
         opcode = Opcode::SMSG_LOOT_MONEY_NOTIFY;
-        new (&this->SMSG_LOOT_MONEY_NOTIFY) vanilla::SMSG_LOOT_MONEY_NOTIFY (obj);
+        new (&this->SMSG_LOOT_MONEY_NOTIFY) vanilla::SMSG_LOOT_MONEY_NOTIFY (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_LOOT_CLEAR_MONEY&& obj) {
         opcode = Opcode::SMSG_LOOT_CLEAR_MONEY;
-        new (&this->SMSG_LOOT_CLEAR_MONEY) vanilla::SMSG_LOOT_CLEAR_MONEY (obj);
+        new (&this->SMSG_LOOT_CLEAR_MONEY) vanilla::SMSG_LOOT_CLEAR_MONEY (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_ITEM_PUSH_RESULT&& obj) {
         opcode = Opcode::SMSG_ITEM_PUSH_RESULT;
-        new (&this->SMSG_ITEM_PUSH_RESULT) vanilla::SMSG_ITEM_PUSH_RESULT (obj);
+        new (&this->SMSG_ITEM_PUSH_RESULT) vanilla::SMSG_ITEM_PUSH_RESULT (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_DUEL_REQUESTED&& obj) {
         opcode = Opcode::SMSG_DUEL_REQUESTED;
-        new (&this->SMSG_DUEL_REQUESTED) vanilla::SMSG_DUEL_REQUESTED (obj);
+        new (&this->SMSG_DUEL_REQUESTED) vanilla::SMSG_DUEL_REQUESTED (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_DUEL_OUTOFBOUNDS&& obj) {
         opcode = Opcode::SMSG_DUEL_OUTOFBOUNDS;
-        new (&this->SMSG_DUEL_OUTOFBOUNDS) vanilla::SMSG_DUEL_OUTOFBOUNDS (obj);
+        new (&this->SMSG_DUEL_OUTOFBOUNDS) vanilla::SMSG_DUEL_OUTOFBOUNDS (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_DUEL_INBOUNDS&& obj) {
         opcode = Opcode::SMSG_DUEL_INBOUNDS;
-        new (&this->SMSG_DUEL_INBOUNDS) vanilla::SMSG_DUEL_INBOUNDS (obj);
+        new (&this->SMSG_DUEL_INBOUNDS) vanilla::SMSG_DUEL_INBOUNDS (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_DUEL_COMPLETE&& obj) {
         opcode = Opcode::SMSG_DUEL_COMPLETE;
-        new (&this->SMSG_DUEL_COMPLETE) vanilla::SMSG_DUEL_COMPLETE (obj);
+        new (&this->SMSG_DUEL_COMPLETE) vanilla::SMSG_DUEL_COMPLETE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_DUEL_WINNER&& obj) {
         opcode = Opcode::SMSG_DUEL_WINNER;
-        new (&this->SMSG_DUEL_WINNER) vanilla::SMSG_DUEL_WINNER (obj);
+        new (&this->SMSG_DUEL_WINNER) vanilla::SMSG_DUEL_WINNER (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_MOUNTRESULT&& obj) {
         opcode = Opcode::SMSG_MOUNTRESULT;
-        new (&this->SMSG_MOUNTRESULT) vanilla::SMSG_MOUNTRESULT (obj);
+        new (&this->SMSG_MOUNTRESULT) vanilla::SMSG_MOUNTRESULT (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_DISMOUNTRESULT&& obj) {
         opcode = Opcode::SMSG_DISMOUNTRESULT;
-        new (&this->SMSG_DISMOUNTRESULT) vanilla::SMSG_DISMOUNTRESULT (obj);
+        new (&this->SMSG_DISMOUNTRESULT) vanilla::SMSG_DISMOUNTRESULT (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_MOUNTSPECIAL_ANIM&& obj) {
         opcode = Opcode::SMSG_MOUNTSPECIAL_ANIM;
-        new (&this->SMSG_MOUNTSPECIAL_ANIM) vanilla::SMSG_MOUNTSPECIAL_ANIM (obj);
+        new (&this->SMSG_MOUNTSPECIAL_ANIM) vanilla::SMSG_MOUNTSPECIAL_ANIM (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_PET_TAME_FAILURE&& obj) {
         opcode = Opcode::SMSG_PET_TAME_FAILURE;
-        new (&this->SMSG_PET_TAME_FAILURE) vanilla::SMSG_PET_TAME_FAILURE (obj);
+        new (&this->SMSG_PET_TAME_FAILURE) vanilla::SMSG_PET_TAME_FAILURE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_PET_NAME_INVALID&& obj) {
         opcode = Opcode::SMSG_PET_NAME_INVALID;
-        new (&this->SMSG_PET_NAME_INVALID) vanilla::SMSG_PET_NAME_INVALID (obj);
+        new (&this->SMSG_PET_NAME_INVALID) vanilla::SMSG_PET_NAME_INVALID (std::move(obj));
+    }
+    explicit ServerOpcode(vanilla::SMSG_PET_SPELLS&& obj) {
+        opcode = Opcode::SMSG_PET_SPELLS;
+        new (&this->SMSG_PET_SPELLS) vanilla::SMSG_PET_SPELLS (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_PET_MODE&& obj) {
         opcode = Opcode::SMSG_PET_MODE;
-        new (&this->SMSG_PET_MODE) vanilla::SMSG_PET_MODE (obj);
+        new (&this->SMSG_PET_MODE) vanilla::SMSG_PET_MODE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_GOSSIP_MESSAGE&& obj) {
         opcode = Opcode::SMSG_GOSSIP_MESSAGE;
-        new (&this->SMSG_GOSSIP_MESSAGE) vanilla::SMSG_GOSSIP_MESSAGE (obj);
+        new (&this->SMSG_GOSSIP_MESSAGE) vanilla::SMSG_GOSSIP_MESSAGE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_GOSSIP_COMPLETE&& obj) {
         opcode = Opcode::SMSG_GOSSIP_COMPLETE;
-        new (&this->SMSG_GOSSIP_COMPLETE) vanilla::SMSG_GOSSIP_COMPLETE (obj);
+        new (&this->SMSG_GOSSIP_COMPLETE) vanilla::SMSG_GOSSIP_COMPLETE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_NPC_TEXT_UPDATE&& obj) {
         opcode = Opcode::SMSG_NPC_TEXT_UPDATE;
-        new (&this->SMSG_NPC_TEXT_UPDATE) vanilla::SMSG_NPC_TEXT_UPDATE (obj);
+        new (&this->SMSG_NPC_TEXT_UPDATE) vanilla::SMSG_NPC_TEXT_UPDATE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_QUESTGIVER_STATUS&& obj) {
         opcode = Opcode::SMSG_QUESTGIVER_STATUS;
-        new (&this->SMSG_QUESTGIVER_STATUS) vanilla::SMSG_QUESTGIVER_STATUS (obj);
+        new (&this->SMSG_QUESTGIVER_STATUS) vanilla::SMSG_QUESTGIVER_STATUS (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_QUESTGIVER_QUEST_LIST&& obj) {
         opcode = Opcode::SMSG_QUESTGIVER_QUEST_LIST;
-        new (&this->SMSG_QUESTGIVER_QUEST_LIST) vanilla::SMSG_QUESTGIVER_QUEST_LIST (obj);
+        new (&this->SMSG_QUESTGIVER_QUEST_LIST) vanilla::SMSG_QUESTGIVER_QUEST_LIST (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_QUESTGIVER_QUEST_DETAILS&& obj) {
         opcode = Opcode::SMSG_QUESTGIVER_QUEST_DETAILS;
-        new (&this->SMSG_QUESTGIVER_QUEST_DETAILS) vanilla::SMSG_QUESTGIVER_QUEST_DETAILS (obj);
+        new (&this->SMSG_QUESTGIVER_QUEST_DETAILS) vanilla::SMSG_QUESTGIVER_QUEST_DETAILS (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_QUESTGIVER_REQUEST_ITEMS&& obj) {
         opcode = Opcode::SMSG_QUESTGIVER_REQUEST_ITEMS;
-        new (&this->SMSG_QUESTGIVER_REQUEST_ITEMS) vanilla::SMSG_QUESTGIVER_REQUEST_ITEMS (obj);
+        new (&this->SMSG_QUESTGIVER_REQUEST_ITEMS) vanilla::SMSG_QUESTGIVER_REQUEST_ITEMS (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_QUESTGIVER_OFFER_REWARD&& obj) {
         opcode = Opcode::SMSG_QUESTGIVER_OFFER_REWARD;
-        new (&this->SMSG_QUESTGIVER_OFFER_REWARD) vanilla::SMSG_QUESTGIVER_OFFER_REWARD (obj);
+        new (&this->SMSG_QUESTGIVER_OFFER_REWARD) vanilla::SMSG_QUESTGIVER_OFFER_REWARD (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_QUESTGIVER_QUEST_INVALID&& obj) {
         opcode = Opcode::SMSG_QUESTGIVER_QUEST_INVALID;
-        new (&this->SMSG_QUESTGIVER_QUEST_INVALID) vanilla::SMSG_QUESTGIVER_QUEST_INVALID (obj);
+        new (&this->SMSG_QUESTGIVER_QUEST_INVALID) vanilla::SMSG_QUESTGIVER_QUEST_INVALID (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_QUESTGIVER_QUEST_COMPLETE&& obj) {
         opcode = Opcode::SMSG_QUESTGIVER_QUEST_COMPLETE;
-        new (&this->SMSG_QUESTGIVER_QUEST_COMPLETE) vanilla::SMSG_QUESTGIVER_QUEST_COMPLETE (obj);
+        new (&this->SMSG_QUESTGIVER_QUEST_COMPLETE) vanilla::SMSG_QUESTGIVER_QUEST_COMPLETE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_QUESTGIVER_QUEST_FAILED&& obj) {
         opcode = Opcode::SMSG_QUESTGIVER_QUEST_FAILED;
-        new (&this->SMSG_QUESTGIVER_QUEST_FAILED) vanilla::SMSG_QUESTGIVER_QUEST_FAILED (obj);
+        new (&this->SMSG_QUESTGIVER_QUEST_FAILED) vanilla::SMSG_QUESTGIVER_QUEST_FAILED (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_QUESTLOG_FULL&& obj) {
         opcode = Opcode::SMSG_QUESTLOG_FULL;
-        new (&this->SMSG_QUESTLOG_FULL) vanilla::SMSG_QUESTLOG_FULL (obj);
+        new (&this->SMSG_QUESTLOG_FULL) vanilla::SMSG_QUESTLOG_FULL (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_QUESTUPDATE_FAILED&& obj) {
         opcode = Opcode::SMSG_QUESTUPDATE_FAILED;
-        new (&this->SMSG_QUESTUPDATE_FAILED) vanilla::SMSG_QUESTUPDATE_FAILED (obj);
+        new (&this->SMSG_QUESTUPDATE_FAILED) vanilla::SMSG_QUESTUPDATE_FAILED (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_QUESTUPDATE_FAILEDTIMER&& obj) {
         opcode = Opcode::SMSG_QUESTUPDATE_FAILEDTIMER;
-        new (&this->SMSG_QUESTUPDATE_FAILEDTIMER) vanilla::SMSG_QUESTUPDATE_FAILEDTIMER (obj);
+        new (&this->SMSG_QUESTUPDATE_FAILEDTIMER) vanilla::SMSG_QUESTUPDATE_FAILEDTIMER (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_QUESTUPDATE_COMPLETE&& obj) {
         opcode = Opcode::SMSG_QUESTUPDATE_COMPLETE;
-        new (&this->SMSG_QUESTUPDATE_COMPLETE) vanilla::SMSG_QUESTUPDATE_COMPLETE (obj);
+        new (&this->SMSG_QUESTUPDATE_COMPLETE) vanilla::SMSG_QUESTUPDATE_COMPLETE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_QUESTUPDATE_ADD_KILL&& obj) {
         opcode = Opcode::SMSG_QUESTUPDATE_ADD_KILL;
-        new (&this->SMSG_QUESTUPDATE_ADD_KILL) vanilla::SMSG_QUESTUPDATE_ADD_KILL (obj);
+        new (&this->SMSG_QUESTUPDATE_ADD_KILL) vanilla::SMSG_QUESTUPDATE_ADD_KILL (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_QUESTUPDATE_ADD_ITEM&& obj) {
         opcode = Opcode::SMSG_QUESTUPDATE_ADD_ITEM;
-        new (&this->SMSG_QUESTUPDATE_ADD_ITEM) vanilla::SMSG_QUESTUPDATE_ADD_ITEM (obj);
+        new (&this->SMSG_QUESTUPDATE_ADD_ITEM) vanilla::SMSG_QUESTUPDATE_ADD_ITEM (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_QUEST_CONFIRM_ACCEPT&& obj) {
         opcode = Opcode::SMSG_QUEST_CONFIRM_ACCEPT;
-        new (&this->SMSG_QUEST_CONFIRM_ACCEPT) vanilla::SMSG_QUEST_CONFIRM_ACCEPT (obj);
+        new (&this->SMSG_QUEST_CONFIRM_ACCEPT) vanilla::SMSG_QUEST_CONFIRM_ACCEPT (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_LIST_INVENTORY&& obj) {
         opcode = Opcode::SMSG_LIST_INVENTORY;
-        new (&this->SMSG_LIST_INVENTORY) vanilla::SMSG_LIST_INVENTORY (obj);
+        new (&this->SMSG_LIST_INVENTORY) vanilla::SMSG_LIST_INVENTORY (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SELL_ITEM&& obj) {
         opcode = Opcode::SMSG_SELL_ITEM;
-        new (&this->SMSG_SELL_ITEM) vanilla::SMSG_SELL_ITEM (obj);
+        new (&this->SMSG_SELL_ITEM) vanilla::SMSG_SELL_ITEM (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_BUY_ITEM&& obj) {
         opcode = Opcode::SMSG_BUY_ITEM;
-        new (&this->SMSG_BUY_ITEM) vanilla::SMSG_BUY_ITEM (obj);
+        new (&this->SMSG_BUY_ITEM) vanilla::SMSG_BUY_ITEM (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_BUY_FAILED&& obj) {
         opcode = Opcode::SMSG_BUY_FAILED;
-        new (&this->SMSG_BUY_FAILED) vanilla::SMSG_BUY_FAILED (obj);
+        new (&this->SMSG_BUY_FAILED) vanilla::SMSG_BUY_FAILED (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SHOWTAXINODES&& obj) {
         opcode = Opcode::SMSG_SHOWTAXINODES;
-        new (&this->SMSG_SHOWTAXINODES) vanilla::SMSG_SHOWTAXINODES (obj);
+        new (&this->SMSG_SHOWTAXINODES) vanilla::SMSG_SHOWTAXINODES (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_TAXINODE_STATUS&& obj) {
         opcode = Opcode::SMSG_TAXINODE_STATUS;
-        new (&this->SMSG_TAXINODE_STATUS) vanilla::SMSG_TAXINODE_STATUS (obj);
+        new (&this->SMSG_TAXINODE_STATUS) vanilla::SMSG_TAXINODE_STATUS (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_ACTIVATETAXIREPLY&& obj) {
         opcode = Opcode::SMSG_ACTIVATETAXIREPLY;
-        new (&this->SMSG_ACTIVATETAXIREPLY) vanilla::SMSG_ACTIVATETAXIREPLY (obj);
+        new (&this->SMSG_ACTIVATETAXIREPLY) vanilla::SMSG_ACTIVATETAXIREPLY (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_NEW_TAXI_PATH&& obj) {
         opcode = Opcode::SMSG_NEW_TAXI_PATH;
-        new (&this->SMSG_NEW_TAXI_PATH) vanilla::SMSG_NEW_TAXI_PATH (obj);
+        new (&this->SMSG_NEW_TAXI_PATH) vanilla::SMSG_NEW_TAXI_PATH (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_TRAINER_LIST&& obj) {
         opcode = Opcode::SMSG_TRAINER_LIST;
-        new (&this->SMSG_TRAINER_LIST) vanilla::SMSG_TRAINER_LIST (obj);
+        new (&this->SMSG_TRAINER_LIST) vanilla::SMSG_TRAINER_LIST (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_TRAINER_BUY_SUCCEEDED&& obj) {
         opcode = Opcode::SMSG_TRAINER_BUY_SUCCEEDED;
-        new (&this->SMSG_TRAINER_BUY_SUCCEEDED) vanilla::SMSG_TRAINER_BUY_SUCCEEDED (obj);
+        new (&this->SMSG_TRAINER_BUY_SUCCEEDED) vanilla::SMSG_TRAINER_BUY_SUCCEEDED (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_TRAINER_BUY_FAILED&& obj) {
         opcode = Opcode::SMSG_TRAINER_BUY_FAILED;
-        new (&this->SMSG_TRAINER_BUY_FAILED) vanilla::SMSG_TRAINER_BUY_FAILED (obj);
+        new (&this->SMSG_TRAINER_BUY_FAILED) vanilla::SMSG_TRAINER_BUY_FAILED (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SHOW_BANK&& obj) {
         opcode = Opcode::SMSG_SHOW_BANK;
-        new (&this->SMSG_SHOW_BANK) vanilla::SMSG_SHOW_BANK (obj);
+        new (&this->SMSG_SHOW_BANK) vanilla::SMSG_SHOW_BANK (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_BUY_BANK_SLOT_RESULT&& obj) {
         opcode = Opcode::SMSG_BUY_BANK_SLOT_RESULT;
-        new (&this->SMSG_BUY_BANK_SLOT_RESULT) vanilla::SMSG_BUY_BANK_SLOT_RESULT (obj);
+        new (&this->SMSG_BUY_BANK_SLOT_RESULT) vanilla::SMSG_BUY_BANK_SLOT_RESULT (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_PETITION_SHOWLIST&& obj) {
         opcode = Opcode::SMSG_PETITION_SHOWLIST;
-        new (&this->SMSG_PETITION_SHOWLIST) vanilla::SMSG_PETITION_SHOWLIST (obj);
+        new (&this->SMSG_PETITION_SHOWLIST) vanilla::SMSG_PETITION_SHOWLIST (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_PETITION_SHOW_SIGNATURES&& obj) {
         opcode = Opcode::SMSG_PETITION_SHOW_SIGNATURES;
-        new (&this->SMSG_PETITION_SHOW_SIGNATURES) vanilla::SMSG_PETITION_SHOW_SIGNATURES (obj);
+        new (&this->SMSG_PETITION_SHOW_SIGNATURES) vanilla::SMSG_PETITION_SHOW_SIGNATURES (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_PETITION_SIGN_RESULTS&& obj) {
         opcode = Opcode::SMSG_PETITION_SIGN_RESULTS;
-        new (&this->SMSG_PETITION_SIGN_RESULTS) vanilla::SMSG_PETITION_SIGN_RESULTS (obj);
+        new (&this->SMSG_PETITION_SIGN_RESULTS) vanilla::SMSG_PETITION_SIGN_RESULTS (std::move(obj));
+    }
+    explicit ServerOpcode(vanilla::MSG_PETITION_DECLINE&& obj) {
+        opcode = Opcode::MSG_PETITION_DECLINE;
+        new (&this->MSG_PETITION_DECLINE) vanilla::MSG_PETITION_DECLINE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_TURN_IN_PETITION_RESULTS&& obj) {
         opcode = Opcode::SMSG_TURN_IN_PETITION_RESULTS;
-        new (&this->SMSG_TURN_IN_PETITION_RESULTS) vanilla::SMSG_TURN_IN_PETITION_RESULTS (obj);
+        new (&this->SMSG_TURN_IN_PETITION_RESULTS) vanilla::SMSG_TURN_IN_PETITION_RESULTS (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_PETITION_QUERY_RESPONSE&& obj) {
         opcode = Opcode::SMSG_PETITION_QUERY_RESPONSE;
-        new (&this->SMSG_PETITION_QUERY_RESPONSE) vanilla::SMSG_PETITION_QUERY_RESPONSE (obj);
+        new (&this->SMSG_PETITION_QUERY_RESPONSE) vanilla::SMSG_PETITION_QUERY_RESPONSE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_FISH_NOT_HOOKED&& obj) {
         opcode = Opcode::SMSG_FISH_NOT_HOOKED;
-        new (&this->SMSG_FISH_NOT_HOOKED) vanilla::SMSG_FISH_NOT_HOOKED (obj);
+        new (&this->SMSG_FISH_NOT_HOOKED) vanilla::SMSG_FISH_NOT_HOOKED (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_FISH_ESCAPED&& obj) {
         opcode = Opcode::SMSG_FISH_ESCAPED;
-        new (&this->SMSG_FISH_ESCAPED) vanilla::SMSG_FISH_ESCAPED (obj);
+        new (&this->SMSG_FISH_ESCAPED) vanilla::SMSG_FISH_ESCAPED (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_NOTIFICATION&& obj) {
         opcode = Opcode::SMSG_NOTIFICATION;
-        new (&this->SMSG_NOTIFICATION) vanilla::SMSG_NOTIFICATION (obj);
+        new (&this->SMSG_NOTIFICATION) vanilla::SMSG_NOTIFICATION (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_PLAYED_TIME&& obj) {
         opcode = Opcode::SMSG_PLAYED_TIME;
-        new (&this->SMSG_PLAYED_TIME) vanilla::SMSG_PLAYED_TIME (obj);
+        new (&this->SMSG_PLAYED_TIME) vanilla::SMSG_PLAYED_TIME (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_QUERY_TIME_RESPONSE&& obj) {
         opcode = Opcode::SMSG_QUERY_TIME_RESPONSE;
-        new (&this->SMSG_QUERY_TIME_RESPONSE) vanilla::SMSG_QUERY_TIME_RESPONSE (obj);
+        new (&this->SMSG_QUERY_TIME_RESPONSE) vanilla::SMSG_QUERY_TIME_RESPONSE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_LOG_XPGAIN&& obj) {
         opcode = Opcode::SMSG_LOG_XPGAIN;
-        new (&this->SMSG_LOG_XPGAIN) vanilla::SMSG_LOG_XPGAIN (obj);
+        new (&this->SMSG_LOG_XPGAIN) vanilla::SMSG_LOG_XPGAIN (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_LEVELUP_INFO&& obj) {
         opcode = Opcode::SMSG_LEVELUP_INFO;
-        new (&this->SMSG_LEVELUP_INFO) vanilla::SMSG_LEVELUP_INFO (obj);
+        new (&this->SMSG_LEVELUP_INFO) vanilla::SMSG_LEVELUP_INFO (std::move(obj));
     }
     explicit ServerOpcode(vanilla::MSG_MINIMAP_PING_Server&& obj) {
         opcode = Opcode::MSG_MINIMAP_PING;
-        new (&this->MSG_MINIMAP_PING) vanilla::MSG_MINIMAP_PING_Server (obj);
+        new (&this->MSG_MINIMAP_PING) vanilla::MSG_MINIMAP_PING_Server (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_RESISTLOG&& obj) {
         opcode = Opcode::SMSG_RESISTLOG;
-        new (&this->SMSG_RESISTLOG) vanilla::SMSG_RESISTLOG (obj);
+        new (&this->SMSG_RESISTLOG) vanilla::SMSG_RESISTLOG (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_ENCHANTMENTLOG&& obj) {
         opcode = Opcode::SMSG_ENCHANTMENTLOG;
-        new (&this->SMSG_ENCHANTMENTLOG) vanilla::SMSG_ENCHANTMENTLOG (obj);
+        new (&this->SMSG_ENCHANTMENTLOG) vanilla::SMSG_ENCHANTMENTLOG (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_START_MIRROR_TIMER&& obj) {
         opcode = Opcode::SMSG_START_MIRROR_TIMER;
-        new (&this->SMSG_START_MIRROR_TIMER) vanilla::SMSG_START_MIRROR_TIMER (obj);
+        new (&this->SMSG_START_MIRROR_TIMER) vanilla::SMSG_START_MIRROR_TIMER (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_PAUSE_MIRROR_TIMER&& obj) {
         opcode = Opcode::SMSG_PAUSE_MIRROR_TIMER;
-        new (&this->SMSG_PAUSE_MIRROR_TIMER) vanilla::SMSG_PAUSE_MIRROR_TIMER (obj);
+        new (&this->SMSG_PAUSE_MIRROR_TIMER) vanilla::SMSG_PAUSE_MIRROR_TIMER (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_STOP_MIRROR_TIMER&& obj) {
         opcode = Opcode::SMSG_STOP_MIRROR_TIMER;
-        new (&this->SMSG_STOP_MIRROR_TIMER) vanilla::SMSG_STOP_MIRROR_TIMER (obj);
+        new (&this->SMSG_STOP_MIRROR_TIMER) vanilla::SMSG_STOP_MIRROR_TIMER (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_PONG&& obj) {
         opcode = Opcode::SMSG_PONG;
-        new (&this->SMSG_PONG) vanilla::SMSG_PONG (obj);
+        new (&this->SMSG_PONG) vanilla::SMSG_PONG (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_CLEAR_COOLDOWN&& obj) {
         opcode = Opcode::SMSG_CLEAR_COOLDOWN;
-        new (&this->SMSG_CLEAR_COOLDOWN) vanilla::SMSG_CLEAR_COOLDOWN (obj);
+        new (&this->SMSG_CLEAR_COOLDOWN) vanilla::SMSG_CLEAR_COOLDOWN (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_GAMEOBJECT_PAGETEXT&& obj) {
         opcode = Opcode::SMSG_GAMEOBJECT_PAGETEXT;
-        new (&this->SMSG_GAMEOBJECT_PAGETEXT) vanilla::SMSG_GAMEOBJECT_PAGETEXT (obj);
+        new (&this->SMSG_GAMEOBJECT_PAGETEXT) vanilla::SMSG_GAMEOBJECT_PAGETEXT (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SPELL_DELAYED&& obj) {
         opcode = Opcode::SMSG_SPELL_DELAYED;
-        new (&this->SMSG_SPELL_DELAYED) vanilla::SMSG_SPELL_DELAYED (obj);
+        new (&this->SMSG_SPELL_DELAYED) vanilla::SMSG_SPELL_DELAYED (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_ITEM_TIME_UPDATE&& obj) {
         opcode = Opcode::SMSG_ITEM_TIME_UPDATE;
-        new (&this->SMSG_ITEM_TIME_UPDATE) vanilla::SMSG_ITEM_TIME_UPDATE (obj);
+        new (&this->SMSG_ITEM_TIME_UPDATE) vanilla::SMSG_ITEM_TIME_UPDATE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_ITEM_ENCHANT_TIME_UPDATE&& obj) {
         opcode = Opcode::SMSG_ITEM_ENCHANT_TIME_UPDATE;
-        new (&this->SMSG_ITEM_ENCHANT_TIME_UPDATE) vanilla::SMSG_ITEM_ENCHANT_TIME_UPDATE (obj);
+        new (&this->SMSG_ITEM_ENCHANT_TIME_UPDATE) vanilla::SMSG_ITEM_ENCHANT_TIME_UPDATE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_AUTH_CHALLENGE&& obj) {
         opcode = Opcode::SMSG_AUTH_CHALLENGE;
-        new (&this->SMSG_AUTH_CHALLENGE) vanilla::SMSG_AUTH_CHALLENGE (obj);
+        new (&this->SMSG_AUTH_CHALLENGE) vanilla::SMSG_AUTH_CHALLENGE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_AUTH_RESPONSE&& obj) {
         opcode = Opcode::SMSG_AUTH_RESPONSE;
-        new (&this->SMSG_AUTH_RESPONSE) vanilla::SMSG_AUTH_RESPONSE (obj);
+        new (&this->SMSG_AUTH_RESPONSE) vanilla::SMSG_AUTH_RESPONSE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::MSG_SAVE_GUILD_EMBLEM_Server&& obj) {
         opcode = Opcode::MSG_SAVE_GUILD_EMBLEM;
-        new (&this->MSG_SAVE_GUILD_EMBLEM) vanilla::MSG_SAVE_GUILD_EMBLEM_Server (obj);
+        new (&this->MSG_SAVE_GUILD_EMBLEM) vanilla::MSG_SAVE_GUILD_EMBLEM_Server (std::move(obj));
+    }
+    explicit ServerOpcode(vanilla::MSG_TABARDVENDOR_ACTIVATE&& obj) {
+        opcode = Opcode::MSG_TABARDVENDOR_ACTIVATE;
+        new (&this->MSG_TABARDVENDOR_ACTIVATE) vanilla::MSG_TABARDVENDOR_ACTIVATE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_PLAY_SPELL_VISUAL&& obj) {
         opcode = Opcode::SMSG_PLAY_SPELL_VISUAL;
-        new (&this->SMSG_PLAY_SPELL_VISUAL) vanilla::SMSG_PLAY_SPELL_VISUAL (obj);
+        new (&this->SMSG_PLAY_SPELL_VISUAL) vanilla::SMSG_PLAY_SPELL_VISUAL (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_PARTYKILLLOG&& obj) {
         opcode = Opcode::SMSG_PARTYKILLLOG;
-        new (&this->SMSG_PARTYKILLLOG) vanilla::SMSG_PARTYKILLLOG (obj);
+        new (&this->SMSG_PARTYKILLLOG) vanilla::SMSG_PARTYKILLLOG (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_PLAY_SPELL_IMPACT&& obj) {
         opcode = Opcode::SMSG_PLAY_SPELL_IMPACT;
-        new (&this->SMSG_PLAY_SPELL_IMPACT) vanilla::SMSG_PLAY_SPELL_IMPACT (obj);
+        new (&this->SMSG_PLAY_SPELL_IMPACT) vanilla::SMSG_PLAY_SPELL_IMPACT (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_EXPLORATION_EXPERIENCE&& obj) {
         opcode = Opcode::SMSG_EXPLORATION_EXPERIENCE;
-        new (&this->SMSG_EXPLORATION_EXPERIENCE) vanilla::SMSG_EXPLORATION_EXPERIENCE (obj);
+        new (&this->SMSG_EXPLORATION_EXPERIENCE) vanilla::SMSG_EXPLORATION_EXPERIENCE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::MSG_RANDOM_ROLL_Server&& obj) {
         opcode = Opcode::MSG_RANDOM_ROLL;
-        new (&this->MSG_RANDOM_ROLL) vanilla::MSG_RANDOM_ROLL_Server (obj);
+        new (&this->MSG_RANDOM_ROLL) vanilla::MSG_RANDOM_ROLL_Server (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_ENVIRONMENTAL_DAMAGE_LOG&& obj) {
         opcode = Opcode::SMSG_ENVIRONMENTAL_DAMAGE_LOG;
-        new (&this->SMSG_ENVIRONMENTAL_DAMAGE_LOG) vanilla::SMSG_ENVIRONMENTAL_DAMAGE_LOG (obj);
+        new (&this->SMSG_ENVIRONMENTAL_DAMAGE_LOG) vanilla::SMSG_ENVIRONMENTAL_DAMAGE_LOG (std::move(obj));
     }
     explicit ServerOpcode(vanilla::MSG_LOOKING_FOR_GROUP_Server&& obj) {
         opcode = Opcode::MSG_LOOKING_FOR_GROUP;
-        new (&this->MSG_LOOKING_FOR_GROUP) vanilla::MSG_LOOKING_FOR_GROUP_Server (obj);
+        new (&this->MSG_LOOKING_FOR_GROUP) vanilla::MSG_LOOKING_FOR_GROUP_Server (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_REMOVED_SPELL&& obj) {
         opcode = Opcode::SMSG_REMOVED_SPELL;
-        new (&this->SMSG_REMOVED_SPELL) vanilla::SMSG_REMOVED_SPELL (obj);
+        new (&this->SMSG_REMOVED_SPELL) vanilla::SMSG_REMOVED_SPELL (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_GMTICKET_CREATE&& obj) {
         opcode = Opcode::SMSG_GMTICKET_CREATE;
-        new (&this->SMSG_GMTICKET_CREATE) vanilla::SMSG_GMTICKET_CREATE (obj);
+        new (&this->SMSG_GMTICKET_CREATE) vanilla::SMSG_GMTICKET_CREATE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_GMTICKET_UPDATETEXT&& obj) {
         opcode = Opcode::SMSG_GMTICKET_UPDATETEXT;
-        new (&this->SMSG_GMTICKET_UPDATETEXT) vanilla::SMSG_GMTICKET_UPDATETEXT (obj);
+        new (&this->SMSG_GMTICKET_UPDATETEXT) vanilla::SMSG_GMTICKET_UPDATETEXT (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_ACCOUNT_DATA_TIMES&& obj) {
         opcode = Opcode::SMSG_ACCOUNT_DATA_TIMES;
-        new (&this->SMSG_ACCOUNT_DATA_TIMES) vanilla::SMSG_ACCOUNT_DATA_TIMES (obj);
+        new (&this->SMSG_ACCOUNT_DATA_TIMES) vanilla::SMSG_ACCOUNT_DATA_TIMES (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_GMTICKET_GETTICKET&& obj) {
         opcode = Opcode::SMSG_GMTICKET_GETTICKET;
-        new (&this->SMSG_GMTICKET_GETTICKET) vanilla::SMSG_GMTICKET_GETTICKET (obj);
+        new (&this->SMSG_GMTICKET_GETTICKET) vanilla::SMSG_GMTICKET_GETTICKET (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_GAMEOBJECT_SPAWN_ANIM&& obj) {
         opcode = Opcode::SMSG_GAMEOBJECT_SPAWN_ANIM;
-        new (&this->SMSG_GAMEOBJECT_SPAWN_ANIM) vanilla::SMSG_GAMEOBJECT_SPAWN_ANIM (obj);
+        new (&this->SMSG_GAMEOBJECT_SPAWN_ANIM) vanilla::SMSG_GAMEOBJECT_SPAWN_ANIM (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_GAMEOBJECT_DESPAWN_ANIM&& obj) {
         opcode = Opcode::SMSG_GAMEOBJECT_DESPAWN_ANIM;
-        new (&this->SMSG_GAMEOBJECT_DESPAWN_ANIM) vanilla::SMSG_GAMEOBJECT_DESPAWN_ANIM (obj);
+        new (&this->SMSG_GAMEOBJECT_DESPAWN_ANIM) vanilla::SMSG_GAMEOBJECT_DESPAWN_ANIM (std::move(obj));
     }
     explicit ServerOpcode(vanilla::MSG_CORPSE_QUERY_Server&& obj) {
         opcode = Opcode::MSG_CORPSE_QUERY;
-        new (&this->MSG_CORPSE_QUERY) vanilla::MSG_CORPSE_QUERY_Server (obj);
+        new (&this->MSG_CORPSE_QUERY) vanilla::MSG_CORPSE_QUERY_Server (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_GMTICKET_DELETETICKET&& obj) {
         opcode = Opcode::SMSG_GMTICKET_DELETETICKET;
-        new (&this->SMSG_GMTICKET_DELETETICKET) vanilla::SMSG_GMTICKET_DELETETICKET (obj);
+        new (&this->SMSG_GMTICKET_DELETETICKET) vanilla::SMSG_GMTICKET_DELETETICKET (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_CHAT_WRONG_FACTION&& obj) {
         opcode = Opcode::SMSG_CHAT_WRONG_FACTION;
-        new (&this->SMSG_CHAT_WRONG_FACTION) vanilla::SMSG_CHAT_WRONG_FACTION (obj);
+        new (&this->SMSG_CHAT_WRONG_FACTION) vanilla::SMSG_CHAT_WRONG_FACTION (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_GMTICKET_SYSTEMSTATUS&& obj) {
         opcode = Opcode::SMSG_GMTICKET_SYSTEMSTATUS;
-        new (&this->SMSG_GMTICKET_SYSTEMSTATUS) vanilla::SMSG_GMTICKET_SYSTEMSTATUS (obj);
+        new (&this->SMSG_GMTICKET_SYSTEMSTATUS) vanilla::SMSG_GMTICKET_SYSTEMSTATUS (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SET_REST_START&& obj) {
         opcode = Opcode::SMSG_SET_REST_START;
-        new (&this->SMSG_SET_REST_START) vanilla::SMSG_SET_REST_START (obj);
+        new (&this->SMSG_SET_REST_START) vanilla::SMSG_SET_REST_START (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SPIRIT_HEALER_CONFIRM&& obj) {
         opcode = Opcode::SMSG_SPIRIT_HEALER_CONFIRM;
-        new (&this->SMSG_SPIRIT_HEALER_CONFIRM) vanilla::SMSG_SPIRIT_HEALER_CONFIRM (obj);
+        new (&this->SMSG_SPIRIT_HEALER_CONFIRM) vanilla::SMSG_SPIRIT_HEALER_CONFIRM (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_GOSSIP_POI&& obj) {
         opcode = Opcode::SMSG_GOSSIP_POI;
-        new (&this->SMSG_GOSSIP_POI) vanilla::SMSG_GOSSIP_POI (obj);
+        new (&this->SMSG_GOSSIP_POI) vanilla::SMSG_GOSSIP_POI (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_LOGIN_VERIFY_WORLD&& obj) {
         opcode = Opcode::SMSG_LOGIN_VERIFY_WORLD;
-        new (&this->SMSG_LOGIN_VERIFY_WORLD) vanilla::SMSG_LOGIN_VERIFY_WORLD (obj);
+        new (&this->SMSG_LOGIN_VERIFY_WORLD) vanilla::SMSG_LOGIN_VERIFY_WORLD (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SEND_MAIL_RESULT&& obj) {
         opcode = Opcode::SMSG_SEND_MAIL_RESULT;
-        new (&this->SMSG_SEND_MAIL_RESULT) vanilla::SMSG_SEND_MAIL_RESULT (obj);
+        new (&this->SMSG_SEND_MAIL_RESULT) vanilla::SMSG_SEND_MAIL_RESULT (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_MAIL_LIST_RESULT&& obj) {
         opcode = Opcode::SMSG_MAIL_LIST_RESULT;
-        new (&this->SMSG_MAIL_LIST_RESULT) vanilla::SMSG_MAIL_LIST_RESULT (obj);
+        new (&this->SMSG_MAIL_LIST_RESULT) vanilla::SMSG_MAIL_LIST_RESULT (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_BATTLEFIELD_LIST&& obj) {
         opcode = Opcode::SMSG_BATTLEFIELD_LIST;
-        new (&this->SMSG_BATTLEFIELD_LIST) vanilla::SMSG_BATTLEFIELD_LIST (obj);
+        new (&this->SMSG_BATTLEFIELD_LIST) vanilla::SMSG_BATTLEFIELD_LIST (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_ITEM_TEXT_QUERY_RESPONSE&& obj) {
         opcode = Opcode::SMSG_ITEM_TEXT_QUERY_RESPONSE;
-        new (&this->SMSG_ITEM_TEXT_QUERY_RESPONSE) vanilla::SMSG_ITEM_TEXT_QUERY_RESPONSE (obj);
+        new (&this->SMSG_ITEM_TEXT_QUERY_RESPONSE) vanilla::SMSG_ITEM_TEXT_QUERY_RESPONSE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SPELLLOGMISS&& obj) {
         opcode = Opcode::SMSG_SPELLLOGMISS;
-        new (&this->SMSG_SPELLLOGMISS) vanilla::SMSG_SPELLLOGMISS (obj);
+        new (&this->SMSG_SPELLLOGMISS) vanilla::SMSG_SPELLLOGMISS (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SPELLLOGEXECUTE&& obj) {
         opcode = Opcode::SMSG_SPELLLOGEXECUTE;
-        new (&this->SMSG_SPELLLOGEXECUTE) vanilla::SMSG_SPELLLOGEXECUTE (obj);
+        new (&this->SMSG_SPELLLOGEXECUTE) vanilla::SMSG_SPELLLOGEXECUTE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_PERIODICAURALOG&& obj) {
         opcode = Opcode::SMSG_PERIODICAURALOG;
-        new (&this->SMSG_PERIODICAURALOG) vanilla::SMSG_PERIODICAURALOG (obj);
+        new (&this->SMSG_PERIODICAURALOG) vanilla::SMSG_PERIODICAURALOG (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SPELLDAMAGESHIELD&& obj) {
         opcode = Opcode::SMSG_SPELLDAMAGESHIELD;
-        new (&this->SMSG_SPELLDAMAGESHIELD) vanilla::SMSG_SPELLDAMAGESHIELD (obj);
+        new (&this->SMSG_SPELLDAMAGESHIELD) vanilla::SMSG_SPELLDAMAGESHIELD (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SPELLNONMELEEDAMAGELOG&& obj) {
         opcode = Opcode::SMSG_SPELLNONMELEEDAMAGELOG;
-        new (&this->SMSG_SPELLNONMELEEDAMAGELOG) vanilla::SMSG_SPELLNONMELEEDAMAGELOG (obj);
+        new (&this->SMSG_SPELLNONMELEEDAMAGELOG) vanilla::SMSG_SPELLNONMELEEDAMAGELOG (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_ZONE_UNDER_ATTACK&& obj) {
         opcode = Opcode::SMSG_ZONE_UNDER_ATTACK;
-        new (&this->SMSG_ZONE_UNDER_ATTACK) vanilla::SMSG_ZONE_UNDER_ATTACK (obj);
+        new (&this->SMSG_ZONE_UNDER_ATTACK) vanilla::SMSG_ZONE_UNDER_ATTACK (std::move(obj));
     }
     explicit ServerOpcode(vanilla::MSG_AUCTION_HELLO_Server&& obj) {
         opcode = Opcode::MSG_AUCTION_HELLO;
-        new (&this->MSG_AUCTION_HELLO) vanilla::MSG_AUCTION_HELLO_Server (obj);
+        new (&this->MSG_AUCTION_HELLO) vanilla::MSG_AUCTION_HELLO_Server (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_AUCTION_COMMAND_RESULT&& obj) {
         opcode = Opcode::SMSG_AUCTION_COMMAND_RESULT;
-        new (&this->SMSG_AUCTION_COMMAND_RESULT) vanilla::SMSG_AUCTION_COMMAND_RESULT (obj);
+        new (&this->SMSG_AUCTION_COMMAND_RESULT) vanilla::SMSG_AUCTION_COMMAND_RESULT (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_AUCTION_LIST_RESULT&& obj) {
         opcode = Opcode::SMSG_AUCTION_LIST_RESULT;
-        new (&this->SMSG_AUCTION_LIST_RESULT) vanilla::SMSG_AUCTION_LIST_RESULT (obj);
+        new (&this->SMSG_AUCTION_LIST_RESULT) vanilla::SMSG_AUCTION_LIST_RESULT (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_AUCTION_OWNER_LIST_RESULT&& obj) {
         opcode = Opcode::SMSG_AUCTION_OWNER_LIST_RESULT;
-        new (&this->SMSG_AUCTION_OWNER_LIST_RESULT) vanilla::SMSG_AUCTION_OWNER_LIST_RESULT (obj);
+        new (&this->SMSG_AUCTION_OWNER_LIST_RESULT) vanilla::SMSG_AUCTION_OWNER_LIST_RESULT (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_AUCTION_BIDDER_NOTIFICATION&& obj) {
         opcode = Opcode::SMSG_AUCTION_BIDDER_NOTIFICATION;
-        new (&this->SMSG_AUCTION_BIDDER_NOTIFICATION) vanilla::SMSG_AUCTION_BIDDER_NOTIFICATION (obj);
+        new (&this->SMSG_AUCTION_BIDDER_NOTIFICATION) vanilla::SMSG_AUCTION_BIDDER_NOTIFICATION (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_AUCTION_OWNER_NOTIFICATION&& obj) {
         opcode = Opcode::SMSG_AUCTION_OWNER_NOTIFICATION;
-        new (&this->SMSG_AUCTION_OWNER_NOTIFICATION) vanilla::SMSG_AUCTION_OWNER_NOTIFICATION (obj);
+        new (&this->SMSG_AUCTION_OWNER_NOTIFICATION) vanilla::SMSG_AUCTION_OWNER_NOTIFICATION (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_PROCRESIST&& obj) {
         opcode = Opcode::SMSG_PROCRESIST;
-        new (&this->SMSG_PROCRESIST) vanilla::SMSG_PROCRESIST (obj);
+        new (&this->SMSG_PROCRESIST) vanilla::SMSG_PROCRESIST (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_DISPEL_FAILED&& obj) {
         opcode = Opcode::SMSG_DISPEL_FAILED;
-        new (&this->SMSG_DISPEL_FAILED) vanilla::SMSG_DISPEL_FAILED (obj);
+        new (&this->SMSG_DISPEL_FAILED) vanilla::SMSG_DISPEL_FAILED (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SPELLORDAMAGE_IMMUNE&& obj) {
         opcode = Opcode::SMSG_SPELLORDAMAGE_IMMUNE;
-        new (&this->SMSG_SPELLORDAMAGE_IMMUNE) vanilla::SMSG_SPELLORDAMAGE_IMMUNE (obj);
+        new (&this->SMSG_SPELLORDAMAGE_IMMUNE) vanilla::SMSG_SPELLORDAMAGE_IMMUNE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_AUCTION_BIDDER_LIST_RESULT&& obj) {
         opcode = Opcode::SMSG_AUCTION_BIDDER_LIST_RESULT;
-        new (&this->SMSG_AUCTION_BIDDER_LIST_RESULT) vanilla::SMSG_AUCTION_BIDDER_LIST_RESULT (obj);
+        new (&this->SMSG_AUCTION_BIDDER_LIST_RESULT) vanilla::SMSG_AUCTION_BIDDER_LIST_RESULT (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SET_FLAT_SPELL_MODIFIER&& obj) {
         opcode = Opcode::SMSG_SET_FLAT_SPELL_MODIFIER;
-        new (&this->SMSG_SET_FLAT_SPELL_MODIFIER) vanilla::SMSG_SET_FLAT_SPELL_MODIFIER (obj);
+        new (&this->SMSG_SET_FLAT_SPELL_MODIFIER) vanilla::SMSG_SET_FLAT_SPELL_MODIFIER (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SET_PCT_SPELL_MODIFIER&& obj) {
         opcode = Opcode::SMSG_SET_PCT_SPELL_MODIFIER;
-        new (&this->SMSG_SET_PCT_SPELL_MODIFIER) vanilla::SMSG_SET_PCT_SPELL_MODIFIER (obj);
+        new (&this->SMSG_SET_PCT_SPELL_MODIFIER) vanilla::SMSG_SET_PCT_SPELL_MODIFIER (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_CORPSE_RECLAIM_DELAY&& obj) {
         opcode = Opcode::SMSG_CORPSE_RECLAIM_DELAY;
-        new (&this->SMSG_CORPSE_RECLAIM_DELAY) vanilla::SMSG_CORPSE_RECLAIM_DELAY (obj);
+        new (&this->SMSG_CORPSE_RECLAIM_DELAY) vanilla::SMSG_CORPSE_RECLAIM_DELAY (std::move(obj));
     }
     explicit ServerOpcode(vanilla::MSG_LIST_STABLED_PETS_Server&& obj) {
         opcode = Opcode::MSG_LIST_STABLED_PETS;
-        new (&this->MSG_LIST_STABLED_PETS) vanilla::MSG_LIST_STABLED_PETS_Server (obj);
+        new (&this->MSG_LIST_STABLED_PETS) vanilla::MSG_LIST_STABLED_PETS_Server (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_STABLE_RESULT&& obj) {
         opcode = Opcode::SMSG_STABLE_RESULT;
-        new (&this->SMSG_STABLE_RESULT) vanilla::SMSG_STABLE_RESULT (obj);
+        new (&this->SMSG_STABLE_RESULT) vanilla::SMSG_STABLE_RESULT (std::move(obj));
+    }
+    explicit ServerOpcode(vanilla::MSG_QUEST_PUSH_RESULT&& obj) {
+        opcode = Opcode::MSG_QUEST_PUSH_RESULT;
+        new (&this->MSG_QUEST_PUSH_RESULT) vanilla::MSG_QUEST_PUSH_RESULT (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_PLAY_MUSIC&& obj) {
         opcode = Opcode::SMSG_PLAY_MUSIC;
-        new (&this->SMSG_PLAY_MUSIC) vanilla::SMSG_PLAY_MUSIC (obj);
+        new (&this->SMSG_PLAY_MUSIC) vanilla::SMSG_PLAY_MUSIC (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_PLAY_OBJECT_SOUND&& obj) {
         opcode = Opcode::SMSG_PLAY_OBJECT_SOUND;
-        new (&this->SMSG_PLAY_OBJECT_SOUND) vanilla::SMSG_PLAY_OBJECT_SOUND (obj);
+        new (&this->SMSG_PLAY_OBJECT_SOUND) vanilla::SMSG_PLAY_OBJECT_SOUND (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SPELLDISPELLOG&& obj) {
         opcode = Opcode::SMSG_SPELLDISPELLOG;
-        new (&this->SMSG_SPELLDISPELLOG) vanilla::SMSG_SPELLDISPELLOG (obj);
+        new (&this->SMSG_SPELLDISPELLOG) vanilla::SMSG_SPELLDISPELLOG (std::move(obj));
     }
     explicit ServerOpcode(vanilla::MSG_QUERY_NEXT_MAIL_TIME_Server&& obj) {
         opcode = Opcode::MSG_QUERY_NEXT_MAIL_TIME;
-        new (&this->MSG_QUERY_NEXT_MAIL_TIME) vanilla::MSG_QUERY_NEXT_MAIL_TIME_Server (obj);
+        new (&this->MSG_QUERY_NEXT_MAIL_TIME) vanilla::MSG_QUERY_NEXT_MAIL_TIME_Server (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_RECEIVED_MAIL&& obj) {
         opcode = Opcode::SMSG_RECEIVED_MAIL;
-        new (&this->SMSG_RECEIVED_MAIL) vanilla::SMSG_RECEIVED_MAIL (obj);
+        new (&this->SMSG_RECEIVED_MAIL) vanilla::SMSG_RECEIVED_MAIL (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_RAID_GROUP_ONLY&& obj) {
         opcode = Opcode::SMSG_RAID_GROUP_ONLY;
-        new (&this->SMSG_RAID_GROUP_ONLY) vanilla::SMSG_RAID_GROUP_ONLY (obj);
+        new (&this->SMSG_RAID_GROUP_ONLY) vanilla::SMSG_RAID_GROUP_ONLY (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_PVP_CREDIT&& obj) {
         opcode = Opcode::SMSG_PVP_CREDIT;
-        new (&this->SMSG_PVP_CREDIT) vanilla::SMSG_PVP_CREDIT (obj);
+        new (&this->SMSG_PVP_CREDIT) vanilla::SMSG_PVP_CREDIT (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_AUCTION_REMOVED_NOTIFICATION&& obj) {
         opcode = Opcode::SMSG_AUCTION_REMOVED_NOTIFICATION;
-        new (&this->SMSG_AUCTION_REMOVED_NOTIFICATION) vanilla::SMSG_AUCTION_REMOVED_NOTIFICATION (obj);
+        new (&this->SMSG_AUCTION_REMOVED_NOTIFICATION) vanilla::SMSG_AUCTION_REMOVED_NOTIFICATION (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SERVER_MESSAGE&& obj) {
         opcode = Opcode::SMSG_SERVER_MESSAGE;
-        new (&this->SMSG_SERVER_MESSAGE) vanilla::SMSG_SERVER_MESSAGE (obj);
+        new (&this->SMSG_SERVER_MESSAGE) vanilla::SMSG_SERVER_MESSAGE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_MEETINGSTONE_SETQUEUE&& obj) {
         opcode = Opcode::SMSG_MEETINGSTONE_SETQUEUE;
-        new (&this->SMSG_MEETINGSTONE_SETQUEUE) vanilla::SMSG_MEETINGSTONE_SETQUEUE (obj);
+        new (&this->SMSG_MEETINGSTONE_SETQUEUE) vanilla::SMSG_MEETINGSTONE_SETQUEUE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_MEETINGSTONE_COMPLETE&& obj) {
         opcode = Opcode::SMSG_MEETINGSTONE_COMPLETE;
-        new (&this->SMSG_MEETINGSTONE_COMPLETE) vanilla::SMSG_MEETINGSTONE_COMPLETE (obj);
+        new (&this->SMSG_MEETINGSTONE_COMPLETE) vanilla::SMSG_MEETINGSTONE_COMPLETE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_MEETINGSTONE_IN_PROGRESS&& obj) {
         opcode = Opcode::SMSG_MEETINGSTONE_IN_PROGRESS;
-        new (&this->SMSG_MEETINGSTONE_IN_PROGRESS) vanilla::SMSG_MEETINGSTONE_IN_PROGRESS (obj);
+        new (&this->SMSG_MEETINGSTONE_IN_PROGRESS) vanilla::SMSG_MEETINGSTONE_IN_PROGRESS (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_MEETINGSTONE_MEMBER_ADDED&& obj) {
         opcode = Opcode::SMSG_MEETINGSTONE_MEMBER_ADDED;
-        new (&this->SMSG_MEETINGSTONE_MEMBER_ADDED) vanilla::SMSG_MEETINGSTONE_MEMBER_ADDED (obj);
+        new (&this->SMSG_MEETINGSTONE_MEMBER_ADDED) vanilla::SMSG_MEETINGSTONE_MEMBER_ADDED (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_CANCEL_AUTO_REPEAT&& obj) {
         opcode = Opcode::SMSG_CANCEL_AUTO_REPEAT;
-        new (&this->SMSG_CANCEL_AUTO_REPEAT) vanilla::SMSG_CANCEL_AUTO_REPEAT (obj);
+        new (&this->SMSG_CANCEL_AUTO_REPEAT) vanilla::SMSG_CANCEL_AUTO_REPEAT (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_STANDSTATE_UPDATE&& obj) {
         opcode = Opcode::SMSG_STANDSTATE_UPDATE;
-        new (&this->SMSG_STANDSTATE_UPDATE) vanilla::SMSG_STANDSTATE_UPDATE (obj);
+        new (&this->SMSG_STANDSTATE_UPDATE) vanilla::SMSG_STANDSTATE_UPDATE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_LOOT_ALL_PASSED&& obj) {
         opcode = Opcode::SMSG_LOOT_ALL_PASSED;
-        new (&this->SMSG_LOOT_ALL_PASSED) vanilla::SMSG_LOOT_ALL_PASSED (obj);
+        new (&this->SMSG_LOOT_ALL_PASSED) vanilla::SMSG_LOOT_ALL_PASSED (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_LOOT_ROLL_WON&& obj) {
         opcode = Opcode::SMSG_LOOT_ROLL_WON;
-        new (&this->SMSG_LOOT_ROLL_WON) vanilla::SMSG_LOOT_ROLL_WON (obj);
+        new (&this->SMSG_LOOT_ROLL_WON) vanilla::SMSG_LOOT_ROLL_WON (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_LOOT_START_ROLL&& obj) {
         opcode = Opcode::SMSG_LOOT_START_ROLL;
-        new (&this->SMSG_LOOT_START_ROLL) vanilla::SMSG_LOOT_START_ROLL (obj);
+        new (&this->SMSG_LOOT_START_ROLL) vanilla::SMSG_LOOT_START_ROLL (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_LOOT_ROLL&& obj) {
         opcode = Opcode::SMSG_LOOT_ROLL;
-        new (&this->SMSG_LOOT_ROLL) vanilla::SMSG_LOOT_ROLL (obj);
+        new (&this->SMSG_LOOT_ROLL) vanilla::SMSG_LOOT_ROLL (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_LOOT_MASTER_LIST&& obj) {
         opcode = Opcode::SMSG_LOOT_MASTER_LIST;
-        new (&this->SMSG_LOOT_MASTER_LIST) vanilla::SMSG_LOOT_MASTER_LIST (obj);
+        new (&this->SMSG_LOOT_MASTER_LIST) vanilla::SMSG_LOOT_MASTER_LIST (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SET_FORCED_REACTIONS&& obj) {
         opcode = Opcode::SMSG_SET_FORCED_REACTIONS;
-        new (&this->SMSG_SET_FORCED_REACTIONS) vanilla::SMSG_SET_FORCED_REACTIONS (obj);
+        new (&this->SMSG_SET_FORCED_REACTIONS) vanilla::SMSG_SET_FORCED_REACTIONS (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SPELL_FAILED_OTHER&& obj) {
         opcode = Opcode::SMSG_SPELL_FAILED_OTHER;
-        new (&this->SMSG_SPELL_FAILED_OTHER) vanilla::SMSG_SPELL_FAILED_OTHER (obj);
+        new (&this->SMSG_SPELL_FAILED_OTHER) vanilla::SMSG_SPELL_FAILED_OTHER (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_GAMEOBJECT_RESET_STATE&& obj) {
         opcode = Opcode::SMSG_GAMEOBJECT_RESET_STATE;
-        new (&this->SMSG_GAMEOBJECT_RESET_STATE) vanilla::SMSG_GAMEOBJECT_RESET_STATE (obj);
+        new (&this->SMSG_GAMEOBJECT_RESET_STATE) vanilla::SMSG_GAMEOBJECT_RESET_STATE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_CHAT_PLAYER_NOT_FOUND&& obj) {
         opcode = Opcode::SMSG_CHAT_PLAYER_NOT_FOUND;
-        new (&this->SMSG_CHAT_PLAYER_NOT_FOUND) vanilla::SMSG_CHAT_PLAYER_NOT_FOUND (obj);
+        new (&this->SMSG_CHAT_PLAYER_NOT_FOUND) vanilla::SMSG_CHAT_PLAYER_NOT_FOUND (std::move(obj));
     }
     explicit ServerOpcode(vanilla::MSG_TALENT_WIPE_CONFIRM_Server&& obj) {
         opcode = Opcode::MSG_TALENT_WIPE_CONFIRM;
-        new (&this->MSG_TALENT_WIPE_CONFIRM) vanilla::MSG_TALENT_WIPE_CONFIRM_Server (obj);
+        new (&this->MSG_TALENT_WIPE_CONFIRM) vanilla::MSG_TALENT_WIPE_CONFIRM_Server (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SUMMON_REQUEST&& obj) {
         opcode = Opcode::SMSG_SUMMON_REQUEST;
-        new (&this->SMSG_SUMMON_REQUEST) vanilla::SMSG_SUMMON_REQUEST (obj);
+        new (&this->SMSG_SUMMON_REQUEST) vanilla::SMSG_SUMMON_REQUEST (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_MONSTER_MOVE_TRANSPORT&& obj) {
         opcode = Opcode::SMSG_MONSTER_MOVE_TRANSPORT;
-        new (&this->SMSG_MONSTER_MOVE_TRANSPORT) vanilla::SMSG_MONSTER_MOVE_TRANSPORT (obj);
+        new (&this->SMSG_MONSTER_MOVE_TRANSPORT) vanilla::SMSG_MONSTER_MOVE_TRANSPORT (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_PET_BROKEN&& obj) {
         opcode = Opcode::SMSG_PET_BROKEN;
-        new (&this->SMSG_PET_BROKEN) vanilla::SMSG_PET_BROKEN (obj);
+        new (&this->SMSG_PET_BROKEN) vanilla::SMSG_PET_BROKEN (std::move(obj));
     }
     explicit ServerOpcode(vanilla::MSG_MOVE_FEATHER_FALL_Server&& obj) {
         opcode = Opcode::MSG_MOVE_FEATHER_FALL;
-        new (&this->MSG_MOVE_FEATHER_FALL) vanilla::MSG_MOVE_FEATHER_FALL_Server (obj);
+        new (&this->MSG_MOVE_FEATHER_FALL) vanilla::MSG_MOVE_FEATHER_FALL_Server (std::move(obj));
+    }
+    explicit ServerOpcode(vanilla::MSG_MOVE_WATER_WALK&& obj) {
+        opcode = Opcode::MSG_MOVE_WATER_WALK;
+        new (&this->MSG_MOVE_WATER_WALK) vanilla::MSG_MOVE_WATER_WALK (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_FEIGN_DEATH_RESISTED&& obj) {
         opcode = Opcode::SMSG_FEIGN_DEATH_RESISTED;
-        new (&this->SMSG_FEIGN_DEATH_RESISTED) vanilla::SMSG_FEIGN_DEATH_RESISTED (obj);
+        new (&this->SMSG_FEIGN_DEATH_RESISTED) vanilla::SMSG_FEIGN_DEATH_RESISTED (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_DUEL_COUNTDOWN&& obj) {
         opcode = Opcode::SMSG_DUEL_COUNTDOWN;
-        new (&this->SMSG_DUEL_COUNTDOWN) vanilla::SMSG_DUEL_COUNTDOWN (obj);
+        new (&this->SMSG_DUEL_COUNTDOWN) vanilla::SMSG_DUEL_COUNTDOWN (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_AREA_TRIGGER_MESSAGE&& obj) {
         opcode = Opcode::SMSG_AREA_TRIGGER_MESSAGE;
-        new (&this->SMSG_AREA_TRIGGER_MESSAGE) vanilla::SMSG_AREA_TRIGGER_MESSAGE (obj);
+        new (&this->SMSG_AREA_TRIGGER_MESSAGE) vanilla::SMSG_AREA_TRIGGER_MESSAGE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_MEETINGSTONE_JOINFAILED&& obj) {
         opcode = Opcode::SMSG_MEETINGSTONE_JOINFAILED;
-        new (&this->SMSG_MEETINGSTONE_JOINFAILED) vanilla::SMSG_MEETINGSTONE_JOINFAILED (obj);
+        new (&this->SMSG_MEETINGSTONE_JOINFAILED) vanilla::SMSG_MEETINGSTONE_JOINFAILED (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_PLAYER_SKINNED&& obj) {
         opcode = Opcode::SMSG_PLAYER_SKINNED;
-        new (&this->SMSG_PLAYER_SKINNED) vanilla::SMSG_PLAYER_SKINNED (obj);
+        new (&this->SMSG_PLAYER_SKINNED) vanilla::SMSG_PLAYER_SKINNED (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_DURABILITY_DAMAGE_DEATH&& obj) {
         opcode = Opcode::SMSG_DURABILITY_DAMAGE_DEATH;
-        new (&this->SMSG_DURABILITY_DAMAGE_DEATH) vanilla::SMSG_DURABILITY_DAMAGE_DEATH (obj);
+        new (&this->SMSG_DURABILITY_DAMAGE_DEATH) vanilla::SMSG_DURABILITY_DAMAGE_DEATH (std::move(obj));
+    }
+    explicit ServerOpcode(vanilla::MSG_PETITION_RENAME&& obj) {
+        opcode = Opcode::MSG_PETITION_RENAME;
+        new (&this->MSG_PETITION_RENAME) vanilla::MSG_PETITION_RENAME (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_INIT_WORLD_STATES&& obj) {
         opcode = Opcode::SMSG_INIT_WORLD_STATES;
-        new (&this->SMSG_INIT_WORLD_STATES) vanilla::SMSG_INIT_WORLD_STATES (obj);
+        new (&this->SMSG_INIT_WORLD_STATES) vanilla::SMSG_INIT_WORLD_STATES (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_UPDATE_WORLD_STATE&& obj) {
         opcode = Opcode::SMSG_UPDATE_WORLD_STATE;
-        new (&this->SMSG_UPDATE_WORLD_STATE) vanilla::SMSG_UPDATE_WORLD_STATE (obj);
+        new (&this->SMSG_UPDATE_WORLD_STATE) vanilla::SMSG_UPDATE_WORLD_STATE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_ITEM_NAME_QUERY_RESPONSE&& obj) {
         opcode = Opcode::SMSG_ITEM_NAME_QUERY_RESPONSE;
-        new (&this->SMSG_ITEM_NAME_QUERY_RESPONSE) vanilla::SMSG_ITEM_NAME_QUERY_RESPONSE (obj);
+        new (&this->SMSG_ITEM_NAME_QUERY_RESPONSE) vanilla::SMSG_ITEM_NAME_QUERY_RESPONSE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_PET_ACTION_FEEDBACK&& obj) {
         opcode = Opcode::SMSG_PET_ACTION_FEEDBACK;
-        new (&this->SMSG_PET_ACTION_FEEDBACK) vanilla::SMSG_PET_ACTION_FEEDBACK (obj);
+        new (&this->SMSG_PET_ACTION_FEEDBACK) vanilla::SMSG_PET_ACTION_FEEDBACK (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_CHAR_RENAME&& obj) {
         opcode = Opcode::SMSG_CHAR_RENAME;
-        new (&this->SMSG_CHAR_RENAME) vanilla::SMSG_CHAR_RENAME (obj);
+        new (&this->SMSG_CHAR_RENAME) vanilla::SMSG_CHAR_RENAME (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_INSTANCE_SAVE_CREATED&& obj) {
         opcode = Opcode::SMSG_INSTANCE_SAVE_CREATED;
-        new (&this->SMSG_INSTANCE_SAVE_CREATED) vanilla::SMSG_INSTANCE_SAVE_CREATED (obj);
+        new (&this->SMSG_INSTANCE_SAVE_CREATED) vanilla::SMSG_INSTANCE_SAVE_CREATED (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_RAID_INSTANCE_INFO&& obj) {
         opcode = Opcode::SMSG_RAID_INSTANCE_INFO;
-        new (&this->SMSG_RAID_INSTANCE_INFO) vanilla::SMSG_RAID_INSTANCE_INFO (obj);
+        new (&this->SMSG_RAID_INSTANCE_INFO) vanilla::SMSG_RAID_INSTANCE_INFO (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_PLAY_SOUND&& obj) {
         opcode = Opcode::SMSG_PLAY_SOUND;
-        new (&this->SMSG_PLAY_SOUND) vanilla::SMSG_PLAY_SOUND (obj);
+        new (&this->SMSG_PLAY_SOUND) vanilla::SMSG_PLAY_SOUND (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_BATTLEFIELD_STATUS&& obj) {
         opcode = Opcode::SMSG_BATTLEFIELD_STATUS;
-        new (&this->SMSG_BATTLEFIELD_STATUS) vanilla::SMSG_BATTLEFIELD_STATUS (obj);
+        new (&this->SMSG_BATTLEFIELD_STATUS) vanilla::SMSG_BATTLEFIELD_STATUS (std::move(obj));
     }
     explicit ServerOpcode(vanilla::MSG_INSPECT_HONOR_STATS_Server&& obj) {
         opcode = Opcode::MSG_INSPECT_HONOR_STATS;
-        new (&this->MSG_INSPECT_HONOR_STATS) vanilla::MSG_INSPECT_HONOR_STATS_Server (obj);
+        new (&this->MSG_INSPECT_HONOR_STATS) vanilla::MSG_INSPECT_HONOR_STATS_Server (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_FORCE_WALK_SPEED_CHANGE&& obj) {
         opcode = Opcode::SMSG_FORCE_WALK_SPEED_CHANGE;
-        new (&this->SMSG_FORCE_WALK_SPEED_CHANGE) vanilla::SMSG_FORCE_WALK_SPEED_CHANGE (obj);
+        new (&this->SMSG_FORCE_WALK_SPEED_CHANGE) vanilla::SMSG_FORCE_WALK_SPEED_CHANGE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_FORCE_SWIM_BACK_SPEED_CHANGE&& obj) {
         opcode = Opcode::SMSG_FORCE_SWIM_BACK_SPEED_CHANGE;
-        new (&this->SMSG_FORCE_SWIM_BACK_SPEED_CHANGE) vanilla::SMSG_FORCE_SWIM_BACK_SPEED_CHANGE (obj);
+        new (&this->SMSG_FORCE_SWIM_BACK_SPEED_CHANGE) vanilla::SMSG_FORCE_SWIM_BACK_SPEED_CHANGE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_FORCE_TURN_RATE_CHANGE&& obj) {
         opcode = Opcode::SMSG_FORCE_TURN_RATE_CHANGE;
-        new (&this->SMSG_FORCE_TURN_RATE_CHANGE) vanilla::SMSG_FORCE_TURN_RATE_CHANGE (obj);
+        new (&this->SMSG_FORCE_TURN_RATE_CHANGE) vanilla::SMSG_FORCE_TURN_RATE_CHANGE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::MSG_PVP_LOG_DATA_Server&& obj) {
         opcode = Opcode::MSG_PVP_LOG_DATA;
-        new (&this->MSG_PVP_LOG_DATA) vanilla::MSG_PVP_LOG_DATA_Server (obj);
+        new (&this->MSG_PVP_LOG_DATA) vanilla::MSG_PVP_LOG_DATA_Server (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_AREA_SPIRIT_HEALER_TIME&& obj) {
         opcode = Opcode::SMSG_AREA_SPIRIT_HEALER_TIME;
-        new (&this->SMSG_AREA_SPIRIT_HEALER_TIME) vanilla::SMSG_AREA_SPIRIT_HEALER_TIME (obj);
+        new (&this->SMSG_AREA_SPIRIT_HEALER_TIME) vanilla::SMSG_AREA_SPIRIT_HEALER_TIME (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_WARDEN_DATA&& obj) {
         opcode = Opcode::SMSG_WARDEN_DATA;
-        new (&this->SMSG_WARDEN_DATA) vanilla::SMSG_WARDEN_DATA (obj);
+        new (&this->SMSG_WARDEN_DATA) vanilla::SMSG_WARDEN_DATA (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_GROUP_JOINED_BATTLEGROUND&& obj) {
         opcode = Opcode::SMSG_GROUP_JOINED_BATTLEGROUND;
-        new (&this->SMSG_GROUP_JOINED_BATTLEGROUND) vanilla::SMSG_GROUP_JOINED_BATTLEGROUND (obj);
+        new (&this->SMSG_GROUP_JOINED_BATTLEGROUND) vanilla::SMSG_GROUP_JOINED_BATTLEGROUND (std::move(obj));
     }
     explicit ServerOpcode(vanilla::MSG_BATTLEGROUND_PLAYER_POSITIONS_Server&& obj) {
         opcode = Opcode::MSG_BATTLEGROUND_PLAYER_POSITIONS;
-        new (&this->MSG_BATTLEGROUND_PLAYER_POSITIONS) vanilla::MSG_BATTLEGROUND_PLAYER_POSITIONS_Server (obj);
+        new (&this->MSG_BATTLEGROUND_PLAYER_POSITIONS) vanilla::MSG_BATTLEGROUND_PLAYER_POSITIONS_Server (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_BINDER_CONFIRM&& obj) {
         opcode = Opcode::SMSG_BINDER_CONFIRM;
-        new (&this->SMSG_BINDER_CONFIRM) vanilla::SMSG_BINDER_CONFIRM (obj);
+        new (&this->SMSG_BINDER_CONFIRM) vanilla::SMSG_BINDER_CONFIRM (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_BATTLEGROUND_PLAYER_JOINED&& obj) {
         opcode = Opcode::SMSG_BATTLEGROUND_PLAYER_JOINED;
-        new (&this->SMSG_BATTLEGROUND_PLAYER_JOINED) vanilla::SMSG_BATTLEGROUND_PLAYER_JOINED (obj);
+        new (&this->SMSG_BATTLEGROUND_PLAYER_JOINED) vanilla::SMSG_BATTLEGROUND_PLAYER_JOINED (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_BATTLEGROUND_PLAYER_LEFT&& obj) {
         opcode = Opcode::SMSG_BATTLEGROUND_PLAYER_LEFT;
-        new (&this->SMSG_BATTLEGROUND_PLAYER_LEFT) vanilla::SMSG_BATTLEGROUND_PLAYER_LEFT (obj);
+        new (&this->SMSG_BATTLEGROUND_PLAYER_LEFT) vanilla::SMSG_BATTLEGROUND_PLAYER_LEFT (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_ADDON_INFO&& obj) {
         opcode = Opcode::SMSG_ADDON_INFO;
-        new (&this->SMSG_ADDON_INFO) vanilla::SMSG_ADDON_INFO (obj);
+        new (&this->SMSG_ADDON_INFO) vanilla::SMSG_ADDON_INFO (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_PET_UNLEARN_CONFIRM&& obj) {
         opcode = Opcode::SMSG_PET_UNLEARN_CONFIRM;
-        new (&this->SMSG_PET_UNLEARN_CONFIRM) vanilla::SMSG_PET_UNLEARN_CONFIRM (obj);
+        new (&this->SMSG_PET_UNLEARN_CONFIRM) vanilla::SMSG_PET_UNLEARN_CONFIRM (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_PARTY_MEMBER_STATS_FULL&& obj) {
         opcode = Opcode::SMSG_PARTY_MEMBER_STATS_FULL;
-        new (&this->SMSG_PARTY_MEMBER_STATS_FULL) vanilla::SMSG_PARTY_MEMBER_STATS_FULL (obj);
+        new (&this->SMSG_PARTY_MEMBER_STATS_FULL) vanilla::SMSG_PARTY_MEMBER_STATS_FULL (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_WEATHER&& obj) {
         opcode = Opcode::SMSG_WEATHER;
-        new (&this->SMSG_WEATHER) vanilla::SMSG_WEATHER (obj);
+        new (&this->SMSG_WEATHER) vanilla::SMSG_WEATHER (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_RAID_INSTANCE_MESSAGE&& obj) {
         opcode = Opcode::SMSG_RAID_INSTANCE_MESSAGE;
-        new (&this->SMSG_RAID_INSTANCE_MESSAGE) vanilla::SMSG_RAID_INSTANCE_MESSAGE (obj);
+        new (&this->SMSG_RAID_INSTANCE_MESSAGE) vanilla::SMSG_RAID_INSTANCE_MESSAGE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_CHAT_RESTRICTED&& obj) {
         opcode = Opcode::SMSG_CHAT_RESTRICTED;
-        new (&this->SMSG_CHAT_RESTRICTED) vanilla::SMSG_CHAT_RESTRICTED (obj);
+        new (&this->SMSG_CHAT_RESTRICTED) vanilla::SMSG_CHAT_RESTRICTED (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SPLINE_SET_RUN_SPEED&& obj) {
         opcode = Opcode::SMSG_SPLINE_SET_RUN_SPEED;
-        new (&this->SMSG_SPLINE_SET_RUN_SPEED) vanilla::SMSG_SPLINE_SET_RUN_SPEED (obj);
+        new (&this->SMSG_SPLINE_SET_RUN_SPEED) vanilla::SMSG_SPLINE_SET_RUN_SPEED (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SPLINE_SET_RUN_BACK_SPEED&& obj) {
         opcode = Opcode::SMSG_SPLINE_SET_RUN_BACK_SPEED;
-        new (&this->SMSG_SPLINE_SET_RUN_BACK_SPEED) vanilla::SMSG_SPLINE_SET_RUN_BACK_SPEED (obj);
+        new (&this->SMSG_SPLINE_SET_RUN_BACK_SPEED) vanilla::SMSG_SPLINE_SET_RUN_BACK_SPEED (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SPLINE_SET_SWIM_SPEED&& obj) {
         opcode = Opcode::SMSG_SPLINE_SET_SWIM_SPEED;
-        new (&this->SMSG_SPLINE_SET_SWIM_SPEED) vanilla::SMSG_SPLINE_SET_SWIM_SPEED (obj);
+        new (&this->SMSG_SPLINE_SET_SWIM_SPEED) vanilla::SMSG_SPLINE_SET_SWIM_SPEED (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SPLINE_SET_WALK_SPEED&& obj) {
         opcode = Opcode::SMSG_SPLINE_SET_WALK_SPEED;
-        new (&this->SMSG_SPLINE_SET_WALK_SPEED) vanilla::SMSG_SPLINE_SET_WALK_SPEED (obj);
+        new (&this->SMSG_SPLINE_SET_WALK_SPEED) vanilla::SMSG_SPLINE_SET_WALK_SPEED (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SPLINE_SET_SWIM_BACK_SPEED&& obj) {
         opcode = Opcode::SMSG_SPLINE_SET_SWIM_BACK_SPEED;
-        new (&this->SMSG_SPLINE_SET_SWIM_BACK_SPEED) vanilla::SMSG_SPLINE_SET_SWIM_BACK_SPEED (obj);
+        new (&this->SMSG_SPLINE_SET_SWIM_BACK_SPEED) vanilla::SMSG_SPLINE_SET_SWIM_BACK_SPEED (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SPLINE_SET_TURN_RATE&& obj) {
         opcode = Opcode::SMSG_SPLINE_SET_TURN_RATE;
-        new (&this->SMSG_SPLINE_SET_TURN_RATE) vanilla::SMSG_SPLINE_SET_TURN_RATE (obj);
+        new (&this->SMSG_SPLINE_SET_TURN_RATE) vanilla::SMSG_SPLINE_SET_TURN_RATE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SPLINE_MOVE_UNROOT&& obj) {
         opcode = Opcode::SMSG_SPLINE_MOVE_UNROOT;
-        new (&this->SMSG_SPLINE_MOVE_UNROOT) vanilla::SMSG_SPLINE_MOVE_UNROOT (obj);
+        new (&this->SMSG_SPLINE_MOVE_UNROOT) vanilla::SMSG_SPLINE_MOVE_UNROOT (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SPLINE_MOVE_FEATHER_FALL&& obj) {
         opcode = Opcode::SMSG_SPLINE_MOVE_FEATHER_FALL;
-        new (&this->SMSG_SPLINE_MOVE_FEATHER_FALL) vanilla::SMSG_SPLINE_MOVE_FEATHER_FALL (obj);
+        new (&this->SMSG_SPLINE_MOVE_FEATHER_FALL) vanilla::SMSG_SPLINE_MOVE_FEATHER_FALL (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SPLINE_MOVE_NORMAL_FALL&& obj) {
         opcode = Opcode::SMSG_SPLINE_MOVE_NORMAL_FALL;
-        new (&this->SMSG_SPLINE_MOVE_NORMAL_FALL) vanilla::SMSG_SPLINE_MOVE_NORMAL_FALL (obj);
+        new (&this->SMSG_SPLINE_MOVE_NORMAL_FALL) vanilla::SMSG_SPLINE_MOVE_NORMAL_FALL (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SPLINE_MOVE_SET_HOVER&& obj) {
         opcode = Opcode::SMSG_SPLINE_MOVE_SET_HOVER;
-        new (&this->SMSG_SPLINE_MOVE_SET_HOVER) vanilla::SMSG_SPLINE_MOVE_SET_HOVER (obj);
+        new (&this->SMSG_SPLINE_MOVE_SET_HOVER) vanilla::SMSG_SPLINE_MOVE_SET_HOVER (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SPLINE_MOVE_UNSET_HOVER&& obj) {
         opcode = Opcode::SMSG_SPLINE_MOVE_UNSET_HOVER;
-        new (&this->SMSG_SPLINE_MOVE_UNSET_HOVER) vanilla::SMSG_SPLINE_MOVE_UNSET_HOVER (obj);
+        new (&this->SMSG_SPLINE_MOVE_UNSET_HOVER) vanilla::SMSG_SPLINE_MOVE_UNSET_HOVER (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SPLINE_MOVE_WATER_WALK&& obj) {
         opcode = Opcode::SMSG_SPLINE_MOVE_WATER_WALK;
-        new (&this->SMSG_SPLINE_MOVE_WATER_WALK) vanilla::SMSG_SPLINE_MOVE_WATER_WALK (obj);
+        new (&this->SMSG_SPLINE_MOVE_WATER_WALK) vanilla::SMSG_SPLINE_MOVE_WATER_WALK (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SPLINE_MOVE_LAND_WALK&& obj) {
         opcode = Opcode::SMSG_SPLINE_MOVE_LAND_WALK;
-        new (&this->SMSG_SPLINE_MOVE_LAND_WALK) vanilla::SMSG_SPLINE_MOVE_LAND_WALK (obj);
+        new (&this->SMSG_SPLINE_MOVE_LAND_WALK) vanilla::SMSG_SPLINE_MOVE_LAND_WALK (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SPLINE_MOVE_START_SWIM&& obj) {
         opcode = Opcode::SMSG_SPLINE_MOVE_START_SWIM;
-        new (&this->SMSG_SPLINE_MOVE_START_SWIM) vanilla::SMSG_SPLINE_MOVE_START_SWIM (obj);
+        new (&this->SMSG_SPLINE_MOVE_START_SWIM) vanilla::SMSG_SPLINE_MOVE_START_SWIM (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SPLINE_MOVE_STOP_SWIM&& obj) {
         opcode = Opcode::SMSG_SPLINE_MOVE_STOP_SWIM;
-        new (&this->SMSG_SPLINE_MOVE_STOP_SWIM) vanilla::SMSG_SPLINE_MOVE_STOP_SWIM (obj);
+        new (&this->SMSG_SPLINE_MOVE_STOP_SWIM) vanilla::SMSG_SPLINE_MOVE_STOP_SWIM (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SPLINE_MOVE_SET_RUN_MODE&& obj) {
         opcode = Opcode::SMSG_SPLINE_MOVE_SET_RUN_MODE;
-        new (&this->SMSG_SPLINE_MOVE_SET_RUN_MODE) vanilla::SMSG_SPLINE_MOVE_SET_RUN_MODE (obj);
+        new (&this->SMSG_SPLINE_MOVE_SET_RUN_MODE) vanilla::SMSG_SPLINE_MOVE_SET_RUN_MODE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SPLINE_MOVE_SET_WALK_MODE&& obj) {
         opcode = Opcode::SMSG_SPLINE_MOVE_SET_WALK_MODE;
-        new (&this->SMSG_SPLINE_MOVE_SET_WALK_MODE) vanilla::SMSG_SPLINE_MOVE_SET_WALK_MODE (obj);
+        new (&this->SMSG_SPLINE_MOVE_SET_WALK_MODE) vanilla::SMSG_SPLINE_MOVE_SET_WALK_MODE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::MSG_MOVE_TIME_SKIPPED_Server&& obj) {
         opcode = Opcode::MSG_MOVE_TIME_SKIPPED;
-        new (&this->MSG_MOVE_TIME_SKIPPED) vanilla::MSG_MOVE_TIME_SKIPPED_Server (obj);
+        new (&this->MSG_MOVE_TIME_SKIPPED) vanilla::MSG_MOVE_TIME_SKIPPED_Server (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SPLINE_MOVE_ROOT&& obj) {
         opcode = Opcode::SMSG_SPLINE_MOVE_ROOT;
-        new (&this->SMSG_SPLINE_MOVE_ROOT) vanilla::SMSG_SPLINE_MOVE_ROOT (obj);
+        new (&this->SMSG_SPLINE_MOVE_ROOT) vanilla::SMSG_SPLINE_MOVE_ROOT (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_INVALIDATE_PLAYER&& obj) {
         opcode = Opcode::SMSG_INVALIDATE_PLAYER;
-        new (&this->SMSG_INVALIDATE_PLAYER) vanilla::SMSG_INVALIDATE_PLAYER (obj);
+        new (&this->SMSG_INVALIDATE_PLAYER) vanilla::SMSG_INVALIDATE_PLAYER (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_INSTANCE_RESET&& obj) {
         opcode = Opcode::SMSG_INSTANCE_RESET;
-        new (&this->SMSG_INSTANCE_RESET) vanilla::SMSG_INSTANCE_RESET (obj);
+        new (&this->SMSG_INSTANCE_RESET) vanilla::SMSG_INSTANCE_RESET (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_INSTANCE_RESET_FAILED&& obj) {
         opcode = Opcode::SMSG_INSTANCE_RESET_FAILED;
-        new (&this->SMSG_INSTANCE_RESET_FAILED) vanilla::SMSG_INSTANCE_RESET_FAILED (obj);
+        new (&this->SMSG_INSTANCE_RESET_FAILED) vanilla::SMSG_INSTANCE_RESET_FAILED (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_UPDATE_LAST_INSTANCE&& obj) {
         opcode = Opcode::SMSG_UPDATE_LAST_INSTANCE;
-        new (&this->SMSG_UPDATE_LAST_INSTANCE) vanilla::SMSG_UPDATE_LAST_INSTANCE (obj);
+        new (&this->SMSG_UPDATE_LAST_INSTANCE) vanilla::SMSG_UPDATE_LAST_INSTANCE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::MSG_RAID_TARGET_UPDATE_Server&& obj) {
         opcode = Opcode::MSG_RAID_TARGET_UPDATE;
-        new (&this->MSG_RAID_TARGET_UPDATE) vanilla::MSG_RAID_TARGET_UPDATE_Server (obj);
+        new (&this->MSG_RAID_TARGET_UPDATE) vanilla::MSG_RAID_TARGET_UPDATE_Server (std::move(obj));
+    }
+    explicit ServerOpcode(vanilla::MSG_RAID_READY_CHECK_Server&& obj) {
+        opcode = Opcode::MSG_RAID_READY_CHECK;
+        new (&this->MSG_RAID_READY_CHECK) vanilla::MSG_RAID_READY_CHECK_Server (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_PET_ACTION_SOUND&& obj) {
         opcode = Opcode::SMSG_PET_ACTION_SOUND;
-        new (&this->SMSG_PET_ACTION_SOUND) vanilla::SMSG_PET_ACTION_SOUND (obj);
+        new (&this->SMSG_PET_ACTION_SOUND) vanilla::SMSG_PET_ACTION_SOUND (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_PET_DISMISS_SOUND&& obj) {
         opcode = Opcode::SMSG_PET_DISMISS_SOUND;
-        new (&this->SMSG_PET_DISMISS_SOUND) vanilla::SMSG_PET_DISMISS_SOUND (obj);
+        new (&this->SMSG_PET_DISMISS_SOUND) vanilla::SMSG_PET_DISMISS_SOUND (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_GM_TICKET_STATUS_UPDATE&& obj) {
         opcode = Opcode::SMSG_GM_TICKET_STATUS_UPDATE;
-        new (&this->SMSG_GM_TICKET_STATUS_UPDATE) vanilla::SMSG_GM_TICKET_STATUS_UPDATE (obj);
+        new (&this->SMSG_GM_TICKET_STATUS_UPDATE) vanilla::SMSG_GM_TICKET_STATUS_UPDATE (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_UPDATE_INSTANCE_OWNERSHIP&& obj) {
         opcode = Opcode::SMSG_UPDATE_INSTANCE_OWNERSHIP;
-        new (&this->SMSG_UPDATE_INSTANCE_OWNERSHIP) vanilla::SMSG_UPDATE_INSTANCE_OWNERSHIP (obj);
+        new (&this->SMSG_UPDATE_INSTANCE_OWNERSHIP) vanilla::SMSG_UPDATE_INSTANCE_OWNERSHIP (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SPELLINSTAKILLLOG&& obj) {
         opcode = Opcode::SMSG_SPELLINSTAKILLLOG;
-        new (&this->SMSG_SPELLINSTAKILLLOG) vanilla::SMSG_SPELLINSTAKILLLOG (obj);
+        new (&this->SMSG_SPELLINSTAKILLLOG) vanilla::SMSG_SPELLINSTAKILLLOG (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_SPELL_UPDATE_CHAIN_TARGETS&& obj) {
         opcode = Opcode::SMSG_SPELL_UPDATE_CHAIN_TARGETS;
-        new (&this->SMSG_SPELL_UPDATE_CHAIN_TARGETS) vanilla::SMSG_SPELL_UPDATE_CHAIN_TARGETS (obj);
+        new (&this->SMSG_SPELL_UPDATE_CHAIN_TARGETS) vanilla::SMSG_SPELL_UPDATE_CHAIN_TARGETS (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_EXPECTED_SPAM_RECORDS&& obj) {
         opcode = Opcode::SMSG_EXPECTED_SPAM_RECORDS;
-        new (&this->SMSG_EXPECTED_SPAM_RECORDS) vanilla::SMSG_EXPECTED_SPAM_RECORDS (obj);
+        new (&this->SMSG_EXPECTED_SPAM_RECORDS) vanilla::SMSG_EXPECTED_SPAM_RECORDS (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_DEFENSE_MESSAGE&& obj) {
         opcode = Opcode::SMSG_DEFENSE_MESSAGE;
-        new (&this->SMSG_DEFENSE_MESSAGE) vanilla::SMSG_DEFENSE_MESSAGE (obj);
+        new (&this->SMSG_DEFENSE_MESSAGE) vanilla::SMSG_DEFENSE_MESSAGE (std::move(obj));
     }
-};
-std::vector<unsigned char> write_opcode(const ServerOpcode& opcode);
 
-ServerOpcode read_server_opcode(Reader& reader);
+    template<typename T>
+    // NOLINTNEXTLINE
+    T& get(); // All possible types have been specialized
+
+    template<typename T>
+    // NOLINTNEXTLINE
+    T* get_if(); // All possible types have been specialized
+};
+
+template<>
+vanilla::SMSG_CHAR_CREATE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_CHAR_CREATE& ServerOpcode::get();
+template<>
+vanilla::SMSG_CHAR_ENUM* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_CHAR_ENUM& ServerOpcode::get();
+template<>
+vanilla::SMSG_CHAR_DELETE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_CHAR_DELETE& ServerOpcode::get();
+template<>
+vanilla::SMSG_NEW_WORLD* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_NEW_WORLD& ServerOpcode::get();
+template<>
+vanilla::SMSG_TRANSFER_PENDING* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_TRANSFER_PENDING& ServerOpcode::get();
+template<>
+vanilla::SMSG_TRANSFER_ABORTED* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_TRANSFER_ABORTED& ServerOpcode::get();
+template<>
+vanilla::SMSG_CHARACTER_LOGIN_FAILED* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_CHARACTER_LOGIN_FAILED& ServerOpcode::get();
+template<>
+vanilla::SMSG_LOGIN_SETTIMESPEED* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_LOGIN_SETTIMESPEED& ServerOpcode::get();
+template<>
+vanilla::SMSG_LOGOUT_RESPONSE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_LOGOUT_RESPONSE& ServerOpcode::get();
+template<>
+vanilla::SMSG_LOGOUT_COMPLETE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_LOGOUT_COMPLETE& ServerOpcode::get();
+template<>
+vanilla::SMSG_LOGOUT_CANCEL_ACK* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_LOGOUT_CANCEL_ACK& ServerOpcode::get();
+template<>
+vanilla::SMSG_NAME_QUERY_RESPONSE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_NAME_QUERY_RESPONSE& ServerOpcode::get();
+template<>
+vanilla::SMSG_PET_NAME_QUERY_RESPONSE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_PET_NAME_QUERY_RESPONSE& ServerOpcode::get();
+template<>
+vanilla::SMSG_GUILD_QUERY_RESPONSE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_GUILD_QUERY_RESPONSE& ServerOpcode::get();
+template<>
+vanilla::SMSG_ITEM_QUERY_SINGLE_RESPONSE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_ITEM_QUERY_SINGLE_RESPONSE& ServerOpcode::get();
+template<>
+vanilla::SMSG_PAGE_TEXT_QUERY_RESPONSE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_PAGE_TEXT_QUERY_RESPONSE& ServerOpcode::get();
+template<>
+vanilla::SMSG_QUEST_QUERY_RESPONSE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_QUEST_QUERY_RESPONSE& ServerOpcode::get();
+template<>
+vanilla::SMSG_GAMEOBJECT_QUERY_RESPONSE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_GAMEOBJECT_QUERY_RESPONSE& ServerOpcode::get();
+template<>
+vanilla::SMSG_CREATURE_QUERY_RESPONSE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_CREATURE_QUERY_RESPONSE& ServerOpcode::get();
+template<>
+vanilla::SMSG_WHO* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_WHO& ServerOpcode::get();
+template<>
+vanilla::SMSG_WHOIS* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_WHOIS& ServerOpcode::get();
+template<>
+vanilla::SMSG_FRIEND_LIST* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_FRIEND_LIST& ServerOpcode::get();
+template<>
+vanilla::SMSG_FRIEND_STATUS* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_FRIEND_STATUS& ServerOpcode::get();
+template<>
+vanilla::SMSG_IGNORE_LIST* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_IGNORE_LIST& ServerOpcode::get();
+template<>
+vanilla::SMSG_GROUP_INVITE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_GROUP_INVITE& ServerOpcode::get();
+template<>
+vanilla::SMSG_GROUP_DECLINE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_GROUP_DECLINE& ServerOpcode::get();
+template<>
+vanilla::SMSG_GROUP_UNINVITE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_GROUP_UNINVITE& ServerOpcode::get();
+template<>
+vanilla::SMSG_GROUP_SET_LEADER* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_GROUP_SET_LEADER& ServerOpcode::get();
+template<>
+vanilla::SMSG_GROUP_DESTROYED* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_GROUP_DESTROYED& ServerOpcode::get();
+template<>
+vanilla::SMSG_GROUP_LIST* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_GROUP_LIST& ServerOpcode::get();
+template<>
+vanilla::SMSG_PARTY_MEMBER_STATS* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_PARTY_MEMBER_STATS& ServerOpcode::get();
+template<>
+vanilla::SMSG_PARTY_COMMAND_RESULT* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_PARTY_COMMAND_RESULT& ServerOpcode::get();
+template<>
+vanilla::SMSG_GUILD_INVITE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_GUILD_INVITE& ServerOpcode::get();
+template<>
+vanilla::SMSG_GUILD_INFO* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_GUILD_INFO& ServerOpcode::get();
+template<>
+vanilla::SMSG_GUILD_ROSTER* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_GUILD_ROSTER& ServerOpcode::get();
+template<>
+vanilla::SMSG_GUILD_EVENT* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_GUILD_EVENT& ServerOpcode::get();
+template<>
+vanilla::SMSG_GUILD_COMMAND_RESULT* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_GUILD_COMMAND_RESULT& ServerOpcode::get();
+template<>
+vanilla::SMSG_MESSAGECHAT* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_MESSAGECHAT& ServerOpcode::get();
+template<>
+vanilla::SMSG_CHANNEL_NOTIFY* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_CHANNEL_NOTIFY& ServerOpcode::get();
+template<>
+vanilla::SMSG_CHANNEL_LIST* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_CHANNEL_LIST& ServerOpcode::get();
+template<>
+vanilla::SMSG_UPDATE_OBJECT* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_UPDATE_OBJECT& ServerOpcode::get();
+template<>
+vanilla::SMSG_DESTROY_OBJECT* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_DESTROY_OBJECT& ServerOpcode::get();
+template<>
+vanilla::SMSG_READ_ITEM_OK* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_READ_ITEM_OK& ServerOpcode::get();
+template<>
+vanilla::SMSG_READ_ITEM_FAILED* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_READ_ITEM_FAILED& ServerOpcode::get();
+template<>
+vanilla::SMSG_ITEM_COOLDOWN* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_ITEM_COOLDOWN& ServerOpcode::get();
+template<>
+vanilla::SMSG_GAMEOBJECT_CUSTOM_ANIM* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_GAMEOBJECT_CUSTOM_ANIM& ServerOpcode::get();
+template<>
+vanilla::MSG_MOVE_START_FORWARD_Server* ServerOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_START_FORWARD_Server& ServerOpcode::get();
+template<>
+vanilla::MSG_MOVE_START_BACKWARD_Server* ServerOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_START_BACKWARD_Server& ServerOpcode::get();
+template<>
+vanilla::MSG_MOVE_STOP_Server* ServerOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_STOP_Server& ServerOpcode::get();
+template<>
+vanilla::MSG_MOVE_START_STRAFE_LEFT_Server* ServerOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_START_STRAFE_LEFT_Server& ServerOpcode::get();
+template<>
+vanilla::MSG_MOVE_START_STRAFE_RIGHT_Server* ServerOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_START_STRAFE_RIGHT_Server& ServerOpcode::get();
+template<>
+vanilla::MSG_MOVE_STOP_STRAFE_Server* ServerOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_STOP_STRAFE_Server& ServerOpcode::get();
+template<>
+vanilla::MSG_MOVE_JUMP_Server* ServerOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_JUMP_Server& ServerOpcode::get();
+template<>
+vanilla::MSG_MOVE_START_TURN_LEFT_Server* ServerOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_START_TURN_LEFT_Server& ServerOpcode::get();
+template<>
+vanilla::MSG_MOVE_START_TURN_RIGHT_Server* ServerOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_START_TURN_RIGHT_Server& ServerOpcode::get();
+template<>
+vanilla::MSG_MOVE_STOP_TURN_Server* ServerOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_STOP_TURN_Server& ServerOpcode::get();
+template<>
+vanilla::MSG_MOVE_START_PITCH_UP_Server* ServerOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_START_PITCH_UP_Server& ServerOpcode::get();
+template<>
+vanilla::MSG_MOVE_START_PITCH_DOWN_Server* ServerOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_START_PITCH_DOWN_Server& ServerOpcode::get();
+template<>
+vanilla::MSG_MOVE_STOP_PITCH_Server* ServerOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_STOP_PITCH_Server& ServerOpcode::get();
+template<>
+vanilla::MSG_MOVE_SET_RUN_MODE_Server* ServerOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_SET_RUN_MODE_Server& ServerOpcode::get();
+template<>
+vanilla::MSG_MOVE_SET_WALK_MODE_Server* ServerOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_SET_WALK_MODE_Server& ServerOpcode::get();
+template<>
+vanilla::MSG_MOVE_TELEPORT_ACK_Server* ServerOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_TELEPORT_ACK_Server& ServerOpcode::get();
+template<>
+vanilla::MSG_MOVE_FALL_LAND_Server* ServerOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_FALL_LAND_Server& ServerOpcode::get();
+template<>
+vanilla::MSG_MOVE_START_SWIM_Server* ServerOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_START_SWIM_Server& ServerOpcode::get();
+template<>
+vanilla::MSG_MOVE_STOP_SWIM_Server* ServerOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_STOP_SWIM_Server& ServerOpcode::get();
+template<>
+vanilla::MSG_MOVE_SET_FACING_Server* ServerOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_SET_FACING_Server& ServerOpcode::get();
+template<>
+vanilla::MSG_MOVE_SET_PITCH_Server* ServerOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_SET_PITCH_Server& ServerOpcode::get();
+template<>
+vanilla::MSG_MOVE_WORLDPORT_ACK* ServerOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_WORLDPORT_ACK& ServerOpcode::get();
+template<>
+vanilla::SMSG_MONSTER_MOVE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_MONSTER_MOVE& ServerOpcode::get();
+template<>
+vanilla::SMSG_MOVE_WATER_WALK* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_MOVE_WATER_WALK& ServerOpcode::get();
+template<>
+vanilla::SMSG_MOVE_LAND_WALK* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_MOVE_LAND_WALK& ServerOpcode::get();
+template<>
+vanilla::SMSG_FORCE_RUN_SPEED_CHANGE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_FORCE_RUN_SPEED_CHANGE& ServerOpcode::get();
+template<>
+vanilla::SMSG_FORCE_RUN_BACK_SPEED_CHANGE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_FORCE_RUN_BACK_SPEED_CHANGE& ServerOpcode::get();
+template<>
+vanilla::SMSG_FORCE_SWIM_SPEED_CHANGE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_FORCE_SWIM_SPEED_CHANGE& ServerOpcode::get();
+template<>
+vanilla::SMSG_FORCE_MOVE_ROOT* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_FORCE_MOVE_ROOT& ServerOpcode::get();
+template<>
+vanilla::SMSG_FORCE_MOVE_UNROOT* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_FORCE_MOVE_UNROOT& ServerOpcode::get();
+template<>
+vanilla::MSG_MOVE_HEARTBEAT_Server* ServerOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_HEARTBEAT_Server& ServerOpcode::get();
+template<>
+vanilla::SMSG_MOVE_KNOCK_BACK* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_MOVE_KNOCK_BACK& ServerOpcode::get();
+template<>
+vanilla::SMSG_MOVE_FEATHER_FALL* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_MOVE_FEATHER_FALL& ServerOpcode::get();
+template<>
+vanilla::SMSG_MOVE_NORMAL_FALL* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_MOVE_NORMAL_FALL& ServerOpcode::get();
+template<>
+vanilla::SMSG_MOVE_SET_HOVER* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_MOVE_SET_HOVER& ServerOpcode::get();
+template<>
+vanilla::SMSG_MOVE_UNSET_HOVER* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_MOVE_UNSET_HOVER& ServerOpcode::get();
+template<>
+vanilla::SMSG_TRIGGER_CINEMATIC* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_TRIGGER_CINEMATIC& ServerOpcode::get();
+template<>
+vanilla::SMSG_TUTORIAL_FLAGS* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_TUTORIAL_FLAGS& ServerOpcode::get();
+template<>
+vanilla::SMSG_EMOTE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_EMOTE& ServerOpcode::get();
+template<>
+vanilla::SMSG_TEXT_EMOTE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_TEXT_EMOTE& ServerOpcode::get();
+template<>
+vanilla::SMSG_INVENTORY_CHANGE_FAILURE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_INVENTORY_CHANGE_FAILURE& ServerOpcode::get();
+template<>
+vanilla::SMSG_OPEN_CONTAINER* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_OPEN_CONTAINER& ServerOpcode::get();
+template<>
+vanilla::SMSG_INSPECT* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_INSPECT& ServerOpcode::get();
+template<>
+vanilla::SMSG_TRADE_STATUS* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_TRADE_STATUS& ServerOpcode::get();
+template<>
+vanilla::SMSG_TRADE_STATUS_EXTENDED* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_TRADE_STATUS_EXTENDED& ServerOpcode::get();
+template<>
+vanilla::SMSG_INITIALIZE_FACTIONS* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_INITIALIZE_FACTIONS& ServerOpcode::get();
+template<>
+vanilla::SMSG_SET_FACTION_VISIBLE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SET_FACTION_VISIBLE& ServerOpcode::get();
+template<>
+vanilla::SMSG_SET_FACTION_STANDING* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SET_FACTION_STANDING& ServerOpcode::get();
+template<>
+vanilla::SMSG_SET_PROFICIENCY* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SET_PROFICIENCY& ServerOpcode::get();
+template<>
+vanilla::SMSG_ACTION_BUTTONS* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_ACTION_BUTTONS& ServerOpcode::get();
+template<>
+vanilla::SMSG_INITIAL_SPELLS* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_INITIAL_SPELLS& ServerOpcode::get();
+template<>
+vanilla::SMSG_LEARNED_SPELL* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_LEARNED_SPELL& ServerOpcode::get();
+template<>
+vanilla::SMSG_SUPERCEDED_SPELL* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SUPERCEDED_SPELL& ServerOpcode::get();
+template<>
+vanilla::SMSG_CAST_RESULT* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_CAST_RESULT& ServerOpcode::get();
+template<>
+vanilla::SMSG_SPELL_START* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SPELL_START& ServerOpcode::get();
+template<>
+vanilla::SMSG_SPELL_GO* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SPELL_GO& ServerOpcode::get();
+template<>
+vanilla::SMSG_SPELL_FAILURE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SPELL_FAILURE& ServerOpcode::get();
+template<>
+vanilla::SMSG_SPELL_COOLDOWN* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SPELL_COOLDOWN& ServerOpcode::get();
+template<>
+vanilla::SMSG_COOLDOWN_EVENT* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_COOLDOWN_EVENT& ServerOpcode::get();
+template<>
+vanilla::SMSG_UPDATE_AURA_DURATION* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_UPDATE_AURA_DURATION& ServerOpcode::get();
+template<>
+vanilla::SMSG_PET_CAST_FAILED* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_PET_CAST_FAILED& ServerOpcode::get();
+template<>
+vanilla::MSG_CHANNEL_START_Server* ServerOpcode::get_if();
+template<>
+vanilla::MSG_CHANNEL_START_Server& ServerOpcode::get();
+template<>
+vanilla::MSG_CHANNEL_UPDATE_Server* ServerOpcode::get_if();
+template<>
+vanilla::MSG_CHANNEL_UPDATE_Server& ServerOpcode::get();
+template<>
+vanilla::SMSG_AI_REACTION* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_AI_REACTION& ServerOpcode::get();
+template<>
+vanilla::SMSG_ATTACKSTART* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_ATTACKSTART& ServerOpcode::get();
+template<>
+vanilla::SMSG_ATTACKSTOP* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_ATTACKSTOP& ServerOpcode::get();
+template<>
+vanilla::SMSG_ATTACKSWING_NOTINRANGE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_ATTACKSWING_NOTINRANGE& ServerOpcode::get();
+template<>
+vanilla::SMSG_ATTACKSWING_BADFACING* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_ATTACKSWING_BADFACING& ServerOpcode::get();
+template<>
+vanilla::SMSG_ATTACKSWING_NOTSTANDING* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_ATTACKSWING_NOTSTANDING& ServerOpcode::get();
+template<>
+vanilla::SMSG_ATTACKSWING_DEADTARGET* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_ATTACKSWING_DEADTARGET& ServerOpcode::get();
+template<>
+vanilla::SMSG_ATTACKSWING_CANT_ATTACK* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_ATTACKSWING_CANT_ATTACK& ServerOpcode::get();
+template<>
+vanilla::SMSG_ATTACKERSTATEUPDATE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_ATTACKERSTATEUPDATE& ServerOpcode::get();
+template<>
+vanilla::SMSG_CANCEL_COMBAT* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_CANCEL_COMBAT& ServerOpcode::get();
+template<>
+vanilla::SMSG_SPELLHEALLOG* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SPELLHEALLOG& ServerOpcode::get();
+template<>
+vanilla::SMSG_SPELLENERGIZELOG* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SPELLENERGIZELOG& ServerOpcode::get();
+template<>
+vanilla::SMSG_BINDPOINTUPDATE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_BINDPOINTUPDATE& ServerOpcode::get();
+template<>
+vanilla::SMSG_PLAYERBOUND* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_PLAYERBOUND& ServerOpcode::get();
+template<>
+vanilla::SMSG_CLIENT_CONTROL_UPDATE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_CLIENT_CONTROL_UPDATE& ServerOpcode::get();
+template<>
+vanilla::SMSG_RESURRECT_REQUEST* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_RESURRECT_REQUEST& ServerOpcode::get();
+template<>
+vanilla::SMSG_LOOT_RESPONSE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_LOOT_RESPONSE& ServerOpcode::get();
+template<>
+vanilla::SMSG_LOOT_RELEASE_RESPONSE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_LOOT_RELEASE_RESPONSE& ServerOpcode::get();
+template<>
+vanilla::SMSG_LOOT_REMOVED* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_LOOT_REMOVED& ServerOpcode::get();
+template<>
+vanilla::SMSG_LOOT_MONEY_NOTIFY* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_LOOT_MONEY_NOTIFY& ServerOpcode::get();
+template<>
+vanilla::SMSG_LOOT_CLEAR_MONEY* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_LOOT_CLEAR_MONEY& ServerOpcode::get();
+template<>
+vanilla::SMSG_ITEM_PUSH_RESULT* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_ITEM_PUSH_RESULT& ServerOpcode::get();
+template<>
+vanilla::SMSG_DUEL_REQUESTED* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_DUEL_REQUESTED& ServerOpcode::get();
+template<>
+vanilla::SMSG_DUEL_OUTOFBOUNDS* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_DUEL_OUTOFBOUNDS& ServerOpcode::get();
+template<>
+vanilla::SMSG_DUEL_INBOUNDS* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_DUEL_INBOUNDS& ServerOpcode::get();
+template<>
+vanilla::SMSG_DUEL_COMPLETE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_DUEL_COMPLETE& ServerOpcode::get();
+template<>
+vanilla::SMSG_DUEL_WINNER* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_DUEL_WINNER& ServerOpcode::get();
+template<>
+vanilla::SMSG_MOUNTRESULT* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_MOUNTRESULT& ServerOpcode::get();
+template<>
+vanilla::SMSG_DISMOUNTRESULT* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_DISMOUNTRESULT& ServerOpcode::get();
+template<>
+vanilla::SMSG_MOUNTSPECIAL_ANIM* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_MOUNTSPECIAL_ANIM& ServerOpcode::get();
+template<>
+vanilla::SMSG_PET_TAME_FAILURE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_PET_TAME_FAILURE& ServerOpcode::get();
+template<>
+vanilla::SMSG_PET_NAME_INVALID* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_PET_NAME_INVALID& ServerOpcode::get();
+template<>
+vanilla::SMSG_PET_SPELLS* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_PET_SPELLS& ServerOpcode::get();
+template<>
+vanilla::SMSG_PET_MODE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_PET_MODE& ServerOpcode::get();
+template<>
+vanilla::SMSG_GOSSIP_MESSAGE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_GOSSIP_MESSAGE& ServerOpcode::get();
+template<>
+vanilla::SMSG_GOSSIP_COMPLETE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_GOSSIP_COMPLETE& ServerOpcode::get();
+template<>
+vanilla::SMSG_NPC_TEXT_UPDATE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_NPC_TEXT_UPDATE& ServerOpcode::get();
+template<>
+vanilla::SMSG_QUESTGIVER_STATUS* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_QUESTGIVER_STATUS& ServerOpcode::get();
+template<>
+vanilla::SMSG_QUESTGIVER_QUEST_LIST* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_QUESTGIVER_QUEST_LIST& ServerOpcode::get();
+template<>
+vanilla::SMSG_QUESTGIVER_QUEST_DETAILS* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_QUESTGIVER_QUEST_DETAILS& ServerOpcode::get();
+template<>
+vanilla::SMSG_QUESTGIVER_REQUEST_ITEMS* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_QUESTGIVER_REQUEST_ITEMS& ServerOpcode::get();
+template<>
+vanilla::SMSG_QUESTGIVER_OFFER_REWARD* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_QUESTGIVER_OFFER_REWARD& ServerOpcode::get();
+template<>
+vanilla::SMSG_QUESTGIVER_QUEST_INVALID* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_QUESTGIVER_QUEST_INVALID& ServerOpcode::get();
+template<>
+vanilla::SMSG_QUESTGIVER_QUEST_COMPLETE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_QUESTGIVER_QUEST_COMPLETE& ServerOpcode::get();
+template<>
+vanilla::SMSG_QUESTGIVER_QUEST_FAILED* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_QUESTGIVER_QUEST_FAILED& ServerOpcode::get();
+template<>
+vanilla::SMSG_QUESTLOG_FULL* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_QUESTLOG_FULL& ServerOpcode::get();
+template<>
+vanilla::SMSG_QUESTUPDATE_FAILED* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_QUESTUPDATE_FAILED& ServerOpcode::get();
+template<>
+vanilla::SMSG_QUESTUPDATE_FAILEDTIMER* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_QUESTUPDATE_FAILEDTIMER& ServerOpcode::get();
+template<>
+vanilla::SMSG_QUESTUPDATE_COMPLETE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_QUESTUPDATE_COMPLETE& ServerOpcode::get();
+template<>
+vanilla::SMSG_QUESTUPDATE_ADD_KILL* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_QUESTUPDATE_ADD_KILL& ServerOpcode::get();
+template<>
+vanilla::SMSG_QUESTUPDATE_ADD_ITEM* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_QUESTUPDATE_ADD_ITEM& ServerOpcode::get();
+template<>
+vanilla::SMSG_QUEST_CONFIRM_ACCEPT* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_QUEST_CONFIRM_ACCEPT& ServerOpcode::get();
+template<>
+vanilla::SMSG_LIST_INVENTORY* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_LIST_INVENTORY& ServerOpcode::get();
+template<>
+vanilla::SMSG_SELL_ITEM* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SELL_ITEM& ServerOpcode::get();
+template<>
+vanilla::SMSG_BUY_ITEM* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_BUY_ITEM& ServerOpcode::get();
+template<>
+vanilla::SMSG_BUY_FAILED* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_BUY_FAILED& ServerOpcode::get();
+template<>
+vanilla::SMSG_SHOWTAXINODES* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SHOWTAXINODES& ServerOpcode::get();
+template<>
+vanilla::SMSG_TAXINODE_STATUS* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_TAXINODE_STATUS& ServerOpcode::get();
+template<>
+vanilla::SMSG_ACTIVATETAXIREPLY* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_ACTIVATETAXIREPLY& ServerOpcode::get();
+template<>
+vanilla::SMSG_NEW_TAXI_PATH* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_NEW_TAXI_PATH& ServerOpcode::get();
+template<>
+vanilla::SMSG_TRAINER_LIST* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_TRAINER_LIST& ServerOpcode::get();
+template<>
+vanilla::SMSG_TRAINER_BUY_SUCCEEDED* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_TRAINER_BUY_SUCCEEDED& ServerOpcode::get();
+template<>
+vanilla::SMSG_TRAINER_BUY_FAILED* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_TRAINER_BUY_FAILED& ServerOpcode::get();
+template<>
+vanilla::SMSG_SHOW_BANK* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SHOW_BANK& ServerOpcode::get();
+template<>
+vanilla::SMSG_BUY_BANK_SLOT_RESULT* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_BUY_BANK_SLOT_RESULT& ServerOpcode::get();
+template<>
+vanilla::SMSG_PETITION_SHOWLIST* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_PETITION_SHOWLIST& ServerOpcode::get();
+template<>
+vanilla::SMSG_PETITION_SHOW_SIGNATURES* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_PETITION_SHOW_SIGNATURES& ServerOpcode::get();
+template<>
+vanilla::SMSG_PETITION_SIGN_RESULTS* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_PETITION_SIGN_RESULTS& ServerOpcode::get();
+template<>
+vanilla::MSG_PETITION_DECLINE* ServerOpcode::get_if();
+template<>
+vanilla::MSG_PETITION_DECLINE& ServerOpcode::get();
+template<>
+vanilla::SMSG_TURN_IN_PETITION_RESULTS* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_TURN_IN_PETITION_RESULTS& ServerOpcode::get();
+template<>
+vanilla::SMSG_PETITION_QUERY_RESPONSE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_PETITION_QUERY_RESPONSE& ServerOpcode::get();
+template<>
+vanilla::SMSG_FISH_NOT_HOOKED* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_FISH_NOT_HOOKED& ServerOpcode::get();
+template<>
+vanilla::SMSG_FISH_ESCAPED* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_FISH_ESCAPED& ServerOpcode::get();
+template<>
+vanilla::SMSG_NOTIFICATION* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_NOTIFICATION& ServerOpcode::get();
+template<>
+vanilla::SMSG_PLAYED_TIME* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_PLAYED_TIME& ServerOpcode::get();
+template<>
+vanilla::SMSG_QUERY_TIME_RESPONSE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_QUERY_TIME_RESPONSE& ServerOpcode::get();
+template<>
+vanilla::SMSG_LOG_XPGAIN* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_LOG_XPGAIN& ServerOpcode::get();
+template<>
+vanilla::SMSG_LEVELUP_INFO* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_LEVELUP_INFO& ServerOpcode::get();
+template<>
+vanilla::MSG_MINIMAP_PING_Server* ServerOpcode::get_if();
+template<>
+vanilla::MSG_MINIMAP_PING_Server& ServerOpcode::get();
+template<>
+vanilla::SMSG_RESISTLOG* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_RESISTLOG& ServerOpcode::get();
+template<>
+vanilla::SMSG_ENCHANTMENTLOG* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_ENCHANTMENTLOG& ServerOpcode::get();
+template<>
+vanilla::SMSG_START_MIRROR_TIMER* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_START_MIRROR_TIMER& ServerOpcode::get();
+template<>
+vanilla::SMSG_PAUSE_MIRROR_TIMER* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_PAUSE_MIRROR_TIMER& ServerOpcode::get();
+template<>
+vanilla::SMSG_STOP_MIRROR_TIMER* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_STOP_MIRROR_TIMER& ServerOpcode::get();
+template<>
+vanilla::SMSG_PONG* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_PONG& ServerOpcode::get();
+template<>
+vanilla::SMSG_CLEAR_COOLDOWN* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_CLEAR_COOLDOWN& ServerOpcode::get();
+template<>
+vanilla::SMSG_GAMEOBJECT_PAGETEXT* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_GAMEOBJECT_PAGETEXT& ServerOpcode::get();
+template<>
+vanilla::SMSG_SPELL_DELAYED* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SPELL_DELAYED& ServerOpcode::get();
+template<>
+vanilla::SMSG_ITEM_TIME_UPDATE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_ITEM_TIME_UPDATE& ServerOpcode::get();
+template<>
+vanilla::SMSG_ITEM_ENCHANT_TIME_UPDATE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_ITEM_ENCHANT_TIME_UPDATE& ServerOpcode::get();
+template<>
+vanilla::SMSG_AUTH_CHALLENGE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_AUTH_CHALLENGE& ServerOpcode::get();
+template<>
+vanilla::SMSG_AUTH_RESPONSE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_AUTH_RESPONSE& ServerOpcode::get();
+template<>
+vanilla::MSG_SAVE_GUILD_EMBLEM_Server* ServerOpcode::get_if();
+template<>
+vanilla::MSG_SAVE_GUILD_EMBLEM_Server& ServerOpcode::get();
+template<>
+vanilla::MSG_TABARDVENDOR_ACTIVATE* ServerOpcode::get_if();
+template<>
+vanilla::MSG_TABARDVENDOR_ACTIVATE& ServerOpcode::get();
+template<>
+vanilla::SMSG_PLAY_SPELL_VISUAL* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_PLAY_SPELL_VISUAL& ServerOpcode::get();
+template<>
+vanilla::SMSG_PARTYKILLLOG* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_PARTYKILLLOG& ServerOpcode::get();
+template<>
+vanilla::SMSG_PLAY_SPELL_IMPACT* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_PLAY_SPELL_IMPACT& ServerOpcode::get();
+template<>
+vanilla::SMSG_EXPLORATION_EXPERIENCE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_EXPLORATION_EXPERIENCE& ServerOpcode::get();
+template<>
+vanilla::MSG_RANDOM_ROLL_Server* ServerOpcode::get_if();
+template<>
+vanilla::MSG_RANDOM_ROLL_Server& ServerOpcode::get();
+template<>
+vanilla::SMSG_ENVIRONMENTAL_DAMAGE_LOG* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_ENVIRONMENTAL_DAMAGE_LOG& ServerOpcode::get();
+template<>
+vanilla::MSG_LOOKING_FOR_GROUP_Server* ServerOpcode::get_if();
+template<>
+vanilla::MSG_LOOKING_FOR_GROUP_Server& ServerOpcode::get();
+template<>
+vanilla::SMSG_REMOVED_SPELL* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_REMOVED_SPELL& ServerOpcode::get();
+template<>
+vanilla::SMSG_GMTICKET_CREATE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_GMTICKET_CREATE& ServerOpcode::get();
+template<>
+vanilla::SMSG_GMTICKET_UPDATETEXT* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_GMTICKET_UPDATETEXT& ServerOpcode::get();
+template<>
+vanilla::SMSG_ACCOUNT_DATA_TIMES* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_ACCOUNT_DATA_TIMES& ServerOpcode::get();
+template<>
+vanilla::SMSG_GMTICKET_GETTICKET* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_GMTICKET_GETTICKET& ServerOpcode::get();
+template<>
+vanilla::SMSG_GAMEOBJECT_SPAWN_ANIM* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_GAMEOBJECT_SPAWN_ANIM& ServerOpcode::get();
+template<>
+vanilla::SMSG_GAMEOBJECT_DESPAWN_ANIM* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_GAMEOBJECT_DESPAWN_ANIM& ServerOpcode::get();
+template<>
+vanilla::MSG_CORPSE_QUERY_Server* ServerOpcode::get_if();
+template<>
+vanilla::MSG_CORPSE_QUERY_Server& ServerOpcode::get();
+template<>
+vanilla::SMSG_GMTICKET_DELETETICKET* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_GMTICKET_DELETETICKET& ServerOpcode::get();
+template<>
+vanilla::SMSG_CHAT_WRONG_FACTION* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_CHAT_WRONG_FACTION& ServerOpcode::get();
+template<>
+vanilla::SMSG_GMTICKET_SYSTEMSTATUS* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_GMTICKET_SYSTEMSTATUS& ServerOpcode::get();
+template<>
+vanilla::SMSG_SET_REST_START* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SET_REST_START& ServerOpcode::get();
+template<>
+vanilla::SMSG_SPIRIT_HEALER_CONFIRM* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SPIRIT_HEALER_CONFIRM& ServerOpcode::get();
+template<>
+vanilla::SMSG_GOSSIP_POI* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_GOSSIP_POI& ServerOpcode::get();
+template<>
+vanilla::SMSG_LOGIN_VERIFY_WORLD* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_LOGIN_VERIFY_WORLD& ServerOpcode::get();
+template<>
+vanilla::SMSG_SEND_MAIL_RESULT* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SEND_MAIL_RESULT& ServerOpcode::get();
+template<>
+vanilla::SMSG_MAIL_LIST_RESULT* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_MAIL_LIST_RESULT& ServerOpcode::get();
+template<>
+vanilla::SMSG_BATTLEFIELD_LIST* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_BATTLEFIELD_LIST& ServerOpcode::get();
+template<>
+vanilla::SMSG_ITEM_TEXT_QUERY_RESPONSE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_ITEM_TEXT_QUERY_RESPONSE& ServerOpcode::get();
+template<>
+vanilla::SMSG_SPELLLOGMISS* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SPELLLOGMISS& ServerOpcode::get();
+template<>
+vanilla::SMSG_SPELLLOGEXECUTE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SPELLLOGEXECUTE& ServerOpcode::get();
+template<>
+vanilla::SMSG_PERIODICAURALOG* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_PERIODICAURALOG& ServerOpcode::get();
+template<>
+vanilla::SMSG_SPELLDAMAGESHIELD* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SPELLDAMAGESHIELD& ServerOpcode::get();
+template<>
+vanilla::SMSG_SPELLNONMELEEDAMAGELOG* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SPELLNONMELEEDAMAGELOG& ServerOpcode::get();
+template<>
+vanilla::SMSG_ZONE_UNDER_ATTACK* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_ZONE_UNDER_ATTACK& ServerOpcode::get();
+template<>
+vanilla::MSG_AUCTION_HELLO_Server* ServerOpcode::get_if();
+template<>
+vanilla::MSG_AUCTION_HELLO_Server& ServerOpcode::get();
+template<>
+vanilla::SMSG_AUCTION_COMMAND_RESULT* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_AUCTION_COMMAND_RESULT& ServerOpcode::get();
+template<>
+vanilla::SMSG_AUCTION_LIST_RESULT* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_AUCTION_LIST_RESULT& ServerOpcode::get();
+template<>
+vanilla::SMSG_AUCTION_OWNER_LIST_RESULT* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_AUCTION_OWNER_LIST_RESULT& ServerOpcode::get();
+template<>
+vanilla::SMSG_AUCTION_BIDDER_NOTIFICATION* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_AUCTION_BIDDER_NOTIFICATION& ServerOpcode::get();
+template<>
+vanilla::SMSG_AUCTION_OWNER_NOTIFICATION* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_AUCTION_OWNER_NOTIFICATION& ServerOpcode::get();
+template<>
+vanilla::SMSG_PROCRESIST* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_PROCRESIST& ServerOpcode::get();
+template<>
+vanilla::SMSG_DISPEL_FAILED* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_DISPEL_FAILED& ServerOpcode::get();
+template<>
+vanilla::SMSG_SPELLORDAMAGE_IMMUNE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SPELLORDAMAGE_IMMUNE& ServerOpcode::get();
+template<>
+vanilla::SMSG_AUCTION_BIDDER_LIST_RESULT* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_AUCTION_BIDDER_LIST_RESULT& ServerOpcode::get();
+template<>
+vanilla::SMSG_SET_FLAT_SPELL_MODIFIER* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SET_FLAT_SPELL_MODIFIER& ServerOpcode::get();
+template<>
+vanilla::SMSG_SET_PCT_SPELL_MODIFIER* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SET_PCT_SPELL_MODIFIER& ServerOpcode::get();
+template<>
+vanilla::SMSG_CORPSE_RECLAIM_DELAY* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_CORPSE_RECLAIM_DELAY& ServerOpcode::get();
+template<>
+vanilla::MSG_LIST_STABLED_PETS_Server* ServerOpcode::get_if();
+template<>
+vanilla::MSG_LIST_STABLED_PETS_Server& ServerOpcode::get();
+template<>
+vanilla::SMSG_STABLE_RESULT* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_STABLE_RESULT& ServerOpcode::get();
+template<>
+vanilla::MSG_QUEST_PUSH_RESULT* ServerOpcode::get_if();
+template<>
+vanilla::MSG_QUEST_PUSH_RESULT& ServerOpcode::get();
+template<>
+vanilla::SMSG_PLAY_MUSIC* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_PLAY_MUSIC& ServerOpcode::get();
+template<>
+vanilla::SMSG_PLAY_OBJECT_SOUND* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_PLAY_OBJECT_SOUND& ServerOpcode::get();
+template<>
+vanilla::SMSG_SPELLDISPELLOG* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SPELLDISPELLOG& ServerOpcode::get();
+template<>
+vanilla::MSG_QUERY_NEXT_MAIL_TIME_Server* ServerOpcode::get_if();
+template<>
+vanilla::MSG_QUERY_NEXT_MAIL_TIME_Server& ServerOpcode::get();
+template<>
+vanilla::SMSG_RECEIVED_MAIL* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_RECEIVED_MAIL& ServerOpcode::get();
+template<>
+vanilla::SMSG_RAID_GROUP_ONLY* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_RAID_GROUP_ONLY& ServerOpcode::get();
+template<>
+vanilla::SMSG_PVP_CREDIT* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_PVP_CREDIT& ServerOpcode::get();
+template<>
+vanilla::SMSG_AUCTION_REMOVED_NOTIFICATION* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_AUCTION_REMOVED_NOTIFICATION& ServerOpcode::get();
+template<>
+vanilla::SMSG_SERVER_MESSAGE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SERVER_MESSAGE& ServerOpcode::get();
+template<>
+vanilla::SMSG_MEETINGSTONE_SETQUEUE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_MEETINGSTONE_SETQUEUE& ServerOpcode::get();
+template<>
+vanilla::SMSG_MEETINGSTONE_COMPLETE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_MEETINGSTONE_COMPLETE& ServerOpcode::get();
+template<>
+vanilla::SMSG_MEETINGSTONE_IN_PROGRESS* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_MEETINGSTONE_IN_PROGRESS& ServerOpcode::get();
+template<>
+vanilla::SMSG_MEETINGSTONE_MEMBER_ADDED* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_MEETINGSTONE_MEMBER_ADDED& ServerOpcode::get();
+template<>
+vanilla::SMSG_CANCEL_AUTO_REPEAT* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_CANCEL_AUTO_REPEAT& ServerOpcode::get();
+template<>
+vanilla::SMSG_STANDSTATE_UPDATE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_STANDSTATE_UPDATE& ServerOpcode::get();
+template<>
+vanilla::SMSG_LOOT_ALL_PASSED* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_LOOT_ALL_PASSED& ServerOpcode::get();
+template<>
+vanilla::SMSG_LOOT_ROLL_WON* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_LOOT_ROLL_WON& ServerOpcode::get();
+template<>
+vanilla::SMSG_LOOT_START_ROLL* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_LOOT_START_ROLL& ServerOpcode::get();
+template<>
+vanilla::SMSG_LOOT_ROLL* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_LOOT_ROLL& ServerOpcode::get();
+template<>
+vanilla::SMSG_LOOT_MASTER_LIST* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_LOOT_MASTER_LIST& ServerOpcode::get();
+template<>
+vanilla::SMSG_SET_FORCED_REACTIONS* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SET_FORCED_REACTIONS& ServerOpcode::get();
+template<>
+vanilla::SMSG_SPELL_FAILED_OTHER* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SPELL_FAILED_OTHER& ServerOpcode::get();
+template<>
+vanilla::SMSG_GAMEOBJECT_RESET_STATE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_GAMEOBJECT_RESET_STATE& ServerOpcode::get();
+template<>
+vanilla::SMSG_CHAT_PLAYER_NOT_FOUND* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_CHAT_PLAYER_NOT_FOUND& ServerOpcode::get();
+template<>
+vanilla::MSG_TALENT_WIPE_CONFIRM_Server* ServerOpcode::get_if();
+template<>
+vanilla::MSG_TALENT_WIPE_CONFIRM_Server& ServerOpcode::get();
+template<>
+vanilla::SMSG_SUMMON_REQUEST* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SUMMON_REQUEST& ServerOpcode::get();
+template<>
+vanilla::SMSG_MONSTER_MOVE_TRANSPORT* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_MONSTER_MOVE_TRANSPORT& ServerOpcode::get();
+template<>
+vanilla::SMSG_PET_BROKEN* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_PET_BROKEN& ServerOpcode::get();
+template<>
+vanilla::MSG_MOVE_FEATHER_FALL_Server* ServerOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_FEATHER_FALL_Server& ServerOpcode::get();
+template<>
+vanilla::MSG_MOVE_WATER_WALK* ServerOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_WATER_WALK& ServerOpcode::get();
+template<>
+vanilla::SMSG_FEIGN_DEATH_RESISTED* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_FEIGN_DEATH_RESISTED& ServerOpcode::get();
+template<>
+vanilla::SMSG_DUEL_COUNTDOWN* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_DUEL_COUNTDOWN& ServerOpcode::get();
+template<>
+vanilla::SMSG_AREA_TRIGGER_MESSAGE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_AREA_TRIGGER_MESSAGE& ServerOpcode::get();
+template<>
+vanilla::SMSG_MEETINGSTONE_JOINFAILED* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_MEETINGSTONE_JOINFAILED& ServerOpcode::get();
+template<>
+vanilla::SMSG_PLAYER_SKINNED* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_PLAYER_SKINNED& ServerOpcode::get();
+template<>
+vanilla::SMSG_DURABILITY_DAMAGE_DEATH* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_DURABILITY_DAMAGE_DEATH& ServerOpcode::get();
+template<>
+vanilla::MSG_PETITION_RENAME* ServerOpcode::get_if();
+template<>
+vanilla::MSG_PETITION_RENAME& ServerOpcode::get();
+template<>
+vanilla::SMSG_INIT_WORLD_STATES* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_INIT_WORLD_STATES& ServerOpcode::get();
+template<>
+vanilla::SMSG_UPDATE_WORLD_STATE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_UPDATE_WORLD_STATE& ServerOpcode::get();
+template<>
+vanilla::SMSG_ITEM_NAME_QUERY_RESPONSE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_ITEM_NAME_QUERY_RESPONSE& ServerOpcode::get();
+template<>
+vanilla::SMSG_PET_ACTION_FEEDBACK* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_PET_ACTION_FEEDBACK& ServerOpcode::get();
+template<>
+vanilla::SMSG_CHAR_RENAME* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_CHAR_RENAME& ServerOpcode::get();
+template<>
+vanilla::SMSG_INSTANCE_SAVE_CREATED* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_INSTANCE_SAVE_CREATED& ServerOpcode::get();
+template<>
+vanilla::SMSG_RAID_INSTANCE_INFO* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_RAID_INSTANCE_INFO& ServerOpcode::get();
+template<>
+vanilla::SMSG_PLAY_SOUND* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_PLAY_SOUND& ServerOpcode::get();
+template<>
+vanilla::SMSG_BATTLEFIELD_STATUS* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_BATTLEFIELD_STATUS& ServerOpcode::get();
+template<>
+vanilla::MSG_INSPECT_HONOR_STATS_Server* ServerOpcode::get_if();
+template<>
+vanilla::MSG_INSPECT_HONOR_STATS_Server& ServerOpcode::get();
+template<>
+vanilla::SMSG_FORCE_WALK_SPEED_CHANGE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_FORCE_WALK_SPEED_CHANGE& ServerOpcode::get();
+template<>
+vanilla::SMSG_FORCE_SWIM_BACK_SPEED_CHANGE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_FORCE_SWIM_BACK_SPEED_CHANGE& ServerOpcode::get();
+template<>
+vanilla::SMSG_FORCE_TURN_RATE_CHANGE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_FORCE_TURN_RATE_CHANGE& ServerOpcode::get();
+template<>
+vanilla::MSG_PVP_LOG_DATA_Server* ServerOpcode::get_if();
+template<>
+vanilla::MSG_PVP_LOG_DATA_Server& ServerOpcode::get();
+template<>
+vanilla::SMSG_AREA_SPIRIT_HEALER_TIME* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_AREA_SPIRIT_HEALER_TIME& ServerOpcode::get();
+template<>
+vanilla::SMSG_WARDEN_DATA* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_WARDEN_DATA& ServerOpcode::get();
+template<>
+vanilla::SMSG_GROUP_JOINED_BATTLEGROUND* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_GROUP_JOINED_BATTLEGROUND& ServerOpcode::get();
+template<>
+vanilla::MSG_BATTLEGROUND_PLAYER_POSITIONS_Server* ServerOpcode::get_if();
+template<>
+vanilla::MSG_BATTLEGROUND_PLAYER_POSITIONS_Server& ServerOpcode::get();
+template<>
+vanilla::SMSG_BINDER_CONFIRM* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_BINDER_CONFIRM& ServerOpcode::get();
+template<>
+vanilla::SMSG_BATTLEGROUND_PLAYER_JOINED* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_BATTLEGROUND_PLAYER_JOINED& ServerOpcode::get();
+template<>
+vanilla::SMSG_BATTLEGROUND_PLAYER_LEFT* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_BATTLEGROUND_PLAYER_LEFT& ServerOpcode::get();
+template<>
+vanilla::SMSG_ADDON_INFO* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_ADDON_INFO& ServerOpcode::get();
+template<>
+vanilla::SMSG_PET_UNLEARN_CONFIRM* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_PET_UNLEARN_CONFIRM& ServerOpcode::get();
+template<>
+vanilla::SMSG_PARTY_MEMBER_STATS_FULL* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_PARTY_MEMBER_STATS_FULL& ServerOpcode::get();
+template<>
+vanilla::SMSG_WEATHER* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_WEATHER& ServerOpcode::get();
+template<>
+vanilla::SMSG_RAID_INSTANCE_MESSAGE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_RAID_INSTANCE_MESSAGE& ServerOpcode::get();
+template<>
+vanilla::SMSG_CHAT_RESTRICTED* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_CHAT_RESTRICTED& ServerOpcode::get();
+template<>
+vanilla::SMSG_SPLINE_SET_RUN_SPEED* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SPLINE_SET_RUN_SPEED& ServerOpcode::get();
+template<>
+vanilla::SMSG_SPLINE_SET_RUN_BACK_SPEED* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SPLINE_SET_RUN_BACK_SPEED& ServerOpcode::get();
+template<>
+vanilla::SMSG_SPLINE_SET_SWIM_SPEED* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SPLINE_SET_SWIM_SPEED& ServerOpcode::get();
+template<>
+vanilla::SMSG_SPLINE_SET_WALK_SPEED* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SPLINE_SET_WALK_SPEED& ServerOpcode::get();
+template<>
+vanilla::SMSG_SPLINE_SET_SWIM_BACK_SPEED* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SPLINE_SET_SWIM_BACK_SPEED& ServerOpcode::get();
+template<>
+vanilla::SMSG_SPLINE_SET_TURN_RATE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SPLINE_SET_TURN_RATE& ServerOpcode::get();
+template<>
+vanilla::SMSG_SPLINE_MOVE_UNROOT* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SPLINE_MOVE_UNROOT& ServerOpcode::get();
+template<>
+vanilla::SMSG_SPLINE_MOVE_FEATHER_FALL* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SPLINE_MOVE_FEATHER_FALL& ServerOpcode::get();
+template<>
+vanilla::SMSG_SPLINE_MOVE_NORMAL_FALL* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SPLINE_MOVE_NORMAL_FALL& ServerOpcode::get();
+template<>
+vanilla::SMSG_SPLINE_MOVE_SET_HOVER* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SPLINE_MOVE_SET_HOVER& ServerOpcode::get();
+template<>
+vanilla::SMSG_SPLINE_MOVE_UNSET_HOVER* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SPLINE_MOVE_UNSET_HOVER& ServerOpcode::get();
+template<>
+vanilla::SMSG_SPLINE_MOVE_WATER_WALK* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SPLINE_MOVE_WATER_WALK& ServerOpcode::get();
+template<>
+vanilla::SMSG_SPLINE_MOVE_LAND_WALK* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SPLINE_MOVE_LAND_WALK& ServerOpcode::get();
+template<>
+vanilla::SMSG_SPLINE_MOVE_START_SWIM* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SPLINE_MOVE_START_SWIM& ServerOpcode::get();
+template<>
+vanilla::SMSG_SPLINE_MOVE_STOP_SWIM* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SPLINE_MOVE_STOP_SWIM& ServerOpcode::get();
+template<>
+vanilla::SMSG_SPLINE_MOVE_SET_RUN_MODE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SPLINE_MOVE_SET_RUN_MODE& ServerOpcode::get();
+template<>
+vanilla::SMSG_SPLINE_MOVE_SET_WALK_MODE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SPLINE_MOVE_SET_WALK_MODE& ServerOpcode::get();
+template<>
+vanilla::MSG_MOVE_TIME_SKIPPED_Server* ServerOpcode::get_if();
+template<>
+vanilla::MSG_MOVE_TIME_SKIPPED_Server& ServerOpcode::get();
+template<>
+vanilla::SMSG_SPLINE_MOVE_ROOT* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SPLINE_MOVE_ROOT& ServerOpcode::get();
+template<>
+vanilla::SMSG_INVALIDATE_PLAYER* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_INVALIDATE_PLAYER& ServerOpcode::get();
+template<>
+vanilla::SMSG_INSTANCE_RESET* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_INSTANCE_RESET& ServerOpcode::get();
+template<>
+vanilla::SMSG_INSTANCE_RESET_FAILED* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_INSTANCE_RESET_FAILED& ServerOpcode::get();
+template<>
+vanilla::SMSG_UPDATE_LAST_INSTANCE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_UPDATE_LAST_INSTANCE& ServerOpcode::get();
+template<>
+vanilla::MSG_RAID_TARGET_UPDATE_Server* ServerOpcode::get_if();
+template<>
+vanilla::MSG_RAID_TARGET_UPDATE_Server& ServerOpcode::get();
+template<>
+vanilla::MSG_RAID_READY_CHECK_Server* ServerOpcode::get_if();
+template<>
+vanilla::MSG_RAID_READY_CHECK_Server& ServerOpcode::get();
+template<>
+vanilla::SMSG_PET_ACTION_SOUND* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_PET_ACTION_SOUND& ServerOpcode::get();
+template<>
+vanilla::SMSG_PET_DISMISS_SOUND* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_PET_DISMISS_SOUND& ServerOpcode::get();
+template<>
+vanilla::SMSG_GM_TICKET_STATUS_UPDATE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_GM_TICKET_STATUS_UPDATE& ServerOpcode::get();
+template<>
+vanilla::SMSG_UPDATE_INSTANCE_OWNERSHIP* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_UPDATE_INSTANCE_OWNERSHIP& ServerOpcode::get();
+template<>
+vanilla::SMSG_SPELLINSTAKILLLOG* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SPELLINSTAKILLLOG& ServerOpcode::get();
+template<>
+vanilla::SMSG_SPELL_UPDATE_CHAIN_TARGETS* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_SPELL_UPDATE_CHAIN_TARGETS& ServerOpcode::get();
+template<>
+vanilla::SMSG_EXPECTED_SPAM_RECORDS* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_EXPECTED_SPAM_RECORDS& ServerOpcode::get();
+template<>
+vanilla::SMSG_DEFENSE_MESSAGE* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_DEFENSE_MESSAGE& ServerOpcode::get();
+
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const ServerOpcode& opcode);
+
+WOW_WORLD_MESSAGES_CPP_EXPORT ServerOpcode read_server_opcode(Reader& reader);
 
 } // namespace vanilla
 } // namespace wow_world_messages

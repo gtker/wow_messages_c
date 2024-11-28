@@ -97,7 +97,7 @@ struct CMD_AUTH_LOGON_CHALLENGE_Server {
     uint64_t seed;
     uint8_t required;
 
-    std::vector<unsigned char> write() const;
+    WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 typedef all::CMD_AUTH_LOGON_CHALLENGE_Client CMD_AUTH_LOGON_CHALLENGE_Client;
@@ -114,7 +114,7 @@ struct CMD_AUTH_LOGON_PROOF_Client {
     std::array<uint8_t, 20> matrix_card_proof;
     std::string authenticator;
 
-    std::vector<unsigned char> write() const;
+    WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMD_AUTH_LOGON_PROOF_Server {
@@ -124,7 +124,7 @@ struct CMD_AUTH_LOGON_PROOF_Server {
     uint32_t hardware_survey_id;
     uint16_t unknown;
 
-    std::vector<unsigned char> write() const;
+    WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMD_AUTH_RECONNECT_CHALLENGE_Server {
@@ -132,7 +132,7 @@ struct CMD_AUTH_RECONNECT_CHALLENGE_Server {
     std::array<uint8_t, 16> challenge_data;
     std::array<uint8_t, 16> checksum_salt;
 
-    std::vector<unsigned char> write() const;
+    WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 typedef all::CMD_AUTH_RECONNECT_CHALLENGE_Client CMD_AUTH_RECONNECT_CHALLENGE_Client;
@@ -142,19 +142,19 @@ typedef version2::CMD_AUTH_RECONNECT_PROOF_Client CMD_AUTH_RECONNECT_PROOF_Clien
 struct CMD_AUTH_RECONNECT_PROOF_Server {
     LoginResult result;
 
-    std::vector<unsigned char> write() const;
+    WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMD_REALM_LIST_Client {
 
-    std::vector<unsigned char> write() const;
+    WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMD_REALM_LIST_Server {
     uint16_t number_of_realms;
     std::vector<version8::Realm> realms;
 
-    std::vector<unsigned char> write() const;
+    WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 typedef version2::CMD_XFER_INITIATE CMD_XFER_INITIATE;
@@ -163,14 +163,14 @@ typedef version2::CMD_XFER_DATA CMD_XFER_DATA;
 
 struct CMD_XFER_ACCEPT {
 
-    std::vector<unsigned char> write() const;
+    WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 typedef version2::CMD_XFER_RESUME CMD_XFER_RESUME;
 
 struct CMD_XFER_CANCEL {
 
-    std::vector<unsigned char> write() const;
+    WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct ClientOpcode {
@@ -192,53 +192,33 @@ struct ClientOpcode {
         version8::CMD_XFER_RESUME CMD_XFER_RESUME;
         version8::CMD_XFER_CANCEL CMD_XFER_CANCEL;
     };
+
     bool is_none() const noexcept {
         return opcode == Opcode::NONE;
     }
 
-    explicit ClientOpcode() : ClientOpcode(Opcode::NONE) {}
-
-    explicit ClientOpcode(Opcode op) : opcode(op) {
-        if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
-            new (&this->CMD_AUTH_LOGON_PROOF) version8::CMD_AUTH_LOGON_PROOF_Client();
-        }
-        if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
-            new (&this->CMD_AUTH_RECONNECT_PROOF) version8::CMD_AUTH_RECONNECT_PROOF_Client();
-        }
-        if (opcode == Opcode::CMD_REALM_LIST) {
-            new (&this->CMD_REALM_LIST) version8::CMD_REALM_LIST_Client();
-        }
-        if (opcode == Opcode::CMD_XFER_ACCEPT) {
-            new (&this->CMD_XFER_ACCEPT) version8::CMD_XFER_ACCEPT();
-        }
-        if (opcode == Opcode::CMD_XFER_RESUME) {
-            new (&this->CMD_XFER_RESUME) version8::CMD_XFER_RESUME();
-        }
-        if (opcode == Opcode::CMD_XFER_CANCEL) {
-            new (&this->CMD_XFER_CANCEL) version8::CMD_XFER_CANCEL();
-        }
-    }
+    explicit ClientOpcode() : opcode(Opcode::NONE), CMD_AUTH_LOGON_PROOF() {}
 
     ClientOpcode(ClientOpcode&& other) noexcept {
         this->opcode = other.opcode;
         other.opcode = Opcode::NONE;
         if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
-            this->CMD_AUTH_LOGON_PROOF = other.CMD_AUTH_LOGON_PROOF;
+            this->CMD_AUTH_LOGON_PROOF = std::move(other.CMD_AUTH_LOGON_PROOF);
         }
         if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
-            this->CMD_AUTH_RECONNECT_PROOF = other.CMD_AUTH_RECONNECT_PROOF;
+            this->CMD_AUTH_RECONNECT_PROOF = std::move(other.CMD_AUTH_RECONNECT_PROOF);
         }
         if (opcode == Opcode::CMD_REALM_LIST) {
-            this->CMD_REALM_LIST = other.CMD_REALM_LIST;
+            this->CMD_REALM_LIST = std::move(other.CMD_REALM_LIST);
         }
         if (opcode == Opcode::CMD_XFER_ACCEPT) {
-            this->CMD_XFER_ACCEPT = other.CMD_XFER_ACCEPT;
+            this->CMD_XFER_ACCEPT = std::move(other.CMD_XFER_ACCEPT);
         }
         if (opcode == Opcode::CMD_XFER_RESUME) {
-            this->CMD_XFER_RESUME = other.CMD_XFER_RESUME;
+            this->CMD_XFER_RESUME = std::move(other.CMD_XFER_RESUME);
         }
         if (opcode == Opcode::CMD_XFER_CANCEL) {
-            this->CMD_XFER_CANCEL = other.CMD_XFER_CANCEL;
+            this->CMD_XFER_CANCEL = std::move(other.CMD_XFER_CANCEL);
         }
     }
 
@@ -265,32 +245,66 @@ struct ClientOpcode {
 
     explicit ClientOpcode(version8::CMD_AUTH_LOGON_PROOF_Client&& obj) {
         opcode = Opcode::CMD_AUTH_LOGON_PROOF;
-        new (&this->CMD_AUTH_LOGON_PROOF) version8::CMD_AUTH_LOGON_PROOF_Client (obj);
+        new (&this->CMD_AUTH_LOGON_PROOF) version8::CMD_AUTH_LOGON_PROOF_Client (std::move(obj));
     }
     explicit ClientOpcode(version8::CMD_AUTH_RECONNECT_PROOF_Client&& obj) {
         opcode = Opcode::CMD_AUTH_RECONNECT_PROOF;
-        new (&this->CMD_AUTH_RECONNECT_PROOF) version8::CMD_AUTH_RECONNECT_PROOF_Client (obj);
+        new (&this->CMD_AUTH_RECONNECT_PROOF) version8::CMD_AUTH_RECONNECT_PROOF_Client (std::move(obj));
     }
     explicit ClientOpcode(version8::CMD_REALM_LIST_Client&& obj) {
         opcode = Opcode::CMD_REALM_LIST;
-        new (&this->CMD_REALM_LIST) version8::CMD_REALM_LIST_Client (obj);
+        new (&this->CMD_REALM_LIST) version8::CMD_REALM_LIST_Client (std::move(obj));
     }
     explicit ClientOpcode(version8::CMD_XFER_ACCEPT&& obj) {
         opcode = Opcode::CMD_XFER_ACCEPT;
-        new (&this->CMD_XFER_ACCEPT) version8::CMD_XFER_ACCEPT (obj);
+        new (&this->CMD_XFER_ACCEPT) version8::CMD_XFER_ACCEPT (std::move(obj));
     }
     explicit ClientOpcode(version8::CMD_XFER_RESUME&& obj) {
         opcode = Opcode::CMD_XFER_RESUME;
-        new (&this->CMD_XFER_RESUME) version8::CMD_XFER_RESUME (obj);
+        new (&this->CMD_XFER_RESUME) version8::CMD_XFER_RESUME (std::move(obj));
     }
     explicit ClientOpcode(version8::CMD_XFER_CANCEL&& obj) {
         opcode = Opcode::CMD_XFER_CANCEL;
-        new (&this->CMD_XFER_CANCEL) version8::CMD_XFER_CANCEL (obj);
+        new (&this->CMD_XFER_CANCEL) version8::CMD_XFER_CANCEL (std::move(obj));
     }
-};
-std::vector<unsigned char> write_opcode(const ClientOpcode& opcode);
 
-ClientOpcode read_client_opcode(Reader& reader);
+    template<typename T>
+    // NOLINTNEXTLINE
+    T& get(); // All possible types have been specialized
+
+    template<typename T>
+    // NOLINTNEXTLINE
+    T* get_if(); // All possible types have been specialized
+};
+
+template<>
+version8::CMD_AUTH_LOGON_PROOF_Client* ClientOpcode::get_if();
+template<>
+version8::CMD_AUTH_LOGON_PROOF_Client& ClientOpcode::get();
+template<>
+version8::CMD_AUTH_RECONNECT_PROOF_Client* ClientOpcode::get_if();
+template<>
+version8::CMD_AUTH_RECONNECT_PROOF_Client& ClientOpcode::get();
+template<>
+version8::CMD_REALM_LIST_Client* ClientOpcode::get_if();
+template<>
+version8::CMD_REALM_LIST_Client& ClientOpcode::get();
+template<>
+version8::CMD_XFER_ACCEPT* ClientOpcode::get_if();
+template<>
+version8::CMD_XFER_ACCEPT& ClientOpcode::get();
+template<>
+version8::CMD_XFER_RESUME* ClientOpcode::get_if();
+template<>
+version8::CMD_XFER_RESUME& ClientOpcode::get();
+template<>
+version8::CMD_XFER_CANCEL* ClientOpcode::get_if();
+template<>
+version8::CMD_XFER_CANCEL& ClientOpcode::get();
+
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const ClientOpcode& opcode);
+
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode read_client_opcode(Reader& reader);
 
 struct ServerOpcode {
     enum class Opcode {
@@ -313,59 +327,36 @@ struct ServerOpcode {
         version8::CMD_XFER_INITIATE CMD_XFER_INITIATE;
         version8::CMD_XFER_DATA CMD_XFER_DATA;
     };
+
     bool is_none() const noexcept {
         return opcode == Opcode::NONE;
     }
 
-    explicit ServerOpcode() : ServerOpcode(Opcode::NONE) {}
-
-    explicit ServerOpcode(Opcode op) : opcode(op) {
-        if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
-            new (&this->CMD_AUTH_LOGON_CHALLENGE) version8::CMD_AUTH_LOGON_CHALLENGE_Server();
-        }
-        if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
-            new (&this->CMD_AUTH_LOGON_PROOF) version8::CMD_AUTH_LOGON_PROOF_Server();
-        }
-        if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
-            new (&this->CMD_AUTH_RECONNECT_CHALLENGE) version8::CMD_AUTH_RECONNECT_CHALLENGE_Server();
-        }
-        if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
-            new (&this->CMD_AUTH_RECONNECT_PROOF) version8::CMD_AUTH_RECONNECT_PROOF_Server();
-        }
-        if (opcode == Opcode::CMD_REALM_LIST) {
-            new (&this->CMD_REALM_LIST) version8::CMD_REALM_LIST_Server();
-        }
-        if (opcode == Opcode::CMD_XFER_INITIATE) {
-            new (&this->CMD_XFER_INITIATE) version8::CMD_XFER_INITIATE();
-        }
-        if (opcode == Opcode::CMD_XFER_DATA) {
-            new (&this->CMD_XFER_DATA) version8::CMD_XFER_DATA();
-        }
-    }
+    explicit ServerOpcode() : opcode(Opcode::NONE), CMD_AUTH_LOGON_CHALLENGE() {}
 
     ServerOpcode(ServerOpcode&& other) noexcept {
         this->opcode = other.opcode;
         other.opcode = Opcode::NONE;
         if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
-            this->CMD_AUTH_LOGON_CHALLENGE = other.CMD_AUTH_LOGON_CHALLENGE;
+            this->CMD_AUTH_LOGON_CHALLENGE = std::move(other.CMD_AUTH_LOGON_CHALLENGE);
         }
         if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
-            this->CMD_AUTH_LOGON_PROOF = other.CMD_AUTH_LOGON_PROOF;
+            this->CMD_AUTH_LOGON_PROOF = std::move(other.CMD_AUTH_LOGON_PROOF);
         }
         if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
-            this->CMD_AUTH_RECONNECT_CHALLENGE = other.CMD_AUTH_RECONNECT_CHALLENGE;
+            this->CMD_AUTH_RECONNECT_CHALLENGE = std::move(other.CMD_AUTH_RECONNECT_CHALLENGE);
         }
         if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
-            this->CMD_AUTH_RECONNECT_PROOF = other.CMD_AUTH_RECONNECT_PROOF;
+            this->CMD_AUTH_RECONNECT_PROOF = std::move(other.CMD_AUTH_RECONNECT_PROOF);
         }
         if (opcode == Opcode::CMD_REALM_LIST) {
-            this->CMD_REALM_LIST = other.CMD_REALM_LIST;
+            this->CMD_REALM_LIST = std::move(other.CMD_REALM_LIST);
         }
         if (opcode == Opcode::CMD_XFER_INITIATE) {
-            this->CMD_XFER_INITIATE = other.CMD_XFER_INITIATE;
+            this->CMD_XFER_INITIATE = std::move(other.CMD_XFER_INITIATE);
         }
         if (opcode == Opcode::CMD_XFER_DATA) {
-            this->CMD_XFER_DATA = other.CMD_XFER_DATA;
+            this->CMD_XFER_DATA = std::move(other.CMD_XFER_DATA);
         }
     }
 
@@ -395,36 +386,74 @@ struct ServerOpcode {
 
     explicit ServerOpcode(version8::CMD_AUTH_LOGON_CHALLENGE_Server&& obj) {
         opcode = Opcode::CMD_AUTH_LOGON_CHALLENGE;
-        new (&this->CMD_AUTH_LOGON_CHALLENGE) version8::CMD_AUTH_LOGON_CHALLENGE_Server (obj);
+        new (&this->CMD_AUTH_LOGON_CHALLENGE) version8::CMD_AUTH_LOGON_CHALLENGE_Server (std::move(obj));
     }
     explicit ServerOpcode(version8::CMD_AUTH_LOGON_PROOF_Server&& obj) {
         opcode = Opcode::CMD_AUTH_LOGON_PROOF;
-        new (&this->CMD_AUTH_LOGON_PROOF) version8::CMD_AUTH_LOGON_PROOF_Server (obj);
+        new (&this->CMD_AUTH_LOGON_PROOF) version8::CMD_AUTH_LOGON_PROOF_Server (std::move(obj));
     }
     explicit ServerOpcode(version8::CMD_AUTH_RECONNECT_CHALLENGE_Server&& obj) {
         opcode = Opcode::CMD_AUTH_RECONNECT_CHALLENGE;
-        new (&this->CMD_AUTH_RECONNECT_CHALLENGE) version8::CMD_AUTH_RECONNECT_CHALLENGE_Server (obj);
+        new (&this->CMD_AUTH_RECONNECT_CHALLENGE) version8::CMD_AUTH_RECONNECT_CHALLENGE_Server (std::move(obj));
     }
     explicit ServerOpcode(version8::CMD_AUTH_RECONNECT_PROOF_Server&& obj) {
         opcode = Opcode::CMD_AUTH_RECONNECT_PROOF;
-        new (&this->CMD_AUTH_RECONNECT_PROOF) version8::CMD_AUTH_RECONNECT_PROOF_Server (obj);
+        new (&this->CMD_AUTH_RECONNECT_PROOF) version8::CMD_AUTH_RECONNECT_PROOF_Server (std::move(obj));
     }
     explicit ServerOpcode(version8::CMD_REALM_LIST_Server&& obj) {
         opcode = Opcode::CMD_REALM_LIST;
-        new (&this->CMD_REALM_LIST) version8::CMD_REALM_LIST_Server (obj);
+        new (&this->CMD_REALM_LIST) version8::CMD_REALM_LIST_Server (std::move(obj));
     }
     explicit ServerOpcode(version8::CMD_XFER_INITIATE&& obj) {
         opcode = Opcode::CMD_XFER_INITIATE;
-        new (&this->CMD_XFER_INITIATE) version8::CMD_XFER_INITIATE (obj);
+        new (&this->CMD_XFER_INITIATE) version8::CMD_XFER_INITIATE (std::move(obj));
     }
     explicit ServerOpcode(version8::CMD_XFER_DATA&& obj) {
         opcode = Opcode::CMD_XFER_DATA;
-        new (&this->CMD_XFER_DATA) version8::CMD_XFER_DATA (obj);
+        new (&this->CMD_XFER_DATA) version8::CMD_XFER_DATA (std::move(obj));
     }
-};
-std::vector<unsigned char> write_opcode(const ServerOpcode& opcode);
 
-ServerOpcode read_server_opcode(Reader& reader);
+    template<typename T>
+    // NOLINTNEXTLINE
+    T& get(); // All possible types have been specialized
+
+    template<typename T>
+    // NOLINTNEXTLINE
+    T* get_if(); // All possible types have been specialized
+};
+
+template<>
+version8::CMD_AUTH_LOGON_CHALLENGE_Server* ServerOpcode::get_if();
+template<>
+version8::CMD_AUTH_LOGON_CHALLENGE_Server& ServerOpcode::get();
+template<>
+version8::CMD_AUTH_LOGON_PROOF_Server* ServerOpcode::get_if();
+template<>
+version8::CMD_AUTH_LOGON_PROOF_Server& ServerOpcode::get();
+template<>
+version8::CMD_AUTH_RECONNECT_CHALLENGE_Server* ServerOpcode::get_if();
+template<>
+version8::CMD_AUTH_RECONNECT_CHALLENGE_Server& ServerOpcode::get();
+template<>
+version8::CMD_AUTH_RECONNECT_PROOF_Server* ServerOpcode::get_if();
+template<>
+version8::CMD_AUTH_RECONNECT_PROOF_Server& ServerOpcode::get();
+template<>
+version8::CMD_REALM_LIST_Server* ServerOpcode::get_if();
+template<>
+version8::CMD_REALM_LIST_Server& ServerOpcode::get();
+template<>
+version8::CMD_XFER_INITIATE* ServerOpcode::get_if();
+template<>
+version8::CMD_XFER_INITIATE& ServerOpcode::get();
+template<>
+version8::CMD_XFER_DATA* ServerOpcode::get_if();
+template<>
+version8::CMD_XFER_DATA& ServerOpcode::get();
+
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const ServerOpcode& opcode);
+
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode read_server_opcode(Reader& reader);
 
 } // namespace version8
 } // namespace wow_login_messages

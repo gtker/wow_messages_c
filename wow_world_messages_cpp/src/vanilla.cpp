@@ -2,8 +2,6 @@
 
 #include "wow_world_messages_cpp/vanilla.hpp"
 
-#include <string.h> /* memset */
-
 namespace wow_world_messages {
     namespace all {
         /* forward declare all struct read/write */
@@ -32,13 +30,11 @@ static size_t aura_mask_size(const AuraMask& mask) {
 }
 
 static AuraMask aura_mask_read(Reader& reader) {
-    uint32_t header = reader.read_u32();
+    const uint32_t header = reader.read_u32();
 
-    AuraMask mask;
+    AuraMask mask{};
 
     for(int i = 0; i < AURA_MASK_SIZE; ++i) {
-        mask.auras[i] = 0; /* initialize to 0 */
-
         if ((header & (1 << i)) != 0) {
             mask.auras[i] = reader.read_u16();
         }
@@ -87,8 +83,8 @@ WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t update_mask_get(const UpdateMask& mask, U
 static void update_mask_write(Writer& writer, const UpdateMask& mask) {
     uint8_t amount_of_headers = 0;
 
-    for (int i = 0; i < UPDATE_MASK_HEADERS_LENGTH; ++i) {
-        uint32_t header = mask.headers[i];
+    for (uint8_t i = 0; i < UPDATE_MASK_HEADERS_LENGTH; ++i) {
+        const uint32_t header = mask.headers[i];
         if (header != 0) {
             amount_of_headers = i + 1;
         }
@@ -101,7 +97,7 @@ static void update_mask_write(Writer& writer, const UpdateMask& mask) {
     }
 
     for (int i = 0; i < amount_of_headers; ++i) {
-        uint32_t header = mask.headers[i];
+        const uint32_t header = mask.headers[i];
         for (int j = 0; j < 32; ++j) {
             if ((header & (1 << j)) != 0) {
                 writer.write_u32(mask.values[i * 32 + j]);
@@ -169,7 +165,7 @@ static size_t Addon_size(const Addon& obj) {
 }
 
 Addon Addon_read(Reader& reader) {
-    Addon obj;
+    Addon obj{};
 
     obj.addon_type = static_cast<AddonType>(reader.read_u8());
 
@@ -196,7 +192,7 @@ Addon Addon_read(Reader& reader) {
     return obj;
 }
 
-void Addon_write(Writer& writer, const Addon& obj) {
+static void Addon_write(Writer& writer, const Addon& obj) {
     writer.write_u8(static_cast<uint8_t>(obj.addon_type));
 
     writer.write_u8(static_cast<uint8_t>(obj.info_block));
@@ -226,7 +222,7 @@ static size_t AddonInfo_size(const AddonInfo& obj) {
 }
 
 AddonInfo AddonInfo_read(Reader& reader) {
-    AddonInfo obj;
+    AddonInfo obj{};
 
     obj.addon_name = reader.read_cstring();
 
@@ -239,7 +235,7 @@ AddonInfo AddonInfo_read(Reader& reader) {
     return obj;
 }
 
-void AddonInfo_write(Writer& writer, const AddonInfo& obj) {
+static void AddonInfo_write(Writer& writer, const AddonInfo& obj) {
     writer.write_cstring(obj.addon_name);
 
     writer.write_u8(obj.addon_has_signature);
@@ -251,7 +247,7 @@ void AddonInfo_write(Writer& writer, const AddonInfo& obj) {
 }
 
 AuctionListItem AuctionListItem_read(Reader& reader) {
-    AuctionListItem obj;
+    AuctionListItem obj{};
 
     obj.id = reader.read_u32();
 
@@ -284,7 +280,7 @@ AuctionListItem AuctionListItem_read(Reader& reader) {
     return obj;
 }
 
-void AuctionListItem_write(Writer& writer, const AuctionListItem& obj) {
+static void AuctionListItem_write(Writer& writer, const AuctionListItem& obj) {
     writer.write_u32(obj.id);
 
     writer.write_u32(obj.item);
@@ -335,7 +331,7 @@ static size_t AuraLog_size(const AuraLog& obj) {
 }
 
 AuraLog AuraLog_read(Reader& reader) {
-    AuraLog obj;
+    AuraLog obj{};
 
     obj.aura_type = static_cast<AuraType>(reader.read_u32());
 
@@ -370,7 +366,7 @@ AuraLog AuraLog_read(Reader& reader) {
     return obj;
 }
 
-void AuraLog_write(Writer& writer, const AuraLog& obj) {
+static void AuraLog_write(Writer& writer, const AuraLog& obj) {
     writer.write_u32(static_cast<uint32_t>(obj.aura_type));
 
     if (obj.aura_type == AuraType::PERIODIC_DAMAGE|| obj.aura_type == AuraType::PERIODIC_DAMAGE_PERCENT) {
@@ -408,7 +404,7 @@ static size_t BattlegroundPlayer_size(const BattlegroundPlayer& obj) {
 }
 
 BattlegroundPlayer BattlegroundPlayer_read(Reader& reader) {
-    BattlegroundPlayer obj;
+    BattlegroundPlayer obj{};
 
     obj.player = reader.read_u64();
 
@@ -424,14 +420,14 @@ BattlegroundPlayer BattlegroundPlayer_read(Reader& reader) {
 
     obj.amount_of_extra_fields = reader.read_u32();
 
-    for (auto i = 0; i < obj.amount_of_extra_fields; ++i) {
+    for (uint32_t i = 0; i < obj.amount_of_extra_fields; ++i) {
         obj.fields.push_back(reader.read_u32());
     }
 
     return obj;
 }
 
-void BattlegroundPlayer_write(Writer& writer, const BattlegroundPlayer& obj) {
+static void BattlegroundPlayer_write(Writer& writer, const BattlegroundPlayer& obj) {
     writer.write_u64(obj.player);
 
     writer.write_u32(static_cast<uint32_t>(obj.rank));
@@ -453,7 +449,7 @@ void BattlegroundPlayer_write(Writer& writer, const BattlegroundPlayer& obj) {
 }
 
 BattlegroundPlayerPosition BattlegroundPlayerPosition_read(Reader& reader) {
-    BattlegroundPlayerPosition obj;
+    BattlegroundPlayerPosition obj{};
 
     obj.player = reader.read_u64();
 
@@ -464,7 +460,7 @@ BattlegroundPlayerPosition BattlegroundPlayerPosition_read(Reader& reader) {
     return obj;
 }
 
-void BattlegroundPlayerPosition_write(Writer& writer, const BattlegroundPlayerPosition& obj) {
+static void BattlegroundPlayerPosition_write(Writer& writer, const BattlegroundPlayerPosition& obj) {
     writer.write_u64(obj.player);
 
     writer.write_float(obj.position_x);
@@ -474,7 +470,7 @@ void BattlegroundPlayerPosition_write(Writer& writer, const BattlegroundPlayerPo
 }
 
 ChannelMember ChannelMember_read(Reader& reader) {
-    ChannelMember obj;
+    ChannelMember obj{};
 
     obj.guid = reader.read_u64();
 
@@ -483,7 +479,7 @@ ChannelMember ChannelMember_read(Reader& reader) {
     return obj;
 }
 
-void ChannelMember_write(Writer& writer, const ChannelMember& obj) {
+static void ChannelMember_write(Writer& writer, const ChannelMember& obj) {
     writer.write_u64(obj.guid);
 
     writer.write_u8(static_cast<uint8_t>(obj.member_flags));
@@ -491,7 +487,7 @@ void ChannelMember_write(Writer& writer, const ChannelMember& obj) {
 }
 
 CharacterGear CharacterGear_read(Reader& reader) {
-    CharacterGear obj;
+    CharacterGear obj{};
 
     obj.equipment_display_id = reader.read_u32();
 
@@ -500,7 +496,7 @@ CharacterGear CharacterGear_read(Reader& reader) {
     return obj;
 }
 
-void CharacterGear_write(Writer& writer, const CharacterGear& obj) {
+static void CharacterGear_write(Writer& writer, const CharacterGear& obj) {
     writer.write_u32(obj.equipment_display_id);
 
     writer.write_u8(static_cast<uint8_t>(obj.inventory_type));
@@ -512,7 +508,7 @@ static size_t Character_size(const Character& obj) {
 }
 
 Character Character_read(Reader& reader) {
-    Character obj;
+    Character obj{};
 
     obj.guid = reader.read_u64();
 
@@ -565,7 +561,7 @@ Character Character_read(Reader& reader) {
     return obj;
 }
 
-void Character_write(Writer& writer, const Character& obj) {
+static void Character_write(Writer& writer, const Character& obj) {
     writer.write_u64(obj.guid);
 
     writer.write_cstring(obj.name);
@@ -637,7 +633,7 @@ static size_t MonsterMove_size(const MonsterMove& obj) {
 }
 
 MonsterMove MonsterMove_read(Reader& reader) {
-    MonsterMove obj;
+    MonsterMove obj{};
 
     obj.spline_point = ::wow_world_messages::all::Vector3d_read(reader);
 
@@ -668,7 +664,7 @@ MonsterMove MonsterMove_read(Reader& reader) {
     return obj;
 }
 
-void MonsterMove_write(Writer& writer, const MonsterMove& obj) {
+static void MonsterMove_write(Writer& writer, const MonsterMove& obj) {
     Vector3d_write(writer, obj.spline_point);
 
     writer.write_u32(obj.spline_id);
@@ -714,7 +710,7 @@ static size_t CompressedMove_size(const CompressedMove& obj) {
 }
 
 CompressedMove CompressedMove_read(Reader& reader) {
-    CompressedMove obj;
+    CompressedMove obj{};
 
     (void)reader.read_u8();
 
@@ -739,7 +735,7 @@ CompressedMove CompressedMove_read(Reader& reader) {
     return obj;
 }
 
-void CompressedMove_write(Writer& writer, const CompressedMove& obj) {
+static void CompressedMove_write(Writer& writer, const CompressedMove& obj) {
     writer.write_u8(static_cast<uint8_t>(CompressedMove_size(obj)));
 
     writer.write_u16(static_cast<uint16_t>(obj.opcode));
@@ -763,7 +759,7 @@ void CompressedMove_write(Writer& writer, const CompressedMove& obj) {
 }
 
 CooldownSpell CooldownSpell_read(Reader& reader) {
-    CooldownSpell obj;
+    CooldownSpell obj{};
 
     obj.spell_id = reader.read_u16();
 
@@ -778,7 +774,7 @@ CooldownSpell CooldownSpell_read(Reader& reader) {
     return obj;
 }
 
-void CooldownSpell_write(Writer& writer, const CooldownSpell& obj) {
+static void CooldownSpell_write(Writer& writer, const CooldownSpell& obj) {
     writer.write_u16(obj.spell_id);
 
     writer.write_u16(obj.item_id);
@@ -792,7 +788,7 @@ void CooldownSpell_write(Writer& writer, const CooldownSpell& obj) {
 }
 
 DamageInfo DamageInfo_read(Reader& reader) {
-    DamageInfo obj;
+    DamageInfo obj{};
 
     obj.spell_school_mask = reader.read_u32();
 
@@ -807,7 +803,7 @@ DamageInfo DamageInfo_read(Reader& reader) {
     return obj;
 }
 
-void DamageInfo_write(Writer& writer, const DamageInfo& obj) {
+static void DamageInfo_write(Writer& writer, const DamageInfo& obj) {
     writer.write_u32(obj.spell_school_mask);
 
     writer.write_float(obj.damage_float);
@@ -821,7 +817,7 @@ void DamageInfo_write(Writer& writer, const DamageInfo& obj) {
 }
 
 FactionInitializer FactionInitializer_read(Reader& reader) {
-    FactionInitializer obj;
+    FactionInitializer obj{};
 
     obj.flag = static_cast<FactionFlag>(reader.read_u8());
 
@@ -830,7 +826,7 @@ FactionInitializer FactionInitializer_read(Reader& reader) {
     return obj;
 }
 
-void FactionInitializer_write(Writer& writer, const FactionInitializer& obj) {
+static void FactionInitializer_write(Writer& writer, const FactionInitializer& obj) {
     writer.write_u8(static_cast<uint8_t>(obj.flag));
 
     writer.write_u32(obj.standing);
@@ -838,7 +834,7 @@ void FactionInitializer_write(Writer& writer, const FactionInitializer& obj) {
 }
 
 FactionStanding FactionStanding_read(Reader& reader) {
-    FactionStanding obj;
+    FactionStanding obj{};
 
     obj.faction = static_cast<Faction>(reader.read_u16());
 
@@ -847,7 +843,7 @@ FactionStanding FactionStanding_read(Reader& reader) {
     return obj;
 }
 
-void FactionStanding_write(Writer& writer, const FactionStanding& obj) {
+static void FactionStanding_write(Writer& writer, const FactionStanding& obj) {
     writer.write_u16(static_cast<uint16_t>(obj.faction));
 
     writer.write_u32(obj.standing);
@@ -855,7 +851,7 @@ void FactionStanding_write(Writer& writer, const FactionStanding& obj) {
 }
 
 ForcedReaction ForcedReaction_read(Reader& reader) {
-    ForcedReaction obj;
+    ForcedReaction obj{};
 
     obj.faction = static_cast<Faction>(reader.read_u16());
 
@@ -864,7 +860,7 @@ ForcedReaction ForcedReaction_read(Reader& reader) {
     return obj;
 }
 
-void ForcedReaction_write(Writer& writer, const ForcedReaction& obj) {
+static void ForcedReaction_write(Writer& writer, const ForcedReaction& obj) {
     writer.write_u16(static_cast<uint16_t>(obj.faction));
 
     writer.write_u32(obj.reputation_rank);
@@ -882,7 +878,7 @@ static size_t Friend_size(const Friend& obj) {
 }
 
 Friend Friend_read(Reader& reader) {
-    Friend obj;
+    Friend obj{};
 
     obj.guid = reader.read_u64();
 
@@ -899,7 +895,7 @@ Friend Friend_read(Reader& reader) {
     return obj;
 }
 
-void Friend_write(Writer& writer, const Friend& obj) {
+static void Friend_write(Writer& writer, const Friend& obj) {
     writer.write_u64(obj.guid);
 
     writer.write_u8(static_cast<uint8_t>(obj.status));
@@ -919,7 +915,7 @@ static size_t GmSurveyQuestion_size(const GmSurveyQuestion& obj) {
 }
 
 GmSurveyQuestion GmSurveyQuestion_read(Reader& reader) {
-    GmSurveyQuestion obj;
+    GmSurveyQuestion obj{};
 
     obj.question_id = reader.read_u32();
 
@@ -930,7 +926,7 @@ GmSurveyQuestion GmSurveyQuestion_read(Reader& reader) {
     return obj;
 }
 
-void GmSurveyQuestion_write(Writer& writer, const GmSurveyQuestion& obj) {
+static void GmSurveyQuestion_write(Writer& writer, const GmSurveyQuestion& obj) {
     writer.write_u32(obj.question_id);
 
     writer.write_u8(obj.answer);
@@ -944,7 +940,7 @@ static size_t GossipItem_size(const GossipItem& obj) {
 }
 
 GossipItem GossipItem_read(Reader& reader) {
-    GossipItem obj;
+    GossipItem obj{};
 
     obj.id = reader.read_u32();
 
@@ -957,7 +953,7 @@ GossipItem GossipItem_read(Reader& reader) {
     return obj;
 }
 
-void GossipItem_write(Writer& writer, const GossipItem& obj) {
+static void GossipItem_write(Writer& writer, const GossipItem& obj) {
     writer.write_u32(obj.id);
 
     writer.write_u8(obj.item_icon);
@@ -973,7 +969,7 @@ static size_t GroupListMember_size(const GroupListMember& obj) {
 }
 
 GroupListMember GroupListMember_read(Reader& reader) {
-    GroupListMember obj;
+    GroupListMember obj{};
 
     obj.name = reader.read_cstring();
 
@@ -986,7 +982,7 @@ GroupListMember GroupListMember_read(Reader& reader) {
     return obj;
 }
 
-void GroupListMember_write(Writer& writer, const GroupListMember& obj) {
+static void GroupListMember_write(Writer& writer, const GroupListMember& obj) {
     writer.write_cstring(obj.name);
 
     writer.write_u64(obj.guid);
@@ -1008,7 +1004,7 @@ static size_t GuildMember_size(const GuildMember& obj) {
 }
 
 GuildMember GuildMember_read(Reader& reader) {
-    GuildMember obj;
+    GuildMember obj{};
 
     obj.guid = reader.read_u64();
 
@@ -1035,7 +1031,7 @@ GuildMember GuildMember_read(Reader& reader) {
     return obj;
 }
 
-void GuildMember_write(Writer& writer, const GuildMember& obj) {
+static void GuildMember_write(Writer& writer, const GuildMember& obj) {
     writer.write_u64(obj.guid);
 
     writer.write_u8(static_cast<uint8_t>(obj.status));
@@ -1061,7 +1057,7 @@ void GuildMember_write(Writer& writer, const GuildMember& obj) {
 }
 
 InitialSpell InitialSpell_read(Reader& reader) {
-    InitialSpell obj;
+    InitialSpell obj{};
 
     obj.spell_id = reader.read_u16();
 
@@ -1070,7 +1066,7 @@ InitialSpell InitialSpell_read(Reader& reader) {
     return obj;
 }
 
-void InitialSpell_write(Writer& writer, const InitialSpell& obj) {
+static void InitialSpell_write(Writer& writer, const InitialSpell& obj) {
     writer.write_u16(obj.spell_id);
 
     writer.write_u16(obj.unknown1);
@@ -1078,7 +1074,7 @@ void InitialSpell_write(Writer& writer, const InitialSpell& obj) {
 }
 
 ItemDamageType ItemDamageType_read(Reader& reader) {
-    ItemDamageType obj;
+    ItemDamageType obj{};
 
     obj.damage_minimum = reader.read_float();
 
@@ -1089,7 +1085,7 @@ ItemDamageType ItemDamageType_read(Reader& reader) {
     return obj;
 }
 
-void ItemDamageType_write(Writer& writer, const ItemDamageType& obj) {
+static void ItemDamageType_write(Writer& writer, const ItemDamageType& obj) {
     writer.write_float(obj.damage_minimum);
 
     writer.write_float(obj.damage_maximum);
@@ -1099,7 +1095,7 @@ void ItemDamageType_write(Writer& writer, const ItemDamageType& obj) {
 }
 
 ItemSpells ItemSpells_read(Reader& reader) {
-    ItemSpells obj;
+    ItemSpells obj{};
 
     obj.spell = reader.read_u32();
 
@@ -1116,7 +1112,7 @@ ItemSpells ItemSpells_read(Reader& reader) {
     return obj;
 }
 
-void ItemSpells_write(Writer& writer, const ItemSpells& obj) {
+static void ItemSpells_write(Writer& writer, const ItemSpells& obj) {
     writer.write_u32(obj.spell);
 
     writer.write_u32(static_cast<uint32_t>(obj.spell_trigger));
@@ -1132,7 +1128,7 @@ void ItemSpells_write(Writer& writer, const ItemSpells& obj) {
 }
 
 ItemStat ItemStat_read(Reader& reader) {
-    ItemStat obj;
+    ItemStat obj{};
 
     obj.stat_type = static_cast<ItemStatType>(reader.read_u32());
 
@@ -1141,7 +1137,7 @@ ItemStat ItemStat_read(Reader& reader) {
     return obj;
 }
 
-void ItemStat_write(Writer& writer, const ItemStat& obj) {
+static void ItemStat_write(Writer& writer, const ItemStat& obj) {
     writer.write_u32(static_cast<uint32_t>(obj.stat_type));
 
     writer.write_i32(obj.value);
@@ -1149,7 +1145,7 @@ void ItemStat_write(Writer& writer, const ItemStat& obj) {
 }
 
 ListInventoryItem ListInventoryItem_read(Reader& reader) {
-    ListInventoryItem obj;
+    ListInventoryItem obj{};
 
     obj.item_stack_count = reader.read_u32();
 
@@ -1168,7 +1164,7 @@ ListInventoryItem ListInventoryItem_read(Reader& reader) {
     return obj;
 }
 
-void ListInventoryItem_write(Writer& writer, const ListInventoryItem& obj) {
+static void ListInventoryItem_write(Writer& writer, const ListInventoryItem& obj) {
     writer.write_u32(obj.item_stack_count);
 
     writer.write_u32(obj.item);
@@ -1186,7 +1182,7 @@ void ListInventoryItem_write(Writer& writer, const ListInventoryItem& obj) {
 }
 
 LootItem LootItem_read(Reader& reader) {
-    LootItem obj;
+    LootItem obj{};
 
     obj.index = reader.read_u8();
 
@@ -1197,7 +1193,7 @@ LootItem LootItem_read(Reader& reader) {
     return obj;
 }
 
-void LootItem_write(Writer& writer, const LootItem& obj) {
+static void LootItem_write(Writer& writer, const LootItem& obj) {
     writer.write_u8(obj.index);
 
     writer.write_u32(obj.item);
@@ -1223,7 +1219,7 @@ static size_t Mail_size(const Mail& obj) {
 }
 
 Mail Mail_read(Reader& reader) {
-    Mail obj;
+    Mail obj{};
 
     obj.message_id = reader.read_u32();
 
@@ -1278,7 +1274,7 @@ Mail Mail_read(Reader& reader) {
     return obj;
 }
 
-void Mail_write(Writer& writer, const Mail& obj) {
+static void Mail_write(Writer& writer, const Mail& obj) {
     writer.write_u32(obj.message_id);
 
     writer.write_u8(static_cast<uint8_t>(obj.message_type));
@@ -1393,7 +1389,7 @@ static size_t MovementBlock_size(const MovementBlock& obj) {
 }
 
 MovementBlock MovementBlock_read(Reader& reader) {
-    MovementBlock obj;
+    MovementBlock obj{};
 
     obj.update_flag = static_cast<UpdateFlag>(reader.read_u8());
 
@@ -1469,7 +1465,7 @@ MovementBlock MovementBlock_read(Reader& reader) {
 
             obj.amount_of_nodes = reader.read_u32();
 
-            for (auto i = 0; i < obj.amount_of_nodes; ++i) {
+            for (uint32_t i = 0; i < obj.amount_of_nodes; ++i) {
                 obj.nodes.push_back(::wow_world_messages::all::Vector3d_read(reader));
             }
 
@@ -1502,7 +1498,7 @@ MovementBlock MovementBlock_read(Reader& reader) {
     return obj;
 }
 
-void MovementBlock_write(Writer& writer, const MovementBlock& obj) {
+static void MovementBlock_write(Writer& writer, const MovementBlock& obj) {
     writer.write_u8(static_cast<uint8_t>(obj.update_flag));
 
     if ((obj.update_flag & UPDATE_FLAG_LIVING) != 0) {
@@ -1614,7 +1610,7 @@ static size_t TransportInfo_size(const TransportInfo& obj) {
 }
 
 TransportInfo TransportInfo_read(Reader& reader) {
-    TransportInfo obj;
+    TransportInfo obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -1627,7 +1623,7 @@ TransportInfo TransportInfo_read(Reader& reader) {
     return obj;
 }
 
-void TransportInfo_write(Writer& writer, const TransportInfo& obj) {
+static void TransportInfo_write(Writer& writer, const TransportInfo& obj) {
     writer.write_packed_guid(obj.guid);
 
     Vector3d_write(writer, obj.position);
@@ -1661,7 +1657,7 @@ static size_t MovementInfo_size(const MovementInfo& obj) {
 }
 
 MovementInfo MovementInfo_read(Reader& reader) {
-    MovementInfo obj;
+    MovementInfo obj{};
 
     obj.flags = static_cast<MovementFlags>(reader.read_u32());
 
@@ -1698,7 +1694,7 @@ MovementInfo MovementInfo_read(Reader& reader) {
     return obj;
 }
 
-void MovementInfo_write(Writer& writer, const MovementInfo& obj) {
+static void MovementInfo_write(Writer& writer, const MovementInfo& obj) {
     writer.write_u32(static_cast<uint32_t>(obj.flags));
 
     writer.write_u32(obj.timestamp);
@@ -1734,7 +1730,7 @@ void MovementInfo_write(Writer& writer, const MovementInfo& obj) {
 }
 
 NpcTextUpdateEmote NpcTextUpdateEmote_read(Reader& reader) {
-    NpcTextUpdateEmote obj;
+    NpcTextUpdateEmote obj{};
 
     obj.delay = reader.read_u32();
 
@@ -1743,7 +1739,7 @@ NpcTextUpdateEmote NpcTextUpdateEmote_read(Reader& reader) {
     return obj;
 }
 
-void NpcTextUpdateEmote_write(Writer& writer, const NpcTextUpdateEmote& obj) {
+static void NpcTextUpdateEmote_write(Writer& writer, const NpcTextUpdateEmote& obj) {
     writer.write_u32(obj.delay);
 
     writer.write_u32(obj.emote);
@@ -1754,14 +1750,14 @@ static size_t NpcTextUpdate_size(const NpcTextUpdate& obj) {
     size_t _size = 32;
 
     for(const auto& v : obj.texts) {
-        _size += v.size() + 1;
+        _size += v.size() + 1;;
     }
 
     return _size;
 }
 
 NpcTextUpdate NpcTextUpdate_read(Reader& reader) {
-    NpcTextUpdate obj;
+    NpcTextUpdate obj{};
 
     obj.probability = reader.read_float();
 
@@ -1778,7 +1774,7 @@ NpcTextUpdate NpcTextUpdate_read(Reader& reader) {
     return obj;
 }
 
-void NpcTextUpdate_write(Writer& writer, const NpcTextUpdate& obj) {
+static void NpcTextUpdate_write(Writer& writer, const NpcTextUpdate& obj) {
     writer.write_float(obj.probability);
 
     for (const auto& v : obj.texts) {
@@ -1809,7 +1805,7 @@ static size_t Object_size(const Object& obj) {
         _size += 4;
 
         for(const auto& v : obj.guids) {
-            _size += wow_world_messages::util::wwm_packed_guid_size(v);
+            _size += wow_world_messages::util::wwm_packed_guid_size(v);;
         }
 
     }
@@ -1818,7 +1814,7 @@ static size_t Object_size(const Object& obj) {
 }
 
 Object Object_read(Reader& reader) {
-    Object obj;
+    Object obj{};
 
     obj.update_type = static_cast<UpdateType>(reader.read_u8());
 
@@ -1847,7 +1843,7 @@ Object Object_read(Reader& reader) {
     else if (obj.update_type == UpdateType::OUT_OF_RANGE_OBJECTS|| obj.update_type == UpdateType::NEAR_OBJECTS) {
         obj.count = reader.read_u32();
 
-        for (auto i = 0; i < obj.count; ++i) {
+        for (uint32_t i = 0; i < obj.count; ++i) {
             obj.guids.push_back(reader.read_packed_guid());
         }
 
@@ -1855,7 +1851,7 @@ Object Object_read(Reader& reader) {
     return obj;
 }
 
-void Object_write(Writer& writer, const Object& obj) {
+static void Object_write(Writer& writer, const Object& obj) {
     writer.write_u8(static_cast<uint8_t>(obj.update_type));
 
     if (obj.update_type == UpdateType::VALUES) {
@@ -1891,7 +1887,7 @@ void Object_write(Writer& writer, const Object& obj) {
 }
 
 PetSpellCooldown PetSpellCooldown_read(Reader& reader) {
-    PetSpellCooldown obj;
+    PetSpellCooldown obj{};
 
     obj.spell = reader.read_u16();
 
@@ -1904,7 +1900,7 @@ PetSpellCooldown PetSpellCooldown_read(Reader& reader) {
     return obj;
 }
 
-void PetSpellCooldown_write(Writer& writer, const PetSpellCooldown& obj) {
+static void PetSpellCooldown_write(Writer& writer, const PetSpellCooldown& obj) {
     writer.write_u16(obj.spell);
 
     writer.write_u16(obj.spell_category);
@@ -1916,7 +1912,7 @@ void PetSpellCooldown_write(Writer& writer, const PetSpellCooldown& obj) {
 }
 
 PetitionShowlist PetitionShowlist_read(Reader& reader) {
-    PetitionShowlist obj;
+    PetitionShowlist obj{};
 
     obj.index = reader.read_u32();
 
@@ -1931,7 +1927,7 @@ PetitionShowlist PetitionShowlist_read(Reader& reader) {
     return obj;
 }
 
-void PetitionShowlist_write(Writer& writer, const PetitionShowlist& obj) {
+static void PetitionShowlist_write(Writer& writer, const PetitionShowlist& obj) {
     writer.write_u32(obj.index);
 
     writer.write_u32(obj.charter_entry);
@@ -1945,7 +1941,7 @@ void PetitionShowlist_write(Writer& writer, const PetitionShowlist& obj) {
 }
 
 PetitionSignature PetitionSignature_read(Reader& reader) {
-    PetitionSignature obj;
+    PetitionSignature obj{};
 
     obj.signer = reader.read_u64();
 
@@ -1954,7 +1950,7 @@ PetitionSignature PetitionSignature_read(Reader& reader) {
     return obj;
 }
 
-void PetitionSignature_write(Writer& writer, const PetitionSignature& obj) {
+static void PetitionSignature_write(Writer& writer, const PetitionSignature& obj) {
     writer.write_u64(obj.signer);
 
     writer.write_u32(obj.unknown1);
@@ -1962,7 +1958,7 @@ void PetitionSignature_write(Writer& writer, const PetitionSignature& obj) {
 }
 
 QuestDetailsEmote QuestDetailsEmote_read(Reader& reader) {
-    QuestDetailsEmote obj;
+    QuestDetailsEmote obj{};
 
     obj.emote = reader.read_u32();
 
@@ -1971,7 +1967,7 @@ QuestDetailsEmote QuestDetailsEmote_read(Reader& reader) {
     return obj;
 }
 
-void QuestDetailsEmote_write(Writer& writer, const QuestDetailsEmote& obj) {
+static void QuestDetailsEmote_write(Writer& writer, const QuestDetailsEmote& obj) {
     writer.write_u32(obj.emote);
 
     writer.write_u32(obj.emote_delay);
@@ -1983,7 +1979,7 @@ static size_t QuestItem_size(const QuestItem& obj) {
 }
 
 QuestItem QuestItem_read(Reader& reader) {
-    QuestItem obj;
+    QuestItem obj{};
 
     obj.quest_id = reader.read_u32();
 
@@ -1996,7 +1992,7 @@ QuestItem QuestItem_read(Reader& reader) {
     return obj;
 }
 
-void QuestItem_write(Writer& writer, const QuestItem& obj) {
+static void QuestItem_write(Writer& writer, const QuestItem& obj) {
     writer.write_u32(obj.quest_id);
 
     writer.write_u32(obj.quest_icon);
@@ -2008,7 +2004,7 @@ void QuestItem_write(Writer& writer, const QuestItem& obj) {
 }
 
 QuestItemRequirement QuestItemRequirement_read(Reader& reader) {
-    QuestItemRequirement obj;
+    QuestItemRequirement obj{};
 
     obj.item = reader.read_u32();
 
@@ -2019,7 +2015,7 @@ QuestItemRequirement QuestItemRequirement_read(Reader& reader) {
     return obj;
 }
 
-void QuestItemRequirement_write(Writer& writer, const QuestItemRequirement& obj) {
+static void QuestItemRequirement_write(Writer& writer, const QuestItemRequirement& obj) {
     writer.write_u32(obj.item);
 
     writer.write_u32(obj.item_count);
@@ -2029,7 +2025,7 @@ void QuestItemRequirement_write(Writer& writer, const QuestItemRequirement& obj)
 }
 
 QuestItemReward QuestItemReward_read(Reader& reader) {
-    QuestItemReward obj;
+    QuestItemReward obj{};
 
     obj.item = reader.read_u32();
 
@@ -2038,7 +2034,7 @@ QuestItemReward QuestItemReward_read(Reader& reader) {
     return obj;
 }
 
-void QuestItemReward_write(Writer& writer, const QuestItemReward& obj) {
+static void QuestItemReward_write(Writer& writer, const QuestItemReward& obj) {
     writer.write_u32(obj.item);
 
     writer.write_u32(obj.item_count);
@@ -2046,7 +2042,7 @@ void QuestItemReward_write(Writer& writer, const QuestItemReward& obj) {
 }
 
 QuestObjective QuestObjective_read(Reader& reader) {
-    QuestObjective obj;
+    QuestObjective obj{};
 
     obj.creature_id = reader.read_u32();
 
@@ -2059,7 +2055,7 @@ QuestObjective QuestObjective_read(Reader& reader) {
     return obj;
 }
 
-void QuestObjective_write(Writer& writer, const QuestObjective& obj) {
+static void QuestObjective_write(Writer& writer, const QuestObjective& obj) {
     writer.write_u32(obj.creature_id);
 
     writer.write_u32(obj.kill_count);
@@ -2071,7 +2067,7 @@ void QuestObjective_write(Writer& writer, const QuestObjective& obj) {
 }
 
 RaidInfo RaidInfo_read(Reader& reader) {
-    RaidInfo obj;
+    RaidInfo obj{};
 
     obj.map = static_cast<Map>(reader.read_u32());
 
@@ -2082,7 +2078,7 @@ RaidInfo RaidInfo_read(Reader& reader) {
     return obj;
 }
 
-void RaidInfo_write(Writer& writer, const RaidInfo& obj) {
+static void RaidInfo_write(Writer& writer, const RaidInfo& obj) {
     writer.write_u32(static_cast<uint32_t>(obj.map));
 
     writer.write_u32(obj.reset_time);
@@ -2092,7 +2088,7 @@ void RaidInfo_write(Writer& writer, const RaidInfo& obj) {
 }
 
 RaidTargetUpdate RaidTargetUpdate_read(Reader& reader) {
-    RaidTargetUpdate obj;
+    RaidTargetUpdate obj{};
 
     obj.index = static_cast<RaidTargetIndex>(reader.read_u8());
 
@@ -2101,7 +2097,7 @@ RaidTargetUpdate RaidTargetUpdate_read(Reader& reader) {
     return obj;
 }
 
-void RaidTargetUpdate_write(Writer& writer, const RaidTargetUpdate& obj) {
+static void RaidTargetUpdate_write(Writer& writer, const RaidTargetUpdate& obj) {
     writer.write_u8(static_cast<uint8_t>(obj.index));
 
     writer.write_u64(obj.guid);
@@ -2152,7 +2148,7 @@ static size_t SpellCastTargets_size(const SpellCastTargets& obj) {
 }
 
 SpellCastTargets SpellCastTargets_read(Reader& reader) {
-    SpellCastTargets obj;
+    SpellCastTargets obj{};
 
     obj.target_flags = static_cast<SpellCastTargetFlags>(reader.read_u16());
 
@@ -2199,7 +2195,7 @@ SpellCastTargets SpellCastTargets_read(Reader& reader) {
     return obj;
 }
 
-void SpellCastTargets_write(Writer& writer, const SpellCastTargets& obj) {
+static void SpellCastTargets_write(Writer& writer, const SpellCastTargets& obj) {
     writer.write_u16(static_cast<uint16_t>(obj.target_flags));
 
     if ((obj.target_flags & SPELL_CAST_TARGET_FLAGS_UNIT) != 0) {
@@ -2245,7 +2241,7 @@ void SpellCastTargets_write(Writer& writer, const SpellCastTargets& obj) {
 }
 
 SpellCooldownStatus SpellCooldownStatus_read(Reader& reader) {
-    SpellCooldownStatus obj;
+    SpellCooldownStatus obj{};
 
     obj.id = reader.read_u32();
 
@@ -2254,7 +2250,7 @@ SpellCooldownStatus SpellCooldownStatus_read(Reader& reader) {
     return obj;
 }
 
-void SpellCooldownStatus_write(Writer& writer, const SpellCooldownStatus& obj) {
+static void SpellCooldownStatus_write(Writer& writer, const SpellCooldownStatus& obj) {
     writer.write_u32(obj.id);
 
     writer.write_u32(obj.cooldown_time);
@@ -2296,7 +2292,7 @@ static size_t SpellLog_size(const SpellLog& obj) {
 }
 
 SpellLog SpellLog_read(Reader& reader) {
-    SpellLog obj;
+    SpellLog obj{};
 
     obj.effect = static_cast<SpellEffect>(reader.read_u32());
 
@@ -2363,7 +2359,7 @@ SpellLog SpellLog_read(Reader& reader) {
     return obj;
 }
 
-void SpellLog_write(Writer& writer, const SpellLog& obj) {
+static void SpellLog_write(Writer& writer, const SpellLog& obj) {
     writer.write_u32(static_cast<uint32_t>(obj.effect));
 
     writer.write_u32(1);
@@ -2429,7 +2425,7 @@ void SpellLog_write(Writer& writer, const SpellLog& obj) {
 }
 
 SpellLogMiss SpellLogMiss_read(Reader& reader) {
-    SpellLogMiss obj;
+    SpellLogMiss obj{};
 
     obj.target = reader.read_u64();
 
@@ -2438,7 +2434,7 @@ SpellLogMiss SpellLogMiss_read(Reader& reader) {
     return obj;
 }
 
-void SpellLogMiss_write(Writer& writer, const SpellLogMiss& obj) {
+static void SpellLogMiss_write(Writer& writer, const SpellLogMiss& obj) {
     writer.write_u64(obj.target);
 
     writer.write_u8(static_cast<uint8_t>(obj.miss_info));
@@ -2446,7 +2442,7 @@ void SpellLogMiss_write(Writer& writer, const SpellLogMiss& obj) {
 }
 
 SpellMiss SpellMiss_read(Reader& reader) {
-    SpellMiss obj;
+    SpellMiss obj{};
 
     obj.target = reader.read_u64();
 
@@ -2455,7 +2451,7 @@ SpellMiss SpellMiss_read(Reader& reader) {
     return obj;
 }
 
-void SpellMiss_write(Writer& writer, const SpellMiss& obj) {
+static void SpellMiss_write(Writer& writer, const SpellMiss& obj) {
     writer.write_u64(obj.target);
 
     writer.write_u8(static_cast<uint8_t>(obj.miss_info));
@@ -2467,7 +2463,7 @@ static size_t StabledPet_size(const StabledPet& obj) {
 }
 
 StabledPet StabledPet_read(Reader& reader) {
-    StabledPet obj;
+    StabledPet obj{};
 
     obj.pet_number = reader.read_u32();
 
@@ -2484,7 +2480,7 @@ StabledPet StabledPet_read(Reader& reader) {
     return obj;
 }
 
-void StabledPet_write(Writer& writer, const StabledPet& obj) {
+static void StabledPet_write(Writer& writer, const StabledPet& obj) {
     writer.write_u32(obj.pet_number);
 
     writer.write_u32(obj.entry);
@@ -2500,7 +2496,7 @@ void StabledPet_write(Writer& writer, const StabledPet& obj) {
 }
 
 TradeSlot TradeSlot_read(Reader& reader) {
-    TradeSlot obj;
+    TradeSlot obj{};
 
     obj.trade_slot_number = reader.read_u8();
 
@@ -2533,7 +2529,7 @@ TradeSlot TradeSlot_read(Reader& reader) {
     return obj;
 }
 
-void TradeSlot_write(Writer& writer, const TradeSlot& obj) {
+static void TradeSlot_write(Writer& writer, const TradeSlot& obj) {
     writer.write_u8(obj.trade_slot_number);
 
     writer.write_u32(obj.item);
@@ -2565,7 +2561,7 @@ void TradeSlot_write(Writer& writer, const TradeSlot& obj) {
 }
 
 TrainerSpell TrainerSpell_read(Reader& reader) {
-    TrainerSpell obj;
+    TrainerSpell obj{};
 
     obj.spell = reader.read_u32();
 
@@ -2590,7 +2586,7 @@ TrainerSpell TrainerSpell_read(Reader& reader) {
     return obj;
 }
 
-void TrainerSpell_write(Writer& writer, const TrainerSpell& obj) {
+static void TrainerSpell_write(Writer& writer, const TrainerSpell& obj) {
     writer.write_u32(obj.spell);
 
     writer.write_u8(static_cast<uint8_t>(obj.state));
@@ -2618,7 +2614,7 @@ static size_t WhoPlayer_size(const WhoPlayer& obj) {
 }
 
 WhoPlayer WhoPlayer_read(Reader& reader) {
-    WhoPlayer obj;
+    WhoPlayer obj{};
 
     obj.name = reader.read_cstring();
 
@@ -2637,7 +2633,7 @@ WhoPlayer WhoPlayer_read(Reader& reader) {
     return obj;
 }
 
-void WhoPlayer_write(Writer& writer, const WhoPlayer& obj) {
+static void WhoPlayer_write(Writer& writer, const WhoPlayer& obj) {
     writer.write_cstring(obj.name);
 
     writer.write_cstring(obj.guild);
@@ -2655,7 +2651,7 @@ void WhoPlayer_write(Writer& writer, const WhoPlayer& obj) {
 }
 
 WorldState WorldState_read(Reader& reader) {
-    WorldState obj;
+    WorldState obj{};
 
     obj.state = reader.read_u32();
 
@@ -2664,17 +2660,17 @@ WorldState WorldState_read(Reader& reader) {
     return obj;
 }
 
-void WorldState_write(Writer& writer, const WorldState& obj) {
+static void WorldState_write(Writer& writer, const WorldState& obj) {
     writer.write_u32(obj.state);
 
     writer.write_u32(obj.value);
 
 }
 
-std::vector<unsigned char> CMSG_BOOTME::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_BOOTME::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x00000001); /* opcode */
 
@@ -2686,18 +2682,18 @@ static size_t CMSG_DBLOOKUP_size(const CMSG_DBLOOKUP& obj) {
 }
 
 CMSG_DBLOOKUP CMSG_DBLOOKUP_read(Reader& reader) {
-    CMSG_DBLOOKUP obj;
+    CMSG_DBLOOKUP obj{};
 
     obj.query = reader.read_cstring();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_DBLOOKUP::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_DBLOOKUP::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_DBLOOKUP_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_DBLOOKUP_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_DBLOOKUP_size(obj) + 4)); /* size */
 
     writer.write_u32(0x00000002); /* opcode */
 
@@ -2707,7 +2703,7 @@ std::vector<unsigned char> CMSG_DBLOOKUP::write() const {
 }
 
 CMSG_WORLD_TELEPORT CMSG_WORLD_TELEPORT_read(Reader& reader) {
-    CMSG_WORLD_TELEPORT obj;
+    CMSG_WORLD_TELEPORT obj{};
 
     obj.time = reader.read_u32();
 
@@ -2720,11 +2716,11 @@ CMSG_WORLD_TELEPORT CMSG_WORLD_TELEPORT_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_WORLD_TELEPORT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_WORLD_TELEPORT::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0018);
 
-    writer.write_u16_be(0x0018 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0018 + 4)); /* size */
 
     writer.write_u32(0x00000008); /* opcode */
 
@@ -2744,18 +2740,18 @@ static size_t CMSG_TELEPORT_TO_UNIT_size(const CMSG_TELEPORT_TO_UNIT& obj) {
 }
 
 CMSG_TELEPORT_TO_UNIT CMSG_TELEPORT_TO_UNIT_read(Reader& reader) {
-    CMSG_TELEPORT_TO_UNIT obj;
+    CMSG_TELEPORT_TO_UNIT obj{};
 
     obj.name = reader.read_cstring();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_TELEPORT_TO_UNIT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_TELEPORT_TO_UNIT::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_TELEPORT_TO_UNIT_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_TELEPORT_TO_UNIT_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_TELEPORT_TO_UNIT_size(obj) + 4)); /* size */
 
     writer.write_u32(0x00000009); /* opcode */
 
@@ -2769,7 +2765,7 @@ static size_t CMSG_CHAR_CREATE_size(const CMSG_CHAR_CREATE& obj) {
 }
 
 CMSG_CHAR_CREATE CMSG_CHAR_CREATE_read(Reader& reader) {
-    CMSG_CHAR_CREATE obj;
+    CMSG_CHAR_CREATE obj{};
 
     obj.name = reader.read_cstring();
 
@@ -2794,11 +2790,11 @@ CMSG_CHAR_CREATE CMSG_CHAR_CREATE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_CHAR_CREATE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_CHAR_CREATE::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_CHAR_CREATE_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_CHAR_CREATE_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_CHAR_CREATE_size(obj) + 4)); /* size */
 
     writer.write_u32(0x00000036); /* opcode */
 
@@ -2825,10 +2821,10 @@ std::vector<unsigned char> CMSG_CHAR_CREATE::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_CHAR_ENUM::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_CHAR_ENUM::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x00000037); /* opcode */
 
@@ -2836,18 +2832,18 @@ std::vector<unsigned char> CMSG_CHAR_ENUM::write() const {
 }
 
 CMSG_CHAR_DELETE CMSG_CHAR_DELETE_read(Reader& reader) {
-    CMSG_CHAR_DELETE obj;
+    CMSG_CHAR_DELETE obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_CHAR_DELETE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_CHAR_DELETE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x00000038); /* opcode */
 
@@ -2857,18 +2853,18 @@ std::vector<unsigned char> CMSG_CHAR_DELETE::write() const {
 }
 
 SMSG_CHAR_CREATE SMSG_CHAR_CREATE_read(Reader& reader) {
-    SMSG_CHAR_CREATE obj;
+    SMSG_CHAR_CREATE obj{};
 
     obj.result = static_cast<WorldResult>(reader.read_u8());
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_CHAR_CREATE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_CHAR_CREATE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0001);
 
-    writer.write_u16_be(0x0001 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0001 + 2)); /* size */
 
     writer.write_u16(0x0000003a); /* opcode */
 
@@ -2888,22 +2884,22 @@ static size_t SMSG_CHAR_ENUM_size(const SMSG_CHAR_ENUM& obj) {
 }
 
 SMSG_CHAR_ENUM SMSG_CHAR_ENUM_read(Reader& reader) {
-    SMSG_CHAR_ENUM obj;
+    SMSG_CHAR_ENUM obj{};
 
     obj.amount_of_characters = reader.read_u8();
 
-    for (auto i = 0; i < obj.amount_of_characters; ++i) {
+    for (uint8_t i = 0; i < obj.amount_of_characters; ++i) {
         obj.characters.push_back(::wow_world_messages::vanilla::Character_read(reader));
     }
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_CHAR_ENUM::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_CHAR_ENUM::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_CHAR_ENUM_size(obj));
 
-    writer.write_u16_be(SMSG_CHAR_ENUM_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_CHAR_ENUM_size(obj) + 2)); /* size */
 
     writer.write_u16(0x0000003b); /* opcode */
 
@@ -2917,18 +2913,18 @@ std::vector<unsigned char> SMSG_CHAR_ENUM::write() const {
 }
 
 SMSG_CHAR_DELETE SMSG_CHAR_DELETE_read(Reader& reader) {
-    SMSG_CHAR_DELETE obj;
+    SMSG_CHAR_DELETE obj{};
 
     obj.result = static_cast<WorldResult>(reader.read_u8());
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_CHAR_DELETE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_CHAR_DELETE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0001);
 
-    writer.write_u16_be(0x0001 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0001 + 2)); /* size */
 
     writer.write_u16(0x0000003c); /* opcode */
 
@@ -2938,18 +2934,18 @@ std::vector<unsigned char> SMSG_CHAR_DELETE::write() const {
 }
 
 CMSG_PLAYER_LOGIN CMSG_PLAYER_LOGIN_read(Reader& reader) {
-    CMSG_PLAYER_LOGIN obj;
+    CMSG_PLAYER_LOGIN obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_PLAYER_LOGIN::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_PLAYER_LOGIN::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x0000003d); /* opcode */
 
@@ -2959,7 +2955,7 @@ std::vector<unsigned char> CMSG_PLAYER_LOGIN::write() const {
 }
 
 SMSG_NEW_WORLD SMSG_NEW_WORLD_read(Reader& reader) {
-    SMSG_NEW_WORLD obj;
+    SMSG_NEW_WORLD obj{};
 
     obj.map = static_cast<Map>(reader.read_u32());
 
@@ -2970,11 +2966,11 @@ SMSG_NEW_WORLD SMSG_NEW_WORLD_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_NEW_WORLD::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_NEW_WORLD::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0014);
 
-    writer.write_u16_be(0x0014 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0014 + 2)); /* size */
 
     writer.write_u16(0x0000003e); /* opcode */
 
@@ -2987,8 +2983,55 @@ std::vector<unsigned char> SMSG_NEW_WORLD::write() const {
     return writer.m_buf;
 }
 
+static size_t SMSG_TRANSFER_PENDING_size(const SMSG_TRANSFER_PENDING& obj) {
+    size_t _size = 4;
+
+    if(obj.has_transport) {
+        _size += 8;
+    }
+
+    return _size;
+}
+
+SMSG_TRANSFER_PENDING SMSG_TRANSFER_PENDING_read(Reader& reader, size_t body_size) {
+    SMSG_TRANSFER_PENDING obj{};
+    size_t _size = 0;
+
+    obj.map = static_cast<Map>(reader.read_u32());
+    _size += 4;
+
+    if (_size < body_size) {
+        obj.has_transport = std::unique_ptr<vanilla::SMSG_TRANSFER_PENDING::HasTransport>(new vanilla::SMSG_TRANSFER_PENDING::HasTransport());
+
+        obj.has_transport->transport = reader.read_u32();
+
+        obj.has_transport->transport_map = static_cast<Map>(reader.read_u32());
+
+    }
+    return obj;
+}
+
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_TRANSFER_PENDING::write() const {
+    const auto& obj = *this;
+    auto writer = Writer(SMSG_TRANSFER_PENDING_size(obj));
+
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_TRANSFER_PENDING_size(obj) + 2)); /* size */
+
+    writer.write_u16(0x0000003f); /* opcode */
+
+    writer.write_u32(static_cast<uint32_t>(obj.map));
+
+    if(obj.has_transport) {
+        writer.write_u32(obj.has_transport->transport);
+
+        writer.write_u32(static_cast<uint32_t>(obj.has_transport->transport_map));
+
+    }
+    return writer.m_buf;
+}
+
 SMSG_TRANSFER_ABORTED SMSG_TRANSFER_ABORTED_read(Reader& reader) {
-    SMSG_TRANSFER_ABORTED obj;
+    SMSG_TRANSFER_ABORTED obj{};
 
     obj.map = static_cast<Map>(reader.read_u32());
 
@@ -2999,11 +3042,11 @@ SMSG_TRANSFER_ABORTED SMSG_TRANSFER_ABORTED_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_TRANSFER_ABORTED::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_TRANSFER_ABORTED::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0006);
 
-    writer.write_u16_be(0x0006 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0006 + 2)); /* size */
 
     writer.write_u16(0x00000040); /* opcode */
 
@@ -3017,18 +3060,18 @@ std::vector<unsigned char> SMSG_TRANSFER_ABORTED::write() const {
 }
 
 SMSG_CHARACTER_LOGIN_FAILED SMSG_CHARACTER_LOGIN_FAILED_read(Reader& reader) {
-    SMSG_CHARACTER_LOGIN_FAILED obj;
+    SMSG_CHARACTER_LOGIN_FAILED obj{};
 
     obj.result = static_cast<WorldResult>(reader.read_u8());
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_CHARACTER_LOGIN_FAILED::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_CHARACTER_LOGIN_FAILED::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0001);
 
-    writer.write_u16_be(0x0001 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0001 + 2)); /* size */
 
     writer.write_u16(0x00000041); /* opcode */
 
@@ -3038,7 +3081,7 @@ std::vector<unsigned char> SMSG_CHARACTER_LOGIN_FAILED::write() const {
 }
 
 SMSG_LOGIN_SETTIMESPEED SMSG_LOGIN_SETTIMESPEED_read(Reader& reader) {
-    SMSG_LOGIN_SETTIMESPEED obj;
+    SMSG_LOGIN_SETTIMESPEED obj{};
 
     obj.datetime = reader.read_u32();
 
@@ -3047,11 +3090,11 @@ SMSG_LOGIN_SETTIMESPEED SMSG_LOGIN_SETTIMESPEED_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_LOGIN_SETTIMESPEED::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_LOGIN_SETTIMESPEED::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 2)); /* size */
 
     writer.write_u16(0x00000042); /* opcode */
 
@@ -3062,20 +3105,20 @@ std::vector<unsigned char> SMSG_LOGIN_SETTIMESPEED::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_PLAYER_LOGOUT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_PLAYER_LOGOUT::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x0000004a); /* opcode */
 
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_LOGOUT_REQUEST::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_LOGOUT_REQUEST::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x0000004b); /* opcode */
 
@@ -3083,7 +3126,7 @@ std::vector<unsigned char> CMSG_LOGOUT_REQUEST::write() const {
 }
 
 SMSG_LOGOUT_RESPONSE SMSG_LOGOUT_RESPONSE_read(Reader& reader) {
-    SMSG_LOGOUT_RESPONSE obj;
+    SMSG_LOGOUT_RESPONSE obj{};
 
     obj.result = static_cast<LogoutResult>(reader.read_u32());
 
@@ -3092,11 +3135,11 @@ SMSG_LOGOUT_RESPONSE SMSG_LOGOUT_RESPONSE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_LOGOUT_RESPONSE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_LOGOUT_RESPONSE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0005);
 
-    writer.write_u16_be(0x0005 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0005 + 2)); /* size */
 
     writer.write_u16(0x0000004c); /* opcode */
 
@@ -3107,30 +3150,30 @@ std::vector<unsigned char> SMSG_LOGOUT_RESPONSE::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> SMSG_LOGOUT_COMPLETE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_LOGOUT_COMPLETE::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 2)); /* size */
 
     writer.write_u16(0x0000004d); /* opcode */
 
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_LOGOUT_CANCEL::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_LOGOUT_CANCEL::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x0000004e); /* opcode */
 
     return writer.m_buf;
 }
 
-std::vector<unsigned char> SMSG_LOGOUT_CANCEL_ACK::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_LOGOUT_CANCEL_ACK::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 2)); /* size */
 
     writer.write_u16(0x0000004f); /* opcode */
 
@@ -3138,18 +3181,18 @@ std::vector<unsigned char> SMSG_LOGOUT_CANCEL_ACK::write() const {
 }
 
 CMSG_NAME_QUERY CMSG_NAME_QUERY_read(Reader& reader) {
-    CMSG_NAME_QUERY obj;
+    CMSG_NAME_QUERY obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_NAME_QUERY::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_NAME_QUERY::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x00000050); /* opcode */
 
@@ -3163,7 +3206,7 @@ static size_t SMSG_NAME_QUERY_RESPONSE_size(const SMSG_NAME_QUERY_RESPONSE& obj)
 }
 
 SMSG_NAME_QUERY_RESPONSE SMSG_NAME_QUERY_RESPONSE_read(Reader& reader) {
-    SMSG_NAME_QUERY_RESPONSE obj;
+    SMSG_NAME_QUERY_RESPONSE obj{};
 
     obj.guid = reader.read_u64();
 
@@ -3180,11 +3223,11 @@ SMSG_NAME_QUERY_RESPONSE SMSG_NAME_QUERY_RESPONSE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_NAME_QUERY_RESPONSE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_NAME_QUERY_RESPONSE::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_NAME_QUERY_RESPONSE_size(obj));
 
-    writer.write_u16_be(SMSG_NAME_QUERY_RESPONSE_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_NAME_QUERY_RESPONSE_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000051); /* opcode */
 
@@ -3204,7 +3247,7 @@ std::vector<unsigned char> SMSG_NAME_QUERY_RESPONSE::write() const {
 }
 
 CMSG_PET_NAME_QUERY CMSG_PET_NAME_QUERY_read(Reader& reader) {
-    CMSG_PET_NAME_QUERY obj;
+    CMSG_PET_NAME_QUERY obj{};
 
     obj.pet_number = reader.read_u32();
 
@@ -3213,11 +3256,11 @@ CMSG_PET_NAME_QUERY CMSG_PET_NAME_QUERY_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_PET_NAME_QUERY::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_PET_NAME_QUERY::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 4)); /* size */
 
     writer.write_u32(0x00000052); /* opcode */
 
@@ -3233,7 +3276,7 @@ static size_t SMSG_PET_NAME_QUERY_RESPONSE_size(const SMSG_PET_NAME_QUERY_RESPON
 }
 
 SMSG_PET_NAME_QUERY_RESPONSE SMSG_PET_NAME_QUERY_RESPONSE_read(Reader& reader) {
-    SMSG_PET_NAME_QUERY_RESPONSE obj;
+    SMSG_PET_NAME_QUERY_RESPONSE obj{};
 
     obj.pet_number = reader.read_u32();
 
@@ -3244,11 +3287,11 @@ SMSG_PET_NAME_QUERY_RESPONSE SMSG_PET_NAME_QUERY_RESPONSE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_PET_NAME_QUERY_RESPONSE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_PET_NAME_QUERY_RESPONSE::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_PET_NAME_QUERY_RESPONSE_size(obj));
 
-    writer.write_u16_be(SMSG_PET_NAME_QUERY_RESPONSE_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_PET_NAME_QUERY_RESPONSE_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000053); /* opcode */
 
@@ -3262,18 +3305,18 @@ std::vector<unsigned char> SMSG_PET_NAME_QUERY_RESPONSE::write() const {
 }
 
 CMSG_GUILD_QUERY CMSG_GUILD_QUERY_read(Reader& reader) {
-    CMSG_GUILD_QUERY obj;
+    CMSG_GUILD_QUERY obj{};
 
     obj.guild_id = reader.read_u32();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_GUILD_QUERY::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GUILD_QUERY::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 4)); /* size */
 
     writer.write_u32(0x00000054); /* opcode */
 
@@ -3286,14 +3329,14 @@ static size_t SMSG_GUILD_QUERY_RESPONSE_size(const SMSG_GUILD_QUERY_RESPONSE& ob
     size_t _size = 25 + obj.name.size();
 
     for(const auto& v : obj.rank_names) {
-        _size += v.size() + 1;
+        _size += v.size() + 1;;
     }
 
     return _size;
 }
 
 SMSG_GUILD_QUERY_RESPONSE SMSG_GUILD_QUERY_RESPONSE_read(Reader& reader) {
-    SMSG_GUILD_QUERY_RESPONSE obj;
+    SMSG_GUILD_QUERY_RESPONSE obj{};
 
     obj.id = reader.read_u32();
 
@@ -3316,11 +3359,11 @@ SMSG_GUILD_QUERY_RESPONSE SMSG_GUILD_QUERY_RESPONSE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_GUILD_QUERY_RESPONSE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_GUILD_QUERY_RESPONSE::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_GUILD_QUERY_RESPONSE_size(obj));
 
-    writer.write_u16_be(SMSG_GUILD_QUERY_RESPONSE_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_GUILD_QUERY_RESPONSE_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000055); /* opcode */
 
@@ -3346,7 +3389,7 @@ std::vector<unsigned char> SMSG_GUILD_QUERY_RESPONSE::write() const {
 }
 
 CMSG_ITEM_QUERY_SINGLE CMSG_ITEM_QUERY_SINGLE_read(Reader& reader) {
-    CMSG_ITEM_QUERY_SINGLE obj;
+    CMSG_ITEM_QUERY_SINGLE obj{};
 
     obj.item = reader.read_u32();
 
@@ -3355,11 +3398,11 @@ CMSG_ITEM_QUERY_SINGLE CMSG_ITEM_QUERY_SINGLE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_ITEM_QUERY_SINGLE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_ITEM_QUERY_SINGLE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 4)); /* size */
 
     writer.write_u32(0x00000056); /* opcode */
 
@@ -3370,19 +3413,286 @@ std::vector<unsigned char> CMSG_ITEM_QUERY_SINGLE::write() const {
     return writer.m_buf;
 }
 
+static size_t SMSG_ITEM_QUERY_SINGLE_RESPONSE_size(const SMSG_ITEM_QUERY_SINGLE_RESPONSE& obj) {
+    size_t _size = 4;
+
+    if(obj.found) {
+        _size += 453 + obj.found->name1.size() + obj.found->name2.size() + obj.found->name3.size() + obj.found->name4.size() + obj.found->description.size();
+    }
+
+    return _size;
+}
+
+SMSG_ITEM_QUERY_SINGLE_RESPONSE SMSG_ITEM_QUERY_SINGLE_RESPONSE_read(Reader& reader, size_t body_size) {
+    SMSG_ITEM_QUERY_SINGLE_RESPONSE obj{};
+    size_t _size = 0;
+
+    obj.item = reader.read_u32();
+    _size += 4;
+
+    if (_size < body_size) {
+        obj.found = std::unique_ptr<vanilla::SMSG_ITEM_QUERY_SINGLE_RESPONSE::Found>(new vanilla::SMSG_ITEM_QUERY_SINGLE_RESPONSE::Found());
+
+        obj.found->class_and_sub_class = static_cast<ItemClassAndSubClass>(reader.read_u64());
+
+        obj.found->name1 = reader.read_cstring();
+
+        obj.found->name2 = reader.read_cstring();
+
+        obj.found->name3 = reader.read_cstring();
+
+        obj.found->name4 = reader.read_cstring();
+
+        obj.found->display_id = reader.read_u32();
+
+        obj.found->quality = static_cast<ItemQuality>(reader.read_u32());
+
+        obj.found->flags = static_cast<ItemFlag>(reader.read_u32());
+
+        obj.found->buy_price = reader.read_u32();
+
+        obj.found->sell_price = reader.read_u32();
+
+        obj.found->inventory_type = static_cast<InventoryType>(reader.read_u32());
+
+        obj.found->allowed_class = static_cast<AllowedClass>(reader.read_u32());
+
+        obj.found->allowed_race = static_cast<AllowedRace>(reader.read_u32());
+
+        obj.found->item_level = reader.read_u32();
+
+        obj.found->required_level = reader.read_u32();
+
+        obj.found->required_skill = static_cast<Skill>(reader.read_u32());
+
+        obj.found->required_skill_rank = reader.read_u32();
+
+        obj.found->required_spell = reader.read_u32();
+
+        obj.found->required_honor_rank = reader.read_u32();
+
+        obj.found->required_city_rank = reader.read_u32();
+
+        obj.found->required_faction = static_cast<Faction>(reader.read_u32());
+
+        obj.found->required_faction_rank = reader.read_u32();
+
+        obj.found->max_count = reader.read_u32();
+
+        obj.found->stackable = reader.read_u32();
+
+        obj.found->container_slots = reader.read_u32();
+
+        for (auto i = 0; i < 10; ++i) {
+            obj.found->stats[i] = ::wow_world_messages::vanilla::ItemStat_read(reader);
+        }
+
+        for (auto i = 0; i < 5; ++i) {
+            obj.found->damages[i] = ::wow_world_messages::vanilla::ItemDamageType_read(reader);
+        }
+
+        obj.found->armor = reader.read_i32();
+
+        obj.found->holy_resistance = reader.read_i32();
+
+        obj.found->fire_resistance = reader.read_i32();
+
+        obj.found->nature_resistance = reader.read_i32();
+
+        obj.found->frost_resistance = reader.read_i32();
+
+        obj.found->shadow_resistance = reader.read_i32();
+
+        obj.found->arcane_resistance = reader.read_i32();
+
+        obj.found->delay = reader.read_u32();
+
+        obj.found->ammo_type = reader.read_u32();
+
+        obj.found->ranged_range_modification = reader.read_float();
+
+        for (auto i = 0; i < 5; ++i) {
+            obj.found->spells[i] = ::wow_world_messages::vanilla::ItemSpells_read(reader);
+        }
+
+        obj.found->bonding = static_cast<Bonding>(reader.read_u32());
+
+        obj.found->description = reader.read_cstring();
+
+        obj.found->page_text = reader.read_u32();
+
+        obj.found->language = static_cast<Language>(reader.read_u32());
+
+        obj.found->page_text_material = static_cast<PageTextMaterial>(reader.read_u32());
+
+        obj.found->start_quest = reader.read_u32();
+
+        obj.found->lock_id = reader.read_u32();
+
+        obj.found->material = reader.read_u32();
+
+        obj.found->sheathe_type = static_cast<SheatheType>(reader.read_u32());
+
+        obj.found->random_property = reader.read_u32();
+
+        obj.found->block = reader.read_u32();
+
+        obj.found->item_set = static_cast<ItemSet>(reader.read_u32());
+
+        obj.found->max_durability = reader.read_u32();
+
+        obj.found->area = static_cast<Area>(reader.read_u32());
+
+        obj.found->map = static_cast<Map>(reader.read_u32());
+
+        obj.found->bag_family = static_cast<BagFamily>(reader.read_u32());
+
+    }
+    return obj;
+}
+
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_ITEM_QUERY_SINGLE_RESPONSE::write() const {
+    const auto& obj = *this;
+    auto writer = Writer(SMSG_ITEM_QUERY_SINGLE_RESPONSE_size(obj));
+
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_ITEM_QUERY_SINGLE_RESPONSE_size(obj) + 2)); /* size */
+
+    writer.write_u16(0x00000058); /* opcode */
+
+    writer.write_u32(obj.item);
+
+    if(obj.found) {
+        writer.write_u64(static_cast<uint64_t>(obj.found->class_and_sub_class));
+
+        writer.write_cstring(obj.found->name1);
+
+        writer.write_cstring(obj.found->name2);
+
+        writer.write_cstring(obj.found->name3);
+
+        writer.write_cstring(obj.found->name4);
+
+        writer.write_u32(obj.found->display_id);
+
+        writer.write_u32(static_cast<uint32_t>(obj.found->quality));
+
+        writer.write_u32(static_cast<uint32_t>(obj.found->flags));
+
+        writer.write_u32(obj.found->buy_price);
+
+        writer.write_u32(obj.found->sell_price);
+
+        writer.write_u32(static_cast<uint32_t>(obj.found->inventory_type));
+
+        writer.write_u32(static_cast<uint32_t>(obj.found->allowed_class));
+
+        writer.write_u32(static_cast<uint32_t>(obj.found->allowed_race));
+
+        writer.write_u32(obj.found->item_level);
+
+        writer.write_u32(obj.found->required_level);
+
+        writer.write_u32(static_cast<uint32_t>(obj.found->required_skill));
+
+        writer.write_u32(obj.found->required_skill_rank);
+
+        writer.write_u32(obj.found->required_spell);
+
+        writer.write_u32(obj.found->required_honor_rank);
+
+        writer.write_u32(obj.found->required_city_rank);
+
+        writer.write_u32(static_cast<uint32_t>(obj.found->required_faction));
+
+        writer.write_u32(obj.found->required_faction_rank);
+
+        writer.write_u32(obj.found->max_count);
+
+        writer.write_u32(obj.found->stackable);
+
+        writer.write_u32(obj.found->container_slots);
+
+        for (const auto& v : obj.found->stats) {
+            ItemStat_write(writer, v);
+        }
+
+        for (const auto& v : obj.found->damages) {
+            ItemDamageType_write(writer, v);
+        }
+
+        writer.write_i32(obj.found->armor);
+
+        writer.write_i32(obj.found->holy_resistance);
+
+        writer.write_i32(obj.found->fire_resistance);
+
+        writer.write_i32(obj.found->nature_resistance);
+
+        writer.write_i32(obj.found->frost_resistance);
+
+        writer.write_i32(obj.found->shadow_resistance);
+
+        writer.write_i32(obj.found->arcane_resistance);
+
+        writer.write_u32(obj.found->delay);
+
+        writer.write_u32(obj.found->ammo_type);
+
+        writer.write_float(obj.found->ranged_range_modification);
+
+        for (const auto& v : obj.found->spells) {
+            ItemSpells_write(writer, v);
+        }
+
+        writer.write_u32(static_cast<uint32_t>(obj.found->bonding));
+
+        writer.write_cstring(obj.found->description);
+
+        writer.write_u32(obj.found->page_text);
+
+        writer.write_u32(static_cast<uint32_t>(obj.found->language));
+
+        writer.write_u32(static_cast<uint32_t>(obj.found->page_text_material));
+
+        writer.write_u32(obj.found->start_quest);
+
+        writer.write_u32(obj.found->lock_id);
+
+        writer.write_u32(obj.found->material);
+
+        writer.write_u32(static_cast<uint32_t>(obj.found->sheathe_type));
+
+        writer.write_u32(obj.found->random_property);
+
+        writer.write_u32(obj.found->block);
+
+        writer.write_u32(static_cast<uint32_t>(obj.found->item_set));
+
+        writer.write_u32(obj.found->max_durability);
+
+        writer.write_u32(static_cast<uint32_t>(obj.found->area));
+
+        writer.write_u32(static_cast<uint32_t>(obj.found->map));
+
+        writer.write_u32(static_cast<uint32_t>(obj.found->bag_family));
+
+    }
+    return writer.m_buf;
+}
+
 CMSG_PAGE_TEXT_QUERY CMSG_PAGE_TEXT_QUERY_read(Reader& reader) {
-    CMSG_PAGE_TEXT_QUERY obj;
+    CMSG_PAGE_TEXT_QUERY obj{};
 
     obj.page_id = reader.read_u32();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_PAGE_TEXT_QUERY::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_PAGE_TEXT_QUERY::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 4)); /* size */
 
     writer.write_u32(0x0000005a); /* opcode */
 
@@ -3396,7 +3706,7 @@ static size_t SMSG_PAGE_TEXT_QUERY_RESPONSE_size(const SMSG_PAGE_TEXT_QUERY_RESP
 }
 
 SMSG_PAGE_TEXT_QUERY_RESPONSE SMSG_PAGE_TEXT_QUERY_RESPONSE_read(Reader& reader) {
-    SMSG_PAGE_TEXT_QUERY_RESPONSE obj;
+    SMSG_PAGE_TEXT_QUERY_RESPONSE obj{};
 
     obj.page_id = reader.read_u32();
 
@@ -3407,11 +3717,11 @@ SMSG_PAGE_TEXT_QUERY_RESPONSE SMSG_PAGE_TEXT_QUERY_RESPONSE_read(Reader& reader)
     return obj;
 }
 
-std::vector<unsigned char> SMSG_PAGE_TEXT_QUERY_RESPONSE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_PAGE_TEXT_QUERY_RESPONSE::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_PAGE_TEXT_QUERY_RESPONSE_size(obj));
 
-    writer.write_u16_be(SMSG_PAGE_TEXT_QUERY_RESPONSE_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_PAGE_TEXT_QUERY_RESPONSE_size(obj) + 2)); /* size */
 
     writer.write_u16(0x0000005b); /* opcode */
 
@@ -3425,18 +3735,18 @@ std::vector<unsigned char> SMSG_PAGE_TEXT_QUERY_RESPONSE::write() const {
 }
 
 CMSG_QUEST_QUERY CMSG_QUEST_QUERY_read(Reader& reader) {
-    CMSG_QUEST_QUERY obj;
+    CMSG_QUEST_QUERY obj{};
 
     obj.quest_id = reader.read_u32();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_QUEST_QUERY::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_QUEST_QUERY::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 4)); /* size */
 
     writer.write_u32(0x0000005c); /* opcode */
 
@@ -3449,14 +3759,14 @@ static size_t SMSG_QUEST_QUERY_RESPONSE_size(const SMSG_QUEST_QUERY_RESPONSE& ob
     size_t _size = 220 + obj.title.size() + obj.objective_text.size() + obj.details.size() + obj.end_text.size();
 
     for(const auto& v : obj.objective_texts) {
-        _size += v.size() + 1;
+        _size += v.size() + 1;;
     }
 
     return _size;
 }
 
 SMSG_QUEST_QUERY_RESPONSE SMSG_QUEST_QUERY_RESPONSE_read(Reader& reader) {
-    SMSG_QUEST_QUERY_RESPONSE obj;
+    SMSG_QUEST_QUERY_RESPONSE obj{};
 
     obj.quest_id = reader.read_u32();
 
@@ -3521,11 +3831,11 @@ SMSG_QUEST_QUERY_RESPONSE SMSG_QUEST_QUERY_RESPONSE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_QUEST_QUERY_RESPONSE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_QUEST_QUERY_RESPONSE::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_QUEST_QUERY_RESPONSE_size(obj));
 
-    writer.write_u16_be(SMSG_QUEST_QUERY_RESPONSE_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_QUEST_QUERY_RESPONSE_size(obj) + 2)); /* size */
 
     writer.write_u16(0x0000005d); /* opcode */
 
@@ -3593,7 +3903,7 @@ std::vector<unsigned char> SMSG_QUEST_QUERY_RESPONSE::write() const {
 }
 
 CMSG_GAMEOBJECT_QUERY CMSG_GAMEOBJECT_QUERY_read(Reader& reader) {
-    CMSG_GAMEOBJECT_QUERY obj;
+    CMSG_GAMEOBJECT_QUERY obj{};
 
     obj.entry_id = reader.read_u32();
 
@@ -3602,11 +3912,11 @@ CMSG_GAMEOBJECT_QUERY CMSG_GAMEOBJECT_QUERY_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_GAMEOBJECT_QUERY::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GAMEOBJECT_QUERY::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 4)); /* size */
 
     writer.write_u32(0x0000005e); /* opcode */
 
@@ -3617,8 +3927,83 @@ std::vector<unsigned char> CMSG_GAMEOBJECT_QUERY::write() const {
     return writer.m_buf;
 }
 
+static size_t SMSG_GAMEOBJECT_QUERY_RESPONSE_size(const SMSG_GAMEOBJECT_QUERY_RESPONSE& obj) {
+    size_t _size = 4;
+
+    if(obj.found) {
+        _size += 37 + obj.found->name1.size() + obj.found->name2.size() + obj.found->name3.size() + obj.found->name4.size() + obj.found->name5.size();
+    }
+
+    return _size;
+}
+
+SMSG_GAMEOBJECT_QUERY_RESPONSE SMSG_GAMEOBJECT_QUERY_RESPONSE_read(Reader& reader, size_t body_size) {
+    SMSG_GAMEOBJECT_QUERY_RESPONSE obj{};
+    size_t _size = 0;
+
+    obj.entry_id = reader.read_u32();
+    _size += 4;
+
+    if (_size < body_size) {
+        obj.found = std::unique_ptr<vanilla::SMSG_GAMEOBJECT_QUERY_RESPONSE::Found>(new vanilla::SMSG_GAMEOBJECT_QUERY_RESPONSE::Found());
+
+        obj.found->info_type = reader.read_u32();
+
+        obj.found->display_id = reader.read_u32();
+
+        obj.found->name1 = reader.read_cstring();
+
+        obj.found->name2 = reader.read_cstring();
+
+        obj.found->name3 = reader.read_cstring();
+
+        obj.found->name4 = reader.read_cstring();
+
+        obj.found->name5 = reader.read_cstring();
+
+        for (auto i = 0; i < 6; ++i) {
+            obj.found->raw_data[i] = reader.read_u32();
+        }
+
+    }
+    return obj;
+}
+
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_GAMEOBJECT_QUERY_RESPONSE::write() const {
+    const auto& obj = *this;
+    auto writer = Writer(SMSG_GAMEOBJECT_QUERY_RESPONSE_size(obj));
+
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_GAMEOBJECT_QUERY_RESPONSE_size(obj) + 2)); /* size */
+
+    writer.write_u16(0x0000005f); /* opcode */
+
+    writer.write_u32(obj.entry_id);
+
+    if(obj.found) {
+        writer.write_u32(obj.found->info_type);
+
+        writer.write_u32(obj.found->display_id);
+
+        writer.write_cstring(obj.found->name1);
+
+        writer.write_cstring(obj.found->name2);
+
+        writer.write_cstring(obj.found->name3);
+
+        writer.write_cstring(obj.found->name4);
+
+        writer.write_cstring(obj.found->name5);
+
+        for (const auto& v : obj.found->raw_data) {
+            writer.write_u32(v);
+        }
+
+    }
+    return writer.m_buf;
+}
+
 CMSG_CREATURE_QUERY CMSG_CREATURE_QUERY_read(Reader& reader) {
-    CMSG_CREATURE_QUERY obj;
+    CMSG_CREATURE_QUERY obj{};
 
     obj.creature = reader.read_u32();
 
@@ -3627,11 +4012,11 @@ CMSG_CREATURE_QUERY CMSG_CREATURE_QUERY_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_CREATURE_QUERY::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_CREATURE_QUERY::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 4)); /* size */
 
     writer.write_u32(0x00000060); /* opcode */
 
@@ -3642,18 +4027,113 @@ std::vector<unsigned char> CMSG_CREATURE_QUERY::write() const {
     return writer.m_buf;
 }
 
+static size_t SMSG_CREATURE_QUERY_RESPONSE_size(const SMSG_CREATURE_QUERY_RESPONSE& obj) {
+    size_t _size = 4;
+
+    if(obj.found) {
+        _size += 35 + obj.found->name1.size() + obj.found->name2.size() + obj.found->name3.size() + obj.found->name4.size() + obj.found->sub_name.size();
+    }
+
+    return _size;
+}
+
+SMSG_CREATURE_QUERY_RESPONSE SMSG_CREATURE_QUERY_RESPONSE_read(Reader& reader, size_t body_size) {
+    SMSG_CREATURE_QUERY_RESPONSE obj{};
+    size_t _size = 0;
+
+    obj.creature_entry = reader.read_u32();
+    _size += 4;
+
+    if (_size < body_size) {
+        obj.found = std::unique_ptr<vanilla::SMSG_CREATURE_QUERY_RESPONSE::Found>(new vanilla::SMSG_CREATURE_QUERY_RESPONSE::Found());
+
+        obj.found->name1 = reader.read_cstring();
+
+        obj.found->name2 = reader.read_cstring();
+
+        obj.found->name3 = reader.read_cstring();
+
+        obj.found->name4 = reader.read_cstring();
+
+        obj.found->sub_name = reader.read_cstring();
+
+        obj.found->type_flags = reader.read_u32();
+
+        obj.found->creature_type = reader.read_u32();
+
+        obj.found->creature_family = static_cast<CreatureFamily>(reader.read_u32());
+
+        obj.found->creature_rank = reader.read_u32();
+
+        obj.found->unknown0 = reader.read_u32();
+
+        obj.found->spell_data_id = reader.read_u32();
+
+        obj.found->display_id = reader.read_u32();
+
+        obj.found->civilian = reader.read_u8();
+
+        obj.found->racial_leader = reader.read_u8();
+
+    }
+    return obj;
+}
+
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_CREATURE_QUERY_RESPONSE::write() const {
+    const auto& obj = *this;
+    auto writer = Writer(SMSG_CREATURE_QUERY_RESPONSE_size(obj));
+
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_CREATURE_QUERY_RESPONSE_size(obj) + 2)); /* size */
+
+    writer.write_u16(0x00000061); /* opcode */
+
+    writer.write_u32(obj.creature_entry);
+
+    if(obj.found) {
+        writer.write_cstring(obj.found->name1);
+
+        writer.write_cstring(obj.found->name2);
+
+        writer.write_cstring(obj.found->name3);
+
+        writer.write_cstring(obj.found->name4);
+
+        writer.write_cstring(obj.found->sub_name);
+
+        writer.write_u32(obj.found->type_flags);
+
+        writer.write_u32(obj.found->creature_type);
+
+        writer.write_u32(static_cast<uint32_t>(obj.found->creature_family));
+
+        writer.write_u32(obj.found->creature_rank);
+
+        writer.write_u32(obj.found->unknown0);
+
+        writer.write_u32(obj.found->spell_data_id);
+
+        writer.write_u32(obj.found->display_id);
+
+        writer.write_u8(obj.found->civilian);
+
+        writer.write_u8(obj.found->racial_leader);
+
+    }
+    return writer.m_buf;
+}
+
 static size_t CMSG_WHO_size(const CMSG_WHO& obj) {
     size_t _size = 26 + obj.player_name.size() + obj.guild_name.size() + 4 * obj.zones.size();
 
     for(const auto& v : obj.search_strings) {
-        _size += v.size() + 1;
+        _size += v.size() + 1;;
     }
 
     return _size;
 }
 
 CMSG_WHO CMSG_WHO_read(Reader& reader) {
-    CMSG_WHO obj;
+    CMSG_WHO obj{};
 
     obj.minimum_level = reader.read_u32();
 
@@ -3669,24 +4149,24 @@ CMSG_WHO CMSG_WHO_read(Reader& reader) {
 
     obj.amount_of_zones = reader.read_u32();
 
-    for (auto i = 0; i < obj.amount_of_zones; ++i) {
+    for (uint32_t i = 0; i < obj.amount_of_zones; ++i) {
         obj.zones.push_back(reader.read_u32());
     }
 
     obj.amount_of_strings = reader.read_u32();
 
-    for (auto i = 0; i < obj.amount_of_strings; ++i) {
+    for (uint32_t i = 0; i < obj.amount_of_strings; ++i) {
         obj.search_strings.push_back(reader.read_cstring());
     }
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_WHO::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_WHO::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_WHO_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_WHO_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_WHO_size(obj) + 4)); /* size */
 
     writer.write_u32(0x00000062); /* opcode */
 
@@ -3728,24 +4208,24 @@ static size_t SMSG_WHO_size(const SMSG_WHO& obj) {
 }
 
 SMSG_WHO SMSG_WHO_read(Reader& reader) {
-    SMSG_WHO obj;
+    SMSG_WHO obj{};
 
     obj.listed_players = reader.read_u32();
 
     obj.online_players = reader.read_u32();
 
-    for (auto i = 0; i < obj.listed_players; ++i) {
+    for (uint32_t i = 0; i < obj.listed_players; ++i) {
         obj.players.push_back(::wow_world_messages::vanilla::WhoPlayer_read(reader));
     }
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_WHO::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_WHO::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_WHO_size(obj));
 
-    writer.write_u16_be(SMSG_WHO_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_WHO_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000063); /* opcode */
 
@@ -3765,18 +4245,18 @@ static size_t CMSG_WHOIS_size(const CMSG_WHOIS& obj) {
 }
 
 CMSG_WHOIS CMSG_WHOIS_read(Reader& reader) {
-    CMSG_WHOIS obj;
+    CMSG_WHOIS obj{};
 
     obj.character = reader.read_cstring();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_WHOIS::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_WHOIS::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_WHOIS_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_WHOIS_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_WHOIS_size(obj) + 4)); /* size */
 
     writer.write_u32(0x00000064); /* opcode */
 
@@ -3790,18 +4270,18 @@ static size_t SMSG_WHOIS_size(const SMSG_WHOIS& obj) {
 }
 
 SMSG_WHOIS SMSG_WHOIS_read(Reader& reader) {
-    SMSG_WHOIS obj;
+    SMSG_WHOIS obj{};
 
     obj.message = reader.read_cstring();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_WHOIS::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_WHOIS::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_WHOIS_size(obj));
 
-    writer.write_u16_be(SMSG_WHOIS_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_WHOIS_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000065); /* opcode */
 
@@ -3810,10 +4290,10 @@ std::vector<unsigned char> SMSG_WHOIS::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_FRIEND_LIST::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_FRIEND_LIST::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x00000066); /* opcode */
 
@@ -3831,22 +4311,22 @@ static size_t SMSG_FRIEND_LIST_size(const SMSG_FRIEND_LIST& obj) {
 }
 
 SMSG_FRIEND_LIST SMSG_FRIEND_LIST_read(Reader& reader) {
-    SMSG_FRIEND_LIST obj;
+    SMSG_FRIEND_LIST obj{};
 
     obj.amount_of_friends = reader.read_u8();
 
-    for (auto i = 0; i < obj.amount_of_friends; ++i) {
+    for (uint8_t i = 0; i < obj.amount_of_friends; ++i) {
         obj.friends.push_back(::wow_world_messages::vanilla::Friend_read(reader));
     }
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_FRIEND_LIST::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_FRIEND_LIST::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_FRIEND_LIST_size(obj));
 
-    writer.write_u16_be(SMSG_FRIEND_LIST_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_FRIEND_LIST_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000067); /* opcode */
 
@@ -3860,7 +4340,7 @@ std::vector<unsigned char> SMSG_FRIEND_LIST::write() const {
 }
 
 SMSG_FRIEND_STATUS SMSG_FRIEND_STATUS_read(Reader& reader) {
-    SMSG_FRIEND_STATUS obj;
+    SMSG_FRIEND_STATUS obj{};
 
     obj.result = static_cast<FriendResult>(reader.read_u8());
 
@@ -3869,11 +4349,11 @@ SMSG_FRIEND_STATUS SMSG_FRIEND_STATUS_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_FRIEND_STATUS::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_FRIEND_STATUS::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0009);
 
-    writer.write_u16_be(0x0009 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0009 + 2)); /* size */
 
     writer.write_u16(0x00000068); /* opcode */
 
@@ -3889,18 +4369,18 @@ static size_t CMSG_ADD_FRIEND_size(const CMSG_ADD_FRIEND& obj) {
 }
 
 CMSG_ADD_FRIEND CMSG_ADD_FRIEND_read(Reader& reader) {
-    CMSG_ADD_FRIEND obj;
+    CMSG_ADD_FRIEND obj{};
 
     obj.name = reader.read_cstring();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_ADD_FRIEND::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_ADD_FRIEND::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_ADD_FRIEND_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_ADD_FRIEND_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_ADD_FRIEND_size(obj) + 4)); /* size */
 
     writer.write_u32(0x00000069); /* opcode */
 
@@ -3910,18 +4390,18 @@ std::vector<unsigned char> CMSG_ADD_FRIEND::write() const {
 }
 
 CMSG_DEL_FRIEND CMSG_DEL_FRIEND_read(Reader& reader) {
-    CMSG_DEL_FRIEND obj;
+    CMSG_DEL_FRIEND obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_DEL_FRIEND::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_DEL_FRIEND::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x0000006a); /* opcode */
 
@@ -3935,22 +4415,22 @@ static size_t SMSG_IGNORE_LIST_size(const SMSG_IGNORE_LIST& obj) {
 }
 
 SMSG_IGNORE_LIST SMSG_IGNORE_LIST_read(Reader& reader) {
-    SMSG_IGNORE_LIST obj;
+    SMSG_IGNORE_LIST obj{};
 
     obj.amount_of_ignored = reader.read_u8();
 
-    for (auto i = 0; i < obj.amount_of_ignored; ++i) {
+    for (uint8_t i = 0; i < obj.amount_of_ignored; ++i) {
         obj.ignored.push_back(reader.read_u64());
     }
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_IGNORE_LIST::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_IGNORE_LIST::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_IGNORE_LIST_size(obj));
 
-    writer.write_u16_be(SMSG_IGNORE_LIST_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_IGNORE_LIST_size(obj) + 2)); /* size */
 
     writer.write_u16(0x0000006b); /* opcode */
 
@@ -3968,18 +4448,18 @@ static size_t CMSG_ADD_IGNORE_size(const CMSG_ADD_IGNORE& obj) {
 }
 
 CMSG_ADD_IGNORE CMSG_ADD_IGNORE_read(Reader& reader) {
-    CMSG_ADD_IGNORE obj;
+    CMSG_ADD_IGNORE obj{};
 
     obj.name = reader.read_cstring();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_ADD_IGNORE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_ADD_IGNORE::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_ADD_IGNORE_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_ADD_IGNORE_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_ADD_IGNORE_size(obj) + 4)); /* size */
 
     writer.write_u32(0x0000006c); /* opcode */
 
@@ -3989,18 +4469,18 @@ std::vector<unsigned char> CMSG_ADD_IGNORE::write() const {
 }
 
 CMSG_DEL_IGNORE CMSG_DEL_IGNORE_read(Reader& reader) {
-    CMSG_DEL_IGNORE obj;
+    CMSG_DEL_IGNORE obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_DEL_IGNORE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_DEL_IGNORE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x0000006d); /* opcode */
 
@@ -4014,18 +4494,18 @@ static size_t CMSG_GROUP_INVITE_size(const CMSG_GROUP_INVITE& obj) {
 }
 
 CMSG_GROUP_INVITE CMSG_GROUP_INVITE_read(Reader& reader) {
-    CMSG_GROUP_INVITE obj;
+    CMSG_GROUP_INVITE obj{};
 
     obj.name = reader.read_cstring();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_GROUP_INVITE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GROUP_INVITE::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_GROUP_INVITE_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_GROUP_INVITE_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_GROUP_INVITE_size(obj) + 4)); /* size */
 
     writer.write_u32(0x0000006e); /* opcode */
 
@@ -4039,18 +4519,18 @@ static size_t SMSG_GROUP_INVITE_size(const SMSG_GROUP_INVITE& obj) {
 }
 
 SMSG_GROUP_INVITE SMSG_GROUP_INVITE_read(Reader& reader) {
-    SMSG_GROUP_INVITE obj;
+    SMSG_GROUP_INVITE obj{};
 
     obj.name = reader.read_cstring();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_GROUP_INVITE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_GROUP_INVITE::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_GROUP_INVITE_size(obj));
 
-    writer.write_u16_be(SMSG_GROUP_INVITE_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_GROUP_INVITE_size(obj) + 2)); /* size */
 
     writer.write_u16(0x0000006f); /* opcode */
 
@@ -4059,20 +4539,20 @@ std::vector<unsigned char> SMSG_GROUP_INVITE::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_GROUP_ACCEPT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GROUP_ACCEPT::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x00000072); /* opcode */
 
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_GROUP_DECLINE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GROUP_DECLINE::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x00000073); /* opcode */
 
@@ -4084,18 +4564,18 @@ static size_t SMSG_GROUP_DECLINE_size(const SMSG_GROUP_DECLINE& obj) {
 }
 
 SMSG_GROUP_DECLINE SMSG_GROUP_DECLINE_read(Reader& reader) {
-    SMSG_GROUP_DECLINE obj;
+    SMSG_GROUP_DECLINE obj{};
 
     obj.name = reader.read_cstring();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_GROUP_DECLINE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_GROUP_DECLINE::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_GROUP_DECLINE_size(obj));
 
-    writer.write_u16_be(SMSG_GROUP_DECLINE_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_GROUP_DECLINE_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000074); /* opcode */
 
@@ -4109,18 +4589,18 @@ static size_t CMSG_GROUP_UNINVITE_size(const CMSG_GROUP_UNINVITE& obj) {
 }
 
 CMSG_GROUP_UNINVITE CMSG_GROUP_UNINVITE_read(Reader& reader) {
-    CMSG_GROUP_UNINVITE obj;
+    CMSG_GROUP_UNINVITE obj{};
 
     obj.name = reader.read_cstring();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_GROUP_UNINVITE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GROUP_UNINVITE::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_GROUP_UNINVITE_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_GROUP_UNINVITE_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_GROUP_UNINVITE_size(obj) + 4)); /* size */
 
     writer.write_u32(0x00000075); /* opcode */
 
@@ -4130,18 +4610,18 @@ std::vector<unsigned char> CMSG_GROUP_UNINVITE::write() const {
 }
 
 CMSG_GROUP_UNINVITE_GUID CMSG_GROUP_UNINVITE_GUID_read(Reader& reader) {
-    CMSG_GROUP_UNINVITE_GUID obj;
+    CMSG_GROUP_UNINVITE_GUID obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_GROUP_UNINVITE_GUID::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GROUP_UNINVITE_GUID::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x00000076); /* opcode */
 
@@ -4150,10 +4630,10 @@ std::vector<unsigned char> CMSG_GROUP_UNINVITE_GUID::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> SMSG_GROUP_UNINVITE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_GROUP_UNINVITE::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 2)); /* size */
 
     writer.write_u16(0x00000077); /* opcode */
 
@@ -4161,18 +4641,18 @@ std::vector<unsigned char> SMSG_GROUP_UNINVITE::write() const {
 }
 
 CMSG_GROUP_SET_LEADER CMSG_GROUP_SET_LEADER_read(Reader& reader) {
-    CMSG_GROUP_SET_LEADER obj;
+    CMSG_GROUP_SET_LEADER obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_GROUP_SET_LEADER::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GROUP_SET_LEADER::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x00000078); /* opcode */
 
@@ -4186,18 +4666,18 @@ static size_t SMSG_GROUP_SET_LEADER_size(const SMSG_GROUP_SET_LEADER& obj) {
 }
 
 SMSG_GROUP_SET_LEADER SMSG_GROUP_SET_LEADER_read(Reader& reader) {
-    SMSG_GROUP_SET_LEADER obj;
+    SMSG_GROUP_SET_LEADER obj{};
 
     obj.name = reader.read_cstring();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_GROUP_SET_LEADER::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_GROUP_SET_LEADER::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_GROUP_SET_LEADER_size(obj));
 
-    writer.write_u16_be(SMSG_GROUP_SET_LEADER_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_GROUP_SET_LEADER_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000079); /* opcode */
 
@@ -4207,7 +4687,7 @@ std::vector<unsigned char> SMSG_GROUP_SET_LEADER::write() const {
 }
 
 CMSG_LOOT_METHOD CMSG_LOOT_METHOD_read(Reader& reader) {
-    CMSG_LOOT_METHOD obj;
+    CMSG_LOOT_METHOD obj{};
 
     obj.loot_setting = static_cast<GroupLootSetting>(reader.read_u32());
 
@@ -4218,11 +4698,11 @@ CMSG_LOOT_METHOD CMSG_LOOT_METHOD_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_LOOT_METHOD::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_LOOT_METHOD::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0010);
 
-    writer.write_u16_be(0x0010 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0010 + 4)); /* size */
 
     writer.write_u32(0x0000007a); /* opcode */
 
@@ -4235,23 +4715,102 @@ std::vector<unsigned char> CMSG_LOOT_METHOD::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_GROUP_DISBAND::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GROUP_DISBAND::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x0000007b); /* opcode */
 
     return writer.m_buf;
 }
 
-std::vector<unsigned char> SMSG_GROUP_DESTROYED::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_GROUP_DESTROYED::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 2)); /* size */
 
     writer.write_u16(0x0000007c); /* opcode */
 
+    return writer.m_buf;
+}
+
+static size_t SMSG_GROUP_LIST_size(const SMSG_GROUP_LIST& obj) {
+    size_t _size = 14;
+
+    for(const auto& v : obj.members) {
+        _size += GroupListMember_size(v);
+    }
+
+    if(obj.group_not_empty) {
+        _size += 10;
+    }
+
+    return _size;
+}
+
+SMSG_GROUP_LIST SMSG_GROUP_LIST_read(Reader& reader, size_t body_size) {
+    SMSG_GROUP_LIST obj{};
+    size_t _size = 0;
+
+    obj.group_type = static_cast<GroupType>(reader.read_u8());
+    _size += 1;
+
+    obj.flags = reader.read_u8();
+    _size += 1;
+
+    obj.amount_of_members = reader.read_u32();
+    _size += 4;
+
+    for (uint32_t i = 0; i < obj.amount_of_members; ++i) {
+        obj.members.push_back(::wow_world_messages::vanilla::GroupListMember_read(reader));
+        _size += vanilla::GroupListMember_size(obj.members.back());
+    }
+
+    obj.leader = reader.read_u64();
+    _size += 8;
+
+    if (_size < body_size) {
+        obj.group_not_empty = std::unique_ptr<vanilla::SMSG_GROUP_LIST::GroupNotEmpty>(new vanilla::SMSG_GROUP_LIST::GroupNotEmpty());
+
+        obj.group_not_empty->loot_setting = static_cast<GroupLootSetting>(reader.read_u8());
+
+        obj.group_not_empty->master_loot = reader.read_u64();
+
+        obj.group_not_empty->loot_threshold = static_cast<ItemQuality>(reader.read_u8());
+
+    }
+    return obj;
+}
+
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_GROUP_LIST::write() const {
+    const auto& obj = *this;
+    auto writer = Writer(SMSG_GROUP_LIST_size(obj));
+
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_GROUP_LIST_size(obj) + 2)); /* size */
+
+    writer.write_u16(0x0000007d); /* opcode */
+
+    writer.write_u8(static_cast<uint8_t>(obj.group_type));
+
+    writer.write_u8(obj.flags);
+
+    writer.write_u32(obj.amount_of_members);
+
+    for (const auto& v : obj.members) {
+        GroupListMember_write(writer, v);
+    }
+
+    writer.write_u64(obj.leader);
+
+    if(obj.group_not_empty) {
+        writer.write_u8(static_cast<uint8_t>(obj.group_not_empty->loot_setting));
+
+        writer.write_u64(obj.group_not_empty->master_loot);
+
+        writer.write_u8(static_cast<uint8_t>(obj.group_not_empty->loot_threshold));
+
+    }
     return writer.m_buf;
 }
 
@@ -4342,7 +4901,7 @@ static size_t SMSG_PARTY_MEMBER_STATS_size(const SMSG_PARTY_MEMBER_STATS& obj) {
 }
 
 SMSG_PARTY_MEMBER_STATS SMSG_PARTY_MEMBER_STATS_read(Reader& reader) {
-    SMSG_PARTY_MEMBER_STATS obj;
+    SMSG_PARTY_MEMBER_STATS obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -4433,11 +4992,11 @@ SMSG_PARTY_MEMBER_STATS SMSG_PARTY_MEMBER_STATS_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_PARTY_MEMBER_STATS::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_PARTY_MEMBER_STATS::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_PARTY_MEMBER_STATS_size(obj));
 
-    writer.write_u16_be(SMSG_PARTY_MEMBER_STATS_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_PARTY_MEMBER_STATS_size(obj) + 2)); /* size */
 
     writer.write_u16(0x0000007e); /* opcode */
 
@@ -4535,7 +5094,7 @@ static size_t SMSG_PARTY_COMMAND_RESULT_size(const SMSG_PARTY_COMMAND_RESULT& ob
 }
 
 SMSG_PARTY_COMMAND_RESULT SMSG_PARTY_COMMAND_RESULT_read(Reader& reader) {
-    SMSG_PARTY_COMMAND_RESULT obj;
+    SMSG_PARTY_COMMAND_RESULT obj{};
 
     obj.operation = static_cast<PartyOperation>(reader.read_u32());
 
@@ -4546,11 +5105,11 @@ SMSG_PARTY_COMMAND_RESULT SMSG_PARTY_COMMAND_RESULT_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_PARTY_COMMAND_RESULT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_PARTY_COMMAND_RESULT::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_PARTY_COMMAND_RESULT_size(obj));
 
-    writer.write_u16_be(SMSG_PARTY_COMMAND_RESULT_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_PARTY_COMMAND_RESULT_size(obj) + 2)); /* size */
 
     writer.write_u16(0x0000007f); /* opcode */
 
@@ -4568,18 +5127,18 @@ static size_t CMSG_GUILD_CREATE_size(const CMSG_GUILD_CREATE& obj) {
 }
 
 CMSG_GUILD_CREATE CMSG_GUILD_CREATE_read(Reader& reader) {
-    CMSG_GUILD_CREATE obj;
+    CMSG_GUILD_CREATE obj{};
 
     obj.guild_name = reader.read_cstring();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_GUILD_CREATE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GUILD_CREATE::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_GUILD_CREATE_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_GUILD_CREATE_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_GUILD_CREATE_size(obj) + 4)); /* size */
 
     writer.write_u32(0x00000081); /* opcode */
 
@@ -4593,18 +5152,18 @@ static size_t CMSG_GUILD_INVITE_size(const CMSG_GUILD_INVITE& obj) {
 }
 
 CMSG_GUILD_INVITE CMSG_GUILD_INVITE_read(Reader& reader) {
-    CMSG_GUILD_INVITE obj;
+    CMSG_GUILD_INVITE obj{};
 
     obj.invited_player = reader.read_cstring();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_GUILD_INVITE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GUILD_INVITE::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_GUILD_INVITE_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_GUILD_INVITE_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_GUILD_INVITE_size(obj) + 4)); /* size */
 
     writer.write_u32(0x00000082); /* opcode */
 
@@ -4618,7 +5177,7 @@ static size_t SMSG_GUILD_INVITE_size(const SMSG_GUILD_INVITE& obj) {
 }
 
 SMSG_GUILD_INVITE SMSG_GUILD_INVITE_read(Reader& reader) {
-    SMSG_GUILD_INVITE obj;
+    SMSG_GUILD_INVITE obj{};
 
     obj.player_name = reader.read_cstring();
 
@@ -4627,11 +5186,11 @@ SMSG_GUILD_INVITE SMSG_GUILD_INVITE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_GUILD_INVITE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_GUILD_INVITE::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_GUILD_INVITE_size(obj));
 
-    writer.write_u16_be(SMSG_GUILD_INVITE_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_GUILD_INVITE_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000083); /* opcode */
 
@@ -4642,30 +5201,30 @@ std::vector<unsigned char> SMSG_GUILD_INVITE::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_GUILD_ACCEPT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GUILD_ACCEPT::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x00000084); /* opcode */
 
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_GUILD_DECLINE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GUILD_DECLINE::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x00000085); /* opcode */
 
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_GUILD_INFO::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GUILD_INFO::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x00000087); /* opcode */
 
@@ -4677,7 +5236,7 @@ static size_t SMSG_GUILD_INFO_size(const SMSG_GUILD_INFO& obj) {
 }
 
 SMSG_GUILD_INFO SMSG_GUILD_INFO_read(Reader& reader) {
-    SMSG_GUILD_INFO obj;
+    SMSG_GUILD_INFO obj{};
 
     obj.guild_name = reader.read_cstring();
 
@@ -4694,11 +5253,11 @@ SMSG_GUILD_INFO SMSG_GUILD_INFO_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_GUILD_INFO::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_GUILD_INFO::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_GUILD_INFO_size(obj));
 
-    writer.write_u16_be(SMSG_GUILD_INFO_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_GUILD_INFO_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000088); /* opcode */
 
@@ -4717,10 +5276,10 @@ std::vector<unsigned char> SMSG_GUILD_INFO::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_GUILD_ROSTER::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GUILD_ROSTER::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x00000089); /* opcode */
 
@@ -4738,7 +5297,7 @@ static size_t SMSG_GUILD_ROSTER_size(const SMSG_GUILD_ROSTER& obj) {
 }
 
 SMSG_GUILD_ROSTER SMSG_GUILD_ROSTER_read(Reader& reader) {
-    SMSG_GUILD_ROSTER obj;
+    SMSG_GUILD_ROSTER obj{};
 
     obj.amount_of_members = reader.read_u32();
 
@@ -4748,22 +5307,22 @@ SMSG_GUILD_ROSTER SMSG_GUILD_ROSTER_read(Reader& reader) {
 
     obj.amount_of_rights = reader.read_u32();
 
-    for (auto i = 0; i < obj.amount_of_rights; ++i) {
+    for (uint32_t i = 0; i < obj.amount_of_rights; ++i) {
         obj.rights.push_back(reader.read_u32());
     }
 
-    for (auto i = 0; i < obj.amount_of_members; ++i) {
+    for (uint32_t i = 0; i < obj.amount_of_members; ++i) {
         obj.members.push_back(::wow_world_messages::vanilla::GuildMember_read(reader));
     }
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_GUILD_ROSTER::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_GUILD_ROSTER::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_GUILD_ROSTER_size(obj));
 
-    writer.write_u16_be(SMSG_GUILD_ROSTER_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_GUILD_ROSTER_size(obj) + 2)); /* size */
 
     writer.write_u16(0x0000008a); /* opcode */
 
@@ -4791,18 +5350,18 @@ static size_t CMSG_GUILD_PROMOTE_size(const CMSG_GUILD_PROMOTE& obj) {
 }
 
 CMSG_GUILD_PROMOTE CMSG_GUILD_PROMOTE_read(Reader& reader) {
-    CMSG_GUILD_PROMOTE obj;
+    CMSG_GUILD_PROMOTE obj{};
 
     obj.player_name = reader.read_cstring();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_GUILD_PROMOTE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GUILD_PROMOTE::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_GUILD_PROMOTE_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_GUILD_PROMOTE_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_GUILD_PROMOTE_size(obj) + 4)); /* size */
 
     writer.write_u32(0x0000008b); /* opcode */
 
@@ -4816,18 +5375,18 @@ static size_t CMSG_GUILD_DEMOTE_size(const CMSG_GUILD_DEMOTE& obj) {
 }
 
 CMSG_GUILD_DEMOTE CMSG_GUILD_DEMOTE_read(Reader& reader) {
-    CMSG_GUILD_DEMOTE obj;
+    CMSG_GUILD_DEMOTE obj{};
 
     obj.player_name = reader.read_cstring();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_GUILD_DEMOTE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GUILD_DEMOTE::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_GUILD_DEMOTE_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_GUILD_DEMOTE_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_GUILD_DEMOTE_size(obj) + 4)); /* size */
 
     writer.write_u32(0x0000008c); /* opcode */
 
@@ -4836,10 +5395,10 @@ std::vector<unsigned char> CMSG_GUILD_DEMOTE::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_GUILD_LEAVE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GUILD_LEAVE::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x0000008d); /* opcode */
 
@@ -4851,18 +5410,18 @@ static size_t CMSG_GUILD_REMOVE_size(const CMSG_GUILD_REMOVE& obj) {
 }
 
 CMSG_GUILD_REMOVE CMSG_GUILD_REMOVE_read(Reader& reader) {
-    CMSG_GUILD_REMOVE obj;
+    CMSG_GUILD_REMOVE obj{};
 
     obj.player_name = reader.read_cstring();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_GUILD_REMOVE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GUILD_REMOVE::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_GUILD_REMOVE_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_GUILD_REMOVE_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_GUILD_REMOVE_size(obj) + 4)); /* size */
 
     writer.write_u32(0x0000008e); /* opcode */
 
@@ -4871,10 +5430,10 @@ std::vector<unsigned char> CMSG_GUILD_REMOVE::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_GUILD_DISBAND::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GUILD_DISBAND::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x0000008f); /* opcode */
 
@@ -4886,18 +5445,18 @@ static size_t CMSG_GUILD_LEADER_size(const CMSG_GUILD_LEADER& obj) {
 }
 
 CMSG_GUILD_LEADER CMSG_GUILD_LEADER_read(Reader& reader) {
-    CMSG_GUILD_LEADER obj;
+    CMSG_GUILD_LEADER obj{};
 
     obj.new_guild_leader_name = reader.read_cstring();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_GUILD_LEADER::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GUILD_LEADER::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_GUILD_LEADER_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_GUILD_LEADER_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_GUILD_LEADER_size(obj) + 4)); /* size */
 
     writer.write_u32(0x00000090); /* opcode */
 
@@ -4911,18 +5470,18 @@ static size_t CMSG_GUILD_MOTD_size(const CMSG_GUILD_MOTD& obj) {
 }
 
 CMSG_GUILD_MOTD CMSG_GUILD_MOTD_read(Reader& reader) {
-    CMSG_GUILD_MOTD obj;
+    CMSG_GUILD_MOTD obj{};
 
     obj.message_of_the_day = reader.read_cstring();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_GUILD_MOTD::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GUILD_MOTD::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_GUILD_MOTD_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_GUILD_MOTD_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_GUILD_MOTD_size(obj) + 4)); /* size */
 
     writer.write_u32(0x00000091); /* opcode */
 
@@ -4935,31 +5494,31 @@ static size_t SMSG_GUILD_EVENT_size(const SMSG_GUILD_EVENT& obj) {
     size_t _size = 2;
 
     for(const auto& v : obj.event_descriptions) {
-        _size += v.size() + 1;
+        _size += v.size() + 1;;
     }
 
     return _size;
 }
 
 SMSG_GUILD_EVENT SMSG_GUILD_EVENT_read(Reader& reader) {
-    SMSG_GUILD_EVENT obj;
+    SMSG_GUILD_EVENT obj{};
 
     obj.event = static_cast<GuildEvent>(reader.read_u8());
 
     obj.amount_of_events = reader.read_u8();
 
-    for (auto i = 0; i < obj.amount_of_events; ++i) {
+    for (uint8_t i = 0; i < obj.amount_of_events; ++i) {
         obj.event_descriptions.push_back(reader.read_cstring());
     }
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_GUILD_EVENT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_GUILD_EVENT::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_GUILD_EVENT_size(obj));
 
-    writer.write_u16_be(SMSG_GUILD_EVENT_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_GUILD_EVENT_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000092); /* opcode */
 
@@ -4979,7 +5538,7 @@ static size_t SMSG_GUILD_COMMAND_RESULT_size(const SMSG_GUILD_COMMAND_RESULT& ob
 }
 
 SMSG_GUILD_COMMAND_RESULT SMSG_GUILD_COMMAND_RESULT_read(Reader& reader) {
-    SMSG_GUILD_COMMAND_RESULT obj;
+    SMSG_GUILD_COMMAND_RESULT obj{};
 
     obj.command = static_cast<GuildCommand>(reader.read_u32());
 
@@ -4990,11 +5549,11 @@ SMSG_GUILD_COMMAND_RESULT SMSG_GUILD_COMMAND_RESULT_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_GUILD_COMMAND_RESULT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_GUILD_COMMAND_RESULT::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_GUILD_COMMAND_RESULT_size(obj));
 
-    writer.write_u16_be(SMSG_GUILD_COMMAND_RESULT_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_GUILD_COMMAND_RESULT_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000093); /* opcode */
 
@@ -5021,7 +5580,7 @@ static size_t CMSG_MESSAGECHAT_size(const CMSG_MESSAGECHAT& obj) {
 }
 
 CMSG_MESSAGECHAT CMSG_MESSAGECHAT_read(Reader& reader) {
-    CMSG_MESSAGECHAT obj;
+    CMSG_MESSAGECHAT obj{};
 
     obj.chat_type = static_cast<ChatType>(reader.read_u32());
 
@@ -5040,11 +5599,11 @@ CMSG_MESSAGECHAT CMSG_MESSAGECHAT_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_MESSAGECHAT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_MESSAGECHAT::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_MESSAGECHAT_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_MESSAGECHAT_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_MESSAGECHAT_size(obj) + 4)); /* size */
 
     writer.write_u32(0x00000095); /* opcode */
 
@@ -5088,7 +5647,7 @@ static size_t SMSG_MESSAGECHAT_size(const SMSG_MESSAGECHAT& obj) {
 }
 
 SMSG_MESSAGECHAT SMSG_MESSAGECHAT_read(Reader& reader) {
-    SMSG_MESSAGECHAT obj;
+    SMSG_MESSAGECHAT obj{};
 
     obj.chat_type = static_cast<ChatType>(reader.read_u8());
 
@@ -5133,11 +5692,11 @@ SMSG_MESSAGECHAT SMSG_MESSAGECHAT_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_MESSAGECHAT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_MESSAGECHAT::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_MESSAGECHAT_size(obj));
 
-    writer.write_u16_be(SMSG_MESSAGECHAT_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_MESSAGECHAT_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000096); /* opcode */
 
@@ -5189,7 +5748,7 @@ static size_t CMSG_JOIN_CHANNEL_size(const CMSG_JOIN_CHANNEL& obj) {
 }
 
 CMSG_JOIN_CHANNEL CMSG_JOIN_CHANNEL_read(Reader& reader) {
-    CMSG_JOIN_CHANNEL obj;
+    CMSG_JOIN_CHANNEL obj{};
 
     obj.channel_name = reader.read_cstring();
 
@@ -5198,11 +5757,11 @@ CMSG_JOIN_CHANNEL CMSG_JOIN_CHANNEL_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_JOIN_CHANNEL::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_JOIN_CHANNEL::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_JOIN_CHANNEL_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_JOIN_CHANNEL_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_JOIN_CHANNEL_size(obj) + 4)); /* size */
 
     writer.write_u32(0x00000097); /* opcode */
 
@@ -5218,18 +5777,18 @@ static size_t CMSG_LEAVE_CHANNEL_size(const CMSG_LEAVE_CHANNEL& obj) {
 }
 
 CMSG_LEAVE_CHANNEL CMSG_LEAVE_CHANNEL_read(Reader& reader) {
-    CMSG_LEAVE_CHANNEL obj;
+    CMSG_LEAVE_CHANNEL obj{};
 
     obj.channel_name = reader.read_cstring();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_LEAVE_CHANNEL::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_LEAVE_CHANNEL::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_LEAVE_CHANNEL_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_LEAVE_CHANNEL_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_LEAVE_CHANNEL_size(obj) + 4)); /* size */
 
     writer.write_u32(0x00000098); /* opcode */
 
@@ -5243,7 +5802,7 @@ static size_t SMSG_CHANNEL_NOTIFY_size(const SMSG_CHANNEL_NOTIFY& obj) {
 }
 
 SMSG_CHANNEL_NOTIFY SMSG_CHANNEL_NOTIFY_read(Reader& reader) {
-    SMSG_CHANNEL_NOTIFY obj;
+    SMSG_CHANNEL_NOTIFY obj{};
 
     obj.notify_type = static_cast<ChatNotify>(reader.read_u8());
 
@@ -5252,11 +5811,11 @@ SMSG_CHANNEL_NOTIFY SMSG_CHANNEL_NOTIFY_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_CHANNEL_NOTIFY::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_CHANNEL_NOTIFY::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_CHANNEL_NOTIFY_size(obj));
 
-    writer.write_u16_be(SMSG_CHANNEL_NOTIFY_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_CHANNEL_NOTIFY_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000099); /* opcode */
 
@@ -5272,18 +5831,18 @@ static size_t CMSG_CHANNEL_LIST_size(const CMSG_CHANNEL_LIST& obj) {
 }
 
 CMSG_CHANNEL_LIST CMSG_CHANNEL_LIST_read(Reader& reader) {
-    CMSG_CHANNEL_LIST obj;
+    CMSG_CHANNEL_LIST obj{};
 
     obj.channel_name = reader.read_cstring();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_CHANNEL_LIST::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_CHANNEL_LIST::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_CHANNEL_LIST_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_CHANNEL_LIST_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_CHANNEL_LIST_size(obj) + 4)); /* size */
 
     writer.write_u32(0x0000009a); /* opcode */
 
@@ -5297,7 +5856,7 @@ static size_t SMSG_CHANNEL_LIST_size(const SMSG_CHANNEL_LIST& obj) {
 }
 
 SMSG_CHANNEL_LIST SMSG_CHANNEL_LIST_read(Reader& reader) {
-    SMSG_CHANNEL_LIST obj;
+    SMSG_CHANNEL_LIST obj{};
 
     obj.channel_name = reader.read_cstring();
 
@@ -5305,18 +5864,18 @@ SMSG_CHANNEL_LIST SMSG_CHANNEL_LIST_read(Reader& reader) {
 
     obj.amount_of_members = reader.read_u32();
 
-    for (auto i = 0; i < obj.amount_of_members; ++i) {
+    for (uint32_t i = 0; i < obj.amount_of_members; ++i) {
         obj.members.push_back(::wow_world_messages::vanilla::ChannelMember_read(reader));
     }
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_CHANNEL_LIST::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_CHANNEL_LIST::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_CHANNEL_LIST_size(obj));
 
-    writer.write_u16_be(SMSG_CHANNEL_LIST_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_CHANNEL_LIST_size(obj) + 2)); /* size */
 
     writer.write_u16(0x0000009b); /* opcode */
 
@@ -5338,7 +5897,7 @@ static size_t CMSG_CHANNEL_PASSWORD_size(const CMSG_CHANNEL_PASSWORD& obj) {
 }
 
 CMSG_CHANNEL_PASSWORD CMSG_CHANNEL_PASSWORD_read(Reader& reader) {
-    CMSG_CHANNEL_PASSWORD obj;
+    CMSG_CHANNEL_PASSWORD obj{};
 
     obj.channel_name = reader.read_cstring();
 
@@ -5347,11 +5906,11 @@ CMSG_CHANNEL_PASSWORD CMSG_CHANNEL_PASSWORD_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_CHANNEL_PASSWORD::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_CHANNEL_PASSWORD::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_CHANNEL_PASSWORD_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_CHANNEL_PASSWORD_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_CHANNEL_PASSWORD_size(obj) + 4)); /* size */
 
     writer.write_u32(0x0000009c); /* opcode */
 
@@ -5367,7 +5926,7 @@ static size_t CMSG_CHANNEL_SET_OWNER_size(const CMSG_CHANNEL_SET_OWNER& obj) {
 }
 
 CMSG_CHANNEL_SET_OWNER CMSG_CHANNEL_SET_OWNER_read(Reader& reader) {
-    CMSG_CHANNEL_SET_OWNER obj;
+    CMSG_CHANNEL_SET_OWNER obj{};
 
     obj.channel_name = reader.read_cstring();
 
@@ -5376,11 +5935,11 @@ CMSG_CHANNEL_SET_OWNER CMSG_CHANNEL_SET_OWNER_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_CHANNEL_SET_OWNER::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_CHANNEL_SET_OWNER::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_CHANNEL_SET_OWNER_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_CHANNEL_SET_OWNER_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_CHANNEL_SET_OWNER_size(obj) + 4)); /* size */
 
     writer.write_u32(0x0000009d); /* opcode */
 
@@ -5396,18 +5955,18 @@ static size_t CMSG_CHANNEL_OWNER_size(const CMSG_CHANNEL_OWNER& obj) {
 }
 
 CMSG_CHANNEL_OWNER CMSG_CHANNEL_OWNER_read(Reader& reader) {
-    CMSG_CHANNEL_OWNER obj;
+    CMSG_CHANNEL_OWNER obj{};
 
     obj.channel_name = reader.read_cstring();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_CHANNEL_OWNER::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_CHANNEL_OWNER::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_CHANNEL_OWNER_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_CHANNEL_OWNER_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_CHANNEL_OWNER_size(obj) + 4)); /* size */
 
     writer.write_u32(0x0000009e); /* opcode */
 
@@ -5421,7 +5980,7 @@ static size_t CMSG_CHANNEL_MODERATOR_size(const CMSG_CHANNEL_MODERATOR& obj) {
 }
 
 CMSG_CHANNEL_MODERATOR CMSG_CHANNEL_MODERATOR_read(Reader& reader) {
-    CMSG_CHANNEL_MODERATOR obj;
+    CMSG_CHANNEL_MODERATOR obj{};
 
     obj.channel_name = reader.read_cstring();
 
@@ -5430,11 +5989,11 @@ CMSG_CHANNEL_MODERATOR CMSG_CHANNEL_MODERATOR_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_CHANNEL_MODERATOR::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_CHANNEL_MODERATOR::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_CHANNEL_MODERATOR_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_CHANNEL_MODERATOR_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_CHANNEL_MODERATOR_size(obj) + 4)); /* size */
 
     writer.write_u32(0x0000009f); /* opcode */
 
@@ -5450,7 +6009,7 @@ static size_t CMSG_CHANNEL_UNMODERATOR_size(const CMSG_CHANNEL_UNMODERATOR& obj)
 }
 
 CMSG_CHANNEL_UNMODERATOR CMSG_CHANNEL_UNMODERATOR_read(Reader& reader) {
-    CMSG_CHANNEL_UNMODERATOR obj;
+    CMSG_CHANNEL_UNMODERATOR obj{};
 
     obj.channel_name = reader.read_cstring();
 
@@ -5459,11 +6018,11 @@ CMSG_CHANNEL_UNMODERATOR CMSG_CHANNEL_UNMODERATOR_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_CHANNEL_UNMODERATOR::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_CHANNEL_UNMODERATOR::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_CHANNEL_UNMODERATOR_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_CHANNEL_UNMODERATOR_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_CHANNEL_UNMODERATOR_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000000a0); /* opcode */
 
@@ -5479,7 +6038,7 @@ static size_t CMSG_CHANNEL_MUTE_size(const CMSG_CHANNEL_MUTE& obj) {
 }
 
 CMSG_CHANNEL_MUTE CMSG_CHANNEL_MUTE_read(Reader& reader) {
-    CMSG_CHANNEL_MUTE obj;
+    CMSG_CHANNEL_MUTE obj{};
 
     obj.channel_name = reader.read_cstring();
 
@@ -5488,11 +6047,11 @@ CMSG_CHANNEL_MUTE CMSG_CHANNEL_MUTE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_CHANNEL_MUTE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_CHANNEL_MUTE::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_CHANNEL_MUTE_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_CHANNEL_MUTE_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_CHANNEL_MUTE_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000000a1); /* opcode */
 
@@ -5508,7 +6067,7 @@ static size_t CMSG_CHANNEL_UNMUTE_size(const CMSG_CHANNEL_UNMUTE& obj) {
 }
 
 CMSG_CHANNEL_UNMUTE CMSG_CHANNEL_UNMUTE_read(Reader& reader) {
-    CMSG_CHANNEL_UNMUTE obj;
+    CMSG_CHANNEL_UNMUTE obj{};
 
     obj.channel_name = reader.read_cstring();
 
@@ -5517,11 +6076,11 @@ CMSG_CHANNEL_UNMUTE CMSG_CHANNEL_UNMUTE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_CHANNEL_UNMUTE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_CHANNEL_UNMUTE::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_CHANNEL_UNMUTE_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_CHANNEL_UNMUTE_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_CHANNEL_UNMUTE_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000000a2); /* opcode */
 
@@ -5537,7 +6096,7 @@ static size_t CMSG_CHANNEL_INVITE_size(const CMSG_CHANNEL_INVITE& obj) {
 }
 
 CMSG_CHANNEL_INVITE CMSG_CHANNEL_INVITE_read(Reader& reader) {
-    CMSG_CHANNEL_INVITE obj;
+    CMSG_CHANNEL_INVITE obj{};
 
     obj.channel_name = reader.read_cstring();
 
@@ -5546,11 +6105,11 @@ CMSG_CHANNEL_INVITE CMSG_CHANNEL_INVITE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_CHANNEL_INVITE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_CHANNEL_INVITE::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_CHANNEL_INVITE_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_CHANNEL_INVITE_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_CHANNEL_INVITE_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000000a3); /* opcode */
 
@@ -5566,7 +6125,7 @@ static size_t CMSG_CHANNEL_KICK_size(const CMSG_CHANNEL_KICK& obj) {
 }
 
 CMSG_CHANNEL_KICK CMSG_CHANNEL_KICK_read(Reader& reader) {
-    CMSG_CHANNEL_KICK obj;
+    CMSG_CHANNEL_KICK obj{};
 
     obj.channel_name = reader.read_cstring();
 
@@ -5575,11 +6134,11 @@ CMSG_CHANNEL_KICK CMSG_CHANNEL_KICK_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_CHANNEL_KICK::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_CHANNEL_KICK::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_CHANNEL_KICK_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_CHANNEL_KICK_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_CHANNEL_KICK_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000000a4); /* opcode */
 
@@ -5595,7 +6154,7 @@ static size_t CMSG_CHANNEL_BAN_size(const CMSG_CHANNEL_BAN& obj) {
 }
 
 CMSG_CHANNEL_BAN CMSG_CHANNEL_BAN_read(Reader& reader) {
-    CMSG_CHANNEL_BAN obj;
+    CMSG_CHANNEL_BAN obj{};
 
     obj.channel_name = reader.read_cstring();
 
@@ -5604,11 +6163,11 @@ CMSG_CHANNEL_BAN CMSG_CHANNEL_BAN_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_CHANNEL_BAN::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_CHANNEL_BAN::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_CHANNEL_BAN_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_CHANNEL_BAN_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_CHANNEL_BAN_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000000a5); /* opcode */
 
@@ -5624,7 +6183,7 @@ static size_t CMSG_CHANNEL_UNBAN_size(const CMSG_CHANNEL_UNBAN& obj) {
 }
 
 CMSG_CHANNEL_UNBAN CMSG_CHANNEL_UNBAN_read(Reader& reader) {
-    CMSG_CHANNEL_UNBAN obj;
+    CMSG_CHANNEL_UNBAN obj{};
 
     obj.channel_name = reader.read_cstring();
 
@@ -5633,11 +6192,11 @@ CMSG_CHANNEL_UNBAN CMSG_CHANNEL_UNBAN_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_CHANNEL_UNBAN::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_CHANNEL_UNBAN::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_CHANNEL_UNBAN_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_CHANNEL_UNBAN_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_CHANNEL_UNBAN_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000000a6); /* opcode */
 
@@ -5653,18 +6212,18 @@ static size_t CMSG_CHANNEL_ANNOUNCEMENTS_size(const CMSG_CHANNEL_ANNOUNCEMENTS& 
 }
 
 CMSG_CHANNEL_ANNOUNCEMENTS CMSG_CHANNEL_ANNOUNCEMENTS_read(Reader& reader) {
-    CMSG_CHANNEL_ANNOUNCEMENTS obj;
+    CMSG_CHANNEL_ANNOUNCEMENTS obj{};
 
     obj.channel_name = reader.read_cstring();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_CHANNEL_ANNOUNCEMENTS::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_CHANNEL_ANNOUNCEMENTS::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_CHANNEL_ANNOUNCEMENTS_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_CHANNEL_ANNOUNCEMENTS_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_CHANNEL_ANNOUNCEMENTS_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000000a7); /* opcode */
 
@@ -5678,18 +6237,18 @@ static size_t CMSG_CHANNEL_MODERATE_size(const CMSG_CHANNEL_MODERATE& obj) {
 }
 
 CMSG_CHANNEL_MODERATE CMSG_CHANNEL_MODERATE_read(Reader& reader) {
-    CMSG_CHANNEL_MODERATE obj;
+    CMSG_CHANNEL_MODERATE obj{};
 
     obj.channel_name = reader.read_cstring();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_CHANNEL_MODERATE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_CHANNEL_MODERATE::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_CHANNEL_MODERATE_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_CHANNEL_MODERATE_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_CHANNEL_MODERATE_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000000a8); /* opcode */
 
@@ -5709,24 +6268,24 @@ static size_t SMSG_UPDATE_OBJECT_size(const SMSG_UPDATE_OBJECT& obj) {
 }
 
 SMSG_UPDATE_OBJECT SMSG_UPDATE_OBJECT_read(Reader& reader) {
-    SMSG_UPDATE_OBJECT obj;
+    SMSG_UPDATE_OBJECT obj{};
 
     obj.amount_of_objects = reader.read_u32();
 
     obj.has_transport = reader.read_u8();
 
-    for (auto i = 0; i < obj.amount_of_objects; ++i) {
+    for (uint32_t i = 0; i < obj.amount_of_objects; ++i) {
         obj.objects.push_back(::wow_world_messages::vanilla::Object_read(reader));
     }
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_UPDATE_OBJECT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_UPDATE_OBJECT::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_UPDATE_OBJECT_size(obj));
 
-    writer.write_u16_be(SMSG_UPDATE_OBJECT_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_UPDATE_OBJECT_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000000a9); /* opcode */
 
@@ -5742,18 +6301,18 @@ std::vector<unsigned char> SMSG_UPDATE_OBJECT::write() const {
 }
 
 SMSG_DESTROY_OBJECT SMSG_DESTROY_OBJECT_read(Reader& reader) {
-    SMSG_DESTROY_OBJECT obj;
+    SMSG_DESTROY_OBJECT obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_DESTROY_OBJECT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_DESTROY_OBJECT::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 2)); /* size */
 
     writer.write_u16(0x000000aa); /* opcode */
 
@@ -5767,7 +6326,7 @@ static size_t CMSG_USE_ITEM_size(const CMSG_USE_ITEM& obj) {
 }
 
 CMSG_USE_ITEM CMSG_USE_ITEM_read(Reader& reader) {
-    CMSG_USE_ITEM obj;
+    CMSG_USE_ITEM obj{};
 
     obj.bag_index = reader.read_u8();
 
@@ -5780,11 +6339,11 @@ CMSG_USE_ITEM CMSG_USE_ITEM_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_USE_ITEM::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_USE_ITEM::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_USE_ITEM_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_USE_ITEM_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_USE_ITEM_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000000ab); /* opcode */
 
@@ -5800,7 +6359,7 @@ std::vector<unsigned char> CMSG_USE_ITEM::write() const {
 }
 
 CMSG_OPEN_ITEM CMSG_OPEN_ITEM_read(Reader& reader) {
-    CMSG_OPEN_ITEM obj;
+    CMSG_OPEN_ITEM obj{};
 
     obj.bag_index = reader.read_u8();
 
@@ -5809,11 +6368,11 @@ CMSG_OPEN_ITEM CMSG_OPEN_ITEM_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_OPEN_ITEM::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_OPEN_ITEM::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0002);
 
-    writer.write_u16_be(0x0002 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0002 + 4)); /* size */
 
     writer.write_u32(0x000000ac); /* opcode */
 
@@ -5825,7 +6384,7 @@ std::vector<unsigned char> CMSG_OPEN_ITEM::write() const {
 }
 
 CMSG_READ_ITEM CMSG_READ_ITEM_read(Reader& reader) {
-    CMSG_READ_ITEM obj;
+    CMSG_READ_ITEM obj{};
 
     obj.bag_index = reader.read_u8();
 
@@ -5834,11 +6393,11 @@ CMSG_READ_ITEM CMSG_READ_ITEM_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_READ_ITEM::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_READ_ITEM::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0002);
 
-    writer.write_u16_be(0x0002 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0002 + 4)); /* size */
 
     writer.write_u32(0x000000ad); /* opcode */
 
@@ -5850,18 +6409,18 @@ std::vector<unsigned char> CMSG_READ_ITEM::write() const {
 }
 
 SMSG_READ_ITEM_OK SMSG_READ_ITEM_OK_read(Reader& reader) {
-    SMSG_READ_ITEM_OK obj;
+    SMSG_READ_ITEM_OK obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_READ_ITEM_OK::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_READ_ITEM_OK::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 2)); /* size */
 
     writer.write_u16(0x000000ae); /* opcode */
 
@@ -5871,18 +6430,18 @@ std::vector<unsigned char> SMSG_READ_ITEM_OK::write() const {
 }
 
 SMSG_READ_ITEM_FAILED SMSG_READ_ITEM_FAILED_read(Reader& reader) {
-    SMSG_READ_ITEM_FAILED obj;
+    SMSG_READ_ITEM_FAILED obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_READ_ITEM_FAILED::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_READ_ITEM_FAILED::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 2)); /* size */
 
     writer.write_u16(0x000000af); /* opcode */
 
@@ -5892,7 +6451,7 @@ std::vector<unsigned char> SMSG_READ_ITEM_FAILED::write() const {
 }
 
 SMSG_ITEM_COOLDOWN SMSG_ITEM_COOLDOWN_read(Reader& reader) {
-    SMSG_ITEM_COOLDOWN obj;
+    SMSG_ITEM_COOLDOWN obj{};
 
     obj.guid = reader.read_u64();
 
@@ -5901,11 +6460,11 @@ SMSG_ITEM_COOLDOWN SMSG_ITEM_COOLDOWN_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_ITEM_COOLDOWN::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_ITEM_COOLDOWN::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 2)); /* size */
 
     writer.write_u16(0x000000b0); /* opcode */
 
@@ -5917,18 +6476,18 @@ std::vector<unsigned char> SMSG_ITEM_COOLDOWN::write() const {
 }
 
 CMSG_GAMEOBJ_USE CMSG_GAMEOBJ_USE_read(Reader& reader) {
-    CMSG_GAMEOBJ_USE obj;
+    CMSG_GAMEOBJ_USE obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_GAMEOBJ_USE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GAMEOBJ_USE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x000000b1); /* opcode */
 
@@ -5938,7 +6497,7 @@ std::vector<unsigned char> CMSG_GAMEOBJ_USE::write() const {
 }
 
 SMSG_GAMEOBJECT_CUSTOM_ANIM SMSG_GAMEOBJECT_CUSTOM_ANIM_read(Reader& reader) {
-    SMSG_GAMEOBJECT_CUSTOM_ANIM obj;
+    SMSG_GAMEOBJECT_CUSTOM_ANIM obj{};
 
     obj.guid = reader.read_u64();
 
@@ -5947,11 +6506,11 @@ SMSG_GAMEOBJECT_CUSTOM_ANIM SMSG_GAMEOBJECT_CUSTOM_ANIM_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_GAMEOBJECT_CUSTOM_ANIM::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_GAMEOBJECT_CUSTOM_ANIM::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 2)); /* size */
 
     writer.write_u16(0x000000b3); /* opcode */
 
@@ -5963,18 +6522,18 @@ std::vector<unsigned char> SMSG_GAMEOBJECT_CUSTOM_ANIM::write() const {
 }
 
 CMSG_AREATRIGGER CMSG_AREATRIGGER_read(Reader& reader) {
-    CMSG_AREATRIGGER obj;
+    CMSG_AREATRIGGER obj{};
 
     obj.trigger_id = reader.read_u32();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_AREATRIGGER::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_AREATRIGGER::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 4)); /* size */
 
     writer.write_u32(0x000000b4); /* opcode */
 
@@ -5988,18 +6547,18 @@ static size_t MSG_MOVE_START_FORWARD_Client_size(const MSG_MOVE_START_FORWARD_Cl
 }
 
 MSG_MOVE_START_FORWARD_Client MSG_MOVE_START_FORWARD_Client_read(Reader& reader) {
-    MSG_MOVE_START_FORWARD_Client obj;
+    MSG_MOVE_START_FORWARD_Client obj{};
 
     obj.info = ::wow_world_messages::vanilla::MovementInfo_read(reader);
 
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_START_FORWARD_Client::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_START_FORWARD_Client::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_START_FORWARD_Client_size(obj));
 
-    writer.write_u16_be((uint16_t)MSG_MOVE_START_FORWARD_Client_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)MSG_MOVE_START_FORWARD_Client_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000000b5); /* opcode */
 
@@ -6013,7 +6572,7 @@ static size_t MSG_MOVE_START_FORWARD_Server_size(const MSG_MOVE_START_FORWARD_Se
 }
 
 MSG_MOVE_START_FORWARD_Server MSG_MOVE_START_FORWARD_Server_read(Reader& reader) {
-    MSG_MOVE_START_FORWARD_Server obj;
+    MSG_MOVE_START_FORWARD_Server obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -6022,11 +6581,11 @@ MSG_MOVE_START_FORWARD_Server MSG_MOVE_START_FORWARD_Server_read(Reader& reader)
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_START_FORWARD_Server::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_START_FORWARD_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_START_FORWARD_Server_size(obj));
 
-    writer.write_u16_be(MSG_MOVE_START_FORWARD_Server_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(MSG_MOVE_START_FORWARD_Server_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000000b5); /* opcode */
 
@@ -6042,18 +6601,18 @@ static size_t MSG_MOVE_START_BACKWARD_Client_size(const MSG_MOVE_START_BACKWARD_
 }
 
 MSG_MOVE_START_BACKWARD_Client MSG_MOVE_START_BACKWARD_Client_read(Reader& reader) {
-    MSG_MOVE_START_BACKWARD_Client obj;
+    MSG_MOVE_START_BACKWARD_Client obj{};
 
     obj.info = ::wow_world_messages::vanilla::MovementInfo_read(reader);
 
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_START_BACKWARD_Client::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_START_BACKWARD_Client::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_START_BACKWARD_Client_size(obj));
 
-    writer.write_u16_be((uint16_t)MSG_MOVE_START_BACKWARD_Client_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)MSG_MOVE_START_BACKWARD_Client_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000000b6); /* opcode */
 
@@ -6067,7 +6626,7 @@ static size_t MSG_MOVE_START_BACKWARD_Server_size(const MSG_MOVE_START_BACKWARD_
 }
 
 MSG_MOVE_START_BACKWARD_Server MSG_MOVE_START_BACKWARD_Server_read(Reader& reader) {
-    MSG_MOVE_START_BACKWARD_Server obj;
+    MSG_MOVE_START_BACKWARD_Server obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -6076,11 +6635,11 @@ MSG_MOVE_START_BACKWARD_Server MSG_MOVE_START_BACKWARD_Server_read(Reader& reade
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_START_BACKWARD_Server::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_START_BACKWARD_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_START_BACKWARD_Server_size(obj));
 
-    writer.write_u16_be(MSG_MOVE_START_BACKWARD_Server_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(MSG_MOVE_START_BACKWARD_Server_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000000b6); /* opcode */
 
@@ -6096,18 +6655,18 @@ static size_t MSG_MOVE_STOP_Client_size(const MSG_MOVE_STOP_Client& obj) {
 }
 
 MSG_MOVE_STOP_Client MSG_MOVE_STOP_Client_read(Reader& reader) {
-    MSG_MOVE_STOP_Client obj;
+    MSG_MOVE_STOP_Client obj{};
 
     obj.info = ::wow_world_messages::vanilla::MovementInfo_read(reader);
 
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_STOP_Client::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_STOP_Client::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_STOP_Client_size(obj));
 
-    writer.write_u16_be((uint16_t)MSG_MOVE_STOP_Client_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)MSG_MOVE_STOP_Client_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000000b7); /* opcode */
 
@@ -6121,7 +6680,7 @@ static size_t MSG_MOVE_STOP_Server_size(const MSG_MOVE_STOP_Server& obj) {
 }
 
 MSG_MOVE_STOP_Server MSG_MOVE_STOP_Server_read(Reader& reader) {
-    MSG_MOVE_STOP_Server obj;
+    MSG_MOVE_STOP_Server obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -6130,11 +6689,11 @@ MSG_MOVE_STOP_Server MSG_MOVE_STOP_Server_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_STOP_Server::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_STOP_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_STOP_Server_size(obj));
 
-    writer.write_u16_be(MSG_MOVE_STOP_Server_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(MSG_MOVE_STOP_Server_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000000b7); /* opcode */
 
@@ -6150,18 +6709,18 @@ static size_t MSG_MOVE_START_STRAFE_LEFT_Client_size(const MSG_MOVE_START_STRAFE
 }
 
 MSG_MOVE_START_STRAFE_LEFT_Client MSG_MOVE_START_STRAFE_LEFT_Client_read(Reader& reader) {
-    MSG_MOVE_START_STRAFE_LEFT_Client obj;
+    MSG_MOVE_START_STRAFE_LEFT_Client obj{};
 
     obj.info = ::wow_world_messages::vanilla::MovementInfo_read(reader);
 
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_START_STRAFE_LEFT_Client::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_START_STRAFE_LEFT_Client::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_START_STRAFE_LEFT_Client_size(obj));
 
-    writer.write_u16_be((uint16_t)MSG_MOVE_START_STRAFE_LEFT_Client_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)MSG_MOVE_START_STRAFE_LEFT_Client_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000000b8); /* opcode */
 
@@ -6175,7 +6734,7 @@ static size_t MSG_MOVE_START_STRAFE_LEFT_Server_size(const MSG_MOVE_START_STRAFE
 }
 
 MSG_MOVE_START_STRAFE_LEFT_Server MSG_MOVE_START_STRAFE_LEFT_Server_read(Reader& reader) {
-    MSG_MOVE_START_STRAFE_LEFT_Server obj;
+    MSG_MOVE_START_STRAFE_LEFT_Server obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -6184,11 +6743,11 @@ MSG_MOVE_START_STRAFE_LEFT_Server MSG_MOVE_START_STRAFE_LEFT_Server_read(Reader&
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_START_STRAFE_LEFT_Server::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_START_STRAFE_LEFT_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_START_STRAFE_LEFT_Server_size(obj));
 
-    writer.write_u16_be(MSG_MOVE_START_STRAFE_LEFT_Server_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(MSG_MOVE_START_STRAFE_LEFT_Server_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000000b8); /* opcode */
 
@@ -6204,18 +6763,18 @@ static size_t MSG_MOVE_START_STRAFE_RIGHT_Client_size(const MSG_MOVE_START_STRAF
 }
 
 MSG_MOVE_START_STRAFE_RIGHT_Client MSG_MOVE_START_STRAFE_RIGHT_Client_read(Reader& reader) {
-    MSG_MOVE_START_STRAFE_RIGHT_Client obj;
+    MSG_MOVE_START_STRAFE_RIGHT_Client obj{};
 
     obj.info = ::wow_world_messages::vanilla::MovementInfo_read(reader);
 
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_START_STRAFE_RIGHT_Client::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_START_STRAFE_RIGHT_Client::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_START_STRAFE_RIGHT_Client_size(obj));
 
-    writer.write_u16_be((uint16_t)MSG_MOVE_START_STRAFE_RIGHT_Client_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)MSG_MOVE_START_STRAFE_RIGHT_Client_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000000b9); /* opcode */
 
@@ -6229,7 +6788,7 @@ static size_t MSG_MOVE_START_STRAFE_RIGHT_Server_size(const MSG_MOVE_START_STRAF
 }
 
 MSG_MOVE_START_STRAFE_RIGHT_Server MSG_MOVE_START_STRAFE_RIGHT_Server_read(Reader& reader) {
-    MSG_MOVE_START_STRAFE_RIGHT_Server obj;
+    MSG_MOVE_START_STRAFE_RIGHT_Server obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -6238,11 +6797,11 @@ MSG_MOVE_START_STRAFE_RIGHT_Server MSG_MOVE_START_STRAFE_RIGHT_Server_read(Reade
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_START_STRAFE_RIGHT_Server::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_START_STRAFE_RIGHT_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_START_STRAFE_RIGHT_Server_size(obj));
 
-    writer.write_u16_be(MSG_MOVE_START_STRAFE_RIGHT_Server_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(MSG_MOVE_START_STRAFE_RIGHT_Server_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000000b9); /* opcode */
 
@@ -6258,18 +6817,18 @@ static size_t MSG_MOVE_STOP_STRAFE_Client_size(const MSG_MOVE_STOP_STRAFE_Client
 }
 
 MSG_MOVE_STOP_STRAFE_Client MSG_MOVE_STOP_STRAFE_Client_read(Reader& reader) {
-    MSG_MOVE_STOP_STRAFE_Client obj;
+    MSG_MOVE_STOP_STRAFE_Client obj{};
 
     obj.info = ::wow_world_messages::vanilla::MovementInfo_read(reader);
 
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_STOP_STRAFE_Client::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_STOP_STRAFE_Client::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_STOP_STRAFE_Client_size(obj));
 
-    writer.write_u16_be((uint16_t)MSG_MOVE_STOP_STRAFE_Client_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)MSG_MOVE_STOP_STRAFE_Client_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000000ba); /* opcode */
 
@@ -6283,7 +6842,7 @@ static size_t MSG_MOVE_STOP_STRAFE_Server_size(const MSG_MOVE_STOP_STRAFE_Server
 }
 
 MSG_MOVE_STOP_STRAFE_Server MSG_MOVE_STOP_STRAFE_Server_read(Reader& reader) {
-    MSG_MOVE_STOP_STRAFE_Server obj;
+    MSG_MOVE_STOP_STRAFE_Server obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -6292,11 +6851,11 @@ MSG_MOVE_STOP_STRAFE_Server MSG_MOVE_STOP_STRAFE_Server_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_STOP_STRAFE_Server::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_STOP_STRAFE_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_STOP_STRAFE_Server_size(obj));
 
-    writer.write_u16_be(MSG_MOVE_STOP_STRAFE_Server_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(MSG_MOVE_STOP_STRAFE_Server_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000000ba); /* opcode */
 
@@ -6312,18 +6871,18 @@ static size_t MSG_MOVE_JUMP_Client_size(const MSG_MOVE_JUMP_Client& obj) {
 }
 
 MSG_MOVE_JUMP_Client MSG_MOVE_JUMP_Client_read(Reader& reader) {
-    MSG_MOVE_JUMP_Client obj;
+    MSG_MOVE_JUMP_Client obj{};
 
     obj.info = ::wow_world_messages::vanilla::MovementInfo_read(reader);
 
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_JUMP_Client::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_JUMP_Client::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_JUMP_Client_size(obj));
 
-    writer.write_u16_be((uint16_t)MSG_MOVE_JUMP_Client_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)MSG_MOVE_JUMP_Client_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000000bb); /* opcode */
 
@@ -6337,7 +6896,7 @@ static size_t MSG_MOVE_JUMP_Server_size(const MSG_MOVE_JUMP_Server& obj) {
 }
 
 MSG_MOVE_JUMP_Server MSG_MOVE_JUMP_Server_read(Reader& reader) {
-    MSG_MOVE_JUMP_Server obj;
+    MSG_MOVE_JUMP_Server obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -6346,11 +6905,11 @@ MSG_MOVE_JUMP_Server MSG_MOVE_JUMP_Server_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_JUMP_Server::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_JUMP_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_JUMP_Server_size(obj));
 
-    writer.write_u16_be(MSG_MOVE_JUMP_Server_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(MSG_MOVE_JUMP_Server_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000000bb); /* opcode */
 
@@ -6366,18 +6925,18 @@ static size_t MSG_MOVE_START_TURN_LEFT_Client_size(const MSG_MOVE_START_TURN_LEF
 }
 
 MSG_MOVE_START_TURN_LEFT_Client MSG_MOVE_START_TURN_LEFT_Client_read(Reader& reader) {
-    MSG_MOVE_START_TURN_LEFT_Client obj;
+    MSG_MOVE_START_TURN_LEFT_Client obj{};
 
     obj.info = ::wow_world_messages::vanilla::MovementInfo_read(reader);
 
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_START_TURN_LEFT_Client::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_START_TURN_LEFT_Client::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_START_TURN_LEFT_Client_size(obj));
 
-    writer.write_u16_be((uint16_t)MSG_MOVE_START_TURN_LEFT_Client_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)MSG_MOVE_START_TURN_LEFT_Client_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000000bc); /* opcode */
 
@@ -6391,7 +6950,7 @@ static size_t MSG_MOVE_START_TURN_LEFT_Server_size(const MSG_MOVE_START_TURN_LEF
 }
 
 MSG_MOVE_START_TURN_LEFT_Server MSG_MOVE_START_TURN_LEFT_Server_read(Reader& reader) {
-    MSG_MOVE_START_TURN_LEFT_Server obj;
+    MSG_MOVE_START_TURN_LEFT_Server obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -6400,11 +6959,11 @@ MSG_MOVE_START_TURN_LEFT_Server MSG_MOVE_START_TURN_LEFT_Server_read(Reader& rea
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_START_TURN_LEFT_Server::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_START_TURN_LEFT_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_START_TURN_LEFT_Server_size(obj));
 
-    writer.write_u16_be(MSG_MOVE_START_TURN_LEFT_Server_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(MSG_MOVE_START_TURN_LEFT_Server_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000000bc); /* opcode */
 
@@ -6420,18 +6979,18 @@ static size_t MSG_MOVE_START_TURN_RIGHT_Client_size(const MSG_MOVE_START_TURN_RI
 }
 
 MSG_MOVE_START_TURN_RIGHT_Client MSG_MOVE_START_TURN_RIGHT_Client_read(Reader& reader) {
-    MSG_MOVE_START_TURN_RIGHT_Client obj;
+    MSG_MOVE_START_TURN_RIGHT_Client obj{};
 
     obj.info = ::wow_world_messages::vanilla::MovementInfo_read(reader);
 
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_START_TURN_RIGHT_Client::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_START_TURN_RIGHT_Client::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_START_TURN_RIGHT_Client_size(obj));
 
-    writer.write_u16_be((uint16_t)MSG_MOVE_START_TURN_RIGHT_Client_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)MSG_MOVE_START_TURN_RIGHT_Client_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000000bd); /* opcode */
 
@@ -6445,7 +7004,7 @@ static size_t MSG_MOVE_START_TURN_RIGHT_Server_size(const MSG_MOVE_START_TURN_RI
 }
 
 MSG_MOVE_START_TURN_RIGHT_Server MSG_MOVE_START_TURN_RIGHT_Server_read(Reader& reader) {
-    MSG_MOVE_START_TURN_RIGHT_Server obj;
+    MSG_MOVE_START_TURN_RIGHT_Server obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -6454,11 +7013,11 @@ MSG_MOVE_START_TURN_RIGHT_Server MSG_MOVE_START_TURN_RIGHT_Server_read(Reader& r
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_START_TURN_RIGHT_Server::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_START_TURN_RIGHT_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_START_TURN_RIGHT_Server_size(obj));
 
-    writer.write_u16_be(MSG_MOVE_START_TURN_RIGHT_Server_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(MSG_MOVE_START_TURN_RIGHT_Server_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000000bd); /* opcode */
 
@@ -6474,18 +7033,18 @@ static size_t MSG_MOVE_STOP_TURN_Client_size(const MSG_MOVE_STOP_TURN_Client& ob
 }
 
 MSG_MOVE_STOP_TURN_Client MSG_MOVE_STOP_TURN_Client_read(Reader& reader) {
-    MSG_MOVE_STOP_TURN_Client obj;
+    MSG_MOVE_STOP_TURN_Client obj{};
 
     obj.info = ::wow_world_messages::vanilla::MovementInfo_read(reader);
 
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_STOP_TURN_Client::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_STOP_TURN_Client::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_STOP_TURN_Client_size(obj));
 
-    writer.write_u16_be((uint16_t)MSG_MOVE_STOP_TURN_Client_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)MSG_MOVE_STOP_TURN_Client_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000000be); /* opcode */
 
@@ -6499,7 +7058,7 @@ static size_t MSG_MOVE_STOP_TURN_Server_size(const MSG_MOVE_STOP_TURN_Server& ob
 }
 
 MSG_MOVE_STOP_TURN_Server MSG_MOVE_STOP_TURN_Server_read(Reader& reader) {
-    MSG_MOVE_STOP_TURN_Server obj;
+    MSG_MOVE_STOP_TURN_Server obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -6508,11 +7067,11 @@ MSG_MOVE_STOP_TURN_Server MSG_MOVE_STOP_TURN_Server_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_STOP_TURN_Server::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_STOP_TURN_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_STOP_TURN_Server_size(obj));
 
-    writer.write_u16_be(MSG_MOVE_STOP_TURN_Server_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(MSG_MOVE_STOP_TURN_Server_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000000be); /* opcode */
 
@@ -6528,18 +7087,18 @@ static size_t MSG_MOVE_START_PITCH_UP_Client_size(const MSG_MOVE_START_PITCH_UP_
 }
 
 MSG_MOVE_START_PITCH_UP_Client MSG_MOVE_START_PITCH_UP_Client_read(Reader& reader) {
-    MSG_MOVE_START_PITCH_UP_Client obj;
+    MSG_MOVE_START_PITCH_UP_Client obj{};
 
     obj.info = ::wow_world_messages::vanilla::MovementInfo_read(reader);
 
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_START_PITCH_UP_Client::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_START_PITCH_UP_Client::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_START_PITCH_UP_Client_size(obj));
 
-    writer.write_u16_be((uint16_t)MSG_MOVE_START_PITCH_UP_Client_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)MSG_MOVE_START_PITCH_UP_Client_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000000bf); /* opcode */
 
@@ -6553,7 +7112,7 @@ static size_t MSG_MOVE_START_PITCH_UP_Server_size(const MSG_MOVE_START_PITCH_UP_
 }
 
 MSG_MOVE_START_PITCH_UP_Server MSG_MOVE_START_PITCH_UP_Server_read(Reader& reader) {
-    MSG_MOVE_START_PITCH_UP_Server obj;
+    MSG_MOVE_START_PITCH_UP_Server obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -6562,11 +7121,11 @@ MSG_MOVE_START_PITCH_UP_Server MSG_MOVE_START_PITCH_UP_Server_read(Reader& reade
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_START_PITCH_UP_Server::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_START_PITCH_UP_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_START_PITCH_UP_Server_size(obj));
 
-    writer.write_u16_be(MSG_MOVE_START_PITCH_UP_Server_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(MSG_MOVE_START_PITCH_UP_Server_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000000bf); /* opcode */
 
@@ -6582,18 +7141,18 @@ static size_t MSG_MOVE_START_PITCH_DOWN_Client_size(const MSG_MOVE_START_PITCH_D
 }
 
 MSG_MOVE_START_PITCH_DOWN_Client MSG_MOVE_START_PITCH_DOWN_Client_read(Reader& reader) {
-    MSG_MOVE_START_PITCH_DOWN_Client obj;
+    MSG_MOVE_START_PITCH_DOWN_Client obj{};
 
     obj.info = ::wow_world_messages::vanilla::MovementInfo_read(reader);
 
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_START_PITCH_DOWN_Client::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_START_PITCH_DOWN_Client::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_START_PITCH_DOWN_Client_size(obj));
 
-    writer.write_u16_be((uint16_t)MSG_MOVE_START_PITCH_DOWN_Client_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)MSG_MOVE_START_PITCH_DOWN_Client_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000000c0); /* opcode */
 
@@ -6607,7 +7166,7 @@ static size_t MSG_MOVE_START_PITCH_DOWN_Server_size(const MSG_MOVE_START_PITCH_D
 }
 
 MSG_MOVE_START_PITCH_DOWN_Server MSG_MOVE_START_PITCH_DOWN_Server_read(Reader& reader) {
-    MSG_MOVE_START_PITCH_DOWN_Server obj;
+    MSG_MOVE_START_PITCH_DOWN_Server obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -6616,11 +7175,11 @@ MSG_MOVE_START_PITCH_DOWN_Server MSG_MOVE_START_PITCH_DOWN_Server_read(Reader& r
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_START_PITCH_DOWN_Server::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_START_PITCH_DOWN_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_START_PITCH_DOWN_Server_size(obj));
 
-    writer.write_u16_be(MSG_MOVE_START_PITCH_DOWN_Server_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(MSG_MOVE_START_PITCH_DOWN_Server_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000000c0); /* opcode */
 
@@ -6636,18 +7195,18 @@ static size_t MSG_MOVE_STOP_PITCH_Client_size(const MSG_MOVE_STOP_PITCH_Client& 
 }
 
 MSG_MOVE_STOP_PITCH_Client MSG_MOVE_STOP_PITCH_Client_read(Reader& reader) {
-    MSG_MOVE_STOP_PITCH_Client obj;
+    MSG_MOVE_STOP_PITCH_Client obj{};
 
     obj.info = ::wow_world_messages::vanilla::MovementInfo_read(reader);
 
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_STOP_PITCH_Client::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_STOP_PITCH_Client::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_STOP_PITCH_Client_size(obj));
 
-    writer.write_u16_be((uint16_t)MSG_MOVE_STOP_PITCH_Client_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)MSG_MOVE_STOP_PITCH_Client_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000000c1); /* opcode */
 
@@ -6661,7 +7220,7 @@ static size_t MSG_MOVE_STOP_PITCH_Server_size(const MSG_MOVE_STOP_PITCH_Server& 
 }
 
 MSG_MOVE_STOP_PITCH_Server MSG_MOVE_STOP_PITCH_Server_read(Reader& reader) {
-    MSG_MOVE_STOP_PITCH_Server obj;
+    MSG_MOVE_STOP_PITCH_Server obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -6670,11 +7229,11 @@ MSG_MOVE_STOP_PITCH_Server MSG_MOVE_STOP_PITCH_Server_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_STOP_PITCH_Server::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_STOP_PITCH_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_STOP_PITCH_Server_size(obj));
 
-    writer.write_u16_be(MSG_MOVE_STOP_PITCH_Server_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(MSG_MOVE_STOP_PITCH_Server_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000000c1); /* opcode */
 
@@ -6690,18 +7249,18 @@ static size_t MSG_MOVE_SET_RUN_MODE_Client_size(const MSG_MOVE_SET_RUN_MODE_Clie
 }
 
 MSG_MOVE_SET_RUN_MODE_Client MSG_MOVE_SET_RUN_MODE_Client_read(Reader& reader) {
-    MSG_MOVE_SET_RUN_MODE_Client obj;
+    MSG_MOVE_SET_RUN_MODE_Client obj{};
 
     obj.info = ::wow_world_messages::vanilla::MovementInfo_read(reader);
 
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_SET_RUN_MODE_Client::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_SET_RUN_MODE_Client::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_SET_RUN_MODE_Client_size(obj));
 
-    writer.write_u16_be((uint16_t)MSG_MOVE_SET_RUN_MODE_Client_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)MSG_MOVE_SET_RUN_MODE_Client_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000000c2); /* opcode */
 
@@ -6715,7 +7274,7 @@ static size_t MSG_MOVE_SET_RUN_MODE_Server_size(const MSG_MOVE_SET_RUN_MODE_Serv
 }
 
 MSG_MOVE_SET_RUN_MODE_Server MSG_MOVE_SET_RUN_MODE_Server_read(Reader& reader) {
-    MSG_MOVE_SET_RUN_MODE_Server obj;
+    MSG_MOVE_SET_RUN_MODE_Server obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -6724,11 +7283,11 @@ MSG_MOVE_SET_RUN_MODE_Server MSG_MOVE_SET_RUN_MODE_Server_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_SET_RUN_MODE_Server::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_SET_RUN_MODE_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_SET_RUN_MODE_Server_size(obj));
 
-    writer.write_u16_be(MSG_MOVE_SET_RUN_MODE_Server_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(MSG_MOVE_SET_RUN_MODE_Server_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000000c2); /* opcode */
 
@@ -6744,18 +7303,18 @@ static size_t MSG_MOVE_SET_WALK_MODE_Client_size(const MSG_MOVE_SET_WALK_MODE_Cl
 }
 
 MSG_MOVE_SET_WALK_MODE_Client MSG_MOVE_SET_WALK_MODE_Client_read(Reader& reader) {
-    MSG_MOVE_SET_WALK_MODE_Client obj;
+    MSG_MOVE_SET_WALK_MODE_Client obj{};
 
     obj.info = ::wow_world_messages::vanilla::MovementInfo_read(reader);
 
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_SET_WALK_MODE_Client::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_SET_WALK_MODE_Client::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_SET_WALK_MODE_Client_size(obj));
 
-    writer.write_u16_be((uint16_t)MSG_MOVE_SET_WALK_MODE_Client_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)MSG_MOVE_SET_WALK_MODE_Client_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000000c3); /* opcode */
 
@@ -6769,7 +7328,7 @@ static size_t MSG_MOVE_SET_WALK_MODE_Server_size(const MSG_MOVE_SET_WALK_MODE_Se
 }
 
 MSG_MOVE_SET_WALK_MODE_Server MSG_MOVE_SET_WALK_MODE_Server_read(Reader& reader) {
-    MSG_MOVE_SET_WALK_MODE_Server obj;
+    MSG_MOVE_SET_WALK_MODE_Server obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -6778,11 +7337,11 @@ MSG_MOVE_SET_WALK_MODE_Server MSG_MOVE_SET_WALK_MODE_Server_read(Reader& reader)
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_SET_WALK_MODE_Server::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_SET_WALK_MODE_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_SET_WALK_MODE_Server_size(obj));
 
-    writer.write_u16_be(MSG_MOVE_SET_WALK_MODE_Server_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(MSG_MOVE_SET_WALK_MODE_Server_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000000c3); /* opcode */
 
@@ -6798,7 +7357,7 @@ static size_t MSG_MOVE_TELEPORT_ACK_Client_size(const MSG_MOVE_TELEPORT_ACK_Clie
 }
 
 MSG_MOVE_TELEPORT_ACK_Client MSG_MOVE_TELEPORT_ACK_Client_read(Reader& reader) {
-    MSG_MOVE_TELEPORT_ACK_Client obj;
+    MSG_MOVE_TELEPORT_ACK_Client obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -6809,11 +7368,11 @@ MSG_MOVE_TELEPORT_ACK_Client MSG_MOVE_TELEPORT_ACK_Client_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_TELEPORT_ACK_Client::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_TELEPORT_ACK_Client::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_TELEPORT_ACK_Client_size(obj));
 
-    writer.write_u16_be((uint16_t)MSG_MOVE_TELEPORT_ACK_Client_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)MSG_MOVE_TELEPORT_ACK_Client_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000000c7); /* opcode */
 
@@ -6831,7 +7390,7 @@ static size_t MSG_MOVE_TELEPORT_ACK_Server_size(const MSG_MOVE_TELEPORT_ACK_Serv
 }
 
 MSG_MOVE_TELEPORT_ACK_Server MSG_MOVE_TELEPORT_ACK_Server_read(Reader& reader) {
-    MSG_MOVE_TELEPORT_ACK_Server obj;
+    MSG_MOVE_TELEPORT_ACK_Server obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -6842,11 +7401,11 @@ MSG_MOVE_TELEPORT_ACK_Server MSG_MOVE_TELEPORT_ACK_Server_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_TELEPORT_ACK_Server::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_TELEPORT_ACK_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_TELEPORT_ACK_Server_size(obj));
 
-    writer.write_u16_be(MSG_MOVE_TELEPORT_ACK_Server_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(MSG_MOVE_TELEPORT_ACK_Server_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000000c7); /* opcode */
 
@@ -6864,18 +7423,18 @@ static size_t MSG_MOVE_FALL_LAND_Client_size(const MSG_MOVE_FALL_LAND_Client& ob
 }
 
 MSG_MOVE_FALL_LAND_Client MSG_MOVE_FALL_LAND_Client_read(Reader& reader) {
-    MSG_MOVE_FALL_LAND_Client obj;
+    MSG_MOVE_FALL_LAND_Client obj{};
 
     obj.info = ::wow_world_messages::vanilla::MovementInfo_read(reader);
 
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_FALL_LAND_Client::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_FALL_LAND_Client::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_FALL_LAND_Client_size(obj));
 
-    writer.write_u16_be((uint16_t)MSG_MOVE_FALL_LAND_Client_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)MSG_MOVE_FALL_LAND_Client_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000000c9); /* opcode */
 
@@ -6889,7 +7448,7 @@ static size_t MSG_MOVE_FALL_LAND_Server_size(const MSG_MOVE_FALL_LAND_Server& ob
 }
 
 MSG_MOVE_FALL_LAND_Server MSG_MOVE_FALL_LAND_Server_read(Reader& reader) {
-    MSG_MOVE_FALL_LAND_Server obj;
+    MSG_MOVE_FALL_LAND_Server obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -6898,11 +7457,11 @@ MSG_MOVE_FALL_LAND_Server MSG_MOVE_FALL_LAND_Server_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_FALL_LAND_Server::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_FALL_LAND_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_FALL_LAND_Server_size(obj));
 
-    writer.write_u16_be(MSG_MOVE_FALL_LAND_Server_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(MSG_MOVE_FALL_LAND_Server_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000000c9); /* opcode */
 
@@ -6918,18 +7477,18 @@ static size_t MSG_MOVE_START_SWIM_Client_size(const MSG_MOVE_START_SWIM_Client& 
 }
 
 MSG_MOVE_START_SWIM_Client MSG_MOVE_START_SWIM_Client_read(Reader& reader) {
-    MSG_MOVE_START_SWIM_Client obj;
+    MSG_MOVE_START_SWIM_Client obj{};
 
     obj.info = ::wow_world_messages::vanilla::MovementInfo_read(reader);
 
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_START_SWIM_Client::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_START_SWIM_Client::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_START_SWIM_Client_size(obj));
 
-    writer.write_u16_be((uint16_t)MSG_MOVE_START_SWIM_Client_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)MSG_MOVE_START_SWIM_Client_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000000ca); /* opcode */
 
@@ -6943,7 +7502,7 @@ static size_t MSG_MOVE_START_SWIM_Server_size(const MSG_MOVE_START_SWIM_Server& 
 }
 
 MSG_MOVE_START_SWIM_Server MSG_MOVE_START_SWIM_Server_read(Reader& reader) {
-    MSG_MOVE_START_SWIM_Server obj;
+    MSG_MOVE_START_SWIM_Server obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -6952,11 +7511,11 @@ MSG_MOVE_START_SWIM_Server MSG_MOVE_START_SWIM_Server_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_START_SWIM_Server::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_START_SWIM_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_START_SWIM_Server_size(obj));
 
-    writer.write_u16_be(MSG_MOVE_START_SWIM_Server_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(MSG_MOVE_START_SWIM_Server_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000000ca); /* opcode */
 
@@ -6972,18 +7531,18 @@ static size_t MSG_MOVE_STOP_SWIM_Client_size(const MSG_MOVE_STOP_SWIM_Client& ob
 }
 
 MSG_MOVE_STOP_SWIM_Client MSG_MOVE_STOP_SWIM_Client_read(Reader& reader) {
-    MSG_MOVE_STOP_SWIM_Client obj;
+    MSG_MOVE_STOP_SWIM_Client obj{};
 
     obj.info = ::wow_world_messages::vanilla::MovementInfo_read(reader);
 
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_STOP_SWIM_Client::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_STOP_SWIM_Client::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_STOP_SWIM_Client_size(obj));
 
-    writer.write_u16_be((uint16_t)MSG_MOVE_STOP_SWIM_Client_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)MSG_MOVE_STOP_SWIM_Client_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000000cb); /* opcode */
 
@@ -6997,7 +7556,7 @@ static size_t MSG_MOVE_STOP_SWIM_Server_size(const MSG_MOVE_STOP_SWIM_Server& ob
 }
 
 MSG_MOVE_STOP_SWIM_Server MSG_MOVE_STOP_SWIM_Server_read(Reader& reader) {
-    MSG_MOVE_STOP_SWIM_Server obj;
+    MSG_MOVE_STOP_SWIM_Server obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -7006,11 +7565,11 @@ MSG_MOVE_STOP_SWIM_Server MSG_MOVE_STOP_SWIM_Server_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_STOP_SWIM_Server::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_STOP_SWIM_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_STOP_SWIM_Server_size(obj));
 
-    writer.write_u16_be(MSG_MOVE_STOP_SWIM_Server_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(MSG_MOVE_STOP_SWIM_Server_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000000cb); /* opcode */
 
@@ -7026,18 +7585,18 @@ static size_t MSG_MOVE_SET_FACING_Client_size(const MSG_MOVE_SET_FACING_Client& 
 }
 
 MSG_MOVE_SET_FACING_Client MSG_MOVE_SET_FACING_Client_read(Reader& reader) {
-    MSG_MOVE_SET_FACING_Client obj;
+    MSG_MOVE_SET_FACING_Client obj{};
 
     obj.info = ::wow_world_messages::vanilla::MovementInfo_read(reader);
 
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_SET_FACING_Client::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_SET_FACING_Client::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_SET_FACING_Client_size(obj));
 
-    writer.write_u16_be((uint16_t)MSG_MOVE_SET_FACING_Client_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)MSG_MOVE_SET_FACING_Client_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000000da); /* opcode */
 
@@ -7051,7 +7610,7 @@ static size_t MSG_MOVE_SET_FACING_Server_size(const MSG_MOVE_SET_FACING_Server& 
 }
 
 MSG_MOVE_SET_FACING_Server MSG_MOVE_SET_FACING_Server_read(Reader& reader) {
-    MSG_MOVE_SET_FACING_Server obj;
+    MSG_MOVE_SET_FACING_Server obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -7060,11 +7619,11 @@ MSG_MOVE_SET_FACING_Server MSG_MOVE_SET_FACING_Server_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_SET_FACING_Server::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_SET_FACING_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_SET_FACING_Server_size(obj));
 
-    writer.write_u16_be(MSG_MOVE_SET_FACING_Server_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(MSG_MOVE_SET_FACING_Server_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000000da); /* opcode */
 
@@ -7080,18 +7639,18 @@ static size_t MSG_MOVE_SET_PITCH_Client_size(const MSG_MOVE_SET_PITCH_Client& ob
 }
 
 MSG_MOVE_SET_PITCH_Client MSG_MOVE_SET_PITCH_Client_read(Reader& reader) {
-    MSG_MOVE_SET_PITCH_Client obj;
+    MSG_MOVE_SET_PITCH_Client obj{};
 
     obj.info = ::wow_world_messages::vanilla::MovementInfo_read(reader);
 
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_SET_PITCH_Client::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_SET_PITCH_Client::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_SET_PITCH_Client_size(obj));
 
-    writer.write_u16_be((uint16_t)MSG_MOVE_SET_PITCH_Client_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)MSG_MOVE_SET_PITCH_Client_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000000db); /* opcode */
 
@@ -7105,7 +7664,7 @@ static size_t MSG_MOVE_SET_PITCH_Server_size(const MSG_MOVE_SET_PITCH_Server& ob
 }
 
 MSG_MOVE_SET_PITCH_Server MSG_MOVE_SET_PITCH_Server_read(Reader& reader) {
-    MSG_MOVE_SET_PITCH_Server obj;
+    MSG_MOVE_SET_PITCH_Server obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -7114,17 +7673,37 @@ MSG_MOVE_SET_PITCH_Server MSG_MOVE_SET_PITCH_Server_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_SET_PITCH_Server::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_SET_PITCH_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_SET_PITCH_Server_size(obj));
 
-    writer.write_u16_be(MSG_MOVE_SET_PITCH_Server_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(MSG_MOVE_SET_PITCH_Server_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000000db); /* opcode */
 
     writer.write_packed_guid(obj.guid);
 
     MovementInfo_write(writer, obj.info);
+
+    return writer.m_buf;
+}
+
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_WORLDPORT_ACK::write_cmsg() const {
+    auto writer = Writer(0x0000);
+
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
+
+    writer.write_u32(0x000000dc); /* opcode */
+
+    return writer.m_buf;
+}
+
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_WORLDPORT_ACK::write_smsg() const {
+    auto writer = Writer(0x0000);
+
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 2)); /* size */
+
+    writer.write_u16(0x000000dc); /* opcode */
 
     return writer.m_buf;
 }
@@ -7146,7 +7725,7 @@ static size_t SMSG_MONSTER_MOVE_size(const SMSG_MONSTER_MOVE& obj) {
 }
 
 SMSG_MONSTER_MOVE SMSG_MONSTER_MOVE_read(Reader& reader) {
-    SMSG_MONSTER_MOVE obj;
+    SMSG_MONSTER_MOVE obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -7177,11 +7756,11 @@ SMSG_MONSTER_MOVE SMSG_MONSTER_MOVE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_MONSTER_MOVE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_MONSTER_MOVE::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_MONSTER_MOVE_size(obj));
 
-    writer.write_u16_be(SMSG_MONSTER_MOVE_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_MONSTER_MOVE_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000000dd); /* opcode */
 
@@ -7219,7 +7798,7 @@ static size_t SMSG_MOVE_WATER_WALK_size(const SMSG_MOVE_WATER_WALK& obj) {
 }
 
 SMSG_MOVE_WATER_WALK SMSG_MOVE_WATER_WALK_read(Reader& reader) {
-    SMSG_MOVE_WATER_WALK obj;
+    SMSG_MOVE_WATER_WALK obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -7228,11 +7807,11 @@ SMSG_MOVE_WATER_WALK SMSG_MOVE_WATER_WALK_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_MOVE_WATER_WALK::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_MOVE_WATER_WALK::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_MOVE_WATER_WALK_size(obj));
 
-    writer.write_u16_be(SMSG_MOVE_WATER_WALK_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_MOVE_WATER_WALK_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000000de); /* opcode */
 
@@ -7248,7 +7827,7 @@ static size_t SMSG_MOVE_LAND_WALK_size(const SMSG_MOVE_LAND_WALK& obj) {
 }
 
 SMSG_MOVE_LAND_WALK SMSG_MOVE_LAND_WALK_read(Reader& reader) {
-    SMSG_MOVE_LAND_WALK obj;
+    SMSG_MOVE_LAND_WALK obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -7257,11 +7836,11 @@ SMSG_MOVE_LAND_WALK SMSG_MOVE_LAND_WALK_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_MOVE_LAND_WALK::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_MOVE_LAND_WALK::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_MOVE_LAND_WALK_size(obj));
 
-    writer.write_u16_be(SMSG_MOVE_LAND_WALK_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_MOVE_LAND_WALK_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000000df); /* opcode */
 
@@ -7273,7 +7852,7 @@ std::vector<unsigned char> SMSG_MOVE_LAND_WALK::write() const {
 }
 
 CMSG_MOVE_SET_RAW_POSITION CMSG_MOVE_SET_RAW_POSITION_read(Reader& reader) {
-    CMSG_MOVE_SET_RAW_POSITION obj;
+    CMSG_MOVE_SET_RAW_POSITION obj{};
 
     obj.position = ::wow_world_messages::all::Vector3d_read(reader);
 
@@ -7282,11 +7861,11 @@ CMSG_MOVE_SET_RAW_POSITION CMSG_MOVE_SET_RAW_POSITION_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_MOVE_SET_RAW_POSITION::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_MOVE_SET_RAW_POSITION::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0010);
 
-    writer.write_u16_be(0x0010 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0010 + 4)); /* size */
 
     writer.write_u32(0x000000e1); /* opcode */
 
@@ -7302,7 +7881,7 @@ static size_t SMSG_FORCE_RUN_SPEED_CHANGE_size(const SMSG_FORCE_RUN_SPEED_CHANGE
 }
 
 SMSG_FORCE_RUN_SPEED_CHANGE SMSG_FORCE_RUN_SPEED_CHANGE_read(Reader& reader) {
-    SMSG_FORCE_RUN_SPEED_CHANGE obj;
+    SMSG_FORCE_RUN_SPEED_CHANGE obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -7313,11 +7892,11 @@ SMSG_FORCE_RUN_SPEED_CHANGE SMSG_FORCE_RUN_SPEED_CHANGE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_FORCE_RUN_SPEED_CHANGE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_FORCE_RUN_SPEED_CHANGE::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_FORCE_RUN_SPEED_CHANGE_size(obj));
 
-    writer.write_u16_be(SMSG_FORCE_RUN_SPEED_CHANGE_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_FORCE_RUN_SPEED_CHANGE_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000000e2); /* opcode */
 
@@ -7335,7 +7914,7 @@ static size_t CMSG_FORCE_RUN_SPEED_CHANGE_ACK_size(const CMSG_FORCE_RUN_SPEED_CH
 }
 
 CMSG_FORCE_RUN_SPEED_CHANGE_ACK CMSG_FORCE_RUN_SPEED_CHANGE_ACK_read(Reader& reader) {
-    CMSG_FORCE_RUN_SPEED_CHANGE_ACK obj;
+    CMSG_FORCE_RUN_SPEED_CHANGE_ACK obj{};
 
     obj.guid = reader.read_u64();
 
@@ -7348,11 +7927,11 @@ CMSG_FORCE_RUN_SPEED_CHANGE_ACK CMSG_FORCE_RUN_SPEED_CHANGE_ACK_read(Reader& rea
     return obj;
 }
 
-std::vector<unsigned char> CMSG_FORCE_RUN_SPEED_CHANGE_ACK::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_FORCE_RUN_SPEED_CHANGE_ACK::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_FORCE_RUN_SPEED_CHANGE_ACK_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_FORCE_RUN_SPEED_CHANGE_ACK_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_FORCE_RUN_SPEED_CHANGE_ACK_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000000e3); /* opcode */
 
@@ -7372,7 +7951,7 @@ static size_t SMSG_FORCE_RUN_BACK_SPEED_CHANGE_size(const SMSG_FORCE_RUN_BACK_SP
 }
 
 SMSG_FORCE_RUN_BACK_SPEED_CHANGE SMSG_FORCE_RUN_BACK_SPEED_CHANGE_read(Reader& reader) {
-    SMSG_FORCE_RUN_BACK_SPEED_CHANGE obj;
+    SMSG_FORCE_RUN_BACK_SPEED_CHANGE obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -7383,11 +7962,11 @@ SMSG_FORCE_RUN_BACK_SPEED_CHANGE SMSG_FORCE_RUN_BACK_SPEED_CHANGE_read(Reader& r
     return obj;
 }
 
-std::vector<unsigned char> SMSG_FORCE_RUN_BACK_SPEED_CHANGE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_FORCE_RUN_BACK_SPEED_CHANGE::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_FORCE_RUN_BACK_SPEED_CHANGE_size(obj));
 
-    writer.write_u16_be(SMSG_FORCE_RUN_BACK_SPEED_CHANGE_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_FORCE_RUN_BACK_SPEED_CHANGE_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000000e4); /* opcode */
 
@@ -7405,7 +7984,7 @@ static size_t CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK_size(const CMSG_FORCE_RUN_BAC
 }
 
 CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK_read(Reader& reader) {
-    CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK obj;
+    CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK obj{};
 
     obj.guid = reader.read_u64();
 
@@ -7418,11 +7997,11 @@ CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK_read(R
     return obj;
 }
 
-std::vector<unsigned char> CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000000e5); /* opcode */
 
@@ -7442,7 +8021,7 @@ static size_t SMSG_FORCE_SWIM_SPEED_CHANGE_size(const SMSG_FORCE_SWIM_SPEED_CHAN
 }
 
 SMSG_FORCE_SWIM_SPEED_CHANGE SMSG_FORCE_SWIM_SPEED_CHANGE_read(Reader& reader) {
-    SMSG_FORCE_SWIM_SPEED_CHANGE obj;
+    SMSG_FORCE_SWIM_SPEED_CHANGE obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -7453,11 +8032,11 @@ SMSG_FORCE_SWIM_SPEED_CHANGE SMSG_FORCE_SWIM_SPEED_CHANGE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_FORCE_SWIM_SPEED_CHANGE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_FORCE_SWIM_SPEED_CHANGE::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_FORCE_SWIM_SPEED_CHANGE_size(obj));
 
-    writer.write_u16_be(SMSG_FORCE_SWIM_SPEED_CHANGE_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_FORCE_SWIM_SPEED_CHANGE_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000000e6); /* opcode */
 
@@ -7475,7 +8054,7 @@ static size_t CMSG_FORCE_SWIM_SPEED_CHANGE_ACK_size(const CMSG_FORCE_SWIM_SPEED_
 }
 
 CMSG_FORCE_SWIM_SPEED_CHANGE_ACK CMSG_FORCE_SWIM_SPEED_CHANGE_ACK_read(Reader& reader) {
-    CMSG_FORCE_SWIM_SPEED_CHANGE_ACK obj;
+    CMSG_FORCE_SWIM_SPEED_CHANGE_ACK obj{};
 
     obj.guid = reader.read_u64();
 
@@ -7488,11 +8067,11 @@ CMSG_FORCE_SWIM_SPEED_CHANGE_ACK CMSG_FORCE_SWIM_SPEED_CHANGE_ACK_read(Reader& r
     return obj;
 }
 
-std::vector<unsigned char> CMSG_FORCE_SWIM_SPEED_CHANGE_ACK::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_FORCE_SWIM_SPEED_CHANGE_ACK::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_FORCE_SWIM_SPEED_CHANGE_ACK_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_FORCE_SWIM_SPEED_CHANGE_ACK_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_FORCE_SWIM_SPEED_CHANGE_ACK_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000000e7); /* opcode */
 
@@ -7508,7 +8087,7 @@ std::vector<unsigned char> CMSG_FORCE_SWIM_SPEED_CHANGE_ACK::write() const {
 }
 
 SMSG_FORCE_MOVE_ROOT SMSG_FORCE_MOVE_ROOT_read(Reader& reader) {
-    SMSG_FORCE_MOVE_ROOT obj;
+    SMSG_FORCE_MOVE_ROOT obj{};
 
     obj.guid = reader.read_u64();
 
@@ -7517,11 +8096,11 @@ SMSG_FORCE_MOVE_ROOT SMSG_FORCE_MOVE_ROOT_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_FORCE_MOVE_ROOT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_FORCE_MOVE_ROOT::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 2)); /* size */
 
     writer.write_u16(0x000000e8); /* opcode */
 
@@ -7537,7 +8116,7 @@ static size_t CMSG_FORCE_MOVE_ROOT_ACK_size(const CMSG_FORCE_MOVE_ROOT_ACK& obj)
 }
 
 CMSG_FORCE_MOVE_ROOT_ACK CMSG_FORCE_MOVE_ROOT_ACK_read(Reader& reader) {
-    CMSG_FORCE_MOVE_ROOT_ACK obj;
+    CMSG_FORCE_MOVE_ROOT_ACK obj{};
 
     obj.guid = reader.read_u64();
 
@@ -7548,11 +8127,11 @@ CMSG_FORCE_MOVE_ROOT_ACK CMSG_FORCE_MOVE_ROOT_ACK_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_FORCE_MOVE_ROOT_ACK::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_FORCE_MOVE_ROOT_ACK::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_FORCE_MOVE_ROOT_ACK_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_FORCE_MOVE_ROOT_ACK_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_FORCE_MOVE_ROOT_ACK_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000000e9); /* opcode */
 
@@ -7566,7 +8145,7 @@ std::vector<unsigned char> CMSG_FORCE_MOVE_ROOT_ACK::write() const {
 }
 
 SMSG_FORCE_MOVE_UNROOT SMSG_FORCE_MOVE_UNROOT_read(Reader& reader) {
-    SMSG_FORCE_MOVE_UNROOT obj;
+    SMSG_FORCE_MOVE_UNROOT obj{};
 
     obj.guid = reader.read_u64();
 
@@ -7575,11 +8154,11 @@ SMSG_FORCE_MOVE_UNROOT SMSG_FORCE_MOVE_UNROOT_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_FORCE_MOVE_UNROOT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_FORCE_MOVE_UNROOT::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 2)); /* size */
 
     writer.write_u16(0x000000ea); /* opcode */
 
@@ -7595,7 +8174,7 @@ static size_t CMSG_FORCE_MOVE_UNROOT_ACK_size(const CMSG_FORCE_MOVE_UNROOT_ACK& 
 }
 
 CMSG_FORCE_MOVE_UNROOT_ACK CMSG_FORCE_MOVE_UNROOT_ACK_read(Reader& reader) {
-    CMSG_FORCE_MOVE_UNROOT_ACK obj;
+    CMSG_FORCE_MOVE_UNROOT_ACK obj{};
 
     obj.guid = reader.read_u64();
 
@@ -7606,11 +8185,11 @@ CMSG_FORCE_MOVE_UNROOT_ACK CMSG_FORCE_MOVE_UNROOT_ACK_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_FORCE_MOVE_UNROOT_ACK::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_FORCE_MOVE_UNROOT_ACK::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_FORCE_MOVE_UNROOT_ACK_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_FORCE_MOVE_UNROOT_ACK_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_FORCE_MOVE_UNROOT_ACK_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000000eb); /* opcode */
 
@@ -7628,18 +8207,18 @@ static size_t MSG_MOVE_HEARTBEAT_Client_size(const MSG_MOVE_HEARTBEAT_Client& ob
 }
 
 MSG_MOVE_HEARTBEAT_Client MSG_MOVE_HEARTBEAT_Client_read(Reader& reader) {
-    MSG_MOVE_HEARTBEAT_Client obj;
+    MSG_MOVE_HEARTBEAT_Client obj{};
 
     obj.info = ::wow_world_messages::vanilla::MovementInfo_read(reader);
 
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_HEARTBEAT_Client::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_HEARTBEAT_Client::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_HEARTBEAT_Client_size(obj));
 
-    writer.write_u16_be((uint16_t)MSG_MOVE_HEARTBEAT_Client_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)MSG_MOVE_HEARTBEAT_Client_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000000ee); /* opcode */
 
@@ -7653,7 +8232,7 @@ static size_t MSG_MOVE_HEARTBEAT_Server_size(const MSG_MOVE_HEARTBEAT_Server& ob
 }
 
 MSG_MOVE_HEARTBEAT_Server MSG_MOVE_HEARTBEAT_Server_read(Reader& reader) {
-    MSG_MOVE_HEARTBEAT_Server obj;
+    MSG_MOVE_HEARTBEAT_Server obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -7662,11 +8241,11 @@ MSG_MOVE_HEARTBEAT_Server MSG_MOVE_HEARTBEAT_Server_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_HEARTBEAT_Server::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_HEARTBEAT_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_HEARTBEAT_Server_size(obj));
 
-    writer.write_u16_be(MSG_MOVE_HEARTBEAT_Server_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(MSG_MOVE_HEARTBEAT_Server_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000000ee); /* opcode */
 
@@ -7682,7 +8261,7 @@ static size_t SMSG_MOVE_KNOCK_BACK_size(const SMSG_MOVE_KNOCK_BACK& obj) {
 }
 
 SMSG_MOVE_KNOCK_BACK SMSG_MOVE_KNOCK_BACK_read(Reader& reader) {
-    SMSG_MOVE_KNOCK_BACK obj;
+    SMSG_MOVE_KNOCK_BACK obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -7699,11 +8278,11 @@ SMSG_MOVE_KNOCK_BACK SMSG_MOVE_KNOCK_BACK_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_MOVE_KNOCK_BACK::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_MOVE_KNOCK_BACK::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_MOVE_KNOCK_BACK_size(obj));
 
-    writer.write_u16_be(SMSG_MOVE_KNOCK_BACK_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_MOVE_KNOCK_BACK_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000000ef); /* opcode */
 
@@ -7727,7 +8306,7 @@ static size_t CMSG_MOVE_KNOCK_BACK_ACK_size(const CMSG_MOVE_KNOCK_BACK_ACK& obj)
 }
 
 CMSG_MOVE_KNOCK_BACK_ACK CMSG_MOVE_KNOCK_BACK_ACK_read(Reader& reader) {
-    CMSG_MOVE_KNOCK_BACK_ACK obj;
+    CMSG_MOVE_KNOCK_BACK_ACK obj{};
 
     obj.guid = reader.read_u64();
 
@@ -7738,11 +8317,11 @@ CMSG_MOVE_KNOCK_BACK_ACK CMSG_MOVE_KNOCK_BACK_ACK_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_MOVE_KNOCK_BACK_ACK::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_MOVE_KNOCK_BACK_ACK::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_MOVE_KNOCK_BACK_ACK_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_MOVE_KNOCK_BACK_ACK_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_MOVE_KNOCK_BACK_ACK_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000000f0); /* opcode */
 
@@ -7760,7 +8339,7 @@ static size_t SMSG_MOVE_FEATHER_FALL_size(const SMSG_MOVE_FEATHER_FALL& obj) {
 }
 
 SMSG_MOVE_FEATHER_FALL SMSG_MOVE_FEATHER_FALL_read(Reader& reader) {
-    SMSG_MOVE_FEATHER_FALL obj;
+    SMSG_MOVE_FEATHER_FALL obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -7769,11 +8348,11 @@ SMSG_MOVE_FEATHER_FALL SMSG_MOVE_FEATHER_FALL_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_MOVE_FEATHER_FALL::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_MOVE_FEATHER_FALL::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_MOVE_FEATHER_FALL_size(obj));
 
-    writer.write_u16_be(SMSG_MOVE_FEATHER_FALL_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_MOVE_FEATHER_FALL_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000000f2); /* opcode */
 
@@ -7789,7 +8368,7 @@ static size_t SMSG_MOVE_NORMAL_FALL_size(const SMSG_MOVE_NORMAL_FALL& obj) {
 }
 
 SMSG_MOVE_NORMAL_FALL SMSG_MOVE_NORMAL_FALL_read(Reader& reader) {
-    SMSG_MOVE_NORMAL_FALL obj;
+    SMSG_MOVE_NORMAL_FALL obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -7798,11 +8377,11 @@ SMSG_MOVE_NORMAL_FALL SMSG_MOVE_NORMAL_FALL_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_MOVE_NORMAL_FALL::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_MOVE_NORMAL_FALL::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_MOVE_NORMAL_FALL_size(obj));
 
-    writer.write_u16_be(SMSG_MOVE_NORMAL_FALL_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_MOVE_NORMAL_FALL_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000000f3); /* opcode */
 
@@ -7818,7 +8397,7 @@ static size_t SMSG_MOVE_SET_HOVER_size(const SMSG_MOVE_SET_HOVER& obj) {
 }
 
 SMSG_MOVE_SET_HOVER SMSG_MOVE_SET_HOVER_read(Reader& reader) {
-    SMSG_MOVE_SET_HOVER obj;
+    SMSG_MOVE_SET_HOVER obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -7827,11 +8406,11 @@ SMSG_MOVE_SET_HOVER SMSG_MOVE_SET_HOVER_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_MOVE_SET_HOVER::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_MOVE_SET_HOVER::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_MOVE_SET_HOVER_size(obj));
 
-    writer.write_u16_be(SMSG_MOVE_SET_HOVER_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_MOVE_SET_HOVER_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000000f4); /* opcode */
 
@@ -7847,7 +8426,7 @@ static size_t SMSG_MOVE_UNSET_HOVER_size(const SMSG_MOVE_UNSET_HOVER& obj) {
 }
 
 SMSG_MOVE_UNSET_HOVER SMSG_MOVE_UNSET_HOVER_read(Reader& reader) {
-    SMSG_MOVE_UNSET_HOVER obj;
+    SMSG_MOVE_UNSET_HOVER obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -7856,11 +8435,11 @@ SMSG_MOVE_UNSET_HOVER SMSG_MOVE_UNSET_HOVER_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_MOVE_UNSET_HOVER::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_MOVE_UNSET_HOVER::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_MOVE_UNSET_HOVER_size(obj));
 
-    writer.write_u16_be(SMSG_MOVE_UNSET_HOVER_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_MOVE_UNSET_HOVER_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000000f5); /* opcode */
 
@@ -7876,7 +8455,7 @@ static size_t CMSG_MOVE_HOVER_ACK_size(const CMSG_MOVE_HOVER_ACK& obj) {
 }
 
 CMSG_MOVE_HOVER_ACK CMSG_MOVE_HOVER_ACK_read(Reader& reader) {
-    CMSG_MOVE_HOVER_ACK obj;
+    CMSG_MOVE_HOVER_ACK obj{};
 
     obj.guid = reader.read_u64();
 
@@ -7889,11 +8468,11 @@ CMSG_MOVE_HOVER_ACK CMSG_MOVE_HOVER_ACK_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_MOVE_HOVER_ACK::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_MOVE_HOVER_ACK::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_MOVE_HOVER_ACK_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_MOVE_HOVER_ACK_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_MOVE_HOVER_ACK_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000000f6); /* opcode */
 
@@ -7909,18 +8488,18 @@ std::vector<unsigned char> CMSG_MOVE_HOVER_ACK::write() const {
 }
 
 SMSG_TRIGGER_CINEMATIC SMSG_TRIGGER_CINEMATIC_read(Reader& reader) {
-    SMSG_TRIGGER_CINEMATIC obj;
+    SMSG_TRIGGER_CINEMATIC obj{};
 
     obj.cinematic_sequence_id = static_cast<CinematicSequenceId>(reader.read_u32());
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_TRIGGER_CINEMATIC::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_TRIGGER_CINEMATIC::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 2)); /* size */
 
     writer.write_u16(0x000000fa); /* opcode */
 
@@ -7929,20 +8508,20 @@ std::vector<unsigned char> SMSG_TRIGGER_CINEMATIC::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_NEXT_CINEMATIC_CAMERA::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_NEXT_CINEMATIC_CAMERA::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x000000fb); /* opcode */
 
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_COMPLETE_CINEMATIC::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_COMPLETE_CINEMATIC::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x000000fc); /* opcode */
 
@@ -7950,7 +8529,7 @@ std::vector<unsigned char> CMSG_COMPLETE_CINEMATIC::write() const {
 }
 
 SMSG_TUTORIAL_FLAGS SMSG_TUTORIAL_FLAGS_read(Reader& reader) {
-    SMSG_TUTORIAL_FLAGS obj;
+    SMSG_TUTORIAL_FLAGS obj{};
 
     for (auto i = 0; i < 8; ++i) {
         obj.tutorial_data[i] = reader.read_u32();
@@ -7959,11 +8538,11 @@ SMSG_TUTORIAL_FLAGS SMSG_TUTORIAL_FLAGS_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_TUTORIAL_FLAGS::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_TUTORIAL_FLAGS::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0020);
 
-    writer.write_u16_be(0x0020 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0020 + 2)); /* size */
 
     writer.write_u16(0x000000fd); /* opcode */
 
@@ -7975,18 +8554,18 @@ std::vector<unsigned char> SMSG_TUTORIAL_FLAGS::write() const {
 }
 
 CMSG_TUTORIAL_FLAG CMSG_TUTORIAL_FLAG_read(Reader& reader) {
-    CMSG_TUTORIAL_FLAG obj;
+    CMSG_TUTORIAL_FLAG obj{};
 
     obj.tutorial_flag = reader.read_u32();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_TUTORIAL_FLAG::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_TUTORIAL_FLAG::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 4)); /* size */
 
     writer.write_u32(0x000000fe); /* opcode */
 
@@ -7995,20 +8574,20 @@ std::vector<unsigned char> CMSG_TUTORIAL_FLAG::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_TUTORIAL_CLEAR::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_TUTORIAL_CLEAR::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x000000ff); /* opcode */
 
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_TUTORIAL_RESET::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_TUTORIAL_RESET::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x00000100); /* opcode */
 
@@ -8016,18 +8595,18 @@ std::vector<unsigned char> CMSG_TUTORIAL_RESET::write() const {
 }
 
 CMSG_STANDSTATECHANGE CMSG_STANDSTATECHANGE_read(Reader& reader) {
-    CMSG_STANDSTATECHANGE obj;
+    CMSG_STANDSTATECHANGE obj{};
 
     obj.animation_state = static_cast<UnitStandState>(reader.read_u32());
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_STANDSTATECHANGE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_STANDSTATECHANGE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 4)); /* size */
 
     writer.write_u32(0x00000101); /* opcode */
 
@@ -8037,18 +8616,18 @@ std::vector<unsigned char> CMSG_STANDSTATECHANGE::write() const {
 }
 
 CMSG_EMOTE CMSG_EMOTE_read(Reader& reader) {
-    CMSG_EMOTE obj;
+    CMSG_EMOTE obj{};
 
     obj.emote = static_cast<Emote>(reader.read_u32());
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_EMOTE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_EMOTE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 4)); /* size */
 
     writer.write_u32(0x00000102); /* opcode */
 
@@ -8058,7 +8637,7 @@ std::vector<unsigned char> CMSG_EMOTE::write() const {
 }
 
 SMSG_EMOTE SMSG_EMOTE_read(Reader& reader) {
-    SMSG_EMOTE obj;
+    SMSG_EMOTE obj{};
 
     obj.emote = static_cast<Emote>(reader.read_u32());
 
@@ -8067,11 +8646,11 @@ SMSG_EMOTE SMSG_EMOTE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_EMOTE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_EMOTE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 2)); /* size */
 
     writer.write_u16(0x00000103); /* opcode */
 
@@ -8083,7 +8662,7 @@ std::vector<unsigned char> SMSG_EMOTE::write() const {
 }
 
 CMSG_TEXT_EMOTE CMSG_TEXT_EMOTE_read(Reader& reader) {
-    CMSG_TEXT_EMOTE obj;
+    CMSG_TEXT_EMOTE obj{};
 
     obj.text_emote = static_cast<TextEmote>(reader.read_u32());
 
@@ -8094,11 +8673,11 @@ CMSG_TEXT_EMOTE CMSG_TEXT_EMOTE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_TEXT_EMOTE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_TEXT_EMOTE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0010);
 
-    writer.write_u16_be(0x0010 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0010 + 4)); /* size */
 
     writer.write_u32(0x00000104); /* opcode */
 
@@ -8116,7 +8695,7 @@ static size_t SMSG_TEXT_EMOTE_size(const SMSG_TEXT_EMOTE& obj) {
 }
 
 SMSG_TEXT_EMOTE SMSG_TEXT_EMOTE_read(Reader& reader) {
-    SMSG_TEXT_EMOTE obj;
+    SMSG_TEXT_EMOTE obj{};
 
     obj.guid = reader.read_u64();
 
@@ -8129,11 +8708,11 @@ SMSG_TEXT_EMOTE SMSG_TEXT_EMOTE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_TEXT_EMOTE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_TEXT_EMOTE::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_TEXT_EMOTE_size(obj));
 
-    writer.write_u16_be(SMSG_TEXT_EMOTE_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_TEXT_EMOTE_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000105); /* opcode */
 
@@ -8149,18 +8728,18 @@ std::vector<unsigned char> SMSG_TEXT_EMOTE::write() const {
 }
 
 CMSG_AUTOSTORE_LOOT_ITEM CMSG_AUTOSTORE_LOOT_ITEM_read(Reader& reader) {
-    CMSG_AUTOSTORE_LOOT_ITEM obj;
+    CMSG_AUTOSTORE_LOOT_ITEM obj{};
 
     obj.item_slot = reader.read_u8();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_AUTOSTORE_LOOT_ITEM::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_AUTOSTORE_LOOT_ITEM::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0001);
 
-    writer.write_u16_be(0x0001 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0001 + 4)); /* size */
 
     writer.write_u32(0x00000108); /* opcode */
 
@@ -8170,7 +8749,7 @@ std::vector<unsigned char> CMSG_AUTOSTORE_LOOT_ITEM::write() const {
 }
 
 CMSG_AUTOEQUIP_ITEM CMSG_AUTOEQUIP_ITEM_read(Reader& reader) {
-    CMSG_AUTOEQUIP_ITEM obj;
+    CMSG_AUTOEQUIP_ITEM obj{};
 
     obj.source_bag = reader.read_u8();
 
@@ -8179,11 +8758,11 @@ CMSG_AUTOEQUIP_ITEM CMSG_AUTOEQUIP_ITEM_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_AUTOEQUIP_ITEM::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_AUTOEQUIP_ITEM::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0002);
 
-    writer.write_u16_be(0x0002 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0002 + 4)); /* size */
 
     writer.write_u32(0x0000010a); /* opcode */
 
@@ -8195,7 +8774,7 @@ std::vector<unsigned char> CMSG_AUTOEQUIP_ITEM::write() const {
 }
 
 CMSG_AUTOSTORE_BAG_ITEM CMSG_AUTOSTORE_BAG_ITEM_read(Reader& reader) {
-    CMSG_AUTOSTORE_BAG_ITEM obj;
+    CMSG_AUTOSTORE_BAG_ITEM obj{};
 
     obj.source_bag = reader.read_u8();
 
@@ -8206,11 +8785,11 @@ CMSG_AUTOSTORE_BAG_ITEM CMSG_AUTOSTORE_BAG_ITEM_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_AUTOSTORE_BAG_ITEM::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_AUTOSTORE_BAG_ITEM::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0003);
 
-    writer.write_u16_be(0x0003 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0003 + 4)); /* size */
 
     writer.write_u32(0x0000010b); /* opcode */
 
@@ -8224,7 +8803,7 @@ std::vector<unsigned char> CMSG_AUTOSTORE_BAG_ITEM::write() const {
 }
 
 CMSG_SWAP_ITEM CMSG_SWAP_ITEM_read(Reader& reader) {
-    CMSG_SWAP_ITEM obj;
+    CMSG_SWAP_ITEM obj{};
 
     obj.destination_bag = reader.read_u8();
 
@@ -8237,11 +8816,11 @@ CMSG_SWAP_ITEM CMSG_SWAP_ITEM_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_SWAP_ITEM::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_SWAP_ITEM::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 4)); /* size */
 
     writer.write_u32(0x0000010c); /* opcode */
 
@@ -8257,7 +8836,7 @@ std::vector<unsigned char> CMSG_SWAP_ITEM::write() const {
 }
 
 CMSG_SWAP_INV_ITEM CMSG_SWAP_INV_ITEM_read(Reader& reader) {
-    CMSG_SWAP_INV_ITEM obj;
+    CMSG_SWAP_INV_ITEM obj{};
 
     obj.source_slot = static_cast<ItemSlot>(reader.read_u8());
 
@@ -8266,11 +8845,11 @@ CMSG_SWAP_INV_ITEM CMSG_SWAP_INV_ITEM_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_SWAP_INV_ITEM::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_SWAP_INV_ITEM::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0002);
 
-    writer.write_u16_be(0x0002 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0002 + 4)); /* size */
 
     writer.write_u32(0x0000010d); /* opcode */
 
@@ -8282,7 +8861,7 @@ std::vector<unsigned char> CMSG_SWAP_INV_ITEM::write() const {
 }
 
 CMSG_SPLIT_ITEM CMSG_SPLIT_ITEM_read(Reader& reader) {
-    CMSG_SPLIT_ITEM obj;
+    CMSG_SPLIT_ITEM obj{};
 
     obj.source_bag = reader.read_u8();
 
@@ -8297,11 +8876,11 @@ CMSG_SPLIT_ITEM CMSG_SPLIT_ITEM_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_SPLIT_ITEM::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_SPLIT_ITEM::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0005);
 
-    writer.write_u16_be(0x0005 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0005 + 4)); /* size */
 
     writer.write_u32(0x0000010e); /* opcode */
 
@@ -8319,7 +8898,7 @@ std::vector<unsigned char> CMSG_SPLIT_ITEM::write() const {
 }
 
 CMSG_AUTOEQUIP_ITEM_SLOT CMSG_AUTOEQUIP_ITEM_SLOT_read(Reader& reader) {
-    CMSG_AUTOEQUIP_ITEM_SLOT obj;
+    CMSG_AUTOEQUIP_ITEM_SLOT obj{};
 
     obj.guid = reader.read_u64();
 
@@ -8328,11 +8907,11 @@ CMSG_AUTOEQUIP_ITEM_SLOT CMSG_AUTOEQUIP_ITEM_SLOT_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_AUTOEQUIP_ITEM_SLOT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_AUTOEQUIP_ITEM_SLOT::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0009);
 
-    writer.write_u16_be(0x0009 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0009 + 4)); /* size */
 
     writer.write_u32(0x0000010f); /* opcode */
 
@@ -8344,7 +8923,7 @@ std::vector<unsigned char> CMSG_AUTOEQUIP_ITEM_SLOT::write() const {
 }
 
 CMSG_DESTROYITEM CMSG_DESTROYITEM_read(Reader& reader) {
-    CMSG_DESTROYITEM obj;
+    CMSG_DESTROYITEM obj{};
 
     obj.bag = reader.read_u8();
 
@@ -8361,11 +8940,11 @@ CMSG_DESTROYITEM CMSG_DESTROYITEM_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_DESTROYITEM::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_DESTROYITEM::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0006);
 
-    writer.write_u16_be(0x0006 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0006 + 4)); /* size */
 
     writer.write_u32(0x00000111); /* opcode */
 
@@ -8399,7 +8978,7 @@ static size_t SMSG_INVENTORY_CHANGE_FAILURE_size(const SMSG_INVENTORY_CHANGE_FAI
 }
 
 SMSG_INVENTORY_CHANGE_FAILURE SMSG_INVENTORY_CHANGE_FAILURE_read(Reader& reader) {
-    SMSG_INVENTORY_CHANGE_FAILURE obj;
+    SMSG_INVENTORY_CHANGE_FAILURE obj{};
 
     obj.result = static_cast<InventoryResult>(reader.read_u8());
 
@@ -8418,11 +8997,11 @@ SMSG_INVENTORY_CHANGE_FAILURE SMSG_INVENTORY_CHANGE_FAILURE_read(Reader& reader)
     return obj;
 }
 
-std::vector<unsigned char> SMSG_INVENTORY_CHANGE_FAILURE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_INVENTORY_CHANGE_FAILURE::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_INVENTORY_CHANGE_FAILURE_size(obj));
 
-    writer.write_u16_be(SMSG_INVENTORY_CHANGE_FAILURE_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_INVENTORY_CHANGE_FAILURE_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000112); /* opcode */
 
@@ -8444,18 +9023,18 @@ std::vector<unsigned char> SMSG_INVENTORY_CHANGE_FAILURE::write() const {
 }
 
 SMSG_OPEN_CONTAINER SMSG_OPEN_CONTAINER_read(Reader& reader) {
-    SMSG_OPEN_CONTAINER obj;
+    SMSG_OPEN_CONTAINER obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_OPEN_CONTAINER::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_OPEN_CONTAINER::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 2)); /* size */
 
     writer.write_u16(0x00000113); /* opcode */
 
@@ -8465,18 +9044,18 @@ std::vector<unsigned char> SMSG_OPEN_CONTAINER::write() const {
 }
 
 CMSG_INSPECT CMSG_INSPECT_read(Reader& reader) {
-    CMSG_INSPECT obj;
+    CMSG_INSPECT obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_INSPECT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_INSPECT::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x00000114); /* opcode */
 
@@ -8486,18 +9065,18 @@ std::vector<unsigned char> CMSG_INSPECT::write() const {
 }
 
 SMSG_INSPECT SMSG_INSPECT_read(Reader& reader) {
-    SMSG_INSPECT obj;
+    SMSG_INSPECT obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_INSPECT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_INSPECT::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 2)); /* size */
 
     writer.write_u16(0x00000115); /* opcode */
 
@@ -8507,18 +9086,18 @@ std::vector<unsigned char> SMSG_INSPECT::write() const {
 }
 
 CMSG_INITIATE_TRADE CMSG_INITIATE_TRADE_read(Reader& reader) {
-    CMSG_INITIATE_TRADE obj;
+    CMSG_INITIATE_TRADE obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_INITIATE_TRADE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_INITIATE_TRADE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x00000116); /* opcode */
 
@@ -8527,30 +9106,30 @@ std::vector<unsigned char> CMSG_INITIATE_TRADE::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_BEGIN_TRADE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_BEGIN_TRADE::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x00000117); /* opcode */
 
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_BUSY_TRADE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_BUSY_TRADE::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x00000118); /* opcode */
 
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_IGNORE_TRADE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_IGNORE_TRADE::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x00000119); /* opcode */
 
@@ -8558,18 +9137,18 @@ std::vector<unsigned char> CMSG_IGNORE_TRADE::write() const {
 }
 
 CMSG_ACCEPT_TRADE CMSG_ACCEPT_TRADE_read(Reader& reader) {
-    CMSG_ACCEPT_TRADE obj;
+    CMSG_ACCEPT_TRADE obj{};
 
     obj.unknown1 = reader.read_u32();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_ACCEPT_TRADE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_ACCEPT_TRADE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 4)); /* size */
 
     writer.write_u32(0x0000011a); /* opcode */
 
@@ -8578,20 +9157,20 @@ std::vector<unsigned char> CMSG_ACCEPT_TRADE::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_UNACCEPT_TRADE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_UNACCEPT_TRADE::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x0000011b); /* opcode */
 
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_CANCEL_TRADE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_CANCEL_TRADE::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x0000011c); /* opcode */
 
@@ -8599,7 +9178,7 @@ std::vector<unsigned char> CMSG_CANCEL_TRADE::write() const {
 }
 
 CMSG_SET_TRADE_ITEM CMSG_SET_TRADE_ITEM_read(Reader& reader) {
-    CMSG_SET_TRADE_ITEM obj;
+    CMSG_SET_TRADE_ITEM obj{};
 
     obj.trade_slot = reader.read_u8();
 
@@ -8610,11 +9189,11 @@ CMSG_SET_TRADE_ITEM CMSG_SET_TRADE_ITEM_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_SET_TRADE_ITEM::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_SET_TRADE_ITEM::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0003);
 
-    writer.write_u16_be(0x0003 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0003 + 4)); /* size */
 
     writer.write_u32(0x0000011d); /* opcode */
 
@@ -8628,18 +9207,18 @@ std::vector<unsigned char> CMSG_SET_TRADE_ITEM::write() const {
 }
 
 CMSG_CLEAR_TRADE_ITEM CMSG_CLEAR_TRADE_ITEM_read(Reader& reader) {
-    CMSG_CLEAR_TRADE_ITEM obj;
+    CMSG_CLEAR_TRADE_ITEM obj{};
 
     obj.trade_slot = reader.read_u8();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_CLEAR_TRADE_ITEM::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_CLEAR_TRADE_ITEM::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0001);
 
-    writer.write_u16_be(0x0001 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0001 + 4)); /* size */
 
     writer.write_u32(0x0000011e); /* opcode */
 
@@ -8649,18 +9228,18 @@ std::vector<unsigned char> CMSG_CLEAR_TRADE_ITEM::write() const {
 }
 
 CMSG_SET_TRADE_GOLD CMSG_SET_TRADE_GOLD_read(Reader& reader) {
-    CMSG_SET_TRADE_GOLD obj;
+    CMSG_SET_TRADE_GOLD obj{};
 
     obj.gold = reader.read_u32();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_SET_TRADE_GOLD::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_SET_TRADE_GOLD::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 4)); /* size */
 
     writer.write_u32(0x0000011f); /* opcode */
 
@@ -8686,7 +9265,7 @@ static size_t SMSG_TRADE_STATUS_size(const SMSG_TRADE_STATUS& obj) {
 }
 
 SMSG_TRADE_STATUS SMSG_TRADE_STATUS_read(Reader& reader) {
-    SMSG_TRADE_STATUS obj;
+    SMSG_TRADE_STATUS obj{};
 
     obj.status = static_cast<TradeStatus>(reader.read_u32());
 
@@ -8709,11 +9288,11 @@ SMSG_TRADE_STATUS SMSG_TRADE_STATUS_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_TRADE_STATUS::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_TRADE_STATUS::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_TRADE_STATUS_size(obj));
 
-    writer.write_u16_be(SMSG_TRADE_STATUS_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_TRADE_STATUS_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000120); /* opcode */
 
@@ -8739,7 +9318,7 @@ std::vector<unsigned char> SMSG_TRADE_STATUS::write() const {
 }
 
 SMSG_TRADE_STATUS_EXTENDED SMSG_TRADE_STATUS_EXTENDED_read(Reader& reader) {
-    SMSG_TRADE_STATUS_EXTENDED obj;
+    SMSG_TRADE_STATUS_EXTENDED obj{};
 
     obj.self_player = reader.read_bool8();
 
@@ -8758,11 +9337,11 @@ SMSG_TRADE_STATUS_EXTENDED SMSG_TRADE_STATUS_EXTENDED_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_TRADE_STATUS_EXTENDED::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_TRADE_STATUS_EXTENDED::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x01bc);
 
-    writer.write_u16_be(0x01bc + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x01bc + 2)); /* size */
 
     writer.write_u16(0x00000121); /* opcode */
 
@@ -8788,22 +9367,22 @@ static size_t SMSG_INITIALIZE_FACTIONS_size(const SMSG_INITIALIZE_FACTIONS& obj)
 }
 
 SMSG_INITIALIZE_FACTIONS SMSG_INITIALIZE_FACTIONS_read(Reader& reader) {
-    SMSG_INITIALIZE_FACTIONS obj;
+    SMSG_INITIALIZE_FACTIONS obj{};
 
     obj.amount_of_factions = reader.read_u32();
 
-    for (auto i = 0; i < obj.amount_of_factions; ++i) {
+    for (uint32_t i = 0; i < obj.amount_of_factions; ++i) {
         obj.factions.push_back(::wow_world_messages::vanilla::FactionInitializer_read(reader));
     }
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_INITIALIZE_FACTIONS::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_INITIALIZE_FACTIONS::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_INITIALIZE_FACTIONS_size(obj));
 
-    writer.write_u16_be(SMSG_INITIALIZE_FACTIONS_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_INITIALIZE_FACTIONS_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000122); /* opcode */
 
@@ -8817,18 +9396,18 @@ std::vector<unsigned char> SMSG_INITIALIZE_FACTIONS::write() const {
 }
 
 SMSG_SET_FACTION_VISIBLE SMSG_SET_FACTION_VISIBLE_read(Reader& reader) {
-    SMSG_SET_FACTION_VISIBLE obj;
+    SMSG_SET_FACTION_VISIBLE obj{};
 
     obj.faction = static_cast<Faction>(reader.read_u16());
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SET_FACTION_VISIBLE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SET_FACTION_VISIBLE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0002);
 
-    writer.write_u16_be(0x0002 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0002 + 2)); /* size */
 
     writer.write_u16(0x00000123); /* opcode */
 
@@ -8842,22 +9421,22 @@ static size_t SMSG_SET_FACTION_STANDING_size(const SMSG_SET_FACTION_STANDING& ob
 }
 
 SMSG_SET_FACTION_STANDING SMSG_SET_FACTION_STANDING_read(Reader& reader) {
-    SMSG_SET_FACTION_STANDING obj;
+    SMSG_SET_FACTION_STANDING obj{};
 
     obj.amount_of_faction_standings = reader.read_u32();
 
-    for (auto i = 0; i < obj.amount_of_faction_standings; ++i) {
+    for (uint32_t i = 0; i < obj.amount_of_faction_standings; ++i) {
         obj.faction_standings.push_back(::wow_world_messages::vanilla::FactionStanding_read(reader));
     }
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SET_FACTION_STANDING::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SET_FACTION_STANDING::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_SET_FACTION_STANDING_size(obj));
 
-    writer.write_u16_be(SMSG_SET_FACTION_STANDING_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_SET_FACTION_STANDING_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000124); /* opcode */
 
@@ -8871,7 +9450,7 @@ std::vector<unsigned char> SMSG_SET_FACTION_STANDING::write() const {
 }
 
 CMSG_SET_FACTION_ATWAR CMSG_SET_FACTION_ATWAR_read(Reader& reader) {
-    CMSG_SET_FACTION_ATWAR obj;
+    CMSG_SET_FACTION_ATWAR obj{};
 
     obj.faction = static_cast<Faction>(reader.read_u16());
 
@@ -8880,11 +9459,11 @@ CMSG_SET_FACTION_ATWAR CMSG_SET_FACTION_ATWAR_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_SET_FACTION_ATWAR::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_SET_FACTION_ATWAR::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0003);
 
-    writer.write_u16_be(0x0003 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0003 + 4)); /* size */
 
     writer.write_u32(0x00000125); /* opcode */
 
@@ -8896,7 +9475,7 @@ std::vector<unsigned char> CMSG_SET_FACTION_ATWAR::write() const {
 }
 
 SMSG_SET_PROFICIENCY SMSG_SET_PROFICIENCY_read(Reader& reader) {
-    SMSG_SET_PROFICIENCY obj;
+    SMSG_SET_PROFICIENCY obj{};
 
     obj.class_type = static_cast<ItemClass>(reader.read_u8());
 
@@ -8905,11 +9484,11 @@ SMSG_SET_PROFICIENCY SMSG_SET_PROFICIENCY_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SET_PROFICIENCY::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SET_PROFICIENCY::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0005);
 
-    writer.write_u16_be(0x0005 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0005 + 2)); /* size */
 
     writer.write_u16(0x00000127); /* opcode */
 
@@ -8921,7 +9500,7 @@ std::vector<unsigned char> SMSG_SET_PROFICIENCY::write() const {
 }
 
 CMSG_SET_ACTION_BUTTON CMSG_SET_ACTION_BUTTON_read(Reader& reader) {
-    CMSG_SET_ACTION_BUTTON obj;
+    CMSG_SET_ACTION_BUTTON obj{};
 
     obj.button = reader.read_u8();
 
@@ -8934,11 +9513,11 @@ CMSG_SET_ACTION_BUTTON CMSG_SET_ACTION_BUTTON_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_SET_ACTION_BUTTON::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_SET_ACTION_BUTTON::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0005);
 
-    writer.write_u16_be(0x0005 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0005 + 4)); /* size */
 
     writer.write_u32(0x00000128); /* opcode */
 
@@ -8954,7 +9533,7 @@ std::vector<unsigned char> CMSG_SET_ACTION_BUTTON::write() const {
 }
 
 SMSG_ACTION_BUTTONS SMSG_ACTION_BUTTONS_read(Reader& reader) {
-    SMSG_ACTION_BUTTONS obj;
+    SMSG_ACTION_BUTTONS obj{};
 
     for (auto i = 0; i < 120; ++i) {
         obj.data[i] = reader.read_u32();
@@ -8963,11 +9542,11 @@ SMSG_ACTION_BUTTONS SMSG_ACTION_BUTTONS_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_ACTION_BUTTONS::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_ACTION_BUTTONS::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x01e0);
 
-    writer.write_u16_be(0x01e0 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x01e0 + 2)); /* size */
 
     writer.write_u16(0x00000129); /* opcode */
 
@@ -8983,30 +9562,30 @@ static size_t SMSG_INITIAL_SPELLS_size(const SMSG_INITIAL_SPELLS& obj) {
 }
 
 SMSG_INITIAL_SPELLS SMSG_INITIAL_SPELLS_read(Reader& reader) {
-    SMSG_INITIAL_SPELLS obj;
+    SMSG_INITIAL_SPELLS obj{};
 
     obj.unknown1 = reader.read_u8();
 
     obj.spell_count = reader.read_u16();
 
-    for (auto i = 0; i < obj.spell_count; ++i) {
+    for (uint16_t i = 0; i < obj.spell_count; ++i) {
         obj.initial_spells.push_back(::wow_world_messages::vanilla::InitialSpell_read(reader));
     }
 
     obj.cooldown_count = reader.read_u16();
 
-    for (auto i = 0; i < obj.cooldown_count; ++i) {
+    for (uint16_t i = 0; i < obj.cooldown_count; ++i) {
         obj.cooldowns.push_back(::wow_world_messages::vanilla::CooldownSpell_read(reader));
     }
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_INITIAL_SPELLS::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_INITIAL_SPELLS::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_INITIAL_SPELLS_size(obj));
 
-    writer.write_u16_be(SMSG_INITIAL_SPELLS_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_INITIAL_SPELLS_size(obj) + 2)); /* size */
 
     writer.write_u16(0x0000012a); /* opcode */
 
@@ -9028,18 +9607,18 @@ std::vector<unsigned char> SMSG_INITIAL_SPELLS::write() const {
 }
 
 SMSG_LEARNED_SPELL SMSG_LEARNED_SPELL_read(Reader& reader) {
-    SMSG_LEARNED_SPELL obj;
+    SMSG_LEARNED_SPELL obj{};
 
     obj.id = reader.read_u32();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_LEARNED_SPELL::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_LEARNED_SPELL::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 2)); /* size */
 
     writer.write_u16(0x0000012b); /* opcode */
 
@@ -9049,7 +9628,7 @@ std::vector<unsigned char> SMSG_LEARNED_SPELL::write() const {
 }
 
 SMSG_SUPERCEDED_SPELL SMSG_SUPERCEDED_SPELL_read(Reader& reader) {
-    SMSG_SUPERCEDED_SPELL obj;
+    SMSG_SUPERCEDED_SPELL obj{};
 
     obj.new_spell_id = reader.read_u16();
 
@@ -9058,11 +9637,11 @@ SMSG_SUPERCEDED_SPELL SMSG_SUPERCEDED_SPELL_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SUPERCEDED_SPELL::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SUPERCEDED_SPELL::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 2)); /* size */
 
     writer.write_u16(0x0000012c); /* opcode */
 
@@ -9078,7 +9657,7 @@ static size_t CMSG_CAST_SPELL_size(const CMSG_CAST_SPELL& obj) {
 }
 
 CMSG_CAST_SPELL CMSG_CAST_SPELL_read(Reader& reader) {
-    CMSG_CAST_SPELL obj;
+    CMSG_CAST_SPELL obj{};
 
     obj.spell = reader.read_u32();
 
@@ -9087,11 +9666,11 @@ CMSG_CAST_SPELL CMSG_CAST_SPELL_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_CAST_SPELL::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_CAST_SPELL::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_CAST_SPELL_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_CAST_SPELL_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_CAST_SPELL_size(obj) + 4)); /* size */
 
     writer.write_u32(0x0000012e); /* opcode */
 
@@ -9103,18 +9682,18 @@ std::vector<unsigned char> CMSG_CAST_SPELL::write() const {
 }
 
 CMSG_CANCEL_CAST CMSG_CANCEL_CAST_read(Reader& reader) {
-    CMSG_CANCEL_CAST obj;
+    CMSG_CANCEL_CAST obj{};
 
     obj.id = reader.read_u32();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_CANCEL_CAST::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_CANCEL_CAST::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 4)); /* size */
 
     writer.write_u32(0x0000012f); /* opcode */
 
@@ -9145,7 +9724,7 @@ static size_t SMSG_CAST_RESULT_size(const SMSG_CAST_RESULT& obj) {
 }
 
 SMSG_CAST_RESULT SMSG_CAST_RESULT_read(Reader& reader) {
-    SMSG_CAST_RESULT obj;
+    SMSG_CAST_RESULT obj{};
 
     obj.spell = reader.read_u32();
 
@@ -9174,11 +9753,11 @@ SMSG_CAST_RESULT SMSG_CAST_RESULT_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_CAST_RESULT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_CAST_RESULT::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_CAST_RESULT_size(obj));
 
-    writer.write_u16_be(SMSG_CAST_RESULT_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_CAST_RESULT_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000130); /* opcode */
 
@@ -9220,7 +9799,7 @@ static size_t SMSG_SPELL_START_size(const SMSG_SPELL_START& obj) {
 }
 
 SMSG_SPELL_START SMSG_SPELL_START_read(Reader& reader) {
-    SMSG_SPELL_START obj;
+    SMSG_SPELL_START obj{};
 
     obj.cast_item = reader.read_packed_guid();
 
@@ -9243,11 +9822,11 @@ SMSG_SPELL_START SMSG_SPELL_START_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SPELL_START::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPELL_START::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_SPELL_START_size(obj));
 
-    writer.write_u16_be(SMSG_SPELL_START_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_SPELL_START_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000131); /* opcode */
 
@@ -9283,7 +9862,7 @@ static size_t SMSG_SPELL_GO_size(const SMSG_SPELL_GO& obj) {
 }
 
 SMSG_SPELL_GO SMSG_SPELL_GO_read(Reader& reader) {
-    SMSG_SPELL_GO obj;
+    SMSG_SPELL_GO obj{};
 
     obj.cast_item = reader.read_packed_guid();
 
@@ -9295,13 +9874,13 @@ SMSG_SPELL_GO SMSG_SPELL_GO_read(Reader& reader) {
 
     obj.amount_of_hits = reader.read_u8();
 
-    for (auto i = 0; i < obj.amount_of_hits; ++i) {
+    for (uint8_t i = 0; i < obj.amount_of_hits; ++i) {
         obj.hits.push_back(reader.read_u64());
     }
 
     obj.amount_of_misses = reader.read_u8();
 
-    for (auto i = 0; i < obj.amount_of_misses; ++i) {
+    for (uint8_t i = 0; i < obj.amount_of_misses; ++i) {
         obj.misses.push_back(::wow_world_messages::vanilla::SpellMiss_read(reader));
     }
 
@@ -9316,11 +9895,11 @@ SMSG_SPELL_GO SMSG_SPELL_GO_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SPELL_GO::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPELL_GO::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_SPELL_GO_size(obj));
 
-    writer.write_u16_be(SMSG_SPELL_GO_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_SPELL_GO_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000132); /* opcode */
 
@@ -9356,7 +9935,7 @@ std::vector<unsigned char> SMSG_SPELL_GO::write() const {
 }
 
 SMSG_SPELL_FAILURE SMSG_SPELL_FAILURE_read(Reader& reader) {
-    SMSG_SPELL_FAILURE obj;
+    SMSG_SPELL_FAILURE obj{};
 
     obj.guid = reader.read_u64();
 
@@ -9367,11 +9946,11 @@ SMSG_SPELL_FAILURE SMSG_SPELL_FAILURE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SPELL_FAILURE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPELL_FAILURE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000d);
 
-    writer.write_u16_be(0x000d + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000d + 2)); /* size */
 
     writer.write_u16(0x00000133); /* opcode */
 
@@ -9395,7 +9974,7 @@ static size_t SMSG_SPELL_COOLDOWN_size(const SMSG_SPELL_COOLDOWN& obj) {
 }
 
 SMSG_SPELL_COOLDOWN SMSG_SPELL_COOLDOWN_read(Reader& reader, size_t body_size) {
-    SMSG_SPELL_COOLDOWN obj;
+    SMSG_SPELL_COOLDOWN obj{};
     size_t _size = 0;
 
     obj.guid = reader.read_u64();
@@ -9409,11 +9988,11 @@ SMSG_SPELL_COOLDOWN SMSG_SPELL_COOLDOWN_read(Reader& reader, size_t body_size) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SPELL_COOLDOWN::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPELL_COOLDOWN::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_SPELL_COOLDOWN_size(obj));
 
-    writer.write_u16_be(SMSG_SPELL_COOLDOWN_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_SPELL_COOLDOWN_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000134); /* opcode */
 
@@ -9427,7 +10006,7 @@ std::vector<unsigned char> SMSG_SPELL_COOLDOWN::write() const {
 }
 
 SMSG_COOLDOWN_EVENT SMSG_COOLDOWN_EVENT_read(Reader& reader) {
-    SMSG_COOLDOWN_EVENT obj;
+    SMSG_COOLDOWN_EVENT obj{};
 
     obj.id = reader.read_u32();
 
@@ -9436,11 +10015,11 @@ SMSG_COOLDOWN_EVENT SMSG_COOLDOWN_EVENT_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_COOLDOWN_EVENT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_COOLDOWN_EVENT::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 2)); /* size */
 
     writer.write_u16(0x00000135); /* opcode */
 
@@ -9452,18 +10031,18 @@ std::vector<unsigned char> SMSG_COOLDOWN_EVENT::write() const {
 }
 
 CMSG_CANCEL_AURA CMSG_CANCEL_AURA_read(Reader& reader) {
-    CMSG_CANCEL_AURA obj;
+    CMSG_CANCEL_AURA obj{};
 
     obj.id = reader.read_u32();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_CANCEL_AURA::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_CANCEL_AURA::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 4)); /* size */
 
     writer.write_u32(0x00000136); /* opcode */
 
@@ -9473,7 +10052,7 @@ std::vector<unsigned char> CMSG_CANCEL_AURA::write() const {
 }
 
 SMSG_UPDATE_AURA_DURATION SMSG_UPDATE_AURA_DURATION_read(Reader& reader) {
-    SMSG_UPDATE_AURA_DURATION obj;
+    SMSG_UPDATE_AURA_DURATION obj{};
 
     obj.aura_slot = reader.read_u8();
 
@@ -9482,11 +10061,11 @@ SMSG_UPDATE_AURA_DURATION SMSG_UPDATE_AURA_DURATION_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_UPDATE_AURA_DURATION::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_UPDATE_AURA_DURATION::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0005);
 
-    writer.write_u16_be(0x0005 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0005 + 2)); /* size */
 
     writer.write_u16(0x00000137); /* opcode */
 
@@ -9498,7 +10077,7 @@ std::vector<unsigned char> SMSG_UPDATE_AURA_DURATION::write() const {
 }
 
 SMSG_PET_CAST_FAILED SMSG_PET_CAST_FAILED_read(Reader& reader) {
-    SMSG_PET_CAST_FAILED obj;
+    SMSG_PET_CAST_FAILED obj{};
 
     obj.id = reader.read_u32();
 
@@ -9509,11 +10088,11 @@ SMSG_PET_CAST_FAILED SMSG_PET_CAST_FAILED_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_PET_CAST_FAILED::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_PET_CAST_FAILED::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0006);
 
-    writer.write_u16_be(0x0006 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0006 + 2)); /* size */
 
     writer.write_u16(0x00000138); /* opcode */
 
@@ -9527,7 +10106,7 @@ std::vector<unsigned char> SMSG_PET_CAST_FAILED::write() const {
 }
 
 MSG_CHANNEL_START_Server MSG_CHANNEL_START_Server_read(Reader& reader) {
-    MSG_CHANNEL_START_Server obj;
+    MSG_CHANNEL_START_Server obj{};
 
     obj.spell = reader.read_u32();
 
@@ -9536,11 +10115,11 @@ MSG_CHANNEL_START_Server MSG_CHANNEL_START_Server_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> MSG_CHANNEL_START_Server::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_CHANNEL_START_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 2)); /* size */
 
     writer.write_u16(0x00000139); /* opcode */
 
@@ -9552,18 +10131,18 @@ std::vector<unsigned char> MSG_CHANNEL_START_Server::write() const {
 }
 
 MSG_CHANNEL_UPDATE_Server MSG_CHANNEL_UPDATE_Server_read(Reader& reader) {
-    MSG_CHANNEL_UPDATE_Server obj;
+    MSG_CHANNEL_UPDATE_Server obj{};
 
     obj.time = reader.read_u32();
 
     return obj;
 }
 
-std::vector<unsigned char> MSG_CHANNEL_UPDATE_Server::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_CHANNEL_UPDATE_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 2)); /* size */
 
     writer.write_u16(0x0000013a); /* opcode */
 
@@ -9573,18 +10152,18 @@ std::vector<unsigned char> MSG_CHANNEL_UPDATE_Server::write() const {
 }
 
 CMSG_CANCEL_CHANNELLING CMSG_CANCEL_CHANNELLING_read(Reader& reader) {
-    CMSG_CANCEL_CHANNELLING obj;
+    CMSG_CANCEL_CHANNELLING obj{};
 
     obj.id = reader.read_u32();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_CANCEL_CHANNELLING::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_CANCEL_CHANNELLING::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 4)); /* size */
 
     writer.write_u32(0x0000013b); /* opcode */
 
@@ -9594,7 +10173,7 @@ std::vector<unsigned char> CMSG_CANCEL_CHANNELLING::write() const {
 }
 
 SMSG_AI_REACTION SMSG_AI_REACTION_read(Reader& reader) {
-    SMSG_AI_REACTION obj;
+    SMSG_AI_REACTION obj{};
 
     obj.guid = reader.read_u64();
 
@@ -9603,11 +10182,11 @@ SMSG_AI_REACTION SMSG_AI_REACTION_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_AI_REACTION::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_AI_REACTION::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 2)); /* size */
 
     writer.write_u16(0x0000013c); /* opcode */
 
@@ -9619,18 +10198,18 @@ std::vector<unsigned char> SMSG_AI_REACTION::write() const {
 }
 
 CMSG_SET_SELECTION CMSG_SET_SELECTION_read(Reader& reader) {
-    CMSG_SET_SELECTION obj;
+    CMSG_SET_SELECTION obj{};
 
     obj.target = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_SET_SELECTION::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_SET_SELECTION::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x0000013d); /* opcode */
 
@@ -9640,18 +10219,18 @@ std::vector<unsigned char> CMSG_SET_SELECTION::write() const {
 }
 
 CMSG_SET_TARGET_OBSOLETE CMSG_SET_TARGET_OBSOLETE_read(Reader& reader) {
-    CMSG_SET_TARGET_OBSOLETE obj;
+    CMSG_SET_TARGET_OBSOLETE obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_SET_TARGET_OBSOLETE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_SET_TARGET_OBSOLETE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x0000013e); /* opcode */
 
@@ -9661,18 +10240,18 @@ std::vector<unsigned char> CMSG_SET_TARGET_OBSOLETE::write() const {
 }
 
 CMSG_ATTACKSWING CMSG_ATTACKSWING_read(Reader& reader) {
-    CMSG_ATTACKSWING obj;
+    CMSG_ATTACKSWING obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_ATTACKSWING::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_ATTACKSWING::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x00000141); /* opcode */
 
@@ -9681,10 +10260,10 @@ std::vector<unsigned char> CMSG_ATTACKSWING::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_ATTACKSTOP::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_ATTACKSTOP::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x00000142); /* opcode */
 
@@ -9692,7 +10271,7 @@ std::vector<unsigned char> CMSG_ATTACKSTOP::write() const {
 }
 
 SMSG_ATTACKSTART SMSG_ATTACKSTART_read(Reader& reader) {
-    SMSG_ATTACKSTART obj;
+    SMSG_ATTACKSTART obj{};
 
     obj.attacker = reader.read_u64();
 
@@ -9701,11 +10280,11 @@ SMSG_ATTACKSTART SMSG_ATTACKSTART_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_ATTACKSTART::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_ATTACKSTART::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0010);
 
-    writer.write_u16_be(0x0010 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0010 + 2)); /* size */
 
     writer.write_u16(0x00000143); /* opcode */
 
@@ -9721,7 +10300,7 @@ static size_t SMSG_ATTACKSTOP_size(const SMSG_ATTACKSTOP& obj) {
 }
 
 SMSG_ATTACKSTOP SMSG_ATTACKSTOP_read(Reader& reader) {
-    SMSG_ATTACKSTOP obj;
+    SMSG_ATTACKSTOP obj{};
 
     obj.player = reader.read_packed_guid();
 
@@ -9732,11 +10311,11 @@ SMSG_ATTACKSTOP SMSG_ATTACKSTOP_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_ATTACKSTOP::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_ATTACKSTOP::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_ATTACKSTOP_size(obj));
 
-    writer.write_u16_be(SMSG_ATTACKSTOP_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_ATTACKSTOP_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000144); /* opcode */
 
@@ -9749,50 +10328,50 @@ std::vector<unsigned char> SMSG_ATTACKSTOP::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> SMSG_ATTACKSWING_NOTINRANGE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_ATTACKSWING_NOTINRANGE::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 2)); /* size */
 
     writer.write_u16(0x00000145); /* opcode */
 
     return writer.m_buf;
 }
 
-std::vector<unsigned char> SMSG_ATTACKSWING_BADFACING::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_ATTACKSWING_BADFACING::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 2)); /* size */
 
     writer.write_u16(0x00000146); /* opcode */
 
     return writer.m_buf;
 }
 
-std::vector<unsigned char> SMSG_ATTACKSWING_NOTSTANDING::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_ATTACKSWING_NOTSTANDING::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 2)); /* size */
 
     writer.write_u16(0x00000147); /* opcode */
 
     return writer.m_buf;
 }
 
-std::vector<unsigned char> SMSG_ATTACKSWING_DEADTARGET::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_ATTACKSWING_DEADTARGET::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 2)); /* size */
 
     writer.write_u16(0x00000148); /* opcode */
 
     return writer.m_buf;
 }
 
-std::vector<unsigned char> SMSG_ATTACKSWING_CANT_ATTACK::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_ATTACKSWING_CANT_ATTACK::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 2)); /* size */
 
     writer.write_u16(0x00000149); /* opcode */
 
@@ -9804,7 +10383,7 @@ static size_t SMSG_ATTACKERSTATEUPDATE_size(const SMSG_ATTACKERSTATEUPDATE& obj)
 }
 
 SMSG_ATTACKERSTATEUPDATE SMSG_ATTACKERSTATEUPDATE_read(Reader& reader) {
-    SMSG_ATTACKERSTATEUPDATE obj;
+    SMSG_ATTACKERSTATEUPDATE obj{};
 
     obj.hit_info = static_cast<HitInfo>(reader.read_u32());
 
@@ -9816,7 +10395,7 @@ SMSG_ATTACKERSTATEUPDATE SMSG_ATTACKERSTATEUPDATE_read(Reader& reader) {
 
     obj.amount_of_damages = reader.read_u8();
 
-    for (auto i = 0; i < obj.amount_of_damages; ++i) {
+    for (uint8_t i = 0; i < obj.amount_of_damages; ++i) {
         obj.damages.push_back(::wow_world_messages::vanilla::DamageInfo_read(reader));
     }
 
@@ -9831,11 +10410,11 @@ SMSG_ATTACKERSTATEUPDATE SMSG_ATTACKERSTATEUPDATE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_ATTACKERSTATEUPDATE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_ATTACKERSTATEUPDATE::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_ATTACKERSTATEUPDATE_size(obj));
 
-    writer.write_u16_be(SMSG_ATTACKERSTATEUPDATE_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_ATTACKERSTATEUPDATE_size(obj) + 2)); /* size */
 
     writer.write_u16(0x0000014a); /* opcode */
 
@@ -9864,10 +10443,10 @@ std::vector<unsigned char> SMSG_ATTACKERSTATEUPDATE::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> SMSG_CANCEL_COMBAT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_CANCEL_COMBAT::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 2)); /* size */
 
     writer.write_u16(0x0000014e); /* opcode */
 
@@ -9879,7 +10458,7 @@ static size_t SMSG_SPELLHEALLOG_size(const SMSG_SPELLHEALLOG& obj) {
 }
 
 SMSG_SPELLHEALLOG SMSG_SPELLHEALLOG_read(Reader& reader) {
-    SMSG_SPELLHEALLOG obj;
+    SMSG_SPELLHEALLOG obj{};
 
     obj.victim = reader.read_packed_guid();
 
@@ -9894,11 +10473,11 @@ SMSG_SPELLHEALLOG SMSG_SPELLHEALLOG_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SPELLHEALLOG::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPELLHEALLOG::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_SPELLHEALLOG_size(obj));
 
-    writer.write_u16_be(SMSG_SPELLHEALLOG_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_SPELLHEALLOG_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000150); /* opcode */
 
@@ -9920,7 +10499,7 @@ static size_t SMSG_SPELLENERGIZELOG_size(const SMSG_SPELLENERGIZELOG& obj) {
 }
 
 SMSG_SPELLENERGIZELOG SMSG_SPELLENERGIZELOG_read(Reader& reader) {
-    SMSG_SPELLENERGIZELOG obj;
+    SMSG_SPELLENERGIZELOG obj{};
 
     obj.victim = reader.read_packed_guid();
 
@@ -9935,11 +10514,11 @@ SMSG_SPELLENERGIZELOG SMSG_SPELLENERGIZELOG_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SPELLENERGIZELOG::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPELLENERGIZELOG::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_SPELLENERGIZELOG_size(obj));
 
-    writer.write_u16_be(SMSG_SPELLENERGIZELOG_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_SPELLENERGIZELOG_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000151); /* opcode */
 
@@ -9957,7 +10536,7 @@ std::vector<unsigned char> SMSG_SPELLENERGIZELOG::write() const {
 }
 
 SMSG_BINDPOINTUPDATE SMSG_BINDPOINTUPDATE_read(Reader& reader) {
-    SMSG_BINDPOINTUPDATE obj;
+    SMSG_BINDPOINTUPDATE obj{};
 
     obj.position = ::wow_world_messages::all::Vector3d_read(reader);
 
@@ -9968,11 +10547,11 @@ SMSG_BINDPOINTUPDATE SMSG_BINDPOINTUPDATE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_BINDPOINTUPDATE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_BINDPOINTUPDATE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0014);
 
-    writer.write_u16_be(0x0014 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0014 + 2)); /* size */
 
     writer.write_u16(0x00000155); /* opcode */
 
@@ -9986,7 +10565,7 @@ std::vector<unsigned char> SMSG_BINDPOINTUPDATE::write() const {
 }
 
 SMSG_PLAYERBOUND SMSG_PLAYERBOUND_read(Reader& reader) {
-    SMSG_PLAYERBOUND obj;
+    SMSG_PLAYERBOUND obj{};
 
     obj.guid = reader.read_u64();
 
@@ -9995,11 +10574,11 @@ SMSG_PLAYERBOUND SMSG_PLAYERBOUND_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_PLAYERBOUND::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_PLAYERBOUND::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 2)); /* size */
 
     writer.write_u16(0x00000158); /* opcode */
 
@@ -10015,7 +10594,7 @@ static size_t SMSG_CLIENT_CONTROL_UPDATE_size(const SMSG_CLIENT_CONTROL_UPDATE& 
 }
 
 SMSG_CLIENT_CONTROL_UPDATE SMSG_CLIENT_CONTROL_UPDATE_read(Reader& reader) {
-    SMSG_CLIENT_CONTROL_UPDATE obj;
+    SMSG_CLIENT_CONTROL_UPDATE obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -10024,11 +10603,11 @@ SMSG_CLIENT_CONTROL_UPDATE SMSG_CLIENT_CONTROL_UPDATE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_CLIENT_CONTROL_UPDATE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_CLIENT_CONTROL_UPDATE::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_CLIENT_CONTROL_UPDATE_size(obj));
 
-    writer.write_u16_be(SMSG_CLIENT_CONTROL_UPDATE_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_CLIENT_CONTROL_UPDATE_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000159); /* opcode */
 
@@ -10039,10 +10618,10 @@ std::vector<unsigned char> SMSG_CLIENT_CONTROL_UPDATE::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_REPOP_REQUEST::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_REPOP_REQUEST::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x0000015a); /* opcode */
 
@@ -10054,7 +10633,7 @@ static size_t SMSG_RESURRECT_REQUEST_size(const SMSG_RESURRECT_REQUEST& obj) {
 }
 
 SMSG_RESURRECT_REQUEST SMSG_RESURRECT_REQUEST_read(Reader& reader) {
-    SMSG_RESURRECT_REQUEST obj;
+    SMSG_RESURRECT_REQUEST obj{};
 
     obj.guid = reader.read_u64();
 
@@ -10065,11 +10644,11 @@ SMSG_RESURRECT_REQUEST SMSG_RESURRECT_REQUEST_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_RESURRECT_REQUEST::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_RESURRECT_REQUEST::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_RESURRECT_REQUEST_size(obj));
 
-    writer.write_u16_be(SMSG_RESURRECT_REQUEST_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_RESURRECT_REQUEST_size(obj) + 2)); /* size */
 
     writer.write_u16(0x0000015b); /* opcode */
 
@@ -10083,7 +10662,7 @@ std::vector<unsigned char> SMSG_RESURRECT_REQUEST::write() const {
 }
 
 CMSG_RESURRECT_RESPONSE CMSG_RESURRECT_RESPONSE_read(Reader& reader) {
-    CMSG_RESURRECT_RESPONSE obj;
+    CMSG_RESURRECT_RESPONSE obj{};
 
     obj.guid = reader.read_u64();
 
@@ -10092,11 +10671,11 @@ CMSG_RESURRECT_RESPONSE CMSG_RESURRECT_RESPONSE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_RESURRECT_RESPONSE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_RESURRECT_RESPONSE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0009);
 
-    writer.write_u16_be(0x0009 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0009 + 4)); /* size */
 
     writer.write_u32(0x0000015c); /* opcode */
 
@@ -10108,18 +10687,18 @@ std::vector<unsigned char> CMSG_RESURRECT_RESPONSE::write() const {
 }
 
 CMSG_LOOT CMSG_LOOT_read(Reader& reader) {
-    CMSG_LOOT obj;
+    CMSG_LOOT obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_LOOT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_LOOT::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x0000015d); /* opcode */
 
@@ -10128,10 +10707,10 @@ std::vector<unsigned char> CMSG_LOOT::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_LOOT_MONEY::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_LOOT_MONEY::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x0000015e); /* opcode */
 
@@ -10139,18 +10718,18 @@ std::vector<unsigned char> CMSG_LOOT_MONEY::write() const {
 }
 
 CMSG_LOOT_RELEASE CMSG_LOOT_RELEASE_read(Reader& reader) {
-    CMSG_LOOT_RELEASE obj;
+    CMSG_LOOT_RELEASE obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_LOOT_RELEASE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_LOOT_RELEASE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x0000015f); /* opcode */
 
@@ -10170,7 +10749,7 @@ static size_t SMSG_LOOT_RESPONSE_size(const SMSG_LOOT_RESPONSE& obj) {
 }
 
 SMSG_LOOT_RESPONSE SMSG_LOOT_RESPONSE_read(Reader& reader) {
-    SMSG_LOOT_RESPONSE obj;
+    SMSG_LOOT_RESPONSE obj{};
 
     obj.guid = reader.read_u64();
 
@@ -10184,18 +10763,18 @@ SMSG_LOOT_RESPONSE SMSG_LOOT_RESPONSE_read(Reader& reader) {
 
     obj.amount_of_items = reader.read_u8();
 
-    for (auto i = 0; i < obj.amount_of_items; ++i) {
+    for (uint8_t i = 0; i < obj.amount_of_items; ++i) {
         obj.items.push_back(::wow_world_messages::vanilla::LootItem_read(reader));
     }
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_LOOT_RESPONSE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_LOOT_RESPONSE::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_LOOT_RESPONSE_size(obj));
 
-    writer.write_u16_be(SMSG_LOOT_RESPONSE_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_LOOT_RESPONSE_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000160); /* opcode */
 
@@ -10219,7 +10798,7 @@ std::vector<unsigned char> SMSG_LOOT_RESPONSE::write() const {
 }
 
 SMSG_LOOT_RELEASE_RESPONSE SMSG_LOOT_RELEASE_RESPONSE_read(Reader& reader) {
-    SMSG_LOOT_RELEASE_RESPONSE obj;
+    SMSG_LOOT_RELEASE_RESPONSE obj{};
 
     obj.guid = reader.read_u64();
 
@@ -10228,11 +10807,11 @@ SMSG_LOOT_RELEASE_RESPONSE SMSG_LOOT_RELEASE_RESPONSE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_LOOT_RELEASE_RESPONSE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_LOOT_RELEASE_RESPONSE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0009);
 
-    writer.write_u16_be(0x0009 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0009 + 2)); /* size */
 
     writer.write_u16(0x00000161); /* opcode */
 
@@ -10244,18 +10823,18 @@ std::vector<unsigned char> SMSG_LOOT_RELEASE_RESPONSE::write() const {
 }
 
 SMSG_LOOT_REMOVED SMSG_LOOT_REMOVED_read(Reader& reader) {
-    SMSG_LOOT_REMOVED obj;
+    SMSG_LOOT_REMOVED obj{};
 
     obj.slot = reader.read_u8();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_LOOT_REMOVED::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_LOOT_REMOVED::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0001);
 
-    writer.write_u16_be(0x0001 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0001 + 2)); /* size */
 
     writer.write_u16(0x00000162); /* opcode */
 
@@ -10265,18 +10844,18 @@ std::vector<unsigned char> SMSG_LOOT_REMOVED::write() const {
 }
 
 SMSG_LOOT_MONEY_NOTIFY SMSG_LOOT_MONEY_NOTIFY_read(Reader& reader) {
-    SMSG_LOOT_MONEY_NOTIFY obj;
+    SMSG_LOOT_MONEY_NOTIFY obj{};
 
     obj.amount = reader.read_u32();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_LOOT_MONEY_NOTIFY::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_LOOT_MONEY_NOTIFY::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 2)); /* size */
 
     writer.write_u16(0x00000163); /* opcode */
 
@@ -10285,10 +10864,10 @@ std::vector<unsigned char> SMSG_LOOT_MONEY_NOTIFY::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> SMSG_LOOT_CLEAR_MONEY::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_LOOT_CLEAR_MONEY::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 2)); /* size */
 
     writer.write_u16(0x00000165); /* opcode */
 
@@ -10296,7 +10875,7 @@ std::vector<unsigned char> SMSG_LOOT_CLEAR_MONEY::write() const {
 }
 
 SMSG_ITEM_PUSH_RESULT SMSG_ITEM_PUSH_RESULT_read(Reader& reader) {
-    SMSG_ITEM_PUSH_RESULT obj;
+    SMSG_ITEM_PUSH_RESULT obj{};
 
     obj.guid = reader.read_u64();
 
@@ -10321,11 +10900,11 @@ SMSG_ITEM_PUSH_RESULT SMSG_ITEM_PUSH_RESULT_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_ITEM_PUSH_RESULT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_ITEM_PUSH_RESULT::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0029);
 
-    writer.write_u16_be(0x0029 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0029 + 2)); /* size */
 
     writer.write_u16(0x00000166); /* opcode */
 
@@ -10353,7 +10932,7 @@ std::vector<unsigned char> SMSG_ITEM_PUSH_RESULT::write() const {
 }
 
 SMSG_DUEL_REQUESTED SMSG_DUEL_REQUESTED_read(Reader& reader) {
-    SMSG_DUEL_REQUESTED obj;
+    SMSG_DUEL_REQUESTED obj{};
 
     obj.initiator = reader.read_u64();
 
@@ -10362,11 +10941,11 @@ SMSG_DUEL_REQUESTED SMSG_DUEL_REQUESTED_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_DUEL_REQUESTED::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_DUEL_REQUESTED::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0010);
 
-    writer.write_u16_be(0x0010 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0010 + 2)); /* size */
 
     writer.write_u16(0x00000167); /* opcode */
 
@@ -10377,20 +10956,20 @@ std::vector<unsigned char> SMSG_DUEL_REQUESTED::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> SMSG_DUEL_OUTOFBOUNDS::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_DUEL_OUTOFBOUNDS::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 2)); /* size */
 
     writer.write_u16(0x00000168); /* opcode */
 
     return writer.m_buf;
 }
 
-std::vector<unsigned char> SMSG_DUEL_INBOUNDS::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_DUEL_INBOUNDS::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 2)); /* size */
 
     writer.write_u16(0x00000169); /* opcode */
 
@@ -10398,18 +10977,18 @@ std::vector<unsigned char> SMSG_DUEL_INBOUNDS::write() const {
 }
 
 SMSG_DUEL_COMPLETE SMSG_DUEL_COMPLETE_read(Reader& reader) {
-    SMSG_DUEL_COMPLETE obj;
+    SMSG_DUEL_COMPLETE obj{};
 
     obj.ended_without_interruption = reader.read_bool8();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_DUEL_COMPLETE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_DUEL_COMPLETE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0001);
 
-    writer.write_u16_be(0x0001 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0001 + 2)); /* size */
 
     writer.write_u16(0x0000016a); /* opcode */
 
@@ -10423,7 +11002,7 @@ static size_t SMSG_DUEL_WINNER_size(const SMSG_DUEL_WINNER& obj) {
 }
 
 SMSG_DUEL_WINNER SMSG_DUEL_WINNER_read(Reader& reader) {
-    SMSG_DUEL_WINNER obj;
+    SMSG_DUEL_WINNER obj{};
 
     obj.reason = static_cast<DuelWinnerReason>(reader.read_u8());
 
@@ -10434,11 +11013,11 @@ SMSG_DUEL_WINNER SMSG_DUEL_WINNER_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_DUEL_WINNER::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_DUEL_WINNER::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_DUEL_WINNER_size(obj));
 
-    writer.write_u16_be(SMSG_DUEL_WINNER_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_DUEL_WINNER_size(obj) + 2)); /* size */
 
     writer.write_u16(0x0000016b); /* opcode */
 
@@ -10452,18 +11031,18 @@ std::vector<unsigned char> SMSG_DUEL_WINNER::write() const {
 }
 
 CMSG_DUEL_ACCEPTED CMSG_DUEL_ACCEPTED_read(Reader& reader) {
-    CMSG_DUEL_ACCEPTED obj;
+    CMSG_DUEL_ACCEPTED obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_DUEL_ACCEPTED::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_DUEL_ACCEPTED::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x0000016c); /* opcode */
 
@@ -10473,18 +11052,18 @@ std::vector<unsigned char> CMSG_DUEL_ACCEPTED::write() const {
 }
 
 CMSG_DUEL_CANCELLED CMSG_DUEL_CANCELLED_read(Reader& reader) {
-    CMSG_DUEL_CANCELLED obj;
+    CMSG_DUEL_CANCELLED obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_DUEL_CANCELLED::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_DUEL_CANCELLED::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x0000016d); /* opcode */
 
@@ -10494,18 +11073,18 @@ std::vector<unsigned char> CMSG_DUEL_CANCELLED::write() const {
 }
 
 SMSG_MOUNTRESULT SMSG_MOUNTRESULT_read(Reader& reader) {
-    SMSG_MOUNTRESULT obj;
+    SMSG_MOUNTRESULT obj{};
 
     obj.result = static_cast<MountResult>(reader.read_u32());
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_MOUNTRESULT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_MOUNTRESULT::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 2)); /* size */
 
     writer.write_u16(0x0000016e); /* opcode */
 
@@ -10515,18 +11094,18 @@ std::vector<unsigned char> SMSG_MOUNTRESULT::write() const {
 }
 
 SMSG_DISMOUNTRESULT SMSG_DISMOUNTRESULT_read(Reader& reader) {
-    SMSG_DISMOUNTRESULT obj;
+    SMSG_DISMOUNTRESULT obj{};
 
     obj.result = static_cast<DismountResult>(reader.read_u32());
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_DISMOUNTRESULT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_DISMOUNTRESULT::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 2)); /* size */
 
     writer.write_u16(0x0000016f); /* opcode */
 
@@ -10535,10 +11114,10 @@ std::vector<unsigned char> SMSG_DISMOUNTRESULT::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_MOUNTSPECIAL_ANIM::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_MOUNTSPECIAL_ANIM::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x00000171); /* opcode */
 
@@ -10546,18 +11125,18 @@ std::vector<unsigned char> CMSG_MOUNTSPECIAL_ANIM::write() const {
 }
 
 SMSG_MOUNTSPECIAL_ANIM SMSG_MOUNTSPECIAL_ANIM_read(Reader& reader) {
-    SMSG_MOUNTSPECIAL_ANIM obj;
+    SMSG_MOUNTSPECIAL_ANIM obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_MOUNTSPECIAL_ANIM::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_MOUNTSPECIAL_ANIM::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 2)); /* size */
 
     writer.write_u16(0x00000172); /* opcode */
 
@@ -10567,18 +11146,18 @@ std::vector<unsigned char> SMSG_MOUNTSPECIAL_ANIM::write() const {
 }
 
 SMSG_PET_TAME_FAILURE SMSG_PET_TAME_FAILURE_read(Reader& reader) {
-    SMSG_PET_TAME_FAILURE obj;
+    SMSG_PET_TAME_FAILURE obj{};
 
     obj.reason = static_cast<PetTameFailureReason>(reader.read_u8());
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_PET_TAME_FAILURE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_PET_TAME_FAILURE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0001);
 
-    writer.write_u16_be(0x0001 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0001 + 2)); /* size */
 
     writer.write_u16(0x00000173); /* opcode */
 
@@ -10587,8 +11166,65 @@ std::vector<unsigned char> SMSG_PET_TAME_FAILURE::write() const {
     return writer.m_buf;
 }
 
+static size_t CMSG_PET_SET_ACTION_size(const CMSG_PET_SET_ACTION& obj) {
+    size_t _size = 16;
+
+    if(obj.extra) {
+        _size += 8;
+    }
+
+    return _size;
+}
+
+CMSG_PET_SET_ACTION CMSG_PET_SET_ACTION_read(Reader& reader, size_t body_size) {
+    CMSG_PET_SET_ACTION obj{};
+    size_t _size = 0;
+
+    obj.guid = reader.read_u64();
+    _size += 8;
+
+    obj.position1 = reader.read_u32();
+    _size += 4;
+
+    obj.data1 = reader.read_u32();
+    _size += 4;
+
+    if (_size < body_size) {
+        obj.extra = std::unique_ptr<vanilla::CMSG_PET_SET_ACTION::Extra>(new vanilla::CMSG_PET_SET_ACTION::Extra());
+
+        obj.extra->position2 = reader.read_u32();
+
+        obj.extra->data2 = reader.read_u32();
+
+    }
+    return obj;
+}
+
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_PET_SET_ACTION::write() const {
+    const auto& obj = *this;
+    auto writer = Writer(CMSG_PET_SET_ACTION_size(obj));
+
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_PET_SET_ACTION_size(obj) + 4)); /* size */
+
+    writer.write_u32(0x00000174); /* opcode */
+
+    writer.write_u64(obj.guid);
+
+    writer.write_u32(obj.position1);
+
+    writer.write_u32(obj.data1);
+
+    if(obj.extra) {
+        writer.write_u32(obj.extra->position2);
+
+        writer.write_u32(obj.extra->data2);
+
+    }
+    return writer.m_buf;
+}
+
 CMSG_PET_ACTION CMSG_PET_ACTION_read(Reader& reader) {
-    CMSG_PET_ACTION obj;
+    CMSG_PET_ACTION obj{};
 
     obj.pet = reader.read_u64();
 
@@ -10599,11 +11235,11 @@ CMSG_PET_ACTION CMSG_PET_ACTION_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_PET_ACTION::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_PET_ACTION::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0014);
 
-    writer.write_u16_be(0x0014 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0014 + 4)); /* size */
 
     writer.write_u32(0x00000175); /* opcode */
 
@@ -10617,18 +11253,18 @@ std::vector<unsigned char> CMSG_PET_ACTION::write() const {
 }
 
 CMSG_PET_ABANDON CMSG_PET_ABANDON_read(Reader& reader) {
-    CMSG_PET_ABANDON obj;
+    CMSG_PET_ABANDON obj{};
 
     obj.pet = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_PET_ABANDON::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_PET_ABANDON::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x00000176); /* opcode */
 
@@ -10642,7 +11278,7 @@ static size_t CMSG_PET_RENAME_size(const CMSG_PET_RENAME& obj) {
 }
 
 CMSG_PET_RENAME CMSG_PET_RENAME_read(Reader& reader) {
-    CMSG_PET_RENAME obj;
+    CMSG_PET_RENAME obj{};
 
     obj.pet = reader.read_u64();
 
@@ -10651,11 +11287,11 @@ CMSG_PET_RENAME CMSG_PET_RENAME_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_PET_RENAME::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_PET_RENAME::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_PET_RENAME_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_PET_RENAME_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_PET_RENAME_size(obj) + 4)); /* size */
 
     writer.write_u32(0x00000177); /* opcode */
 
@@ -10666,18 +11302,109 @@ std::vector<unsigned char> CMSG_PET_RENAME::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> SMSG_PET_NAME_INVALID::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_PET_NAME_INVALID::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 2)); /* size */
 
     writer.write_u16(0x00000178); /* opcode */
 
     return writer.m_buf;
 }
 
+static size_t SMSG_PET_SPELLS_size(const SMSG_PET_SPELLS& obj) {
+    size_t _size = 8;
+
+    if(obj.action_bars) {
+        _size += 50 + 4 * obj.action_bars->spells.size() + 12 * obj.action_bars->cooldowns.size();
+    }
+
+    return _size;
+}
+
+SMSG_PET_SPELLS SMSG_PET_SPELLS_read(Reader& reader, size_t body_size) {
+    SMSG_PET_SPELLS obj{};
+    size_t _size = 0;
+
+    obj.pet = reader.read_u64();
+    _size += 8;
+
+    if (_size < body_size) {
+        obj.action_bars = std::unique_ptr<vanilla::SMSG_PET_SPELLS::ActionBars>(new vanilla::SMSG_PET_SPELLS::ActionBars());
+
+        obj.action_bars->duration = reader.read_u32();
+
+        obj.action_bars->react = static_cast<PetReactState>(reader.read_u8());
+
+        obj.action_bars->command = static_cast<PetCommandState>(reader.read_u8());
+
+        obj.action_bars->unknown = reader.read_u8();
+
+        obj.action_bars->pet_enabled = static_cast<PetEnabled>(reader.read_u8());
+
+        for (auto i = 0; i < 10; ++i) {
+            obj.action_bars->action_bars[i] = reader.read_u32();
+        }
+
+        obj.action_bars->amount_of_spells = reader.read_u8();
+
+        for (uint8_t i = 0; i < obj.action_bars->amount_of_spells; ++i) {
+            obj.action_bars->spells.push_back(reader.read_u32());
+        }
+
+        obj.action_bars->amount_of_cooldowns = reader.read_u8();
+
+        for (uint8_t i = 0; i < obj.action_bars->amount_of_cooldowns; ++i) {
+            obj.action_bars->cooldowns.push_back(::wow_world_messages::vanilla::PetSpellCooldown_read(reader));
+        }
+
+    }
+    return obj;
+}
+
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_PET_SPELLS::write() const {
+    const auto& obj = *this;
+    auto writer = Writer(SMSG_PET_SPELLS_size(obj));
+
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_PET_SPELLS_size(obj) + 2)); /* size */
+
+    writer.write_u16(0x00000179); /* opcode */
+
+    writer.write_u64(obj.pet);
+
+    if(obj.action_bars) {
+        writer.write_u32(obj.action_bars->duration);
+
+        writer.write_u8(static_cast<uint8_t>(obj.action_bars->react));
+
+        writer.write_u8(static_cast<uint8_t>(obj.action_bars->command));
+
+        writer.write_u8(obj.action_bars->unknown);
+
+        writer.write_u8(static_cast<uint8_t>(obj.action_bars->pet_enabled));
+
+        for (const auto& v : obj.action_bars->action_bars) {
+            writer.write_u32(v);
+        }
+
+        writer.write_u8(obj.action_bars->amount_of_spells);
+
+        for (const auto& v : obj.action_bars->spells) {
+            writer.write_u32(v);
+        }
+
+        writer.write_u8(obj.action_bars->amount_of_cooldowns);
+
+        for (const auto& v : obj.action_bars->cooldowns) {
+            PetSpellCooldown_write(writer, v);
+        }
+
+    }
+    return writer.m_buf;
+}
+
 SMSG_PET_MODE SMSG_PET_MODE_read(Reader& reader) {
-    SMSG_PET_MODE obj;
+    SMSG_PET_MODE obj{};
 
     obj.guid = reader.read_u64();
 
@@ -10692,11 +11419,11 @@ SMSG_PET_MODE SMSG_PET_MODE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_PET_MODE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_PET_MODE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 2)); /* size */
 
     writer.write_u16(0x0000017a); /* opcode */
 
@@ -10714,23 +11441,71 @@ std::vector<unsigned char> SMSG_PET_MODE::write() const {
 }
 
 CMSG_GOSSIP_HELLO CMSG_GOSSIP_HELLO_read(Reader& reader) {
-    CMSG_GOSSIP_HELLO obj;
+    CMSG_GOSSIP_HELLO obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_GOSSIP_HELLO::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GOSSIP_HELLO::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x0000017b); /* opcode */
 
     writer.write_u64(obj.guid);
 
+    return writer.m_buf;
+}
+
+static size_t CMSG_GOSSIP_SELECT_OPTION_size(const CMSG_GOSSIP_SELECT_OPTION& obj) {
+    size_t _size = 12;
+
+    if(obj.unknown) {
+        _size += 1 + obj.unknown->code.size();
+    }
+
+    return _size;
+}
+
+CMSG_GOSSIP_SELECT_OPTION CMSG_GOSSIP_SELECT_OPTION_read(Reader& reader, size_t body_size) {
+    CMSG_GOSSIP_SELECT_OPTION obj{};
+    size_t _size = 0;
+
+    obj.guid = reader.read_u64();
+    _size += 8;
+
+    obj.gossip_list_id = reader.read_u32();
+    _size += 4;
+
+    if (_size < body_size) {
+        obj.unknown = std::unique_ptr<vanilla::CMSG_GOSSIP_SELECT_OPTION::Unknown>(new vanilla::CMSG_GOSSIP_SELECT_OPTION::Unknown());
+
+        obj.unknown->code = reader.read_cstring();
+
+    }
+    return obj;
+}
+
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GOSSIP_SELECT_OPTION::write() const {
+    const auto& obj = *this;
+    auto writer = Writer(CMSG_GOSSIP_SELECT_OPTION_size(obj));
+
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_GOSSIP_SELECT_OPTION_size(obj) + 4)); /* size */
+
+    writer.write_u32(0x0000017c); /* opcode */
+
+    writer.write_u64(obj.guid);
+
+    writer.write_u32(obj.gossip_list_id);
+
+    if(obj.unknown) {
+        writer.write_cstring(obj.unknown->code);
+
+    }
     return writer.m_buf;
 }
 
@@ -10749,7 +11524,7 @@ static size_t SMSG_GOSSIP_MESSAGE_size(const SMSG_GOSSIP_MESSAGE& obj) {
 }
 
 SMSG_GOSSIP_MESSAGE SMSG_GOSSIP_MESSAGE_read(Reader& reader) {
-    SMSG_GOSSIP_MESSAGE obj;
+    SMSG_GOSSIP_MESSAGE obj{};
 
     obj.guid = reader.read_u64();
 
@@ -10757,24 +11532,24 @@ SMSG_GOSSIP_MESSAGE SMSG_GOSSIP_MESSAGE_read(Reader& reader) {
 
     obj.amount_of_gossip_items = reader.read_u32();
 
-    for (auto i = 0; i < obj.amount_of_gossip_items; ++i) {
+    for (uint32_t i = 0; i < obj.amount_of_gossip_items; ++i) {
         obj.gossips.push_back(::wow_world_messages::vanilla::GossipItem_read(reader));
     }
 
     obj.amount_of_quests = reader.read_u32();
 
-    for (auto i = 0; i < obj.amount_of_quests; ++i) {
+    for (uint32_t i = 0; i < obj.amount_of_quests; ++i) {
         obj.quests.push_back(::wow_world_messages::vanilla::QuestItem_read(reader));
     }
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_GOSSIP_MESSAGE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_GOSSIP_MESSAGE::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_GOSSIP_MESSAGE_size(obj));
 
-    writer.write_u16_be(SMSG_GOSSIP_MESSAGE_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_GOSSIP_MESSAGE_size(obj) + 2)); /* size */
 
     writer.write_u16(0x0000017d); /* opcode */
 
@@ -10797,10 +11572,10 @@ std::vector<unsigned char> SMSG_GOSSIP_MESSAGE::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> SMSG_GOSSIP_COMPLETE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_GOSSIP_COMPLETE::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 2)); /* size */
 
     writer.write_u16(0x0000017e); /* opcode */
 
@@ -10808,7 +11583,7 @@ std::vector<unsigned char> SMSG_GOSSIP_COMPLETE::write() const {
 }
 
 CMSG_NPC_TEXT_QUERY CMSG_NPC_TEXT_QUERY_read(Reader& reader) {
-    CMSG_NPC_TEXT_QUERY obj;
+    CMSG_NPC_TEXT_QUERY obj{};
 
     obj.text_id = reader.read_u32();
 
@@ -10817,11 +11592,11 @@ CMSG_NPC_TEXT_QUERY CMSG_NPC_TEXT_QUERY_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_NPC_TEXT_QUERY::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_NPC_TEXT_QUERY::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 4)); /* size */
 
     writer.write_u32(0x0000017f); /* opcode */
 
@@ -10843,7 +11618,7 @@ static size_t SMSG_NPC_TEXT_UPDATE_size(const SMSG_NPC_TEXT_UPDATE& obj) {
 }
 
 SMSG_NPC_TEXT_UPDATE SMSG_NPC_TEXT_UPDATE_read(Reader& reader) {
-    SMSG_NPC_TEXT_UPDATE obj;
+    SMSG_NPC_TEXT_UPDATE obj{};
 
     obj.text_id = reader.read_u32();
 
@@ -10854,11 +11629,11 @@ SMSG_NPC_TEXT_UPDATE SMSG_NPC_TEXT_UPDATE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_NPC_TEXT_UPDATE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_NPC_TEXT_UPDATE::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_NPC_TEXT_UPDATE_size(obj));
 
-    writer.write_u16_be(SMSG_NPC_TEXT_UPDATE_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_NPC_TEXT_UPDATE_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000180); /* opcode */
 
@@ -10872,18 +11647,18 @@ std::vector<unsigned char> SMSG_NPC_TEXT_UPDATE::write() const {
 }
 
 CMSG_QUESTGIVER_STATUS_QUERY CMSG_QUESTGIVER_STATUS_QUERY_read(Reader& reader) {
-    CMSG_QUESTGIVER_STATUS_QUERY obj;
+    CMSG_QUESTGIVER_STATUS_QUERY obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_QUESTGIVER_STATUS_QUERY::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_QUESTGIVER_STATUS_QUERY::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x00000182); /* opcode */
 
@@ -10893,7 +11668,7 @@ std::vector<unsigned char> CMSG_QUESTGIVER_STATUS_QUERY::write() const {
 }
 
 SMSG_QUESTGIVER_STATUS SMSG_QUESTGIVER_STATUS_read(Reader& reader) {
-    SMSG_QUESTGIVER_STATUS obj;
+    SMSG_QUESTGIVER_STATUS obj{};
 
     obj.guid = reader.read_u64();
 
@@ -10902,11 +11677,11 @@ SMSG_QUESTGIVER_STATUS SMSG_QUESTGIVER_STATUS_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_QUESTGIVER_STATUS::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_QUESTGIVER_STATUS::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 2)); /* size */
 
     writer.write_u16(0x00000183); /* opcode */
 
@@ -10918,18 +11693,18 @@ std::vector<unsigned char> SMSG_QUESTGIVER_STATUS::write() const {
 }
 
 CMSG_QUESTGIVER_HELLO CMSG_QUESTGIVER_HELLO_read(Reader& reader) {
-    CMSG_QUESTGIVER_HELLO obj;
+    CMSG_QUESTGIVER_HELLO obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_QUESTGIVER_HELLO::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_QUESTGIVER_HELLO::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x00000184); /* opcode */
 
@@ -10949,7 +11724,7 @@ static size_t SMSG_QUESTGIVER_QUEST_LIST_size(const SMSG_QUESTGIVER_QUEST_LIST& 
 }
 
 SMSG_QUESTGIVER_QUEST_LIST SMSG_QUESTGIVER_QUEST_LIST_read(Reader& reader) {
-    SMSG_QUESTGIVER_QUEST_LIST obj;
+    SMSG_QUESTGIVER_QUEST_LIST obj{};
 
     obj.npc = reader.read_u64();
 
@@ -10961,18 +11736,18 @@ SMSG_QUESTGIVER_QUEST_LIST SMSG_QUESTGIVER_QUEST_LIST_read(Reader& reader) {
 
     obj.amount_of_entries = reader.read_u8();
 
-    for (auto i = 0; i < obj.amount_of_entries; ++i) {
+    for (uint8_t i = 0; i < obj.amount_of_entries; ++i) {
         obj.quest_items.push_back(::wow_world_messages::vanilla::QuestItem_read(reader));
     }
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_QUESTGIVER_QUEST_LIST::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_QUESTGIVER_QUEST_LIST::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_QUESTGIVER_QUEST_LIST_size(obj));
 
-    writer.write_u16_be(SMSG_QUESTGIVER_QUEST_LIST_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_QUESTGIVER_QUEST_LIST_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000185); /* opcode */
 
@@ -10994,7 +11769,7 @@ std::vector<unsigned char> SMSG_QUESTGIVER_QUEST_LIST::write() const {
 }
 
 CMSG_QUESTGIVER_QUERY_QUEST CMSG_QUESTGIVER_QUERY_QUEST_read(Reader& reader) {
-    CMSG_QUESTGIVER_QUERY_QUEST obj;
+    CMSG_QUESTGIVER_QUERY_QUEST obj{};
 
     obj.guid = reader.read_u64();
 
@@ -11003,11 +11778,11 @@ CMSG_QUESTGIVER_QUERY_QUEST CMSG_QUESTGIVER_QUERY_QUEST_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_QUESTGIVER_QUERY_QUEST::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_QUESTGIVER_QUERY_QUEST::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 4)); /* size */
 
     writer.write_u32(0x00000186); /* opcode */
 
@@ -11018,10 +11793,10 @@ std::vector<unsigned char> CMSG_QUESTGIVER_QUERY_QUEST::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_QUESTGIVER_QUEST_AUTOLAUNCH::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_QUESTGIVER_QUEST_AUTOLAUNCH::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x00000187); /* opcode */
 
@@ -11033,7 +11808,7 @@ static size_t SMSG_QUESTGIVER_QUEST_DETAILS_size(const SMSG_QUESTGIVER_QUEST_DET
 }
 
 SMSG_QUESTGIVER_QUEST_DETAILS SMSG_QUESTGIVER_QUEST_DETAILS_read(Reader& reader) {
-    SMSG_QUESTGIVER_QUEST_DETAILS obj;
+    SMSG_QUESTGIVER_QUEST_DETAILS obj{};
 
     obj.guid = reader.read_u64();
 
@@ -11049,13 +11824,13 @@ SMSG_QUESTGIVER_QUEST_DETAILS SMSG_QUESTGIVER_QUEST_DETAILS_read(Reader& reader)
 
     obj.amount_of_choice_item_rewards = reader.read_u32();
 
-    for (auto i = 0; i < obj.amount_of_choice_item_rewards; ++i) {
+    for (uint32_t i = 0; i < obj.amount_of_choice_item_rewards; ++i) {
         obj.choice_item_rewards.push_back(::wow_world_messages::vanilla::QuestItemReward_read(reader));
     }
 
     obj.amount_of_item_rewards = reader.read_u32();
 
-    for (auto i = 0; i < obj.amount_of_item_rewards; ++i) {
+    for (uint32_t i = 0; i < obj.amount_of_item_rewards; ++i) {
         obj.item_rewards.push_back(::wow_world_messages::vanilla::QuestItemReward_read(reader));
     }
 
@@ -11065,18 +11840,18 @@ SMSG_QUESTGIVER_QUEST_DETAILS SMSG_QUESTGIVER_QUEST_DETAILS_read(Reader& reader)
 
     obj.amount_of_emotes = reader.read_u32();
 
-    for (auto i = 0; i < obj.amount_of_emotes; ++i) {
+    for (uint32_t i = 0; i < obj.amount_of_emotes; ++i) {
         obj.emotes.push_back(::wow_world_messages::vanilla::QuestDetailsEmote_read(reader));
     }
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_QUESTGIVER_QUEST_DETAILS::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_QUESTGIVER_QUEST_DETAILS::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_QUESTGIVER_QUEST_DETAILS_size(obj));
 
-    writer.write_u16_be(SMSG_QUESTGIVER_QUEST_DETAILS_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_QUESTGIVER_QUEST_DETAILS_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000188); /* opcode */
 
@@ -11118,7 +11893,7 @@ std::vector<unsigned char> SMSG_QUESTGIVER_QUEST_DETAILS::write() const {
 }
 
 CMSG_QUESTGIVER_ACCEPT_QUEST CMSG_QUESTGIVER_ACCEPT_QUEST_read(Reader& reader) {
-    CMSG_QUESTGIVER_ACCEPT_QUEST obj;
+    CMSG_QUESTGIVER_ACCEPT_QUEST obj{};
 
     obj.guid = reader.read_u64();
 
@@ -11127,11 +11902,11 @@ CMSG_QUESTGIVER_ACCEPT_QUEST CMSG_QUESTGIVER_ACCEPT_QUEST_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_QUESTGIVER_ACCEPT_QUEST::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_QUESTGIVER_ACCEPT_QUEST::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 4)); /* size */
 
     writer.write_u32(0x00000189); /* opcode */
 
@@ -11143,7 +11918,7 @@ std::vector<unsigned char> CMSG_QUESTGIVER_ACCEPT_QUEST::write() const {
 }
 
 CMSG_QUESTGIVER_COMPLETE_QUEST CMSG_QUESTGIVER_COMPLETE_QUEST_read(Reader& reader) {
-    CMSG_QUESTGIVER_COMPLETE_QUEST obj;
+    CMSG_QUESTGIVER_COMPLETE_QUEST obj{};
 
     obj.guid = reader.read_u64();
 
@@ -11152,11 +11927,11 @@ CMSG_QUESTGIVER_COMPLETE_QUEST CMSG_QUESTGIVER_COMPLETE_QUEST_read(Reader& reade
     return obj;
 }
 
-std::vector<unsigned char> CMSG_QUESTGIVER_COMPLETE_QUEST::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_QUESTGIVER_COMPLETE_QUEST::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 4)); /* size */
 
     writer.write_u32(0x0000018a); /* opcode */
 
@@ -11172,7 +11947,7 @@ static size_t SMSG_QUESTGIVER_REQUEST_ITEMS_size(const SMSG_QUESTGIVER_REQUEST_I
 }
 
 SMSG_QUESTGIVER_REQUEST_ITEMS SMSG_QUESTGIVER_REQUEST_ITEMS_read(Reader& reader) {
-    SMSG_QUESTGIVER_REQUEST_ITEMS obj;
+    SMSG_QUESTGIVER_REQUEST_ITEMS obj{};
 
     obj.npc = reader.read_u64();
 
@@ -11192,7 +11967,7 @@ SMSG_QUESTGIVER_REQUEST_ITEMS SMSG_QUESTGIVER_REQUEST_ITEMS_read(Reader& reader)
 
     obj.amount_of_required_items = reader.read_u32();
 
-    for (auto i = 0; i < obj.amount_of_required_items; ++i) {
+    for (uint32_t i = 0; i < obj.amount_of_required_items; ++i) {
         obj.required_items.push_back(::wow_world_messages::vanilla::QuestItemRequirement_read(reader));
     }
 
@@ -11207,11 +11982,11 @@ SMSG_QUESTGIVER_REQUEST_ITEMS SMSG_QUESTGIVER_REQUEST_ITEMS_read(Reader& reader)
     return obj;
 }
 
-std::vector<unsigned char> SMSG_QUESTGIVER_REQUEST_ITEMS::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_QUESTGIVER_REQUEST_ITEMS::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_QUESTGIVER_REQUEST_ITEMS_size(obj));
 
-    writer.write_u16_be(SMSG_QUESTGIVER_REQUEST_ITEMS_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_QUESTGIVER_REQUEST_ITEMS_size(obj) + 2)); /* size */
 
     writer.write_u16(0x0000018b); /* opcode */
 
@@ -11249,7 +12024,7 @@ std::vector<unsigned char> SMSG_QUESTGIVER_REQUEST_ITEMS::write() const {
 }
 
 CMSG_QUESTGIVER_REQUEST_REWARD CMSG_QUESTGIVER_REQUEST_REWARD_read(Reader& reader) {
-    CMSG_QUESTGIVER_REQUEST_REWARD obj;
+    CMSG_QUESTGIVER_REQUEST_REWARD obj{};
 
     obj.guid = reader.read_u64();
 
@@ -11258,11 +12033,11 @@ CMSG_QUESTGIVER_REQUEST_REWARD CMSG_QUESTGIVER_REQUEST_REWARD_read(Reader& reade
     return obj;
 }
 
-std::vector<unsigned char> CMSG_QUESTGIVER_REQUEST_REWARD::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_QUESTGIVER_REQUEST_REWARD::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 4)); /* size */
 
     writer.write_u32(0x0000018c); /* opcode */
 
@@ -11278,7 +12053,7 @@ static size_t SMSG_QUESTGIVER_OFFER_REWARD_size(const SMSG_QUESTGIVER_OFFER_REWA
 }
 
 SMSG_QUESTGIVER_OFFER_REWARD SMSG_QUESTGIVER_OFFER_REWARD_read(Reader& reader) {
-    SMSG_QUESTGIVER_OFFER_REWARD obj;
+    SMSG_QUESTGIVER_OFFER_REWARD obj{};
 
     obj.npc = reader.read_u64();
 
@@ -11292,19 +12067,19 @@ SMSG_QUESTGIVER_OFFER_REWARD SMSG_QUESTGIVER_OFFER_REWARD_read(Reader& reader) {
 
     obj.amount_of_emotes = reader.read_u32();
 
-    for (auto i = 0; i < obj.amount_of_emotes; ++i) {
+    for (uint32_t i = 0; i < obj.amount_of_emotes; ++i) {
         obj.emotes.push_back(::wow_world_messages::vanilla::NpcTextUpdateEmote_read(reader));
     }
 
     obj.amount_of_choice_item_rewards = reader.read_u32();
 
-    for (auto i = 0; i < obj.amount_of_choice_item_rewards; ++i) {
+    for (uint32_t i = 0; i < obj.amount_of_choice_item_rewards; ++i) {
         obj.choice_item_rewards.push_back(::wow_world_messages::vanilla::QuestItemRequirement_read(reader));
     }
 
     obj.amount_of_item_rewards = reader.read_u32();
 
-    for (auto i = 0; i < obj.amount_of_item_rewards; ++i) {
+    for (uint32_t i = 0; i < obj.amount_of_item_rewards; ++i) {
         obj.item_rewards.push_back(::wow_world_messages::vanilla::QuestItemRequirement_read(reader));
     }
 
@@ -11317,11 +12092,11 @@ SMSG_QUESTGIVER_OFFER_REWARD SMSG_QUESTGIVER_OFFER_REWARD_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_QUESTGIVER_OFFER_REWARD::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_QUESTGIVER_OFFER_REWARD::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_QUESTGIVER_OFFER_REWARD_size(obj));
 
-    writer.write_u16_be(SMSG_QUESTGIVER_OFFER_REWARD_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_QUESTGIVER_OFFER_REWARD_size(obj) + 2)); /* size */
 
     writer.write_u16(0x0000018d); /* opcode */
 
@@ -11363,7 +12138,7 @@ std::vector<unsigned char> SMSG_QUESTGIVER_OFFER_REWARD::write() const {
 }
 
 CMSG_QUESTGIVER_CHOOSE_REWARD CMSG_QUESTGIVER_CHOOSE_REWARD_read(Reader& reader) {
-    CMSG_QUESTGIVER_CHOOSE_REWARD obj;
+    CMSG_QUESTGIVER_CHOOSE_REWARD obj{};
 
     obj.guid = reader.read_u64();
 
@@ -11374,11 +12149,11 @@ CMSG_QUESTGIVER_CHOOSE_REWARD CMSG_QUESTGIVER_CHOOSE_REWARD_read(Reader& reader)
     return obj;
 }
 
-std::vector<unsigned char> CMSG_QUESTGIVER_CHOOSE_REWARD::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_QUESTGIVER_CHOOSE_REWARD::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0010);
 
-    writer.write_u16_be(0x0010 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0010 + 4)); /* size */
 
     writer.write_u32(0x0000018e); /* opcode */
 
@@ -11392,18 +12167,18 @@ std::vector<unsigned char> CMSG_QUESTGIVER_CHOOSE_REWARD::write() const {
 }
 
 SMSG_QUESTGIVER_QUEST_INVALID SMSG_QUESTGIVER_QUEST_INVALID_read(Reader& reader) {
-    SMSG_QUESTGIVER_QUEST_INVALID obj;
+    SMSG_QUESTGIVER_QUEST_INVALID obj{};
 
     obj.msg = static_cast<QuestFailedReason>(reader.read_u32());
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_QUESTGIVER_QUEST_INVALID::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_QUESTGIVER_QUEST_INVALID::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 2)); /* size */
 
     writer.write_u16(0x0000018f); /* opcode */
 
@@ -11412,10 +12187,10 @@ std::vector<unsigned char> SMSG_QUESTGIVER_QUEST_INVALID::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_QUESTGIVER_CANCEL::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_QUESTGIVER_CANCEL::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x00000190); /* opcode */
 
@@ -11427,7 +12202,7 @@ static size_t SMSG_QUESTGIVER_QUEST_COMPLETE_size(const SMSG_QUESTGIVER_QUEST_CO
 }
 
 SMSG_QUESTGIVER_QUEST_COMPLETE SMSG_QUESTGIVER_QUEST_COMPLETE_read(Reader& reader) {
-    SMSG_QUESTGIVER_QUEST_COMPLETE obj;
+    SMSG_QUESTGIVER_QUEST_COMPLETE obj{};
 
     obj.quest_id = reader.read_u32();
 
@@ -11439,18 +12214,18 @@ SMSG_QUESTGIVER_QUEST_COMPLETE SMSG_QUESTGIVER_QUEST_COMPLETE_read(Reader& reade
 
     obj.amount_of_item_rewards = reader.read_u32();
 
-    for (auto i = 0; i < obj.amount_of_item_rewards; ++i) {
+    for (uint32_t i = 0; i < obj.amount_of_item_rewards; ++i) {
         obj.item_rewards.push_back(::wow_world_messages::vanilla::QuestItemReward_read(reader));
     }
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_QUESTGIVER_QUEST_COMPLETE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_QUESTGIVER_QUEST_COMPLETE::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_QUESTGIVER_QUEST_COMPLETE_size(obj));
 
-    writer.write_u16_be(SMSG_QUESTGIVER_QUEST_COMPLETE_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_QUESTGIVER_QUEST_COMPLETE_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000191); /* opcode */
 
@@ -11472,7 +12247,7 @@ std::vector<unsigned char> SMSG_QUESTGIVER_QUEST_COMPLETE::write() const {
 }
 
 SMSG_QUESTGIVER_QUEST_FAILED SMSG_QUESTGIVER_QUEST_FAILED_read(Reader& reader) {
-    SMSG_QUESTGIVER_QUEST_FAILED obj;
+    SMSG_QUESTGIVER_QUEST_FAILED obj{};
 
     obj.quest_id = reader.read_u32();
 
@@ -11481,11 +12256,11 @@ SMSG_QUESTGIVER_QUEST_FAILED SMSG_QUESTGIVER_QUEST_FAILED_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_QUESTGIVER_QUEST_FAILED::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_QUESTGIVER_QUEST_FAILED::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 2)); /* size */
 
     writer.write_u16(0x00000192); /* opcode */
 
@@ -11497,7 +12272,7 @@ std::vector<unsigned char> SMSG_QUESTGIVER_QUEST_FAILED::write() const {
 }
 
 CMSG_QUESTLOG_SWAP_QUEST CMSG_QUESTLOG_SWAP_QUEST_read(Reader& reader) {
-    CMSG_QUESTLOG_SWAP_QUEST obj;
+    CMSG_QUESTLOG_SWAP_QUEST obj{};
 
     obj.slot1 = reader.read_u8();
 
@@ -11506,11 +12281,11 @@ CMSG_QUESTLOG_SWAP_QUEST CMSG_QUESTLOG_SWAP_QUEST_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_QUESTLOG_SWAP_QUEST::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_QUESTLOG_SWAP_QUEST::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0002);
 
-    writer.write_u16_be(0x0002 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0002 + 4)); /* size */
 
     writer.write_u32(0x00000193); /* opcode */
 
@@ -11522,18 +12297,18 @@ std::vector<unsigned char> CMSG_QUESTLOG_SWAP_QUEST::write() const {
 }
 
 CMSG_QUESTLOG_REMOVE_QUEST CMSG_QUESTLOG_REMOVE_QUEST_read(Reader& reader) {
-    CMSG_QUESTLOG_REMOVE_QUEST obj;
+    CMSG_QUESTLOG_REMOVE_QUEST obj{};
 
     obj.slot = reader.read_u8();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_QUESTLOG_REMOVE_QUEST::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_QUESTLOG_REMOVE_QUEST::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0001);
 
-    writer.write_u16_be(0x0001 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0001 + 4)); /* size */
 
     writer.write_u32(0x00000194); /* opcode */
 
@@ -11542,10 +12317,10 @@ std::vector<unsigned char> CMSG_QUESTLOG_REMOVE_QUEST::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> SMSG_QUESTLOG_FULL::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_QUESTLOG_FULL::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 2)); /* size */
 
     writer.write_u16(0x00000195); /* opcode */
 
@@ -11553,18 +12328,18 @@ std::vector<unsigned char> SMSG_QUESTLOG_FULL::write() const {
 }
 
 SMSG_QUESTUPDATE_FAILED SMSG_QUESTUPDATE_FAILED_read(Reader& reader) {
-    SMSG_QUESTUPDATE_FAILED obj;
+    SMSG_QUESTUPDATE_FAILED obj{};
 
     obj.quest_id = reader.read_u32();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_QUESTUPDATE_FAILED::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_QUESTUPDATE_FAILED::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 2)); /* size */
 
     writer.write_u16(0x00000196); /* opcode */
 
@@ -11574,18 +12349,18 @@ std::vector<unsigned char> SMSG_QUESTUPDATE_FAILED::write() const {
 }
 
 SMSG_QUESTUPDATE_FAILEDTIMER SMSG_QUESTUPDATE_FAILEDTIMER_read(Reader& reader) {
-    SMSG_QUESTUPDATE_FAILEDTIMER obj;
+    SMSG_QUESTUPDATE_FAILEDTIMER obj{};
 
     obj.quest_id = reader.read_u32();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_QUESTUPDATE_FAILEDTIMER::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_QUESTUPDATE_FAILEDTIMER::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 2)); /* size */
 
     writer.write_u16(0x00000197); /* opcode */
 
@@ -11595,18 +12370,18 @@ std::vector<unsigned char> SMSG_QUESTUPDATE_FAILEDTIMER::write() const {
 }
 
 SMSG_QUESTUPDATE_COMPLETE SMSG_QUESTUPDATE_COMPLETE_read(Reader& reader) {
-    SMSG_QUESTUPDATE_COMPLETE obj;
+    SMSG_QUESTUPDATE_COMPLETE obj{};
 
     obj.quest_id = reader.read_u32();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_QUESTUPDATE_COMPLETE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_QUESTUPDATE_COMPLETE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 2)); /* size */
 
     writer.write_u16(0x00000198); /* opcode */
 
@@ -11616,7 +12391,7 @@ std::vector<unsigned char> SMSG_QUESTUPDATE_COMPLETE::write() const {
 }
 
 SMSG_QUESTUPDATE_ADD_KILL SMSG_QUESTUPDATE_ADD_KILL_read(Reader& reader) {
-    SMSG_QUESTUPDATE_ADD_KILL obj;
+    SMSG_QUESTUPDATE_ADD_KILL obj{};
 
     obj.quest_id = reader.read_u32();
 
@@ -11631,11 +12406,11 @@ SMSG_QUESTUPDATE_ADD_KILL SMSG_QUESTUPDATE_ADD_KILL_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_QUESTUPDATE_ADD_KILL::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_QUESTUPDATE_ADD_KILL::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0018);
 
-    writer.write_u16_be(0x0018 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0018 + 2)); /* size */
 
     writer.write_u16(0x00000199); /* opcode */
 
@@ -11653,7 +12428,7 @@ std::vector<unsigned char> SMSG_QUESTUPDATE_ADD_KILL::write() const {
 }
 
 SMSG_QUESTUPDATE_ADD_ITEM SMSG_QUESTUPDATE_ADD_ITEM_read(Reader& reader) {
-    SMSG_QUESTUPDATE_ADD_ITEM obj;
+    SMSG_QUESTUPDATE_ADD_ITEM obj{};
 
     obj.required_item_id = reader.read_u32();
 
@@ -11662,11 +12437,11 @@ SMSG_QUESTUPDATE_ADD_ITEM SMSG_QUESTUPDATE_ADD_ITEM_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_QUESTUPDATE_ADD_ITEM::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_QUESTUPDATE_ADD_ITEM::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 2)); /* size */
 
     writer.write_u16(0x0000019a); /* opcode */
 
@@ -11678,18 +12453,18 @@ std::vector<unsigned char> SMSG_QUESTUPDATE_ADD_ITEM::write() const {
 }
 
 CMSG_QUEST_CONFIRM_ACCEPT CMSG_QUEST_CONFIRM_ACCEPT_read(Reader& reader) {
-    CMSG_QUEST_CONFIRM_ACCEPT obj;
+    CMSG_QUEST_CONFIRM_ACCEPT obj{};
 
     obj.quest_id = reader.read_u32();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_QUEST_CONFIRM_ACCEPT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_QUEST_CONFIRM_ACCEPT::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 4)); /* size */
 
     writer.write_u32(0x0000019b); /* opcode */
 
@@ -11703,7 +12478,7 @@ static size_t SMSG_QUEST_CONFIRM_ACCEPT_size(const SMSG_QUEST_CONFIRM_ACCEPT& ob
 }
 
 SMSG_QUEST_CONFIRM_ACCEPT SMSG_QUEST_CONFIRM_ACCEPT_read(Reader& reader) {
-    SMSG_QUEST_CONFIRM_ACCEPT obj;
+    SMSG_QUEST_CONFIRM_ACCEPT obj{};
 
     obj.quest_id = reader.read_u32();
 
@@ -11714,11 +12489,11 @@ SMSG_QUEST_CONFIRM_ACCEPT SMSG_QUEST_CONFIRM_ACCEPT_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_QUEST_CONFIRM_ACCEPT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_QUEST_CONFIRM_ACCEPT::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_QUEST_CONFIRM_ACCEPT_size(obj));
 
-    writer.write_u16_be(SMSG_QUEST_CONFIRM_ACCEPT_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_QUEST_CONFIRM_ACCEPT_size(obj) + 2)); /* size */
 
     writer.write_u16(0x0000019c); /* opcode */
 
@@ -11732,18 +12507,18 @@ std::vector<unsigned char> SMSG_QUEST_CONFIRM_ACCEPT::write() const {
 }
 
 CMSG_PUSHQUESTTOPARTY CMSG_PUSHQUESTTOPARTY_read(Reader& reader) {
-    CMSG_PUSHQUESTTOPARTY obj;
+    CMSG_PUSHQUESTTOPARTY obj{};
 
     obj.quest_id = reader.read_u32();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_PUSHQUESTTOPARTY::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_PUSHQUESTTOPARTY::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 4)); /* size */
 
     writer.write_u32(0x0000019d); /* opcode */
 
@@ -11753,18 +12528,18 @@ std::vector<unsigned char> CMSG_PUSHQUESTTOPARTY::write() const {
 }
 
 CMSG_LIST_INVENTORY CMSG_LIST_INVENTORY_read(Reader& reader) {
-    CMSG_LIST_INVENTORY obj;
+    CMSG_LIST_INVENTORY obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_LIST_INVENTORY::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_LIST_INVENTORY::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x0000019e); /* opcode */
 
@@ -11778,24 +12553,24 @@ static size_t SMSG_LIST_INVENTORY_size(const SMSG_LIST_INVENTORY& obj) {
 }
 
 SMSG_LIST_INVENTORY SMSG_LIST_INVENTORY_read(Reader& reader) {
-    SMSG_LIST_INVENTORY obj;
+    SMSG_LIST_INVENTORY obj{};
 
     obj.vendor = reader.read_u64();
 
     obj.amount_of_items = reader.read_u8();
 
-    for (auto i = 0; i < obj.amount_of_items; ++i) {
+    for (uint8_t i = 0; i < obj.amount_of_items; ++i) {
         obj.items.push_back(::wow_world_messages::vanilla::ListInventoryItem_read(reader));
     }
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_LIST_INVENTORY::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_LIST_INVENTORY::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_LIST_INVENTORY_size(obj));
 
-    writer.write_u16_be(SMSG_LIST_INVENTORY_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_LIST_INVENTORY_size(obj) + 2)); /* size */
 
     writer.write_u16(0x0000019f); /* opcode */
 
@@ -11811,7 +12586,7 @@ std::vector<unsigned char> SMSG_LIST_INVENTORY::write() const {
 }
 
 CMSG_SELL_ITEM CMSG_SELL_ITEM_read(Reader& reader) {
-    CMSG_SELL_ITEM obj;
+    CMSG_SELL_ITEM obj{};
 
     obj.vendor = reader.read_u64();
 
@@ -11822,11 +12597,11 @@ CMSG_SELL_ITEM CMSG_SELL_ITEM_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_SELL_ITEM::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_SELL_ITEM::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0011);
 
-    writer.write_u16_be(0x0011 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0011 + 4)); /* size */
 
     writer.write_u32(0x000001a0); /* opcode */
 
@@ -11840,7 +12615,7 @@ std::vector<unsigned char> CMSG_SELL_ITEM::write() const {
 }
 
 SMSG_SELL_ITEM SMSG_SELL_ITEM_read(Reader& reader) {
-    SMSG_SELL_ITEM obj;
+    SMSG_SELL_ITEM obj{};
 
     obj.guid = reader.read_u64();
 
@@ -11851,11 +12626,11 @@ SMSG_SELL_ITEM SMSG_SELL_ITEM_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SELL_ITEM::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SELL_ITEM::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0011);
 
-    writer.write_u16_be(0x0011 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0011 + 2)); /* size */
 
     writer.write_u16(0x000001a1); /* opcode */
 
@@ -11869,7 +12644,7 @@ std::vector<unsigned char> SMSG_SELL_ITEM::write() const {
 }
 
 CMSG_BUY_ITEM CMSG_BUY_ITEM_read(Reader& reader) {
-    CMSG_BUY_ITEM obj;
+    CMSG_BUY_ITEM obj{};
 
     obj.vendor = reader.read_u64();
 
@@ -11882,11 +12657,11 @@ CMSG_BUY_ITEM CMSG_BUY_ITEM_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_BUY_ITEM::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_BUY_ITEM::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000e);
 
-    writer.write_u16_be(0x000e + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000e + 4)); /* size */
 
     writer.write_u32(0x000001a2); /* opcode */
 
@@ -11902,7 +12677,7 @@ std::vector<unsigned char> CMSG_BUY_ITEM::write() const {
 }
 
 CMSG_BUY_ITEM_IN_SLOT CMSG_BUY_ITEM_IN_SLOT_read(Reader& reader) {
-    CMSG_BUY_ITEM_IN_SLOT obj;
+    CMSG_BUY_ITEM_IN_SLOT obj{};
 
     obj.vendor = reader.read_u64();
 
@@ -11917,11 +12692,11 @@ CMSG_BUY_ITEM_IN_SLOT CMSG_BUY_ITEM_IN_SLOT_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_BUY_ITEM_IN_SLOT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_BUY_ITEM_IN_SLOT::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0016);
 
-    writer.write_u16_be(0x0016 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0016 + 4)); /* size */
 
     writer.write_u32(0x000001a3); /* opcode */
 
@@ -11939,7 +12714,7 @@ std::vector<unsigned char> CMSG_BUY_ITEM_IN_SLOT::write() const {
 }
 
 SMSG_BUY_ITEM SMSG_BUY_ITEM_read(Reader& reader) {
-    SMSG_BUY_ITEM obj;
+    SMSG_BUY_ITEM obj{};
 
     obj.guid = reader.read_u64();
 
@@ -11952,11 +12727,11 @@ SMSG_BUY_ITEM SMSG_BUY_ITEM_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_BUY_ITEM::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_BUY_ITEM::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0014);
 
-    writer.write_u16_be(0x0014 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0014 + 2)); /* size */
 
     writer.write_u16(0x000001a4); /* opcode */
 
@@ -11972,7 +12747,7 @@ std::vector<unsigned char> SMSG_BUY_ITEM::write() const {
 }
 
 SMSG_BUY_FAILED SMSG_BUY_FAILED_read(Reader& reader) {
-    SMSG_BUY_FAILED obj;
+    SMSG_BUY_FAILED obj{};
 
     obj.guid = reader.read_u64();
 
@@ -11983,11 +12758,11 @@ SMSG_BUY_FAILED SMSG_BUY_FAILED_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_BUY_FAILED::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_BUY_FAILED::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000d);
 
-    writer.write_u16_be(0x000d + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000d + 2)); /* size */
 
     writer.write_u16(0x000001a5); /* opcode */
 
@@ -12004,14 +12779,14 @@ static size_t SMSG_SHOWTAXINODES_size(const SMSG_SHOWTAXINODES& obj) {
     size_t _size = 16;
 
     for(const auto& v : obj.nodes) {
-        _size += 4;
+        _size += 4;;
     }
 
     return _size;
 }
 
 SMSG_SHOWTAXINODES SMSG_SHOWTAXINODES_read(Reader& reader, size_t body_size) {
-    SMSG_SHOWTAXINODES obj;
+    SMSG_SHOWTAXINODES obj{};
     size_t _size = 0;
 
     obj.unknown1 = reader.read_u32();
@@ -12031,11 +12806,11 @@ SMSG_SHOWTAXINODES SMSG_SHOWTAXINODES_read(Reader& reader, size_t body_size) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SHOWTAXINODES::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SHOWTAXINODES::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_SHOWTAXINODES_size(obj));
 
-    writer.write_u16_be(SMSG_SHOWTAXINODES_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_SHOWTAXINODES_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000001a9); /* opcode */
 
@@ -12053,18 +12828,18 @@ std::vector<unsigned char> SMSG_SHOWTAXINODES::write() const {
 }
 
 CMSG_TAXINODE_STATUS_QUERY CMSG_TAXINODE_STATUS_QUERY_read(Reader& reader) {
-    CMSG_TAXINODE_STATUS_QUERY obj;
+    CMSG_TAXINODE_STATUS_QUERY obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_TAXINODE_STATUS_QUERY::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_TAXINODE_STATUS_QUERY::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x000001aa); /* opcode */
 
@@ -12074,7 +12849,7 @@ std::vector<unsigned char> CMSG_TAXINODE_STATUS_QUERY::write() const {
 }
 
 SMSG_TAXINODE_STATUS SMSG_TAXINODE_STATUS_read(Reader& reader) {
-    SMSG_TAXINODE_STATUS obj;
+    SMSG_TAXINODE_STATUS obj{};
 
     obj.guid = reader.read_u64();
 
@@ -12083,11 +12858,11 @@ SMSG_TAXINODE_STATUS SMSG_TAXINODE_STATUS_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_TAXINODE_STATUS::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_TAXINODE_STATUS::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0009);
 
-    writer.write_u16_be(0x0009 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0009 + 2)); /* size */
 
     writer.write_u16(0x000001ab); /* opcode */
 
@@ -12099,18 +12874,18 @@ std::vector<unsigned char> SMSG_TAXINODE_STATUS::write() const {
 }
 
 CMSG_TAXIQUERYAVAILABLENODES CMSG_TAXIQUERYAVAILABLENODES_read(Reader& reader) {
-    CMSG_TAXIQUERYAVAILABLENODES obj;
+    CMSG_TAXIQUERYAVAILABLENODES obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_TAXIQUERYAVAILABLENODES::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_TAXIQUERYAVAILABLENODES::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x000001ac); /* opcode */
 
@@ -12120,7 +12895,7 @@ std::vector<unsigned char> CMSG_TAXIQUERYAVAILABLENODES::write() const {
 }
 
 CMSG_ACTIVATETAXI CMSG_ACTIVATETAXI_read(Reader& reader) {
-    CMSG_ACTIVATETAXI obj;
+    CMSG_ACTIVATETAXI obj{};
 
     obj.guid = reader.read_u64();
 
@@ -12131,11 +12906,11 @@ CMSG_ACTIVATETAXI CMSG_ACTIVATETAXI_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_ACTIVATETAXI::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_ACTIVATETAXI::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0010);
 
-    writer.write_u16_be(0x0010 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0010 + 4)); /* size */
 
     writer.write_u32(0x000001ad); /* opcode */
 
@@ -12149,18 +12924,18 @@ std::vector<unsigned char> CMSG_ACTIVATETAXI::write() const {
 }
 
 SMSG_ACTIVATETAXIREPLY SMSG_ACTIVATETAXIREPLY_read(Reader& reader) {
-    SMSG_ACTIVATETAXIREPLY obj;
+    SMSG_ACTIVATETAXIREPLY obj{};
 
     obj.reply = static_cast<ActivateTaxiReply>(reader.read_u32());
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_ACTIVATETAXIREPLY::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_ACTIVATETAXIREPLY::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 2)); /* size */
 
     writer.write_u16(0x000001ae); /* opcode */
 
@@ -12169,10 +12944,10 @@ std::vector<unsigned char> SMSG_ACTIVATETAXIREPLY::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> SMSG_NEW_TAXI_PATH::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_NEW_TAXI_PATH::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 2)); /* size */
 
     writer.write_u16(0x000001af); /* opcode */
 
@@ -12180,18 +12955,18 @@ std::vector<unsigned char> SMSG_NEW_TAXI_PATH::write() const {
 }
 
 CMSG_TRAINER_LIST CMSG_TRAINER_LIST_read(Reader& reader) {
-    CMSG_TRAINER_LIST obj;
+    CMSG_TRAINER_LIST obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_TRAINER_LIST::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_TRAINER_LIST::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x000001b0); /* opcode */
 
@@ -12205,7 +12980,7 @@ static size_t SMSG_TRAINER_LIST_size(const SMSG_TRAINER_LIST& obj) {
 }
 
 SMSG_TRAINER_LIST SMSG_TRAINER_LIST_read(Reader& reader) {
-    SMSG_TRAINER_LIST obj;
+    SMSG_TRAINER_LIST obj{};
 
     obj.guid = reader.read_u64();
 
@@ -12213,7 +12988,7 @@ SMSG_TRAINER_LIST SMSG_TRAINER_LIST_read(Reader& reader) {
 
     obj.amount_of_spells = reader.read_u32();
 
-    for (auto i = 0; i < obj.amount_of_spells; ++i) {
+    for (uint32_t i = 0; i < obj.amount_of_spells; ++i) {
         obj.spells.push_back(::wow_world_messages::vanilla::TrainerSpell_read(reader));
     }
 
@@ -12222,11 +12997,11 @@ SMSG_TRAINER_LIST SMSG_TRAINER_LIST_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_TRAINER_LIST::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_TRAINER_LIST::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_TRAINER_LIST_size(obj));
 
-    writer.write_u16_be(SMSG_TRAINER_LIST_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_TRAINER_LIST_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000001b1); /* opcode */
 
@@ -12246,7 +13021,7 @@ std::vector<unsigned char> SMSG_TRAINER_LIST::write() const {
 }
 
 CMSG_TRAINER_BUY_SPELL CMSG_TRAINER_BUY_SPELL_read(Reader& reader) {
-    CMSG_TRAINER_BUY_SPELL obj;
+    CMSG_TRAINER_BUY_SPELL obj{};
 
     obj.guid = reader.read_u64();
 
@@ -12255,11 +13030,11 @@ CMSG_TRAINER_BUY_SPELL CMSG_TRAINER_BUY_SPELL_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_TRAINER_BUY_SPELL::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_TRAINER_BUY_SPELL::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 4)); /* size */
 
     writer.write_u32(0x000001b2); /* opcode */
 
@@ -12271,7 +13046,7 @@ std::vector<unsigned char> CMSG_TRAINER_BUY_SPELL::write() const {
 }
 
 SMSG_TRAINER_BUY_SUCCEEDED SMSG_TRAINER_BUY_SUCCEEDED_read(Reader& reader) {
-    SMSG_TRAINER_BUY_SUCCEEDED obj;
+    SMSG_TRAINER_BUY_SUCCEEDED obj{};
 
     obj.guid = reader.read_u64();
 
@@ -12280,11 +13055,11 @@ SMSG_TRAINER_BUY_SUCCEEDED SMSG_TRAINER_BUY_SUCCEEDED_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_TRAINER_BUY_SUCCEEDED::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_TRAINER_BUY_SUCCEEDED::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 2)); /* size */
 
     writer.write_u16(0x000001b3); /* opcode */
 
@@ -12296,7 +13071,7 @@ std::vector<unsigned char> SMSG_TRAINER_BUY_SUCCEEDED::write() const {
 }
 
 SMSG_TRAINER_BUY_FAILED SMSG_TRAINER_BUY_FAILED_read(Reader& reader) {
-    SMSG_TRAINER_BUY_FAILED obj;
+    SMSG_TRAINER_BUY_FAILED obj{};
 
     obj.guid = reader.read_u64();
 
@@ -12307,11 +13082,11 @@ SMSG_TRAINER_BUY_FAILED SMSG_TRAINER_BUY_FAILED_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_TRAINER_BUY_FAILED::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_TRAINER_BUY_FAILED::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0010);
 
-    writer.write_u16_be(0x0010 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0010 + 2)); /* size */
 
     writer.write_u16(0x000001b4); /* opcode */
 
@@ -12325,18 +13100,18 @@ std::vector<unsigned char> SMSG_TRAINER_BUY_FAILED::write() const {
 }
 
 CMSG_BINDER_ACTIVATE CMSG_BINDER_ACTIVATE_read(Reader& reader) {
-    CMSG_BINDER_ACTIVATE obj;
+    CMSG_BINDER_ACTIVATE obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_BINDER_ACTIVATE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_BINDER_ACTIVATE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x000001b5); /* opcode */
 
@@ -12346,18 +13121,18 @@ std::vector<unsigned char> CMSG_BINDER_ACTIVATE::write() const {
 }
 
 CMSG_BANKER_ACTIVATE CMSG_BANKER_ACTIVATE_read(Reader& reader) {
-    CMSG_BANKER_ACTIVATE obj;
+    CMSG_BANKER_ACTIVATE obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_BANKER_ACTIVATE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_BANKER_ACTIVATE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x000001b7); /* opcode */
 
@@ -12367,18 +13142,18 @@ std::vector<unsigned char> CMSG_BANKER_ACTIVATE::write() const {
 }
 
 SMSG_SHOW_BANK SMSG_SHOW_BANK_read(Reader& reader) {
-    SMSG_SHOW_BANK obj;
+    SMSG_SHOW_BANK obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SHOW_BANK::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SHOW_BANK::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 2)); /* size */
 
     writer.write_u16(0x000001b8); /* opcode */
 
@@ -12388,18 +13163,18 @@ std::vector<unsigned char> SMSG_SHOW_BANK::write() const {
 }
 
 CMSG_BUY_BANK_SLOT CMSG_BUY_BANK_SLOT_read(Reader& reader) {
-    CMSG_BUY_BANK_SLOT obj;
+    CMSG_BUY_BANK_SLOT obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_BUY_BANK_SLOT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_BUY_BANK_SLOT::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x000001b9); /* opcode */
 
@@ -12409,18 +13184,18 @@ std::vector<unsigned char> CMSG_BUY_BANK_SLOT::write() const {
 }
 
 SMSG_BUY_BANK_SLOT_RESULT SMSG_BUY_BANK_SLOT_RESULT_read(Reader& reader) {
-    SMSG_BUY_BANK_SLOT_RESULT obj;
+    SMSG_BUY_BANK_SLOT_RESULT obj{};
 
     obj.result = static_cast<BuyBankSlotResult>(reader.read_u32());
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_BUY_BANK_SLOT_RESULT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_BUY_BANK_SLOT_RESULT::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 2)); /* size */
 
     writer.write_u16(0x000001ba); /* opcode */
 
@@ -12430,18 +13205,18 @@ std::vector<unsigned char> SMSG_BUY_BANK_SLOT_RESULT::write() const {
 }
 
 CMSG_PETITION_SHOWLIST CMSG_PETITION_SHOWLIST_read(Reader& reader) {
-    CMSG_PETITION_SHOWLIST obj;
+    CMSG_PETITION_SHOWLIST obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_PETITION_SHOWLIST::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_PETITION_SHOWLIST::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x000001bb); /* opcode */
 
@@ -12455,24 +13230,24 @@ static size_t SMSG_PETITION_SHOWLIST_size(const SMSG_PETITION_SHOWLIST& obj) {
 }
 
 SMSG_PETITION_SHOWLIST SMSG_PETITION_SHOWLIST_read(Reader& reader) {
-    SMSG_PETITION_SHOWLIST obj;
+    SMSG_PETITION_SHOWLIST obj{};
 
     obj.npc = reader.read_u64();
 
     obj.amount_of_petitions = reader.read_u8();
 
-    for (auto i = 0; i < obj.amount_of_petitions; ++i) {
+    for (uint8_t i = 0; i < obj.amount_of_petitions; ++i) {
         obj.petitions.push_back(::wow_world_messages::vanilla::PetitionShowlist_read(reader));
     }
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_PETITION_SHOWLIST::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_PETITION_SHOWLIST::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_PETITION_SHOWLIST_size(obj));
 
-    writer.write_u16_be(SMSG_PETITION_SHOWLIST_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_PETITION_SHOWLIST_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000001bc); /* opcode */
 
@@ -12492,7 +13267,7 @@ static size_t CMSG_PETITION_BUY_size(const CMSG_PETITION_BUY& obj) {
 }
 
 CMSG_PETITION_BUY CMSG_PETITION_BUY_read(Reader& reader) {
-    CMSG_PETITION_BUY obj;
+    CMSG_PETITION_BUY obj{};
 
     obj.npc = reader.read_u64();
 
@@ -12533,11 +13308,11 @@ CMSG_PETITION_BUY CMSG_PETITION_BUY_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_PETITION_BUY::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_PETITION_BUY::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_PETITION_BUY_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_PETITION_BUY_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_PETITION_BUY_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000001bd); /* opcode */
 
@@ -12581,18 +13356,18 @@ std::vector<unsigned char> CMSG_PETITION_BUY::write() const {
 }
 
 CMSG_PETITION_SHOW_SIGNATURES CMSG_PETITION_SHOW_SIGNATURES_read(Reader& reader) {
-    CMSG_PETITION_SHOW_SIGNATURES obj;
+    CMSG_PETITION_SHOW_SIGNATURES obj{};
 
     obj.item = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_PETITION_SHOW_SIGNATURES::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_PETITION_SHOW_SIGNATURES::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x000001be); /* opcode */
 
@@ -12606,7 +13381,7 @@ static size_t SMSG_PETITION_SHOW_SIGNATURES_size(const SMSG_PETITION_SHOW_SIGNAT
 }
 
 SMSG_PETITION_SHOW_SIGNATURES SMSG_PETITION_SHOW_SIGNATURES_read(Reader& reader) {
-    SMSG_PETITION_SHOW_SIGNATURES obj;
+    SMSG_PETITION_SHOW_SIGNATURES obj{};
 
     obj.item = reader.read_u64();
 
@@ -12616,18 +13391,18 @@ SMSG_PETITION_SHOW_SIGNATURES SMSG_PETITION_SHOW_SIGNATURES_read(Reader& reader)
 
     obj.amount_of_signatures = reader.read_u8();
 
-    for (auto i = 0; i < obj.amount_of_signatures; ++i) {
+    for (uint8_t i = 0; i < obj.amount_of_signatures; ++i) {
         obj.signatures.push_back(::wow_world_messages::vanilla::PetitionSignature_read(reader));
     }
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_PETITION_SHOW_SIGNATURES::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_PETITION_SHOW_SIGNATURES::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_PETITION_SHOW_SIGNATURES_size(obj));
 
-    writer.write_u16_be(SMSG_PETITION_SHOW_SIGNATURES_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_PETITION_SHOW_SIGNATURES_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000001bf); /* opcode */
 
@@ -12647,7 +13422,7 @@ std::vector<unsigned char> SMSG_PETITION_SHOW_SIGNATURES::write() const {
 }
 
 CMSG_PETITION_SIGN CMSG_PETITION_SIGN_read(Reader& reader) {
-    CMSG_PETITION_SIGN obj;
+    CMSG_PETITION_SIGN obj{};
 
     obj.petition = reader.read_u64();
 
@@ -12656,11 +13431,11 @@ CMSG_PETITION_SIGN CMSG_PETITION_SIGN_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_PETITION_SIGN::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_PETITION_SIGN::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0009);
 
-    writer.write_u16_be(0x0009 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0009 + 4)); /* size */
 
     writer.write_u32(0x000001c0); /* opcode */
 
@@ -12672,7 +13447,7 @@ std::vector<unsigned char> CMSG_PETITION_SIGN::write() const {
 }
 
 SMSG_PETITION_SIGN_RESULTS SMSG_PETITION_SIGN_RESULTS_read(Reader& reader) {
-    SMSG_PETITION_SIGN_RESULTS obj;
+    SMSG_PETITION_SIGN_RESULTS obj{};
 
     obj.petition = reader.read_u64();
 
@@ -12683,11 +13458,11 @@ SMSG_PETITION_SIGN_RESULTS SMSG_PETITION_SIGN_RESULTS_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_PETITION_SIGN_RESULTS::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_PETITION_SIGN_RESULTS::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0014);
 
-    writer.write_u16_be(0x0014 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0014 + 2)); /* size */
 
     writer.write_u16(0x000001c1); /* opcode */
 
@@ -12700,8 +13475,42 @@ std::vector<unsigned char> SMSG_PETITION_SIGN_RESULTS::write() const {
     return writer.m_buf;
 }
 
+MSG_PETITION_DECLINE MSG_PETITION_DECLINE_read(Reader& reader) {
+    MSG_PETITION_DECLINE obj{};
+
+    obj.petition = reader.read_u64();
+
+    return obj;
+}
+
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_PETITION_DECLINE::write_cmsg() const {
+    const auto& obj = *this;
+    auto writer = Writer(0x0008);
+
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
+
+    writer.write_u32(0x000001c2); /* opcode */
+
+    writer.write_u64(obj.petition);
+
+    return writer.m_buf;
+}
+
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_PETITION_DECLINE::write_smsg() const {
+    const auto& obj = *this;
+    auto writer = Writer(0x0008);
+
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 2)); /* size */
+
+    writer.write_u16(0x000001c2); /* opcode */
+
+    writer.write_u64(obj.petition);
+
+    return writer.m_buf;
+}
+
 CMSG_OFFER_PETITION CMSG_OFFER_PETITION_read(Reader& reader) {
-    CMSG_OFFER_PETITION obj;
+    CMSG_OFFER_PETITION obj{};
 
     obj.petition = reader.read_u64();
 
@@ -12710,11 +13519,11 @@ CMSG_OFFER_PETITION CMSG_OFFER_PETITION_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_OFFER_PETITION::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_OFFER_PETITION::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0010);
 
-    writer.write_u16_be(0x0010 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0010 + 4)); /* size */
 
     writer.write_u32(0x000001c3); /* opcode */
 
@@ -12726,18 +13535,18 @@ std::vector<unsigned char> CMSG_OFFER_PETITION::write() const {
 }
 
 CMSG_TURN_IN_PETITION CMSG_TURN_IN_PETITION_read(Reader& reader) {
-    CMSG_TURN_IN_PETITION obj;
+    CMSG_TURN_IN_PETITION obj{};
 
     obj.petition = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_TURN_IN_PETITION::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_TURN_IN_PETITION::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x000001c4); /* opcode */
 
@@ -12747,18 +13556,18 @@ std::vector<unsigned char> CMSG_TURN_IN_PETITION::write() const {
 }
 
 SMSG_TURN_IN_PETITION_RESULTS SMSG_TURN_IN_PETITION_RESULTS_read(Reader& reader) {
-    SMSG_TURN_IN_PETITION_RESULTS obj;
+    SMSG_TURN_IN_PETITION_RESULTS obj{};
 
     obj.result = static_cast<PetitionResult>(reader.read_u32());
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_TURN_IN_PETITION_RESULTS::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_TURN_IN_PETITION_RESULTS::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 2)); /* size */
 
     writer.write_u16(0x000001c5); /* opcode */
 
@@ -12768,7 +13577,7 @@ std::vector<unsigned char> SMSG_TURN_IN_PETITION_RESULTS::write() const {
 }
 
 CMSG_PETITION_QUERY CMSG_PETITION_QUERY_read(Reader& reader) {
-    CMSG_PETITION_QUERY obj;
+    CMSG_PETITION_QUERY obj{};
 
     obj.guild_id = reader.read_u32();
 
@@ -12777,11 +13586,11 @@ CMSG_PETITION_QUERY CMSG_PETITION_QUERY_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_PETITION_QUERY::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_PETITION_QUERY::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 4)); /* size */
 
     writer.write_u32(0x000001c6); /* opcode */
 
@@ -12797,7 +13606,7 @@ static size_t SMSG_PETITION_QUERY_RESPONSE_size(const SMSG_PETITION_QUERY_RESPON
 }
 
 SMSG_PETITION_QUERY_RESPONSE SMSG_PETITION_QUERY_RESPONSE_read(Reader& reader) {
-    SMSG_PETITION_QUERY_RESPONSE obj;
+    SMSG_PETITION_QUERY_RESPONSE obj{};
 
     obj.petition_id = reader.read_u32();
 
@@ -12836,11 +13645,11 @@ SMSG_PETITION_QUERY_RESPONSE SMSG_PETITION_QUERY_RESPONSE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_PETITION_QUERY_RESPONSE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_PETITION_QUERY_RESPONSE::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_PETITION_QUERY_RESPONSE_size(obj));
 
-    writer.write_u16_be(SMSG_PETITION_QUERY_RESPONSE_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_PETITION_QUERY_RESPONSE_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000001c7); /* opcode */
 
@@ -12881,20 +13690,20 @@ std::vector<unsigned char> SMSG_PETITION_QUERY_RESPONSE::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> SMSG_FISH_NOT_HOOKED::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_FISH_NOT_HOOKED::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 2)); /* size */
 
     writer.write_u16(0x000001c8); /* opcode */
 
     return writer.m_buf;
 }
 
-std::vector<unsigned char> SMSG_FISH_ESCAPED::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_FISH_ESCAPED::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 2)); /* size */
 
     writer.write_u16(0x000001c9); /* opcode */
 
@@ -12906,7 +13715,7 @@ static size_t CMSG_BUG_size(const CMSG_BUG& obj) {
 }
 
 CMSG_BUG CMSG_BUG_read(Reader& reader) {
-    CMSG_BUG obj;
+    CMSG_BUG obj{};
 
     obj.suggestion = reader.read_u32();
 
@@ -12917,11 +13726,11 @@ CMSG_BUG CMSG_BUG_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_BUG::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_BUG::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_BUG_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_BUG_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_BUG_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000001ca); /* opcode */
 
@@ -12939,18 +13748,18 @@ static size_t SMSG_NOTIFICATION_size(const SMSG_NOTIFICATION& obj) {
 }
 
 SMSG_NOTIFICATION SMSG_NOTIFICATION_read(Reader& reader) {
-    SMSG_NOTIFICATION obj;
+    SMSG_NOTIFICATION obj{};
 
     obj.notification = reader.read_cstring();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_NOTIFICATION::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_NOTIFICATION::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_NOTIFICATION_size(obj));
 
-    writer.write_u16_be(SMSG_NOTIFICATION_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_NOTIFICATION_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000001cb); /* opcode */
 
@@ -12959,10 +13768,10 @@ std::vector<unsigned char> SMSG_NOTIFICATION::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_PLAYED_TIME::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_PLAYED_TIME::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x000001cc); /* opcode */
 
@@ -12970,7 +13779,7 @@ std::vector<unsigned char> CMSG_PLAYED_TIME::write() const {
 }
 
 SMSG_PLAYED_TIME SMSG_PLAYED_TIME_read(Reader& reader) {
-    SMSG_PLAYED_TIME obj;
+    SMSG_PLAYED_TIME obj{};
 
     obj.total_played_time = reader.read_u32();
 
@@ -12979,11 +13788,11 @@ SMSG_PLAYED_TIME SMSG_PLAYED_TIME_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_PLAYED_TIME::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_PLAYED_TIME::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 2)); /* size */
 
     writer.write_u16(0x000001cd); /* opcode */
 
@@ -12994,10 +13803,10 @@ std::vector<unsigned char> SMSG_PLAYED_TIME::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_QUERY_TIME::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_QUERY_TIME::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x000001ce); /* opcode */
 
@@ -13005,18 +13814,18 @@ std::vector<unsigned char> CMSG_QUERY_TIME::write() const {
 }
 
 SMSG_QUERY_TIME_RESPONSE SMSG_QUERY_TIME_RESPONSE_read(Reader& reader) {
-    SMSG_QUERY_TIME_RESPONSE obj;
+    SMSG_QUERY_TIME_RESPONSE obj{};
 
     obj.time = reader.read_u32();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_QUERY_TIME_RESPONSE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_QUERY_TIME_RESPONSE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 2)); /* size */
 
     writer.write_u16(0x000001cf); /* opcode */
 
@@ -13036,7 +13845,7 @@ static size_t SMSG_LOG_XPGAIN_size(const SMSG_LOG_XPGAIN& obj) {
 }
 
 SMSG_LOG_XPGAIN SMSG_LOG_XPGAIN_read(Reader& reader) {
-    SMSG_LOG_XPGAIN obj;
+    SMSG_LOG_XPGAIN obj{};
 
     obj.target = reader.read_u64();
 
@@ -13053,11 +13862,11 @@ SMSG_LOG_XPGAIN SMSG_LOG_XPGAIN_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_LOG_XPGAIN::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_LOG_XPGAIN::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_LOG_XPGAIN_size(obj));
 
-    writer.write_u16_be(SMSG_LOG_XPGAIN_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_LOG_XPGAIN_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000001d0); /* opcode */
 
@@ -13077,18 +13886,18 @@ std::vector<unsigned char> SMSG_LOG_XPGAIN::write() const {
 }
 
 CMSG_RECLAIM_CORPSE CMSG_RECLAIM_CORPSE_read(Reader& reader) {
-    CMSG_RECLAIM_CORPSE obj;
+    CMSG_RECLAIM_CORPSE obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_RECLAIM_CORPSE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_RECLAIM_CORPSE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x000001d2); /* opcode */
 
@@ -13098,7 +13907,7 @@ std::vector<unsigned char> CMSG_RECLAIM_CORPSE::write() const {
 }
 
 CMSG_WRAP_ITEM CMSG_WRAP_ITEM_read(Reader& reader) {
-    CMSG_WRAP_ITEM obj;
+    CMSG_WRAP_ITEM obj{};
 
     obj.gift_bag_index = reader.read_u8();
 
@@ -13111,11 +13920,11 @@ CMSG_WRAP_ITEM CMSG_WRAP_ITEM_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_WRAP_ITEM::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_WRAP_ITEM::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 4)); /* size */
 
     writer.write_u32(0x000001d3); /* opcode */
 
@@ -13131,7 +13940,7 @@ std::vector<unsigned char> CMSG_WRAP_ITEM::write() const {
 }
 
 SMSG_LEVELUP_INFO SMSG_LEVELUP_INFO_read(Reader& reader) {
-    SMSG_LEVELUP_INFO obj;
+    SMSG_LEVELUP_INFO obj{};
 
     obj.new_level = reader.read_u32();
 
@@ -13160,11 +13969,11 @@ SMSG_LEVELUP_INFO SMSG_LEVELUP_INFO_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_LEVELUP_INFO::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_LEVELUP_INFO::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0030);
 
-    writer.write_u16_be(0x0030 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0030 + 2)); /* size */
 
     writer.write_u16(0x000001d4); /* opcode */
 
@@ -13196,7 +14005,7 @@ std::vector<unsigned char> SMSG_LEVELUP_INFO::write() const {
 }
 
 MSG_MINIMAP_PING_Client MSG_MINIMAP_PING_Client_read(Reader& reader) {
-    MSG_MINIMAP_PING_Client obj;
+    MSG_MINIMAP_PING_Client obj{};
 
     obj.position_x = reader.read_float();
 
@@ -13205,11 +14014,11 @@ MSG_MINIMAP_PING_Client MSG_MINIMAP_PING_Client_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> MSG_MINIMAP_PING_Client::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MINIMAP_PING_Client::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x000001d5); /* opcode */
 
@@ -13221,7 +14030,7 @@ std::vector<unsigned char> MSG_MINIMAP_PING_Client::write() const {
 }
 
 MSG_MINIMAP_PING_Server MSG_MINIMAP_PING_Server_read(Reader& reader) {
-    MSG_MINIMAP_PING_Server obj;
+    MSG_MINIMAP_PING_Server obj{};
 
     obj.guid = reader.read_u64();
 
@@ -13232,11 +14041,11 @@ MSG_MINIMAP_PING_Server MSG_MINIMAP_PING_Server_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> MSG_MINIMAP_PING_Server::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MINIMAP_PING_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0010);
 
-    writer.write_u16_be(0x0010 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0010 + 2)); /* size */
 
     writer.write_u16(0x000001d5); /* opcode */
 
@@ -13250,7 +14059,7 @@ std::vector<unsigned char> MSG_MINIMAP_PING_Server::write() const {
 }
 
 SMSG_RESISTLOG SMSG_RESISTLOG_read(Reader& reader) {
-    SMSG_RESISTLOG obj;
+    SMSG_RESISTLOG obj{};
 
     obj.guid1 = reader.read_u64();
 
@@ -13269,11 +14078,11 @@ SMSG_RESISTLOG SMSG_RESISTLOG_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_RESISTLOG::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_RESISTLOG::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0024);
 
-    writer.write_u16_be(0x0024 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0024 + 2)); /* size */
 
     writer.write_u16(0x000001d6); /* opcode */
 
@@ -13295,7 +14104,7 @@ std::vector<unsigned char> SMSG_RESISTLOG::write() const {
 }
 
 SMSG_ENCHANTMENTLOG SMSG_ENCHANTMENTLOG_read(Reader& reader) {
-    SMSG_ENCHANTMENTLOG obj;
+    SMSG_ENCHANTMENTLOG obj{};
 
     obj.target = reader.read_u64();
 
@@ -13310,11 +14119,11 @@ SMSG_ENCHANTMENTLOG SMSG_ENCHANTMENTLOG_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_ENCHANTMENTLOG::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_ENCHANTMENTLOG::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0019);
 
-    writer.write_u16_be(0x0019 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0019 + 2)); /* size */
 
     writer.write_u16(0x000001d7); /* opcode */
 
@@ -13332,7 +14141,7 @@ std::vector<unsigned char> SMSG_ENCHANTMENTLOG::write() const {
 }
 
 SMSG_START_MIRROR_TIMER SMSG_START_MIRROR_TIMER_read(Reader& reader) {
-    SMSG_START_MIRROR_TIMER obj;
+    SMSG_START_MIRROR_TIMER obj{};
 
     obj.timer = static_cast<TimerType>(reader.read_u32());
 
@@ -13349,11 +14158,11 @@ SMSG_START_MIRROR_TIMER SMSG_START_MIRROR_TIMER_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_START_MIRROR_TIMER::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_START_MIRROR_TIMER::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0015);
 
-    writer.write_u16_be(0x0015 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0015 + 2)); /* size */
 
     writer.write_u16(0x000001d9); /* opcode */
 
@@ -13373,7 +14182,7 @@ std::vector<unsigned char> SMSG_START_MIRROR_TIMER::write() const {
 }
 
 SMSG_PAUSE_MIRROR_TIMER SMSG_PAUSE_MIRROR_TIMER_read(Reader& reader) {
-    SMSG_PAUSE_MIRROR_TIMER obj;
+    SMSG_PAUSE_MIRROR_TIMER obj{};
 
     obj.timer = static_cast<TimerType>(reader.read_u32());
 
@@ -13382,11 +14191,11 @@ SMSG_PAUSE_MIRROR_TIMER SMSG_PAUSE_MIRROR_TIMER_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_PAUSE_MIRROR_TIMER::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_PAUSE_MIRROR_TIMER::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0005);
 
-    writer.write_u16_be(0x0005 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0005 + 2)); /* size */
 
     writer.write_u16(0x000001da); /* opcode */
 
@@ -13398,18 +14207,18 @@ std::vector<unsigned char> SMSG_PAUSE_MIRROR_TIMER::write() const {
 }
 
 SMSG_STOP_MIRROR_TIMER SMSG_STOP_MIRROR_TIMER_read(Reader& reader) {
-    SMSG_STOP_MIRROR_TIMER obj;
+    SMSG_STOP_MIRROR_TIMER obj{};
 
     obj.timer = static_cast<TimerType>(reader.read_u32());
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_STOP_MIRROR_TIMER::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_STOP_MIRROR_TIMER::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 2)); /* size */
 
     writer.write_u16(0x000001db); /* opcode */
 
@@ -13419,7 +14228,7 @@ std::vector<unsigned char> SMSG_STOP_MIRROR_TIMER::write() const {
 }
 
 CMSG_PING CMSG_PING_read(Reader& reader) {
-    CMSG_PING obj;
+    CMSG_PING obj{};
 
     obj.sequence_id = reader.read_u32();
 
@@ -13428,11 +14237,11 @@ CMSG_PING CMSG_PING_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_PING::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_PING::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x000001dc); /* opcode */
 
@@ -13444,18 +14253,18 @@ std::vector<unsigned char> CMSG_PING::write() const {
 }
 
 SMSG_PONG SMSG_PONG_read(Reader& reader) {
-    SMSG_PONG obj;
+    SMSG_PONG obj{};
 
     obj.sequence_id = reader.read_u32();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_PONG::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_PONG::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 2)); /* size */
 
     writer.write_u16(0x000001dd); /* opcode */
 
@@ -13465,7 +14274,7 @@ std::vector<unsigned char> SMSG_PONG::write() const {
 }
 
 SMSG_CLEAR_COOLDOWN SMSG_CLEAR_COOLDOWN_read(Reader& reader) {
-    SMSG_CLEAR_COOLDOWN obj;
+    SMSG_CLEAR_COOLDOWN obj{};
 
     obj.id = reader.read_u32();
 
@@ -13474,11 +14283,11 @@ SMSG_CLEAR_COOLDOWN SMSG_CLEAR_COOLDOWN_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_CLEAR_COOLDOWN::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_CLEAR_COOLDOWN::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 2)); /* size */
 
     writer.write_u16(0x000001de); /* opcode */
 
@@ -13490,18 +14299,18 @@ std::vector<unsigned char> SMSG_CLEAR_COOLDOWN::write() const {
 }
 
 SMSG_GAMEOBJECT_PAGETEXT SMSG_GAMEOBJECT_PAGETEXT_read(Reader& reader) {
-    SMSG_GAMEOBJECT_PAGETEXT obj;
+    SMSG_GAMEOBJECT_PAGETEXT obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_GAMEOBJECT_PAGETEXT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_GAMEOBJECT_PAGETEXT::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 2)); /* size */
 
     writer.write_u16(0x000001df); /* opcode */
 
@@ -13511,18 +14320,18 @@ std::vector<unsigned char> SMSG_GAMEOBJECT_PAGETEXT::write() const {
 }
 
 CMSG_SETSHEATHED CMSG_SETSHEATHED_read(Reader& reader) {
-    CMSG_SETSHEATHED obj;
+    CMSG_SETSHEATHED obj{};
 
     obj.sheathed = static_cast<SheathState>(reader.read_u32());
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_SETSHEATHED::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_SETSHEATHED::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 4)); /* size */
 
     writer.write_u32(0x000001e0); /* opcode */
 
@@ -13532,7 +14341,7 @@ std::vector<unsigned char> CMSG_SETSHEATHED::write() const {
 }
 
 SMSG_SPELL_DELAYED SMSG_SPELL_DELAYED_read(Reader& reader) {
-    SMSG_SPELL_DELAYED obj;
+    SMSG_SPELL_DELAYED obj{};
 
     obj.guid = reader.read_u64();
 
@@ -13541,11 +14350,11 @@ SMSG_SPELL_DELAYED SMSG_SPELL_DELAYED_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SPELL_DELAYED::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPELL_DELAYED::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 2)); /* size */
 
     writer.write_u16(0x000001e2); /* opcode */
 
@@ -13557,7 +14366,7 @@ std::vector<unsigned char> SMSG_SPELL_DELAYED::write() const {
 }
 
 SMSG_ITEM_TIME_UPDATE SMSG_ITEM_TIME_UPDATE_read(Reader& reader) {
-    SMSG_ITEM_TIME_UPDATE obj;
+    SMSG_ITEM_TIME_UPDATE obj{};
 
     obj.guid = reader.read_u64();
 
@@ -13566,11 +14375,11 @@ SMSG_ITEM_TIME_UPDATE SMSG_ITEM_TIME_UPDATE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_ITEM_TIME_UPDATE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_ITEM_TIME_UPDATE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 2)); /* size */
 
     writer.write_u16(0x000001ea); /* opcode */
 
@@ -13582,7 +14391,7 @@ std::vector<unsigned char> SMSG_ITEM_TIME_UPDATE::write() const {
 }
 
 SMSG_ITEM_ENCHANT_TIME_UPDATE SMSG_ITEM_ENCHANT_TIME_UPDATE_read(Reader& reader) {
-    SMSG_ITEM_ENCHANT_TIME_UPDATE obj;
+    SMSG_ITEM_ENCHANT_TIME_UPDATE obj{};
 
     obj.item = reader.read_u64();
 
@@ -13595,11 +14404,11 @@ SMSG_ITEM_ENCHANT_TIME_UPDATE SMSG_ITEM_ENCHANT_TIME_UPDATE_read(Reader& reader)
     return obj;
 }
 
-std::vector<unsigned char> SMSG_ITEM_ENCHANT_TIME_UPDATE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_ITEM_ENCHANT_TIME_UPDATE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0018);
 
-    writer.write_u16_be(0x0018 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0018 + 2)); /* size */
 
     writer.write_u16(0x000001eb); /* opcode */
 
@@ -13615,18 +14424,18 @@ std::vector<unsigned char> SMSG_ITEM_ENCHANT_TIME_UPDATE::write() const {
 }
 
 SMSG_AUTH_CHALLENGE SMSG_AUTH_CHALLENGE_read(Reader& reader) {
-    SMSG_AUTH_CHALLENGE obj;
+    SMSG_AUTH_CHALLENGE obj{};
 
     obj.server_seed = reader.read_u32();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_AUTH_CHALLENGE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_AUTH_CHALLENGE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 2)); /* size */
 
     writer.write_u16(0x000001ec); /* opcode */
 
@@ -13649,7 +14458,7 @@ static size_t SMSG_AUTH_RESPONSE_size(const SMSG_AUTH_RESPONSE& obj) {
 }
 
 SMSG_AUTH_RESPONSE SMSG_AUTH_RESPONSE_read(Reader& reader) {
-    SMSG_AUTH_RESPONSE obj;
+    SMSG_AUTH_RESPONSE obj{};
 
     obj.result = static_cast<WorldResult>(reader.read_u8());
 
@@ -13668,11 +14477,11 @@ SMSG_AUTH_RESPONSE SMSG_AUTH_RESPONSE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_AUTH_RESPONSE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_AUTH_RESPONSE::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_AUTH_RESPONSE_size(obj));
 
-    writer.write_u16_be(SMSG_AUTH_RESPONSE_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_AUTH_RESPONSE_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000001ee); /* opcode */
 
@@ -13698,7 +14507,7 @@ static size_t CMSG_PET_CAST_SPELL_size(const CMSG_PET_CAST_SPELL& obj) {
 }
 
 CMSG_PET_CAST_SPELL CMSG_PET_CAST_SPELL_read(Reader& reader) {
-    CMSG_PET_CAST_SPELL obj;
+    CMSG_PET_CAST_SPELL obj{};
 
     obj.guid = reader.read_u64();
 
@@ -13709,11 +14518,11 @@ CMSG_PET_CAST_SPELL CMSG_PET_CAST_SPELL_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_PET_CAST_SPELL::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_PET_CAST_SPELL::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_PET_CAST_SPELL_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_PET_CAST_SPELL_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_PET_CAST_SPELL_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000001f0); /* opcode */
 
@@ -13727,18 +14536,18 @@ std::vector<unsigned char> CMSG_PET_CAST_SPELL::write() const {
 }
 
 MSG_SAVE_GUILD_EMBLEM_Server MSG_SAVE_GUILD_EMBLEM_Server_read(Reader& reader) {
-    MSG_SAVE_GUILD_EMBLEM_Server obj;
+    MSG_SAVE_GUILD_EMBLEM_Server obj{};
 
     obj.result = static_cast<GuildEmblemResult>(reader.read_u32());
 
     return obj;
 }
 
-std::vector<unsigned char> MSG_SAVE_GUILD_EMBLEM_Server::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_SAVE_GUILD_EMBLEM_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 2)); /* size */
 
     writer.write_u16(0x000001f1); /* opcode */
 
@@ -13748,7 +14557,7 @@ std::vector<unsigned char> MSG_SAVE_GUILD_EMBLEM_Server::write() const {
 }
 
 MSG_SAVE_GUILD_EMBLEM_Client MSG_SAVE_GUILD_EMBLEM_Client_read(Reader& reader) {
-    MSG_SAVE_GUILD_EMBLEM_Client obj;
+    MSG_SAVE_GUILD_EMBLEM_Client obj{};
 
     obj.vendor = reader.read_u64();
 
@@ -13765,11 +14574,11 @@ MSG_SAVE_GUILD_EMBLEM_Client MSG_SAVE_GUILD_EMBLEM_Client_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> MSG_SAVE_GUILD_EMBLEM_Client::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_SAVE_GUILD_EMBLEM_Client::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x001c);
 
-    writer.write_u16_be(0x001c + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x001c + 4)); /* size */
 
     writer.write_u32(0x000001f1); /* opcode */
 
@@ -13788,8 +14597,42 @@ std::vector<unsigned char> MSG_SAVE_GUILD_EMBLEM_Client::write() const {
     return writer.m_buf;
 }
 
+MSG_TABARDVENDOR_ACTIVATE MSG_TABARDVENDOR_ACTIVATE_read(Reader& reader) {
+    MSG_TABARDVENDOR_ACTIVATE obj{};
+
+    obj.guid = reader.read_u64();
+
+    return obj;
+}
+
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_TABARDVENDOR_ACTIVATE::write_cmsg() const {
+    const auto& obj = *this;
+    auto writer = Writer(0x0008);
+
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
+
+    writer.write_u32(0x000001f2); /* opcode */
+
+    writer.write_u64(obj.guid);
+
+    return writer.m_buf;
+}
+
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_TABARDVENDOR_ACTIVATE::write_smsg() const {
+    const auto& obj = *this;
+    auto writer = Writer(0x0008);
+
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 2)); /* size */
+
+    writer.write_u16(0x000001f2); /* opcode */
+
+    writer.write_u64(obj.guid);
+
+    return writer.m_buf;
+}
+
 SMSG_PLAY_SPELL_VISUAL SMSG_PLAY_SPELL_VISUAL_read(Reader& reader) {
-    SMSG_PLAY_SPELL_VISUAL obj;
+    SMSG_PLAY_SPELL_VISUAL obj{};
 
     obj.guid = reader.read_u64();
 
@@ -13798,11 +14641,11 @@ SMSG_PLAY_SPELL_VISUAL SMSG_PLAY_SPELL_VISUAL_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_PLAY_SPELL_VISUAL::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_PLAY_SPELL_VISUAL::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 2)); /* size */
 
     writer.write_u16(0x000001f3); /* opcode */
 
@@ -13814,18 +14657,18 @@ std::vector<unsigned char> SMSG_PLAY_SPELL_VISUAL::write() const {
 }
 
 CMSG_ZONEUPDATE CMSG_ZONEUPDATE_read(Reader& reader) {
-    CMSG_ZONEUPDATE obj;
+    CMSG_ZONEUPDATE obj{};
 
     obj.area = static_cast<Area>(reader.read_u32());
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_ZONEUPDATE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_ZONEUPDATE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 4)); /* size */
 
     writer.write_u32(0x000001f4); /* opcode */
 
@@ -13835,7 +14678,7 @@ std::vector<unsigned char> CMSG_ZONEUPDATE::write() const {
 }
 
 SMSG_PARTYKILLLOG SMSG_PARTYKILLLOG_read(Reader& reader) {
-    SMSG_PARTYKILLLOG obj;
+    SMSG_PARTYKILLLOG obj{};
 
     obj.player_with_killing_blow = reader.read_u64();
 
@@ -13844,11 +14687,11 @@ SMSG_PARTYKILLLOG SMSG_PARTYKILLLOG_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_PARTYKILLLOG::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_PARTYKILLLOG::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0010);
 
-    writer.write_u16_be(0x0010 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0010 + 2)); /* size */
 
     writer.write_u16(0x000001f5); /* opcode */
 
@@ -13860,7 +14703,7 @@ std::vector<unsigned char> SMSG_PARTYKILLLOG::write() const {
 }
 
 SMSG_PLAY_SPELL_IMPACT SMSG_PLAY_SPELL_IMPACT_read(Reader& reader) {
-    SMSG_PLAY_SPELL_IMPACT obj;
+    SMSG_PLAY_SPELL_IMPACT obj{};
 
     obj.guid = reader.read_u64();
 
@@ -13869,11 +14712,11 @@ SMSG_PLAY_SPELL_IMPACT SMSG_PLAY_SPELL_IMPACT_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_PLAY_SPELL_IMPACT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_PLAY_SPELL_IMPACT::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 2)); /* size */
 
     writer.write_u16(0x000001f7); /* opcode */
 
@@ -13885,7 +14728,7 @@ std::vector<unsigned char> SMSG_PLAY_SPELL_IMPACT::write() const {
 }
 
 SMSG_EXPLORATION_EXPERIENCE SMSG_EXPLORATION_EXPERIENCE_read(Reader& reader) {
-    SMSG_EXPLORATION_EXPERIENCE obj;
+    SMSG_EXPLORATION_EXPERIENCE obj{};
 
     obj.area = static_cast<Area>(reader.read_u32());
 
@@ -13894,11 +14737,11 @@ SMSG_EXPLORATION_EXPERIENCE SMSG_EXPLORATION_EXPERIENCE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_EXPLORATION_EXPERIENCE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_EXPLORATION_EXPERIENCE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 2)); /* size */
 
     writer.write_u16(0x000001f8); /* opcode */
 
@@ -13910,7 +14753,7 @@ std::vector<unsigned char> SMSG_EXPLORATION_EXPERIENCE::write() const {
 }
 
 MSG_RANDOM_ROLL_Client MSG_RANDOM_ROLL_Client_read(Reader& reader) {
-    MSG_RANDOM_ROLL_Client obj;
+    MSG_RANDOM_ROLL_Client obj{};
 
     obj.minimum = reader.read_u32();
 
@@ -13919,11 +14762,11 @@ MSG_RANDOM_ROLL_Client MSG_RANDOM_ROLL_Client_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> MSG_RANDOM_ROLL_Client::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_RANDOM_ROLL_Client::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x000001fb); /* opcode */
 
@@ -13935,7 +14778,7 @@ std::vector<unsigned char> MSG_RANDOM_ROLL_Client::write() const {
 }
 
 MSG_RANDOM_ROLL_Server MSG_RANDOM_ROLL_Server_read(Reader& reader) {
-    MSG_RANDOM_ROLL_Server obj;
+    MSG_RANDOM_ROLL_Server obj{};
 
     obj.minimum = reader.read_u32();
 
@@ -13948,11 +14791,11 @@ MSG_RANDOM_ROLL_Server MSG_RANDOM_ROLL_Server_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> MSG_RANDOM_ROLL_Server::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_RANDOM_ROLL_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0014);
 
-    writer.write_u16_be(0x0014 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0014 + 2)); /* size */
 
     writer.write_u16(0x000001fb); /* opcode */
 
@@ -13968,7 +14811,7 @@ std::vector<unsigned char> MSG_RANDOM_ROLL_Server::write() const {
 }
 
 SMSG_ENVIRONMENTAL_DAMAGE_LOG SMSG_ENVIRONMENTAL_DAMAGE_LOG_read(Reader& reader) {
-    SMSG_ENVIRONMENTAL_DAMAGE_LOG obj;
+    SMSG_ENVIRONMENTAL_DAMAGE_LOG obj{};
 
     obj.guid = reader.read_u64();
 
@@ -13983,11 +14826,11 @@ SMSG_ENVIRONMENTAL_DAMAGE_LOG SMSG_ENVIRONMENTAL_DAMAGE_LOG_read(Reader& reader)
     return obj;
 }
 
-std::vector<unsigned char> SMSG_ENVIRONMENTAL_DAMAGE_LOG::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_ENVIRONMENTAL_DAMAGE_LOG::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0015);
 
-    writer.write_u16_be(0x0015 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0015 + 2)); /* size */
 
     writer.write_u16(0x000001fc); /* opcode */
 
@@ -14004,10 +14847,10 @@ std::vector<unsigned char> SMSG_ENVIRONMENTAL_DAMAGE_LOG::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> MSG_LOOKING_FOR_GROUP_Client::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_LOOKING_FOR_GROUP_Client::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x000001ff); /* opcode */
 
@@ -14015,18 +14858,18 @@ std::vector<unsigned char> MSG_LOOKING_FOR_GROUP_Client::write() const {
 }
 
 MSG_LOOKING_FOR_GROUP_Server MSG_LOOKING_FOR_GROUP_Server_read(Reader& reader) {
-    MSG_LOOKING_FOR_GROUP_Server obj;
+    MSG_LOOKING_FOR_GROUP_Server obj{};
 
     obj.unknown1 = reader.read_u32();
 
     return obj;
 }
 
-std::vector<unsigned char> MSG_LOOKING_FOR_GROUP_Server::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_LOOKING_FOR_GROUP_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 2)); /* size */
 
     writer.write_u16(0x000001ff); /* opcode */
 
@@ -14036,18 +14879,18 @@ std::vector<unsigned char> MSG_LOOKING_FOR_GROUP_Server::write() const {
 }
 
 CMSG_UNLEARN_SKILL CMSG_UNLEARN_SKILL_read(Reader& reader) {
-    CMSG_UNLEARN_SKILL obj;
+    CMSG_UNLEARN_SKILL obj{};
 
     obj.skill = static_cast<Skill>(reader.read_u32());
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_UNLEARN_SKILL::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_UNLEARN_SKILL::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 4)); /* size */
 
     writer.write_u32(0x00000202); /* opcode */
 
@@ -14057,18 +14900,18 @@ std::vector<unsigned char> CMSG_UNLEARN_SKILL::write() const {
 }
 
 SMSG_REMOVED_SPELL SMSG_REMOVED_SPELL_read(Reader& reader) {
-    SMSG_REMOVED_SPELL obj;
+    SMSG_REMOVED_SPELL obj{};
 
     obj.spell = reader.read_u16();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_REMOVED_SPELL::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_REMOVED_SPELL::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0002);
 
-    writer.write_u16_be(0x0002 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0002 + 2)); /* size */
 
     writer.write_u16(0x00000203); /* opcode */
 
@@ -14078,18 +14921,18 @@ std::vector<unsigned char> SMSG_REMOVED_SPELL::write() const {
 }
 
 SMSG_GMTICKET_CREATE SMSG_GMTICKET_CREATE_read(Reader& reader) {
-    SMSG_GMTICKET_CREATE obj;
+    SMSG_GMTICKET_CREATE obj{};
 
     obj.response = static_cast<GmTicketResponse>(reader.read_u32());
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_GMTICKET_CREATE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_GMTICKET_CREATE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 2)); /* size */
 
     writer.write_u16(0x00000206); /* opcode */
 
@@ -14103,7 +14946,7 @@ static size_t CMSG_GMTICKET_UPDATETEXT_size(const CMSG_GMTICKET_UPDATETEXT& obj)
 }
 
 CMSG_GMTICKET_UPDATETEXT CMSG_GMTICKET_UPDATETEXT_read(Reader& reader) {
-    CMSG_GMTICKET_UPDATETEXT obj;
+    CMSG_GMTICKET_UPDATETEXT obj{};
 
     obj.ticket_type = static_cast<GmTicketType>(reader.read_u8());
 
@@ -14112,11 +14955,11 @@ CMSG_GMTICKET_UPDATETEXT CMSG_GMTICKET_UPDATETEXT_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_GMTICKET_UPDATETEXT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GMTICKET_UPDATETEXT::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_GMTICKET_UPDATETEXT_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_GMTICKET_UPDATETEXT_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_GMTICKET_UPDATETEXT_size(obj) + 4)); /* size */
 
     writer.write_u32(0x00000207); /* opcode */
 
@@ -14128,18 +14971,18 @@ std::vector<unsigned char> CMSG_GMTICKET_UPDATETEXT::write() const {
 }
 
 SMSG_GMTICKET_UPDATETEXT SMSG_GMTICKET_UPDATETEXT_read(Reader& reader) {
-    SMSG_GMTICKET_UPDATETEXT obj;
+    SMSG_GMTICKET_UPDATETEXT obj{};
 
     obj.response = static_cast<GmTicketResponse>(reader.read_u32());
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_GMTICKET_UPDATETEXT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_GMTICKET_UPDATETEXT::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 2)); /* size */
 
     writer.write_u16(0x00000208); /* opcode */
 
@@ -14149,7 +14992,7 @@ std::vector<unsigned char> SMSG_GMTICKET_UPDATETEXT::write() const {
 }
 
 SMSG_ACCOUNT_DATA_TIMES SMSG_ACCOUNT_DATA_TIMES_read(Reader& reader) {
-    SMSG_ACCOUNT_DATA_TIMES obj;
+    SMSG_ACCOUNT_DATA_TIMES obj{};
 
     for (auto i = 0; i < 32; ++i) {
         obj.data[i] = reader.read_u32();
@@ -14158,11 +15001,11 @@ SMSG_ACCOUNT_DATA_TIMES SMSG_ACCOUNT_DATA_TIMES_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_ACCOUNT_DATA_TIMES::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_ACCOUNT_DATA_TIMES::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0080);
 
-    writer.write_u16_be(0x0080 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0080 + 2)); /* size */
 
     writer.write_u16(0x00000209); /* opcode */
 
@@ -14174,18 +15017,18 @@ std::vector<unsigned char> SMSG_ACCOUNT_DATA_TIMES::write() const {
 }
 
 CMSG_REQUEST_ACCOUNT_DATA CMSG_REQUEST_ACCOUNT_DATA_read(Reader& reader) {
-    CMSG_REQUEST_ACCOUNT_DATA obj;
+    CMSG_REQUEST_ACCOUNT_DATA obj{};
 
     obj.data_type = reader.read_u32();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_REQUEST_ACCOUNT_DATA::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_REQUEST_ACCOUNT_DATA::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 4)); /* size */
 
     writer.write_u32(0x0000020a); /* opcode */
 
@@ -14194,10 +15037,10 @@ std::vector<unsigned char> CMSG_REQUEST_ACCOUNT_DATA::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_GMTICKET_GETTICKET::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GMTICKET_GETTICKET::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x00000211); /* opcode */
 
@@ -14215,7 +15058,7 @@ static size_t SMSG_GMTICKET_GETTICKET_size(const SMSG_GMTICKET_GETTICKET& obj) {
 }
 
 SMSG_GMTICKET_GETTICKET SMSG_GMTICKET_GETTICKET_read(Reader& reader) {
-    SMSG_GMTICKET_GETTICKET obj;
+    SMSG_GMTICKET_GETTICKET obj{};
 
     obj.status = static_cast<GmTicketStatus>(reader.read_u32());
 
@@ -14238,11 +15081,11 @@ SMSG_GMTICKET_GETTICKET SMSG_GMTICKET_GETTICKET_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_GMTICKET_GETTICKET::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_GMTICKET_GETTICKET::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_GMTICKET_GETTICKET_size(obj));
 
-    writer.write_u16_be(SMSG_GMTICKET_GETTICKET_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_GMTICKET_GETTICKET_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000212); /* opcode */
 
@@ -14268,18 +15111,18 @@ std::vector<unsigned char> SMSG_GMTICKET_GETTICKET::write() const {
 }
 
 SMSG_GAMEOBJECT_SPAWN_ANIM SMSG_GAMEOBJECT_SPAWN_ANIM_read(Reader& reader) {
-    SMSG_GAMEOBJECT_SPAWN_ANIM obj;
+    SMSG_GAMEOBJECT_SPAWN_ANIM obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_GAMEOBJECT_SPAWN_ANIM::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_GAMEOBJECT_SPAWN_ANIM::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 2)); /* size */
 
     writer.write_u16(0x00000214); /* opcode */
 
@@ -14289,18 +15132,18 @@ std::vector<unsigned char> SMSG_GAMEOBJECT_SPAWN_ANIM::write() const {
 }
 
 SMSG_GAMEOBJECT_DESPAWN_ANIM SMSG_GAMEOBJECT_DESPAWN_ANIM_read(Reader& reader) {
-    SMSG_GAMEOBJECT_DESPAWN_ANIM obj;
+    SMSG_GAMEOBJECT_DESPAWN_ANIM obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_GAMEOBJECT_DESPAWN_ANIM::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_GAMEOBJECT_DESPAWN_ANIM::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 2)); /* size */
 
     writer.write_u16(0x00000215); /* opcode */
 
@@ -14309,10 +15152,10 @@ std::vector<unsigned char> SMSG_GAMEOBJECT_DESPAWN_ANIM::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> MSG_CORPSE_QUERY_Client::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_CORPSE_QUERY_Client::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x00000216); /* opcode */
 
@@ -14330,7 +15173,7 @@ static size_t MSG_CORPSE_QUERY_Server_size(const MSG_CORPSE_QUERY_Server& obj) {
 }
 
 MSG_CORPSE_QUERY_Server MSG_CORPSE_QUERY_Server_read(Reader& reader) {
-    MSG_CORPSE_QUERY_Server obj;
+    MSG_CORPSE_QUERY_Server obj{};
 
     obj.result = static_cast<CorpseQueryResult>(reader.read_u8());
 
@@ -14345,11 +15188,11 @@ MSG_CORPSE_QUERY_Server MSG_CORPSE_QUERY_Server_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> MSG_CORPSE_QUERY_Server::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_CORPSE_QUERY_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_CORPSE_QUERY_Server_size(obj));
 
-    writer.write_u16_be(MSG_CORPSE_QUERY_Server_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(MSG_CORPSE_QUERY_Server_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000216); /* opcode */
 
@@ -14366,10 +15209,10 @@ std::vector<unsigned char> MSG_CORPSE_QUERY_Server::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_GMTICKET_DELETETICKET::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GMTICKET_DELETETICKET::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x00000217); /* opcode */
 
@@ -14377,18 +15220,18 @@ std::vector<unsigned char> CMSG_GMTICKET_DELETETICKET::write() const {
 }
 
 SMSG_GMTICKET_DELETETICKET SMSG_GMTICKET_DELETETICKET_read(Reader& reader) {
-    SMSG_GMTICKET_DELETETICKET obj;
+    SMSG_GMTICKET_DELETETICKET obj{};
 
     obj.response = static_cast<GmTicketResponse>(reader.read_u32());
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_GMTICKET_DELETETICKET::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_GMTICKET_DELETETICKET::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 2)); /* size */
 
     writer.write_u16(0x00000218); /* opcode */
 
@@ -14397,20 +15240,20 @@ std::vector<unsigned char> SMSG_GMTICKET_DELETETICKET::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> SMSG_CHAT_WRONG_FACTION::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_CHAT_WRONG_FACTION::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 2)); /* size */
 
     writer.write_u16(0x00000219); /* opcode */
 
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_GMTICKET_SYSTEMSTATUS::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GMTICKET_SYSTEMSTATUS::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x0000021a); /* opcode */
 
@@ -14418,18 +15261,18 @@ std::vector<unsigned char> CMSG_GMTICKET_SYSTEMSTATUS::write() const {
 }
 
 SMSG_GMTICKET_SYSTEMSTATUS SMSG_GMTICKET_SYSTEMSTATUS_read(Reader& reader) {
-    SMSG_GMTICKET_SYSTEMSTATUS obj;
+    SMSG_GMTICKET_SYSTEMSTATUS obj{};
 
     obj.will_accept_tickets = static_cast<GmTicketQueueStatus>(reader.read_u32());
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_GMTICKET_SYSTEMSTATUS::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_GMTICKET_SYSTEMSTATUS::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 2)); /* size */
 
     writer.write_u16(0x0000021b); /* opcode */
 
@@ -14439,18 +15282,18 @@ std::vector<unsigned char> SMSG_GMTICKET_SYSTEMSTATUS::write() const {
 }
 
 CMSG_SPIRIT_HEALER_ACTIVATE CMSG_SPIRIT_HEALER_ACTIVATE_read(Reader& reader) {
-    CMSG_SPIRIT_HEALER_ACTIVATE obj;
+    CMSG_SPIRIT_HEALER_ACTIVATE obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_SPIRIT_HEALER_ACTIVATE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_SPIRIT_HEALER_ACTIVATE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x0000021c); /* opcode */
 
@@ -14460,18 +15303,18 @@ std::vector<unsigned char> CMSG_SPIRIT_HEALER_ACTIVATE::write() const {
 }
 
 SMSG_SET_REST_START SMSG_SET_REST_START_read(Reader& reader) {
-    SMSG_SET_REST_START obj;
+    SMSG_SET_REST_START obj{};
 
     obj.unknown1 = reader.read_u32();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SET_REST_START::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SET_REST_START::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 2)); /* size */
 
     writer.write_u16(0x0000021e); /* opcode */
 
@@ -14481,18 +15324,18 @@ std::vector<unsigned char> SMSG_SET_REST_START::write() const {
 }
 
 SMSG_SPIRIT_HEALER_CONFIRM SMSG_SPIRIT_HEALER_CONFIRM_read(Reader& reader) {
-    SMSG_SPIRIT_HEALER_CONFIRM obj;
+    SMSG_SPIRIT_HEALER_CONFIRM obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SPIRIT_HEALER_CONFIRM::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPIRIT_HEALER_CONFIRM::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 2)); /* size */
 
     writer.write_u16(0x00000222); /* opcode */
 
@@ -14506,7 +15349,7 @@ static size_t SMSG_GOSSIP_POI_size(const SMSG_GOSSIP_POI& obj) {
 }
 
 SMSG_GOSSIP_POI SMSG_GOSSIP_POI_read(Reader& reader) {
-    SMSG_GOSSIP_POI obj;
+    SMSG_GOSSIP_POI obj{};
 
     obj.flags = reader.read_u32();
 
@@ -14521,11 +15364,11 @@ SMSG_GOSSIP_POI SMSG_GOSSIP_POI_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_GOSSIP_POI::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_GOSSIP_POI::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_GOSSIP_POI_size(obj));
 
-    writer.write_u16_be(SMSG_GOSSIP_POI_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_GOSSIP_POI_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000224); /* opcode */
 
@@ -14543,18 +15386,18 @@ std::vector<unsigned char> SMSG_GOSSIP_POI::write() const {
 }
 
 CMSG_CHAT_IGNORED CMSG_CHAT_IGNORED_read(Reader& reader) {
-    CMSG_CHAT_IGNORED obj;
+    CMSG_CHAT_IGNORED obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_CHAT_IGNORED::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_CHAT_IGNORED::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x00000225); /* opcode */
 
@@ -14568,7 +15411,7 @@ static size_t CMSG_GUILD_RANK_size(const CMSG_GUILD_RANK& obj) {
 }
 
 CMSG_GUILD_RANK CMSG_GUILD_RANK_read(Reader& reader) {
-    CMSG_GUILD_RANK obj;
+    CMSG_GUILD_RANK obj{};
 
     obj.rank_id = reader.read_u32();
 
@@ -14579,11 +15422,11 @@ CMSG_GUILD_RANK CMSG_GUILD_RANK_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_GUILD_RANK::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GUILD_RANK::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_GUILD_RANK_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_GUILD_RANK_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_GUILD_RANK_size(obj) + 4)); /* size */
 
     writer.write_u32(0x00000231); /* opcode */
 
@@ -14601,18 +15444,18 @@ static size_t CMSG_GUILD_ADD_RANK_size(const CMSG_GUILD_ADD_RANK& obj) {
 }
 
 CMSG_GUILD_ADD_RANK CMSG_GUILD_ADD_RANK_read(Reader& reader) {
-    CMSG_GUILD_ADD_RANK obj;
+    CMSG_GUILD_ADD_RANK obj{};
 
     obj.rank_name = reader.read_cstring();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_GUILD_ADD_RANK::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GUILD_ADD_RANK::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_GUILD_ADD_RANK_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_GUILD_ADD_RANK_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_GUILD_ADD_RANK_size(obj) + 4)); /* size */
 
     writer.write_u32(0x00000232); /* opcode */
 
@@ -14621,10 +15464,10 @@ std::vector<unsigned char> CMSG_GUILD_ADD_RANK::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_GUILD_DEL_RANK::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GUILD_DEL_RANK::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x00000233); /* opcode */
 
@@ -14636,7 +15479,7 @@ static size_t CMSG_GUILD_SET_PUBLIC_NOTE_size(const CMSG_GUILD_SET_PUBLIC_NOTE& 
 }
 
 CMSG_GUILD_SET_PUBLIC_NOTE CMSG_GUILD_SET_PUBLIC_NOTE_read(Reader& reader) {
-    CMSG_GUILD_SET_PUBLIC_NOTE obj;
+    CMSG_GUILD_SET_PUBLIC_NOTE obj{};
 
     obj.player_name = reader.read_cstring();
 
@@ -14645,11 +15488,11 @@ CMSG_GUILD_SET_PUBLIC_NOTE CMSG_GUILD_SET_PUBLIC_NOTE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_GUILD_SET_PUBLIC_NOTE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GUILD_SET_PUBLIC_NOTE::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_GUILD_SET_PUBLIC_NOTE_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_GUILD_SET_PUBLIC_NOTE_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_GUILD_SET_PUBLIC_NOTE_size(obj) + 4)); /* size */
 
     writer.write_u32(0x00000234); /* opcode */
 
@@ -14665,7 +15508,7 @@ static size_t CMSG_GUILD_SET_OFFICER_NOTE_size(const CMSG_GUILD_SET_OFFICER_NOTE
 }
 
 CMSG_GUILD_SET_OFFICER_NOTE CMSG_GUILD_SET_OFFICER_NOTE_read(Reader& reader) {
-    CMSG_GUILD_SET_OFFICER_NOTE obj;
+    CMSG_GUILD_SET_OFFICER_NOTE obj{};
 
     obj.player_name = reader.read_cstring();
 
@@ -14674,11 +15517,11 @@ CMSG_GUILD_SET_OFFICER_NOTE CMSG_GUILD_SET_OFFICER_NOTE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_GUILD_SET_OFFICER_NOTE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GUILD_SET_OFFICER_NOTE::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_GUILD_SET_OFFICER_NOTE_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_GUILD_SET_OFFICER_NOTE_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_GUILD_SET_OFFICER_NOTE_size(obj) + 4)); /* size */
 
     writer.write_u32(0x00000235); /* opcode */
 
@@ -14690,7 +15533,7 @@ std::vector<unsigned char> CMSG_GUILD_SET_OFFICER_NOTE::write() const {
 }
 
 SMSG_LOGIN_VERIFY_WORLD SMSG_LOGIN_VERIFY_WORLD_read(Reader& reader) {
-    SMSG_LOGIN_VERIFY_WORLD obj;
+    SMSG_LOGIN_VERIFY_WORLD obj{};
 
     obj.map = static_cast<Map>(reader.read_u32());
 
@@ -14701,11 +15544,11 @@ SMSG_LOGIN_VERIFY_WORLD SMSG_LOGIN_VERIFY_WORLD_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_LOGIN_VERIFY_WORLD::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_LOGIN_VERIFY_WORLD::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0014);
 
-    writer.write_u16_be(0x0014 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0014 + 2)); /* size */
 
     writer.write_u16(0x00000236); /* opcode */
 
@@ -14723,7 +15566,7 @@ static size_t CMSG_SEND_MAIL_size(const CMSG_SEND_MAIL& obj) {
 }
 
 CMSG_SEND_MAIL CMSG_SEND_MAIL_read(Reader& reader) {
-    CMSG_SEND_MAIL obj;
+    CMSG_SEND_MAIL obj{};
 
     obj.mailbox = reader.read_u64();
 
@@ -14750,11 +15593,11 @@ CMSG_SEND_MAIL CMSG_SEND_MAIL_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_SEND_MAIL::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_SEND_MAIL::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_SEND_MAIL_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_SEND_MAIL_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_SEND_MAIL_size(obj) + 4)); /* size */
 
     writer.write_u32(0x00000238); /* opcode */
 
@@ -14810,7 +15653,7 @@ static size_t SMSG_SEND_MAIL_RESULT_size(const SMSG_SEND_MAIL_RESULT& obj) {
 }
 
 SMSG_SEND_MAIL_RESULT SMSG_SEND_MAIL_RESULT_read(Reader& reader) {
-    SMSG_SEND_MAIL_RESULT obj;
+    SMSG_SEND_MAIL_RESULT obj{};
 
     obj.mail_id = reader.read_u32();
 
@@ -14841,11 +15684,11 @@ SMSG_SEND_MAIL_RESULT SMSG_SEND_MAIL_RESULT_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SEND_MAIL_RESULT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SEND_MAIL_RESULT::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_SEND_MAIL_RESULT_size(obj));
 
-    writer.write_u16_be(SMSG_SEND_MAIL_RESULT_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_SEND_MAIL_RESULT_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000239); /* opcode */
 
@@ -14879,18 +15722,18 @@ std::vector<unsigned char> SMSG_SEND_MAIL_RESULT::write() const {
 }
 
 CMSG_GET_MAIL_LIST CMSG_GET_MAIL_LIST_read(Reader& reader) {
-    CMSG_GET_MAIL_LIST obj;
+    CMSG_GET_MAIL_LIST obj{};
 
     obj.mailbox = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_GET_MAIL_LIST::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GET_MAIL_LIST::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x0000023a); /* opcode */
 
@@ -14910,22 +15753,22 @@ static size_t SMSG_MAIL_LIST_RESULT_size(const SMSG_MAIL_LIST_RESULT& obj) {
 }
 
 SMSG_MAIL_LIST_RESULT SMSG_MAIL_LIST_RESULT_read(Reader& reader) {
-    SMSG_MAIL_LIST_RESULT obj;
+    SMSG_MAIL_LIST_RESULT obj{};
 
     obj.amount_of_mails = reader.read_u8();
 
-    for (auto i = 0; i < obj.amount_of_mails; ++i) {
+    for (uint8_t i = 0; i < obj.amount_of_mails; ++i) {
         obj.mails.push_back(::wow_world_messages::vanilla::Mail_read(reader));
     }
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_MAIL_LIST_RESULT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_MAIL_LIST_RESULT::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_MAIL_LIST_RESULT_size(obj));
 
-    writer.write_u16_be(SMSG_MAIL_LIST_RESULT_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_MAIL_LIST_RESULT_size(obj) + 2)); /* size */
 
     writer.write_u16(0x0000023b); /* opcode */
 
@@ -14939,18 +15782,18 @@ std::vector<unsigned char> SMSG_MAIL_LIST_RESULT::write() const {
 }
 
 CMSG_BATTLEFIELD_LIST CMSG_BATTLEFIELD_LIST_read(Reader& reader) {
-    CMSG_BATTLEFIELD_LIST obj;
+    CMSG_BATTLEFIELD_LIST obj{};
 
     obj.map = static_cast<Map>(reader.read_u32());
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_BATTLEFIELD_LIST::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_BATTLEFIELD_LIST::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 4)); /* size */
 
     writer.write_u32(0x0000023c); /* opcode */
 
@@ -14964,7 +15807,7 @@ static size_t SMSG_BATTLEFIELD_LIST_size(const SMSG_BATTLEFIELD_LIST& obj) {
 }
 
 SMSG_BATTLEFIELD_LIST SMSG_BATTLEFIELD_LIST_read(Reader& reader) {
-    SMSG_BATTLEFIELD_LIST obj;
+    SMSG_BATTLEFIELD_LIST obj{};
 
     obj.battlemaster = reader.read_u64();
 
@@ -14974,18 +15817,18 @@ SMSG_BATTLEFIELD_LIST SMSG_BATTLEFIELD_LIST_read(Reader& reader) {
 
     obj.number_of_battlegrounds = reader.read_u32();
 
-    for (auto i = 0; i < obj.number_of_battlegrounds; ++i) {
+    for (uint32_t i = 0; i < obj.number_of_battlegrounds; ++i) {
         obj.battlegrounds.push_back(reader.read_u32());
     }
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_BATTLEFIELD_LIST::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_BATTLEFIELD_LIST::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_BATTLEFIELD_LIST_size(obj));
 
-    writer.write_u16_be(SMSG_BATTLEFIELD_LIST_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_BATTLEFIELD_LIST_size(obj) + 2)); /* size */
 
     writer.write_u16(0x0000023d); /* opcode */
 
@@ -15005,18 +15848,18 @@ std::vector<unsigned char> SMSG_BATTLEFIELD_LIST::write() const {
 }
 
 CMSG_BATTLEFIELD_JOIN CMSG_BATTLEFIELD_JOIN_read(Reader& reader) {
-    CMSG_BATTLEFIELD_JOIN obj;
+    CMSG_BATTLEFIELD_JOIN obj{};
 
     obj.map = static_cast<Map>(reader.read_u32());
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_BATTLEFIELD_JOIN::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_BATTLEFIELD_JOIN::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 4)); /* size */
 
     writer.write_u32(0x0000023e); /* opcode */
 
@@ -15026,7 +15869,7 @@ std::vector<unsigned char> CMSG_BATTLEFIELD_JOIN::write() const {
 }
 
 CMSG_ITEM_TEXT_QUERY CMSG_ITEM_TEXT_QUERY_read(Reader& reader) {
-    CMSG_ITEM_TEXT_QUERY obj;
+    CMSG_ITEM_TEXT_QUERY obj{};
 
     obj.item_text_id = reader.read_u32();
 
@@ -15037,11 +15880,11 @@ CMSG_ITEM_TEXT_QUERY CMSG_ITEM_TEXT_QUERY_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_ITEM_TEXT_QUERY::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_ITEM_TEXT_QUERY::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 4)); /* size */
 
     writer.write_u32(0x00000243); /* opcode */
 
@@ -15059,7 +15902,7 @@ static size_t SMSG_ITEM_TEXT_QUERY_RESPONSE_size(const SMSG_ITEM_TEXT_QUERY_RESP
 }
 
 SMSG_ITEM_TEXT_QUERY_RESPONSE SMSG_ITEM_TEXT_QUERY_RESPONSE_read(Reader& reader) {
-    SMSG_ITEM_TEXT_QUERY_RESPONSE obj;
+    SMSG_ITEM_TEXT_QUERY_RESPONSE obj{};
 
     obj.item_text_id = reader.read_u32();
 
@@ -15068,11 +15911,11 @@ SMSG_ITEM_TEXT_QUERY_RESPONSE SMSG_ITEM_TEXT_QUERY_RESPONSE_read(Reader& reader)
     return obj;
 }
 
-std::vector<unsigned char> SMSG_ITEM_TEXT_QUERY_RESPONSE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_ITEM_TEXT_QUERY_RESPONSE::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_ITEM_TEXT_QUERY_RESPONSE_size(obj));
 
-    writer.write_u16_be(SMSG_ITEM_TEXT_QUERY_RESPONSE_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_ITEM_TEXT_QUERY_RESPONSE_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000244); /* opcode */
 
@@ -15084,7 +15927,7 @@ std::vector<unsigned char> SMSG_ITEM_TEXT_QUERY_RESPONSE::write() const {
 }
 
 CMSG_MAIL_TAKE_MONEY CMSG_MAIL_TAKE_MONEY_read(Reader& reader) {
-    CMSG_MAIL_TAKE_MONEY obj;
+    CMSG_MAIL_TAKE_MONEY obj{};
 
     obj.mailbox = reader.read_u64();
 
@@ -15093,11 +15936,11 @@ CMSG_MAIL_TAKE_MONEY CMSG_MAIL_TAKE_MONEY_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_MAIL_TAKE_MONEY::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_MAIL_TAKE_MONEY::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 4)); /* size */
 
     writer.write_u32(0x00000245); /* opcode */
 
@@ -15109,7 +15952,7 @@ std::vector<unsigned char> CMSG_MAIL_TAKE_MONEY::write() const {
 }
 
 CMSG_MAIL_TAKE_ITEM CMSG_MAIL_TAKE_ITEM_read(Reader& reader) {
-    CMSG_MAIL_TAKE_ITEM obj;
+    CMSG_MAIL_TAKE_ITEM obj{};
 
     obj.mailbox = reader.read_u64();
 
@@ -15118,11 +15961,11 @@ CMSG_MAIL_TAKE_ITEM CMSG_MAIL_TAKE_ITEM_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_MAIL_TAKE_ITEM::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_MAIL_TAKE_ITEM::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 4)); /* size */
 
     writer.write_u32(0x00000246); /* opcode */
 
@@ -15134,7 +15977,7 @@ std::vector<unsigned char> CMSG_MAIL_TAKE_ITEM::write() const {
 }
 
 CMSG_MAIL_MARK_AS_READ CMSG_MAIL_MARK_AS_READ_read(Reader& reader) {
-    CMSG_MAIL_MARK_AS_READ obj;
+    CMSG_MAIL_MARK_AS_READ obj{};
 
     obj.mailbox = reader.read_u64();
 
@@ -15143,11 +15986,11 @@ CMSG_MAIL_MARK_AS_READ CMSG_MAIL_MARK_AS_READ_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_MAIL_MARK_AS_READ::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_MAIL_MARK_AS_READ::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 4)); /* size */
 
     writer.write_u32(0x00000247); /* opcode */
 
@@ -15159,7 +16002,7 @@ std::vector<unsigned char> CMSG_MAIL_MARK_AS_READ::write() const {
 }
 
 CMSG_MAIL_RETURN_TO_SENDER CMSG_MAIL_RETURN_TO_SENDER_read(Reader& reader) {
-    CMSG_MAIL_RETURN_TO_SENDER obj;
+    CMSG_MAIL_RETURN_TO_SENDER obj{};
 
     obj.mailbox_id = reader.read_u64();
 
@@ -15168,11 +16011,11 @@ CMSG_MAIL_RETURN_TO_SENDER CMSG_MAIL_RETURN_TO_SENDER_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_MAIL_RETURN_TO_SENDER::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_MAIL_RETURN_TO_SENDER::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 4)); /* size */
 
     writer.write_u32(0x00000248); /* opcode */
 
@@ -15184,7 +16027,7 @@ std::vector<unsigned char> CMSG_MAIL_RETURN_TO_SENDER::write() const {
 }
 
 CMSG_MAIL_DELETE CMSG_MAIL_DELETE_read(Reader& reader) {
-    CMSG_MAIL_DELETE obj;
+    CMSG_MAIL_DELETE obj{};
 
     obj.mailbox_id = reader.read_u64();
 
@@ -15193,11 +16036,11 @@ CMSG_MAIL_DELETE CMSG_MAIL_DELETE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_MAIL_DELETE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_MAIL_DELETE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 4)); /* size */
 
     writer.write_u32(0x00000249); /* opcode */
 
@@ -15209,7 +16052,7 @@ std::vector<unsigned char> CMSG_MAIL_DELETE::write() const {
 }
 
 CMSG_MAIL_CREATE_TEXT_ITEM CMSG_MAIL_CREATE_TEXT_ITEM_read(Reader& reader) {
-    CMSG_MAIL_CREATE_TEXT_ITEM obj;
+    CMSG_MAIL_CREATE_TEXT_ITEM obj{};
 
     obj.mailbox = reader.read_u64();
 
@@ -15220,11 +16063,11 @@ CMSG_MAIL_CREATE_TEXT_ITEM CMSG_MAIL_CREATE_TEXT_ITEM_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_MAIL_CREATE_TEXT_ITEM::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_MAIL_CREATE_TEXT_ITEM::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0010);
 
-    writer.write_u16_be(0x0010 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0010 + 4)); /* size */
 
     writer.write_u32(0x0000024a); /* opcode */
 
@@ -15242,7 +16085,7 @@ static size_t SMSG_SPELLLOGMISS_size(const SMSG_SPELLLOGMISS& obj) {
 }
 
 SMSG_SPELLLOGMISS SMSG_SPELLLOGMISS_read(Reader& reader) {
-    SMSG_SPELLLOGMISS obj;
+    SMSG_SPELLLOGMISS obj{};
 
     obj.id = reader.read_u32();
 
@@ -15252,18 +16095,18 @@ SMSG_SPELLLOGMISS SMSG_SPELLLOGMISS_read(Reader& reader) {
 
     obj.amount_of_targets = reader.read_u32();
 
-    for (auto i = 0; i < obj.amount_of_targets; ++i) {
+    for (uint32_t i = 0; i < obj.amount_of_targets; ++i) {
         obj.targets.push_back(::wow_world_messages::vanilla::SpellLogMiss_read(reader));
     }
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SPELLLOGMISS::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPELLLOGMISS::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_SPELLLOGMISS_size(obj));
 
-    writer.write_u16_be(SMSG_SPELLLOGMISS_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_SPELLLOGMISS_size(obj) + 2)); /* size */
 
     writer.write_u16(0x0000024b); /* opcode */
 
@@ -15293,7 +16136,7 @@ static size_t SMSG_SPELLLOGEXECUTE_size(const SMSG_SPELLLOGEXECUTE& obj) {
 }
 
 SMSG_SPELLLOGEXECUTE SMSG_SPELLLOGEXECUTE_read(Reader& reader) {
-    SMSG_SPELLLOGEXECUTE obj;
+    SMSG_SPELLLOGEXECUTE obj{};
 
     obj.caster = reader.read_packed_guid();
 
@@ -15301,18 +16144,18 @@ SMSG_SPELLLOGEXECUTE SMSG_SPELLLOGEXECUTE_read(Reader& reader) {
 
     obj.amount_of_effects = reader.read_u32();
 
-    for (auto i = 0; i < obj.amount_of_effects; ++i) {
+    for (uint32_t i = 0; i < obj.amount_of_effects; ++i) {
         obj.logs.push_back(::wow_world_messages::vanilla::SpellLog_read(reader));
     }
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SPELLLOGEXECUTE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPELLLOGEXECUTE::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_SPELLLOGEXECUTE_size(obj));
 
-    writer.write_u16_be(SMSG_SPELLLOGEXECUTE_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_SPELLLOGEXECUTE_size(obj) + 2)); /* size */
 
     writer.write_u16(0x0000024c); /* opcode */
 
@@ -15340,7 +16183,7 @@ static size_t SMSG_PERIODICAURALOG_size(const SMSG_PERIODICAURALOG& obj) {
 }
 
 SMSG_PERIODICAURALOG SMSG_PERIODICAURALOG_read(Reader& reader) {
-    SMSG_PERIODICAURALOG obj;
+    SMSG_PERIODICAURALOG obj{};
 
     obj.target = reader.read_packed_guid();
 
@@ -15350,18 +16193,18 @@ SMSG_PERIODICAURALOG SMSG_PERIODICAURALOG_read(Reader& reader) {
 
     obj.amount_of_auras = reader.read_u32();
 
-    for (auto i = 0; i < obj.amount_of_auras; ++i) {
+    for (uint32_t i = 0; i < obj.amount_of_auras; ++i) {
         obj.auras.push_back(::wow_world_messages::vanilla::AuraLog_read(reader));
     }
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_PERIODICAURALOG::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_PERIODICAURALOG::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_PERIODICAURALOG_size(obj));
 
-    writer.write_u16_be(SMSG_PERIODICAURALOG_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_PERIODICAURALOG_size(obj) + 2)); /* size */
 
     writer.write_u16(0x0000024e); /* opcode */
 
@@ -15381,7 +16224,7 @@ std::vector<unsigned char> SMSG_PERIODICAURALOG::write() const {
 }
 
 SMSG_SPELLDAMAGESHIELD SMSG_SPELLDAMAGESHIELD_read(Reader& reader) {
-    SMSG_SPELLDAMAGESHIELD obj;
+    SMSG_SPELLDAMAGESHIELD obj{};
 
     obj.victim = reader.read_u64();
 
@@ -15394,11 +16237,11 @@ SMSG_SPELLDAMAGESHIELD SMSG_SPELLDAMAGESHIELD_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SPELLDAMAGESHIELD::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPELLDAMAGESHIELD::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0018);
 
-    writer.write_u16_be(0x0018 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0018 + 2)); /* size */
 
     writer.write_u16(0x0000024f); /* opcode */
 
@@ -15418,7 +16261,7 @@ static size_t SMSG_SPELLNONMELEEDAMAGELOG_size(const SMSG_SPELLNONMELEEDAMAGELOG
 }
 
 SMSG_SPELLNONMELEEDAMAGELOG SMSG_SPELLNONMELEEDAMAGELOG_read(Reader& reader) {
-    SMSG_SPELLNONMELEEDAMAGELOG obj;
+    SMSG_SPELLNONMELEEDAMAGELOG obj{};
 
     obj.target = reader.read_packed_guid();
 
@@ -15447,11 +16290,11 @@ SMSG_SPELLNONMELEEDAMAGELOG SMSG_SPELLNONMELEEDAMAGELOG_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SPELLNONMELEEDAMAGELOG::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPELLNONMELEEDAMAGELOG::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_SPELLNONMELEEDAMAGELOG_size(obj));
 
-    writer.write_u16_be(SMSG_SPELLNONMELEEDAMAGELOG_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_SPELLNONMELEEDAMAGELOG_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000250); /* opcode */
 
@@ -15483,7 +16326,7 @@ std::vector<unsigned char> SMSG_SPELLNONMELEEDAMAGELOG::write() const {
 }
 
 CMSG_LEARN_TALENT CMSG_LEARN_TALENT_read(Reader& reader) {
-    CMSG_LEARN_TALENT obj;
+    CMSG_LEARN_TALENT obj{};
 
     obj.talent = static_cast<Talent>(reader.read_u32());
 
@@ -15492,11 +16335,11 @@ CMSG_LEARN_TALENT CMSG_LEARN_TALENT_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_LEARN_TALENT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_LEARN_TALENT::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x00000251); /* opcode */
 
@@ -15507,19 +16350,57 @@ std::vector<unsigned char> CMSG_LEARN_TALENT::write() const {
     return writer.m_buf;
 }
 
+static size_t CMSG_TOGGLE_PVP_size(const CMSG_TOGGLE_PVP& obj) {
+    size_t _size = 0;
+
+    if(obj.set) {
+        _size += 1;
+    }
+
+    return _size;
+}
+
+CMSG_TOGGLE_PVP CMSG_TOGGLE_PVP_read(Reader& reader, size_t body_size) {
+    CMSG_TOGGLE_PVP obj{};
+    size_t _size = 0;
+
+    if (_size < body_size) {
+        obj.set = std::unique_ptr<vanilla::CMSG_TOGGLE_PVP::Set>(new vanilla::CMSG_TOGGLE_PVP::Set());
+
+        obj.set->enable_pvp = reader.read_bool8();
+
+    }
+    return obj;
+}
+
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_TOGGLE_PVP::write() const {
+    const auto& obj = *this;
+    auto writer = Writer(CMSG_TOGGLE_PVP_size(obj));
+
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_TOGGLE_PVP_size(obj) + 4)); /* size */
+
+    writer.write_u32(0x00000253); /* opcode */
+
+    if(obj.set) {
+        writer.write_bool8(obj.set->enable_pvp);
+
+    }
+    return writer.m_buf;
+}
+
 SMSG_ZONE_UNDER_ATTACK SMSG_ZONE_UNDER_ATTACK_read(Reader& reader) {
-    SMSG_ZONE_UNDER_ATTACK obj;
+    SMSG_ZONE_UNDER_ATTACK obj{};
 
     obj.zone_id = static_cast<Area>(reader.read_u32());
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_ZONE_UNDER_ATTACK::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_ZONE_UNDER_ATTACK::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 2)); /* size */
 
     writer.write_u16(0x00000254); /* opcode */
 
@@ -15529,18 +16410,18 @@ std::vector<unsigned char> SMSG_ZONE_UNDER_ATTACK::write() const {
 }
 
 MSG_AUCTION_HELLO_Client MSG_AUCTION_HELLO_Client_read(Reader& reader) {
-    MSG_AUCTION_HELLO_Client obj;
+    MSG_AUCTION_HELLO_Client obj{};
 
     obj.auctioneer = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> MSG_AUCTION_HELLO_Client::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_AUCTION_HELLO_Client::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x00000255); /* opcode */
 
@@ -15550,7 +16431,7 @@ std::vector<unsigned char> MSG_AUCTION_HELLO_Client::write() const {
 }
 
 MSG_AUCTION_HELLO_Server MSG_AUCTION_HELLO_Server_read(Reader& reader) {
-    MSG_AUCTION_HELLO_Server obj;
+    MSG_AUCTION_HELLO_Server obj{};
 
     obj.auctioneer = reader.read_u64();
 
@@ -15559,11 +16440,11 @@ MSG_AUCTION_HELLO_Server MSG_AUCTION_HELLO_Server_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> MSG_AUCTION_HELLO_Server::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_AUCTION_HELLO_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 2)); /* size */
 
     writer.write_u16(0x00000255); /* opcode */
 
@@ -15575,7 +16456,7 @@ std::vector<unsigned char> MSG_AUCTION_HELLO_Server::write() const {
 }
 
 CMSG_AUCTION_SELL_ITEM CMSG_AUCTION_SELL_ITEM_read(Reader& reader) {
-    CMSG_AUCTION_SELL_ITEM obj;
+    CMSG_AUCTION_SELL_ITEM obj{};
 
     obj.auctioneer = reader.read_u64();
 
@@ -15590,11 +16471,11 @@ CMSG_AUCTION_SELL_ITEM CMSG_AUCTION_SELL_ITEM_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_AUCTION_SELL_ITEM::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_AUCTION_SELL_ITEM::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x001c);
 
-    writer.write_u16_be(0x001c + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x001c + 4)); /* size */
 
     writer.write_u32(0x00000256); /* opcode */
 
@@ -15612,7 +16493,7 @@ std::vector<unsigned char> CMSG_AUCTION_SELL_ITEM::write() const {
 }
 
 CMSG_AUCTION_REMOVE_ITEM CMSG_AUCTION_REMOVE_ITEM_read(Reader& reader) {
-    CMSG_AUCTION_REMOVE_ITEM obj;
+    CMSG_AUCTION_REMOVE_ITEM obj{};
 
     obj.auctioneer = reader.read_u64();
 
@@ -15621,11 +16502,11 @@ CMSG_AUCTION_REMOVE_ITEM CMSG_AUCTION_REMOVE_ITEM_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_AUCTION_REMOVE_ITEM::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_AUCTION_REMOVE_ITEM::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 4)); /* size */
 
     writer.write_u32(0x00000257); /* opcode */
 
@@ -15641,7 +16522,7 @@ static size_t CMSG_AUCTION_LIST_ITEMS_size(const CMSG_AUCTION_LIST_ITEMS& obj) {
 }
 
 CMSG_AUCTION_LIST_ITEMS CMSG_AUCTION_LIST_ITEMS_read(Reader& reader) {
-    CMSG_AUCTION_LIST_ITEMS obj;
+    CMSG_AUCTION_LIST_ITEMS obj{};
 
     obj.auctioneer = reader.read_u64();
 
@@ -15666,11 +16547,11 @@ CMSG_AUCTION_LIST_ITEMS CMSG_AUCTION_LIST_ITEMS_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_AUCTION_LIST_ITEMS::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_AUCTION_LIST_ITEMS::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_AUCTION_LIST_ITEMS_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_AUCTION_LIST_ITEMS_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_AUCTION_LIST_ITEMS_size(obj) + 4)); /* size */
 
     writer.write_u32(0x00000258); /* opcode */
 
@@ -15698,7 +16579,7 @@ std::vector<unsigned char> CMSG_AUCTION_LIST_ITEMS::write() const {
 }
 
 CMSG_AUCTION_LIST_OWNER_ITEMS CMSG_AUCTION_LIST_OWNER_ITEMS_read(Reader& reader) {
-    CMSG_AUCTION_LIST_OWNER_ITEMS obj;
+    CMSG_AUCTION_LIST_OWNER_ITEMS obj{};
 
     obj.auctioneer = reader.read_u64();
 
@@ -15707,11 +16588,11 @@ CMSG_AUCTION_LIST_OWNER_ITEMS CMSG_AUCTION_LIST_OWNER_ITEMS_read(Reader& reader)
     return obj;
 }
 
-std::vector<unsigned char> CMSG_AUCTION_LIST_OWNER_ITEMS::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_AUCTION_LIST_OWNER_ITEMS::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 4)); /* size */
 
     writer.write_u32(0x00000259); /* opcode */
 
@@ -15723,7 +16604,7 @@ std::vector<unsigned char> CMSG_AUCTION_LIST_OWNER_ITEMS::write() const {
 }
 
 CMSG_AUCTION_PLACE_BID CMSG_AUCTION_PLACE_BID_read(Reader& reader) {
-    CMSG_AUCTION_PLACE_BID obj;
+    CMSG_AUCTION_PLACE_BID obj{};
 
     obj.auctioneer = reader.read_u64();
 
@@ -15734,11 +16615,11 @@ CMSG_AUCTION_PLACE_BID CMSG_AUCTION_PLACE_BID_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_AUCTION_PLACE_BID::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_AUCTION_PLACE_BID::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0010);
 
-    writer.write_u16_be(0x0010 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0010 + 4)); /* size */
 
     writer.write_u32(0x0000025a); /* opcode */
 
@@ -15784,7 +16665,7 @@ static size_t SMSG_AUCTION_COMMAND_RESULT_size(const SMSG_AUCTION_COMMAND_RESULT
 }
 
 SMSG_AUCTION_COMMAND_RESULT SMSG_AUCTION_COMMAND_RESULT_read(Reader& reader) {
-    SMSG_AUCTION_COMMAND_RESULT obj;
+    SMSG_AUCTION_COMMAND_RESULT obj{};
 
     obj.auction_id = reader.read_u32();
 
@@ -15829,11 +16710,11 @@ SMSG_AUCTION_COMMAND_RESULT SMSG_AUCTION_COMMAND_RESULT_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_AUCTION_COMMAND_RESULT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_AUCTION_COMMAND_RESULT::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_AUCTION_COMMAND_RESULT_size(obj));
 
-    writer.write_u16_be(SMSG_AUCTION_COMMAND_RESULT_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_AUCTION_COMMAND_RESULT_size(obj) + 2)); /* size */
 
     writer.write_u16(0x0000025b); /* opcode */
 
@@ -15885,11 +16766,11 @@ static size_t SMSG_AUCTION_LIST_RESULT_size(const SMSG_AUCTION_LIST_RESULT& obj)
 }
 
 SMSG_AUCTION_LIST_RESULT SMSG_AUCTION_LIST_RESULT_read(Reader& reader) {
-    SMSG_AUCTION_LIST_RESULT obj;
+    SMSG_AUCTION_LIST_RESULT obj{};
 
     obj.count = reader.read_u32();
 
-    for (auto i = 0; i < obj.count; ++i) {
+    for (uint32_t i = 0; i < obj.count; ++i) {
         obj.auctions.push_back(::wow_world_messages::vanilla::AuctionListItem_read(reader));
     }
 
@@ -15898,11 +16779,11 @@ SMSG_AUCTION_LIST_RESULT SMSG_AUCTION_LIST_RESULT_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_AUCTION_LIST_RESULT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_AUCTION_LIST_RESULT::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_AUCTION_LIST_RESULT_size(obj));
 
-    writer.write_u16_be(SMSG_AUCTION_LIST_RESULT_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_AUCTION_LIST_RESULT_size(obj) + 2)); /* size */
 
     writer.write_u16(0x0000025c); /* opcode */
 
@@ -15922,11 +16803,11 @@ static size_t SMSG_AUCTION_OWNER_LIST_RESULT_size(const SMSG_AUCTION_OWNER_LIST_
 }
 
 SMSG_AUCTION_OWNER_LIST_RESULT SMSG_AUCTION_OWNER_LIST_RESULT_read(Reader& reader) {
-    SMSG_AUCTION_OWNER_LIST_RESULT obj;
+    SMSG_AUCTION_OWNER_LIST_RESULT obj{};
 
     obj.count = reader.read_u32();
 
-    for (auto i = 0; i < obj.count; ++i) {
+    for (uint32_t i = 0; i < obj.count; ++i) {
         obj.auctions.push_back(::wow_world_messages::vanilla::AuctionListItem_read(reader));
     }
 
@@ -15935,11 +16816,11 @@ SMSG_AUCTION_OWNER_LIST_RESULT SMSG_AUCTION_OWNER_LIST_RESULT_read(Reader& reade
     return obj;
 }
 
-std::vector<unsigned char> SMSG_AUCTION_OWNER_LIST_RESULT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_AUCTION_OWNER_LIST_RESULT::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_AUCTION_OWNER_LIST_RESULT_size(obj));
 
-    writer.write_u16_be(SMSG_AUCTION_OWNER_LIST_RESULT_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_AUCTION_OWNER_LIST_RESULT_size(obj) + 2)); /* size */
 
     writer.write_u16(0x0000025d); /* opcode */
 
@@ -15955,7 +16836,7 @@ std::vector<unsigned char> SMSG_AUCTION_OWNER_LIST_RESULT::write() const {
 }
 
 SMSG_AUCTION_BIDDER_NOTIFICATION SMSG_AUCTION_BIDDER_NOTIFICATION_read(Reader& reader) {
-    SMSG_AUCTION_BIDDER_NOTIFICATION obj;
+    SMSG_AUCTION_BIDDER_NOTIFICATION obj{};
 
     obj.auction_house = static_cast<AuctionHouse>(reader.read_u32());
 
@@ -15974,11 +16855,11 @@ SMSG_AUCTION_BIDDER_NOTIFICATION SMSG_AUCTION_BIDDER_NOTIFICATION_read(Reader& r
     return obj;
 }
 
-std::vector<unsigned char> SMSG_AUCTION_BIDDER_NOTIFICATION::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_AUCTION_BIDDER_NOTIFICATION::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0020);
 
-    writer.write_u16_be(0x0020 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0020 + 2)); /* size */
 
     writer.write_u16(0x0000025e); /* opcode */
 
@@ -16000,7 +16881,7 @@ std::vector<unsigned char> SMSG_AUCTION_BIDDER_NOTIFICATION::write() const {
 }
 
 SMSG_AUCTION_OWNER_NOTIFICATION SMSG_AUCTION_OWNER_NOTIFICATION_read(Reader& reader) {
-    SMSG_AUCTION_OWNER_NOTIFICATION obj;
+    SMSG_AUCTION_OWNER_NOTIFICATION obj{};
 
     obj.auction_id = reader.read_u32();
 
@@ -16017,11 +16898,11 @@ SMSG_AUCTION_OWNER_NOTIFICATION SMSG_AUCTION_OWNER_NOTIFICATION_read(Reader& rea
     return obj;
 }
 
-std::vector<unsigned char> SMSG_AUCTION_OWNER_NOTIFICATION::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_AUCTION_OWNER_NOTIFICATION::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x001c);
 
-    writer.write_u16_be(0x001c + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x001c + 2)); /* size */
 
     writer.write_u16(0x0000025f); /* opcode */
 
@@ -16041,7 +16922,7 @@ std::vector<unsigned char> SMSG_AUCTION_OWNER_NOTIFICATION::write() const {
 }
 
 SMSG_PROCRESIST SMSG_PROCRESIST_read(Reader& reader) {
-    SMSG_PROCRESIST obj;
+    SMSG_PROCRESIST obj{};
 
     obj.caster = reader.read_u64();
 
@@ -16054,11 +16935,11 @@ SMSG_PROCRESIST SMSG_PROCRESIST_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_PROCRESIST::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_PROCRESIST::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0015);
 
-    writer.write_u16_be(0x0015 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0015 + 2)); /* size */
 
     writer.write_u16(0x00000260); /* opcode */
 
@@ -16084,7 +16965,7 @@ static size_t SMSG_DISPEL_FAILED_size(const SMSG_DISPEL_FAILED& obj) {
 }
 
 SMSG_DISPEL_FAILED SMSG_DISPEL_FAILED_read(Reader& reader, size_t body_size) {
-    SMSG_DISPEL_FAILED obj;
+    SMSG_DISPEL_FAILED obj{};
     size_t _size = 0;
 
     obj.caster = reader.read_u64();
@@ -16101,11 +16982,11 @@ SMSG_DISPEL_FAILED SMSG_DISPEL_FAILED_read(Reader& reader, size_t body_size) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_DISPEL_FAILED::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_DISPEL_FAILED::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_DISPEL_FAILED_size(obj));
 
-    writer.write_u16_be(SMSG_DISPEL_FAILED_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_DISPEL_FAILED_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000262); /* opcode */
 
@@ -16121,7 +17002,7 @@ std::vector<unsigned char> SMSG_DISPEL_FAILED::write() const {
 }
 
 SMSG_SPELLORDAMAGE_IMMUNE SMSG_SPELLORDAMAGE_IMMUNE_read(Reader& reader) {
-    SMSG_SPELLORDAMAGE_IMMUNE obj;
+    SMSG_SPELLORDAMAGE_IMMUNE obj{};
 
     obj.caster = reader.read_u64();
 
@@ -16134,11 +17015,11 @@ SMSG_SPELLORDAMAGE_IMMUNE SMSG_SPELLORDAMAGE_IMMUNE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SPELLORDAMAGE_IMMUNE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPELLORDAMAGE_IMMUNE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0015);
 
-    writer.write_u16_be(0x0015 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0015 + 2)); /* size */
 
     writer.write_u16(0x00000263); /* opcode */
 
@@ -16158,7 +17039,7 @@ static size_t CMSG_AUCTION_LIST_BIDDER_ITEMS_size(const CMSG_AUCTION_LIST_BIDDER
 }
 
 CMSG_AUCTION_LIST_BIDDER_ITEMS CMSG_AUCTION_LIST_BIDDER_ITEMS_read(Reader& reader) {
-    CMSG_AUCTION_LIST_BIDDER_ITEMS obj;
+    CMSG_AUCTION_LIST_BIDDER_ITEMS obj{};
 
     obj.auctioneer = reader.read_u64();
 
@@ -16166,18 +17047,18 @@ CMSG_AUCTION_LIST_BIDDER_ITEMS CMSG_AUCTION_LIST_BIDDER_ITEMS_read(Reader& reade
 
     obj.amount_of_outbid_items = reader.read_u32();
 
-    for (auto i = 0; i < obj.amount_of_outbid_items; ++i) {
+    for (uint32_t i = 0; i < obj.amount_of_outbid_items; ++i) {
         obj.outbid_item_ids.push_back(reader.read_u32());
     }
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_AUCTION_LIST_BIDDER_ITEMS::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_AUCTION_LIST_BIDDER_ITEMS::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_AUCTION_LIST_BIDDER_ITEMS_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_AUCTION_LIST_BIDDER_ITEMS_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_AUCTION_LIST_BIDDER_ITEMS_size(obj) + 4)); /* size */
 
     writer.write_u32(0x00000264); /* opcode */
 
@@ -16199,11 +17080,11 @@ static size_t SMSG_AUCTION_BIDDER_LIST_RESULT_size(const SMSG_AUCTION_BIDDER_LIS
 }
 
 SMSG_AUCTION_BIDDER_LIST_RESULT SMSG_AUCTION_BIDDER_LIST_RESULT_read(Reader& reader) {
-    SMSG_AUCTION_BIDDER_LIST_RESULT obj;
+    SMSG_AUCTION_BIDDER_LIST_RESULT obj{};
 
     obj.count = reader.read_u32();
 
-    for (auto i = 0; i < obj.count; ++i) {
+    for (uint32_t i = 0; i < obj.count; ++i) {
         obj.auctions.push_back(::wow_world_messages::vanilla::AuctionListItem_read(reader));
     }
 
@@ -16212,11 +17093,11 @@ SMSG_AUCTION_BIDDER_LIST_RESULT SMSG_AUCTION_BIDDER_LIST_RESULT_read(Reader& rea
     return obj;
 }
 
-std::vector<unsigned char> SMSG_AUCTION_BIDDER_LIST_RESULT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_AUCTION_BIDDER_LIST_RESULT::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_AUCTION_BIDDER_LIST_RESULT_size(obj));
 
-    writer.write_u16_be(SMSG_AUCTION_BIDDER_LIST_RESULT_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_AUCTION_BIDDER_LIST_RESULT_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000265); /* opcode */
 
@@ -16232,7 +17113,7 @@ std::vector<unsigned char> SMSG_AUCTION_BIDDER_LIST_RESULT::write() const {
 }
 
 SMSG_SET_FLAT_SPELL_MODIFIER SMSG_SET_FLAT_SPELL_MODIFIER_read(Reader& reader) {
-    SMSG_SET_FLAT_SPELL_MODIFIER obj;
+    SMSG_SET_FLAT_SPELL_MODIFIER obj{};
 
     obj.eff = reader.read_u8();
 
@@ -16243,11 +17124,11 @@ SMSG_SET_FLAT_SPELL_MODIFIER SMSG_SET_FLAT_SPELL_MODIFIER_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SET_FLAT_SPELL_MODIFIER::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SET_FLAT_SPELL_MODIFIER::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0006);
 
-    writer.write_u16_be(0x0006 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0006 + 2)); /* size */
 
     writer.write_u16(0x00000266); /* opcode */
 
@@ -16261,7 +17142,7 @@ std::vector<unsigned char> SMSG_SET_FLAT_SPELL_MODIFIER::write() const {
 }
 
 SMSG_SET_PCT_SPELL_MODIFIER SMSG_SET_PCT_SPELL_MODIFIER_read(Reader& reader) {
-    SMSG_SET_PCT_SPELL_MODIFIER obj;
+    SMSG_SET_PCT_SPELL_MODIFIER obj{};
 
     obj.eff = reader.read_u8();
 
@@ -16272,11 +17153,11 @@ SMSG_SET_PCT_SPELL_MODIFIER SMSG_SET_PCT_SPELL_MODIFIER_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SET_PCT_SPELL_MODIFIER::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SET_PCT_SPELL_MODIFIER::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0006);
 
-    writer.write_u16_be(0x0006 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0006 + 2)); /* size */
 
     writer.write_u16(0x00000267); /* opcode */
 
@@ -16290,18 +17171,18 @@ std::vector<unsigned char> SMSG_SET_PCT_SPELL_MODIFIER::write() const {
 }
 
 CMSG_SET_AMMO CMSG_SET_AMMO_read(Reader& reader) {
-    CMSG_SET_AMMO obj;
+    CMSG_SET_AMMO obj{};
 
     obj.item = reader.read_u32();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_SET_AMMO::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_SET_AMMO::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 4)); /* size */
 
     writer.write_u32(0x00000268); /* opcode */
 
@@ -16311,18 +17192,18 @@ std::vector<unsigned char> CMSG_SET_AMMO::write() const {
 }
 
 SMSG_CORPSE_RECLAIM_DELAY SMSG_CORPSE_RECLAIM_DELAY_read(Reader& reader) {
-    SMSG_CORPSE_RECLAIM_DELAY obj;
+    SMSG_CORPSE_RECLAIM_DELAY obj{};
 
     obj.delay = reader.read_u32();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_CORPSE_RECLAIM_DELAY::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_CORPSE_RECLAIM_DELAY::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 2)); /* size */
 
     writer.write_u16(0x00000269); /* opcode */
 
@@ -16332,18 +17213,18 @@ std::vector<unsigned char> SMSG_CORPSE_RECLAIM_DELAY::write() const {
 }
 
 CMSG_SET_ACTIVE_MOVER CMSG_SET_ACTIVE_MOVER_read(Reader& reader) {
-    CMSG_SET_ACTIVE_MOVER obj;
+    CMSG_SET_ACTIVE_MOVER obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_SET_ACTIVE_MOVER::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_SET_ACTIVE_MOVER::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x0000026a); /* opcode */
 
@@ -16353,7 +17234,7 @@ std::vector<unsigned char> CMSG_SET_ACTIVE_MOVER::write() const {
 }
 
 CMSG_PET_CANCEL_AURA CMSG_PET_CANCEL_AURA_read(Reader& reader) {
-    CMSG_PET_CANCEL_AURA obj;
+    CMSG_PET_CANCEL_AURA obj{};
 
     obj.guid = reader.read_u64();
 
@@ -16362,11 +17243,11 @@ CMSG_PET_CANCEL_AURA CMSG_PET_CANCEL_AURA_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_PET_CANCEL_AURA::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_PET_CANCEL_AURA::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 4)); /* size */
 
     writer.write_u32(0x0000026b); /* opcode */
 
@@ -16377,10 +17258,10 @@ std::vector<unsigned char> CMSG_PET_CANCEL_AURA::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_CANCEL_AUTO_REPEAT_SPELL::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_CANCEL_AUTO_REPEAT_SPELL::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x0000026d); /* opcode */
 
@@ -16388,18 +17269,18 @@ std::vector<unsigned char> CMSG_CANCEL_AUTO_REPEAT_SPELL::write() const {
 }
 
 MSG_LIST_STABLED_PETS_Client MSG_LIST_STABLED_PETS_Client_read(Reader& reader) {
-    MSG_LIST_STABLED_PETS_Client obj;
+    MSG_LIST_STABLED_PETS_Client obj{};
 
     obj.npc = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> MSG_LIST_STABLED_PETS_Client::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_LIST_STABLED_PETS_Client::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x0000026f); /* opcode */
 
@@ -16419,7 +17300,7 @@ static size_t MSG_LIST_STABLED_PETS_Server_size(const MSG_LIST_STABLED_PETS_Serv
 }
 
 MSG_LIST_STABLED_PETS_Server MSG_LIST_STABLED_PETS_Server_read(Reader& reader) {
-    MSG_LIST_STABLED_PETS_Server obj;
+    MSG_LIST_STABLED_PETS_Server obj{};
 
     obj.npc = reader.read_u64();
 
@@ -16427,18 +17308,18 @@ MSG_LIST_STABLED_PETS_Server MSG_LIST_STABLED_PETS_Server_read(Reader& reader) {
 
     obj.stable_slots = reader.read_u8();
 
-    for (auto i = 0; i < obj.amount_of_pets; ++i) {
+    for (uint8_t i = 0; i < obj.amount_of_pets; ++i) {
         obj.pets.push_back(::wow_world_messages::vanilla::StabledPet_read(reader));
     }
 
     return obj;
 }
 
-std::vector<unsigned char> MSG_LIST_STABLED_PETS_Server::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_LIST_STABLED_PETS_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_LIST_STABLED_PETS_Server_size(obj));
 
-    writer.write_u16_be(MSG_LIST_STABLED_PETS_Server_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(MSG_LIST_STABLED_PETS_Server_size(obj) + 2)); /* size */
 
     writer.write_u16(0x0000026f); /* opcode */
 
@@ -16456,18 +17337,18 @@ std::vector<unsigned char> MSG_LIST_STABLED_PETS_Server::write() const {
 }
 
 CMSG_STABLE_PET CMSG_STABLE_PET_read(Reader& reader) {
-    CMSG_STABLE_PET obj;
+    CMSG_STABLE_PET obj{};
 
     obj.stable_master = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_STABLE_PET::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_STABLE_PET::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x00000270); /* opcode */
 
@@ -16477,7 +17358,7 @@ std::vector<unsigned char> CMSG_STABLE_PET::write() const {
 }
 
 CMSG_UNSTABLE_PET CMSG_UNSTABLE_PET_read(Reader& reader) {
-    CMSG_UNSTABLE_PET obj;
+    CMSG_UNSTABLE_PET obj{};
 
     obj.stable_master = reader.read_u64();
 
@@ -16486,11 +17367,11 @@ CMSG_UNSTABLE_PET CMSG_UNSTABLE_PET_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_UNSTABLE_PET::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_UNSTABLE_PET::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 4)); /* size */
 
     writer.write_u32(0x00000271); /* opcode */
 
@@ -16502,18 +17383,18 @@ std::vector<unsigned char> CMSG_UNSTABLE_PET::write() const {
 }
 
 CMSG_BUY_STABLE_SLOT CMSG_BUY_STABLE_SLOT_read(Reader& reader) {
-    CMSG_BUY_STABLE_SLOT obj;
+    CMSG_BUY_STABLE_SLOT obj{};
 
     obj.npc = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_BUY_STABLE_SLOT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_BUY_STABLE_SLOT::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x00000272); /* opcode */
 
@@ -16523,18 +17404,18 @@ std::vector<unsigned char> CMSG_BUY_STABLE_SLOT::write() const {
 }
 
 SMSG_STABLE_RESULT SMSG_STABLE_RESULT_read(Reader& reader) {
-    SMSG_STABLE_RESULT obj;
+    SMSG_STABLE_RESULT obj{};
 
     obj.result = static_cast<StableResult>(reader.read_u8());
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_STABLE_RESULT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_STABLE_RESULT::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0001);
 
-    writer.write_u16_be(0x0001 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0001 + 2)); /* size */
 
     writer.write_u16(0x00000273); /* opcode */
 
@@ -16544,7 +17425,7 @@ std::vector<unsigned char> SMSG_STABLE_RESULT::write() const {
 }
 
 CMSG_STABLE_SWAP_PET CMSG_STABLE_SWAP_PET_read(Reader& reader) {
-    CMSG_STABLE_SWAP_PET obj;
+    CMSG_STABLE_SWAP_PET obj{};
 
     obj.npc = reader.read_u64();
 
@@ -16553,11 +17434,11 @@ CMSG_STABLE_SWAP_PET CMSG_STABLE_SWAP_PET_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_STABLE_SWAP_PET::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_STABLE_SWAP_PET::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 4)); /* size */
 
     writer.write_u32(0x00000275); /* opcode */
 
@@ -16568,19 +17449,59 @@ std::vector<unsigned char> CMSG_STABLE_SWAP_PET::write() const {
     return writer.m_buf;
 }
 
+MSG_QUEST_PUSH_RESULT MSG_QUEST_PUSH_RESULT_read(Reader& reader) {
+    MSG_QUEST_PUSH_RESULT obj{};
+
+    obj.guid = reader.read_u64();
+
+    obj.message = static_cast<QuestPartyMessage>(reader.read_u8());
+
+    return obj;
+}
+
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_QUEST_PUSH_RESULT::write_cmsg() const {
+    const auto& obj = *this;
+    auto writer = Writer(0x0009);
+
+    writer.write_u16_be(static_cast<uint16_t>(0x0009 + 4)); /* size */
+
+    writer.write_u32(0x00000276); /* opcode */
+
+    writer.write_u64(obj.guid);
+
+    writer.write_u8(static_cast<uint8_t>(obj.message));
+
+    return writer.m_buf;
+}
+
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_QUEST_PUSH_RESULT::write_smsg() const {
+    const auto& obj = *this;
+    auto writer = Writer(0x0009);
+
+    writer.write_u16_be(static_cast<uint16_t>(0x0009 + 2)); /* size */
+
+    writer.write_u16(0x00000276); /* opcode */
+
+    writer.write_u64(obj.guid);
+
+    writer.write_u8(static_cast<uint8_t>(obj.message));
+
+    return writer.m_buf;
+}
+
 SMSG_PLAY_MUSIC SMSG_PLAY_MUSIC_read(Reader& reader) {
-    SMSG_PLAY_MUSIC obj;
+    SMSG_PLAY_MUSIC obj{};
 
     obj.sound_id = reader.read_u32();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_PLAY_MUSIC::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_PLAY_MUSIC::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 2)); /* size */
 
     writer.write_u16(0x00000277); /* opcode */
 
@@ -16590,7 +17511,7 @@ std::vector<unsigned char> SMSG_PLAY_MUSIC::write() const {
 }
 
 SMSG_PLAY_OBJECT_SOUND SMSG_PLAY_OBJECT_SOUND_read(Reader& reader) {
-    SMSG_PLAY_OBJECT_SOUND obj;
+    SMSG_PLAY_OBJECT_SOUND obj{};
 
     obj.sound_id = reader.read_u32();
 
@@ -16599,11 +17520,11 @@ SMSG_PLAY_OBJECT_SOUND SMSG_PLAY_OBJECT_SOUND_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_PLAY_OBJECT_SOUND::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_PLAY_OBJECT_SOUND::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 2)); /* size */
 
     writer.write_u16(0x00000278); /* opcode */
 
@@ -16614,10 +17535,10 @@ std::vector<unsigned char> SMSG_PLAY_OBJECT_SOUND::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_REQUEST_PET_INFO::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_REQUEST_PET_INFO::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x00000279); /* opcode */
 
@@ -16625,18 +17546,18 @@ std::vector<unsigned char> CMSG_REQUEST_PET_INFO::write() const {
 }
 
 CMSG_FAR_SIGHT CMSG_FAR_SIGHT_read(Reader& reader) {
-    CMSG_FAR_SIGHT obj;
+    CMSG_FAR_SIGHT obj{};
 
     obj.operation = static_cast<FarSightOperation>(reader.read_u8());
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_FAR_SIGHT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_FAR_SIGHT::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0001);
 
-    writer.write_u16_be(0x0001 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0001 + 4)); /* size */
 
     writer.write_u32(0x0000027a); /* opcode */
 
@@ -16650,7 +17571,7 @@ static size_t SMSG_SPELLDISPELLOG_size(const SMSG_SPELLDISPELLOG& obj) {
 }
 
 SMSG_SPELLDISPELLOG SMSG_SPELLDISPELLOG_read(Reader& reader) {
-    SMSG_SPELLDISPELLOG obj;
+    SMSG_SPELLDISPELLOG obj{};
 
     obj.victim = reader.read_packed_guid();
 
@@ -16658,18 +17579,18 @@ SMSG_SPELLDISPELLOG SMSG_SPELLDISPELLOG_read(Reader& reader) {
 
     obj.amount_of_spells = reader.read_u32();
 
-    for (auto i = 0; i < obj.amount_of_spells; ++i) {
+    for (uint32_t i = 0; i < obj.amount_of_spells; ++i) {
         obj.spells.push_back(reader.read_u32());
     }
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SPELLDISPELLOG::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPELLDISPELLOG::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_SPELLDISPELLOG_size(obj));
 
-    writer.write_u16_be(SMSG_SPELLDISPELLOG_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_SPELLDISPELLOG_size(obj) + 2)); /* size */
 
     writer.write_u16(0x0000027b); /* opcode */
 
@@ -16691,7 +17612,7 @@ static size_t CMSG_GROUP_CHANGE_SUB_GROUP_size(const CMSG_GROUP_CHANGE_SUB_GROUP
 }
 
 CMSG_GROUP_CHANGE_SUB_GROUP CMSG_GROUP_CHANGE_SUB_GROUP_read(Reader& reader) {
-    CMSG_GROUP_CHANGE_SUB_GROUP obj;
+    CMSG_GROUP_CHANGE_SUB_GROUP obj{};
 
     obj.name = reader.read_cstring();
 
@@ -16700,11 +17621,11 @@ CMSG_GROUP_CHANGE_SUB_GROUP CMSG_GROUP_CHANGE_SUB_GROUP_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_GROUP_CHANGE_SUB_GROUP::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GROUP_CHANGE_SUB_GROUP::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_GROUP_CHANGE_SUB_GROUP_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_GROUP_CHANGE_SUB_GROUP_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_GROUP_CHANGE_SUB_GROUP_size(obj) + 4)); /* size */
 
     writer.write_u32(0x0000027e); /* opcode */
 
@@ -16716,18 +17637,18 @@ std::vector<unsigned char> CMSG_GROUP_CHANGE_SUB_GROUP::write() const {
 }
 
 CMSG_REQUEST_PARTY_MEMBER_STATS CMSG_REQUEST_PARTY_MEMBER_STATS_read(Reader& reader) {
-    CMSG_REQUEST_PARTY_MEMBER_STATS obj;
+    CMSG_REQUEST_PARTY_MEMBER_STATS obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_REQUEST_PARTY_MEMBER_STATS::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_REQUEST_PARTY_MEMBER_STATS::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x0000027f); /* opcode */
 
@@ -16741,7 +17662,7 @@ static size_t CMSG_GROUP_SWAP_SUB_GROUP_size(const CMSG_GROUP_SWAP_SUB_GROUP& ob
 }
 
 CMSG_GROUP_SWAP_SUB_GROUP CMSG_GROUP_SWAP_SUB_GROUP_read(Reader& reader) {
-    CMSG_GROUP_SWAP_SUB_GROUP obj;
+    CMSG_GROUP_SWAP_SUB_GROUP obj{};
 
     obj.name = reader.read_cstring();
 
@@ -16750,11 +17671,11 @@ CMSG_GROUP_SWAP_SUB_GROUP CMSG_GROUP_SWAP_SUB_GROUP_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_GROUP_SWAP_SUB_GROUP::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GROUP_SWAP_SUB_GROUP::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_GROUP_SWAP_SUB_GROUP_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_GROUP_SWAP_SUB_GROUP_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_GROUP_SWAP_SUB_GROUP_size(obj) + 4)); /* size */
 
     writer.write_u32(0x00000280); /* opcode */
 
@@ -16766,7 +17687,7 @@ std::vector<unsigned char> CMSG_GROUP_SWAP_SUB_GROUP::write() const {
 }
 
 CMSG_AUTOSTORE_BANK_ITEM CMSG_AUTOSTORE_BANK_ITEM_read(Reader& reader) {
-    CMSG_AUTOSTORE_BANK_ITEM obj;
+    CMSG_AUTOSTORE_BANK_ITEM obj{};
 
     obj.bag_index = reader.read_u8();
 
@@ -16775,11 +17696,11 @@ CMSG_AUTOSTORE_BANK_ITEM CMSG_AUTOSTORE_BANK_ITEM_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_AUTOSTORE_BANK_ITEM::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_AUTOSTORE_BANK_ITEM::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0002);
 
-    writer.write_u16_be(0x0002 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0002 + 4)); /* size */
 
     writer.write_u32(0x00000282); /* opcode */
 
@@ -16791,7 +17712,7 @@ std::vector<unsigned char> CMSG_AUTOSTORE_BANK_ITEM::write() const {
 }
 
 CMSG_AUTOBANK_ITEM CMSG_AUTOBANK_ITEM_read(Reader& reader) {
-    CMSG_AUTOBANK_ITEM obj;
+    CMSG_AUTOBANK_ITEM obj{};
 
     obj.bag_index = reader.read_u8();
 
@@ -16800,11 +17721,11 @@ CMSG_AUTOBANK_ITEM CMSG_AUTOBANK_ITEM_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_AUTOBANK_ITEM::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_AUTOBANK_ITEM::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0002);
 
-    writer.write_u16_be(0x0002 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0002 + 4)); /* size */
 
     writer.write_u32(0x00000283); /* opcode */
 
@@ -16816,18 +17737,18 @@ std::vector<unsigned char> CMSG_AUTOBANK_ITEM::write() const {
 }
 
 MSG_QUERY_NEXT_MAIL_TIME_Server MSG_QUERY_NEXT_MAIL_TIME_Server_read(Reader& reader) {
-    MSG_QUERY_NEXT_MAIL_TIME_Server obj;
+    MSG_QUERY_NEXT_MAIL_TIME_Server obj{};
 
     obj.unread_mails = reader.read_float();
 
     return obj;
 }
 
-std::vector<unsigned char> MSG_QUERY_NEXT_MAIL_TIME_Server::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_QUERY_NEXT_MAIL_TIME_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 2)); /* size */
 
     writer.write_u16(0x00000284); /* opcode */
 
@@ -16836,10 +17757,10 @@ std::vector<unsigned char> MSG_QUERY_NEXT_MAIL_TIME_Server::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> MSG_QUERY_NEXT_MAIL_TIME_Client::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_QUERY_NEXT_MAIL_TIME_Client::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x00000284); /* opcode */
 
@@ -16847,18 +17768,18 @@ std::vector<unsigned char> MSG_QUERY_NEXT_MAIL_TIME_Client::write() const {
 }
 
 SMSG_RECEIVED_MAIL SMSG_RECEIVED_MAIL_read(Reader& reader) {
-    SMSG_RECEIVED_MAIL obj;
+    SMSG_RECEIVED_MAIL obj{};
 
     obj.unknown1 = reader.read_u32();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_RECEIVED_MAIL::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_RECEIVED_MAIL::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 2)); /* size */
 
     writer.write_u16(0x00000285); /* opcode */
 
@@ -16868,7 +17789,7 @@ std::vector<unsigned char> SMSG_RECEIVED_MAIL::write() const {
 }
 
 SMSG_RAID_GROUP_ONLY SMSG_RAID_GROUP_ONLY_read(Reader& reader) {
-    SMSG_RAID_GROUP_ONLY obj;
+    SMSG_RAID_GROUP_ONLY obj{};
 
     obj.homebind_timer = reader.read_u32();
 
@@ -16877,11 +17798,11 @@ SMSG_RAID_GROUP_ONLY SMSG_RAID_GROUP_ONLY_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_RAID_GROUP_ONLY::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_RAID_GROUP_ONLY::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 2)); /* size */
 
     writer.write_u16(0x00000286); /* opcode */
 
@@ -16893,7 +17814,7 @@ std::vector<unsigned char> SMSG_RAID_GROUP_ONLY::write() const {
 }
 
 SMSG_PVP_CREDIT SMSG_PVP_CREDIT_read(Reader& reader) {
-    SMSG_PVP_CREDIT obj;
+    SMSG_PVP_CREDIT obj{};
 
     obj.honor_points = reader.read_u32();
 
@@ -16904,11 +17825,11 @@ SMSG_PVP_CREDIT SMSG_PVP_CREDIT_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_PVP_CREDIT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_PVP_CREDIT::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0010);
 
-    writer.write_u16_be(0x0010 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0010 + 2)); /* size */
 
     writer.write_u16(0x0000028c); /* opcode */
 
@@ -16922,7 +17843,7 @@ std::vector<unsigned char> SMSG_PVP_CREDIT::write() const {
 }
 
 SMSG_AUCTION_REMOVED_NOTIFICATION SMSG_AUCTION_REMOVED_NOTIFICATION_read(Reader& reader) {
-    SMSG_AUCTION_REMOVED_NOTIFICATION obj;
+    SMSG_AUCTION_REMOVED_NOTIFICATION obj{};
 
     obj.item = reader.read_u32();
 
@@ -16933,11 +17854,11 @@ SMSG_AUCTION_REMOVED_NOTIFICATION SMSG_AUCTION_REMOVED_NOTIFICATION_read(Reader&
     return obj;
 }
 
-std::vector<unsigned char> SMSG_AUCTION_REMOVED_NOTIFICATION::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_AUCTION_REMOVED_NOTIFICATION::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 2)); /* size */
 
     writer.write_u16(0x0000028d); /* opcode */
 
@@ -16950,10 +17871,10 @@ std::vector<unsigned char> SMSG_AUCTION_REMOVED_NOTIFICATION::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_GROUP_RAID_CONVERT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GROUP_RAID_CONVERT::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x0000028e); /* opcode */
 
@@ -16961,7 +17882,7 @@ std::vector<unsigned char> CMSG_GROUP_RAID_CONVERT::write() const {
 }
 
 CMSG_GROUP_ASSISTANT_LEADER CMSG_GROUP_ASSISTANT_LEADER_read(Reader& reader) {
-    CMSG_GROUP_ASSISTANT_LEADER obj;
+    CMSG_GROUP_ASSISTANT_LEADER obj{};
 
     obj.guid = reader.read_u64();
 
@@ -16970,11 +17891,11 @@ CMSG_GROUP_ASSISTANT_LEADER CMSG_GROUP_ASSISTANT_LEADER_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_GROUP_ASSISTANT_LEADER::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GROUP_ASSISTANT_LEADER::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0009);
 
-    writer.write_u16_be(0x0009 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0009 + 4)); /* size */
 
     writer.write_u32(0x0000028f); /* opcode */
 
@@ -16986,7 +17907,7 @@ std::vector<unsigned char> CMSG_GROUP_ASSISTANT_LEADER::write() const {
 }
 
 CMSG_BUYBACK_ITEM CMSG_BUYBACK_ITEM_read(Reader& reader) {
-    CMSG_BUYBACK_ITEM obj;
+    CMSG_BUYBACK_ITEM obj{};
 
     obj.guid = reader.read_u64();
 
@@ -16995,11 +17916,11 @@ CMSG_BUYBACK_ITEM CMSG_BUYBACK_ITEM_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_BUYBACK_ITEM::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_BUYBACK_ITEM::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 4)); /* size */
 
     writer.write_u32(0x00000290); /* opcode */
 
@@ -17015,7 +17936,7 @@ static size_t SMSG_SERVER_MESSAGE_size(const SMSG_SERVER_MESSAGE& obj) {
 }
 
 SMSG_SERVER_MESSAGE SMSG_SERVER_MESSAGE_read(Reader& reader) {
-    SMSG_SERVER_MESSAGE obj;
+    SMSG_SERVER_MESSAGE obj{};
 
     obj.message_type = static_cast<ServerMessageType>(reader.read_u32());
 
@@ -17024,11 +17945,11 @@ SMSG_SERVER_MESSAGE SMSG_SERVER_MESSAGE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SERVER_MESSAGE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SERVER_MESSAGE::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_SERVER_MESSAGE_size(obj));
 
-    writer.write_u16_be(SMSG_SERVER_MESSAGE_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_SERVER_MESSAGE_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000291); /* opcode */
 
@@ -17040,18 +17961,18 @@ std::vector<unsigned char> SMSG_SERVER_MESSAGE::write() const {
 }
 
 CMSG_MEETINGSTONE_JOIN CMSG_MEETINGSTONE_JOIN_read(Reader& reader) {
-    CMSG_MEETINGSTONE_JOIN obj;
+    CMSG_MEETINGSTONE_JOIN obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_MEETINGSTONE_JOIN::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_MEETINGSTONE_JOIN::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x00000292); /* opcode */
 
@@ -17060,10 +17981,10 @@ std::vector<unsigned char> CMSG_MEETINGSTONE_JOIN::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_MEETINGSTONE_LEAVE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_MEETINGSTONE_LEAVE::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x00000293); /* opcode */
 
@@ -17071,7 +17992,7 @@ std::vector<unsigned char> CMSG_MEETINGSTONE_LEAVE::write() const {
 }
 
 SMSG_MEETINGSTONE_SETQUEUE SMSG_MEETINGSTONE_SETQUEUE_read(Reader& reader) {
-    SMSG_MEETINGSTONE_SETQUEUE obj;
+    SMSG_MEETINGSTONE_SETQUEUE obj{};
 
     obj.area = static_cast<Area>(reader.read_u32());
 
@@ -17080,11 +18001,11 @@ SMSG_MEETINGSTONE_SETQUEUE SMSG_MEETINGSTONE_SETQUEUE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_MEETINGSTONE_SETQUEUE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_MEETINGSTONE_SETQUEUE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0005);
 
-    writer.write_u16_be(0x0005 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0005 + 2)); /* size */
 
     writer.write_u16(0x00000295); /* opcode */
 
@@ -17095,30 +18016,30 @@ std::vector<unsigned char> SMSG_MEETINGSTONE_SETQUEUE::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_MEETINGSTONE_INFO::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_MEETINGSTONE_INFO::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x00000296); /* opcode */
 
     return writer.m_buf;
 }
 
-std::vector<unsigned char> SMSG_MEETINGSTONE_COMPLETE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_MEETINGSTONE_COMPLETE::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 2)); /* size */
 
     writer.write_u16(0x00000297); /* opcode */
 
     return writer.m_buf;
 }
 
-std::vector<unsigned char> SMSG_MEETINGSTONE_IN_PROGRESS::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_MEETINGSTONE_IN_PROGRESS::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 2)); /* size */
 
     writer.write_u16(0x00000298); /* opcode */
 
@@ -17126,18 +18047,18 @@ std::vector<unsigned char> SMSG_MEETINGSTONE_IN_PROGRESS::write() const {
 }
 
 SMSG_MEETINGSTONE_MEMBER_ADDED SMSG_MEETINGSTONE_MEMBER_ADDED_read(Reader& reader) {
-    SMSG_MEETINGSTONE_MEMBER_ADDED obj;
+    SMSG_MEETINGSTONE_MEMBER_ADDED obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_MEETINGSTONE_MEMBER_ADDED::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_MEETINGSTONE_MEMBER_ADDED::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 2)); /* size */
 
     writer.write_u16(0x00000299); /* opcode */
 
@@ -17146,20 +18067,20 @@ std::vector<unsigned char> SMSG_MEETINGSTONE_MEMBER_ADDED::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_CANCEL_GROWTH_AURA::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_CANCEL_GROWTH_AURA::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x0000029b); /* opcode */
 
     return writer.m_buf;
 }
 
-std::vector<unsigned char> SMSG_CANCEL_AUTO_REPEAT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_CANCEL_AUTO_REPEAT::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 2)); /* size */
 
     writer.write_u16(0x0000029c); /* opcode */
 
@@ -17167,18 +18088,18 @@ std::vector<unsigned char> SMSG_CANCEL_AUTO_REPEAT::write() const {
 }
 
 SMSG_STANDSTATE_UPDATE SMSG_STANDSTATE_UPDATE_read(Reader& reader) {
-    SMSG_STANDSTATE_UPDATE obj;
+    SMSG_STANDSTATE_UPDATE obj{};
 
     obj.state = static_cast<UnitStandState>(reader.read_u8());
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_STANDSTATE_UPDATE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_STANDSTATE_UPDATE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0001);
 
-    writer.write_u16_be(0x0001 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0001 + 2)); /* size */
 
     writer.write_u16(0x0000029d); /* opcode */
 
@@ -17188,7 +18109,7 @@ std::vector<unsigned char> SMSG_STANDSTATE_UPDATE::write() const {
 }
 
 SMSG_LOOT_ALL_PASSED SMSG_LOOT_ALL_PASSED_read(Reader& reader) {
-    SMSG_LOOT_ALL_PASSED obj;
+    SMSG_LOOT_ALL_PASSED obj{};
 
     obj.looted_target = reader.read_u64();
 
@@ -17203,11 +18124,11 @@ SMSG_LOOT_ALL_PASSED SMSG_LOOT_ALL_PASSED_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_LOOT_ALL_PASSED::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_LOOT_ALL_PASSED::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0018);
 
-    writer.write_u16_be(0x0018 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0018 + 2)); /* size */
 
     writer.write_u16(0x0000029e); /* opcode */
 
@@ -17225,7 +18146,7 @@ std::vector<unsigned char> SMSG_LOOT_ALL_PASSED::write() const {
 }
 
 SMSG_LOOT_ROLL_WON SMSG_LOOT_ROLL_WON_read(Reader& reader) {
-    SMSG_LOOT_ROLL_WON obj;
+    SMSG_LOOT_ROLL_WON obj{};
 
     obj.looted_target = reader.read_u64();
 
@@ -17246,11 +18167,11 @@ SMSG_LOOT_ROLL_WON SMSG_LOOT_ROLL_WON_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_LOOT_ROLL_WON::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_LOOT_ROLL_WON::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0022);
 
-    writer.write_u16_be(0x0022 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0022 + 2)); /* size */
 
     writer.write_u16(0x0000029f); /* opcode */
 
@@ -17274,7 +18195,7 @@ std::vector<unsigned char> SMSG_LOOT_ROLL_WON::write() const {
 }
 
 CMSG_LOOT_ROLL CMSG_LOOT_ROLL_read(Reader& reader) {
-    CMSG_LOOT_ROLL obj;
+    CMSG_LOOT_ROLL obj{};
 
     obj.item = reader.read_u64();
 
@@ -17285,11 +18206,11 @@ CMSG_LOOT_ROLL CMSG_LOOT_ROLL_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_LOOT_ROLL::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_LOOT_ROLL::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000d);
 
-    writer.write_u16_be(0x000d + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000d + 4)); /* size */
 
     writer.write_u32(0x000002a0); /* opcode */
 
@@ -17303,7 +18224,7 @@ std::vector<unsigned char> CMSG_LOOT_ROLL::write() const {
 }
 
 SMSG_LOOT_START_ROLL SMSG_LOOT_START_ROLL_read(Reader& reader) {
-    SMSG_LOOT_START_ROLL obj;
+    SMSG_LOOT_START_ROLL obj{};
 
     obj.creature = reader.read_u64();
 
@@ -17320,11 +18241,11 @@ SMSG_LOOT_START_ROLL SMSG_LOOT_START_ROLL_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_LOOT_START_ROLL::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_LOOT_START_ROLL::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x001c);
 
-    writer.write_u16_be(0x001c + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x001c + 2)); /* size */
 
     writer.write_u16(0x000002a1); /* opcode */
 
@@ -17344,7 +18265,7 @@ std::vector<unsigned char> SMSG_LOOT_START_ROLL::write() const {
 }
 
 SMSG_LOOT_ROLL SMSG_LOOT_ROLL_read(Reader& reader) {
-    SMSG_LOOT_ROLL obj;
+    SMSG_LOOT_ROLL obj{};
 
     obj.creature = reader.read_u64();
 
@@ -17365,11 +18286,11 @@ SMSG_LOOT_ROLL SMSG_LOOT_ROLL_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_LOOT_ROLL::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_LOOT_ROLL::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0022);
 
-    writer.write_u16_be(0x0022 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0022 + 2)); /* size */
 
     writer.write_u16(0x000002a2); /* opcode */
 
@@ -17393,7 +18314,7 @@ std::vector<unsigned char> SMSG_LOOT_ROLL::write() const {
 }
 
 CMSG_LOOT_MASTER_GIVE CMSG_LOOT_MASTER_GIVE_read(Reader& reader) {
-    CMSG_LOOT_MASTER_GIVE obj;
+    CMSG_LOOT_MASTER_GIVE obj{};
 
     obj.loot = reader.read_u64();
 
@@ -17404,11 +18325,11 @@ CMSG_LOOT_MASTER_GIVE CMSG_LOOT_MASTER_GIVE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_LOOT_MASTER_GIVE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_LOOT_MASTER_GIVE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0011);
 
-    writer.write_u16_be(0x0011 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0011 + 4)); /* size */
 
     writer.write_u32(0x000002a3); /* opcode */
 
@@ -17426,22 +18347,22 @@ static size_t SMSG_LOOT_MASTER_LIST_size(const SMSG_LOOT_MASTER_LIST& obj) {
 }
 
 SMSG_LOOT_MASTER_LIST SMSG_LOOT_MASTER_LIST_read(Reader& reader) {
-    SMSG_LOOT_MASTER_LIST obj;
+    SMSG_LOOT_MASTER_LIST obj{};
 
     obj.amount_of_players = reader.read_u8();
 
-    for (auto i = 0; i < obj.amount_of_players; ++i) {
+    for (uint8_t i = 0; i < obj.amount_of_players; ++i) {
         obj.guids.push_back(reader.read_u64());
     }
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_LOOT_MASTER_LIST::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_LOOT_MASTER_LIST::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_LOOT_MASTER_LIST_size(obj));
 
-    writer.write_u16_be(SMSG_LOOT_MASTER_LIST_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_LOOT_MASTER_LIST_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000002a4); /* opcode */
 
@@ -17459,22 +18380,22 @@ static size_t SMSG_SET_FORCED_REACTIONS_size(const SMSG_SET_FORCED_REACTIONS& ob
 }
 
 SMSG_SET_FORCED_REACTIONS SMSG_SET_FORCED_REACTIONS_read(Reader& reader) {
-    SMSG_SET_FORCED_REACTIONS obj;
+    SMSG_SET_FORCED_REACTIONS obj{};
 
     obj.amount_of_reactions = reader.read_u32();
 
-    for (auto i = 0; i < obj.amount_of_reactions; ++i) {
+    for (uint32_t i = 0; i < obj.amount_of_reactions; ++i) {
         obj.reactions.push_back(::wow_world_messages::vanilla::ForcedReaction_read(reader));
     }
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SET_FORCED_REACTIONS::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SET_FORCED_REACTIONS::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_SET_FORCED_REACTIONS_size(obj));
 
-    writer.write_u16_be(SMSG_SET_FORCED_REACTIONS_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_SET_FORCED_REACTIONS_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000002a5); /* opcode */
 
@@ -17488,7 +18409,7 @@ std::vector<unsigned char> SMSG_SET_FORCED_REACTIONS::write() const {
 }
 
 SMSG_SPELL_FAILED_OTHER SMSG_SPELL_FAILED_OTHER_read(Reader& reader) {
-    SMSG_SPELL_FAILED_OTHER obj;
+    SMSG_SPELL_FAILED_OTHER obj{};
 
     obj.caster = reader.read_u64();
 
@@ -17497,11 +18418,11 @@ SMSG_SPELL_FAILED_OTHER SMSG_SPELL_FAILED_OTHER_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SPELL_FAILED_OTHER::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPELL_FAILED_OTHER::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 2)); /* size */
 
     writer.write_u16(0x000002a6); /* opcode */
 
@@ -17513,18 +18434,18 @@ std::vector<unsigned char> SMSG_SPELL_FAILED_OTHER::write() const {
 }
 
 SMSG_GAMEOBJECT_RESET_STATE SMSG_GAMEOBJECT_RESET_STATE_read(Reader& reader) {
-    SMSG_GAMEOBJECT_RESET_STATE obj;
+    SMSG_GAMEOBJECT_RESET_STATE obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_GAMEOBJECT_RESET_STATE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_GAMEOBJECT_RESET_STATE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 2)); /* size */
 
     writer.write_u16(0x000002a7); /* opcode */
 
@@ -17534,7 +18455,7 @@ std::vector<unsigned char> SMSG_GAMEOBJECT_RESET_STATE::write() const {
 }
 
 CMSG_REPAIR_ITEM CMSG_REPAIR_ITEM_read(Reader& reader) {
-    CMSG_REPAIR_ITEM obj;
+    CMSG_REPAIR_ITEM obj{};
 
     obj.npc = reader.read_u64();
 
@@ -17543,11 +18464,11 @@ CMSG_REPAIR_ITEM CMSG_REPAIR_ITEM_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_REPAIR_ITEM::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_REPAIR_ITEM::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0010);
 
-    writer.write_u16_be(0x0010 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0010 + 4)); /* size */
 
     writer.write_u32(0x000002a8); /* opcode */
 
@@ -17563,18 +18484,18 @@ static size_t SMSG_CHAT_PLAYER_NOT_FOUND_size(const SMSG_CHAT_PLAYER_NOT_FOUND& 
 }
 
 SMSG_CHAT_PLAYER_NOT_FOUND SMSG_CHAT_PLAYER_NOT_FOUND_read(Reader& reader) {
-    SMSG_CHAT_PLAYER_NOT_FOUND obj;
+    SMSG_CHAT_PLAYER_NOT_FOUND obj{};
 
     obj.name = reader.read_cstring();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_CHAT_PLAYER_NOT_FOUND::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_CHAT_PLAYER_NOT_FOUND::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_CHAT_PLAYER_NOT_FOUND_size(obj));
 
-    writer.write_u16_be(SMSG_CHAT_PLAYER_NOT_FOUND_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_CHAT_PLAYER_NOT_FOUND_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000002a9); /* opcode */
 
@@ -17584,18 +18505,18 @@ std::vector<unsigned char> SMSG_CHAT_PLAYER_NOT_FOUND::write() const {
 }
 
 MSG_TALENT_WIPE_CONFIRM_Client MSG_TALENT_WIPE_CONFIRM_Client_read(Reader& reader) {
-    MSG_TALENT_WIPE_CONFIRM_Client obj;
+    MSG_TALENT_WIPE_CONFIRM_Client obj{};
 
     obj.wiping_npc = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> MSG_TALENT_WIPE_CONFIRM_Client::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_TALENT_WIPE_CONFIRM_Client::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x000002aa); /* opcode */
 
@@ -17605,7 +18526,7 @@ std::vector<unsigned char> MSG_TALENT_WIPE_CONFIRM_Client::write() const {
 }
 
 MSG_TALENT_WIPE_CONFIRM_Server MSG_TALENT_WIPE_CONFIRM_Server_read(Reader& reader) {
-    MSG_TALENT_WIPE_CONFIRM_Server obj;
+    MSG_TALENT_WIPE_CONFIRM_Server obj{};
 
     obj.wiping_npc = reader.read_u64();
 
@@ -17614,11 +18535,11 @@ MSG_TALENT_WIPE_CONFIRM_Server MSG_TALENT_WIPE_CONFIRM_Server_read(Reader& reade
     return obj;
 }
 
-std::vector<unsigned char> MSG_TALENT_WIPE_CONFIRM_Server::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_TALENT_WIPE_CONFIRM_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 2)); /* size */
 
     writer.write_u16(0x000002aa); /* opcode */
 
@@ -17630,7 +18551,7 @@ std::vector<unsigned char> MSG_TALENT_WIPE_CONFIRM_Server::write() const {
 }
 
 SMSG_SUMMON_REQUEST SMSG_SUMMON_REQUEST_read(Reader& reader) {
-    SMSG_SUMMON_REQUEST obj;
+    SMSG_SUMMON_REQUEST obj{};
 
     obj.summoner = reader.read_u64();
 
@@ -17641,11 +18562,11 @@ SMSG_SUMMON_REQUEST SMSG_SUMMON_REQUEST_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SUMMON_REQUEST::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SUMMON_REQUEST::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0010);
 
-    writer.write_u16_be(0x0010 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0010 + 2)); /* size */
 
     writer.write_u16(0x000002ab); /* opcode */
 
@@ -17659,18 +18580,18 @@ std::vector<unsigned char> SMSG_SUMMON_REQUEST::write() const {
 }
 
 CMSG_SUMMON_RESPONSE CMSG_SUMMON_RESPONSE_read(Reader& reader) {
-    CMSG_SUMMON_RESPONSE obj;
+    CMSG_SUMMON_RESPONSE obj{};
 
     obj.summoner = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_SUMMON_RESPONSE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_SUMMON_RESPONSE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x000002ac); /* opcode */
 
@@ -17696,7 +18617,7 @@ static size_t SMSG_MONSTER_MOVE_TRANSPORT_size(const SMSG_MONSTER_MOVE_TRANSPORT
 }
 
 SMSG_MONSTER_MOVE_TRANSPORT SMSG_MONSTER_MOVE_TRANSPORT_read(Reader& reader) {
-    SMSG_MONSTER_MOVE_TRANSPORT obj;
+    SMSG_MONSTER_MOVE_TRANSPORT obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -17729,11 +18650,11 @@ SMSG_MONSTER_MOVE_TRANSPORT SMSG_MONSTER_MOVE_TRANSPORT_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_MONSTER_MOVE_TRANSPORT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_MONSTER_MOVE_TRANSPORT::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_MONSTER_MOVE_TRANSPORT_size(obj));
 
-    writer.write_u16_be(SMSG_MONSTER_MOVE_TRANSPORT_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_MONSTER_MOVE_TRANSPORT_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000002ae); /* opcode */
 
@@ -17768,10 +18689,10 @@ std::vector<unsigned char> SMSG_MONSTER_MOVE_TRANSPORT::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> SMSG_PET_BROKEN::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_PET_BROKEN::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 2)); /* size */
 
     writer.write_u16(0x000002af); /* opcode */
 
@@ -17783,7 +18704,7 @@ static size_t MSG_MOVE_FEATHER_FALL_Server_size(const MSG_MOVE_FEATHER_FALL_Serv
 }
 
 MSG_MOVE_FEATHER_FALL_Server MSG_MOVE_FEATHER_FALL_Server_read(Reader& reader) {
-    MSG_MOVE_FEATHER_FALL_Server obj;
+    MSG_MOVE_FEATHER_FALL_Server obj{};
 
     obj.player = reader.read_packed_guid();
 
@@ -17792,11 +18713,11 @@ MSG_MOVE_FEATHER_FALL_Server MSG_MOVE_FEATHER_FALL_Server_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_FEATHER_FALL_Server::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_FEATHER_FALL_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_FEATHER_FALL_Server_size(obj));
 
-    writer.write_u16_be(MSG_MOVE_FEATHER_FALL_Server_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(MSG_MOVE_FEATHER_FALL_Server_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000002b0); /* opcode */
 
@@ -17807,20 +18728,64 @@ std::vector<unsigned char> MSG_MOVE_FEATHER_FALL_Server::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_SELF_RES::write() const {
+static size_t MSG_MOVE_WATER_WALK_size(const MSG_MOVE_WATER_WALK& obj) {
+    return 0 + ::wow_world_messages::util::wwm_packed_guid_size(obj.player) + MovementInfo_size(obj.info);
+}
+
+MSG_MOVE_WATER_WALK MSG_MOVE_WATER_WALK_read(Reader& reader) {
+    MSG_MOVE_WATER_WALK obj{};
+
+    obj.player = reader.read_packed_guid();
+
+    obj.info = ::wow_world_messages::vanilla::MovementInfo_read(reader);
+
+    return obj;
+}
+
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_WATER_WALK::write_cmsg() const {
+    const auto& obj = *this;
+    auto writer = Writer(MSG_MOVE_WATER_WALK_size(obj));
+
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)MSG_MOVE_WATER_WALK_size(obj) + 4)); /* size */
+
+    writer.write_u32(0x000002b1); /* opcode */
+
+    writer.write_packed_guid(obj.player);
+
+    MovementInfo_write(writer, obj.info);
+
+    return writer.m_buf;
+}
+
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_WATER_WALK::write_smsg() const {
+    const auto& obj = *this;
+    auto writer = Writer(MSG_MOVE_WATER_WALK_size(obj));
+
+    writer.write_u16_be(static_cast<uint16_t>(MSG_MOVE_WATER_WALK_size(obj) + 2)); /* size */
+
+    writer.write_u16(0x000002b1); /* opcode */
+
+    writer.write_packed_guid(obj.player);
+
+    MovementInfo_write(writer, obj.info);
+
+    return writer.m_buf;
+}
+
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_SELF_RES::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x000002b3); /* opcode */
 
     return writer.m_buf;
 }
 
-std::vector<unsigned char> SMSG_FEIGN_DEATH_RESISTED::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_FEIGN_DEATH_RESISTED::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 2)); /* size */
 
     writer.write_u16(0x000002b4); /* opcode */
 
@@ -17828,18 +18793,18 @@ std::vector<unsigned char> SMSG_FEIGN_DEATH_RESISTED::write() const {
 }
 
 SMSG_DUEL_COUNTDOWN SMSG_DUEL_COUNTDOWN_read(Reader& reader) {
-    SMSG_DUEL_COUNTDOWN obj;
+    SMSG_DUEL_COUNTDOWN obj{};
 
     obj.time = reader.read_u32();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_DUEL_COUNTDOWN::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_DUEL_COUNTDOWN::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 2)); /* size */
 
     writer.write_u16(0x000002b7); /* opcode */
 
@@ -17853,18 +18818,18 @@ static size_t SMSG_AREA_TRIGGER_MESSAGE_size(const SMSG_AREA_TRIGGER_MESSAGE& ob
 }
 
 SMSG_AREA_TRIGGER_MESSAGE SMSG_AREA_TRIGGER_MESSAGE_read(Reader& reader) {
-    SMSG_AREA_TRIGGER_MESSAGE obj;
+    SMSG_AREA_TRIGGER_MESSAGE obj{};
 
     obj.message = reader.read_sized_cstring();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_AREA_TRIGGER_MESSAGE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_AREA_TRIGGER_MESSAGE::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_AREA_TRIGGER_MESSAGE_size(obj));
 
-    writer.write_u16_be(SMSG_AREA_TRIGGER_MESSAGE_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_AREA_TRIGGER_MESSAGE_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000002b8); /* opcode */
 
@@ -17873,20 +18838,20 @@ std::vector<unsigned char> SMSG_AREA_TRIGGER_MESSAGE::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_TOGGLE_HELM::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_TOGGLE_HELM::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x000002b9); /* opcode */
 
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_TOGGLE_CLOAK::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_TOGGLE_CLOAK::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x000002ba); /* opcode */
 
@@ -17894,18 +18859,18 @@ std::vector<unsigned char> CMSG_TOGGLE_CLOAK::write() const {
 }
 
 SMSG_MEETINGSTONE_JOINFAILED SMSG_MEETINGSTONE_JOINFAILED_read(Reader& reader) {
-    SMSG_MEETINGSTONE_JOINFAILED obj;
+    SMSG_MEETINGSTONE_JOINFAILED obj{};
 
     obj.reason = static_cast<MeetingStoneFailure>(reader.read_u8());
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_MEETINGSTONE_JOINFAILED::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_MEETINGSTONE_JOINFAILED::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0001);
 
-    writer.write_u16_be(0x0001 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0001 + 2)); /* size */
 
     writer.write_u16(0x000002bb); /* opcode */
 
@@ -17915,18 +18880,18 @@ std::vector<unsigned char> SMSG_MEETINGSTONE_JOINFAILED::write() const {
 }
 
 SMSG_PLAYER_SKINNED SMSG_PLAYER_SKINNED_read(Reader& reader) {
-    SMSG_PLAYER_SKINNED obj;
+    SMSG_PLAYER_SKINNED obj{};
 
     obj.spirit_released = reader.read_bool8();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_PLAYER_SKINNED::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_PLAYER_SKINNED::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0001);
 
-    writer.write_u16_be(0x0001 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0001 + 2)); /* size */
 
     writer.write_u16(0x000002bc); /* opcode */
 
@@ -17935,10 +18900,10 @@ std::vector<unsigned char> SMSG_PLAYER_SKINNED::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> SMSG_DURABILITY_DAMAGE_DEATH::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_DURABILITY_DAMAGE_DEATH::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 2)); /* size */
 
     writer.write_u16(0x000002bd); /* opcode */
 
@@ -17946,22 +18911,66 @@ std::vector<unsigned char> SMSG_DURABILITY_DAMAGE_DEATH::write() const {
 }
 
 CMSG_SET_ACTIONBAR_TOGGLES CMSG_SET_ACTIONBAR_TOGGLES_read(Reader& reader) {
-    CMSG_SET_ACTIONBAR_TOGGLES obj;
+    CMSG_SET_ACTIONBAR_TOGGLES obj{};
 
     obj.action_bar = reader.read_u8();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_SET_ACTIONBAR_TOGGLES::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_SET_ACTIONBAR_TOGGLES::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0001);
 
-    writer.write_u16_be(0x0001 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0001 + 4)); /* size */
 
     writer.write_u32(0x000002bf); /* opcode */
 
     writer.write_u8(obj.action_bar);
+
+    return writer.m_buf;
+}
+
+static size_t MSG_PETITION_RENAME_size(const MSG_PETITION_RENAME& obj) {
+    return 9 + obj.new_name.size();
+}
+
+MSG_PETITION_RENAME MSG_PETITION_RENAME_read(Reader& reader) {
+    MSG_PETITION_RENAME obj{};
+
+    obj.petition = reader.read_u64();
+
+    obj.new_name = reader.read_cstring();
+
+    return obj;
+}
+
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_PETITION_RENAME::write_cmsg() const {
+    const auto& obj = *this;
+    auto writer = Writer(MSG_PETITION_RENAME_size(obj));
+
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)MSG_PETITION_RENAME_size(obj) + 4)); /* size */
+
+    writer.write_u32(0x000002c1); /* opcode */
+
+    writer.write_u64(obj.petition);
+
+    writer.write_cstring(obj.new_name);
+
+    return writer.m_buf;
+}
+
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_PETITION_RENAME::write_smsg() const {
+    const auto& obj = *this;
+    auto writer = Writer(MSG_PETITION_RENAME_size(obj));
+
+    writer.write_u16_be(static_cast<uint16_t>(MSG_PETITION_RENAME_size(obj) + 2)); /* size */
+
+    writer.write_u16(0x000002c1); /* opcode */
+
+    writer.write_u64(obj.petition);
+
+    writer.write_cstring(obj.new_name);
 
     return writer.m_buf;
 }
@@ -17971,7 +18980,7 @@ static size_t SMSG_INIT_WORLD_STATES_size(const SMSG_INIT_WORLD_STATES& obj) {
 }
 
 SMSG_INIT_WORLD_STATES SMSG_INIT_WORLD_STATES_read(Reader& reader) {
-    SMSG_INIT_WORLD_STATES obj;
+    SMSG_INIT_WORLD_STATES obj{};
 
     obj.map = static_cast<Map>(reader.read_u32());
 
@@ -17979,18 +18988,18 @@ SMSG_INIT_WORLD_STATES SMSG_INIT_WORLD_STATES_read(Reader& reader) {
 
     obj.amount_of_states = reader.read_u16();
 
-    for (auto i = 0; i < obj.amount_of_states; ++i) {
+    for (uint16_t i = 0; i < obj.amount_of_states; ++i) {
         obj.states.push_back(::wow_world_messages::vanilla::WorldState_read(reader));
     }
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_INIT_WORLD_STATES::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_INIT_WORLD_STATES::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_INIT_WORLD_STATES_size(obj));
 
-    writer.write_u16_be(SMSG_INIT_WORLD_STATES_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_INIT_WORLD_STATES_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000002c2); /* opcode */
 
@@ -18008,18 +19017,18 @@ std::vector<unsigned char> SMSG_INIT_WORLD_STATES::write() const {
 }
 
 SMSG_UPDATE_WORLD_STATE SMSG_UPDATE_WORLD_STATE_read(Reader& reader) {
-    SMSG_UPDATE_WORLD_STATE obj;
+    SMSG_UPDATE_WORLD_STATE obj{};
 
     obj.state = ::wow_world_messages::vanilla::WorldState_read(reader);
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_UPDATE_WORLD_STATE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_UPDATE_WORLD_STATE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 2)); /* size */
 
     writer.write_u16(0x000002c3); /* opcode */
 
@@ -18029,7 +19038,7 @@ std::vector<unsigned char> SMSG_UPDATE_WORLD_STATE::write() const {
 }
 
 CMSG_ITEM_NAME_QUERY CMSG_ITEM_NAME_QUERY_read(Reader& reader) {
-    CMSG_ITEM_NAME_QUERY obj;
+    CMSG_ITEM_NAME_QUERY obj{};
 
     obj.item = reader.read_u32();
 
@@ -18038,11 +19047,11 @@ CMSG_ITEM_NAME_QUERY CMSG_ITEM_NAME_QUERY_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_ITEM_NAME_QUERY::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_ITEM_NAME_QUERY::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 4)); /* size */
 
     writer.write_u32(0x000002c4); /* opcode */
 
@@ -18058,7 +19067,7 @@ static size_t SMSG_ITEM_NAME_QUERY_RESPONSE_size(const SMSG_ITEM_NAME_QUERY_RESP
 }
 
 SMSG_ITEM_NAME_QUERY_RESPONSE SMSG_ITEM_NAME_QUERY_RESPONSE_read(Reader& reader) {
-    SMSG_ITEM_NAME_QUERY_RESPONSE obj;
+    SMSG_ITEM_NAME_QUERY_RESPONSE obj{};
 
     obj.item = reader.read_u32();
 
@@ -18067,11 +19076,11 @@ SMSG_ITEM_NAME_QUERY_RESPONSE SMSG_ITEM_NAME_QUERY_RESPONSE_read(Reader& reader)
     return obj;
 }
 
-std::vector<unsigned char> SMSG_ITEM_NAME_QUERY_RESPONSE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_ITEM_NAME_QUERY_RESPONSE::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_ITEM_NAME_QUERY_RESPONSE_size(obj));
 
-    writer.write_u16_be(SMSG_ITEM_NAME_QUERY_RESPONSE_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_ITEM_NAME_QUERY_RESPONSE_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000002c5); /* opcode */
 
@@ -18083,18 +19092,18 @@ std::vector<unsigned char> SMSG_ITEM_NAME_QUERY_RESPONSE::write() const {
 }
 
 SMSG_PET_ACTION_FEEDBACK SMSG_PET_ACTION_FEEDBACK_read(Reader& reader) {
-    SMSG_PET_ACTION_FEEDBACK obj;
+    SMSG_PET_ACTION_FEEDBACK obj{};
 
     obj.feedback = static_cast<PetFeedback>(reader.read_u8());
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_PET_ACTION_FEEDBACK::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_PET_ACTION_FEEDBACK::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0001);
 
-    writer.write_u16_be(0x0001 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0001 + 2)); /* size */
 
     writer.write_u16(0x000002c6); /* opcode */
 
@@ -18108,7 +19117,7 @@ static size_t CMSG_CHAR_RENAME_size(const CMSG_CHAR_RENAME& obj) {
 }
 
 CMSG_CHAR_RENAME CMSG_CHAR_RENAME_read(Reader& reader) {
-    CMSG_CHAR_RENAME obj;
+    CMSG_CHAR_RENAME obj{};
 
     obj.character = reader.read_u64();
 
@@ -18117,11 +19126,11 @@ CMSG_CHAR_RENAME CMSG_CHAR_RENAME_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_CHAR_RENAME::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_CHAR_RENAME::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_CHAR_RENAME_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_CHAR_RENAME_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_CHAR_RENAME_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000002c7); /* opcode */
 
@@ -18143,7 +19152,7 @@ static size_t SMSG_CHAR_RENAME_size(const SMSG_CHAR_RENAME& obj) {
 }
 
 SMSG_CHAR_RENAME SMSG_CHAR_RENAME_read(Reader& reader) {
-    SMSG_CHAR_RENAME obj;
+    SMSG_CHAR_RENAME obj{};
 
     obj.result = static_cast<WorldResult>(reader.read_u8());
 
@@ -18156,11 +19165,11 @@ SMSG_CHAR_RENAME SMSG_CHAR_RENAME_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_CHAR_RENAME::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_CHAR_RENAME::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_CHAR_RENAME_size(obj));
 
-    writer.write_u16_be(SMSG_CHAR_RENAME_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_CHAR_RENAME_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000002c8); /* opcode */
 
@@ -18180,7 +19189,7 @@ static size_t CMSG_MOVE_SPLINE_DONE_size(const CMSG_MOVE_SPLINE_DONE& obj) {
 }
 
 CMSG_MOVE_SPLINE_DONE CMSG_MOVE_SPLINE_DONE_read(Reader& reader) {
-    CMSG_MOVE_SPLINE_DONE obj;
+    CMSG_MOVE_SPLINE_DONE obj{};
 
     obj.info = ::wow_world_messages::vanilla::MovementInfo_read(reader);
 
@@ -18191,11 +19200,11 @@ CMSG_MOVE_SPLINE_DONE CMSG_MOVE_SPLINE_DONE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_MOVE_SPLINE_DONE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_MOVE_SPLINE_DONE::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_MOVE_SPLINE_DONE_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_MOVE_SPLINE_DONE_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_MOVE_SPLINE_DONE_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000002c9); /* opcode */
 
@@ -18213,18 +19222,18 @@ static size_t CMSG_MOVE_FALL_RESET_size(const CMSG_MOVE_FALL_RESET& obj) {
 }
 
 CMSG_MOVE_FALL_RESET CMSG_MOVE_FALL_RESET_read(Reader& reader) {
-    CMSG_MOVE_FALL_RESET obj;
+    CMSG_MOVE_FALL_RESET obj{};
 
     obj.info = ::wow_world_messages::vanilla::MovementInfo_read(reader);
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_MOVE_FALL_RESET::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_MOVE_FALL_RESET::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_MOVE_FALL_RESET_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_MOVE_FALL_RESET_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_MOVE_FALL_RESET_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000002ca); /* opcode */
 
@@ -18234,18 +19243,18 @@ std::vector<unsigned char> CMSG_MOVE_FALL_RESET::write() const {
 }
 
 SMSG_INSTANCE_SAVE_CREATED SMSG_INSTANCE_SAVE_CREATED_read(Reader& reader) {
-    SMSG_INSTANCE_SAVE_CREATED obj;
+    SMSG_INSTANCE_SAVE_CREATED obj{};
 
     obj.unknown = reader.read_u32();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_INSTANCE_SAVE_CREATED::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_INSTANCE_SAVE_CREATED::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 2)); /* size */
 
     writer.write_u16(0x000002cb); /* opcode */
 
@@ -18259,22 +19268,22 @@ static size_t SMSG_RAID_INSTANCE_INFO_size(const SMSG_RAID_INSTANCE_INFO& obj) {
 }
 
 SMSG_RAID_INSTANCE_INFO SMSG_RAID_INSTANCE_INFO_read(Reader& reader) {
-    SMSG_RAID_INSTANCE_INFO obj;
+    SMSG_RAID_INSTANCE_INFO obj{};
 
     obj.amount_of_raid_infos = reader.read_u32();
 
-    for (auto i = 0; i < obj.amount_of_raid_infos; ++i) {
+    for (uint32_t i = 0; i < obj.amount_of_raid_infos; ++i) {
         obj.raid_infos.push_back(::wow_world_messages::vanilla::RaidInfo_read(reader));
     }
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_RAID_INSTANCE_INFO::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_RAID_INSTANCE_INFO::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_RAID_INSTANCE_INFO_size(obj));
 
-    writer.write_u16_be(SMSG_RAID_INSTANCE_INFO_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_RAID_INSTANCE_INFO_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000002cc); /* opcode */
 
@@ -18287,10 +19296,10 @@ std::vector<unsigned char> SMSG_RAID_INSTANCE_INFO::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_REQUEST_RAID_INFO::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_REQUEST_RAID_INFO::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x000002cd); /* opcode */
 
@@ -18298,7 +19307,7 @@ std::vector<unsigned char> CMSG_REQUEST_RAID_INFO::write() const {
 }
 
 CMSG_MOVE_TIME_SKIPPED CMSG_MOVE_TIME_SKIPPED_read(Reader& reader) {
-    CMSG_MOVE_TIME_SKIPPED obj;
+    CMSG_MOVE_TIME_SKIPPED obj{};
 
     obj.guid = reader.read_u64();
 
@@ -18307,11 +19316,11 @@ CMSG_MOVE_TIME_SKIPPED CMSG_MOVE_TIME_SKIPPED_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_MOVE_TIME_SKIPPED::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_MOVE_TIME_SKIPPED::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 4)); /* size */
 
     writer.write_u32(0x000002ce); /* opcode */
 
@@ -18327,7 +19336,7 @@ static size_t CMSG_MOVE_FEATHER_FALL_ACK_size(const CMSG_MOVE_FEATHER_FALL_ACK& 
 }
 
 CMSG_MOVE_FEATHER_FALL_ACK CMSG_MOVE_FEATHER_FALL_ACK_read(Reader& reader) {
-    CMSG_MOVE_FEATHER_FALL_ACK obj;
+    CMSG_MOVE_FEATHER_FALL_ACK obj{};
 
     obj.guid = reader.read_u64();
 
@@ -18340,11 +19349,11 @@ CMSG_MOVE_FEATHER_FALL_ACK CMSG_MOVE_FEATHER_FALL_ACK_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_MOVE_FEATHER_FALL_ACK::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_MOVE_FEATHER_FALL_ACK::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_MOVE_FEATHER_FALL_ACK_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_MOVE_FEATHER_FALL_ACK_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_MOVE_FEATHER_FALL_ACK_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000002cf); /* opcode */
 
@@ -18364,7 +19373,7 @@ static size_t CMSG_MOVE_WATER_WALK_ACK_size(const CMSG_MOVE_WATER_WALK_ACK& obj)
 }
 
 CMSG_MOVE_WATER_WALK_ACK CMSG_MOVE_WATER_WALK_ACK_read(Reader& reader) {
-    CMSG_MOVE_WATER_WALK_ACK obj;
+    CMSG_MOVE_WATER_WALK_ACK obj{};
 
     obj.guid = reader.read_u64();
 
@@ -18377,11 +19386,11 @@ CMSG_MOVE_WATER_WALK_ACK CMSG_MOVE_WATER_WALK_ACK_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_MOVE_WATER_WALK_ACK::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_MOVE_WATER_WALK_ACK::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_MOVE_WATER_WALK_ACK_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_MOVE_WATER_WALK_ACK_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_MOVE_WATER_WALK_ACK_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000002d0); /* opcode */
 
@@ -18401,7 +19410,7 @@ static size_t CMSG_MOVE_NOT_ACTIVE_MOVER_size(const CMSG_MOVE_NOT_ACTIVE_MOVER& 
 }
 
 CMSG_MOVE_NOT_ACTIVE_MOVER CMSG_MOVE_NOT_ACTIVE_MOVER_read(Reader& reader) {
-    CMSG_MOVE_NOT_ACTIVE_MOVER obj;
+    CMSG_MOVE_NOT_ACTIVE_MOVER obj{};
 
     obj.old_mover = reader.read_u64();
 
@@ -18410,11 +19419,11 @@ CMSG_MOVE_NOT_ACTIVE_MOVER CMSG_MOVE_NOT_ACTIVE_MOVER_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_MOVE_NOT_ACTIVE_MOVER::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_MOVE_NOT_ACTIVE_MOVER::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_MOVE_NOT_ACTIVE_MOVER_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_MOVE_NOT_ACTIVE_MOVER_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_MOVE_NOT_ACTIVE_MOVER_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000002d1); /* opcode */
 
@@ -18426,18 +19435,18 @@ std::vector<unsigned char> CMSG_MOVE_NOT_ACTIVE_MOVER::write() const {
 }
 
 SMSG_PLAY_SOUND SMSG_PLAY_SOUND_read(Reader& reader) {
-    SMSG_PLAY_SOUND obj;
+    SMSG_PLAY_SOUND obj{};
 
     obj.sound_id = reader.read_u32();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_PLAY_SOUND::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_PLAY_SOUND::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 2)); /* size */
 
     writer.write_u16(0x000002d2); /* opcode */
 
@@ -18446,10 +19455,10 @@ std::vector<unsigned char> SMSG_PLAY_SOUND::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_BATTLEFIELD_STATUS::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_BATTLEFIELD_STATUS::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x000002d3); /* opcode */
 
@@ -18478,7 +19487,7 @@ static size_t SMSG_BATTLEFIELD_STATUS_size(const SMSG_BATTLEFIELD_STATUS& obj) {
 }
 
 SMSG_BATTLEFIELD_STATUS SMSG_BATTLEFIELD_STATUS_read(Reader& reader) {
-    SMSG_BATTLEFIELD_STATUS obj;
+    SMSG_BATTLEFIELD_STATUS obj{};
 
     obj.queue_slot = reader.read_u32();
 
@@ -18511,11 +19520,11 @@ SMSG_BATTLEFIELD_STATUS SMSG_BATTLEFIELD_STATUS_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_BATTLEFIELD_STATUS::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_BATTLEFIELD_STATUS::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_BATTLEFIELD_STATUS_size(obj));
 
-    writer.write_u16_be(SMSG_BATTLEFIELD_STATUS_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_BATTLEFIELD_STATUS_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000002d4); /* opcode */
 
@@ -18551,7 +19560,7 @@ std::vector<unsigned char> SMSG_BATTLEFIELD_STATUS::write() const {
 }
 
 CMSG_BATTLEFIELD_PORT CMSG_BATTLEFIELD_PORT_read(Reader& reader) {
-    CMSG_BATTLEFIELD_PORT obj;
+    CMSG_BATTLEFIELD_PORT obj{};
 
     obj.map = static_cast<Map>(reader.read_u32());
 
@@ -18560,11 +19569,11 @@ CMSG_BATTLEFIELD_PORT CMSG_BATTLEFIELD_PORT_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_BATTLEFIELD_PORT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_BATTLEFIELD_PORT::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0005);
 
-    writer.write_u16_be(0x0005 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0005 + 4)); /* size */
 
     writer.write_u32(0x000002d5); /* opcode */
 
@@ -18576,18 +19585,18 @@ std::vector<unsigned char> CMSG_BATTLEFIELD_PORT::write() const {
 }
 
 MSG_INSPECT_HONOR_STATS_Client MSG_INSPECT_HONOR_STATS_Client_read(Reader& reader) {
-    MSG_INSPECT_HONOR_STATS_Client obj;
+    MSG_INSPECT_HONOR_STATS_Client obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> MSG_INSPECT_HONOR_STATS_Client::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_INSPECT_HONOR_STATS_Client::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x000002d6); /* opcode */
 
@@ -18597,7 +19606,7 @@ std::vector<unsigned char> MSG_INSPECT_HONOR_STATS_Client::write() const {
 }
 
 MSG_INSPECT_HONOR_STATS_Server MSG_INSPECT_HONOR_STATS_Server_read(Reader& reader) {
-    MSG_INSPECT_HONOR_STATS_Server obj;
+    MSG_INSPECT_HONOR_STATS_Server obj{};
 
     obj.guid = reader.read_u64();
 
@@ -18634,11 +19643,11 @@ MSG_INSPECT_HONOR_STATS_Server MSG_INSPECT_HONOR_STATS_Server_read(Reader& reade
     return obj;
 }
 
-std::vector<unsigned char> MSG_INSPECT_HONOR_STATS_Server::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_INSPECT_HONOR_STATS_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0032);
 
-    writer.write_u16_be(0x0032 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0032 + 2)); /* size */
 
     writer.write_u16(0x000002d6); /* opcode */
 
@@ -18678,18 +19687,18 @@ std::vector<unsigned char> MSG_INSPECT_HONOR_STATS_Server::write() const {
 }
 
 CMSG_BATTLEMASTER_HELLO CMSG_BATTLEMASTER_HELLO_read(Reader& reader) {
-    CMSG_BATTLEMASTER_HELLO obj;
+    CMSG_BATTLEMASTER_HELLO obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_BATTLEMASTER_HELLO::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_BATTLEMASTER_HELLO::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x000002d7); /* opcode */
 
@@ -18703,7 +19712,7 @@ static size_t SMSG_FORCE_WALK_SPEED_CHANGE_size(const SMSG_FORCE_WALK_SPEED_CHAN
 }
 
 SMSG_FORCE_WALK_SPEED_CHANGE SMSG_FORCE_WALK_SPEED_CHANGE_read(Reader& reader) {
-    SMSG_FORCE_WALK_SPEED_CHANGE obj;
+    SMSG_FORCE_WALK_SPEED_CHANGE obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -18714,11 +19723,11 @@ SMSG_FORCE_WALK_SPEED_CHANGE SMSG_FORCE_WALK_SPEED_CHANGE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_FORCE_WALK_SPEED_CHANGE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_FORCE_WALK_SPEED_CHANGE::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_FORCE_WALK_SPEED_CHANGE_size(obj));
 
-    writer.write_u16_be(SMSG_FORCE_WALK_SPEED_CHANGE_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_FORCE_WALK_SPEED_CHANGE_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000002da); /* opcode */
 
@@ -18736,7 +19745,7 @@ static size_t CMSG_FORCE_WALK_SPEED_CHANGE_ACK_size(const CMSG_FORCE_WALK_SPEED_
 }
 
 CMSG_FORCE_WALK_SPEED_CHANGE_ACK CMSG_FORCE_WALK_SPEED_CHANGE_ACK_read(Reader& reader) {
-    CMSG_FORCE_WALK_SPEED_CHANGE_ACK obj;
+    CMSG_FORCE_WALK_SPEED_CHANGE_ACK obj{};
 
     obj.guid = reader.read_u64();
 
@@ -18749,11 +19758,11 @@ CMSG_FORCE_WALK_SPEED_CHANGE_ACK CMSG_FORCE_WALK_SPEED_CHANGE_ACK_read(Reader& r
     return obj;
 }
 
-std::vector<unsigned char> CMSG_FORCE_WALK_SPEED_CHANGE_ACK::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_FORCE_WALK_SPEED_CHANGE_ACK::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_FORCE_WALK_SPEED_CHANGE_ACK_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_FORCE_WALK_SPEED_CHANGE_ACK_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_FORCE_WALK_SPEED_CHANGE_ACK_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000002db); /* opcode */
 
@@ -18773,7 +19782,7 @@ static size_t SMSG_FORCE_SWIM_BACK_SPEED_CHANGE_size(const SMSG_FORCE_SWIM_BACK_
 }
 
 SMSG_FORCE_SWIM_BACK_SPEED_CHANGE SMSG_FORCE_SWIM_BACK_SPEED_CHANGE_read(Reader& reader) {
-    SMSG_FORCE_SWIM_BACK_SPEED_CHANGE obj;
+    SMSG_FORCE_SWIM_BACK_SPEED_CHANGE obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -18784,11 +19793,11 @@ SMSG_FORCE_SWIM_BACK_SPEED_CHANGE SMSG_FORCE_SWIM_BACK_SPEED_CHANGE_read(Reader&
     return obj;
 }
 
-std::vector<unsigned char> SMSG_FORCE_SWIM_BACK_SPEED_CHANGE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_FORCE_SWIM_BACK_SPEED_CHANGE::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_FORCE_SWIM_BACK_SPEED_CHANGE_size(obj));
 
-    writer.write_u16_be(SMSG_FORCE_SWIM_BACK_SPEED_CHANGE_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_FORCE_SWIM_BACK_SPEED_CHANGE_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000002dc); /* opcode */
 
@@ -18806,7 +19815,7 @@ static size_t CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK_size(const CMSG_FORCE_SWIM_B
 }
 
 CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK_read(Reader& reader) {
-    CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK obj;
+    CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK obj{};
 
     obj.guid = reader.read_u64();
 
@@ -18819,11 +19828,11 @@ CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK_read
     return obj;
 }
 
-std::vector<unsigned char> CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000002dd); /* opcode */
 
@@ -18843,7 +19852,7 @@ static size_t SMSG_FORCE_TURN_RATE_CHANGE_size(const SMSG_FORCE_TURN_RATE_CHANGE
 }
 
 SMSG_FORCE_TURN_RATE_CHANGE SMSG_FORCE_TURN_RATE_CHANGE_read(Reader& reader) {
-    SMSG_FORCE_TURN_RATE_CHANGE obj;
+    SMSG_FORCE_TURN_RATE_CHANGE obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -18854,11 +19863,11 @@ SMSG_FORCE_TURN_RATE_CHANGE SMSG_FORCE_TURN_RATE_CHANGE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_FORCE_TURN_RATE_CHANGE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_FORCE_TURN_RATE_CHANGE::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_FORCE_TURN_RATE_CHANGE_size(obj));
 
-    writer.write_u16_be(SMSG_FORCE_TURN_RATE_CHANGE_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_FORCE_TURN_RATE_CHANGE_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000002de); /* opcode */
 
@@ -18876,7 +19885,7 @@ static size_t CMSG_FORCE_TURN_RATE_CHANGE_ACK_size(const CMSG_FORCE_TURN_RATE_CH
 }
 
 CMSG_FORCE_TURN_RATE_CHANGE_ACK CMSG_FORCE_TURN_RATE_CHANGE_ACK_read(Reader& reader) {
-    CMSG_FORCE_TURN_RATE_CHANGE_ACK obj;
+    CMSG_FORCE_TURN_RATE_CHANGE_ACK obj{};
 
     obj.guid = reader.read_u64();
 
@@ -18889,11 +19898,11 @@ CMSG_FORCE_TURN_RATE_CHANGE_ACK CMSG_FORCE_TURN_RATE_CHANGE_ACK_read(Reader& rea
     return obj;
 }
 
-std::vector<unsigned char> CMSG_FORCE_TURN_RATE_CHANGE_ACK::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_FORCE_TURN_RATE_CHANGE_ACK::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_FORCE_TURN_RATE_CHANGE_ACK_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_FORCE_TURN_RATE_CHANGE_ACK_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_FORCE_TURN_RATE_CHANGE_ACK_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000002df); /* opcode */
 
@@ -18908,10 +19917,10 @@ std::vector<unsigned char> CMSG_FORCE_TURN_RATE_CHANGE_ACK::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> MSG_PVP_LOG_DATA_Client::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_PVP_LOG_DATA_Client::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x000002e0); /* opcode */
 
@@ -18933,7 +19942,7 @@ static size_t MSG_PVP_LOG_DATA_Server_size(const MSG_PVP_LOG_DATA_Server& obj) {
 }
 
 MSG_PVP_LOG_DATA_Server MSG_PVP_LOG_DATA_Server_read(Reader& reader) {
-    MSG_PVP_LOG_DATA_Server obj;
+    MSG_PVP_LOG_DATA_Server obj{};
 
     obj.status = static_cast<BattlegroundEndStatus>(reader.read_u8());
 
@@ -18943,18 +19952,18 @@ MSG_PVP_LOG_DATA_Server MSG_PVP_LOG_DATA_Server_read(Reader& reader) {
     }
     obj.amount_of_players = reader.read_u32();
 
-    for (auto i = 0; i < obj.amount_of_players; ++i) {
+    for (uint32_t i = 0; i < obj.amount_of_players; ++i) {
         obj.players.push_back(::wow_world_messages::vanilla::BattlegroundPlayer_read(reader));
     }
 
     return obj;
 }
 
-std::vector<unsigned char> MSG_PVP_LOG_DATA_Server::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_PVP_LOG_DATA_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_PVP_LOG_DATA_Server_size(obj));
 
-    writer.write_u16_be(MSG_PVP_LOG_DATA_Server_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(MSG_PVP_LOG_DATA_Server_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000002e0); /* opcode */
 
@@ -18974,18 +19983,18 @@ std::vector<unsigned char> MSG_PVP_LOG_DATA_Server::write() const {
 }
 
 CMSG_LEAVE_BATTLEFIELD CMSG_LEAVE_BATTLEFIELD_read(Reader& reader) {
-    CMSG_LEAVE_BATTLEFIELD obj;
+    CMSG_LEAVE_BATTLEFIELD obj{};
 
     obj.map = static_cast<Map>(reader.read_u32());
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_LEAVE_BATTLEFIELD::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_LEAVE_BATTLEFIELD::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 4)); /* size */
 
     writer.write_u32(0x000002e1); /* opcode */
 
@@ -18995,18 +20004,18 @@ std::vector<unsigned char> CMSG_LEAVE_BATTLEFIELD::write() const {
 }
 
 CMSG_AREA_SPIRIT_HEALER_QUERY CMSG_AREA_SPIRIT_HEALER_QUERY_read(Reader& reader) {
-    CMSG_AREA_SPIRIT_HEALER_QUERY obj;
+    CMSG_AREA_SPIRIT_HEALER_QUERY obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_AREA_SPIRIT_HEALER_QUERY::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_AREA_SPIRIT_HEALER_QUERY::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x000002e2); /* opcode */
 
@@ -19016,18 +20025,18 @@ std::vector<unsigned char> CMSG_AREA_SPIRIT_HEALER_QUERY::write() const {
 }
 
 CMSG_AREA_SPIRIT_HEALER_QUEUE CMSG_AREA_SPIRIT_HEALER_QUEUE_read(Reader& reader) {
-    CMSG_AREA_SPIRIT_HEALER_QUEUE obj;
+    CMSG_AREA_SPIRIT_HEALER_QUEUE obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_AREA_SPIRIT_HEALER_QUEUE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_AREA_SPIRIT_HEALER_QUEUE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x000002e3); /* opcode */
 
@@ -19037,7 +20046,7 @@ std::vector<unsigned char> CMSG_AREA_SPIRIT_HEALER_QUEUE::write() const {
 }
 
 SMSG_AREA_SPIRIT_HEALER_TIME SMSG_AREA_SPIRIT_HEALER_TIME_read(Reader& reader) {
-    SMSG_AREA_SPIRIT_HEALER_TIME obj;
+    SMSG_AREA_SPIRIT_HEALER_TIME obj{};
 
     obj.guid = reader.read_u64();
 
@@ -19046,11 +20055,11 @@ SMSG_AREA_SPIRIT_HEALER_TIME SMSG_AREA_SPIRIT_HEALER_TIME_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_AREA_SPIRIT_HEALER_TIME::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_AREA_SPIRIT_HEALER_TIME::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 2)); /* size */
 
     writer.write_u16(0x000002e4); /* opcode */
 
@@ -19065,14 +20074,14 @@ static size_t SMSG_WARDEN_DATA_size(const SMSG_WARDEN_DATA& obj) {
     size_t _size = 0;
 
     for(const auto& v : obj.encrypted_data) {
-        _size += 1;
+        _size += 1;;
     }
 
     return _size;
 }
 
 SMSG_WARDEN_DATA SMSG_WARDEN_DATA_read(Reader& reader, size_t body_size) {
-    SMSG_WARDEN_DATA obj;
+    SMSG_WARDEN_DATA obj{};
     size_t _size = 0;
 
     while (_size < body_size) {
@@ -19083,11 +20092,11 @@ SMSG_WARDEN_DATA SMSG_WARDEN_DATA_read(Reader& reader, size_t body_size) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_WARDEN_DATA::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_WARDEN_DATA::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_WARDEN_DATA_size(obj));
 
-    writer.write_u16_be(SMSG_WARDEN_DATA_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_WARDEN_DATA_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000002e6); /* opcode */
 
@@ -19102,14 +20111,14 @@ static size_t CMSG_WARDEN_DATA_size(const CMSG_WARDEN_DATA& obj) {
     size_t _size = 0;
 
     for(const auto& v : obj.encrypted_data) {
-        _size += 1;
+        _size += 1;;
     }
 
     return _size;
 }
 
 CMSG_WARDEN_DATA CMSG_WARDEN_DATA_read(Reader& reader, size_t body_size) {
-    CMSG_WARDEN_DATA obj;
+    CMSG_WARDEN_DATA obj{};
     size_t _size = 0;
 
     while (_size < body_size) {
@@ -19120,11 +20129,11 @@ CMSG_WARDEN_DATA CMSG_WARDEN_DATA_read(Reader& reader, size_t body_size) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_WARDEN_DATA::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_WARDEN_DATA::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_WARDEN_DATA_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_WARDEN_DATA_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_WARDEN_DATA_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000002e7); /* opcode */
 
@@ -19136,18 +20145,18 @@ std::vector<unsigned char> CMSG_WARDEN_DATA::write() const {
 }
 
 SMSG_GROUP_JOINED_BATTLEGROUND SMSG_GROUP_JOINED_BATTLEGROUND_read(Reader& reader) {
-    SMSG_GROUP_JOINED_BATTLEGROUND obj;
+    SMSG_GROUP_JOINED_BATTLEGROUND obj{};
 
     obj.id = static_cast<BgTypeId>(reader.read_u32());
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_GROUP_JOINED_BATTLEGROUND::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_GROUP_JOINED_BATTLEGROUND::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 2)); /* size */
 
     writer.write_u16(0x000002e8); /* opcode */
 
@@ -19156,10 +20165,10 @@ std::vector<unsigned char> SMSG_GROUP_JOINED_BATTLEGROUND::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> MSG_BATTLEGROUND_PLAYER_POSITIONS_Client::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_BATTLEGROUND_PLAYER_POSITIONS_Client::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x000002e9); /* opcode */
 
@@ -19171,28 +20180,28 @@ static size_t MSG_BATTLEGROUND_PLAYER_POSITIONS_Server_size(const MSG_BATTLEGROU
 }
 
 MSG_BATTLEGROUND_PLAYER_POSITIONS_Server MSG_BATTLEGROUND_PLAYER_POSITIONS_Server_read(Reader& reader) {
-    MSG_BATTLEGROUND_PLAYER_POSITIONS_Server obj;
+    MSG_BATTLEGROUND_PLAYER_POSITIONS_Server obj{};
 
     obj.amount_of_teammates = reader.read_u32();
 
-    for (auto i = 0; i < obj.amount_of_teammates; ++i) {
+    for (uint32_t i = 0; i < obj.amount_of_teammates; ++i) {
         obj.teammates.push_back(::wow_world_messages::vanilla::BattlegroundPlayerPosition_read(reader));
     }
 
     obj.amount_of_carriers = reader.read_u8();
 
-    for (auto i = 0; i < obj.amount_of_carriers; ++i) {
+    for (uint8_t i = 0; i < obj.amount_of_carriers; ++i) {
         obj.carriers.push_back(::wow_world_messages::vanilla::BattlegroundPlayerPosition_read(reader));
     }
 
     return obj;
 }
 
-std::vector<unsigned char> MSG_BATTLEGROUND_PLAYER_POSITIONS_Server::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_BATTLEGROUND_PLAYER_POSITIONS_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_BATTLEGROUND_PLAYER_POSITIONS_Server_size(obj));
 
-    writer.write_u16_be(MSG_BATTLEGROUND_PLAYER_POSITIONS_Server_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(MSG_BATTLEGROUND_PLAYER_POSITIONS_Server_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000002e9); /* opcode */
 
@@ -19212,18 +20221,18 @@ std::vector<unsigned char> MSG_BATTLEGROUND_PLAYER_POSITIONS_Server::write() con
 }
 
 CMSG_PET_STOP_ATTACK CMSG_PET_STOP_ATTACK_read(Reader& reader) {
-    CMSG_PET_STOP_ATTACK obj;
+    CMSG_PET_STOP_ATTACK obj{};
 
     obj.pet = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_PET_STOP_ATTACK::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_PET_STOP_ATTACK::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x000002ea); /* opcode */
 
@@ -19233,18 +20242,18 @@ std::vector<unsigned char> CMSG_PET_STOP_ATTACK::write() const {
 }
 
 SMSG_BINDER_CONFIRM SMSG_BINDER_CONFIRM_read(Reader& reader) {
-    SMSG_BINDER_CONFIRM obj;
+    SMSG_BINDER_CONFIRM obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_BINDER_CONFIRM::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_BINDER_CONFIRM::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 2)); /* size */
 
     writer.write_u16(0x000002eb); /* opcode */
 
@@ -19254,18 +20263,18 @@ std::vector<unsigned char> SMSG_BINDER_CONFIRM::write() const {
 }
 
 SMSG_BATTLEGROUND_PLAYER_JOINED SMSG_BATTLEGROUND_PLAYER_JOINED_read(Reader& reader) {
-    SMSG_BATTLEGROUND_PLAYER_JOINED obj;
+    SMSG_BATTLEGROUND_PLAYER_JOINED obj{};
 
     obj.player = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_BATTLEGROUND_PLAYER_JOINED::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_BATTLEGROUND_PLAYER_JOINED::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 2)); /* size */
 
     writer.write_u16(0x000002ec); /* opcode */
 
@@ -19275,18 +20284,18 @@ std::vector<unsigned char> SMSG_BATTLEGROUND_PLAYER_JOINED::write() const {
 }
 
 SMSG_BATTLEGROUND_PLAYER_LEFT SMSG_BATTLEGROUND_PLAYER_LEFT_read(Reader& reader) {
-    SMSG_BATTLEGROUND_PLAYER_LEFT obj;
+    SMSG_BATTLEGROUND_PLAYER_LEFT obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_BATTLEGROUND_PLAYER_LEFT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_BATTLEGROUND_PLAYER_LEFT::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 2)); /* size */
 
     writer.write_u16(0x000002ed); /* opcode */
 
@@ -19296,7 +20305,7 @@ std::vector<unsigned char> SMSG_BATTLEGROUND_PLAYER_LEFT::write() const {
 }
 
 CMSG_BATTLEMASTER_JOIN CMSG_BATTLEMASTER_JOIN_read(Reader& reader) {
-    CMSG_BATTLEMASTER_JOIN obj;
+    CMSG_BATTLEMASTER_JOIN obj{};
 
     obj.guid = reader.read_u64();
 
@@ -19309,11 +20318,11 @@ CMSG_BATTLEMASTER_JOIN CMSG_BATTLEMASTER_JOIN_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_BATTLEMASTER_JOIN::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_BATTLEMASTER_JOIN::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0011);
 
-    writer.write_u16_be(0x0011 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0011 + 4)); /* size */
 
     writer.write_u32(0x000002ee); /* opcode */
 
@@ -19339,7 +20348,7 @@ static size_t SMSG_ADDON_INFO_size(const SMSG_ADDON_INFO& obj) {
 }
 
 SMSG_ADDON_INFO SMSG_ADDON_INFO_read(Reader& reader, size_t body_size) {
-    SMSG_ADDON_INFO obj;
+    SMSG_ADDON_INFO obj{};
     size_t _size = 0;
 
     while (_size < body_size) {
@@ -19350,11 +20359,11 @@ SMSG_ADDON_INFO SMSG_ADDON_INFO_read(Reader& reader, size_t body_size) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_ADDON_INFO::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_ADDON_INFO::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_ADDON_INFO_size(obj));
 
-    writer.write_u16_be(SMSG_ADDON_INFO_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_ADDON_INFO_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000002ef); /* opcode */
 
@@ -19366,18 +20375,18 @@ std::vector<unsigned char> SMSG_ADDON_INFO::write() const {
 }
 
 CMSG_PET_UNLEARN CMSG_PET_UNLEARN_read(Reader& reader) {
-    CMSG_PET_UNLEARN obj;
+    CMSG_PET_UNLEARN obj{};
 
     obj.pet = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_PET_UNLEARN::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_PET_UNLEARN::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 4)); /* size */
 
     writer.write_u32(0x000002f0); /* opcode */
 
@@ -19387,7 +20396,7 @@ std::vector<unsigned char> CMSG_PET_UNLEARN::write() const {
 }
 
 SMSG_PET_UNLEARN_CONFIRM SMSG_PET_UNLEARN_CONFIRM_read(Reader& reader) {
-    SMSG_PET_UNLEARN_CONFIRM obj;
+    SMSG_PET_UNLEARN_CONFIRM obj{};
 
     obj.pet = reader.read_u64();
 
@@ -19396,11 +20405,11 @@ SMSG_PET_UNLEARN_CONFIRM SMSG_PET_UNLEARN_CONFIRM_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_PET_UNLEARN_CONFIRM::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_PET_UNLEARN_CONFIRM::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 2)); /* size */
 
     writer.write_u16(0x000002f1); /* opcode */
 
@@ -19494,7 +20503,7 @@ static size_t SMSG_PARTY_MEMBER_STATS_FULL_size(const SMSG_PARTY_MEMBER_STATS_FU
 }
 
 SMSG_PARTY_MEMBER_STATS_FULL SMSG_PARTY_MEMBER_STATS_FULL_read(Reader& reader) {
-    SMSG_PARTY_MEMBER_STATS_FULL obj;
+    SMSG_PARTY_MEMBER_STATS_FULL obj{};
 
     obj.player = reader.read_packed_guid();
 
@@ -19581,11 +20590,11 @@ SMSG_PARTY_MEMBER_STATS_FULL SMSG_PARTY_MEMBER_STATS_FULL_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_PARTY_MEMBER_STATS_FULL::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_PARTY_MEMBER_STATS_FULL::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_PARTY_MEMBER_STATS_FULL_size(obj));
 
-    writer.write_u16_be(SMSG_PARTY_MEMBER_STATS_FULL_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_PARTY_MEMBER_STATS_FULL_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000002f2); /* opcode */
 
@@ -19675,7 +20684,7 @@ std::vector<unsigned char> SMSG_PARTY_MEMBER_STATS_FULL::write() const {
 }
 
 CMSG_PET_SPELL_AUTOCAST CMSG_PET_SPELL_AUTOCAST_read(Reader& reader) {
-    CMSG_PET_SPELL_AUTOCAST obj;
+    CMSG_PET_SPELL_AUTOCAST obj{};
 
     obj.guid = reader.read_u64();
 
@@ -19686,11 +20695,11 @@ CMSG_PET_SPELL_AUTOCAST CMSG_PET_SPELL_AUTOCAST_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_PET_SPELL_AUTOCAST::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_PET_SPELL_AUTOCAST::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000d);
 
-    writer.write_u16_be(0x000d + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000d + 4)); /* size */
 
     writer.write_u32(0x000002f3); /* opcode */
 
@@ -19704,7 +20713,7 @@ std::vector<unsigned char> CMSG_PET_SPELL_AUTOCAST::write() const {
 }
 
 SMSG_WEATHER SMSG_WEATHER_read(Reader& reader) {
-    SMSG_WEATHER obj;
+    SMSG_WEATHER obj{};
 
     obj.weather_type = static_cast<WeatherType>(reader.read_u32());
 
@@ -19717,11 +20726,11 @@ SMSG_WEATHER SMSG_WEATHER_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_WEATHER::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_WEATHER::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000d);
 
-    writer.write_u16_be(0x000d + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000d + 2)); /* size */
 
     writer.write_u16(0x000002f4); /* opcode */
 
@@ -19737,7 +20746,7 @@ std::vector<unsigned char> SMSG_WEATHER::write() const {
 }
 
 SMSG_RAID_INSTANCE_MESSAGE SMSG_RAID_INSTANCE_MESSAGE_read(Reader& reader) {
-    SMSG_RAID_INSTANCE_MESSAGE obj;
+    SMSG_RAID_INSTANCE_MESSAGE obj{};
 
     obj.message_type = static_cast<RaidInstanceMessage>(reader.read_u32());
 
@@ -19748,11 +20757,11 @@ SMSG_RAID_INSTANCE_MESSAGE SMSG_RAID_INSTANCE_MESSAGE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_RAID_INSTANCE_MESSAGE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_RAID_INSTANCE_MESSAGE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 2)); /* size */
 
     writer.write_u16(0x000002fa); /* opcode */
 
@@ -19770,18 +20779,18 @@ static size_t CMSG_GUILD_INFO_TEXT_size(const CMSG_GUILD_INFO_TEXT& obj) {
 }
 
 CMSG_GUILD_INFO_TEXT CMSG_GUILD_INFO_TEXT_read(Reader& reader) {
-    CMSG_GUILD_INFO_TEXT obj;
+    CMSG_GUILD_INFO_TEXT obj{};
 
     obj.guild_info = reader.read_cstring();
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_GUILD_INFO_TEXT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GUILD_INFO_TEXT::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_GUILD_INFO_TEXT_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_GUILD_INFO_TEXT_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_GUILD_INFO_TEXT_size(obj) + 4)); /* size */
 
     writer.write_u32(0x000002fc); /* opcode */
 
@@ -19790,10 +20799,10 @@ std::vector<unsigned char> CMSG_GUILD_INFO_TEXT::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> SMSG_CHAT_RESTRICTED::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_CHAT_RESTRICTED::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 2)); /* size */
 
     writer.write_u16(0x000002fd); /* opcode */
 
@@ -19805,7 +20814,7 @@ static size_t SMSG_SPLINE_SET_RUN_SPEED_size(const SMSG_SPLINE_SET_RUN_SPEED& ob
 }
 
 SMSG_SPLINE_SET_RUN_SPEED SMSG_SPLINE_SET_RUN_SPEED_read(Reader& reader) {
-    SMSG_SPLINE_SET_RUN_SPEED obj;
+    SMSG_SPLINE_SET_RUN_SPEED obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -19814,11 +20823,11 @@ SMSG_SPLINE_SET_RUN_SPEED SMSG_SPLINE_SET_RUN_SPEED_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SPLINE_SET_RUN_SPEED::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPLINE_SET_RUN_SPEED::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_SPLINE_SET_RUN_SPEED_size(obj));
 
-    writer.write_u16_be(SMSG_SPLINE_SET_RUN_SPEED_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_SPLINE_SET_RUN_SPEED_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000002fe); /* opcode */
 
@@ -19834,7 +20843,7 @@ static size_t SMSG_SPLINE_SET_RUN_BACK_SPEED_size(const SMSG_SPLINE_SET_RUN_BACK
 }
 
 SMSG_SPLINE_SET_RUN_BACK_SPEED SMSG_SPLINE_SET_RUN_BACK_SPEED_read(Reader& reader) {
-    SMSG_SPLINE_SET_RUN_BACK_SPEED obj;
+    SMSG_SPLINE_SET_RUN_BACK_SPEED obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -19843,11 +20852,11 @@ SMSG_SPLINE_SET_RUN_BACK_SPEED SMSG_SPLINE_SET_RUN_BACK_SPEED_read(Reader& reade
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SPLINE_SET_RUN_BACK_SPEED::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPLINE_SET_RUN_BACK_SPEED::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_SPLINE_SET_RUN_BACK_SPEED_size(obj));
 
-    writer.write_u16_be(SMSG_SPLINE_SET_RUN_BACK_SPEED_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_SPLINE_SET_RUN_BACK_SPEED_size(obj) + 2)); /* size */
 
     writer.write_u16(0x000002ff); /* opcode */
 
@@ -19863,7 +20872,7 @@ static size_t SMSG_SPLINE_SET_SWIM_SPEED_size(const SMSG_SPLINE_SET_SWIM_SPEED& 
 }
 
 SMSG_SPLINE_SET_SWIM_SPEED SMSG_SPLINE_SET_SWIM_SPEED_read(Reader& reader) {
-    SMSG_SPLINE_SET_SWIM_SPEED obj;
+    SMSG_SPLINE_SET_SWIM_SPEED obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -19872,11 +20881,11 @@ SMSG_SPLINE_SET_SWIM_SPEED SMSG_SPLINE_SET_SWIM_SPEED_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SPLINE_SET_SWIM_SPEED::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPLINE_SET_SWIM_SPEED::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_SPLINE_SET_SWIM_SPEED_size(obj));
 
-    writer.write_u16_be(SMSG_SPLINE_SET_SWIM_SPEED_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_SPLINE_SET_SWIM_SPEED_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000300); /* opcode */
 
@@ -19892,7 +20901,7 @@ static size_t SMSG_SPLINE_SET_WALK_SPEED_size(const SMSG_SPLINE_SET_WALK_SPEED& 
 }
 
 SMSG_SPLINE_SET_WALK_SPEED SMSG_SPLINE_SET_WALK_SPEED_read(Reader& reader) {
-    SMSG_SPLINE_SET_WALK_SPEED obj;
+    SMSG_SPLINE_SET_WALK_SPEED obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -19901,11 +20910,11 @@ SMSG_SPLINE_SET_WALK_SPEED SMSG_SPLINE_SET_WALK_SPEED_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SPLINE_SET_WALK_SPEED::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPLINE_SET_WALK_SPEED::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_SPLINE_SET_WALK_SPEED_size(obj));
 
-    writer.write_u16_be(SMSG_SPLINE_SET_WALK_SPEED_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_SPLINE_SET_WALK_SPEED_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000301); /* opcode */
 
@@ -19921,7 +20930,7 @@ static size_t SMSG_SPLINE_SET_SWIM_BACK_SPEED_size(const SMSG_SPLINE_SET_SWIM_BA
 }
 
 SMSG_SPLINE_SET_SWIM_BACK_SPEED SMSG_SPLINE_SET_SWIM_BACK_SPEED_read(Reader& reader) {
-    SMSG_SPLINE_SET_SWIM_BACK_SPEED obj;
+    SMSG_SPLINE_SET_SWIM_BACK_SPEED obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -19930,11 +20939,11 @@ SMSG_SPLINE_SET_SWIM_BACK_SPEED SMSG_SPLINE_SET_SWIM_BACK_SPEED_read(Reader& rea
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SPLINE_SET_SWIM_BACK_SPEED::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPLINE_SET_SWIM_BACK_SPEED::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_SPLINE_SET_SWIM_BACK_SPEED_size(obj));
 
-    writer.write_u16_be(SMSG_SPLINE_SET_SWIM_BACK_SPEED_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_SPLINE_SET_SWIM_BACK_SPEED_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000302); /* opcode */
 
@@ -19950,7 +20959,7 @@ static size_t SMSG_SPLINE_SET_TURN_RATE_size(const SMSG_SPLINE_SET_TURN_RATE& ob
 }
 
 SMSG_SPLINE_SET_TURN_RATE SMSG_SPLINE_SET_TURN_RATE_read(Reader& reader) {
-    SMSG_SPLINE_SET_TURN_RATE obj;
+    SMSG_SPLINE_SET_TURN_RATE obj{};
 
     obj.guid = reader.read_packed_guid();
 
@@ -19959,11 +20968,11 @@ SMSG_SPLINE_SET_TURN_RATE SMSG_SPLINE_SET_TURN_RATE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SPLINE_SET_TURN_RATE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPLINE_SET_TURN_RATE::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_SPLINE_SET_TURN_RATE_size(obj));
 
-    writer.write_u16_be(SMSG_SPLINE_SET_TURN_RATE_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_SPLINE_SET_TURN_RATE_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000303); /* opcode */
 
@@ -19979,18 +20988,18 @@ static size_t SMSG_SPLINE_MOVE_UNROOT_size(const SMSG_SPLINE_MOVE_UNROOT& obj) {
 }
 
 SMSG_SPLINE_MOVE_UNROOT SMSG_SPLINE_MOVE_UNROOT_read(Reader& reader) {
-    SMSG_SPLINE_MOVE_UNROOT obj;
+    SMSG_SPLINE_MOVE_UNROOT obj{};
 
     obj.guid = reader.read_packed_guid();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SPLINE_MOVE_UNROOT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPLINE_MOVE_UNROOT::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_SPLINE_MOVE_UNROOT_size(obj));
 
-    writer.write_u16_be(SMSG_SPLINE_MOVE_UNROOT_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_SPLINE_MOVE_UNROOT_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000304); /* opcode */
 
@@ -20004,18 +21013,18 @@ static size_t SMSG_SPLINE_MOVE_FEATHER_FALL_size(const SMSG_SPLINE_MOVE_FEATHER_
 }
 
 SMSG_SPLINE_MOVE_FEATHER_FALL SMSG_SPLINE_MOVE_FEATHER_FALL_read(Reader& reader) {
-    SMSG_SPLINE_MOVE_FEATHER_FALL obj;
+    SMSG_SPLINE_MOVE_FEATHER_FALL obj{};
 
     obj.guid = reader.read_packed_guid();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SPLINE_MOVE_FEATHER_FALL::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPLINE_MOVE_FEATHER_FALL::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_SPLINE_MOVE_FEATHER_FALL_size(obj));
 
-    writer.write_u16_be(SMSG_SPLINE_MOVE_FEATHER_FALL_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_SPLINE_MOVE_FEATHER_FALL_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000305); /* opcode */
 
@@ -20029,18 +21038,18 @@ static size_t SMSG_SPLINE_MOVE_NORMAL_FALL_size(const SMSG_SPLINE_MOVE_NORMAL_FA
 }
 
 SMSG_SPLINE_MOVE_NORMAL_FALL SMSG_SPLINE_MOVE_NORMAL_FALL_read(Reader& reader) {
-    SMSG_SPLINE_MOVE_NORMAL_FALL obj;
+    SMSG_SPLINE_MOVE_NORMAL_FALL obj{};
 
     obj.guid = reader.read_packed_guid();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SPLINE_MOVE_NORMAL_FALL::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPLINE_MOVE_NORMAL_FALL::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_SPLINE_MOVE_NORMAL_FALL_size(obj));
 
-    writer.write_u16_be(SMSG_SPLINE_MOVE_NORMAL_FALL_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_SPLINE_MOVE_NORMAL_FALL_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000306); /* opcode */
 
@@ -20054,18 +21063,18 @@ static size_t SMSG_SPLINE_MOVE_SET_HOVER_size(const SMSG_SPLINE_MOVE_SET_HOVER& 
 }
 
 SMSG_SPLINE_MOVE_SET_HOVER SMSG_SPLINE_MOVE_SET_HOVER_read(Reader& reader) {
-    SMSG_SPLINE_MOVE_SET_HOVER obj;
+    SMSG_SPLINE_MOVE_SET_HOVER obj{};
 
     obj.guid = reader.read_packed_guid();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SPLINE_MOVE_SET_HOVER::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPLINE_MOVE_SET_HOVER::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_SPLINE_MOVE_SET_HOVER_size(obj));
 
-    writer.write_u16_be(SMSG_SPLINE_MOVE_SET_HOVER_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_SPLINE_MOVE_SET_HOVER_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000307); /* opcode */
 
@@ -20079,18 +21088,18 @@ static size_t SMSG_SPLINE_MOVE_UNSET_HOVER_size(const SMSG_SPLINE_MOVE_UNSET_HOV
 }
 
 SMSG_SPLINE_MOVE_UNSET_HOVER SMSG_SPLINE_MOVE_UNSET_HOVER_read(Reader& reader) {
-    SMSG_SPLINE_MOVE_UNSET_HOVER obj;
+    SMSG_SPLINE_MOVE_UNSET_HOVER obj{};
 
     obj.guid = reader.read_packed_guid();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SPLINE_MOVE_UNSET_HOVER::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPLINE_MOVE_UNSET_HOVER::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_SPLINE_MOVE_UNSET_HOVER_size(obj));
 
-    writer.write_u16_be(SMSG_SPLINE_MOVE_UNSET_HOVER_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_SPLINE_MOVE_UNSET_HOVER_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000308); /* opcode */
 
@@ -20104,18 +21113,18 @@ static size_t SMSG_SPLINE_MOVE_WATER_WALK_size(const SMSG_SPLINE_MOVE_WATER_WALK
 }
 
 SMSG_SPLINE_MOVE_WATER_WALK SMSG_SPLINE_MOVE_WATER_WALK_read(Reader& reader) {
-    SMSG_SPLINE_MOVE_WATER_WALK obj;
+    SMSG_SPLINE_MOVE_WATER_WALK obj{};
 
     obj.guid = reader.read_packed_guid();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SPLINE_MOVE_WATER_WALK::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPLINE_MOVE_WATER_WALK::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_SPLINE_MOVE_WATER_WALK_size(obj));
 
-    writer.write_u16_be(SMSG_SPLINE_MOVE_WATER_WALK_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_SPLINE_MOVE_WATER_WALK_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000309); /* opcode */
 
@@ -20129,18 +21138,18 @@ static size_t SMSG_SPLINE_MOVE_LAND_WALK_size(const SMSG_SPLINE_MOVE_LAND_WALK& 
 }
 
 SMSG_SPLINE_MOVE_LAND_WALK SMSG_SPLINE_MOVE_LAND_WALK_read(Reader& reader) {
-    SMSG_SPLINE_MOVE_LAND_WALK obj;
+    SMSG_SPLINE_MOVE_LAND_WALK obj{};
 
     obj.guid = reader.read_packed_guid();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SPLINE_MOVE_LAND_WALK::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPLINE_MOVE_LAND_WALK::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_SPLINE_MOVE_LAND_WALK_size(obj));
 
-    writer.write_u16_be(SMSG_SPLINE_MOVE_LAND_WALK_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_SPLINE_MOVE_LAND_WALK_size(obj) + 2)); /* size */
 
     writer.write_u16(0x0000030a); /* opcode */
 
@@ -20154,18 +21163,18 @@ static size_t SMSG_SPLINE_MOVE_START_SWIM_size(const SMSG_SPLINE_MOVE_START_SWIM
 }
 
 SMSG_SPLINE_MOVE_START_SWIM SMSG_SPLINE_MOVE_START_SWIM_read(Reader& reader) {
-    SMSG_SPLINE_MOVE_START_SWIM obj;
+    SMSG_SPLINE_MOVE_START_SWIM obj{};
 
     obj.guid = reader.read_packed_guid();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SPLINE_MOVE_START_SWIM::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPLINE_MOVE_START_SWIM::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_SPLINE_MOVE_START_SWIM_size(obj));
 
-    writer.write_u16_be(SMSG_SPLINE_MOVE_START_SWIM_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_SPLINE_MOVE_START_SWIM_size(obj) + 2)); /* size */
 
     writer.write_u16(0x0000030b); /* opcode */
 
@@ -20179,18 +21188,18 @@ static size_t SMSG_SPLINE_MOVE_STOP_SWIM_size(const SMSG_SPLINE_MOVE_STOP_SWIM& 
 }
 
 SMSG_SPLINE_MOVE_STOP_SWIM SMSG_SPLINE_MOVE_STOP_SWIM_read(Reader& reader) {
-    SMSG_SPLINE_MOVE_STOP_SWIM obj;
+    SMSG_SPLINE_MOVE_STOP_SWIM obj{};
 
     obj.guid = reader.read_packed_guid();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SPLINE_MOVE_STOP_SWIM::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPLINE_MOVE_STOP_SWIM::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_SPLINE_MOVE_STOP_SWIM_size(obj));
 
-    writer.write_u16_be(SMSG_SPLINE_MOVE_STOP_SWIM_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_SPLINE_MOVE_STOP_SWIM_size(obj) + 2)); /* size */
 
     writer.write_u16(0x0000030c); /* opcode */
 
@@ -20204,18 +21213,18 @@ static size_t SMSG_SPLINE_MOVE_SET_RUN_MODE_size(const SMSG_SPLINE_MOVE_SET_RUN_
 }
 
 SMSG_SPLINE_MOVE_SET_RUN_MODE SMSG_SPLINE_MOVE_SET_RUN_MODE_read(Reader& reader) {
-    SMSG_SPLINE_MOVE_SET_RUN_MODE obj;
+    SMSG_SPLINE_MOVE_SET_RUN_MODE obj{};
 
     obj.guid = reader.read_packed_guid();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SPLINE_MOVE_SET_RUN_MODE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPLINE_MOVE_SET_RUN_MODE::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_SPLINE_MOVE_SET_RUN_MODE_size(obj));
 
-    writer.write_u16_be(SMSG_SPLINE_MOVE_SET_RUN_MODE_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_SPLINE_MOVE_SET_RUN_MODE_size(obj) + 2)); /* size */
 
     writer.write_u16(0x0000030d); /* opcode */
 
@@ -20229,18 +21238,18 @@ static size_t SMSG_SPLINE_MOVE_SET_WALK_MODE_size(const SMSG_SPLINE_MOVE_SET_WAL
 }
 
 SMSG_SPLINE_MOVE_SET_WALK_MODE SMSG_SPLINE_MOVE_SET_WALK_MODE_read(Reader& reader) {
-    SMSG_SPLINE_MOVE_SET_WALK_MODE obj;
+    SMSG_SPLINE_MOVE_SET_WALK_MODE obj{};
 
     obj.guid = reader.read_packed_guid();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SPLINE_MOVE_SET_WALK_MODE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPLINE_MOVE_SET_WALK_MODE::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_SPLINE_MOVE_SET_WALK_MODE_size(obj));
 
-    writer.write_u16_be(SMSG_SPLINE_MOVE_SET_WALK_MODE_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_SPLINE_MOVE_SET_WALK_MODE_size(obj) + 2)); /* size */
 
     writer.write_u16(0x0000030e); /* opcode */
 
@@ -20254,7 +21263,7 @@ static size_t CMSG_ACTIVATETAXIEXPRESS_size(const CMSG_ACTIVATETAXIEXPRESS& obj)
 }
 
 CMSG_ACTIVATETAXIEXPRESS CMSG_ACTIVATETAXIEXPRESS_read(Reader& reader) {
-    CMSG_ACTIVATETAXIEXPRESS obj;
+    CMSG_ACTIVATETAXIEXPRESS obj{};
 
     obj.guid = reader.read_u64();
 
@@ -20262,18 +21271,18 @@ CMSG_ACTIVATETAXIEXPRESS CMSG_ACTIVATETAXIEXPRESS_read(Reader& reader) {
 
     obj.node_count = reader.read_u32();
 
-    for (auto i = 0; i < obj.node_count; ++i) {
+    for (uint32_t i = 0; i < obj.node_count; ++i) {
         obj.nodes.push_back(reader.read_u32());
     }
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_ACTIVATETAXIEXPRESS::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_ACTIVATETAXIEXPRESS::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_ACTIVATETAXIEXPRESS_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_ACTIVATETAXIEXPRESS_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_ACTIVATETAXIEXPRESS_size(obj) + 4)); /* size */
 
     writer.write_u32(0x00000312); /* opcode */
 
@@ -20291,7 +21300,7 @@ std::vector<unsigned char> CMSG_ACTIVATETAXIEXPRESS::write() const {
 }
 
 CMSG_SET_FACTION_INACTIVE CMSG_SET_FACTION_INACTIVE_read(Reader& reader) {
-    CMSG_SET_FACTION_INACTIVE obj;
+    CMSG_SET_FACTION_INACTIVE obj{};
 
     obj.faction = static_cast<Faction>(reader.read_u16());
 
@@ -20300,11 +21309,11 @@ CMSG_SET_FACTION_INACTIVE CMSG_SET_FACTION_INACTIVE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_SET_FACTION_INACTIVE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_SET_FACTION_INACTIVE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0003);
 
-    writer.write_u16_be(0x0003 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0003 + 4)); /* size */
 
     writer.write_u32(0x00000317); /* opcode */
 
@@ -20316,18 +21325,18 @@ std::vector<unsigned char> CMSG_SET_FACTION_INACTIVE::write() const {
 }
 
 CMSG_SET_WATCHED_FACTION CMSG_SET_WATCHED_FACTION_read(Reader& reader) {
-    CMSG_SET_WATCHED_FACTION obj;
+    CMSG_SET_WATCHED_FACTION obj{};
 
     obj.faction = static_cast<Faction>(reader.read_u16());
 
     return obj;
 }
 
-std::vector<unsigned char> CMSG_SET_WATCHED_FACTION::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_SET_WATCHED_FACTION::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0002);
 
-    writer.write_u16_be(0x0002 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0002 + 4)); /* size */
 
     writer.write_u32(0x00000318); /* opcode */
 
@@ -20341,7 +21350,7 @@ static size_t MSG_MOVE_TIME_SKIPPED_Server_size(const MSG_MOVE_TIME_SKIPPED_Serv
 }
 
 MSG_MOVE_TIME_SKIPPED_Server MSG_MOVE_TIME_SKIPPED_Server_read(Reader& reader) {
-    MSG_MOVE_TIME_SKIPPED_Server obj;
+    MSG_MOVE_TIME_SKIPPED_Server obj{};
 
     obj.player = reader.read_packed_guid();
 
@@ -20350,11 +21359,11 @@ MSG_MOVE_TIME_SKIPPED_Server MSG_MOVE_TIME_SKIPPED_Server_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> MSG_MOVE_TIME_SKIPPED_Server::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_MOVE_TIME_SKIPPED_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_MOVE_TIME_SKIPPED_Server_size(obj));
 
-    writer.write_u16_be(MSG_MOVE_TIME_SKIPPED_Server_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(MSG_MOVE_TIME_SKIPPED_Server_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000319); /* opcode */
 
@@ -20366,18 +21375,18 @@ std::vector<unsigned char> MSG_MOVE_TIME_SKIPPED_Server::write() const {
 }
 
 SMSG_SPLINE_MOVE_ROOT SMSG_SPLINE_MOVE_ROOT_read(Reader& reader) {
-    SMSG_SPLINE_MOVE_ROOT obj;
+    SMSG_SPLINE_MOVE_ROOT obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SPLINE_MOVE_ROOT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPLINE_MOVE_ROOT::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 2)); /* size */
 
     writer.write_u16(0x0000031a); /* opcode */
 
@@ -20387,18 +21396,18 @@ std::vector<unsigned char> SMSG_SPLINE_MOVE_ROOT::write() const {
 }
 
 SMSG_INVALIDATE_PLAYER SMSG_INVALIDATE_PLAYER_read(Reader& reader) {
-    SMSG_INVALIDATE_PLAYER obj;
+    SMSG_INVALIDATE_PLAYER obj{};
 
     obj.guid = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_INVALIDATE_PLAYER::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_INVALIDATE_PLAYER::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 2)); /* size */
 
     writer.write_u16(0x0000031c); /* opcode */
 
@@ -20407,10 +21416,10 @@ std::vector<unsigned char> SMSG_INVALIDATE_PLAYER::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> CMSG_RESET_INSTANCES::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_RESET_INSTANCES::write() const {
     auto writer = Writer(0x0000);
 
-    writer.write_u16_be(0x0000 + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0000 + 4)); /* size */
 
     writer.write_u32(0x0000031d); /* opcode */
 
@@ -20418,18 +21427,18 @@ std::vector<unsigned char> CMSG_RESET_INSTANCES::write() const {
 }
 
 SMSG_INSTANCE_RESET SMSG_INSTANCE_RESET_read(Reader& reader) {
-    SMSG_INSTANCE_RESET obj;
+    SMSG_INSTANCE_RESET obj{};
 
     obj.map = static_cast<Map>(reader.read_u32());
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_INSTANCE_RESET::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_INSTANCE_RESET::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 2)); /* size */
 
     writer.write_u16(0x0000031e); /* opcode */
 
@@ -20439,7 +21448,7 @@ std::vector<unsigned char> SMSG_INSTANCE_RESET::write() const {
 }
 
 SMSG_INSTANCE_RESET_FAILED SMSG_INSTANCE_RESET_FAILED_read(Reader& reader) {
-    SMSG_INSTANCE_RESET_FAILED obj;
+    SMSG_INSTANCE_RESET_FAILED obj{};
 
     obj.reason = static_cast<InstanceResetFailedReason>(reader.read_u32());
 
@@ -20448,11 +21457,11 @@ SMSG_INSTANCE_RESET_FAILED SMSG_INSTANCE_RESET_FAILED_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_INSTANCE_RESET_FAILED::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_INSTANCE_RESET_FAILED::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
-    writer.write_u16_be(0x0008 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0008 + 2)); /* size */
 
     writer.write_u16(0x0000031f); /* opcode */
 
@@ -20464,18 +21473,18 @@ std::vector<unsigned char> SMSG_INSTANCE_RESET_FAILED::write() const {
 }
 
 SMSG_UPDATE_LAST_INSTANCE SMSG_UPDATE_LAST_INSTANCE_read(Reader& reader) {
-    SMSG_UPDATE_LAST_INSTANCE obj;
+    SMSG_UPDATE_LAST_INSTANCE obj{};
 
     obj.map = static_cast<Map>(reader.read_u32());
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_UPDATE_LAST_INSTANCE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_UPDATE_LAST_INSTANCE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 2)); /* size */
 
     writer.write_u16(0x00000320); /* opcode */
 
@@ -20495,7 +21504,7 @@ static size_t MSG_RAID_TARGET_UPDATE_Client_size(const MSG_RAID_TARGET_UPDATE_Cl
 }
 
 MSG_RAID_TARGET_UPDATE_Client MSG_RAID_TARGET_UPDATE_Client_read(Reader& reader) {
-    MSG_RAID_TARGET_UPDATE_Client obj;
+    MSG_RAID_TARGET_UPDATE_Client obj{};
 
     obj.target_index = static_cast<RaidTargetIndex>(reader.read_u8());
 
@@ -20506,11 +21515,11 @@ MSG_RAID_TARGET_UPDATE_Client MSG_RAID_TARGET_UPDATE_Client_read(Reader& reader)
     return obj;
 }
 
-std::vector<unsigned char> MSG_RAID_TARGET_UPDATE_Client::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_RAID_TARGET_UPDATE_Client::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_RAID_TARGET_UPDATE_Client_size(obj));
 
-    writer.write_u16_be((uint16_t)MSG_RAID_TARGET_UPDATE_Client_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)MSG_RAID_TARGET_UPDATE_Client_size(obj) + 4)); /* size */
 
     writer.write_u32(0x00000321); /* opcode */
 
@@ -20537,7 +21546,7 @@ static size_t MSG_RAID_TARGET_UPDATE_Server_size(const MSG_RAID_TARGET_UPDATE_Se
 }
 
 MSG_RAID_TARGET_UPDATE_Server MSG_RAID_TARGET_UPDATE_Server_read(Reader& reader) {
-    MSG_RAID_TARGET_UPDATE_Server obj;
+    MSG_RAID_TARGET_UPDATE_Server obj{};
 
     obj.update_type = static_cast<RaidTargetUpdateType>(reader.read_u8());
 
@@ -20554,11 +21563,11 @@ MSG_RAID_TARGET_UPDATE_Server MSG_RAID_TARGET_UPDATE_Server_read(Reader& reader)
     return obj;
 }
 
-std::vector<unsigned char> MSG_RAID_TARGET_UPDATE_Server::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_RAID_TARGET_UPDATE_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(MSG_RAID_TARGET_UPDATE_Server_size(obj));
 
-    writer.write_u16_be(MSG_RAID_TARGET_UPDATE_Server_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(MSG_RAID_TARGET_UPDATE_Server_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000321); /* opcode */
 
@@ -20577,8 +21586,88 @@ std::vector<unsigned char> MSG_RAID_TARGET_UPDATE_Server::write() const {
     return writer.m_buf;
 }
 
+static size_t MSG_RAID_READY_CHECK_Client_size(const MSG_RAID_READY_CHECK_Client& obj) {
+    size_t _size = 0;
+
+    if(obj.answer) {
+        _size += 1;
+    }
+
+    return _size;
+}
+
+MSG_RAID_READY_CHECK_Client MSG_RAID_READY_CHECK_Client_read(Reader& reader, size_t body_size) {
+    MSG_RAID_READY_CHECK_Client obj{};
+    size_t _size = 0;
+
+    if (_size < body_size) {
+        obj.answer = std::unique_ptr<vanilla::MSG_RAID_READY_CHECK_Client::Answer>(new vanilla::MSG_RAID_READY_CHECK_Client::Answer());
+
+        obj.answer->state = reader.read_u8();
+
+    }
+    return obj;
+}
+
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_RAID_READY_CHECK_Client::write() const {
+    const auto& obj = *this;
+    auto writer = Writer(MSG_RAID_READY_CHECK_Client_size(obj));
+
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)MSG_RAID_READY_CHECK_Client_size(obj) + 4)); /* size */
+
+    writer.write_u32(0x00000322); /* opcode */
+
+    if(obj.answer) {
+        writer.write_u8(obj.answer->state);
+
+    }
+    return writer.m_buf;
+}
+
+static size_t MSG_RAID_READY_CHECK_Server_size(const MSG_RAID_READY_CHECK_Server& obj) {
+    size_t _size = 0;
+
+    if(obj.state_check) {
+        _size += 9;
+    }
+
+    return _size;
+}
+
+MSG_RAID_READY_CHECK_Server MSG_RAID_READY_CHECK_Server_read(Reader& reader, size_t body_size) {
+    MSG_RAID_READY_CHECK_Server obj{};
+    size_t _size = 0;
+
+    if (_size < body_size) {
+        obj.state_check = std::unique_ptr<vanilla::MSG_RAID_READY_CHECK_Server::StateCheck>(new vanilla::MSG_RAID_READY_CHECK_Server::StateCheck());
+
+        obj.state_check->guid = reader.read_u64();
+
+        obj.state_check->state = reader.read_u8();
+
+    }
+    return obj;
+}
+
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_RAID_READY_CHECK_Server::write() const {
+    const auto& obj = *this;
+    auto writer = Writer(MSG_RAID_READY_CHECK_Server_size(obj));
+
+    writer.write_u16_be(static_cast<uint16_t>(MSG_RAID_READY_CHECK_Server_size(obj) + 2)); /* size */
+
+    writer.write_u16(0x00000322); /* opcode */
+
+    if(obj.state_check) {
+        writer.write_u64(obj.state_check->guid);
+
+        writer.write_u8(obj.state_check->state);
+
+    }
+    return writer.m_buf;
+}
+
 SMSG_PET_ACTION_SOUND SMSG_PET_ACTION_SOUND_read(Reader& reader) {
-    SMSG_PET_ACTION_SOUND obj;
+    SMSG_PET_ACTION_SOUND obj{};
 
     obj.guid = reader.read_u64();
 
@@ -20587,11 +21676,11 @@ SMSG_PET_ACTION_SOUND SMSG_PET_ACTION_SOUND_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_PET_ACTION_SOUND::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_PET_ACTION_SOUND::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 2)); /* size */
 
     writer.write_u16(0x00000324); /* opcode */
 
@@ -20603,7 +21692,7 @@ std::vector<unsigned char> SMSG_PET_ACTION_SOUND::write() const {
 }
 
 SMSG_PET_DISMISS_SOUND SMSG_PET_DISMISS_SOUND_read(Reader& reader) {
-    SMSG_PET_DISMISS_SOUND obj;
+    SMSG_PET_DISMISS_SOUND obj{};
 
     obj.sound_id = reader.read_u32();
 
@@ -20612,11 +21701,11 @@ SMSG_PET_DISMISS_SOUND SMSG_PET_DISMISS_SOUND_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_PET_DISMISS_SOUND::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_PET_DISMISS_SOUND::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0010);
 
-    writer.write_u16_be(0x0010 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0010 + 2)); /* size */
 
     writer.write_u16(0x00000325); /* opcode */
 
@@ -20628,18 +21717,18 @@ std::vector<unsigned char> SMSG_PET_DISMISS_SOUND::write() const {
 }
 
 SMSG_GM_TICKET_STATUS_UPDATE SMSG_GM_TICKET_STATUS_UPDATE_read(Reader& reader) {
-    SMSG_GM_TICKET_STATUS_UPDATE obj;
+    SMSG_GM_TICKET_STATUS_UPDATE obj{};
 
     obj.response = static_cast<GmTicketStatusResponse>(reader.read_u32());
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_GM_TICKET_STATUS_UPDATE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_GM_TICKET_STATUS_UPDATE::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 2)); /* size */
 
     writer.write_u16(0x00000328); /* opcode */
 
@@ -20659,7 +21748,7 @@ static size_t CMSG_GMSURVEY_SUBMIT_size(const CMSG_GMSURVEY_SUBMIT& obj) {
 }
 
 CMSG_GMSURVEY_SUBMIT CMSG_GMSURVEY_SUBMIT_read(Reader& reader) {
-    CMSG_GMSURVEY_SUBMIT obj;
+    CMSG_GMSURVEY_SUBMIT obj{};
 
     obj.survey_id = reader.read_u32();
 
@@ -20672,11 +21761,11 @@ CMSG_GMSURVEY_SUBMIT CMSG_GMSURVEY_SUBMIT_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMSG_GMSURVEY_SUBMIT::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GMSURVEY_SUBMIT::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMSG_GMSURVEY_SUBMIT_size(obj));
 
-    writer.write_u16_be((uint16_t)CMSG_GMSURVEY_SUBMIT_size(obj) + 4); /* size */
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_GMSURVEY_SUBMIT_size(obj) + 4)); /* size */
 
     writer.write_u32(0x0000032a); /* opcode */
 
@@ -20692,18 +21781,18 @@ std::vector<unsigned char> CMSG_GMSURVEY_SUBMIT::write() const {
 }
 
 SMSG_UPDATE_INSTANCE_OWNERSHIP SMSG_UPDATE_INSTANCE_OWNERSHIP_read(Reader& reader) {
-    SMSG_UPDATE_INSTANCE_OWNERSHIP obj;
+    SMSG_UPDATE_INSTANCE_OWNERSHIP obj{};
 
     obj.player_is_saved_to_a_raid = reader.read_bool32();
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_UPDATE_INSTANCE_OWNERSHIP::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_UPDATE_INSTANCE_OWNERSHIP::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0004);
 
-    writer.write_u16_be(0x0004 + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x0004 + 2)); /* size */
 
     writer.write_u16(0x0000032b); /* opcode */
 
@@ -20713,7 +21802,7 @@ std::vector<unsigned char> SMSG_UPDATE_INSTANCE_OWNERSHIP::write() const {
 }
 
 SMSG_SPELLINSTAKILLLOG SMSG_SPELLINSTAKILLLOG_read(Reader& reader) {
-    SMSG_SPELLINSTAKILLLOG obj;
+    SMSG_SPELLINSTAKILLLOG obj{};
 
     obj.target = reader.read_u64();
 
@@ -20722,11 +21811,11 @@ SMSG_SPELLINSTAKILLLOG SMSG_SPELLINSTAKILLLOG_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SPELLINSTAKILLLOG::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPELLINSTAKILLLOG::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x000c);
 
-    writer.write_u16_be(0x000c + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(0x000c + 2)); /* size */
 
     writer.write_u16(0x0000032f); /* opcode */
 
@@ -20742,7 +21831,7 @@ static size_t SMSG_SPELL_UPDATE_CHAIN_TARGETS_size(const SMSG_SPELL_UPDATE_CHAIN
 }
 
 SMSG_SPELL_UPDATE_CHAIN_TARGETS SMSG_SPELL_UPDATE_CHAIN_TARGETS_read(Reader& reader) {
-    SMSG_SPELL_UPDATE_CHAIN_TARGETS obj;
+    SMSG_SPELL_UPDATE_CHAIN_TARGETS obj{};
 
     obj.caster = reader.read_u64();
 
@@ -20750,18 +21839,18 @@ SMSG_SPELL_UPDATE_CHAIN_TARGETS SMSG_SPELL_UPDATE_CHAIN_TARGETS_read(Reader& rea
 
     obj.amount_of_targets = reader.read_u32();
 
-    for (auto i = 0; i < obj.amount_of_targets; ++i) {
+    for (uint32_t i = 0; i < obj.amount_of_targets; ++i) {
         obj.targets.push_back(reader.read_u64());
     }
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_SPELL_UPDATE_CHAIN_TARGETS::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPELL_UPDATE_CHAIN_TARGETS::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_SPELL_UPDATE_CHAIN_TARGETS_size(obj));
 
-    writer.write_u16_be(SMSG_SPELL_UPDATE_CHAIN_TARGETS_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_SPELL_UPDATE_CHAIN_TARGETS_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000330); /* opcode */
 
@@ -20782,29 +21871,29 @@ static size_t SMSG_EXPECTED_SPAM_RECORDS_size(const SMSG_EXPECTED_SPAM_RECORDS& 
     size_t _size = 4;
 
     for(const auto& v : obj.records) {
-        _size += v.size() + 1;
+        _size += v.size() + 1;;
     }
 
     return _size;
 }
 
 SMSG_EXPECTED_SPAM_RECORDS SMSG_EXPECTED_SPAM_RECORDS_read(Reader& reader) {
-    SMSG_EXPECTED_SPAM_RECORDS obj;
+    SMSG_EXPECTED_SPAM_RECORDS obj{};
 
     obj.amount_of_records = reader.read_u32();
 
-    for (auto i = 0; i < obj.amount_of_records; ++i) {
+    for (uint32_t i = 0; i < obj.amount_of_records; ++i) {
         obj.records.push_back(reader.read_cstring());
     }
 
     return obj;
 }
 
-std::vector<unsigned char> SMSG_EXPECTED_SPAM_RECORDS::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_EXPECTED_SPAM_RECORDS::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_EXPECTED_SPAM_RECORDS_size(obj));
 
-    writer.write_u16_be(SMSG_EXPECTED_SPAM_RECORDS_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_EXPECTED_SPAM_RECORDS_size(obj) + 2)); /* size */
 
     writer.write_u16(0x00000332); /* opcode */
 
@@ -20822,7 +21911,7 @@ static size_t SMSG_DEFENSE_MESSAGE_size(const SMSG_DEFENSE_MESSAGE& obj) {
 }
 
 SMSG_DEFENSE_MESSAGE SMSG_DEFENSE_MESSAGE_read(Reader& reader) {
-    SMSG_DEFENSE_MESSAGE obj;
+    SMSG_DEFENSE_MESSAGE obj{};
 
     obj.area = static_cast<Area>(reader.read_u32());
 
@@ -20831,11 +21920,11 @@ SMSG_DEFENSE_MESSAGE SMSG_DEFENSE_MESSAGE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> SMSG_DEFENSE_MESSAGE::write() const {
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_DEFENSE_MESSAGE::write() const {
     const auto& obj = *this;
     auto writer = Writer(SMSG_DEFENSE_MESSAGE_size(obj));
 
-    writer.write_u16_be(SMSG_DEFENSE_MESSAGE_size(obj) + 2); /* size */
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_DEFENSE_MESSAGE_size(obj) + 2)); /* size */
 
     writer.write_u16(0x0000033b); /* opcode */
 
@@ -20846,7 +21935,4856 @@ std::vector<unsigned char> SMSG_DEFENSE_MESSAGE::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> write_opcode(const ClientOpcode& opcode) {
+template <>
+vanilla::CMSG_BOOTME* ClientOpcode::get_if<CMSG_BOOTME>() {
+    if (opcode == Opcode::CMSG_BOOTME) {
+        return &CMSG_BOOTME;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_BOOTME& ClientOpcode::get<CMSG_BOOTME>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_BOOTME>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_DBLOOKUP* ClientOpcode::get_if<CMSG_DBLOOKUP>() {
+    if (opcode == Opcode::CMSG_DBLOOKUP) {
+        return &CMSG_DBLOOKUP;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_DBLOOKUP& ClientOpcode::get<CMSG_DBLOOKUP>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_DBLOOKUP>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_WORLD_TELEPORT* ClientOpcode::get_if<CMSG_WORLD_TELEPORT>() {
+    if (opcode == Opcode::CMSG_WORLD_TELEPORT) {
+        return &CMSG_WORLD_TELEPORT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_WORLD_TELEPORT& ClientOpcode::get<CMSG_WORLD_TELEPORT>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_WORLD_TELEPORT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_TELEPORT_TO_UNIT* ClientOpcode::get_if<CMSG_TELEPORT_TO_UNIT>() {
+    if (opcode == Opcode::CMSG_TELEPORT_TO_UNIT) {
+        return &CMSG_TELEPORT_TO_UNIT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_TELEPORT_TO_UNIT& ClientOpcode::get<CMSG_TELEPORT_TO_UNIT>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_TELEPORT_TO_UNIT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_CHAR_CREATE* ClientOpcode::get_if<CMSG_CHAR_CREATE>() {
+    if (opcode == Opcode::CMSG_CHAR_CREATE) {
+        return &CMSG_CHAR_CREATE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_CHAR_CREATE& ClientOpcode::get<CMSG_CHAR_CREATE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_CHAR_CREATE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_CHAR_ENUM* ClientOpcode::get_if<CMSG_CHAR_ENUM>() {
+    if (opcode == Opcode::CMSG_CHAR_ENUM) {
+        return &CMSG_CHAR_ENUM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_CHAR_ENUM& ClientOpcode::get<CMSG_CHAR_ENUM>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_CHAR_ENUM>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_CHAR_DELETE* ClientOpcode::get_if<CMSG_CHAR_DELETE>() {
+    if (opcode == Opcode::CMSG_CHAR_DELETE) {
+        return &CMSG_CHAR_DELETE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_CHAR_DELETE& ClientOpcode::get<CMSG_CHAR_DELETE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_CHAR_DELETE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_PLAYER_LOGIN* ClientOpcode::get_if<CMSG_PLAYER_LOGIN>() {
+    if (opcode == Opcode::CMSG_PLAYER_LOGIN) {
+        return &CMSG_PLAYER_LOGIN;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_PLAYER_LOGIN& ClientOpcode::get<CMSG_PLAYER_LOGIN>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_PLAYER_LOGIN>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_PLAYER_LOGOUT* ClientOpcode::get_if<CMSG_PLAYER_LOGOUT>() {
+    if (opcode == Opcode::CMSG_PLAYER_LOGOUT) {
+        return &CMSG_PLAYER_LOGOUT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_PLAYER_LOGOUT& ClientOpcode::get<CMSG_PLAYER_LOGOUT>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_PLAYER_LOGOUT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_LOGOUT_REQUEST* ClientOpcode::get_if<CMSG_LOGOUT_REQUEST>() {
+    if (opcode == Opcode::CMSG_LOGOUT_REQUEST) {
+        return &CMSG_LOGOUT_REQUEST;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_LOGOUT_REQUEST& ClientOpcode::get<CMSG_LOGOUT_REQUEST>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_LOGOUT_REQUEST>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_LOGOUT_CANCEL* ClientOpcode::get_if<CMSG_LOGOUT_CANCEL>() {
+    if (opcode == Opcode::CMSG_LOGOUT_CANCEL) {
+        return &CMSG_LOGOUT_CANCEL;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_LOGOUT_CANCEL& ClientOpcode::get<CMSG_LOGOUT_CANCEL>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_LOGOUT_CANCEL>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_NAME_QUERY* ClientOpcode::get_if<CMSG_NAME_QUERY>() {
+    if (opcode == Opcode::CMSG_NAME_QUERY) {
+        return &CMSG_NAME_QUERY;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_NAME_QUERY& ClientOpcode::get<CMSG_NAME_QUERY>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_NAME_QUERY>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_PET_NAME_QUERY* ClientOpcode::get_if<CMSG_PET_NAME_QUERY>() {
+    if (opcode == Opcode::CMSG_PET_NAME_QUERY) {
+        return &CMSG_PET_NAME_QUERY;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_PET_NAME_QUERY& ClientOpcode::get<CMSG_PET_NAME_QUERY>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_PET_NAME_QUERY>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_GUILD_QUERY* ClientOpcode::get_if<CMSG_GUILD_QUERY>() {
+    if (opcode == Opcode::CMSG_GUILD_QUERY) {
+        return &CMSG_GUILD_QUERY;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GUILD_QUERY& ClientOpcode::get<CMSG_GUILD_QUERY>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GUILD_QUERY>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_ITEM_QUERY_SINGLE* ClientOpcode::get_if<CMSG_ITEM_QUERY_SINGLE>() {
+    if (opcode == Opcode::CMSG_ITEM_QUERY_SINGLE) {
+        return &CMSG_ITEM_QUERY_SINGLE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_ITEM_QUERY_SINGLE& ClientOpcode::get<CMSG_ITEM_QUERY_SINGLE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_ITEM_QUERY_SINGLE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_PAGE_TEXT_QUERY* ClientOpcode::get_if<CMSG_PAGE_TEXT_QUERY>() {
+    if (opcode == Opcode::CMSG_PAGE_TEXT_QUERY) {
+        return &CMSG_PAGE_TEXT_QUERY;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_PAGE_TEXT_QUERY& ClientOpcode::get<CMSG_PAGE_TEXT_QUERY>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_PAGE_TEXT_QUERY>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_QUEST_QUERY* ClientOpcode::get_if<CMSG_QUEST_QUERY>() {
+    if (opcode == Opcode::CMSG_QUEST_QUERY) {
+        return &CMSG_QUEST_QUERY;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_QUEST_QUERY& ClientOpcode::get<CMSG_QUEST_QUERY>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_QUEST_QUERY>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_GAMEOBJECT_QUERY* ClientOpcode::get_if<CMSG_GAMEOBJECT_QUERY>() {
+    if (opcode == Opcode::CMSG_GAMEOBJECT_QUERY) {
+        return &CMSG_GAMEOBJECT_QUERY;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GAMEOBJECT_QUERY& ClientOpcode::get<CMSG_GAMEOBJECT_QUERY>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GAMEOBJECT_QUERY>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_CREATURE_QUERY* ClientOpcode::get_if<CMSG_CREATURE_QUERY>() {
+    if (opcode == Opcode::CMSG_CREATURE_QUERY) {
+        return &CMSG_CREATURE_QUERY;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_CREATURE_QUERY& ClientOpcode::get<CMSG_CREATURE_QUERY>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_CREATURE_QUERY>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_WHO* ClientOpcode::get_if<CMSG_WHO>() {
+    if (opcode == Opcode::CMSG_WHO) {
+        return &CMSG_WHO;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_WHO& ClientOpcode::get<CMSG_WHO>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_WHO>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_WHOIS* ClientOpcode::get_if<CMSG_WHOIS>() {
+    if (opcode == Opcode::CMSG_WHOIS) {
+        return &CMSG_WHOIS;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_WHOIS& ClientOpcode::get<CMSG_WHOIS>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_WHOIS>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_FRIEND_LIST* ClientOpcode::get_if<CMSG_FRIEND_LIST>() {
+    if (opcode == Opcode::CMSG_FRIEND_LIST) {
+        return &CMSG_FRIEND_LIST;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_FRIEND_LIST& ClientOpcode::get<CMSG_FRIEND_LIST>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_FRIEND_LIST>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_ADD_FRIEND* ClientOpcode::get_if<CMSG_ADD_FRIEND>() {
+    if (opcode == Opcode::CMSG_ADD_FRIEND) {
+        return &CMSG_ADD_FRIEND;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_ADD_FRIEND& ClientOpcode::get<CMSG_ADD_FRIEND>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_ADD_FRIEND>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_DEL_FRIEND* ClientOpcode::get_if<CMSG_DEL_FRIEND>() {
+    if (opcode == Opcode::CMSG_DEL_FRIEND) {
+        return &CMSG_DEL_FRIEND;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_DEL_FRIEND& ClientOpcode::get<CMSG_DEL_FRIEND>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_DEL_FRIEND>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_ADD_IGNORE* ClientOpcode::get_if<CMSG_ADD_IGNORE>() {
+    if (opcode == Opcode::CMSG_ADD_IGNORE) {
+        return &CMSG_ADD_IGNORE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_ADD_IGNORE& ClientOpcode::get<CMSG_ADD_IGNORE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_ADD_IGNORE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_DEL_IGNORE* ClientOpcode::get_if<CMSG_DEL_IGNORE>() {
+    if (opcode == Opcode::CMSG_DEL_IGNORE) {
+        return &CMSG_DEL_IGNORE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_DEL_IGNORE& ClientOpcode::get<CMSG_DEL_IGNORE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_DEL_IGNORE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_GROUP_INVITE* ClientOpcode::get_if<CMSG_GROUP_INVITE>() {
+    if (opcode == Opcode::CMSG_GROUP_INVITE) {
+        return &CMSG_GROUP_INVITE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GROUP_INVITE& ClientOpcode::get<CMSG_GROUP_INVITE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GROUP_INVITE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_GROUP_ACCEPT* ClientOpcode::get_if<CMSG_GROUP_ACCEPT>() {
+    if (opcode == Opcode::CMSG_GROUP_ACCEPT) {
+        return &CMSG_GROUP_ACCEPT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GROUP_ACCEPT& ClientOpcode::get<CMSG_GROUP_ACCEPT>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GROUP_ACCEPT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_GROUP_DECLINE* ClientOpcode::get_if<CMSG_GROUP_DECLINE>() {
+    if (opcode == Opcode::CMSG_GROUP_DECLINE) {
+        return &CMSG_GROUP_DECLINE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GROUP_DECLINE& ClientOpcode::get<CMSG_GROUP_DECLINE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GROUP_DECLINE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_GROUP_UNINVITE* ClientOpcode::get_if<CMSG_GROUP_UNINVITE>() {
+    if (opcode == Opcode::CMSG_GROUP_UNINVITE) {
+        return &CMSG_GROUP_UNINVITE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GROUP_UNINVITE& ClientOpcode::get<CMSG_GROUP_UNINVITE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GROUP_UNINVITE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_GROUP_UNINVITE_GUID* ClientOpcode::get_if<CMSG_GROUP_UNINVITE_GUID>() {
+    if (opcode == Opcode::CMSG_GROUP_UNINVITE_GUID) {
+        return &CMSG_GROUP_UNINVITE_GUID;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GROUP_UNINVITE_GUID& ClientOpcode::get<CMSG_GROUP_UNINVITE_GUID>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GROUP_UNINVITE_GUID>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_GROUP_SET_LEADER* ClientOpcode::get_if<CMSG_GROUP_SET_LEADER>() {
+    if (opcode == Opcode::CMSG_GROUP_SET_LEADER) {
+        return &CMSG_GROUP_SET_LEADER;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GROUP_SET_LEADER& ClientOpcode::get<CMSG_GROUP_SET_LEADER>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GROUP_SET_LEADER>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_LOOT_METHOD* ClientOpcode::get_if<CMSG_LOOT_METHOD>() {
+    if (opcode == Opcode::CMSG_LOOT_METHOD) {
+        return &CMSG_LOOT_METHOD;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_LOOT_METHOD& ClientOpcode::get<CMSG_LOOT_METHOD>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_LOOT_METHOD>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_GROUP_DISBAND* ClientOpcode::get_if<CMSG_GROUP_DISBAND>() {
+    if (opcode == Opcode::CMSG_GROUP_DISBAND) {
+        return &CMSG_GROUP_DISBAND;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GROUP_DISBAND& ClientOpcode::get<CMSG_GROUP_DISBAND>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GROUP_DISBAND>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_GUILD_CREATE* ClientOpcode::get_if<CMSG_GUILD_CREATE>() {
+    if (opcode == Opcode::CMSG_GUILD_CREATE) {
+        return &CMSG_GUILD_CREATE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GUILD_CREATE& ClientOpcode::get<CMSG_GUILD_CREATE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GUILD_CREATE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_GUILD_INVITE* ClientOpcode::get_if<CMSG_GUILD_INVITE>() {
+    if (opcode == Opcode::CMSG_GUILD_INVITE) {
+        return &CMSG_GUILD_INVITE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GUILD_INVITE& ClientOpcode::get<CMSG_GUILD_INVITE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GUILD_INVITE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_GUILD_ACCEPT* ClientOpcode::get_if<CMSG_GUILD_ACCEPT>() {
+    if (opcode == Opcode::CMSG_GUILD_ACCEPT) {
+        return &CMSG_GUILD_ACCEPT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GUILD_ACCEPT& ClientOpcode::get<CMSG_GUILD_ACCEPT>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GUILD_ACCEPT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_GUILD_DECLINE* ClientOpcode::get_if<CMSG_GUILD_DECLINE>() {
+    if (opcode == Opcode::CMSG_GUILD_DECLINE) {
+        return &CMSG_GUILD_DECLINE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GUILD_DECLINE& ClientOpcode::get<CMSG_GUILD_DECLINE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GUILD_DECLINE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_GUILD_INFO* ClientOpcode::get_if<CMSG_GUILD_INFO>() {
+    if (opcode == Opcode::CMSG_GUILD_INFO) {
+        return &CMSG_GUILD_INFO;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GUILD_INFO& ClientOpcode::get<CMSG_GUILD_INFO>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GUILD_INFO>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_GUILD_ROSTER* ClientOpcode::get_if<CMSG_GUILD_ROSTER>() {
+    if (opcode == Opcode::CMSG_GUILD_ROSTER) {
+        return &CMSG_GUILD_ROSTER;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GUILD_ROSTER& ClientOpcode::get<CMSG_GUILD_ROSTER>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GUILD_ROSTER>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_GUILD_PROMOTE* ClientOpcode::get_if<CMSG_GUILD_PROMOTE>() {
+    if (opcode == Opcode::CMSG_GUILD_PROMOTE) {
+        return &CMSG_GUILD_PROMOTE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GUILD_PROMOTE& ClientOpcode::get<CMSG_GUILD_PROMOTE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GUILD_PROMOTE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_GUILD_DEMOTE* ClientOpcode::get_if<CMSG_GUILD_DEMOTE>() {
+    if (opcode == Opcode::CMSG_GUILD_DEMOTE) {
+        return &CMSG_GUILD_DEMOTE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GUILD_DEMOTE& ClientOpcode::get<CMSG_GUILD_DEMOTE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GUILD_DEMOTE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_GUILD_LEAVE* ClientOpcode::get_if<CMSG_GUILD_LEAVE>() {
+    if (opcode == Opcode::CMSG_GUILD_LEAVE) {
+        return &CMSG_GUILD_LEAVE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GUILD_LEAVE& ClientOpcode::get<CMSG_GUILD_LEAVE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GUILD_LEAVE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_GUILD_REMOVE* ClientOpcode::get_if<CMSG_GUILD_REMOVE>() {
+    if (opcode == Opcode::CMSG_GUILD_REMOVE) {
+        return &CMSG_GUILD_REMOVE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GUILD_REMOVE& ClientOpcode::get<CMSG_GUILD_REMOVE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GUILD_REMOVE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_GUILD_DISBAND* ClientOpcode::get_if<CMSG_GUILD_DISBAND>() {
+    if (opcode == Opcode::CMSG_GUILD_DISBAND) {
+        return &CMSG_GUILD_DISBAND;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GUILD_DISBAND& ClientOpcode::get<CMSG_GUILD_DISBAND>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GUILD_DISBAND>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_GUILD_LEADER* ClientOpcode::get_if<CMSG_GUILD_LEADER>() {
+    if (opcode == Opcode::CMSG_GUILD_LEADER) {
+        return &CMSG_GUILD_LEADER;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GUILD_LEADER& ClientOpcode::get<CMSG_GUILD_LEADER>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GUILD_LEADER>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_GUILD_MOTD* ClientOpcode::get_if<CMSG_GUILD_MOTD>() {
+    if (opcode == Opcode::CMSG_GUILD_MOTD) {
+        return &CMSG_GUILD_MOTD;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GUILD_MOTD& ClientOpcode::get<CMSG_GUILD_MOTD>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GUILD_MOTD>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_MESSAGECHAT* ClientOpcode::get_if<CMSG_MESSAGECHAT>() {
+    if (opcode == Opcode::CMSG_MESSAGECHAT) {
+        return &CMSG_MESSAGECHAT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_MESSAGECHAT& ClientOpcode::get<CMSG_MESSAGECHAT>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_MESSAGECHAT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_JOIN_CHANNEL* ClientOpcode::get_if<CMSG_JOIN_CHANNEL>() {
+    if (opcode == Opcode::CMSG_JOIN_CHANNEL) {
+        return &CMSG_JOIN_CHANNEL;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_JOIN_CHANNEL& ClientOpcode::get<CMSG_JOIN_CHANNEL>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_JOIN_CHANNEL>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_LEAVE_CHANNEL* ClientOpcode::get_if<CMSG_LEAVE_CHANNEL>() {
+    if (opcode == Opcode::CMSG_LEAVE_CHANNEL) {
+        return &CMSG_LEAVE_CHANNEL;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_LEAVE_CHANNEL& ClientOpcode::get<CMSG_LEAVE_CHANNEL>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_LEAVE_CHANNEL>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_CHANNEL_LIST* ClientOpcode::get_if<CMSG_CHANNEL_LIST>() {
+    if (opcode == Opcode::CMSG_CHANNEL_LIST) {
+        return &CMSG_CHANNEL_LIST;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_CHANNEL_LIST& ClientOpcode::get<CMSG_CHANNEL_LIST>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_CHANNEL_LIST>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_CHANNEL_PASSWORD* ClientOpcode::get_if<CMSG_CHANNEL_PASSWORD>() {
+    if (opcode == Opcode::CMSG_CHANNEL_PASSWORD) {
+        return &CMSG_CHANNEL_PASSWORD;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_CHANNEL_PASSWORD& ClientOpcode::get<CMSG_CHANNEL_PASSWORD>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_CHANNEL_PASSWORD>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_CHANNEL_SET_OWNER* ClientOpcode::get_if<CMSG_CHANNEL_SET_OWNER>() {
+    if (opcode == Opcode::CMSG_CHANNEL_SET_OWNER) {
+        return &CMSG_CHANNEL_SET_OWNER;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_CHANNEL_SET_OWNER& ClientOpcode::get<CMSG_CHANNEL_SET_OWNER>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_CHANNEL_SET_OWNER>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_CHANNEL_OWNER* ClientOpcode::get_if<CMSG_CHANNEL_OWNER>() {
+    if (opcode == Opcode::CMSG_CHANNEL_OWNER) {
+        return &CMSG_CHANNEL_OWNER;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_CHANNEL_OWNER& ClientOpcode::get<CMSG_CHANNEL_OWNER>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_CHANNEL_OWNER>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_CHANNEL_MODERATOR* ClientOpcode::get_if<CMSG_CHANNEL_MODERATOR>() {
+    if (opcode == Opcode::CMSG_CHANNEL_MODERATOR) {
+        return &CMSG_CHANNEL_MODERATOR;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_CHANNEL_MODERATOR& ClientOpcode::get<CMSG_CHANNEL_MODERATOR>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_CHANNEL_MODERATOR>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_CHANNEL_UNMODERATOR* ClientOpcode::get_if<CMSG_CHANNEL_UNMODERATOR>() {
+    if (opcode == Opcode::CMSG_CHANNEL_UNMODERATOR) {
+        return &CMSG_CHANNEL_UNMODERATOR;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_CHANNEL_UNMODERATOR& ClientOpcode::get<CMSG_CHANNEL_UNMODERATOR>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_CHANNEL_UNMODERATOR>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_CHANNEL_MUTE* ClientOpcode::get_if<CMSG_CHANNEL_MUTE>() {
+    if (opcode == Opcode::CMSG_CHANNEL_MUTE) {
+        return &CMSG_CHANNEL_MUTE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_CHANNEL_MUTE& ClientOpcode::get<CMSG_CHANNEL_MUTE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_CHANNEL_MUTE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_CHANNEL_UNMUTE* ClientOpcode::get_if<CMSG_CHANNEL_UNMUTE>() {
+    if (opcode == Opcode::CMSG_CHANNEL_UNMUTE) {
+        return &CMSG_CHANNEL_UNMUTE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_CHANNEL_UNMUTE& ClientOpcode::get<CMSG_CHANNEL_UNMUTE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_CHANNEL_UNMUTE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_CHANNEL_INVITE* ClientOpcode::get_if<CMSG_CHANNEL_INVITE>() {
+    if (opcode == Opcode::CMSG_CHANNEL_INVITE) {
+        return &CMSG_CHANNEL_INVITE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_CHANNEL_INVITE& ClientOpcode::get<CMSG_CHANNEL_INVITE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_CHANNEL_INVITE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_CHANNEL_KICK* ClientOpcode::get_if<CMSG_CHANNEL_KICK>() {
+    if (opcode == Opcode::CMSG_CHANNEL_KICK) {
+        return &CMSG_CHANNEL_KICK;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_CHANNEL_KICK& ClientOpcode::get<CMSG_CHANNEL_KICK>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_CHANNEL_KICK>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_CHANNEL_BAN* ClientOpcode::get_if<CMSG_CHANNEL_BAN>() {
+    if (opcode == Opcode::CMSG_CHANNEL_BAN) {
+        return &CMSG_CHANNEL_BAN;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_CHANNEL_BAN& ClientOpcode::get<CMSG_CHANNEL_BAN>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_CHANNEL_BAN>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_CHANNEL_UNBAN* ClientOpcode::get_if<CMSG_CHANNEL_UNBAN>() {
+    if (opcode == Opcode::CMSG_CHANNEL_UNBAN) {
+        return &CMSG_CHANNEL_UNBAN;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_CHANNEL_UNBAN& ClientOpcode::get<CMSG_CHANNEL_UNBAN>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_CHANNEL_UNBAN>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_CHANNEL_ANNOUNCEMENTS* ClientOpcode::get_if<CMSG_CHANNEL_ANNOUNCEMENTS>() {
+    if (opcode == Opcode::CMSG_CHANNEL_ANNOUNCEMENTS) {
+        return &CMSG_CHANNEL_ANNOUNCEMENTS;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_CHANNEL_ANNOUNCEMENTS& ClientOpcode::get<CMSG_CHANNEL_ANNOUNCEMENTS>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_CHANNEL_ANNOUNCEMENTS>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_CHANNEL_MODERATE* ClientOpcode::get_if<CMSG_CHANNEL_MODERATE>() {
+    if (opcode == Opcode::CMSG_CHANNEL_MODERATE) {
+        return &CMSG_CHANNEL_MODERATE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_CHANNEL_MODERATE& ClientOpcode::get<CMSG_CHANNEL_MODERATE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_CHANNEL_MODERATE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_USE_ITEM* ClientOpcode::get_if<CMSG_USE_ITEM>() {
+    if (opcode == Opcode::CMSG_USE_ITEM) {
+        return &CMSG_USE_ITEM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_USE_ITEM& ClientOpcode::get<CMSG_USE_ITEM>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_USE_ITEM>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_OPEN_ITEM* ClientOpcode::get_if<CMSG_OPEN_ITEM>() {
+    if (opcode == Opcode::CMSG_OPEN_ITEM) {
+        return &CMSG_OPEN_ITEM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_OPEN_ITEM& ClientOpcode::get<CMSG_OPEN_ITEM>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_OPEN_ITEM>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_READ_ITEM* ClientOpcode::get_if<CMSG_READ_ITEM>() {
+    if (opcode == Opcode::CMSG_READ_ITEM) {
+        return &CMSG_READ_ITEM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_READ_ITEM& ClientOpcode::get<CMSG_READ_ITEM>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_READ_ITEM>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_GAMEOBJ_USE* ClientOpcode::get_if<CMSG_GAMEOBJ_USE>() {
+    if (opcode == Opcode::CMSG_GAMEOBJ_USE) {
+        return &CMSG_GAMEOBJ_USE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GAMEOBJ_USE& ClientOpcode::get<CMSG_GAMEOBJ_USE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GAMEOBJ_USE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_AREATRIGGER* ClientOpcode::get_if<CMSG_AREATRIGGER>() {
+    if (opcode == Opcode::CMSG_AREATRIGGER) {
+        return &CMSG_AREATRIGGER;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_AREATRIGGER& ClientOpcode::get<CMSG_AREATRIGGER>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_AREATRIGGER>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_START_FORWARD_Client* ClientOpcode::get_if<MSG_MOVE_START_FORWARD_Client>() {
+    if (opcode == Opcode::MSG_MOVE_START_FORWARD) {
+        return &MSG_MOVE_START_FORWARD;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_START_FORWARD_Client& ClientOpcode::get<MSG_MOVE_START_FORWARD_Client>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_START_FORWARD_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_START_BACKWARD_Client* ClientOpcode::get_if<MSG_MOVE_START_BACKWARD_Client>() {
+    if (opcode == Opcode::MSG_MOVE_START_BACKWARD) {
+        return &MSG_MOVE_START_BACKWARD;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_START_BACKWARD_Client& ClientOpcode::get<MSG_MOVE_START_BACKWARD_Client>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_START_BACKWARD_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_STOP_Client* ClientOpcode::get_if<MSG_MOVE_STOP_Client>() {
+    if (opcode == Opcode::MSG_MOVE_STOP) {
+        return &MSG_MOVE_STOP;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_STOP_Client& ClientOpcode::get<MSG_MOVE_STOP_Client>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_STOP_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_START_STRAFE_LEFT_Client* ClientOpcode::get_if<MSG_MOVE_START_STRAFE_LEFT_Client>() {
+    if (opcode == Opcode::MSG_MOVE_START_STRAFE_LEFT) {
+        return &MSG_MOVE_START_STRAFE_LEFT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_START_STRAFE_LEFT_Client& ClientOpcode::get<MSG_MOVE_START_STRAFE_LEFT_Client>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_START_STRAFE_LEFT_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_START_STRAFE_RIGHT_Client* ClientOpcode::get_if<MSG_MOVE_START_STRAFE_RIGHT_Client>() {
+    if (opcode == Opcode::MSG_MOVE_START_STRAFE_RIGHT) {
+        return &MSG_MOVE_START_STRAFE_RIGHT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_START_STRAFE_RIGHT_Client& ClientOpcode::get<MSG_MOVE_START_STRAFE_RIGHT_Client>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_START_STRAFE_RIGHT_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_STOP_STRAFE_Client* ClientOpcode::get_if<MSG_MOVE_STOP_STRAFE_Client>() {
+    if (opcode == Opcode::MSG_MOVE_STOP_STRAFE) {
+        return &MSG_MOVE_STOP_STRAFE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_STOP_STRAFE_Client& ClientOpcode::get<MSG_MOVE_STOP_STRAFE_Client>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_STOP_STRAFE_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_JUMP_Client* ClientOpcode::get_if<MSG_MOVE_JUMP_Client>() {
+    if (opcode == Opcode::MSG_MOVE_JUMP) {
+        return &MSG_MOVE_JUMP;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_JUMP_Client& ClientOpcode::get<MSG_MOVE_JUMP_Client>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_JUMP_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_START_TURN_LEFT_Client* ClientOpcode::get_if<MSG_MOVE_START_TURN_LEFT_Client>() {
+    if (opcode == Opcode::MSG_MOVE_START_TURN_LEFT) {
+        return &MSG_MOVE_START_TURN_LEFT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_START_TURN_LEFT_Client& ClientOpcode::get<MSG_MOVE_START_TURN_LEFT_Client>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_START_TURN_LEFT_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_START_TURN_RIGHT_Client* ClientOpcode::get_if<MSG_MOVE_START_TURN_RIGHT_Client>() {
+    if (opcode == Opcode::MSG_MOVE_START_TURN_RIGHT) {
+        return &MSG_MOVE_START_TURN_RIGHT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_START_TURN_RIGHT_Client& ClientOpcode::get<MSG_MOVE_START_TURN_RIGHT_Client>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_START_TURN_RIGHT_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_STOP_TURN_Client* ClientOpcode::get_if<MSG_MOVE_STOP_TURN_Client>() {
+    if (opcode == Opcode::MSG_MOVE_STOP_TURN) {
+        return &MSG_MOVE_STOP_TURN;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_STOP_TURN_Client& ClientOpcode::get<MSG_MOVE_STOP_TURN_Client>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_STOP_TURN_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_START_PITCH_UP_Client* ClientOpcode::get_if<MSG_MOVE_START_PITCH_UP_Client>() {
+    if (opcode == Opcode::MSG_MOVE_START_PITCH_UP) {
+        return &MSG_MOVE_START_PITCH_UP;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_START_PITCH_UP_Client& ClientOpcode::get<MSG_MOVE_START_PITCH_UP_Client>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_START_PITCH_UP_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_START_PITCH_DOWN_Client* ClientOpcode::get_if<MSG_MOVE_START_PITCH_DOWN_Client>() {
+    if (opcode == Opcode::MSG_MOVE_START_PITCH_DOWN) {
+        return &MSG_MOVE_START_PITCH_DOWN;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_START_PITCH_DOWN_Client& ClientOpcode::get<MSG_MOVE_START_PITCH_DOWN_Client>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_START_PITCH_DOWN_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_STOP_PITCH_Client* ClientOpcode::get_if<MSG_MOVE_STOP_PITCH_Client>() {
+    if (opcode == Opcode::MSG_MOVE_STOP_PITCH) {
+        return &MSG_MOVE_STOP_PITCH;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_STOP_PITCH_Client& ClientOpcode::get<MSG_MOVE_STOP_PITCH_Client>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_STOP_PITCH_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_SET_RUN_MODE_Client* ClientOpcode::get_if<MSG_MOVE_SET_RUN_MODE_Client>() {
+    if (opcode == Opcode::MSG_MOVE_SET_RUN_MODE) {
+        return &MSG_MOVE_SET_RUN_MODE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_SET_RUN_MODE_Client& ClientOpcode::get<MSG_MOVE_SET_RUN_MODE_Client>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_SET_RUN_MODE_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_SET_WALK_MODE_Client* ClientOpcode::get_if<MSG_MOVE_SET_WALK_MODE_Client>() {
+    if (opcode == Opcode::MSG_MOVE_SET_WALK_MODE) {
+        return &MSG_MOVE_SET_WALK_MODE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_SET_WALK_MODE_Client& ClientOpcode::get<MSG_MOVE_SET_WALK_MODE_Client>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_SET_WALK_MODE_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_TELEPORT_ACK_Client* ClientOpcode::get_if<MSG_MOVE_TELEPORT_ACK_Client>() {
+    if (opcode == Opcode::MSG_MOVE_TELEPORT_ACK) {
+        return &MSG_MOVE_TELEPORT_ACK;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_TELEPORT_ACK_Client& ClientOpcode::get<MSG_MOVE_TELEPORT_ACK_Client>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_TELEPORT_ACK_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_FALL_LAND_Client* ClientOpcode::get_if<MSG_MOVE_FALL_LAND_Client>() {
+    if (opcode == Opcode::MSG_MOVE_FALL_LAND) {
+        return &MSG_MOVE_FALL_LAND;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_FALL_LAND_Client& ClientOpcode::get<MSG_MOVE_FALL_LAND_Client>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_FALL_LAND_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_START_SWIM_Client* ClientOpcode::get_if<MSG_MOVE_START_SWIM_Client>() {
+    if (opcode == Opcode::MSG_MOVE_START_SWIM) {
+        return &MSG_MOVE_START_SWIM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_START_SWIM_Client& ClientOpcode::get<MSG_MOVE_START_SWIM_Client>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_START_SWIM_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_STOP_SWIM_Client* ClientOpcode::get_if<MSG_MOVE_STOP_SWIM_Client>() {
+    if (opcode == Opcode::MSG_MOVE_STOP_SWIM) {
+        return &MSG_MOVE_STOP_SWIM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_STOP_SWIM_Client& ClientOpcode::get<MSG_MOVE_STOP_SWIM_Client>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_STOP_SWIM_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_SET_FACING_Client* ClientOpcode::get_if<MSG_MOVE_SET_FACING_Client>() {
+    if (opcode == Opcode::MSG_MOVE_SET_FACING) {
+        return &MSG_MOVE_SET_FACING;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_SET_FACING_Client& ClientOpcode::get<MSG_MOVE_SET_FACING_Client>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_SET_FACING_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_SET_PITCH_Client* ClientOpcode::get_if<MSG_MOVE_SET_PITCH_Client>() {
+    if (opcode == Opcode::MSG_MOVE_SET_PITCH) {
+        return &MSG_MOVE_SET_PITCH;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_SET_PITCH_Client& ClientOpcode::get<MSG_MOVE_SET_PITCH_Client>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_SET_PITCH_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_WORLDPORT_ACK* ClientOpcode::get_if<MSG_MOVE_WORLDPORT_ACK>() {
+    if (opcode == Opcode::MSG_MOVE_WORLDPORT_ACK) {
+        return &MSG_MOVE_WORLDPORT_ACK;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_WORLDPORT_ACK& ClientOpcode::get<MSG_MOVE_WORLDPORT_ACK>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_WORLDPORT_ACK>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_MOVE_SET_RAW_POSITION* ClientOpcode::get_if<CMSG_MOVE_SET_RAW_POSITION>() {
+    if (opcode == Opcode::CMSG_MOVE_SET_RAW_POSITION) {
+        return &CMSG_MOVE_SET_RAW_POSITION;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_MOVE_SET_RAW_POSITION& ClientOpcode::get<CMSG_MOVE_SET_RAW_POSITION>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_MOVE_SET_RAW_POSITION>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_FORCE_RUN_SPEED_CHANGE_ACK* ClientOpcode::get_if<CMSG_FORCE_RUN_SPEED_CHANGE_ACK>() {
+    if (opcode == Opcode::CMSG_FORCE_RUN_SPEED_CHANGE_ACK) {
+        return &CMSG_FORCE_RUN_SPEED_CHANGE_ACK;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_FORCE_RUN_SPEED_CHANGE_ACK& ClientOpcode::get<CMSG_FORCE_RUN_SPEED_CHANGE_ACK>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_FORCE_RUN_SPEED_CHANGE_ACK>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK* ClientOpcode::get_if<CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK>() {
+    if (opcode == Opcode::CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK) {
+        return &CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK& ClientOpcode::get<CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_FORCE_SWIM_SPEED_CHANGE_ACK* ClientOpcode::get_if<CMSG_FORCE_SWIM_SPEED_CHANGE_ACK>() {
+    if (opcode == Opcode::CMSG_FORCE_SWIM_SPEED_CHANGE_ACK) {
+        return &CMSG_FORCE_SWIM_SPEED_CHANGE_ACK;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_FORCE_SWIM_SPEED_CHANGE_ACK& ClientOpcode::get<CMSG_FORCE_SWIM_SPEED_CHANGE_ACK>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_FORCE_SWIM_SPEED_CHANGE_ACK>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_FORCE_MOVE_ROOT_ACK* ClientOpcode::get_if<CMSG_FORCE_MOVE_ROOT_ACK>() {
+    if (opcode == Opcode::CMSG_FORCE_MOVE_ROOT_ACK) {
+        return &CMSG_FORCE_MOVE_ROOT_ACK;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_FORCE_MOVE_ROOT_ACK& ClientOpcode::get<CMSG_FORCE_MOVE_ROOT_ACK>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_FORCE_MOVE_ROOT_ACK>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_FORCE_MOVE_UNROOT_ACK* ClientOpcode::get_if<CMSG_FORCE_MOVE_UNROOT_ACK>() {
+    if (opcode == Opcode::CMSG_FORCE_MOVE_UNROOT_ACK) {
+        return &CMSG_FORCE_MOVE_UNROOT_ACK;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_FORCE_MOVE_UNROOT_ACK& ClientOpcode::get<CMSG_FORCE_MOVE_UNROOT_ACK>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_FORCE_MOVE_UNROOT_ACK>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_HEARTBEAT_Client* ClientOpcode::get_if<MSG_MOVE_HEARTBEAT_Client>() {
+    if (opcode == Opcode::MSG_MOVE_HEARTBEAT) {
+        return &MSG_MOVE_HEARTBEAT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_HEARTBEAT_Client& ClientOpcode::get<MSG_MOVE_HEARTBEAT_Client>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_HEARTBEAT_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_MOVE_KNOCK_BACK_ACK* ClientOpcode::get_if<CMSG_MOVE_KNOCK_BACK_ACK>() {
+    if (opcode == Opcode::CMSG_MOVE_KNOCK_BACK_ACK) {
+        return &CMSG_MOVE_KNOCK_BACK_ACK;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_MOVE_KNOCK_BACK_ACK& ClientOpcode::get<CMSG_MOVE_KNOCK_BACK_ACK>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_MOVE_KNOCK_BACK_ACK>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_MOVE_HOVER_ACK* ClientOpcode::get_if<CMSG_MOVE_HOVER_ACK>() {
+    if (opcode == Opcode::CMSG_MOVE_HOVER_ACK) {
+        return &CMSG_MOVE_HOVER_ACK;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_MOVE_HOVER_ACK& ClientOpcode::get<CMSG_MOVE_HOVER_ACK>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_MOVE_HOVER_ACK>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_NEXT_CINEMATIC_CAMERA* ClientOpcode::get_if<CMSG_NEXT_CINEMATIC_CAMERA>() {
+    if (opcode == Opcode::CMSG_NEXT_CINEMATIC_CAMERA) {
+        return &CMSG_NEXT_CINEMATIC_CAMERA;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_NEXT_CINEMATIC_CAMERA& ClientOpcode::get<CMSG_NEXT_CINEMATIC_CAMERA>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_NEXT_CINEMATIC_CAMERA>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_COMPLETE_CINEMATIC* ClientOpcode::get_if<CMSG_COMPLETE_CINEMATIC>() {
+    if (opcode == Opcode::CMSG_COMPLETE_CINEMATIC) {
+        return &CMSG_COMPLETE_CINEMATIC;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_COMPLETE_CINEMATIC& ClientOpcode::get<CMSG_COMPLETE_CINEMATIC>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_COMPLETE_CINEMATIC>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_TUTORIAL_FLAG* ClientOpcode::get_if<CMSG_TUTORIAL_FLAG>() {
+    if (opcode == Opcode::CMSG_TUTORIAL_FLAG) {
+        return &CMSG_TUTORIAL_FLAG;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_TUTORIAL_FLAG& ClientOpcode::get<CMSG_TUTORIAL_FLAG>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_TUTORIAL_FLAG>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_TUTORIAL_CLEAR* ClientOpcode::get_if<CMSG_TUTORIAL_CLEAR>() {
+    if (opcode == Opcode::CMSG_TUTORIAL_CLEAR) {
+        return &CMSG_TUTORIAL_CLEAR;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_TUTORIAL_CLEAR& ClientOpcode::get<CMSG_TUTORIAL_CLEAR>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_TUTORIAL_CLEAR>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_TUTORIAL_RESET* ClientOpcode::get_if<CMSG_TUTORIAL_RESET>() {
+    if (opcode == Opcode::CMSG_TUTORIAL_RESET) {
+        return &CMSG_TUTORIAL_RESET;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_TUTORIAL_RESET& ClientOpcode::get<CMSG_TUTORIAL_RESET>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_TUTORIAL_RESET>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_STANDSTATECHANGE* ClientOpcode::get_if<CMSG_STANDSTATECHANGE>() {
+    if (opcode == Opcode::CMSG_STANDSTATECHANGE) {
+        return &CMSG_STANDSTATECHANGE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_STANDSTATECHANGE& ClientOpcode::get<CMSG_STANDSTATECHANGE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_STANDSTATECHANGE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_EMOTE* ClientOpcode::get_if<CMSG_EMOTE>() {
+    if (opcode == Opcode::CMSG_EMOTE) {
+        return &CMSG_EMOTE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_EMOTE& ClientOpcode::get<CMSG_EMOTE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_EMOTE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_TEXT_EMOTE* ClientOpcode::get_if<CMSG_TEXT_EMOTE>() {
+    if (opcode == Opcode::CMSG_TEXT_EMOTE) {
+        return &CMSG_TEXT_EMOTE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_TEXT_EMOTE& ClientOpcode::get<CMSG_TEXT_EMOTE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_TEXT_EMOTE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_AUTOSTORE_LOOT_ITEM* ClientOpcode::get_if<CMSG_AUTOSTORE_LOOT_ITEM>() {
+    if (opcode == Opcode::CMSG_AUTOSTORE_LOOT_ITEM) {
+        return &CMSG_AUTOSTORE_LOOT_ITEM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_AUTOSTORE_LOOT_ITEM& ClientOpcode::get<CMSG_AUTOSTORE_LOOT_ITEM>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_AUTOSTORE_LOOT_ITEM>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_AUTOEQUIP_ITEM* ClientOpcode::get_if<CMSG_AUTOEQUIP_ITEM>() {
+    if (opcode == Opcode::CMSG_AUTOEQUIP_ITEM) {
+        return &CMSG_AUTOEQUIP_ITEM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_AUTOEQUIP_ITEM& ClientOpcode::get<CMSG_AUTOEQUIP_ITEM>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_AUTOEQUIP_ITEM>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_AUTOSTORE_BAG_ITEM* ClientOpcode::get_if<CMSG_AUTOSTORE_BAG_ITEM>() {
+    if (opcode == Opcode::CMSG_AUTOSTORE_BAG_ITEM) {
+        return &CMSG_AUTOSTORE_BAG_ITEM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_AUTOSTORE_BAG_ITEM& ClientOpcode::get<CMSG_AUTOSTORE_BAG_ITEM>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_AUTOSTORE_BAG_ITEM>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_SWAP_ITEM* ClientOpcode::get_if<CMSG_SWAP_ITEM>() {
+    if (opcode == Opcode::CMSG_SWAP_ITEM) {
+        return &CMSG_SWAP_ITEM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_SWAP_ITEM& ClientOpcode::get<CMSG_SWAP_ITEM>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_SWAP_ITEM>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_SWAP_INV_ITEM* ClientOpcode::get_if<CMSG_SWAP_INV_ITEM>() {
+    if (opcode == Opcode::CMSG_SWAP_INV_ITEM) {
+        return &CMSG_SWAP_INV_ITEM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_SWAP_INV_ITEM& ClientOpcode::get<CMSG_SWAP_INV_ITEM>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_SWAP_INV_ITEM>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_SPLIT_ITEM* ClientOpcode::get_if<CMSG_SPLIT_ITEM>() {
+    if (opcode == Opcode::CMSG_SPLIT_ITEM) {
+        return &CMSG_SPLIT_ITEM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_SPLIT_ITEM& ClientOpcode::get<CMSG_SPLIT_ITEM>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_SPLIT_ITEM>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_AUTOEQUIP_ITEM_SLOT* ClientOpcode::get_if<CMSG_AUTOEQUIP_ITEM_SLOT>() {
+    if (opcode == Opcode::CMSG_AUTOEQUIP_ITEM_SLOT) {
+        return &CMSG_AUTOEQUIP_ITEM_SLOT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_AUTOEQUIP_ITEM_SLOT& ClientOpcode::get<CMSG_AUTOEQUIP_ITEM_SLOT>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_AUTOEQUIP_ITEM_SLOT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_DESTROYITEM* ClientOpcode::get_if<CMSG_DESTROYITEM>() {
+    if (opcode == Opcode::CMSG_DESTROYITEM) {
+        return &CMSG_DESTROYITEM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_DESTROYITEM& ClientOpcode::get<CMSG_DESTROYITEM>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_DESTROYITEM>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_INSPECT* ClientOpcode::get_if<CMSG_INSPECT>() {
+    if (opcode == Opcode::CMSG_INSPECT) {
+        return &CMSG_INSPECT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_INSPECT& ClientOpcode::get<CMSG_INSPECT>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_INSPECT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_INITIATE_TRADE* ClientOpcode::get_if<CMSG_INITIATE_TRADE>() {
+    if (opcode == Opcode::CMSG_INITIATE_TRADE) {
+        return &CMSG_INITIATE_TRADE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_INITIATE_TRADE& ClientOpcode::get<CMSG_INITIATE_TRADE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_INITIATE_TRADE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_BEGIN_TRADE* ClientOpcode::get_if<CMSG_BEGIN_TRADE>() {
+    if (opcode == Opcode::CMSG_BEGIN_TRADE) {
+        return &CMSG_BEGIN_TRADE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_BEGIN_TRADE& ClientOpcode::get<CMSG_BEGIN_TRADE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_BEGIN_TRADE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_BUSY_TRADE* ClientOpcode::get_if<CMSG_BUSY_TRADE>() {
+    if (opcode == Opcode::CMSG_BUSY_TRADE) {
+        return &CMSG_BUSY_TRADE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_BUSY_TRADE& ClientOpcode::get<CMSG_BUSY_TRADE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_BUSY_TRADE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_IGNORE_TRADE* ClientOpcode::get_if<CMSG_IGNORE_TRADE>() {
+    if (opcode == Opcode::CMSG_IGNORE_TRADE) {
+        return &CMSG_IGNORE_TRADE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_IGNORE_TRADE& ClientOpcode::get<CMSG_IGNORE_TRADE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_IGNORE_TRADE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_ACCEPT_TRADE* ClientOpcode::get_if<CMSG_ACCEPT_TRADE>() {
+    if (opcode == Opcode::CMSG_ACCEPT_TRADE) {
+        return &CMSG_ACCEPT_TRADE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_ACCEPT_TRADE& ClientOpcode::get<CMSG_ACCEPT_TRADE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_ACCEPT_TRADE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_UNACCEPT_TRADE* ClientOpcode::get_if<CMSG_UNACCEPT_TRADE>() {
+    if (opcode == Opcode::CMSG_UNACCEPT_TRADE) {
+        return &CMSG_UNACCEPT_TRADE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_UNACCEPT_TRADE& ClientOpcode::get<CMSG_UNACCEPT_TRADE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_UNACCEPT_TRADE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_CANCEL_TRADE* ClientOpcode::get_if<CMSG_CANCEL_TRADE>() {
+    if (opcode == Opcode::CMSG_CANCEL_TRADE) {
+        return &CMSG_CANCEL_TRADE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_CANCEL_TRADE& ClientOpcode::get<CMSG_CANCEL_TRADE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_CANCEL_TRADE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_SET_TRADE_ITEM* ClientOpcode::get_if<CMSG_SET_TRADE_ITEM>() {
+    if (opcode == Opcode::CMSG_SET_TRADE_ITEM) {
+        return &CMSG_SET_TRADE_ITEM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_SET_TRADE_ITEM& ClientOpcode::get<CMSG_SET_TRADE_ITEM>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_SET_TRADE_ITEM>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_CLEAR_TRADE_ITEM* ClientOpcode::get_if<CMSG_CLEAR_TRADE_ITEM>() {
+    if (opcode == Opcode::CMSG_CLEAR_TRADE_ITEM) {
+        return &CMSG_CLEAR_TRADE_ITEM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_CLEAR_TRADE_ITEM& ClientOpcode::get<CMSG_CLEAR_TRADE_ITEM>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_CLEAR_TRADE_ITEM>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_SET_TRADE_GOLD* ClientOpcode::get_if<CMSG_SET_TRADE_GOLD>() {
+    if (opcode == Opcode::CMSG_SET_TRADE_GOLD) {
+        return &CMSG_SET_TRADE_GOLD;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_SET_TRADE_GOLD& ClientOpcode::get<CMSG_SET_TRADE_GOLD>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_SET_TRADE_GOLD>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_SET_FACTION_ATWAR* ClientOpcode::get_if<CMSG_SET_FACTION_ATWAR>() {
+    if (opcode == Opcode::CMSG_SET_FACTION_ATWAR) {
+        return &CMSG_SET_FACTION_ATWAR;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_SET_FACTION_ATWAR& ClientOpcode::get<CMSG_SET_FACTION_ATWAR>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_SET_FACTION_ATWAR>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_SET_ACTION_BUTTON* ClientOpcode::get_if<CMSG_SET_ACTION_BUTTON>() {
+    if (opcode == Opcode::CMSG_SET_ACTION_BUTTON) {
+        return &CMSG_SET_ACTION_BUTTON;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_SET_ACTION_BUTTON& ClientOpcode::get<CMSG_SET_ACTION_BUTTON>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_SET_ACTION_BUTTON>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_CAST_SPELL* ClientOpcode::get_if<CMSG_CAST_SPELL>() {
+    if (opcode == Opcode::CMSG_CAST_SPELL) {
+        return &CMSG_CAST_SPELL;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_CAST_SPELL& ClientOpcode::get<CMSG_CAST_SPELL>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_CAST_SPELL>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_CANCEL_CAST* ClientOpcode::get_if<CMSG_CANCEL_CAST>() {
+    if (opcode == Opcode::CMSG_CANCEL_CAST) {
+        return &CMSG_CANCEL_CAST;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_CANCEL_CAST& ClientOpcode::get<CMSG_CANCEL_CAST>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_CANCEL_CAST>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_CANCEL_AURA* ClientOpcode::get_if<CMSG_CANCEL_AURA>() {
+    if (opcode == Opcode::CMSG_CANCEL_AURA) {
+        return &CMSG_CANCEL_AURA;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_CANCEL_AURA& ClientOpcode::get<CMSG_CANCEL_AURA>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_CANCEL_AURA>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_CANCEL_CHANNELLING* ClientOpcode::get_if<CMSG_CANCEL_CHANNELLING>() {
+    if (opcode == Opcode::CMSG_CANCEL_CHANNELLING) {
+        return &CMSG_CANCEL_CHANNELLING;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_CANCEL_CHANNELLING& ClientOpcode::get<CMSG_CANCEL_CHANNELLING>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_CANCEL_CHANNELLING>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_SET_SELECTION* ClientOpcode::get_if<CMSG_SET_SELECTION>() {
+    if (opcode == Opcode::CMSG_SET_SELECTION) {
+        return &CMSG_SET_SELECTION;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_SET_SELECTION& ClientOpcode::get<CMSG_SET_SELECTION>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_SET_SELECTION>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_SET_TARGET_OBSOLETE* ClientOpcode::get_if<CMSG_SET_TARGET_OBSOLETE>() {
+    if (opcode == Opcode::CMSG_SET_TARGET_OBSOLETE) {
+        return &CMSG_SET_TARGET_OBSOLETE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_SET_TARGET_OBSOLETE& ClientOpcode::get<CMSG_SET_TARGET_OBSOLETE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_SET_TARGET_OBSOLETE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_ATTACKSWING* ClientOpcode::get_if<CMSG_ATTACKSWING>() {
+    if (opcode == Opcode::CMSG_ATTACKSWING) {
+        return &CMSG_ATTACKSWING;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_ATTACKSWING& ClientOpcode::get<CMSG_ATTACKSWING>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_ATTACKSWING>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_ATTACKSTOP* ClientOpcode::get_if<CMSG_ATTACKSTOP>() {
+    if (opcode == Opcode::CMSG_ATTACKSTOP) {
+        return &CMSG_ATTACKSTOP;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_ATTACKSTOP& ClientOpcode::get<CMSG_ATTACKSTOP>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_ATTACKSTOP>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_REPOP_REQUEST* ClientOpcode::get_if<CMSG_REPOP_REQUEST>() {
+    if (opcode == Opcode::CMSG_REPOP_REQUEST) {
+        return &CMSG_REPOP_REQUEST;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_REPOP_REQUEST& ClientOpcode::get<CMSG_REPOP_REQUEST>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_REPOP_REQUEST>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_RESURRECT_RESPONSE* ClientOpcode::get_if<CMSG_RESURRECT_RESPONSE>() {
+    if (opcode == Opcode::CMSG_RESURRECT_RESPONSE) {
+        return &CMSG_RESURRECT_RESPONSE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_RESURRECT_RESPONSE& ClientOpcode::get<CMSG_RESURRECT_RESPONSE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_RESURRECT_RESPONSE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_LOOT* ClientOpcode::get_if<CMSG_LOOT>() {
+    if (opcode == Opcode::CMSG_LOOT) {
+        return &CMSG_LOOT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_LOOT& ClientOpcode::get<CMSG_LOOT>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_LOOT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_LOOT_MONEY* ClientOpcode::get_if<CMSG_LOOT_MONEY>() {
+    if (opcode == Opcode::CMSG_LOOT_MONEY) {
+        return &CMSG_LOOT_MONEY;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_LOOT_MONEY& ClientOpcode::get<CMSG_LOOT_MONEY>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_LOOT_MONEY>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_LOOT_RELEASE* ClientOpcode::get_if<CMSG_LOOT_RELEASE>() {
+    if (opcode == Opcode::CMSG_LOOT_RELEASE) {
+        return &CMSG_LOOT_RELEASE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_LOOT_RELEASE& ClientOpcode::get<CMSG_LOOT_RELEASE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_LOOT_RELEASE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_DUEL_ACCEPTED* ClientOpcode::get_if<CMSG_DUEL_ACCEPTED>() {
+    if (opcode == Opcode::CMSG_DUEL_ACCEPTED) {
+        return &CMSG_DUEL_ACCEPTED;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_DUEL_ACCEPTED& ClientOpcode::get<CMSG_DUEL_ACCEPTED>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_DUEL_ACCEPTED>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_DUEL_CANCELLED* ClientOpcode::get_if<CMSG_DUEL_CANCELLED>() {
+    if (opcode == Opcode::CMSG_DUEL_CANCELLED) {
+        return &CMSG_DUEL_CANCELLED;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_DUEL_CANCELLED& ClientOpcode::get<CMSG_DUEL_CANCELLED>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_DUEL_CANCELLED>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_MOUNTSPECIAL_ANIM* ClientOpcode::get_if<CMSG_MOUNTSPECIAL_ANIM>() {
+    if (opcode == Opcode::CMSG_MOUNTSPECIAL_ANIM) {
+        return &CMSG_MOUNTSPECIAL_ANIM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_MOUNTSPECIAL_ANIM& ClientOpcode::get<CMSG_MOUNTSPECIAL_ANIM>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_MOUNTSPECIAL_ANIM>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_PET_SET_ACTION* ClientOpcode::get_if<CMSG_PET_SET_ACTION>() {
+    if (opcode == Opcode::CMSG_PET_SET_ACTION) {
+        return &CMSG_PET_SET_ACTION;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_PET_SET_ACTION& ClientOpcode::get<CMSG_PET_SET_ACTION>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_PET_SET_ACTION>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_PET_ACTION* ClientOpcode::get_if<CMSG_PET_ACTION>() {
+    if (opcode == Opcode::CMSG_PET_ACTION) {
+        return &CMSG_PET_ACTION;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_PET_ACTION& ClientOpcode::get<CMSG_PET_ACTION>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_PET_ACTION>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_PET_ABANDON* ClientOpcode::get_if<CMSG_PET_ABANDON>() {
+    if (opcode == Opcode::CMSG_PET_ABANDON) {
+        return &CMSG_PET_ABANDON;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_PET_ABANDON& ClientOpcode::get<CMSG_PET_ABANDON>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_PET_ABANDON>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_PET_RENAME* ClientOpcode::get_if<CMSG_PET_RENAME>() {
+    if (opcode == Opcode::CMSG_PET_RENAME) {
+        return &CMSG_PET_RENAME;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_PET_RENAME& ClientOpcode::get<CMSG_PET_RENAME>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_PET_RENAME>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_GOSSIP_HELLO* ClientOpcode::get_if<CMSG_GOSSIP_HELLO>() {
+    if (opcode == Opcode::CMSG_GOSSIP_HELLO) {
+        return &CMSG_GOSSIP_HELLO;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GOSSIP_HELLO& ClientOpcode::get<CMSG_GOSSIP_HELLO>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GOSSIP_HELLO>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_GOSSIP_SELECT_OPTION* ClientOpcode::get_if<CMSG_GOSSIP_SELECT_OPTION>() {
+    if (opcode == Opcode::CMSG_GOSSIP_SELECT_OPTION) {
+        return &CMSG_GOSSIP_SELECT_OPTION;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GOSSIP_SELECT_OPTION& ClientOpcode::get<CMSG_GOSSIP_SELECT_OPTION>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GOSSIP_SELECT_OPTION>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_NPC_TEXT_QUERY* ClientOpcode::get_if<CMSG_NPC_TEXT_QUERY>() {
+    if (opcode == Opcode::CMSG_NPC_TEXT_QUERY) {
+        return &CMSG_NPC_TEXT_QUERY;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_NPC_TEXT_QUERY& ClientOpcode::get<CMSG_NPC_TEXT_QUERY>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_NPC_TEXT_QUERY>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_QUESTGIVER_STATUS_QUERY* ClientOpcode::get_if<CMSG_QUESTGIVER_STATUS_QUERY>() {
+    if (opcode == Opcode::CMSG_QUESTGIVER_STATUS_QUERY) {
+        return &CMSG_QUESTGIVER_STATUS_QUERY;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_QUESTGIVER_STATUS_QUERY& ClientOpcode::get<CMSG_QUESTGIVER_STATUS_QUERY>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_QUESTGIVER_STATUS_QUERY>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_QUESTGIVER_HELLO* ClientOpcode::get_if<CMSG_QUESTGIVER_HELLO>() {
+    if (opcode == Opcode::CMSG_QUESTGIVER_HELLO) {
+        return &CMSG_QUESTGIVER_HELLO;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_QUESTGIVER_HELLO& ClientOpcode::get<CMSG_QUESTGIVER_HELLO>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_QUESTGIVER_HELLO>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_QUESTGIVER_QUERY_QUEST* ClientOpcode::get_if<CMSG_QUESTGIVER_QUERY_QUEST>() {
+    if (opcode == Opcode::CMSG_QUESTGIVER_QUERY_QUEST) {
+        return &CMSG_QUESTGIVER_QUERY_QUEST;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_QUESTGIVER_QUERY_QUEST& ClientOpcode::get<CMSG_QUESTGIVER_QUERY_QUEST>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_QUESTGIVER_QUERY_QUEST>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_QUESTGIVER_QUEST_AUTOLAUNCH* ClientOpcode::get_if<CMSG_QUESTGIVER_QUEST_AUTOLAUNCH>() {
+    if (opcode == Opcode::CMSG_QUESTGIVER_QUEST_AUTOLAUNCH) {
+        return &CMSG_QUESTGIVER_QUEST_AUTOLAUNCH;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_QUESTGIVER_QUEST_AUTOLAUNCH& ClientOpcode::get<CMSG_QUESTGIVER_QUEST_AUTOLAUNCH>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_QUESTGIVER_QUEST_AUTOLAUNCH>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_QUESTGIVER_ACCEPT_QUEST* ClientOpcode::get_if<CMSG_QUESTGIVER_ACCEPT_QUEST>() {
+    if (opcode == Opcode::CMSG_QUESTGIVER_ACCEPT_QUEST) {
+        return &CMSG_QUESTGIVER_ACCEPT_QUEST;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_QUESTGIVER_ACCEPT_QUEST& ClientOpcode::get<CMSG_QUESTGIVER_ACCEPT_QUEST>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_QUESTGIVER_ACCEPT_QUEST>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_QUESTGIVER_COMPLETE_QUEST* ClientOpcode::get_if<CMSG_QUESTGIVER_COMPLETE_QUEST>() {
+    if (opcode == Opcode::CMSG_QUESTGIVER_COMPLETE_QUEST) {
+        return &CMSG_QUESTGIVER_COMPLETE_QUEST;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_QUESTGIVER_COMPLETE_QUEST& ClientOpcode::get<CMSG_QUESTGIVER_COMPLETE_QUEST>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_QUESTGIVER_COMPLETE_QUEST>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_QUESTGIVER_REQUEST_REWARD* ClientOpcode::get_if<CMSG_QUESTGIVER_REQUEST_REWARD>() {
+    if (opcode == Opcode::CMSG_QUESTGIVER_REQUEST_REWARD) {
+        return &CMSG_QUESTGIVER_REQUEST_REWARD;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_QUESTGIVER_REQUEST_REWARD& ClientOpcode::get<CMSG_QUESTGIVER_REQUEST_REWARD>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_QUESTGIVER_REQUEST_REWARD>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_QUESTGIVER_CHOOSE_REWARD* ClientOpcode::get_if<CMSG_QUESTGIVER_CHOOSE_REWARD>() {
+    if (opcode == Opcode::CMSG_QUESTGIVER_CHOOSE_REWARD) {
+        return &CMSG_QUESTGIVER_CHOOSE_REWARD;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_QUESTGIVER_CHOOSE_REWARD& ClientOpcode::get<CMSG_QUESTGIVER_CHOOSE_REWARD>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_QUESTGIVER_CHOOSE_REWARD>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_QUESTGIVER_CANCEL* ClientOpcode::get_if<CMSG_QUESTGIVER_CANCEL>() {
+    if (opcode == Opcode::CMSG_QUESTGIVER_CANCEL) {
+        return &CMSG_QUESTGIVER_CANCEL;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_QUESTGIVER_CANCEL& ClientOpcode::get<CMSG_QUESTGIVER_CANCEL>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_QUESTGIVER_CANCEL>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_QUESTLOG_SWAP_QUEST* ClientOpcode::get_if<CMSG_QUESTLOG_SWAP_QUEST>() {
+    if (opcode == Opcode::CMSG_QUESTLOG_SWAP_QUEST) {
+        return &CMSG_QUESTLOG_SWAP_QUEST;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_QUESTLOG_SWAP_QUEST& ClientOpcode::get<CMSG_QUESTLOG_SWAP_QUEST>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_QUESTLOG_SWAP_QUEST>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_QUESTLOG_REMOVE_QUEST* ClientOpcode::get_if<CMSG_QUESTLOG_REMOVE_QUEST>() {
+    if (opcode == Opcode::CMSG_QUESTLOG_REMOVE_QUEST) {
+        return &CMSG_QUESTLOG_REMOVE_QUEST;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_QUESTLOG_REMOVE_QUEST& ClientOpcode::get<CMSG_QUESTLOG_REMOVE_QUEST>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_QUESTLOG_REMOVE_QUEST>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_QUEST_CONFIRM_ACCEPT* ClientOpcode::get_if<CMSG_QUEST_CONFIRM_ACCEPT>() {
+    if (opcode == Opcode::CMSG_QUEST_CONFIRM_ACCEPT) {
+        return &CMSG_QUEST_CONFIRM_ACCEPT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_QUEST_CONFIRM_ACCEPT& ClientOpcode::get<CMSG_QUEST_CONFIRM_ACCEPT>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_QUEST_CONFIRM_ACCEPT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_PUSHQUESTTOPARTY* ClientOpcode::get_if<CMSG_PUSHQUESTTOPARTY>() {
+    if (opcode == Opcode::CMSG_PUSHQUESTTOPARTY) {
+        return &CMSG_PUSHQUESTTOPARTY;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_PUSHQUESTTOPARTY& ClientOpcode::get<CMSG_PUSHQUESTTOPARTY>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_PUSHQUESTTOPARTY>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_LIST_INVENTORY* ClientOpcode::get_if<CMSG_LIST_INVENTORY>() {
+    if (opcode == Opcode::CMSG_LIST_INVENTORY) {
+        return &CMSG_LIST_INVENTORY;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_LIST_INVENTORY& ClientOpcode::get<CMSG_LIST_INVENTORY>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_LIST_INVENTORY>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_SELL_ITEM* ClientOpcode::get_if<CMSG_SELL_ITEM>() {
+    if (opcode == Opcode::CMSG_SELL_ITEM) {
+        return &CMSG_SELL_ITEM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_SELL_ITEM& ClientOpcode::get<CMSG_SELL_ITEM>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_SELL_ITEM>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_BUY_ITEM* ClientOpcode::get_if<CMSG_BUY_ITEM>() {
+    if (opcode == Opcode::CMSG_BUY_ITEM) {
+        return &CMSG_BUY_ITEM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_BUY_ITEM& ClientOpcode::get<CMSG_BUY_ITEM>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_BUY_ITEM>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_BUY_ITEM_IN_SLOT* ClientOpcode::get_if<CMSG_BUY_ITEM_IN_SLOT>() {
+    if (opcode == Opcode::CMSG_BUY_ITEM_IN_SLOT) {
+        return &CMSG_BUY_ITEM_IN_SLOT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_BUY_ITEM_IN_SLOT& ClientOpcode::get<CMSG_BUY_ITEM_IN_SLOT>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_BUY_ITEM_IN_SLOT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_TAXINODE_STATUS_QUERY* ClientOpcode::get_if<CMSG_TAXINODE_STATUS_QUERY>() {
+    if (opcode == Opcode::CMSG_TAXINODE_STATUS_QUERY) {
+        return &CMSG_TAXINODE_STATUS_QUERY;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_TAXINODE_STATUS_QUERY& ClientOpcode::get<CMSG_TAXINODE_STATUS_QUERY>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_TAXINODE_STATUS_QUERY>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_TAXIQUERYAVAILABLENODES* ClientOpcode::get_if<CMSG_TAXIQUERYAVAILABLENODES>() {
+    if (opcode == Opcode::CMSG_TAXIQUERYAVAILABLENODES) {
+        return &CMSG_TAXIQUERYAVAILABLENODES;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_TAXIQUERYAVAILABLENODES& ClientOpcode::get<CMSG_TAXIQUERYAVAILABLENODES>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_TAXIQUERYAVAILABLENODES>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_ACTIVATETAXI* ClientOpcode::get_if<CMSG_ACTIVATETAXI>() {
+    if (opcode == Opcode::CMSG_ACTIVATETAXI) {
+        return &CMSG_ACTIVATETAXI;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_ACTIVATETAXI& ClientOpcode::get<CMSG_ACTIVATETAXI>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_ACTIVATETAXI>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_TRAINER_LIST* ClientOpcode::get_if<CMSG_TRAINER_LIST>() {
+    if (opcode == Opcode::CMSG_TRAINER_LIST) {
+        return &CMSG_TRAINER_LIST;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_TRAINER_LIST& ClientOpcode::get<CMSG_TRAINER_LIST>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_TRAINER_LIST>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_TRAINER_BUY_SPELL* ClientOpcode::get_if<CMSG_TRAINER_BUY_SPELL>() {
+    if (opcode == Opcode::CMSG_TRAINER_BUY_SPELL) {
+        return &CMSG_TRAINER_BUY_SPELL;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_TRAINER_BUY_SPELL& ClientOpcode::get<CMSG_TRAINER_BUY_SPELL>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_TRAINER_BUY_SPELL>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_BINDER_ACTIVATE* ClientOpcode::get_if<CMSG_BINDER_ACTIVATE>() {
+    if (opcode == Opcode::CMSG_BINDER_ACTIVATE) {
+        return &CMSG_BINDER_ACTIVATE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_BINDER_ACTIVATE& ClientOpcode::get<CMSG_BINDER_ACTIVATE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_BINDER_ACTIVATE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_BANKER_ACTIVATE* ClientOpcode::get_if<CMSG_BANKER_ACTIVATE>() {
+    if (opcode == Opcode::CMSG_BANKER_ACTIVATE) {
+        return &CMSG_BANKER_ACTIVATE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_BANKER_ACTIVATE& ClientOpcode::get<CMSG_BANKER_ACTIVATE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_BANKER_ACTIVATE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_BUY_BANK_SLOT* ClientOpcode::get_if<CMSG_BUY_BANK_SLOT>() {
+    if (opcode == Opcode::CMSG_BUY_BANK_SLOT) {
+        return &CMSG_BUY_BANK_SLOT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_BUY_BANK_SLOT& ClientOpcode::get<CMSG_BUY_BANK_SLOT>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_BUY_BANK_SLOT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_PETITION_SHOWLIST* ClientOpcode::get_if<CMSG_PETITION_SHOWLIST>() {
+    if (opcode == Opcode::CMSG_PETITION_SHOWLIST) {
+        return &CMSG_PETITION_SHOWLIST;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_PETITION_SHOWLIST& ClientOpcode::get<CMSG_PETITION_SHOWLIST>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_PETITION_SHOWLIST>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_PETITION_BUY* ClientOpcode::get_if<CMSG_PETITION_BUY>() {
+    if (opcode == Opcode::CMSG_PETITION_BUY) {
+        return &CMSG_PETITION_BUY;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_PETITION_BUY& ClientOpcode::get<CMSG_PETITION_BUY>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_PETITION_BUY>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_PETITION_SHOW_SIGNATURES* ClientOpcode::get_if<CMSG_PETITION_SHOW_SIGNATURES>() {
+    if (opcode == Opcode::CMSG_PETITION_SHOW_SIGNATURES) {
+        return &CMSG_PETITION_SHOW_SIGNATURES;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_PETITION_SHOW_SIGNATURES& ClientOpcode::get<CMSG_PETITION_SHOW_SIGNATURES>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_PETITION_SHOW_SIGNATURES>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_PETITION_SIGN* ClientOpcode::get_if<CMSG_PETITION_SIGN>() {
+    if (opcode == Opcode::CMSG_PETITION_SIGN) {
+        return &CMSG_PETITION_SIGN;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_PETITION_SIGN& ClientOpcode::get<CMSG_PETITION_SIGN>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_PETITION_SIGN>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_PETITION_DECLINE* ClientOpcode::get_if<MSG_PETITION_DECLINE>() {
+    if (opcode == Opcode::MSG_PETITION_DECLINE) {
+        return &MSG_PETITION_DECLINE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_PETITION_DECLINE& ClientOpcode::get<MSG_PETITION_DECLINE>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_PETITION_DECLINE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_OFFER_PETITION* ClientOpcode::get_if<CMSG_OFFER_PETITION>() {
+    if (opcode == Opcode::CMSG_OFFER_PETITION) {
+        return &CMSG_OFFER_PETITION;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_OFFER_PETITION& ClientOpcode::get<CMSG_OFFER_PETITION>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_OFFER_PETITION>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_TURN_IN_PETITION* ClientOpcode::get_if<CMSG_TURN_IN_PETITION>() {
+    if (opcode == Opcode::CMSG_TURN_IN_PETITION) {
+        return &CMSG_TURN_IN_PETITION;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_TURN_IN_PETITION& ClientOpcode::get<CMSG_TURN_IN_PETITION>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_TURN_IN_PETITION>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_PETITION_QUERY* ClientOpcode::get_if<CMSG_PETITION_QUERY>() {
+    if (opcode == Opcode::CMSG_PETITION_QUERY) {
+        return &CMSG_PETITION_QUERY;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_PETITION_QUERY& ClientOpcode::get<CMSG_PETITION_QUERY>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_PETITION_QUERY>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_BUG* ClientOpcode::get_if<CMSG_BUG>() {
+    if (opcode == Opcode::CMSG_BUG) {
+        return &CMSG_BUG;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_BUG& ClientOpcode::get<CMSG_BUG>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_BUG>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_PLAYED_TIME* ClientOpcode::get_if<CMSG_PLAYED_TIME>() {
+    if (opcode == Opcode::CMSG_PLAYED_TIME) {
+        return &CMSG_PLAYED_TIME;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_PLAYED_TIME& ClientOpcode::get<CMSG_PLAYED_TIME>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_PLAYED_TIME>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_QUERY_TIME* ClientOpcode::get_if<CMSG_QUERY_TIME>() {
+    if (opcode == Opcode::CMSG_QUERY_TIME) {
+        return &CMSG_QUERY_TIME;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_QUERY_TIME& ClientOpcode::get<CMSG_QUERY_TIME>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_QUERY_TIME>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_RECLAIM_CORPSE* ClientOpcode::get_if<CMSG_RECLAIM_CORPSE>() {
+    if (opcode == Opcode::CMSG_RECLAIM_CORPSE) {
+        return &CMSG_RECLAIM_CORPSE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_RECLAIM_CORPSE& ClientOpcode::get<CMSG_RECLAIM_CORPSE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_RECLAIM_CORPSE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_WRAP_ITEM* ClientOpcode::get_if<CMSG_WRAP_ITEM>() {
+    if (opcode == Opcode::CMSG_WRAP_ITEM) {
+        return &CMSG_WRAP_ITEM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_WRAP_ITEM& ClientOpcode::get<CMSG_WRAP_ITEM>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_WRAP_ITEM>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MINIMAP_PING_Client* ClientOpcode::get_if<MSG_MINIMAP_PING_Client>() {
+    if (opcode == Opcode::MSG_MINIMAP_PING) {
+        return &MSG_MINIMAP_PING;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MINIMAP_PING_Client& ClientOpcode::get<MSG_MINIMAP_PING_Client>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_MINIMAP_PING_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_PING* ClientOpcode::get_if<CMSG_PING>() {
+    if (opcode == Opcode::CMSG_PING) {
+        return &CMSG_PING;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_PING& ClientOpcode::get<CMSG_PING>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_PING>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_SETSHEATHED* ClientOpcode::get_if<CMSG_SETSHEATHED>() {
+    if (opcode == Opcode::CMSG_SETSHEATHED) {
+        return &CMSG_SETSHEATHED;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_SETSHEATHED& ClientOpcode::get<CMSG_SETSHEATHED>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_SETSHEATHED>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_PET_CAST_SPELL* ClientOpcode::get_if<CMSG_PET_CAST_SPELL>() {
+    if (opcode == Opcode::CMSG_PET_CAST_SPELL) {
+        return &CMSG_PET_CAST_SPELL;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_PET_CAST_SPELL& ClientOpcode::get<CMSG_PET_CAST_SPELL>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_PET_CAST_SPELL>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_SAVE_GUILD_EMBLEM_Client* ClientOpcode::get_if<MSG_SAVE_GUILD_EMBLEM_Client>() {
+    if (opcode == Opcode::MSG_SAVE_GUILD_EMBLEM) {
+        return &MSG_SAVE_GUILD_EMBLEM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_SAVE_GUILD_EMBLEM_Client& ClientOpcode::get<MSG_SAVE_GUILD_EMBLEM_Client>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_SAVE_GUILD_EMBLEM_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_TABARDVENDOR_ACTIVATE* ClientOpcode::get_if<MSG_TABARDVENDOR_ACTIVATE>() {
+    if (opcode == Opcode::MSG_TABARDVENDOR_ACTIVATE) {
+        return &MSG_TABARDVENDOR_ACTIVATE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_TABARDVENDOR_ACTIVATE& ClientOpcode::get<MSG_TABARDVENDOR_ACTIVATE>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_TABARDVENDOR_ACTIVATE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_ZONEUPDATE* ClientOpcode::get_if<CMSG_ZONEUPDATE>() {
+    if (opcode == Opcode::CMSG_ZONEUPDATE) {
+        return &CMSG_ZONEUPDATE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_ZONEUPDATE& ClientOpcode::get<CMSG_ZONEUPDATE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_ZONEUPDATE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_RANDOM_ROLL_Client* ClientOpcode::get_if<MSG_RANDOM_ROLL_Client>() {
+    if (opcode == Opcode::MSG_RANDOM_ROLL) {
+        return &MSG_RANDOM_ROLL;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_RANDOM_ROLL_Client& ClientOpcode::get<MSG_RANDOM_ROLL_Client>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_RANDOM_ROLL_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_LOOKING_FOR_GROUP_Client* ClientOpcode::get_if<MSG_LOOKING_FOR_GROUP_Client>() {
+    if (opcode == Opcode::MSG_LOOKING_FOR_GROUP) {
+        return &MSG_LOOKING_FOR_GROUP;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_LOOKING_FOR_GROUP_Client& ClientOpcode::get<MSG_LOOKING_FOR_GROUP_Client>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_LOOKING_FOR_GROUP_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_UNLEARN_SKILL* ClientOpcode::get_if<CMSG_UNLEARN_SKILL>() {
+    if (opcode == Opcode::CMSG_UNLEARN_SKILL) {
+        return &CMSG_UNLEARN_SKILL;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_UNLEARN_SKILL& ClientOpcode::get<CMSG_UNLEARN_SKILL>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_UNLEARN_SKILL>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_GMTICKET_UPDATETEXT* ClientOpcode::get_if<CMSG_GMTICKET_UPDATETEXT>() {
+    if (opcode == Opcode::CMSG_GMTICKET_UPDATETEXT) {
+        return &CMSG_GMTICKET_UPDATETEXT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GMTICKET_UPDATETEXT& ClientOpcode::get<CMSG_GMTICKET_UPDATETEXT>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GMTICKET_UPDATETEXT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_REQUEST_ACCOUNT_DATA* ClientOpcode::get_if<CMSG_REQUEST_ACCOUNT_DATA>() {
+    if (opcode == Opcode::CMSG_REQUEST_ACCOUNT_DATA) {
+        return &CMSG_REQUEST_ACCOUNT_DATA;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_REQUEST_ACCOUNT_DATA& ClientOpcode::get<CMSG_REQUEST_ACCOUNT_DATA>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_REQUEST_ACCOUNT_DATA>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_GMTICKET_GETTICKET* ClientOpcode::get_if<CMSG_GMTICKET_GETTICKET>() {
+    if (opcode == Opcode::CMSG_GMTICKET_GETTICKET) {
+        return &CMSG_GMTICKET_GETTICKET;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GMTICKET_GETTICKET& ClientOpcode::get<CMSG_GMTICKET_GETTICKET>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GMTICKET_GETTICKET>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_CORPSE_QUERY_Client* ClientOpcode::get_if<MSG_CORPSE_QUERY_Client>() {
+    if (opcode == Opcode::MSG_CORPSE_QUERY) {
+        return &MSG_CORPSE_QUERY;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_CORPSE_QUERY_Client& ClientOpcode::get<MSG_CORPSE_QUERY_Client>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_CORPSE_QUERY_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_GMTICKET_DELETETICKET* ClientOpcode::get_if<CMSG_GMTICKET_DELETETICKET>() {
+    if (opcode == Opcode::CMSG_GMTICKET_DELETETICKET) {
+        return &CMSG_GMTICKET_DELETETICKET;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GMTICKET_DELETETICKET& ClientOpcode::get<CMSG_GMTICKET_DELETETICKET>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GMTICKET_DELETETICKET>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_GMTICKET_SYSTEMSTATUS* ClientOpcode::get_if<CMSG_GMTICKET_SYSTEMSTATUS>() {
+    if (opcode == Opcode::CMSG_GMTICKET_SYSTEMSTATUS) {
+        return &CMSG_GMTICKET_SYSTEMSTATUS;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GMTICKET_SYSTEMSTATUS& ClientOpcode::get<CMSG_GMTICKET_SYSTEMSTATUS>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GMTICKET_SYSTEMSTATUS>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_SPIRIT_HEALER_ACTIVATE* ClientOpcode::get_if<CMSG_SPIRIT_HEALER_ACTIVATE>() {
+    if (opcode == Opcode::CMSG_SPIRIT_HEALER_ACTIVATE) {
+        return &CMSG_SPIRIT_HEALER_ACTIVATE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_SPIRIT_HEALER_ACTIVATE& ClientOpcode::get<CMSG_SPIRIT_HEALER_ACTIVATE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_SPIRIT_HEALER_ACTIVATE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_CHAT_IGNORED* ClientOpcode::get_if<CMSG_CHAT_IGNORED>() {
+    if (opcode == Opcode::CMSG_CHAT_IGNORED) {
+        return &CMSG_CHAT_IGNORED;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_CHAT_IGNORED& ClientOpcode::get<CMSG_CHAT_IGNORED>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_CHAT_IGNORED>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_GUILD_RANK* ClientOpcode::get_if<CMSG_GUILD_RANK>() {
+    if (opcode == Opcode::CMSG_GUILD_RANK) {
+        return &CMSG_GUILD_RANK;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GUILD_RANK& ClientOpcode::get<CMSG_GUILD_RANK>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GUILD_RANK>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_GUILD_ADD_RANK* ClientOpcode::get_if<CMSG_GUILD_ADD_RANK>() {
+    if (opcode == Opcode::CMSG_GUILD_ADD_RANK) {
+        return &CMSG_GUILD_ADD_RANK;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GUILD_ADD_RANK& ClientOpcode::get<CMSG_GUILD_ADD_RANK>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GUILD_ADD_RANK>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_GUILD_DEL_RANK* ClientOpcode::get_if<CMSG_GUILD_DEL_RANK>() {
+    if (opcode == Opcode::CMSG_GUILD_DEL_RANK) {
+        return &CMSG_GUILD_DEL_RANK;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GUILD_DEL_RANK& ClientOpcode::get<CMSG_GUILD_DEL_RANK>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GUILD_DEL_RANK>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_GUILD_SET_PUBLIC_NOTE* ClientOpcode::get_if<CMSG_GUILD_SET_PUBLIC_NOTE>() {
+    if (opcode == Opcode::CMSG_GUILD_SET_PUBLIC_NOTE) {
+        return &CMSG_GUILD_SET_PUBLIC_NOTE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GUILD_SET_PUBLIC_NOTE& ClientOpcode::get<CMSG_GUILD_SET_PUBLIC_NOTE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GUILD_SET_PUBLIC_NOTE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_GUILD_SET_OFFICER_NOTE* ClientOpcode::get_if<CMSG_GUILD_SET_OFFICER_NOTE>() {
+    if (opcode == Opcode::CMSG_GUILD_SET_OFFICER_NOTE) {
+        return &CMSG_GUILD_SET_OFFICER_NOTE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GUILD_SET_OFFICER_NOTE& ClientOpcode::get<CMSG_GUILD_SET_OFFICER_NOTE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GUILD_SET_OFFICER_NOTE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_SEND_MAIL* ClientOpcode::get_if<CMSG_SEND_MAIL>() {
+    if (opcode == Opcode::CMSG_SEND_MAIL) {
+        return &CMSG_SEND_MAIL;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_SEND_MAIL& ClientOpcode::get<CMSG_SEND_MAIL>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_SEND_MAIL>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_GET_MAIL_LIST* ClientOpcode::get_if<CMSG_GET_MAIL_LIST>() {
+    if (opcode == Opcode::CMSG_GET_MAIL_LIST) {
+        return &CMSG_GET_MAIL_LIST;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GET_MAIL_LIST& ClientOpcode::get<CMSG_GET_MAIL_LIST>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GET_MAIL_LIST>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_BATTLEFIELD_LIST* ClientOpcode::get_if<CMSG_BATTLEFIELD_LIST>() {
+    if (opcode == Opcode::CMSG_BATTLEFIELD_LIST) {
+        return &CMSG_BATTLEFIELD_LIST;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_BATTLEFIELD_LIST& ClientOpcode::get<CMSG_BATTLEFIELD_LIST>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_BATTLEFIELD_LIST>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_BATTLEFIELD_JOIN* ClientOpcode::get_if<CMSG_BATTLEFIELD_JOIN>() {
+    if (opcode == Opcode::CMSG_BATTLEFIELD_JOIN) {
+        return &CMSG_BATTLEFIELD_JOIN;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_BATTLEFIELD_JOIN& ClientOpcode::get<CMSG_BATTLEFIELD_JOIN>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_BATTLEFIELD_JOIN>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_ITEM_TEXT_QUERY* ClientOpcode::get_if<CMSG_ITEM_TEXT_QUERY>() {
+    if (opcode == Opcode::CMSG_ITEM_TEXT_QUERY) {
+        return &CMSG_ITEM_TEXT_QUERY;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_ITEM_TEXT_QUERY& ClientOpcode::get<CMSG_ITEM_TEXT_QUERY>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_ITEM_TEXT_QUERY>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_MAIL_TAKE_MONEY* ClientOpcode::get_if<CMSG_MAIL_TAKE_MONEY>() {
+    if (opcode == Opcode::CMSG_MAIL_TAKE_MONEY) {
+        return &CMSG_MAIL_TAKE_MONEY;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_MAIL_TAKE_MONEY& ClientOpcode::get<CMSG_MAIL_TAKE_MONEY>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_MAIL_TAKE_MONEY>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_MAIL_TAKE_ITEM* ClientOpcode::get_if<CMSG_MAIL_TAKE_ITEM>() {
+    if (opcode == Opcode::CMSG_MAIL_TAKE_ITEM) {
+        return &CMSG_MAIL_TAKE_ITEM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_MAIL_TAKE_ITEM& ClientOpcode::get<CMSG_MAIL_TAKE_ITEM>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_MAIL_TAKE_ITEM>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_MAIL_MARK_AS_READ* ClientOpcode::get_if<CMSG_MAIL_MARK_AS_READ>() {
+    if (opcode == Opcode::CMSG_MAIL_MARK_AS_READ) {
+        return &CMSG_MAIL_MARK_AS_READ;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_MAIL_MARK_AS_READ& ClientOpcode::get<CMSG_MAIL_MARK_AS_READ>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_MAIL_MARK_AS_READ>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_MAIL_RETURN_TO_SENDER* ClientOpcode::get_if<CMSG_MAIL_RETURN_TO_SENDER>() {
+    if (opcode == Opcode::CMSG_MAIL_RETURN_TO_SENDER) {
+        return &CMSG_MAIL_RETURN_TO_SENDER;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_MAIL_RETURN_TO_SENDER& ClientOpcode::get<CMSG_MAIL_RETURN_TO_SENDER>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_MAIL_RETURN_TO_SENDER>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_MAIL_DELETE* ClientOpcode::get_if<CMSG_MAIL_DELETE>() {
+    if (opcode == Opcode::CMSG_MAIL_DELETE) {
+        return &CMSG_MAIL_DELETE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_MAIL_DELETE& ClientOpcode::get<CMSG_MAIL_DELETE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_MAIL_DELETE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_MAIL_CREATE_TEXT_ITEM* ClientOpcode::get_if<CMSG_MAIL_CREATE_TEXT_ITEM>() {
+    if (opcode == Opcode::CMSG_MAIL_CREATE_TEXT_ITEM) {
+        return &CMSG_MAIL_CREATE_TEXT_ITEM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_MAIL_CREATE_TEXT_ITEM& ClientOpcode::get<CMSG_MAIL_CREATE_TEXT_ITEM>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_MAIL_CREATE_TEXT_ITEM>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_LEARN_TALENT* ClientOpcode::get_if<CMSG_LEARN_TALENT>() {
+    if (opcode == Opcode::CMSG_LEARN_TALENT) {
+        return &CMSG_LEARN_TALENT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_LEARN_TALENT& ClientOpcode::get<CMSG_LEARN_TALENT>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_LEARN_TALENT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_TOGGLE_PVP* ClientOpcode::get_if<CMSG_TOGGLE_PVP>() {
+    if (opcode == Opcode::CMSG_TOGGLE_PVP) {
+        return &CMSG_TOGGLE_PVP;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_TOGGLE_PVP& ClientOpcode::get<CMSG_TOGGLE_PVP>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_TOGGLE_PVP>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_AUCTION_HELLO_Client* ClientOpcode::get_if<MSG_AUCTION_HELLO_Client>() {
+    if (opcode == Opcode::MSG_AUCTION_HELLO) {
+        return &MSG_AUCTION_HELLO;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_AUCTION_HELLO_Client& ClientOpcode::get<MSG_AUCTION_HELLO_Client>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_AUCTION_HELLO_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_AUCTION_SELL_ITEM* ClientOpcode::get_if<CMSG_AUCTION_SELL_ITEM>() {
+    if (opcode == Opcode::CMSG_AUCTION_SELL_ITEM) {
+        return &CMSG_AUCTION_SELL_ITEM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_AUCTION_SELL_ITEM& ClientOpcode::get<CMSG_AUCTION_SELL_ITEM>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_AUCTION_SELL_ITEM>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_AUCTION_REMOVE_ITEM* ClientOpcode::get_if<CMSG_AUCTION_REMOVE_ITEM>() {
+    if (opcode == Opcode::CMSG_AUCTION_REMOVE_ITEM) {
+        return &CMSG_AUCTION_REMOVE_ITEM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_AUCTION_REMOVE_ITEM& ClientOpcode::get<CMSG_AUCTION_REMOVE_ITEM>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_AUCTION_REMOVE_ITEM>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_AUCTION_LIST_ITEMS* ClientOpcode::get_if<CMSG_AUCTION_LIST_ITEMS>() {
+    if (opcode == Opcode::CMSG_AUCTION_LIST_ITEMS) {
+        return &CMSG_AUCTION_LIST_ITEMS;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_AUCTION_LIST_ITEMS& ClientOpcode::get<CMSG_AUCTION_LIST_ITEMS>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_AUCTION_LIST_ITEMS>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_AUCTION_LIST_OWNER_ITEMS* ClientOpcode::get_if<CMSG_AUCTION_LIST_OWNER_ITEMS>() {
+    if (opcode == Opcode::CMSG_AUCTION_LIST_OWNER_ITEMS) {
+        return &CMSG_AUCTION_LIST_OWNER_ITEMS;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_AUCTION_LIST_OWNER_ITEMS& ClientOpcode::get<CMSG_AUCTION_LIST_OWNER_ITEMS>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_AUCTION_LIST_OWNER_ITEMS>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_AUCTION_PLACE_BID* ClientOpcode::get_if<CMSG_AUCTION_PLACE_BID>() {
+    if (opcode == Opcode::CMSG_AUCTION_PLACE_BID) {
+        return &CMSG_AUCTION_PLACE_BID;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_AUCTION_PLACE_BID& ClientOpcode::get<CMSG_AUCTION_PLACE_BID>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_AUCTION_PLACE_BID>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_AUCTION_LIST_BIDDER_ITEMS* ClientOpcode::get_if<CMSG_AUCTION_LIST_BIDDER_ITEMS>() {
+    if (opcode == Opcode::CMSG_AUCTION_LIST_BIDDER_ITEMS) {
+        return &CMSG_AUCTION_LIST_BIDDER_ITEMS;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_AUCTION_LIST_BIDDER_ITEMS& ClientOpcode::get<CMSG_AUCTION_LIST_BIDDER_ITEMS>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_AUCTION_LIST_BIDDER_ITEMS>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_SET_AMMO* ClientOpcode::get_if<CMSG_SET_AMMO>() {
+    if (opcode == Opcode::CMSG_SET_AMMO) {
+        return &CMSG_SET_AMMO;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_SET_AMMO& ClientOpcode::get<CMSG_SET_AMMO>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_SET_AMMO>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_SET_ACTIVE_MOVER* ClientOpcode::get_if<CMSG_SET_ACTIVE_MOVER>() {
+    if (opcode == Opcode::CMSG_SET_ACTIVE_MOVER) {
+        return &CMSG_SET_ACTIVE_MOVER;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_SET_ACTIVE_MOVER& ClientOpcode::get<CMSG_SET_ACTIVE_MOVER>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_SET_ACTIVE_MOVER>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_PET_CANCEL_AURA* ClientOpcode::get_if<CMSG_PET_CANCEL_AURA>() {
+    if (opcode == Opcode::CMSG_PET_CANCEL_AURA) {
+        return &CMSG_PET_CANCEL_AURA;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_PET_CANCEL_AURA& ClientOpcode::get<CMSG_PET_CANCEL_AURA>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_PET_CANCEL_AURA>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_CANCEL_AUTO_REPEAT_SPELL* ClientOpcode::get_if<CMSG_CANCEL_AUTO_REPEAT_SPELL>() {
+    if (opcode == Opcode::CMSG_CANCEL_AUTO_REPEAT_SPELL) {
+        return &CMSG_CANCEL_AUTO_REPEAT_SPELL;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_CANCEL_AUTO_REPEAT_SPELL& ClientOpcode::get<CMSG_CANCEL_AUTO_REPEAT_SPELL>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_CANCEL_AUTO_REPEAT_SPELL>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_LIST_STABLED_PETS_Client* ClientOpcode::get_if<MSG_LIST_STABLED_PETS_Client>() {
+    if (opcode == Opcode::MSG_LIST_STABLED_PETS) {
+        return &MSG_LIST_STABLED_PETS;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_LIST_STABLED_PETS_Client& ClientOpcode::get<MSG_LIST_STABLED_PETS_Client>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_LIST_STABLED_PETS_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_STABLE_PET* ClientOpcode::get_if<CMSG_STABLE_PET>() {
+    if (opcode == Opcode::CMSG_STABLE_PET) {
+        return &CMSG_STABLE_PET;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_STABLE_PET& ClientOpcode::get<CMSG_STABLE_PET>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_STABLE_PET>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_UNSTABLE_PET* ClientOpcode::get_if<CMSG_UNSTABLE_PET>() {
+    if (opcode == Opcode::CMSG_UNSTABLE_PET) {
+        return &CMSG_UNSTABLE_PET;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_UNSTABLE_PET& ClientOpcode::get<CMSG_UNSTABLE_PET>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_UNSTABLE_PET>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_BUY_STABLE_SLOT* ClientOpcode::get_if<CMSG_BUY_STABLE_SLOT>() {
+    if (opcode == Opcode::CMSG_BUY_STABLE_SLOT) {
+        return &CMSG_BUY_STABLE_SLOT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_BUY_STABLE_SLOT& ClientOpcode::get<CMSG_BUY_STABLE_SLOT>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_BUY_STABLE_SLOT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_STABLE_SWAP_PET* ClientOpcode::get_if<CMSG_STABLE_SWAP_PET>() {
+    if (opcode == Opcode::CMSG_STABLE_SWAP_PET) {
+        return &CMSG_STABLE_SWAP_PET;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_STABLE_SWAP_PET& ClientOpcode::get<CMSG_STABLE_SWAP_PET>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_STABLE_SWAP_PET>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_QUEST_PUSH_RESULT* ClientOpcode::get_if<MSG_QUEST_PUSH_RESULT>() {
+    if (opcode == Opcode::MSG_QUEST_PUSH_RESULT) {
+        return &MSG_QUEST_PUSH_RESULT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_QUEST_PUSH_RESULT& ClientOpcode::get<MSG_QUEST_PUSH_RESULT>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_QUEST_PUSH_RESULT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_REQUEST_PET_INFO* ClientOpcode::get_if<CMSG_REQUEST_PET_INFO>() {
+    if (opcode == Opcode::CMSG_REQUEST_PET_INFO) {
+        return &CMSG_REQUEST_PET_INFO;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_REQUEST_PET_INFO& ClientOpcode::get<CMSG_REQUEST_PET_INFO>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_REQUEST_PET_INFO>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_FAR_SIGHT* ClientOpcode::get_if<CMSG_FAR_SIGHT>() {
+    if (opcode == Opcode::CMSG_FAR_SIGHT) {
+        return &CMSG_FAR_SIGHT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_FAR_SIGHT& ClientOpcode::get<CMSG_FAR_SIGHT>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_FAR_SIGHT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_GROUP_CHANGE_SUB_GROUP* ClientOpcode::get_if<CMSG_GROUP_CHANGE_SUB_GROUP>() {
+    if (opcode == Opcode::CMSG_GROUP_CHANGE_SUB_GROUP) {
+        return &CMSG_GROUP_CHANGE_SUB_GROUP;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GROUP_CHANGE_SUB_GROUP& ClientOpcode::get<CMSG_GROUP_CHANGE_SUB_GROUP>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GROUP_CHANGE_SUB_GROUP>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_REQUEST_PARTY_MEMBER_STATS* ClientOpcode::get_if<CMSG_REQUEST_PARTY_MEMBER_STATS>() {
+    if (opcode == Opcode::CMSG_REQUEST_PARTY_MEMBER_STATS) {
+        return &CMSG_REQUEST_PARTY_MEMBER_STATS;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_REQUEST_PARTY_MEMBER_STATS& ClientOpcode::get<CMSG_REQUEST_PARTY_MEMBER_STATS>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_REQUEST_PARTY_MEMBER_STATS>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_GROUP_SWAP_SUB_GROUP* ClientOpcode::get_if<CMSG_GROUP_SWAP_SUB_GROUP>() {
+    if (opcode == Opcode::CMSG_GROUP_SWAP_SUB_GROUP) {
+        return &CMSG_GROUP_SWAP_SUB_GROUP;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GROUP_SWAP_SUB_GROUP& ClientOpcode::get<CMSG_GROUP_SWAP_SUB_GROUP>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GROUP_SWAP_SUB_GROUP>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_AUTOSTORE_BANK_ITEM* ClientOpcode::get_if<CMSG_AUTOSTORE_BANK_ITEM>() {
+    if (opcode == Opcode::CMSG_AUTOSTORE_BANK_ITEM) {
+        return &CMSG_AUTOSTORE_BANK_ITEM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_AUTOSTORE_BANK_ITEM& ClientOpcode::get<CMSG_AUTOSTORE_BANK_ITEM>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_AUTOSTORE_BANK_ITEM>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_AUTOBANK_ITEM* ClientOpcode::get_if<CMSG_AUTOBANK_ITEM>() {
+    if (opcode == Opcode::CMSG_AUTOBANK_ITEM) {
+        return &CMSG_AUTOBANK_ITEM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_AUTOBANK_ITEM& ClientOpcode::get<CMSG_AUTOBANK_ITEM>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_AUTOBANK_ITEM>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_QUERY_NEXT_MAIL_TIME_Client* ClientOpcode::get_if<MSG_QUERY_NEXT_MAIL_TIME_Client>() {
+    if (opcode == Opcode::MSG_QUERY_NEXT_MAIL_TIME) {
+        return &MSG_QUERY_NEXT_MAIL_TIME;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_QUERY_NEXT_MAIL_TIME_Client& ClientOpcode::get<MSG_QUERY_NEXT_MAIL_TIME_Client>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_QUERY_NEXT_MAIL_TIME_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_GROUP_RAID_CONVERT* ClientOpcode::get_if<CMSG_GROUP_RAID_CONVERT>() {
+    if (opcode == Opcode::CMSG_GROUP_RAID_CONVERT) {
+        return &CMSG_GROUP_RAID_CONVERT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GROUP_RAID_CONVERT& ClientOpcode::get<CMSG_GROUP_RAID_CONVERT>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GROUP_RAID_CONVERT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_GROUP_ASSISTANT_LEADER* ClientOpcode::get_if<CMSG_GROUP_ASSISTANT_LEADER>() {
+    if (opcode == Opcode::CMSG_GROUP_ASSISTANT_LEADER) {
+        return &CMSG_GROUP_ASSISTANT_LEADER;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GROUP_ASSISTANT_LEADER& ClientOpcode::get<CMSG_GROUP_ASSISTANT_LEADER>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GROUP_ASSISTANT_LEADER>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_BUYBACK_ITEM* ClientOpcode::get_if<CMSG_BUYBACK_ITEM>() {
+    if (opcode == Opcode::CMSG_BUYBACK_ITEM) {
+        return &CMSG_BUYBACK_ITEM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_BUYBACK_ITEM& ClientOpcode::get<CMSG_BUYBACK_ITEM>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_BUYBACK_ITEM>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_MEETINGSTONE_JOIN* ClientOpcode::get_if<CMSG_MEETINGSTONE_JOIN>() {
+    if (opcode == Opcode::CMSG_MEETINGSTONE_JOIN) {
+        return &CMSG_MEETINGSTONE_JOIN;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_MEETINGSTONE_JOIN& ClientOpcode::get<CMSG_MEETINGSTONE_JOIN>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_MEETINGSTONE_JOIN>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_MEETINGSTONE_LEAVE* ClientOpcode::get_if<CMSG_MEETINGSTONE_LEAVE>() {
+    if (opcode == Opcode::CMSG_MEETINGSTONE_LEAVE) {
+        return &CMSG_MEETINGSTONE_LEAVE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_MEETINGSTONE_LEAVE& ClientOpcode::get<CMSG_MEETINGSTONE_LEAVE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_MEETINGSTONE_LEAVE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_MEETINGSTONE_INFO* ClientOpcode::get_if<CMSG_MEETINGSTONE_INFO>() {
+    if (opcode == Opcode::CMSG_MEETINGSTONE_INFO) {
+        return &CMSG_MEETINGSTONE_INFO;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_MEETINGSTONE_INFO& ClientOpcode::get<CMSG_MEETINGSTONE_INFO>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_MEETINGSTONE_INFO>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_CANCEL_GROWTH_AURA* ClientOpcode::get_if<CMSG_CANCEL_GROWTH_AURA>() {
+    if (opcode == Opcode::CMSG_CANCEL_GROWTH_AURA) {
+        return &CMSG_CANCEL_GROWTH_AURA;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_CANCEL_GROWTH_AURA& ClientOpcode::get<CMSG_CANCEL_GROWTH_AURA>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_CANCEL_GROWTH_AURA>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_LOOT_ROLL* ClientOpcode::get_if<CMSG_LOOT_ROLL>() {
+    if (opcode == Opcode::CMSG_LOOT_ROLL) {
+        return &CMSG_LOOT_ROLL;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_LOOT_ROLL& ClientOpcode::get<CMSG_LOOT_ROLL>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_LOOT_ROLL>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_LOOT_MASTER_GIVE* ClientOpcode::get_if<CMSG_LOOT_MASTER_GIVE>() {
+    if (opcode == Opcode::CMSG_LOOT_MASTER_GIVE) {
+        return &CMSG_LOOT_MASTER_GIVE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_LOOT_MASTER_GIVE& ClientOpcode::get<CMSG_LOOT_MASTER_GIVE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_LOOT_MASTER_GIVE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_REPAIR_ITEM* ClientOpcode::get_if<CMSG_REPAIR_ITEM>() {
+    if (opcode == Opcode::CMSG_REPAIR_ITEM) {
+        return &CMSG_REPAIR_ITEM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_REPAIR_ITEM& ClientOpcode::get<CMSG_REPAIR_ITEM>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_REPAIR_ITEM>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_TALENT_WIPE_CONFIRM_Client* ClientOpcode::get_if<MSG_TALENT_WIPE_CONFIRM_Client>() {
+    if (opcode == Opcode::MSG_TALENT_WIPE_CONFIRM) {
+        return &MSG_TALENT_WIPE_CONFIRM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_TALENT_WIPE_CONFIRM_Client& ClientOpcode::get<MSG_TALENT_WIPE_CONFIRM_Client>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_TALENT_WIPE_CONFIRM_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_SUMMON_RESPONSE* ClientOpcode::get_if<CMSG_SUMMON_RESPONSE>() {
+    if (opcode == Opcode::CMSG_SUMMON_RESPONSE) {
+        return &CMSG_SUMMON_RESPONSE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_SUMMON_RESPONSE& ClientOpcode::get<CMSG_SUMMON_RESPONSE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_SUMMON_RESPONSE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_WATER_WALK* ClientOpcode::get_if<MSG_MOVE_WATER_WALK>() {
+    if (opcode == Opcode::MSG_MOVE_WATER_WALK) {
+        return &MSG_MOVE_WATER_WALK;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_WATER_WALK& ClientOpcode::get<MSG_MOVE_WATER_WALK>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_WATER_WALK>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_SELF_RES* ClientOpcode::get_if<CMSG_SELF_RES>() {
+    if (opcode == Opcode::CMSG_SELF_RES) {
+        return &CMSG_SELF_RES;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_SELF_RES& ClientOpcode::get<CMSG_SELF_RES>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_SELF_RES>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_TOGGLE_HELM* ClientOpcode::get_if<CMSG_TOGGLE_HELM>() {
+    if (opcode == Opcode::CMSG_TOGGLE_HELM) {
+        return &CMSG_TOGGLE_HELM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_TOGGLE_HELM& ClientOpcode::get<CMSG_TOGGLE_HELM>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_TOGGLE_HELM>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_TOGGLE_CLOAK* ClientOpcode::get_if<CMSG_TOGGLE_CLOAK>() {
+    if (opcode == Opcode::CMSG_TOGGLE_CLOAK) {
+        return &CMSG_TOGGLE_CLOAK;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_TOGGLE_CLOAK& ClientOpcode::get<CMSG_TOGGLE_CLOAK>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_TOGGLE_CLOAK>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_SET_ACTIONBAR_TOGGLES* ClientOpcode::get_if<CMSG_SET_ACTIONBAR_TOGGLES>() {
+    if (opcode == Opcode::CMSG_SET_ACTIONBAR_TOGGLES) {
+        return &CMSG_SET_ACTIONBAR_TOGGLES;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_SET_ACTIONBAR_TOGGLES& ClientOpcode::get<CMSG_SET_ACTIONBAR_TOGGLES>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_SET_ACTIONBAR_TOGGLES>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_PETITION_RENAME* ClientOpcode::get_if<MSG_PETITION_RENAME>() {
+    if (opcode == Opcode::MSG_PETITION_RENAME) {
+        return &MSG_PETITION_RENAME;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_PETITION_RENAME& ClientOpcode::get<MSG_PETITION_RENAME>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_PETITION_RENAME>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_ITEM_NAME_QUERY* ClientOpcode::get_if<CMSG_ITEM_NAME_QUERY>() {
+    if (opcode == Opcode::CMSG_ITEM_NAME_QUERY) {
+        return &CMSG_ITEM_NAME_QUERY;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_ITEM_NAME_QUERY& ClientOpcode::get<CMSG_ITEM_NAME_QUERY>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_ITEM_NAME_QUERY>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_CHAR_RENAME* ClientOpcode::get_if<CMSG_CHAR_RENAME>() {
+    if (opcode == Opcode::CMSG_CHAR_RENAME) {
+        return &CMSG_CHAR_RENAME;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_CHAR_RENAME& ClientOpcode::get<CMSG_CHAR_RENAME>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_CHAR_RENAME>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_MOVE_SPLINE_DONE* ClientOpcode::get_if<CMSG_MOVE_SPLINE_DONE>() {
+    if (opcode == Opcode::CMSG_MOVE_SPLINE_DONE) {
+        return &CMSG_MOVE_SPLINE_DONE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_MOVE_SPLINE_DONE& ClientOpcode::get<CMSG_MOVE_SPLINE_DONE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_MOVE_SPLINE_DONE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_MOVE_FALL_RESET* ClientOpcode::get_if<CMSG_MOVE_FALL_RESET>() {
+    if (opcode == Opcode::CMSG_MOVE_FALL_RESET) {
+        return &CMSG_MOVE_FALL_RESET;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_MOVE_FALL_RESET& ClientOpcode::get<CMSG_MOVE_FALL_RESET>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_MOVE_FALL_RESET>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_REQUEST_RAID_INFO* ClientOpcode::get_if<CMSG_REQUEST_RAID_INFO>() {
+    if (opcode == Opcode::CMSG_REQUEST_RAID_INFO) {
+        return &CMSG_REQUEST_RAID_INFO;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_REQUEST_RAID_INFO& ClientOpcode::get<CMSG_REQUEST_RAID_INFO>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_REQUEST_RAID_INFO>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_MOVE_TIME_SKIPPED* ClientOpcode::get_if<CMSG_MOVE_TIME_SKIPPED>() {
+    if (opcode == Opcode::CMSG_MOVE_TIME_SKIPPED) {
+        return &CMSG_MOVE_TIME_SKIPPED;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_MOVE_TIME_SKIPPED& ClientOpcode::get<CMSG_MOVE_TIME_SKIPPED>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_MOVE_TIME_SKIPPED>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_MOVE_FEATHER_FALL_ACK* ClientOpcode::get_if<CMSG_MOVE_FEATHER_FALL_ACK>() {
+    if (opcode == Opcode::CMSG_MOVE_FEATHER_FALL_ACK) {
+        return &CMSG_MOVE_FEATHER_FALL_ACK;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_MOVE_FEATHER_FALL_ACK& ClientOpcode::get<CMSG_MOVE_FEATHER_FALL_ACK>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_MOVE_FEATHER_FALL_ACK>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_MOVE_WATER_WALK_ACK* ClientOpcode::get_if<CMSG_MOVE_WATER_WALK_ACK>() {
+    if (opcode == Opcode::CMSG_MOVE_WATER_WALK_ACK) {
+        return &CMSG_MOVE_WATER_WALK_ACK;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_MOVE_WATER_WALK_ACK& ClientOpcode::get<CMSG_MOVE_WATER_WALK_ACK>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_MOVE_WATER_WALK_ACK>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_MOVE_NOT_ACTIVE_MOVER* ClientOpcode::get_if<CMSG_MOVE_NOT_ACTIVE_MOVER>() {
+    if (opcode == Opcode::CMSG_MOVE_NOT_ACTIVE_MOVER) {
+        return &CMSG_MOVE_NOT_ACTIVE_MOVER;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_MOVE_NOT_ACTIVE_MOVER& ClientOpcode::get<CMSG_MOVE_NOT_ACTIVE_MOVER>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_MOVE_NOT_ACTIVE_MOVER>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_BATTLEFIELD_STATUS* ClientOpcode::get_if<CMSG_BATTLEFIELD_STATUS>() {
+    if (opcode == Opcode::CMSG_BATTLEFIELD_STATUS) {
+        return &CMSG_BATTLEFIELD_STATUS;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_BATTLEFIELD_STATUS& ClientOpcode::get<CMSG_BATTLEFIELD_STATUS>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_BATTLEFIELD_STATUS>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_BATTLEFIELD_PORT* ClientOpcode::get_if<CMSG_BATTLEFIELD_PORT>() {
+    if (opcode == Opcode::CMSG_BATTLEFIELD_PORT) {
+        return &CMSG_BATTLEFIELD_PORT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_BATTLEFIELD_PORT& ClientOpcode::get<CMSG_BATTLEFIELD_PORT>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_BATTLEFIELD_PORT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_INSPECT_HONOR_STATS_Client* ClientOpcode::get_if<MSG_INSPECT_HONOR_STATS_Client>() {
+    if (opcode == Opcode::MSG_INSPECT_HONOR_STATS) {
+        return &MSG_INSPECT_HONOR_STATS;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_INSPECT_HONOR_STATS_Client& ClientOpcode::get<MSG_INSPECT_HONOR_STATS_Client>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_INSPECT_HONOR_STATS_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_BATTLEMASTER_HELLO* ClientOpcode::get_if<CMSG_BATTLEMASTER_HELLO>() {
+    if (opcode == Opcode::CMSG_BATTLEMASTER_HELLO) {
+        return &CMSG_BATTLEMASTER_HELLO;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_BATTLEMASTER_HELLO& ClientOpcode::get<CMSG_BATTLEMASTER_HELLO>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_BATTLEMASTER_HELLO>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_FORCE_WALK_SPEED_CHANGE_ACK* ClientOpcode::get_if<CMSG_FORCE_WALK_SPEED_CHANGE_ACK>() {
+    if (opcode == Opcode::CMSG_FORCE_WALK_SPEED_CHANGE_ACK) {
+        return &CMSG_FORCE_WALK_SPEED_CHANGE_ACK;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_FORCE_WALK_SPEED_CHANGE_ACK& ClientOpcode::get<CMSG_FORCE_WALK_SPEED_CHANGE_ACK>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_FORCE_WALK_SPEED_CHANGE_ACK>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK* ClientOpcode::get_if<CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK>() {
+    if (opcode == Opcode::CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK) {
+        return &CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK& ClientOpcode::get<CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_FORCE_TURN_RATE_CHANGE_ACK* ClientOpcode::get_if<CMSG_FORCE_TURN_RATE_CHANGE_ACK>() {
+    if (opcode == Opcode::CMSG_FORCE_TURN_RATE_CHANGE_ACK) {
+        return &CMSG_FORCE_TURN_RATE_CHANGE_ACK;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_FORCE_TURN_RATE_CHANGE_ACK& ClientOpcode::get<CMSG_FORCE_TURN_RATE_CHANGE_ACK>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_FORCE_TURN_RATE_CHANGE_ACK>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_PVP_LOG_DATA_Client* ClientOpcode::get_if<MSG_PVP_LOG_DATA_Client>() {
+    if (opcode == Opcode::MSG_PVP_LOG_DATA) {
+        return &MSG_PVP_LOG_DATA;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_PVP_LOG_DATA_Client& ClientOpcode::get<MSG_PVP_LOG_DATA_Client>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_PVP_LOG_DATA_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_LEAVE_BATTLEFIELD* ClientOpcode::get_if<CMSG_LEAVE_BATTLEFIELD>() {
+    if (opcode == Opcode::CMSG_LEAVE_BATTLEFIELD) {
+        return &CMSG_LEAVE_BATTLEFIELD;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_LEAVE_BATTLEFIELD& ClientOpcode::get<CMSG_LEAVE_BATTLEFIELD>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_LEAVE_BATTLEFIELD>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_AREA_SPIRIT_HEALER_QUERY* ClientOpcode::get_if<CMSG_AREA_SPIRIT_HEALER_QUERY>() {
+    if (opcode == Opcode::CMSG_AREA_SPIRIT_HEALER_QUERY) {
+        return &CMSG_AREA_SPIRIT_HEALER_QUERY;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_AREA_SPIRIT_HEALER_QUERY& ClientOpcode::get<CMSG_AREA_SPIRIT_HEALER_QUERY>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_AREA_SPIRIT_HEALER_QUERY>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_AREA_SPIRIT_HEALER_QUEUE* ClientOpcode::get_if<CMSG_AREA_SPIRIT_HEALER_QUEUE>() {
+    if (opcode == Opcode::CMSG_AREA_SPIRIT_HEALER_QUEUE) {
+        return &CMSG_AREA_SPIRIT_HEALER_QUEUE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_AREA_SPIRIT_HEALER_QUEUE& ClientOpcode::get<CMSG_AREA_SPIRIT_HEALER_QUEUE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_AREA_SPIRIT_HEALER_QUEUE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_WARDEN_DATA* ClientOpcode::get_if<CMSG_WARDEN_DATA>() {
+    if (opcode == Opcode::CMSG_WARDEN_DATA) {
+        return &CMSG_WARDEN_DATA;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_WARDEN_DATA& ClientOpcode::get<CMSG_WARDEN_DATA>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_WARDEN_DATA>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_BATTLEGROUND_PLAYER_POSITIONS_Client* ClientOpcode::get_if<MSG_BATTLEGROUND_PLAYER_POSITIONS_Client>() {
+    if (opcode == Opcode::MSG_BATTLEGROUND_PLAYER_POSITIONS) {
+        return &MSG_BATTLEGROUND_PLAYER_POSITIONS;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_BATTLEGROUND_PLAYER_POSITIONS_Client& ClientOpcode::get<MSG_BATTLEGROUND_PLAYER_POSITIONS_Client>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_BATTLEGROUND_PLAYER_POSITIONS_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_PET_STOP_ATTACK* ClientOpcode::get_if<CMSG_PET_STOP_ATTACK>() {
+    if (opcode == Opcode::CMSG_PET_STOP_ATTACK) {
+        return &CMSG_PET_STOP_ATTACK;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_PET_STOP_ATTACK& ClientOpcode::get<CMSG_PET_STOP_ATTACK>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_PET_STOP_ATTACK>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_BATTLEMASTER_JOIN* ClientOpcode::get_if<CMSG_BATTLEMASTER_JOIN>() {
+    if (opcode == Opcode::CMSG_BATTLEMASTER_JOIN) {
+        return &CMSG_BATTLEMASTER_JOIN;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_BATTLEMASTER_JOIN& ClientOpcode::get<CMSG_BATTLEMASTER_JOIN>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_BATTLEMASTER_JOIN>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_PET_UNLEARN* ClientOpcode::get_if<CMSG_PET_UNLEARN>() {
+    if (opcode == Opcode::CMSG_PET_UNLEARN) {
+        return &CMSG_PET_UNLEARN;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_PET_UNLEARN& ClientOpcode::get<CMSG_PET_UNLEARN>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_PET_UNLEARN>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_PET_SPELL_AUTOCAST* ClientOpcode::get_if<CMSG_PET_SPELL_AUTOCAST>() {
+    if (opcode == Opcode::CMSG_PET_SPELL_AUTOCAST) {
+        return &CMSG_PET_SPELL_AUTOCAST;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_PET_SPELL_AUTOCAST& ClientOpcode::get<CMSG_PET_SPELL_AUTOCAST>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_PET_SPELL_AUTOCAST>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_GUILD_INFO_TEXT* ClientOpcode::get_if<CMSG_GUILD_INFO_TEXT>() {
+    if (opcode == Opcode::CMSG_GUILD_INFO_TEXT) {
+        return &CMSG_GUILD_INFO_TEXT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GUILD_INFO_TEXT& ClientOpcode::get<CMSG_GUILD_INFO_TEXT>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GUILD_INFO_TEXT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_ACTIVATETAXIEXPRESS* ClientOpcode::get_if<CMSG_ACTIVATETAXIEXPRESS>() {
+    if (opcode == Opcode::CMSG_ACTIVATETAXIEXPRESS) {
+        return &CMSG_ACTIVATETAXIEXPRESS;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_ACTIVATETAXIEXPRESS& ClientOpcode::get<CMSG_ACTIVATETAXIEXPRESS>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_ACTIVATETAXIEXPRESS>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_SET_FACTION_INACTIVE* ClientOpcode::get_if<CMSG_SET_FACTION_INACTIVE>() {
+    if (opcode == Opcode::CMSG_SET_FACTION_INACTIVE) {
+        return &CMSG_SET_FACTION_INACTIVE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_SET_FACTION_INACTIVE& ClientOpcode::get<CMSG_SET_FACTION_INACTIVE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_SET_FACTION_INACTIVE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_SET_WATCHED_FACTION* ClientOpcode::get_if<CMSG_SET_WATCHED_FACTION>() {
+    if (opcode == Opcode::CMSG_SET_WATCHED_FACTION) {
+        return &CMSG_SET_WATCHED_FACTION;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_SET_WATCHED_FACTION& ClientOpcode::get<CMSG_SET_WATCHED_FACTION>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_SET_WATCHED_FACTION>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_RESET_INSTANCES* ClientOpcode::get_if<CMSG_RESET_INSTANCES>() {
+    if (opcode == Opcode::CMSG_RESET_INSTANCES) {
+        return &CMSG_RESET_INSTANCES;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_RESET_INSTANCES& ClientOpcode::get<CMSG_RESET_INSTANCES>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_RESET_INSTANCES>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_RAID_TARGET_UPDATE_Client* ClientOpcode::get_if<MSG_RAID_TARGET_UPDATE_Client>() {
+    if (opcode == Opcode::MSG_RAID_TARGET_UPDATE) {
+        return &MSG_RAID_TARGET_UPDATE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_RAID_TARGET_UPDATE_Client& ClientOpcode::get<MSG_RAID_TARGET_UPDATE_Client>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_RAID_TARGET_UPDATE_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_RAID_READY_CHECK_Client* ClientOpcode::get_if<MSG_RAID_READY_CHECK_Client>() {
+    if (opcode == Opcode::MSG_RAID_READY_CHECK) {
+        return &MSG_RAID_READY_CHECK;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_RAID_READY_CHECK_Client& ClientOpcode::get<MSG_RAID_READY_CHECK_Client>() {
+    auto p = ClientOpcode::get_if<vanilla::MSG_RAID_READY_CHECK_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_GMSURVEY_SUBMIT* ClientOpcode::get_if<CMSG_GMSURVEY_SUBMIT>() {
+    if (opcode == Opcode::CMSG_GMSURVEY_SUBMIT) {
+        return &CMSG_GMSURVEY_SUBMIT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GMSURVEY_SUBMIT& ClientOpcode::get<CMSG_GMSURVEY_SUBMIT>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GMSURVEY_SUBMIT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const ClientOpcode& opcode) {
     if (opcode.opcode == ClientOpcode::Opcode::CMSG_BOOTME) {
         return opcode.CMSG_BOOTME.write();;
     }
@@ -21117,6 +27055,9 @@ std::vector<unsigned char> write_opcode(const ClientOpcode& opcode) {
     if (opcode.opcode == ClientOpcode::Opcode::MSG_MOVE_SET_PITCH) {
         return opcode.MSG_MOVE_SET_PITCH.write();;
     }
+    if (opcode.opcode == ClientOpcode::Opcode::MSG_MOVE_WORLDPORT_ACK) {
+        return opcode.MSG_MOVE_WORLDPORT_ACK.write_cmsg();;
+    }
     if (opcode.opcode == ClientOpcode::Opcode::CMSG_MOVE_SET_RAW_POSITION) {
         return opcode.CMSG_MOVE_SET_RAW_POSITION.write();;
     }
@@ -21279,6 +27220,9 @@ std::vector<unsigned char> write_opcode(const ClientOpcode& opcode) {
     if (opcode.opcode == ClientOpcode::Opcode::CMSG_MOUNTSPECIAL_ANIM) {
         return opcode.CMSG_MOUNTSPECIAL_ANIM.write();;
     }
+    if (opcode.opcode == ClientOpcode::Opcode::CMSG_PET_SET_ACTION) {
+        return opcode.CMSG_PET_SET_ACTION.write();;
+    }
     if (opcode.opcode == ClientOpcode::Opcode::CMSG_PET_ACTION) {
         return opcode.CMSG_PET_ACTION.write();;
     }
@@ -21290,6 +27234,9 @@ std::vector<unsigned char> write_opcode(const ClientOpcode& opcode) {
     }
     if (opcode.opcode == ClientOpcode::Opcode::CMSG_GOSSIP_HELLO) {
         return opcode.CMSG_GOSSIP_HELLO.write();;
+    }
+    if (opcode.opcode == ClientOpcode::Opcode::CMSG_GOSSIP_SELECT_OPTION) {
+        return opcode.CMSG_GOSSIP_SELECT_OPTION.write();;
     }
     if (opcode.opcode == ClientOpcode::Opcode::CMSG_NPC_TEXT_QUERY) {
         return opcode.CMSG_NPC_TEXT_QUERY.write();;
@@ -21381,6 +27328,9 @@ std::vector<unsigned char> write_opcode(const ClientOpcode& opcode) {
     if (opcode.opcode == ClientOpcode::Opcode::CMSG_PETITION_SIGN) {
         return opcode.CMSG_PETITION_SIGN.write();;
     }
+    if (opcode.opcode == ClientOpcode::Opcode::MSG_PETITION_DECLINE) {
+        return opcode.MSG_PETITION_DECLINE.write_cmsg();;
+    }
     if (opcode.opcode == ClientOpcode::Opcode::CMSG_OFFER_PETITION) {
         return opcode.CMSG_OFFER_PETITION.write();;
     }
@@ -21419,6 +27369,9 @@ std::vector<unsigned char> write_opcode(const ClientOpcode& opcode) {
     }
     if (opcode.opcode == ClientOpcode::Opcode::MSG_SAVE_GUILD_EMBLEM) {
         return opcode.MSG_SAVE_GUILD_EMBLEM.write();;
+    }
+    if (opcode.opcode == ClientOpcode::Opcode::MSG_TABARDVENDOR_ACTIVATE) {
+        return opcode.MSG_TABARDVENDOR_ACTIVATE.write_cmsg();;
     }
     if (opcode.opcode == ClientOpcode::Opcode::CMSG_ZONEUPDATE) {
         return opcode.CMSG_ZONEUPDATE.write();;
@@ -21507,6 +27460,9 @@ std::vector<unsigned char> write_opcode(const ClientOpcode& opcode) {
     if (opcode.opcode == ClientOpcode::Opcode::CMSG_LEARN_TALENT) {
         return opcode.CMSG_LEARN_TALENT.write();;
     }
+    if (opcode.opcode == ClientOpcode::Opcode::CMSG_TOGGLE_PVP) {
+        return opcode.CMSG_TOGGLE_PVP.write();;
+    }
     if (opcode.opcode == ClientOpcode::Opcode::MSG_AUCTION_HELLO) {
         return opcode.MSG_AUCTION_HELLO.write();;
     }
@@ -21554,6 +27510,9 @@ std::vector<unsigned char> write_opcode(const ClientOpcode& opcode) {
     }
     if (opcode.opcode == ClientOpcode::Opcode::CMSG_STABLE_SWAP_PET) {
         return opcode.CMSG_STABLE_SWAP_PET.write();;
+    }
+    if (opcode.opcode == ClientOpcode::Opcode::MSG_QUEST_PUSH_RESULT) {
+        return opcode.MSG_QUEST_PUSH_RESULT.write_cmsg();;
     }
     if (opcode.opcode == ClientOpcode::Opcode::CMSG_REQUEST_PET_INFO) {
         return opcode.CMSG_REQUEST_PET_INFO.write();;
@@ -21615,6 +27574,9 @@ std::vector<unsigned char> write_opcode(const ClientOpcode& opcode) {
     if (opcode.opcode == ClientOpcode::Opcode::CMSG_SUMMON_RESPONSE) {
         return opcode.CMSG_SUMMON_RESPONSE.write();;
     }
+    if (opcode.opcode == ClientOpcode::Opcode::MSG_MOVE_WATER_WALK) {
+        return opcode.MSG_MOVE_WATER_WALK.write_cmsg();;
+    }
     if (opcode.opcode == ClientOpcode::Opcode::CMSG_SELF_RES) {
         return opcode.CMSG_SELF_RES.write();;
     }
@@ -21626,6 +27588,9 @@ std::vector<unsigned char> write_opcode(const ClientOpcode& opcode) {
     }
     if (opcode.opcode == ClientOpcode::Opcode::CMSG_SET_ACTIONBAR_TOGGLES) {
         return opcode.CMSG_SET_ACTIONBAR_TOGGLES.write();;
+    }
+    if (opcode.opcode == ClientOpcode::Opcode::MSG_PETITION_RENAME) {
+        return opcode.MSG_PETITION_RENAME.write_cmsg();;
     }
     if (opcode.opcode == ClientOpcode::Opcode::CMSG_ITEM_NAME_QUERY) {
         return opcode.CMSG_ITEM_NAME_QUERY.write();;
@@ -21723,6 +27688,9 @@ std::vector<unsigned char> write_opcode(const ClientOpcode& opcode) {
     if (opcode.opcode == ClientOpcode::Opcode::MSG_RAID_TARGET_UPDATE) {
         return opcode.MSG_RAID_TARGET_UPDATE.write();;
     }
+    if (opcode.opcode == ClientOpcode::Opcode::MSG_RAID_READY_CHECK) {
+        return opcode.MSG_RAID_READY_CHECK.write();;
+    }
     if (opcode.opcode == ClientOpcode::Opcode::CMSG_GMSURVEY_SUBMIT) {
         return opcode.CMSG_GMSURVEY_SUBMIT.write();;
     }
@@ -21730,8 +27698,8 @@ std::vector<unsigned char> write_opcode(const ClientOpcode& opcode) {
     return {}; /* unreachable */
 }
 
-ClientOpcode read_client_opcode(Reader& reader) {
-    const uint16_t _size = reader.read_u16();
+WOW_WORLD_MESSAGES_CPP_EXPORT ClientOpcode read_client_opcode(Reader& reader) {
+    const uint16_t _size = reader.read_u16_be();
     const uint32_t opcode = reader.read_u32();
 
     ClientOpcode op;
@@ -22006,6 +27974,9 @@ ClientOpcode read_client_opcode(Reader& reader) {
     if (opcode == static_cast<uint32_t>(ClientOpcode::Opcode::MSG_MOVE_SET_PITCH)) {
         return ClientOpcode(::wow_world_messages::vanilla::MSG_MOVE_SET_PITCH_Client_read(reader));
     }
+    if (opcode == static_cast<uint32_t>(ClientOpcode::Opcode::MSG_MOVE_WORLDPORT_ACK)) {
+        return ClientOpcode(::wow_world_messages::vanilla::MSG_MOVE_WORLDPORT_ACK{});
+    }
     if (opcode == static_cast<uint32_t>(ClientOpcode::Opcode::CMSG_MOVE_SET_RAW_POSITION)) {
         return ClientOpcode(::wow_world_messages::vanilla::CMSG_MOVE_SET_RAW_POSITION_read(reader));
     }
@@ -22168,6 +28139,9 @@ ClientOpcode read_client_opcode(Reader& reader) {
     if (opcode == static_cast<uint32_t>(ClientOpcode::Opcode::CMSG_MOUNTSPECIAL_ANIM)) {
         return ClientOpcode(::wow_world_messages::vanilla::CMSG_MOUNTSPECIAL_ANIM{});
     }
+    if (opcode == static_cast<uint32_t>(ClientOpcode::Opcode::CMSG_PET_SET_ACTION)) {
+        return ClientOpcode(::wow_world_messages::vanilla::CMSG_PET_SET_ACTION_read(reader, _size - 4));
+    }
     if (opcode == static_cast<uint32_t>(ClientOpcode::Opcode::CMSG_PET_ACTION)) {
         return ClientOpcode(::wow_world_messages::vanilla::CMSG_PET_ACTION_read(reader));
     }
@@ -22179,6 +28153,9 @@ ClientOpcode read_client_opcode(Reader& reader) {
     }
     if (opcode == static_cast<uint32_t>(ClientOpcode::Opcode::CMSG_GOSSIP_HELLO)) {
         return ClientOpcode(::wow_world_messages::vanilla::CMSG_GOSSIP_HELLO_read(reader));
+    }
+    if (opcode == static_cast<uint32_t>(ClientOpcode::Opcode::CMSG_GOSSIP_SELECT_OPTION)) {
+        return ClientOpcode(::wow_world_messages::vanilla::CMSG_GOSSIP_SELECT_OPTION_read(reader, _size - 4));
     }
     if (opcode == static_cast<uint32_t>(ClientOpcode::Opcode::CMSG_NPC_TEXT_QUERY)) {
         return ClientOpcode(::wow_world_messages::vanilla::CMSG_NPC_TEXT_QUERY_read(reader));
@@ -22270,6 +28247,9 @@ ClientOpcode read_client_opcode(Reader& reader) {
     if (opcode == static_cast<uint32_t>(ClientOpcode::Opcode::CMSG_PETITION_SIGN)) {
         return ClientOpcode(::wow_world_messages::vanilla::CMSG_PETITION_SIGN_read(reader));
     }
+    if (opcode == static_cast<uint32_t>(ClientOpcode::Opcode::MSG_PETITION_DECLINE)) {
+        return ClientOpcode(::wow_world_messages::vanilla::MSG_PETITION_DECLINE_read(reader));
+    }
     if (opcode == static_cast<uint32_t>(ClientOpcode::Opcode::CMSG_OFFER_PETITION)) {
         return ClientOpcode(::wow_world_messages::vanilla::CMSG_OFFER_PETITION_read(reader));
     }
@@ -22308,6 +28288,9 @@ ClientOpcode read_client_opcode(Reader& reader) {
     }
     if (opcode == static_cast<uint32_t>(ClientOpcode::Opcode::MSG_SAVE_GUILD_EMBLEM)) {
         return ClientOpcode(::wow_world_messages::vanilla::MSG_SAVE_GUILD_EMBLEM_Client_read(reader));
+    }
+    if (opcode == static_cast<uint32_t>(ClientOpcode::Opcode::MSG_TABARDVENDOR_ACTIVATE)) {
+        return ClientOpcode(::wow_world_messages::vanilla::MSG_TABARDVENDOR_ACTIVATE_read(reader));
     }
     if (opcode == static_cast<uint32_t>(ClientOpcode::Opcode::CMSG_ZONEUPDATE)) {
         return ClientOpcode(::wow_world_messages::vanilla::CMSG_ZONEUPDATE_read(reader));
@@ -22396,6 +28379,9 @@ ClientOpcode read_client_opcode(Reader& reader) {
     if (opcode == static_cast<uint32_t>(ClientOpcode::Opcode::CMSG_LEARN_TALENT)) {
         return ClientOpcode(::wow_world_messages::vanilla::CMSG_LEARN_TALENT_read(reader));
     }
+    if (opcode == static_cast<uint32_t>(ClientOpcode::Opcode::CMSG_TOGGLE_PVP)) {
+        return ClientOpcode(::wow_world_messages::vanilla::CMSG_TOGGLE_PVP_read(reader, _size - 4));
+    }
     if (opcode == static_cast<uint32_t>(ClientOpcode::Opcode::MSG_AUCTION_HELLO)) {
         return ClientOpcode(::wow_world_messages::vanilla::MSG_AUCTION_HELLO_Client_read(reader));
     }
@@ -22443,6 +28429,9 @@ ClientOpcode read_client_opcode(Reader& reader) {
     }
     if (opcode == static_cast<uint32_t>(ClientOpcode::Opcode::CMSG_STABLE_SWAP_PET)) {
         return ClientOpcode(::wow_world_messages::vanilla::CMSG_STABLE_SWAP_PET_read(reader));
+    }
+    if (opcode == static_cast<uint32_t>(ClientOpcode::Opcode::MSG_QUEST_PUSH_RESULT)) {
+        return ClientOpcode(::wow_world_messages::vanilla::MSG_QUEST_PUSH_RESULT_read(reader));
     }
     if (opcode == static_cast<uint32_t>(ClientOpcode::Opcode::CMSG_REQUEST_PET_INFO)) {
         return ClientOpcode(::wow_world_messages::vanilla::CMSG_REQUEST_PET_INFO{});
@@ -22504,6 +28493,9 @@ ClientOpcode read_client_opcode(Reader& reader) {
     if (opcode == static_cast<uint32_t>(ClientOpcode::Opcode::CMSG_SUMMON_RESPONSE)) {
         return ClientOpcode(::wow_world_messages::vanilla::CMSG_SUMMON_RESPONSE_read(reader));
     }
+    if (opcode == static_cast<uint32_t>(ClientOpcode::Opcode::MSG_MOVE_WATER_WALK)) {
+        return ClientOpcode(::wow_world_messages::vanilla::MSG_MOVE_WATER_WALK_read(reader));
+    }
     if (opcode == static_cast<uint32_t>(ClientOpcode::Opcode::CMSG_SELF_RES)) {
         return ClientOpcode(::wow_world_messages::vanilla::CMSG_SELF_RES{});
     }
@@ -22515,6 +28507,9 @@ ClientOpcode read_client_opcode(Reader& reader) {
     }
     if (opcode == static_cast<uint32_t>(ClientOpcode::Opcode::CMSG_SET_ACTIONBAR_TOGGLES)) {
         return ClientOpcode(::wow_world_messages::vanilla::CMSG_SET_ACTIONBAR_TOGGLES_read(reader));
+    }
+    if (opcode == static_cast<uint32_t>(ClientOpcode::Opcode::MSG_PETITION_RENAME)) {
+        return ClientOpcode(::wow_world_messages::vanilla::MSG_PETITION_RENAME_read(reader));
     }
     if (opcode == static_cast<uint32_t>(ClientOpcode::Opcode::CMSG_ITEM_NAME_QUERY)) {
         return ClientOpcode(::wow_world_messages::vanilla::CMSG_ITEM_NAME_QUERY_read(reader));
@@ -22612,13 +28607,5585 @@ ClientOpcode read_client_opcode(Reader& reader) {
     if (opcode == static_cast<uint32_t>(ClientOpcode::Opcode::MSG_RAID_TARGET_UPDATE)) {
         return ClientOpcode(::wow_world_messages::vanilla::MSG_RAID_TARGET_UPDATE_Client_read(reader));
     }
+    if (opcode == static_cast<uint32_t>(ClientOpcode::Opcode::MSG_RAID_READY_CHECK)) {
+        return ClientOpcode(::wow_world_messages::vanilla::MSG_RAID_READY_CHECK_Client_read(reader, _size - 4));
+    }
     if (opcode == static_cast<uint32_t>(ClientOpcode::Opcode::CMSG_GMSURVEY_SUBMIT)) {
         return ClientOpcode(::wow_world_messages::vanilla::CMSG_GMSURVEY_SUBMIT_read(reader));
     }
 
     return op;
 }
-std::vector<unsigned char> write_opcode(const ServerOpcode& opcode) {
+template <>
+vanilla::SMSG_CHAR_CREATE* ServerOpcode::get_if<SMSG_CHAR_CREATE>() {
+    if (opcode == Opcode::SMSG_CHAR_CREATE) {
+        return &SMSG_CHAR_CREATE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_CHAR_CREATE& ServerOpcode::get<SMSG_CHAR_CREATE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_CHAR_CREATE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_CHAR_ENUM* ServerOpcode::get_if<SMSG_CHAR_ENUM>() {
+    if (opcode == Opcode::SMSG_CHAR_ENUM) {
+        return &SMSG_CHAR_ENUM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_CHAR_ENUM& ServerOpcode::get<SMSG_CHAR_ENUM>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_CHAR_ENUM>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_CHAR_DELETE* ServerOpcode::get_if<SMSG_CHAR_DELETE>() {
+    if (opcode == Opcode::SMSG_CHAR_DELETE) {
+        return &SMSG_CHAR_DELETE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_CHAR_DELETE& ServerOpcode::get<SMSG_CHAR_DELETE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_CHAR_DELETE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_NEW_WORLD* ServerOpcode::get_if<SMSG_NEW_WORLD>() {
+    if (opcode == Opcode::SMSG_NEW_WORLD) {
+        return &SMSG_NEW_WORLD;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_NEW_WORLD& ServerOpcode::get<SMSG_NEW_WORLD>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_NEW_WORLD>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_TRANSFER_PENDING* ServerOpcode::get_if<SMSG_TRANSFER_PENDING>() {
+    if (opcode == Opcode::SMSG_TRANSFER_PENDING) {
+        return &SMSG_TRANSFER_PENDING;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_TRANSFER_PENDING& ServerOpcode::get<SMSG_TRANSFER_PENDING>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_TRANSFER_PENDING>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_TRANSFER_ABORTED* ServerOpcode::get_if<SMSG_TRANSFER_ABORTED>() {
+    if (opcode == Opcode::SMSG_TRANSFER_ABORTED) {
+        return &SMSG_TRANSFER_ABORTED;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_TRANSFER_ABORTED& ServerOpcode::get<SMSG_TRANSFER_ABORTED>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_TRANSFER_ABORTED>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_CHARACTER_LOGIN_FAILED* ServerOpcode::get_if<SMSG_CHARACTER_LOGIN_FAILED>() {
+    if (opcode == Opcode::SMSG_CHARACTER_LOGIN_FAILED) {
+        return &SMSG_CHARACTER_LOGIN_FAILED;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_CHARACTER_LOGIN_FAILED& ServerOpcode::get<SMSG_CHARACTER_LOGIN_FAILED>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_CHARACTER_LOGIN_FAILED>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_LOGIN_SETTIMESPEED* ServerOpcode::get_if<SMSG_LOGIN_SETTIMESPEED>() {
+    if (opcode == Opcode::SMSG_LOGIN_SETTIMESPEED) {
+        return &SMSG_LOGIN_SETTIMESPEED;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_LOGIN_SETTIMESPEED& ServerOpcode::get<SMSG_LOGIN_SETTIMESPEED>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_LOGIN_SETTIMESPEED>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_LOGOUT_RESPONSE* ServerOpcode::get_if<SMSG_LOGOUT_RESPONSE>() {
+    if (opcode == Opcode::SMSG_LOGOUT_RESPONSE) {
+        return &SMSG_LOGOUT_RESPONSE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_LOGOUT_RESPONSE& ServerOpcode::get<SMSG_LOGOUT_RESPONSE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_LOGOUT_RESPONSE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_LOGOUT_COMPLETE* ServerOpcode::get_if<SMSG_LOGOUT_COMPLETE>() {
+    if (opcode == Opcode::SMSG_LOGOUT_COMPLETE) {
+        return &SMSG_LOGOUT_COMPLETE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_LOGOUT_COMPLETE& ServerOpcode::get<SMSG_LOGOUT_COMPLETE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_LOGOUT_COMPLETE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_LOGOUT_CANCEL_ACK* ServerOpcode::get_if<SMSG_LOGOUT_CANCEL_ACK>() {
+    if (opcode == Opcode::SMSG_LOGOUT_CANCEL_ACK) {
+        return &SMSG_LOGOUT_CANCEL_ACK;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_LOGOUT_CANCEL_ACK& ServerOpcode::get<SMSG_LOGOUT_CANCEL_ACK>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_LOGOUT_CANCEL_ACK>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_NAME_QUERY_RESPONSE* ServerOpcode::get_if<SMSG_NAME_QUERY_RESPONSE>() {
+    if (opcode == Opcode::SMSG_NAME_QUERY_RESPONSE) {
+        return &SMSG_NAME_QUERY_RESPONSE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_NAME_QUERY_RESPONSE& ServerOpcode::get<SMSG_NAME_QUERY_RESPONSE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_NAME_QUERY_RESPONSE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_PET_NAME_QUERY_RESPONSE* ServerOpcode::get_if<SMSG_PET_NAME_QUERY_RESPONSE>() {
+    if (opcode == Opcode::SMSG_PET_NAME_QUERY_RESPONSE) {
+        return &SMSG_PET_NAME_QUERY_RESPONSE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_PET_NAME_QUERY_RESPONSE& ServerOpcode::get<SMSG_PET_NAME_QUERY_RESPONSE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_PET_NAME_QUERY_RESPONSE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_GUILD_QUERY_RESPONSE* ServerOpcode::get_if<SMSG_GUILD_QUERY_RESPONSE>() {
+    if (opcode == Opcode::SMSG_GUILD_QUERY_RESPONSE) {
+        return &SMSG_GUILD_QUERY_RESPONSE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_GUILD_QUERY_RESPONSE& ServerOpcode::get<SMSG_GUILD_QUERY_RESPONSE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_GUILD_QUERY_RESPONSE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_ITEM_QUERY_SINGLE_RESPONSE* ServerOpcode::get_if<SMSG_ITEM_QUERY_SINGLE_RESPONSE>() {
+    if (opcode == Opcode::SMSG_ITEM_QUERY_SINGLE_RESPONSE) {
+        return &SMSG_ITEM_QUERY_SINGLE_RESPONSE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_ITEM_QUERY_SINGLE_RESPONSE& ServerOpcode::get<SMSG_ITEM_QUERY_SINGLE_RESPONSE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_ITEM_QUERY_SINGLE_RESPONSE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_PAGE_TEXT_QUERY_RESPONSE* ServerOpcode::get_if<SMSG_PAGE_TEXT_QUERY_RESPONSE>() {
+    if (opcode == Opcode::SMSG_PAGE_TEXT_QUERY_RESPONSE) {
+        return &SMSG_PAGE_TEXT_QUERY_RESPONSE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_PAGE_TEXT_QUERY_RESPONSE& ServerOpcode::get<SMSG_PAGE_TEXT_QUERY_RESPONSE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_PAGE_TEXT_QUERY_RESPONSE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_QUEST_QUERY_RESPONSE* ServerOpcode::get_if<SMSG_QUEST_QUERY_RESPONSE>() {
+    if (opcode == Opcode::SMSG_QUEST_QUERY_RESPONSE) {
+        return &SMSG_QUEST_QUERY_RESPONSE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_QUEST_QUERY_RESPONSE& ServerOpcode::get<SMSG_QUEST_QUERY_RESPONSE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_QUEST_QUERY_RESPONSE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_GAMEOBJECT_QUERY_RESPONSE* ServerOpcode::get_if<SMSG_GAMEOBJECT_QUERY_RESPONSE>() {
+    if (opcode == Opcode::SMSG_GAMEOBJECT_QUERY_RESPONSE) {
+        return &SMSG_GAMEOBJECT_QUERY_RESPONSE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_GAMEOBJECT_QUERY_RESPONSE& ServerOpcode::get<SMSG_GAMEOBJECT_QUERY_RESPONSE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_GAMEOBJECT_QUERY_RESPONSE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_CREATURE_QUERY_RESPONSE* ServerOpcode::get_if<SMSG_CREATURE_QUERY_RESPONSE>() {
+    if (opcode == Opcode::SMSG_CREATURE_QUERY_RESPONSE) {
+        return &SMSG_CREATURE_QUERY_RESPONSE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_CREATURE_QUERY_RESPONSE& ServerOpcode::get<SMSG_CREATURE_QUERY_RESPONSE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_CREATURE_QUERY_RESPONSE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_WHO* ServerOpcode::get_if<SMSG_WHO>() {
+    if (opcode == Opcode::SMSG_WHO) {
+        return &SMSG_WHO;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_WHO& ServerOpcode::get<SMSG_WHO>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_WHO>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_WHOIS* ServerOpcode::get_if<SMSG_WHOIS>() {
+    if (opcode == Opcode::SMSG_WHOIS) {
+        return &SMSG_WHOIS;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_WHOIS& ServerOpcode::get<SMSG_WHOIS>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_WHOIS>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_FRIEND_LIST* ServerOpcode::get_if<SMSG_FRIEND_LIST>() {
+    if (opcode == Opcode::SMSG_FRIEND_LIST) {
+        return &SMSG_FRIEND_LIST;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_FRIEND_LIST& ServerOpcode::get<SMSG_FRIEND_LIST>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_FRIEND_LIST>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_FRIEND_STATUS* ServerOpcode::get_if<SMSG_FRIEND_STATUS>() {
+    if (opcode == Opcode::SMSG_FRIEND_STATUS) {
+        return &SMSG_FRIEND_STATUS;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_FRIEND_STATUS& ServerOpcode::get<SMSG_FRIEND_STATUS>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_FRIEND_STATUS>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_IGNORE_LIST* ServerOpcode::get_if<SMSG_IGNORE_LIST>() {
+    if (opcode == Opcode::SMSG_IGNORE_LIST) {
+        return &SMSG_IGNORE_LIST;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_IGNORE_LIST& ServerOpcode::get<SMSG_IGNORE_LIST>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_IGNORE_LIST>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_GROUP_INVITE* ServerOpcode::get_if<SMSG_GROUP_INVITE>() {
+    if (opcode == Opcode::SMSG_GROUP_INVITE) {
+        return &SMSG_GROUP_INVITE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_GROUP_INVITE& ServerOpcode::get<SMSG_GROUP_INVITE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_GROUP_INVITE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_GROUP_DECLINE* ServerOpcode::get_if<SMSG_GROUP_DECLINE>() {
+    if (opcode == Opcode::SMSG_GROUP_DECLINE) {
+        return &SMSG_GROUP_DECLINE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_GROUP_DECLINE& ServerOpcode::get<SMSG_GROUP_DECLINE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_GROUP_DECLINE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_GROUP_UNINVITE* ServerOpcode::get_if<SMSG_GROUP_UNINVITE>() {
+    if (opcode == Opcode::SMSG_GROUP_UNINVITE) {
+        return &SMSG_GROUP_UNINVITE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_GROUP_UNINVITE& ServerOpcode::get<SMSG_GROUP_UNINVITE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_GROUP_UNINVITE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_GROUP_SET_LEADER* ServerOpcode::get_if<SMSG_GROUP_SET_LEADER>() {
+    if (opcode == Opcode::SMSG_GROUP_SET_LEADER) {
+        return &SMSG_GROUP_SET_LEADER;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_GROUP_SET_LEADER& ServerOpcode::get<SMSG_GROUP_SET_LEADER>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_GROUP_SET_LEADER>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_GROUP_DESTROYED* ServerOpcode::get_if<SMSG_GROUP_DESTROYED>() {
+    if (opcode == Opcode::SMSG_GROUP_DESTROYED) {
+        return &SMSG_GROUP_DESTROYED;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_GROUP_DESTROYED& ServerOpcode::get<SMSG_GROUP_DESTROYED>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_GROUP_DESTROYED>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_GROUP_LIST* ServerOpcode::get_if<SMSG_GROUP_LIST>() {
+    if (opcode == Opcode::SMSG_GROUP_LIST) {
+        return &SMSG_GROUP_LIST;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_GROUP_LIST& ServerOpcode::get<SMSG_GROUP_LIST>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_GROUP_LIST>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_PARTY_MEMBER_STATS* ServerOpcode::get_if<SMSG_PARTY_MEMBER_STATS>() {
+    if (opcode == Opcode::SMSG_PARTY_MEMBER_STATS) {
+        return &SMSG_PARTY_MEMBER_STATS;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_PARTY_MEMBER_STATS& ServerOpcode::get<SMSG_PARTY_MEMBER_STATS>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_PARTY_MEMBER_STATS>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_PARTY_COMMAND_RESULT* ServerOpcode::get_if<SMSG_PARTY_COMMAND_RESULT>() {
+    if (opcode == Opcode::SMSG_PARTY_COMMAND_RESULT) {
+        return &SMSG_PARTY_COMMAND_RESULT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_PARTY_COMMAND_RESULT& ServerOpcode::get<SMSG_PARTY_COMMAND_RESULT>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_PARTY_COMMAND_RESULT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_GUILD_INVITE* ServerOpcode::get_if<SMSG_GUILD_INVITE>() {
+    if (opcode == Opcode::SMSG_GUILD_INVITE) {
+        return &SMSG_GUILD_INVITE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_GUILD_INVITE& ServerOpcode::get<SMSG_GUILD_INVITE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_GUILD_INVITE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_GUILD_INFO* ServerOpcode::get_if<SMSG_GUILD_INFO>() {
+    if (opcode == Opcode::SMSG_GUILD_INFO) {
+        return &SMSG_GUILD_INFO;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_GUILD_INFO& ServerOpcode::get<SMSG_GUILD_INFO>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_GUILD_INFO>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_GUILD_ROSTER* ServerOpcode::get_if<SMSG_GUILD_ROSTER>() {
+    if (opcode == Opcode::SMSG_GUILD_ROSTER) {
+        return &SMSG_GUILD_ROSTER;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_GUILD_ROSTER& ServerOpcode::get<SMSG_GUILD_ROSTER>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_GUILD_ROSTER>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_GUILD_EVENT* ServerOpcode::get_if<SMSG_GUILD_EVENT>() {
+    if (opcode == Opcode::SMSG_GUILD_EVENT) {
+        return &SMSG_GUILD_EVENT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_GUILD_EVENT& ServerOpcode::get<SMSG_GUILD_EVENT>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_GUILD_EVENT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_GUILD_COMMAND_RESULT* ServerOpcode::get_if<SMSG_GUILD_COMMAND_RESULT>() {
+    if (opcode == Opcode::SMSG_GUILD_COMMAND_RESULT) {
+        return &SMSG_GUILD_COMMAND_RESULT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_GUILD_COMMAND_RESULT& ServerOpcode::get<SMSG_GUILD_COMMAND_RESULT>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_GUILD_COMMAND_RESULT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_MESSAGECHAT* ServerOpcode::get_if<SMSG_MESSAGECHAT>() {
+    if (opcode == Opcode::SMSG_MESSAGECHAT) {
+        return &SMSG_MESSAGECHAT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_MESSAGECHAT& ServerOpcode::get<SMSG_MESSAGECHAT>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_MESSAGECHAT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_CHANNEL_NOTIFY* ServerOpcode::get_if<SMSG_CHANNEL_NOTIFY>() {
+    if (opcode == Opcode::SMSG_CHANNEL_NOTIFY) {
+        return &SMSG_CHANNEL_NOTIFY;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_CHANNEL_NOTIFY& ServerOpcode::get<SMSG_CHANNEL_NOTIFY>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_CHANNEL_NOTIFY>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_CHANNEL_LIST* ServerOpcode::get_if<SMSG_CHANNEL_LIST>() {
+    if (opcode == Opcode::SMSG_CHANNEL_LIST) {
+        return &SMSG_CHANNEL_LIST;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_CHANNEL_LIST& ServerOpcode::get<SMSG_CHANNEL_LIST>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_CHANNEL_LIST>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_UPDATE_OBJECT* ServerOpcode::get_if<SMSG_UPDATE_OBJECT>() {
+    if (opcode == Opcode::SMSG_UPDATE_OBJECT) {
+        return &SMSG_UPDATE_OBJECT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_UPDATE_OBJECT& ServerOpcode::get<SMSG_UPDATE_OBJECT>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_UPDATE_OBJECT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_DESTROY_OBJECT* ServerOpcode::get_if<SMSG_DESTROY_OBJECT>() {
+    if (opcode == Opcode::SMSG_DESTROY_OBJECT) {
+        return &SMSG_DESTROY_OBJECT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_DESTROY_OBJECT& ServerOpcode::get<SMSG_DESTROY_OBJECT>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_DESTROY_OBJECT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_READ_ITEM_OK* ServerOpcode::get_if<SMSG_READ_ITEM_OK>() {
+    if (opcode == Opcode::SMSG_READ_ITEM_OK) {
+        return &SMSG_READ_ITEM_OK;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_READ_ITEM_OK& ServerOpcode::get<SMSG_READ_ITEM_OK>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_READ_ITEM_OK>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_READ_ITEM_FAILED* ServerOpcode::get_if<SMSG_READ_ITEM_FAILED>() {
+    if (opcode == Opcode::SMSG_READ_ITEM_FAILED) {
+        return &SMSG_READ_ITEM_FAILED;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_READ_ITEM_FAILED& ServerOpcode::get<SMSG_READ_ITEM_FAILED>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_READ_ITEM_FAILED>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_ITEM_COOLDOWN* ServerOpcode::get_if<SMSG_ITEM_COOLDOWN>() {
+    if (opcode == Opcode::SMSG_ITEM_COOLDOWN) {
+        return &SMSG_ITEM_COOLDOWN;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_ITEM_COOLDOWN& ServerOpcode::get<SMSG_ITEM_COOLDOWN>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_ITEM_COOLDOWN>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_GAMEOBJECT_CUSTOM_ANIM* ServerOpcode::get_if<SMSG_GAMEOBJECT_CUSTOM_ANIM>() {
+    if (opcode == Opcode::SMSG_GAMEOBJECT_CUSTOM_ANIM) {
+        return &SMSG_GAMEOBJECT_CUSTOM_ANIM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_GAMEOBJECT_CUSTOM_ANIM& ServerOpcode::get<SMSG_GAMEOBJECT_CUSTOM_ANIM>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_GAMEOBJECT_CUSTOM_ANIM>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_START_FORWARD_Server* ServerOpcode::get_if<MSG_MOVE_START_FORWARD_Server>() {
+    if (opcode == Opcode::MSG_MOVE_START_FORWARD) {
+        return &MSG_MOVE_START_FORWARD;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_START_FORWARD_Server& ServerOpcode::get<MSG_MOVE_START_FORWARD_Server>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_START_FORWARD_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_START_BACKWARD_Server* ServerOpcode::get_if<MSG_MOVE_START_BACKWARD_Server>() {
+    if (opcode == Opcode::MSG_MOVE_START_BACKWARD) {
+        return &MSG_MOVE_START_BACKWARD;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_START_BACKWARD_Server& ServerOpcode::get<MSG_MOVE_START_BACKWARD_Server>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_START_BACKWARD_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_STOP_Server* ServerOpcode::get_if<MSG_MOVE_STOP_Server>() {
+    if (opcode == Opcode::MSG_MOVE_STOP) {
+        return &MSG_MOVE_STOP;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_STOP_Server& ServerOpcode::get<MSG_MOVE_STOP_Server>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_STOP_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_START_STRAFE_LEFT_Server* ServerOpcode::get_if<MSG_MOVE_START_STRAFE_LEFT_Server>() {
+    if (opcode == Opcode::MSG_MOVE_START_STRAFE_LEFT) {
+        return &MSG_MOVE_START_STRAFE_LEFT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_START_STRAFE_LEFT_Server& ServerOpcode::get<MSG_MOVE_START_STRAFE_LEFT_Server>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_START_STRAFE_LEFT_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_START_STRAFE_RIGHT_Server* ServerOpcode::get_if<MSG_MOVE_START_STRAFE_RIGHT_Server>() {
+    if (opcode == Opcode::MSG_MOVE_START_STRAFE_RIGHT) {
+        return &MSG_MOVE_START_STRAFE_RIGHT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_START_STRAFE_RIGHT_Server& ServerOpcode::get<MSG_MOVE_START_STRAFE_RIGHT_Server>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_START_STRAFE_RIGHT_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_STOP_STRAFE_Server* ServerOpcode::get_if<MSG_MOVE_STOP_STRAFE_Server>() {
+    if (opcode == Opcode::MSG_MOVE_STOP_STRAFE) {
+        return &MSG_MOVE_STOP_STRAFE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_STOP_STRAFE_Server& ServerOpcode::get<MSG_MOVE_STOP_STRAFE_Server>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_STOP_STRAFE_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_JUMP_Server* ServerOpcode::get_if<MSG_MOVE_JUMP_Server>() {
+    if (opcode == Opcode::MSG_MOVE_JUMP) {
+        return &MSG_MOVE_JUMP;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_JUMP_Server& ServerOpcode::get<MSG_MOVE_JUMP_Server>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_JUMP_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_START_TURN_LEFT_Server* ServerOpcode::get_if<MSG_MOVE_START_TURN_LEFT_Server>() {
+    if (opcode == Opcode::MSG_MOVE_START_TURN_LEFT) {
+        return &MSG_MOVE_START_TURN_LEFT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_START_TURN_LEFT_Server& ServerOpcode::get<MSG_MOVE_START_TURN_LEFT_Server>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_START_TURN_LEFT_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_START_TURN_RIGHT_Server* ServerOpcode::get_if<MSG_MOVE_START_TURN_RIGHT_Server>() {
+    if (opcode == Opcode::MSG_MOVE_START_TURN_RIGHT) {
+        return &MSG_MOVE_START_TURN_RIGHT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_START_TURN_RIGHT_Server& ServerOpcode::get<MSG_MOVE_START_TURN_RIGHT_Server>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_START_TURN_RIGHT_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_STOP_TURN_Server* ServerOpcode::get_if<MSG_MOVE_STOP_TURN_Server>() {
+    if (opcode == Opcode::MSG_MOVE_STOP_TURN) {
+        return &MSG_MOVE_STOP_TURN;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_STOP_TURN_Server& ServerOpcode::get<MSG_MOVE_STOP_TURN_Server>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_STOP_TURN_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_START_PITCH_UP_Server* ServerOpcode::get_if<MSG_MOVE_START_PITCH_UP_Server>() {
+    if (opcode == Opcode::MSG_MOVE_START_PITCH_UP) {
+        return &MSG_MOVE_START_PITCH_UP;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_START_PITCH_UP_Server& ServerOpcode::get<MSG_MOVE_START_PITCH_UP_Server>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_START_PITCH_UP_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_START_PITCH_DOWN_Server* ServerOpcode::get_if<MSG_MOVE_START_PITCH_DOWN_Server>() {
+    if (opcode == Opcode::MSG_MOVE_START_PITCH_DOWN) {
+        return &MSG_MOVE_START_PITCH_DOWN;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_START_PITCH_DOWN_Server& ServerOpcode::get<MSG_MOVE_START_PITCH_DOWN_Server>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_START_PITCH_DOWN_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_STOP_PITCH_Server* ServerOpcode::get_if<MSG_MOVE_STOP_PITCH_Server>() {
+    if (opcode == Opcode::MSG_MOVE_STOP_PITCH) {
+        return &MSG_MOVE_STOP_PITCH;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_STOP_PITCH_Server& ServerOpcode::get<MSG_MOVE_STOP_PITCH_Server>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_STOP_PITCH_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_SET_RUN_MODE_Server* ServerOpcode::get_if<MSG_MOVE_SET_RUN_MODE_Server>() {
+    if (opcode == Opcode::MSG_MOVE_SET_RUN_MODE) {
+        return &MSG_MOVE_SET_RUN_MODE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_SET_RUN_MODE_Server& ServerOpcode::get<MSG_MOVE_SET_RUN_MODE_Server>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_SET_RUN_MODE_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_SET_WALK_MODE_Server* ServerOpcode::get_if<MSG_MOVE_SET_WALK_MODE_Server>() {
+    if (opcode == Opcode::MSG_MOVE_SET_WALK_MODE) {
+        return &MSG_MOVE_SET_WALK_MODE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_SET_WALK_MODE_Server& ServerOpcode::get<MSG_MOVE_SET_WALK_MODE_Server>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_SET_WALK_MODE_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_TELEPORT_ACK_Server* ServerOpcode::get_if<MSG_MOVE_TELEPORT_ACK_Server>() {
+    if (opcode == Opcode::MSG_MOVE_TELEPORT_ACK) {
+        return &MSG_MOVE_TELEPORT_ACK;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_TELEPORT_ACK_Server& ServerOpcode::get<MSG_MOVE_TELEPORT_ACK_Server>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_TELEPORT_ACK_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_FALL_LAND_Server* ServerOpcode::get_if<MSG_MOVE_FALL_LAND_Server>() {
+    if (opcode == Opcode::MSG_MOVE_FALL_LAND) {
+        return &MSG_MOVE_FALL_LAND;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_FALL_LAND_Server& ServerOpcode::get<MSG_MOVE_FALL_LAND_Server>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_FALL_LAND_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_START_SWIM_Server* ServerOpcode::get_if<MSG_MOVE_START_SWIM_Server>() {
+    if (opcode == Opcode::MSG_MOVE_START_SWIM) {
+        return &MSG_MOVE_START_SWIM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_START_SWIM_Server& ServerOpcode::get<MSG_MOVE_START_SWIM_Server>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_START_SWIM_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_STOP_SWIM_Server* ServerOpcode::get_if<MSG_MOVE_STOP_SWIM_Server>() {
+    if (opcode == Opcode::MSG_MOVE_STOP_SWIM) {
+        return &MSG_MOVE_STOP_SWIM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_STOP_SWIM_Server& ServerOpcode::get<MSG_MOVE_STOP_SWIM_Server>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_STOP_SWIM_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_SET_FACING_Server* ServerOpcode::get_if<MSG_MOVE_SET_FACING_Server>() {
+    if (opcode == Opcode::MSG_MOVE_SET_FACING) {
+        return &MSG_MOVE_SET_FACING;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_SET_FACING_Server& ServerOpcode::get<MSG_MOVE_SET_FACING_Server>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_SET_FACING_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_SET_PITCH_Server* ServerOpcode::get_if<MSG_MOVE_SET_PITCH_Server>() {
+    if (opcode == Opcode::MSG_MOVE_SET_PITCH) {
+        return &MSG_MOVE_SET_PITCH;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_SET_PITCH_Server& ServerOpcode::get<MSG_MOVE_SET_PITCH_Server>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_SET_PITCH_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_WORLDPORT_ACK* ServerOpcode::get_if<MSG_MOVE_WORLDPORT_ACK>() {
+    if (opcode == Opcode::MSG_MOVE_WORLDPORT_ACK) {
+        return &MSG_MOVE_WORLDPORT_ACK;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_WORLDPORT_ACK& ServerOpcode::get<MSG_MOVE_WORLDPORT_ACK>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_WORLDPORT_ACK>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_MONSTER_MOVE* ServerOpcode::get_if<SMSG_MONSTER_MOVE>() {
+    if (opcode == Opcode::SMSG_MONSTER_MOVE) {
+        return &SMSG_MONSTER_MOVE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_MONSTER_MOVE& ServerOpcode::get<SMSG_MONSTER_MOVE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_MONSTER_MOVE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_MOVE_WATER_WALK* ServerOpcode::get_if<SMSG_MOVE_WATER_WALK>() {
+    if (opcode == Opcode::SMSG_MOVE_WATER_WALK) {
+        return &SMSG_MOVE_WATER_WALK;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_MOVE_WATER_WALK& ServerOpcode::get<SMSG_MOVE_WATER_WALK>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_MOVE_WATER_WALK>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_MOVE_LAND_WALK* ServerOpcode::get_if<SMSG_MOVE_LAND_WALK>() {
+    if (opcode == Opcode::SMSG_MOVE_LAND_WALK) {
+        return &SMSG_MOVE_LAND_WALK;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_MOVE_LAND_WALK& ServerOpcode::get<SMSG_MOVE_LAND_WALK>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_MOVE_LAND_WALK>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_FORCE_RUN_SPEED_CHANGE* ServerOpcode::get_if<SMSG_FORCE_RUN_SPEED_CHANGE>() {
+    if (opcode == Opcode::SMSG_FORCE_RUN_SPEED_CHANGE) {
+        return &SMSG_FORCE_RUN_SPEED_CHANGE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_FORCE_RUN_SPEED_CHANGE& ServerOpcode::get<SMSG_FORCE_RUN_SPEED_CHANGE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_FORCE_RUN_SPEED_CHANGE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_FORCE_RUN_BACK_SPEED_CHANGE* ServerOpcode::get_if<SMSG_FORCE_RUN_BACK_SPEED_CHANGE>() {
+    if (opcode == Opcode::SMSG_FORCE_RUN_BACK_SPEED_CHANGE) {
+        return &SMSG_FORCE_RUN_BACK_SPEED_CHANGE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_FORCE_RUN_BACK_SPEED_CHANGE& ServerOpcode::get<SMSG_FORCE_RUN_BACK_SPEED_CHANGE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_FORCE_RUN_BACK_SPEED_CHANGE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_FORCE_SWIM_SPEED_CHANGE* ServerOpcode::get_if<SMSG_FORCE_SWIM_SPEED_CHANGE>() {
+    if (opcode == Opcode::SMSG_FORCE_SWIM_SPEED_CHANGE) {
+        return &SMSG_FORCE_SWIM_SPEED_CHANGE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_FORCE_SWIM_SPEED_CHANGE& ServerOpcode::get<SMSG_FORCE_SWIM_SPEED_CHANGE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_FORCE_SWIM_SPEED_CHANGE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_FORCE_MOVE_ROOT* ServerOpcode::get_if<SMSG_FORCE_MOVE_ROOT>() {
+    if (opcode == Opcode::SMSG_FORCE_MOVE_ROOT) {
+        return &SMSG_FORCE_MOVE_ROOT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_FORCE_MOVE_ROOT& ServerOpcode::get<SMSG_FORCE_MOVE_ROOT>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_FORCE_MOVE_ROOT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_FORCE_MOVE_UNROOT* ServerOpcode::get_if<SMSG_FORCE_MOVE_UNROOT>() {
+    if (opcode == Opcode::SMSG_FORCE_MOVE_UNROOT) {
+        return &SMSG_FORCE_MOVE_UNROOT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_FORCE_MOVE_UNROOT& ServerOpcode::get<SMSG_FORCE_MOVE_UNROOT>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_FORCE_MOVE_UNROOT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_HEARTBEAT_Server* ServerOpcode::get_if<MSG_MOVE_HEARTBEAT_Server>() {
+    if (opcode == Opcode::MSG_MOVE_HEARTBEAT) {
+        return &MSG_MOVE_HEARTBEAT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_HEARTBEAT_Server& ServerOpcode::get<MSG_MOVE_HEARTBEAT_Server>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_HEARTBEAT_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_MOVE_KNOCK_BACK* ServerOpcode::get_if<SMSG_MOVE_KNOCK_BACK>() {
+    if (opcode == Opcode::SMSG_MOVE_KNOCK_BACK) {
+        return &SMSG_MOVE_KNOCK_BACK;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_MOVE_KNOCK_BACK& ServerOpcode::get<SMSG_MOVE_KNOCK_BACK>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_MOVE_KNOCK_BACK>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_MOVE_FEATHER_FALL* ServerOpcode::get_if<SMSG_MOVE_FEATHER_FALL>() {
+    if (opcode == Opcode::SMSG_MOVE_FEATHER_FALL) {
+        return &SMSG_MOVE_FEATHER_FALL;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_MOVE_FEATHER_FALL& ServerOpcode::get<SMSG_MOVE_FEATHER_FALL>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_MOVE_FEATHER_FALL>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_MOVE_NORMAL_FALL* ServerOpcode::get_if<SMSG_MOVE_NORMAL_FALL>() {
+    if (opcode == Opcode::SMSG_MOVE_NORMAL_FALL) {
+        return &SMSG_MOVE_NORMAL_FALL;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_MOVE_NORMAL_FALL& ServerOpcode::get<SMSG_MOVE_NORMAL_FALL>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_MOVE_NORMAL_FALL>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_MOVE_SET_HOVER* ServerOpcode::get_if<SMSG_MOVE_SET_HOVER>() {
+    if (opcode == Opcode::SMSG_MOVE_SET_HOVER) {
+        return &SMSG_MOVE_SET_HOVER;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_MOVE_SET_HOVER& ServerOpcode::get<SMSG_MOVE_SET_HOVER>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_MOVE_SET_HOVER>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_MOVE_UNSET_HOVER* ServerOpcode::get_if<SMSG_MOVE_UNSET_HOVER>() {
+    if (opcode == Opcode::SMSG_MOVE_UNSET_HOVER) {
+        return &SMSG_MOVE_UNSET_HOVER;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_MOVE_UNSET_HOVER& ServerOpcode::get<SMSG_MOVE_UNSET_HOVER>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_MOVE_UNSET_HOVER>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_TRIGGER_CINEMATIC* ServerOpcode::get_if<SMSG_TRIGGER_CINEMATIC>() {
+    if (opcode == Opcode::SMSG_TRIGGER_CINEMATIC) {
+        return &SMSG_TRIGGER_CINEMATIC;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_TRIGGER_CINEMATIC& ServerOpcode::get<SMSG_TRIGGER_CINEMATIC>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_TRIGGER_CINEMATIC>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_TUTORIAL_FLAGS* ServerOpcode::get_if<SMSG_TUTORIAL_FLAGS>() {
+    if (opcode == Opcode::SMSG_TUTORIAL_FLAGS) {
+        return &SMSG_TUTORIAL_FLAGS;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_TUTORIAL_FLAGS& ServerOpcode::get<SMSG_TUTORIAL_FLAGS>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_TUTORIAL_FLAGS>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_EMOTE* ServerOpcode::get_if<SMSG_EMOTE>() {
+    if (opcode == Opcode::SMSG_EMOTE) {
+        return &SMSG_EMOTE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_EMOTE& ServerOpcode::get<SMSG_EMOTE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_EMOTE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_TEXT_EMOTE* ServerOpcode::get_if<SMSG_TEXT_EMOTE>() {
+    if (opcode == Opcode::SMSG_TEXT_EMOTE) {
+        return &SMSG_TEXT_EMOTE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_TEXT_EMOTE& ServerOpcode::get<SMSG_TEXT_EMOTE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_TEXT_EMOTE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_INVENTORY_CHANGE_FAILURE* ServerOpcode::get_if<SMSG_INVENTORY_CHANGE_FAILURE>() {
+    if (opcode == Opcode::SMSG_INVENTORY_CHANGE_FAILURE) {
+        return &SMSG_INVENTORY_CHANGE_FAILURE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_INVENTORY_CHANGE_FAILURE& ServerOpcode::get<SMSG_INVENTORY_CHANGE_FAILURE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_INVENTORY_CHANGE_FAILURE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_OPEN_CONTAINER* ServerOpcode::get_if<SMSG_OPEN_CONTAINER>() {
+    if (opcode == Opcode::SMSG_OPEN_CONTAINER) {
+        return &SMSG_OPEN_CONTAINER;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_OPEN_CONTAINER& ServerOpcode::get<SMSG_OPEN_CONTAINER>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_OPEN_CONTAINER>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_INSPECT* ServerOpcode::get_if<SMSG_INSPECT>() {
+    if (opcode == Opcode::SMSG_INSPECT) {
+        return &SMSG_INSPECT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_INSPECT& ServerOpcode::get<SMSG_INSPECT>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_INSPECT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_TRADE_STATUS* ServerOpcode::get_if<SMSG_TRADE_STATUS>() {
+    if (opcode == Opcode::SMSG_TRADE_STATUS) {
+        return &SMSG_TRADE_STATUS;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_TRADE_STATUS& ServerOpcode::get<SMSG_TRADE_STATUS>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_TRADE_STATUS>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_TRADE_STATUS_EXTENDED* ServerOpcode::get_if<SMSG_TRADE_STATUS_EXTENDED>() {
+    if (opcode == Opcode::SMSG_TRADE_STATUS_EXTENDED) {
+        return &SMSG_TRADE_STATUS_EXTENDED;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_TRADE_STATUS_EXTENDED& ServerOpcode::get<SMSG_TRADE_STATUS_EXTENDED>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_TRADE_STATUS_EXTENDED>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_INITIALIZE_FACTIONS* ServerOpcode::get_if<SMSG_INITIALIZE_FACTIONS>() {
+    if (opcode == Opcode::SMSG_INITIALIZE_FACTIONS) {
+        return &SMSG_INITIALIZE_FACTIONS;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_INITIALIZE_FACTIONS& ServerOpcode::get<SMSG_INITIALIZE_FACTIONS>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_INITIALIZE_FACTIONS>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SET_FACTION_VISIBLE* ServerOpcode::get_if<SMSG_SET_FACTION_VISIBLE>() {
+    if (opcode == Opcode::SMSG_SET_FACTION_VISIBLE) {
+        return &SMSG_SET_FACTION_VISIBLE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SET_FACTION_VISIBLE& ServerOpcode::get<SMSG_SET_FACTION_VISIBLE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SET_FACTION_VISIBLE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SET_FACTION_STANDING* ServerOpcode::get_if<SMSG_SET_FACTION_STANDING>() {
+    if (opcode == Opcode::SMSG_SET_FACTION_STANDING) {
+        return &SMSG_SET_FACTION_STANDING;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SET_FACTION_STANDING& ServerOpcode::get<SMSG_SET_FACTION_STANDING>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SET_FACTION_STANDING>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SET_PROFICIENCY* ServerOpcode::get_if<SMSG_SET_PROFICIENCY>() {
+    if (opcode == Opcode::SMSG_SET_PROFICIENCY) {
+        return &SMSG_SET_PROFICIENCY;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SET_PROFICIENCY& ServerOpcode::get<SMSG_SET_PROFICIENCY>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SET_PROFICIENCY>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_ACTION_BUTTONS* ServerOpcode::get_if<SMSG_ACTION_BUTTONS>() {
+    if (opcode == Opcode::SMSG_ACTION_BUTTONS) {
+        return &SMSG_ACTION_BUTTONS;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_ACTION_BUTTONS& ServerOpcode::get<SMSG_ACTION_BUTTONS>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_ACTION_BUTTONS>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_INITIAL_SPELLS* ServerOpcode::get_if<SMSG_INITIAL_SPELLS>() {
+    if (opcode == Opcode::SMSG_INITIAL_SPELLS) {
+        return &SMSG_INITIAL_SPELLS;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_INITIAL_SPELLS& ServerOpcode::get<SMSG_INITIAL_SPELLS>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_INITIAL_SPELLS>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_LEARNED_SPELL* ServerOpcode::get_if<SMSG_LEARNED_SPELL>() {
+    if (opcode == Opcode::SMSG_LEARNED_SPELL) {
+        return &SMSG_LEARNED_SPELL;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_LEARNED_SPELL& ServerOpcode::get<SMSG_LEARNED_SPELL>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_LEARNED_SPELL>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SUPERCEDED_SPELL* ServerOpcode::get_if<SMSG_SUPERCEDED_SPELL>() {
+    if (opcode == Opcode::SMSG_SUPERCEDED_SPELL) {
+        return &SMSG_SUPERCEDED_SPELL;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SUPERCEDED_SPELL& ServerOpcode::get<SMSG_SUPERCEDED_SPELL>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SUPERCEDED_SPELL>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_CAST_RESULT* ServerOpcode::get_if<SMSG_CAST_RESULT>() {
+    if (opcode == Opcode::SMSG_CAST_RESULT) {
+        return &SMSG_CAST_RESULT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_CAST_RESULT& ServerOpcode::get<SMSG_CAST_RESULT>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_CAST_RESULT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SPELL_START* ServerOpcode::get_if<SMSG_SPELL_START>() {
+    if (opcode == Opcode::SMSG_SPELL_START) {
+        return &SMSG_SPELL_START;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SPELL_START& ServerOpcode::get<SMSG_SPELL_START>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SPELL_START>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SPELL_GO* ServerOpcode::get_if<SMSG_SPELL_GO>() {
+    if (opcode == Opcode::SMSG_SPELL_GO) {
+        return &SMSG_SPELL_GO;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SPELL_GO& ServerOpcode::get<SMSG_SPELL_GO>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SPELL_GO>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SPELL_FAILURE* ServerOpcode::get_if<SMSG_SPELL_FAILURE>() {
+    if (opcode == Opcode::SMSG_SPELL_FAILURE) {
+        return &SMSG_SPELL_FAILURE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SPELL_FAILURE& ServerOpcode::get<SMSG_SPELL_FAILURE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SPELL_FAILURE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SPELL_COOLDOWN* ServerOpcode::get_if<SMSG_SPELL_COOLDOWN>() {
+    if (opcode == Opcode::SMSG_SPELL_COOLDOWN) {
+        return &SMSG_SPELL_COOLDOWN;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SPELL_COOLDOWN& ServerOpcode::get<SMSG_SPELL_COOLDOWN>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SPELL_COOLDOWN>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_COOLDOWN_EVENT* ServerOpcode::get_if<SMSG_COOLDOWN_EVENT>() {
+    if (opcode == Opcode::SMSG_COOLDOWN_EVENT) {
+        return &SMSG_COOLDOWN_EVENT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_COOLDOWN_EVENT& ServerOpcode::get<SMSG_COOLDOWN_EVENT>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_COOLDOWN_EVENT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_UPDATE_AURA_DURATION* ServerOpcode::get_if<SMSG_UPDATE_AURA_DURATION>() {
+    if (opcode == Opcode::SMSG_UPDATE_AURA_DURATION) {
+        return &SMSG_UPDATE_AURA_DURATION;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_UPDATE_AURA_DURATION& ServerOpcode::get<SMSG_UPDATE_AURA_DURATION>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_UPDATE_AURA_DURATION>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_PET_CAST_FAILED* ServerOpcode::get_if<SMSG_PET_CAST_FAILED>() {
+    if (opcode == Opcode::SMSG_PET_CAST_FAILED) {
+        return &SMSG_PET_CAST_FAILED;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_PET_CAST_FAILED& ServerOpcode::get<SMSG_PET_CAST_FAILED>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_PET_CAST_FAILED>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_CHANNEL_START_Server* ServerOpcode::get_if<MSG_CHANNEL_START_Server>() {
+    if (opcode == Opcode::MSG_CHANNEL_START) {
+        return &MSG_CHANNEL_START;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_CHANNEL_START_Server& ServerOpcode::get<MSG_CHANNEL_START_Server>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_CHANNEL_START_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_CHANNEL_UPDATE_Server* ServerOpcode::get_if<MSG_CHANNEL_UPDATE_Server>() {
+    if (opcode == Opcode::MSG_CHANNEL_UPDATE) {
+        return &MSG_CHANNEL_UPDATE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_CHANNEL_UPDATE_Server& ServerOpcode::get<MSG_CHANNEL_UPDATE_Server>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_CHANNEL_UPDATE_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_AI_REACTION* ServerOpcode::get_if<SMSG_AI_REACTION>() {
+    if (opcode == Opcode::SMSG_AI_REACTION) {
+        return &SMSG_AI_REACTION;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_AI_REACTION& ServerOpcode::get<SMSG_AI_REACTION>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_AI_REACTION>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_ATTACKSTART* ServerOpcode::get_if<SMSG_ATTACKSTART>() {
+    if (opcode == Opcode::SMSG_ATTACKSTART) {
+        return &SMSG_ATTACKSTART;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_ATTACKSTART& ServerOpcode::get<SMSG_ATTACKSTART>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_ATTACKSTART>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_ATTACKSTOP* ServerOpcode::get_if<SMSG_ATTACKSTOP>() {
+    if (opcode == Opcode::SMSG_ATTACKSTOP) {
+        return &SMSG_ATTACKSTOP;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_ATTACKSTOP& ServerOpcode::get<SMSG_ATTACKSTOP>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_ATTACKSTOP>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_ATTACKSWING_NOTINRANGE* ServerOpcode::get_if<SMSG_ATTACKSWING_NOTINRANGE>() {
+    if (opcode == Opcode::SMSG_ATTACKSWING_NOTINRANGE) {
+        return &SMSG_ATTACKSWING_NOTINRANGE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_ATTACKSWING_NOTINRANGE& ServerOpcode::get<SMSG_ATTACKSWING_NOTINRANGE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_ATTACKSWING_NOTINRANGE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_ATTACKSWING_BADFACING* ServerOpcode::get_if<SMSG_ATTACKSWING_BADFACING>() {
+    if (opcode == Opcode::SMSG_ATTACKSWING_BADFACING) {
+        return &SMSG_ATTACKSWING_BADFACING;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_ATTACKSWING_BADFACING& ServerOpcode::get<SMSG_ATTACKSWING_BADFACING>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_ATTACKSWING_BADFACING>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_ATTACKSWING_NOTSTANDING* ServerOpcode::get_if<SMSG_ATTACKSWING_NOTSTANDING>() {
+    if (opcode == Opcode::SMSG_ATTACKSWING_NOTSTANDING) {
+        return &SMSG_ATTACKSWING_NOTSTANDING;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_ATTACKSWING_NOTSTANDING& ServerOpcode::get<SMSG_ATTACKSWING_NOTSTANDING>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_ATTACKSWING_NOTSTANDING>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_ATTACKSWING_DEADTARGET* ServerOpcode::get_if<SMSG_ATTACKSWING_DEADTARGET>() {
+    if (opcode == Opcode::SMSG_ATTACKSWING_DEADTARGET) {
+        return &SMSG_ATTACKSWING_DEADTARGET;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_ATTACKSWING_DEADTARGET& ServerOpcode::get<SMSG_ATTACKSWING_DEADTARGET>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_ATTACKSWING_DEADTARGET>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_ATTACKSWING_CANT_ATTACK* ServerOpcode::get_if<SMSG_ATTACKSWING_CANT_ATTACK>() {
+    if (opcode == Opcode::SMSG_ATTACKSWING_CANT_ATTACK) {
+        return &SMSG_ATTACKSWING_CANT_ATTACK;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_ATTACKSWING_CANT_ATTACK& ServerOpcode::get<SMSG_ATTACKSWING_CANT_ATTACK>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_ATTACKSWING_CANT_ATTACK>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_ATTACKERSTATEUPDATE* ServerOpcode::get_if<SMSG_ATTACKERSTATEUPDATE>() {
+    if (opcode == Opcode::SMSG_ATTACKERSTATEUPDATE) {
+        return &SMSG_ATTACKERSTATEUPDATE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_ATTACKERSTATEUPDATE& ServerOpcode::get<SMSG_ATTACKERSTATEUPDATE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_ATTACKERSTATEUPDATE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_CANCEL_COMBAT* ServerOpcode::get_if<SMSG_CANCEL_COMBAT>() {
+    if (opcode == Opcode::SMSG_CANCEL_COMBAT) {
+        return &SMSG_CANCEL_COMBAT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_CANCEL_COMBAT& ServerOpcode::get<SMSG_CANCEL_COMBAT>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_CANCEL_COMBAT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SPELLHEALLOG* ServerOpcode::get_if<SMSG_SPELLHEALLOG>() {
+    if (opcode == Opcode::SMSG_SPELLHEALLOG) {
+        return &SMSG_SPELLHEALLOG;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SPELLHEALLOG& ServerOpcode::get<SMSG_SPELLHEALLOG>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SPELLHEALLOG>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SPELLENERGIZELOG* ServerOpcode::get_if<SMSG_SPELLENERGIZELOG>() {
+    if (opcode == Opcode::SMSG_SPELLENERGIZELOG) {
+        return &SMSG_SPELLENERGIZELOG;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SPELLENERGIZELOG& ServerOpcode::get<SMSG_SPELLENERGIZELOG>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SPELLENERGIZELOG>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_BINDPOINTUPDATE* ServerOpcode::get_if<SMSG_BINDPOINTUPDATE>() {
+    if (opcode == Opcode::SMSG_BINDPOINTUPDATE) {
+        return &SMSG_BINDPOINTUPDATE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_BINDPOINTUPDATE& ServerOpcode::get<SMSG_BINDPOINTUPDATE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_BINDPOINTUPDATE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_PLAYERBOUND* ServerOpcode::get_if<SMSG_PLAYERBOUND>() {
+    if (opcode == Opcode::SMSG_PLAYERBOUND) {
+        return &SMSG_PLAYERBOUND;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_PLAYERBOUND& ServerOpcode::get<SMSG_PLAYERBOUND>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_PLAYERBOUND>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_CLIENT_CONTROL_UPDATE* ServerOpcode::get_if<SMSG_CLIENT_CONTROL_UPDATE>() {
+    if (opcode == Opcode::SMSG_CLIENT_CONTROL_UPDATE) {
+        return &SMSG_CLIENT_CONTROL_UPDATE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_CLIENT_CONTROL_UPDATE& ServerOpcode::get<SMSG_CLIENT_CONTROL_UPDATE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_CLIENT_CONTROL_UPDATE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_RESURRECT_REQUEST* ServerOpcode::get_if<SMSG_RESURRECT_REQUEST>() {
+    if (opcode == Opcode::SMSG_RESURRECT_REQUEST) {
+        return &SMSG_RESURRECT_REQUEST;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_RESURRECT_REQUEST& ServerOpcode::get<SMSG_RESURRECT_REQUEST>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_RESURRECT_REQUEST>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_LOOT_RESPONSE* ServerOpcode::get_if<SMSG_LOOT_RESPONSE>() {
+    if (opcode == Opcode::SMSG_LOOT_RESPONSE) {
+        return &SMSG_LOOT_RESPONSE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_LOOT_RESPONSE& ServerOpcode::get<SMSG_LOOT_RESPONSE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_LOOT_RESPONSE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_LOOT_RELEASE_RESPONSE* ServerOpcode::get_if<SMSG_LOOT_RELEASE_RESPONSE>() {
+    if (opcode == Opcode::SMSG_LOOT_RELEASE_RESPONSE) {
+        return &SMSG_LOOT_RELEASE_RESPONSE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_LOOT_RELEASE_RESPONSE& ServerOpcode::get<SMSG_LOOT_RELEASE_RESPONSE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_LOOT_RELEASE_RESPONSE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_LOOT_REMOVED* ServerOpcode::get_if<SMSG_LOOT_REMOVED>() {
+    if (opcode == Opcode::SMSG_LOOT_REMOVED) {
+        return &SMSG_LOOT_REMOVED;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_LOOT_REMOVED& ServerOpcode::get<SMSG_LOOT_REMOVED>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_LOOT_REMOVED>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_LOOT_MONEY_NOTIFY* ServerOpcode::get_if<SMSG_LOOT_MONEY_NOTIFY>() {
+    if (opcode == Opcode::SMSG_LOOT_MONEY_NOTIFY) {
+        return &SMSG_LOOT_MONEY_NOTIFY;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_LOOT_MONEY_NOTIFY& ServerOpcode::get<SMSG_LOOT_MONEY_NOTIFY>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_LOOT_MONEY_NOTIFY>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_LOOT_CLEAR_MONEY* ServerOpcode::get_if<SMSG_LOOT_CLEAR_MONEY>() {
+    if (opcode == Opcode::SMSG_LOOT_CLEAR_MONEY) {
+        return &SMSG_LOOT_CLEAR_MONEY;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_LOOT_CLEAR_MONEY& ServerOpcode::get<SMSG_LOOT_CLEAR_MONEY>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_LOOT_CLEAR_MONEY>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_ITEM_PUSH_RESULT* ServerOpcode::get_if<SMSG_ITEM_PUSH_RESULT>() {
+    if (opcode == Opcode::SMSG_ITEM_PUSH_RESULT) {
+        return &SMSG_ITEM_PUSH_RESULT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_ITEM_PUSH_RESULT& ServerOpcode::get<SMSG_ITEM_PUSH_RESULT>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_ITEM_PUSH_RESULT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_DUEL_REQUESTED* ServerOpcode::get_if<SMSG_DUEL_REQUESTED>() {
+    if (opcode == Opcode::SMSG_DUEL_REQUESTED) {
+        return &SMSG_DUEL_REQUESTED;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_DUEL_REQUESTED& ServerOpcode::get<SMSG_DUEL_REQUESTED>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_DUEL_REQUESTED>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_DUEL_OUTOFBOUNDS* ServerOpcode::get_if<SMSG_DUEL_OUTOFBOUNDS>() {
+    if (opcode == Opcode::SMSG_DUEL_OUTOFBOUNDS) {
+        return &SMSG_DUEL_OUTOFBOUNDS;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_DUEL_OUTOFBOUNDS& ServerOpcode::get<SMSG_DUEL_OUTOFBOUNDS>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_DUEL_OUTOFBOUNDS>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_DUEL_INBOUNDS* ServerOpcode::get_if<SMSG_DUEL_INBOUNDS>() {
+    if (opcode == Opcode::SMSG_DUEL_INBOUNDS) {
+        return &SMSG_DUEL_INBOUNDS;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_DUEL_INBOUNDS& ServerOpcode::get<SMSG_DUEL_INBOUNDS>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_DUEL_INBOUNDS>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_DUEL_COMPLETE* ServerOpcode::get_if<SMSG_DUEL_COMPLETE>() {
+    if (opcode == Opcode::SMSG_DUEL_COMPLETE) {
+        return &SMSG_DUEL_COMPLETE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_DUEL_COMPLETE& ServerOpcode::get<SMSG_DUEL_COMPLETE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_DUEL_COMPLETE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_DUEL_WINNER* ServerOpcode::get_if<SMSG_DUEL_WINNER>() {
+    if (opcode == Opcode::SMSG_DUEL_WINNER) {
+        return &SMSG_DUEL_WINNER;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_DUEL_WINNER& ServerOpcode::get<SMSG_DUEL_WINNER>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_DUEL_WINNER>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_MOUNTRESULT* ServerOpcode::get_if<SMSG_MOUNTRESULT>() {
+    if (opcode == Opcode::SMSG_MOUNTRESULT) {
+        return &SMSG_MOUNTRESULT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_MOUNTRESULT& ServerOpcode::get<SMSG_MOUNTRESULT>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_MOUNTRESULT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_DISMOUNTRESULT* ServerOpcode::get_if<SMSG_DISMOUNTRESULT>() {
+    if (opcode == Opcode::SMSG_DISMOUNTRESULT) {
+        return &SMSG_DISMOUNTRESULT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_DISMOUNTRESULT& ServerOpcode::get<SMSG_DISMOUNTRESULT>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_DISMOUNTRESULT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_MOUNTSPECIAL_ANIM* ServerOpcode::get_if<SMSG_MOUNTSPECIAL_ANIM>() {
+    if (opcode == Opcode::SMSG_MOUNTSPECIAL_ANIM) {
+        return &SMSG_MOUNTSPECIAL_ANIM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_MOUNTSPECIAL_ANIM& ServerOpcode::get<SMSG_MOUNTSPECIAL_ANIM>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_MOUNTSPECIAL_ANIM>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_PET_TAME_FAILURE* ServerOpcode::get_if<SMSG_PET_TAME_FAILURE>() {
+    if (opcode == Opcode::SMSG_PET_TAME_FAILURE) {
+        return &SMSG_PET_TAME_FAILURE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_PET_TAME_FAILURE& ServerOpcode::get<SMSG_PET_TAME_FAILURE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_PET_TAME_FAILURE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_PET_NAME_INVALID* ServerOpcode::get_if<SMSG_PET_NAME_INVALID>() {
+    if (opcode == Opcode::SMSG_PET_NAME_INVALID) {
+        return &SMSG_PET_NAME_INVALID;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_PET_NAME_INVALID& ServerOpcode::get<SMSG_PET_NAME_INVALID>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_PET_NAME_INVALID>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_PET_SPELLS* ServerOpcode::get_if<SMSG_PET_SPELLS>() {
+    if (opcode == Opcode::SMSG_PET_SPELLS) {
+        return &SMSG_PET_SPELLS;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_PET_SPELLS& ServerOpcode::get<SMSG_PET_SPELLS>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_PET_SPELLS>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_PET_MODE* ServerOpcode::get_if<SMSG_PET_MODE>() {
+    if (opcode == Opcode::SMSG_PET_MODE) {
+        return &SMSG_PET_MODE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_PET_MODE& ServerOpcode::get<SMSG_PET_MODE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_PET_MODE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_GOSSIP_MESSAGE* ServerOpcode::get_if<SMSG_GOSSIP_MESSAGE>() {
+    if (opcode == Opcode::SMSG_GOSSIP_MESSAGE) {
+        return &SMSG_GOSSIP_MESSAGE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_GOSSIP_MESSAGE& ServerOpcode::get<SMSG_GOSSIP_MESSAGE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_GOSSIP_MESSAGE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_GOSSIP_COMPLETE* ServerOpcode::get_if<SMSG_GOSSIP_COMPLETE>() {
+    if (opcode == Opcode::SMSG_GOSSIP_COMPLETE) {
+        return &SMSG_GOSSIP_COMPLETE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_GOSSIP_COMPLETE& ServerOpcode::get<SMSG_GOSSIP_COMPLETE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_GOSSIP_COMPLETE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_NPC_TEXT_UPDATE* ServerOpcode::get_if<SMSG_NPC_TEXT_UPDATE>() {
+    if (opcode == Opcode::SMSG_NPC_TEXT_UPDATE) {
+        return &SMSG_NPC_TEXT_UPDATE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_NPC_TEXT_UPDATE& ServerOpcode::get<SMSG_NPC_TEXT_UPDATE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_NPC_TEXT_UPDATE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_QUESTGIVER_STATUS* ServerOpcode::get_if<SMSG_QUESTGIVER_STATUS>() {
+    if (opcode == Opcode::SMSG_QUESTGIVER_STATUS) {
+        return &SMSG_QUESTGIVER_STATUS;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_QUESTGIVER_STATUS& ServerOpcode::get<SMSG_QUESTGIVER_STATUS>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_QUESTGIVER_STATUS>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_QUESTGIVER_QUEST_LIST* ServerOpcode::get_if<SMSG_QUESTGIVER_QUEST_LIST>() {
+    if (opcode == Opcode::SMSG_QUESTGIVER_QUEST_LIST) {
+        return &SMSG_QUESTGIVER_QUEST_LIST;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_QUESTGIVER_QUEST_LIST& ServerOpcode::get<SMSG_QUESTGIVER_QUEST_LIST>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_QUESTGIVER_QUEST_LIST>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_QUESTGIVER_QUEST_DETAILS* ServerOpcode::get_if<SMSG_QUESTGIVER_QUEST_DETAILS>() {
+    if (opcode == Opcode::SMSG_QUESTGIVER_QUEST_DETAILS) {
+        return &SMSG_QUESTGIVER_QUEST_DETAILS;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_QUESTGIVER_QUEST_DETAILS& ServerOpcode::get<SMSG_QUESTGIVER_QUEST_DETAILS>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_QUESTGIVER_QUEST_DETAILS>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_QUESTGIVER_REQUEST_ITEMS* ServerOpcode::get_if<SMSG_QUESTGIVER_REQUEST_ITEMS>() {
+    if (opcode == Opcode::SMSG_QUESTGIVER_REQUEST_ITEMS) {
+        return &SMSG_QUESTGIVER_REQUEST_ITEMS;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_QUESTGIVER_REQUEST_ITEMS& ServerOpcode::get<SMSG_QUESTGIVER_REQUEST_ITEMS>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_QUESTGIVER_REQUEST_ITEMS>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_QUESTGIVER_OFFER_REWARD* ServerOpcode::get_if<SMSG_QUESTGIVER_OFFER_REWARD>() {
+    if (opcode == Opcode::SMSG_QUESTGIVER_OFFER_REWARD) {
+        return &SMSG_QUESTGIVER_OFFER_REWARD;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_QUESTGIVER_OFFER_REWARD& ServerOpcode::get<SMSG_QUESTGIVER_OFFER_REWARD>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_QUESTGIVER_OFFER_REWARD>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_QUESTGIVER_QUEST_INVALID* ServerOpcode::get_if<SMSG_QUESTGIVER_QUEST_INVALID>() {
+    if (opcode == Opcode::SMSG_QUESTGIVER_QUEST_INVALID) {
+        return &SMSG_QUESTGIVER_QUEST_INVALID;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_QUESTGIVER_QUEST_INVALID& ServerOpcode::get<SMSG_QUESTGIVER_QUEST_INVALID>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_QUESTGIVER_QUEST_INVALID>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_QUESTGIVER_QUEST_COMPLETE* ServerOpcode::get_if<SMSG_QUESTGIVER_QUEST_COMPLETE>() {
+    if (opcode == Opcode::SMSG_QUESTGIVER_QUEST_COMPLETE) {
+        return &SMSG_QUESTGIVER_QUEST_COMPLETE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_QUESTGIVER_QUEST_COMPLETE& ServerOpcode::get<SMSG_QUESTGIVER_QUEST_COMPLETE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_QUESTGIVER_QUEST_COMPLETE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_QUESTGIVER_QUEST_FAILED* ServerOpcode::get_if<SMSG_QUESTGIVER_QUEST_FAILED>() {
+    if (opcode == Opcode::SMSG_QUESTGIVER_QUEST_FAILED) {
+        return &SMSG_QUESTGIVER_QUEST_FAILED;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_QUESTGIVER_QUEST_FAILED& ServerOpcode::get<SMSG_QUESTGIVER_QUEST_FAILED>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_QUESTGIVER_QUEST_FAILED>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_QUESTLOG_FULL* ServerOpcode::get_if<SMSG_QUESTLOG_FULL>() {
+    if (opcode == Opcode::SMSG_QUESTLOG_FULL) {
+        return &SMSG_QUESTLOG_FULL;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_QUESTLOG_FULL& ServerOpcode::get<SMSG_QUESTLOG_FULL>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_QUESTLOG_FULL>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_QUESTUPDATE_FAILED* ServerOpcode::get_if<SMSG_QUESTUPDATE_FAILED>() {
+    if (opcode == Opcode::SMSG_QUESTUPDATE_FAILED) {
+        return &SMSG_QUESTUPDATE_FAILED;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_QUESTUPDATE_FAILED& ServerOpcode::get<SMSG_QUESTUPDATE_FAILED>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_QUESTUPDATE_FAILED>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_QUESTUPDATE_FAILEDTIMER* ServerOpcode::get_if<SMSG_QUESTUPDATE_FAILEDTIMER>() {
+    if (opcode == Opcode::SMSG_QUESTUPDATE_FAILEDTIMER) {
+        return &SMSG_QUESTUPDATE_FAILEDTIMER;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_QUESTUPDATE_FAILEDTIMER& ServerOpcode::get<SMSG_QUESTUPDATE_FAILEDTIMER>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_QUESTUPDATE_FAILEDTIMER>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_QUESTUPDATE_COMPLETE* ServerOpcode::get_if<SMSG_QUESTUPDATE_COMPLETE>() {
+    if (opcode == Opcode::SMSG_QUESTUPDATE_COMPLETE) {
+        return &SMSG_QUESTUPDATE_COMPLETE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_QUESTUPDATE_COMPLETE& ServerOpcode::get<SMSG_QUESTUPDATE_COMPLETE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_QUESTUPDATE_COMPLETE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_QUESTUPDATE_ADD_KILL* ServerOpcode::get_if<SMSG_QUESTUPDATE_ADD_KILL>() {
+    if (opcode == Opcode::SMSG_QUESTUPDATE_ADD_KILL) {
+        return &SMSG_QUESTUPDATE_ADD_KILL;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_QUESTUPDATE_ADD_KILL& ServerOpcode::get<SMSG_QUESTUPDATE_ADD_KILL>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_QUESTUPDATE_ADD_KILL>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_QUESTUPDATE_ADD_ITEM* ServerOpcode::get_if<SMSG_QUESTUPDATE_ADD_ITEM>() {
+    if (opcode == Opcode::SMSG_QUESTUPDATE_ADD_ITEM) {
+        return &SMSG_QUESTUPDATE_ADD_ITEM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_QUESTUPDATE_ADD_ITEM& ServerOpcode::get<SMSG_QUESTUPDATE_ADD_ITEM>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_QUESTUPDATE_ADD_ITEM>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_QUEST_CONFIRM_ACCEPT* ServerOpcode::get_if<SMSG_QUEST_CONFIRM_ACCEPT>() {
+    if (opcode == Opcode::SMSG_QUEST_CONFIRM_ACCEPT) {
+        return &SMSG_QUEST_CONFIRM_ACCEPT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_QUEST_CONFIRM_ACCEPT& ServerOpcode::get<SMSG_QUEST_CONFIRM_ACCEPT>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_QUEST_CONFIRM_ACCEPT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_LIST_INVENTORY* ServerOpcode::get_if<SMSG_LIST_INVENTORY>() {
+    if (opcode == Opcode::SMSG_LIST_INVENTORY) {
+        return &SMSG_LIST_INVENTORY;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_LIST_INVENTORY& ServerOpcode::get<SMSG_LIST_INVENTORY>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_LIST_INVENTORY>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SELL_ITEM* ServerOpcode::get_if<SMSG_SELL_ITEM>() {
+    if (opcode == Opcode::SMSG_SELL_ITEM) {
+        return &SMSG_SELL_ITEM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SELL_ITEM& ServerOpcode::get<SMSG_SELL_ITEM>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SELL_ITEM>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_BUY_ITEM* ServerOpcode::get_if<SMSG_BUY_ITEM>() {
+    if (opcode == Opcode::SMSG_BUY_ITEM) {
+        return &SMSG_BUY_ITEM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_BUY_ITEM& ServerOpcode::get<SMSG_BUY_ITEM>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_BUY_ITEM>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_BUY_FAILED* ServerOpcode::get_if<SMSG_BUY_FAILED>() {
+    if (opcode == Opcode::SMSG_BUY_FAILED) {
+        return &SMSG_BUY_FAILED;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_BUY_FAILED& ServerOpcode::get<SMSG_BUY_FAILED>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_BUY_FAILED>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SHOWTAXINODES* ServerOpcode::get_if<SMSG_SHOWTAXINODES>() {
+    if (opcode == Opcode::SMSG_SHOWTAXINODES) {
+        return &SMSG_SHOWTAXINODES;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SHOWTAXINODES& ServerOpcode::get<SMSG_SHOWTAXINODES>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SHOWTAXINODES>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_TAXINODE_STATUS* ServerOpcode::get_if<SMSG_TAXINODE_STATUS>() {
+    if (opcode == Opcode::SMSG_TAXINODE_STATUS) {
+        return &SMSG_TAXINODE_STATUS;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_TAXINODE_STATUS& ServerOpcode::get<SMSG_TAXINODE_STATUS>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_TAXINODE_STATUS>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_ACTIVATETAXIREPLY* ServerOpcode::get_if<SMSG_ACTIVATETAXIREPLY>() {
+    if (opcode == Opcode::SMSG_ACTIVATETAXIREPLY) {
+        return &SMSG_ACTIVATETAXIREPLY;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_ACTIVATETAXIREPLY& ServerOpcode::get<SMSG_ACTIVATETAXIREPLY>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_ACTIVATETAXIREPLY>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_NEW_TAXI_PATH* ServerOpcode::get_if<SMSG_NEW_TAXI_PATH>() {
+    if (opcode == Opcode::SMSG_NEW_TAXI_PATH) {
+        return &SMSG_NEW_TAXI_PATH;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_NEW_TAXI_PATH& ServerOpcode::get<SMSG_NEW_TAXI_PATH>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_NEW_TAXI_PATH>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_TRAINER_LIST* ServerOpcode::get_if<SMSG_TRAINER_LIST>() {
+    if (opcode == Opcode::SMSG_TRAINER_LIST) {
+        return &SMSG_TRAINER_LIST;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_TRAINER_LIST& ServerOpcode::get<SMSG_TRAINER_LIST>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_TRAINER_LIST>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_TRAINER_BUY_SUCCEEDED* ServerOpcode::get_if<SMSG_TRAINER_BUY_SUCCEEDED>() {
+    if (opcode == Opcode::SMSG_TRAINER_BUY_SUCCEEDED) {
+        return &SMSG_TRAINER_BUY_SUCCEEDED;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_TRAINER_BUY_SUCCEEDED& ServerOpcode::get<SMSG_TRAINER_BUY_SUCCEEDED>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_TRAINER_BUY_SUCCEEDED>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_TRAINER_BUY_FAILED* ServerOpcode::get_if<SMSG_TRAINER_BUY_FAILED>() {
+    if (opcode == Opcode::SMSG_TRAINER_BUY_FAILED) {
+        return &SMSG_TRAINER_BUY_FAILED;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_TRAINER_BUY_FAILED& ServerOpcode::get<SMSG_TRAINER_BUY_FAILED>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_TRAINER_BUY_FAILED>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SHOW_BANK* ServerOpcode::get_if<SMSG_SHOW_BANK>() {
+    if (opcode == Opcode::SMSG_SHOW_BANK) {
+        return &SMSG_SHOW_BANK;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SHOW_BANK& ServerOpcode::get<SMSG_SHOW_BANK>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SHOW_BANK>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_BUY_BANK_SLOT_RESULT* ServerOpcode::get_if<SMSG_BUY_BANK_SLOT_RESULT>() {
+    if (opcode == Opcode::SMSG_BUY_BANK_SLOT_RESULT) {
+        return &SMSG_BUY_BANK_SLOT_RESULT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_BUY_BANK_SLOT_RESULT& ServerOpcode::get<SMSG_BUY_BANK_SLOT_RESULT>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_BUY_BANK_SLOT_RESULT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_PETITION_SHOWLIST* ServerOpcode::get_if<SMSG_PETITION_SHOWLIST>() {
+    if (opcode == Opcode::SMSG_PETITION_SHOWLIST) {
+        return &SMSG_PETITION_SHOWLIST;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_PETITION_SHOWLIST& ServerOpcode::get<SMSG_PETITION_SHOWLIST>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_PETITION_SHOWLIST>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_PETITION_SHOW_SIGNATURES* ServerOpcode::get_if<SMSG_PETITION_SHOW_SIGNATURES>() {
+    if (opcode == Opcode::SMSG_PETITION_SHOW_SIGNATURES) {
+        return &SMSG_PETITION_SHOW_SIGNATURES;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_PETITION_SHOW_SIGNATURES& ServerOpcode::get<SMSG_PETITION_SHOW_SIGNATURES>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_PETITION_SHOW_SIGNATURES>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_PETITION_SIGN_RESULTS* ServerOpcode::get_if<SMSG_PETITION_SIGN_RESULTS>() {
+    if (opcode == Opcode::SMSG_PETITION_SIGN_RESULTS) {
+        return &SMSG_PETITION_SIGN_RESULTS;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_PETITION_SIGN_RESULTS& ServerOpcode::get<SMSG_PETITION_SIGN_RESULTS>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_PETITION_SIGN_RESULTS>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_PETITION_DECLINE* ServerOpcode::get_if<MSG_PETITION_DECLINE>() {
+    if (opcode == Opcode::MSG_PETITION_DECLINE) {
+        return &MSG_PETITION_DECLINE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_PETITION_DECLINE& ServerOpcode::get<MSG_PETITION_DECLINE>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_PETITION_DECLINE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_TURN_IN_PETITION_RESULTS* ServerOpcode::get_if<SMSG_TURN_IN_PETITION_RESULTS>() {
+    if (opcode == Opcode::SMSG_TURN_IN_PETITION_RESULTS) {
+        return &SMSG_TURN_IN_PETITION_RESULTS;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_TURN_IN_PETITION_RESULTS& ServerOpcode::get<SMSG_TURN_IN_PETITION_RESULTS>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_TURN_IN_PETITION_RESULTS>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_PETITION_QUERY_RESPONSE* ServerOpcode::get_if<SMSG_PETITION_QUERY_RESPONSE>() {
+    if (opcode == Opcode::SMSG_PETITION_QUERY_RESPONSE) {
+        return &SMSG_PETITION_QUERY_RESPONSE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_PETITION_QUERY_RESPONSE& ServerOpcode::get<SMSG_PETITION_QUERY_RESPONSE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_PETITION_QUERY_RESPONSE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_FISH_NOT_HOOKED* ServerOpcode::get_if<SMSG_FISH_NOT_HOOKED>() {
+    if (opcode == Opcode::SMSG_FISH_NOT_HOOKED) {
+        return &SMSG_FISH_NOT_HOOKED;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_FISH_NOT_HOOKED& ServerOpcode::get<SMSG_FISH_NOT_HOOKED>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_FISH_NOT_HOOKED>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_FISH_ESCAPED* ServerOpcode::get_if<SMSG_FISH_ESCAPED>() {
+    if (opcode == Opcode::SMSG_FISH_ESCAPED) {
+        return &SMSG_FISH_ESCAPED;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_FISH_ESCAPED& ServerOpcode::get<SMSG_FISH_ESCAPED>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_FISH_ESCAPED>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_NOTIFICATION* ServerOpcode::get_if<SMSG_NOTIFICATION>() {
+    if (opcode == Opcode::SMSG_NOTIFICATION) {
+        return &SMSG_NOTIFICATION;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_NOTIFICATION& ServerOpcode::get<SMSG_NOTIFICATION>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_NOTIFICATION>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_PLAYED_TIME* ServerOpcode::get_if<SMSG_PLAYED_TIME>() {
+    if (opcode == Opcode::SMSG_PLAYED_TIME) {
+        return &SMSG_PLAYED_TIME;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_PLAYED_TIME& ServerOpcode::get<SMSG_PLAYED_TIME>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_PLAYED_TIME>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_QUERY_TIME_RESPONSE* ServerOpcode::get_if<SMSG_QUERY_TIME_RESPONSE>() {
+    if (opcode == Opcode::SMSG_QUERY_TIME_RESPONSE) {
+        return &SMSG_QUERY_TIME_RESPONSE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_QUERY_TIME_RESPONSE& ServerOpcode::get<SMSG_QUERY_TIME_RESPONSE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_QUERY_TIME_RESPONSE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_LOG_XPGAIN* ServerOpcode::get_if<SMSG_LOG_XPGAIN>() {
+    if (opcode == Opcode::SMSG_LOG_XPGAIN) {
+        return &SMSG_LOG_XPGAIN;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_LOG_XPGAIN& ServerOpcode::get<SMSG_LOG_XPGAIN>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_LOG_XPGAIN>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_LEVELUP_INFO* ServerOpcode::get_if<SMSG_LEVELUP_INFO>() {
+    if (opcode == Opcode::SMSG_LEVELUP_INFO) {
+        return &SMSG_LEVELUP_INFO;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_LEVELUP_INFO& ServerOpcode::get<SMSG_LEVELUP_INFO>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_LEVELUP_INFO>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MINIMAP_PING_Server* ServerOpcode::get_if<MSG_MINIMAP_PING_Server>() {
+    if (opcode == Opcode::MSG_MINIMAP_PING) {
+        return &MSG_MINIMAP_PING;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MINIMAP_PING_Server& ServerOpcode::get<MSG_MINIMAP_PING_Server>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_MINIMAP_PING_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_RESISTLOG* ServerOpcode::get_if<SMSG_RESISTLOG>() {
+    if (opcode == Opcode::SMSG_RESISTLOG) {
+        return &SMSG_RESISTLOG;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_RESISTLOG& ServerOpcode::get<SMSG_RESISTLOG>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_RESISTLOG>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_ENCHANTMENTLOG* ServerOpcode::get_if<SMSG_ENCHANTMENTLOG>() {
+    if (opcode == Opcode::SMSG_ENCHANTMENTLOG) {
+        return &SMSG_ENCHANTMENTLOG;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_ENCHANTMENTLOG& ServerOpcode::get<SMSG_ENCHANTMENTLOG>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_ENCHANTMENTLOG>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_START_MIRROR_TIMER* ServerOpcode::get_if<SMSG_START_MIRROR_TIMER>() {
+    if (opcode == Opcode::SMSG_START_MIRROR_TIMER) {
+        return &SMSG_START_MIRROR_TIMER;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_START_MIRROR_TIMER& ServerOpcode::get<SMSG_START_MIRROR_TIMER>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_START_MIRROR_TIMER>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_PAUSE_MIRROR_TIMER* ServerOpcode::get_if<SMSG_PAUSE_MIRROR_TIMER>() {
+    if (opcode == Opcode::SMSG_PAUSE_MIRROR_TIMER) {
+        return &SMSG_PAUSE_MIRROR_TIMER;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_PAUSE_MIRROR_TIMER& ServerOpcode::get<SMSG_PAUSE_MIRROR_TIMER>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_PAUSE_MIRROR_TIMER>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_STOP_MIRROR_TIMER* ServerOpcode::get_if<SMSG_STOP_MIRROR_TIMER>() {
+    if (opcode == Opcode::SMSG_STOP_MIRROR_TIMER) {
+        return &SMSG_STOP_MIRROR_TIMER;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_STOP_MIRROR_TIMER& ServerOpcode::get<SMSG_STOP_MIRROR_TIMER>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_STOP_MIRROR_TIMER>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_PONG* ServerOpcode::get_if<SMSG_PONG>() {
+    if (opcode == Opcode::SMSG_PONG) {
+        return &SMSG_PONG;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_PONG& ServerOpcode::get<SMSG_PONG>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_PONG>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_CLEAR_COOLDOWN* ServerOpcode::get_if<SMSG_CLEAR_COOLDOWN>() {
+    if (opcode == Opcode::SMSG_CLEAR_COOLDOWN) {
+        return &SMSG_CLEAR_COOLDOWN;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_CLEAR_COOLDOWN& ServerOpcode::get<SMSG_CLEAR_COOLDOWN>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_CLEAR_COOLDOWN>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_GAMEOBJECT_PAGETEXT* ServerOpcode::get_if<SMSG_GAMEOBJECT_PAGETEXT>() {
+    if (opcode == Opcode::SMSG_GAMEOBJECT_PAGETEXT) {
+        return &SMSG_GAMEOBJECT_PAGETEXT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_GAMEOBJECT_PAGETEXT& ServerOpcode::get<SMSG_GAMEOBJECT_PAGETEXT>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_GAMEOBJECT_PAGETEXT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SPELL_DELAYED* ServerOpcode::get_if<SMSG_SPELL_DELAYED>() {
+    if (opcode == Opcode::SMSG_SPELL_DELAYED) {
+        return &SMSG_SPELL_DELAYED;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SPELL_DELAYED& ServerOpcode::get<SMSG_SPELL_DELAYED>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SPELL_DELAYED>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_ITEM_TIME_UPDATE* ServerOpcode::get_if<SMSG_ITEM_TIME_UPDATE>() {
+    if (opcode == Opcode::SMSG_ITEM_TIME_UPDATE) {
+        return &SMSG_ITEM_TIME_UPDATE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_ITEM_TIME_UPDATE& ServerOpcode::get<SMSG_ITEM_TIME_UPDATE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_ITEM_TIME_UPDATE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_ITEM_ENCHANT_TIME_UPDATE* ServerOpcode::get_if<SMSG_ITEM_ENCHANT_TIME_UPDATE>() {
+    if (opcode == Opcode::SMSG_ITEM_ENCHANT_TIME_UPDATE) {
+        return &SMSG_ITEM_ENCHANT_TIME_UPDATE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_ITEM_ENCHANT_TIME_UPDATE& ServerOpcode::get<SMSG_ITEM_ENCHANT_TIME_UPDATE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_ITEM_ENCHANT_TIME_UPDATE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_AUTH_CHALLENGE* ServerOpcode::get_if<SMSG_AUTH_CHALLENGE>() {
+    if (opcode == Opcode::SMSG_AUTH_CHALLENGE) {
+        return &SMSG_AUTH_CHALLENGE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_AUTH_CHALLENGE& ServerOpcode::get<SMSG_AUTH_CHALLENGE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_AUTH_CHALLENGE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_AUTH_RESPONSE* ServerOpcode::get_if<SMSG_AUTH_RESPONSE>() {
+    if (opcode == Opcode::SMSG_AUTH_RESPONSE) {
+        return &SMSG_AUTH_RESPONSE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_AUTH_RESPONSE& ServerOpcode::get<SMSG_AUTH_RESPONSE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_AUTH_RESPONSE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_SAVE_GUILD_EMBLEM_Server* ServerOpcode::get_if<MSG_SAVE_GUILD_EMBLEM_Server>() {
+    if (opcode == Opcode::MSG_SAVE_GUILD_EMBLEM) {
+        return &MSG_SAVE_GUILD_EMBLEM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_SAVE_GUILD_EMBLEM_Server& ServerOpcode::get<MSG_SAVE_GUILD_EMBLEM_Server>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_SAVE_GUILD_EMBLEM_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_TABARDVENDOR_ACTIVATE* ServerOpcode::get_if<MSG_TABARDVENDOR_ACTIVATE>() {
+    if (opcode == Opcode::MSG_TABARDVENDOR_ACTIVATE) {
+        return &MSG_TABARDVENDOR_ACTIVATE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_TABARDVENDOR_ACTIVATE& ServerOpcode::get<MSG_TABARDVENDOR_ACTIVATE>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_TABARDVENDOR_ACTIVATE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_PLAY_SPELL_VISUAL* ServerOpcode::get_if<SMSG_PLAY_SPELL_VISUAL>() {
+    if (opcode == Opcode::SMSG_PLAY_SPELL_VISUAL) {
+        return &SMSG_PLAY_SPELL_VISUAL;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_PLAY_SPELL_VISUAL& ServerOpcode::get<SMSG_PLAY_SPELL_VISUAL>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_PLAY_SPELL_VISUAL>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_PARTYKILLLOG* ServerOpcode::get_if<SMSG_PARTYKILLLOG>() {
+    if (opcode == Opcode::SMSG_PARTYKILLLOG) {
+        return &SMSG_PARTYKILLLOG;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_PARTYKILLLOG& ServerOpcode::get<SMSG_PARTYKILLLOG>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_PARTYKILLLOG>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_PLAY_SPELL_IMPACT* ServerOpcode::get_if<SMSG_PLAY_SPELL_IMPACT>() {
+    if (opcode == Opcode::SMSG_PLAY_SPELL_IMPACT) {
+        return &SMSG_PLAY_SPELL_IMPACT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_PLAY_SPELL_IMPACT& ServerOpcode::get<SMSG_PLAY_SPELL_IMPACT>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_PLAY_SPELL_IMPACT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_EXPLORATION_EXPERIENCE* ServerOpcode::get_if<SMSG_EXPLORATION_EXPERIENCE>() {
+    if (opcode == Opcode::SMSG_EXPLORATION_EXPERIENCE) {
+        return &SMSG_EXPLORATION_EXPERIENCE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_EXPLORATION_EXPERIENCE& ServerOpcode::get<SMSG_EXPLORATION_EXPERIENCE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_EXPLORATION_EXPERIENCE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_RANDOM_ROLL_Server* ServerOpcode::get_if<MSG_RANDOM_ROLL_Server>() {
+    if (opcode == Opcode::MSG_RANDOM_ROLL) {
+        return &MSG_RANDOM_ROLL;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_RANDOM_ROLL_Server& ServerOpcode::get<MSG_RANDOM_ROLL_Server>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_RANDOM_ROLL_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_ENVIRONMENTAL_DAMAGE_LOG* ServerOpcode::get_if<SMSG_ENVIRONMENTAL_DAMAGE_LOG>() {
+    if (opcode == Opcode::SMSG_ENVIRONMENTAL_DAMAGE_LOG) {
+        return &SMSG_ENVIRONMENTAL_DAMAGE_LOG;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_ENVIRONMENTAL_DAMAGE_LOG& ServerOpcode::get<SMSG_ENVIRONMENTAL_DAMAGE_LOG>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_ENVIRONMENTAL_DAMAGE_LOG>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_LOOKING_FOR_GROUP_Server* ServerOpcode::get_if<MSG_LOOKING_FOR_GROUP_Server>() {
+    if (opcode == Opcode::MSG_LOOKING_FOR_GROUP) {
+        return &MSG_LOOKING_FOR_GROUP;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_LOOKING_FOR_GROUP_Server& ServerOpcode::get<MSG_LOOKING_FOR_GROUP_Server>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_LOOKING_FOR_GROUP_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_REMOVED_SPELL* ServerOpcode::get_if<SMSG_REMOVED_SPELL>() {
+    if (opcode == Opcode::SMSG_REMOVED_SPELL) {
+        return &SMSG_REMOVED_SPELL;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_REMOVED_SPELL& ServerOpcode::get<SMSG_REMOVED_SPELL>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_REMOVED_SPELL>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_GMTICKET_CREATE* ServerOpcode::get_if<SMSG_GMTICKET_CREATE>() {
+    if (opcode == Opcode::SMSG_GMTICKET_CREATE) {
+        return &SMSG_GMTICKET_CREATE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_GMTICKET_CREATE& ServerOpcode::get<SMSG_GMTICKET_CREATE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_GMTICKET_CREATE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_GMTICKET_UPDATETEXT* ServerOpcode::get_if<SMSG_GMTICKET_UPDATETEXT>() {
+    if (opcode == Opcode::SMSG_GMTICKET_UPDATETEXT) {
+        return &SMSG_GMTICKET_UPDATETEXT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_GMTICKET_UPDATETEXT& ServerOpcode::get<SMSG_GMTICKET_UPDATETEXT>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_GMTICKET_UPDATETEXT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_ACCOUNT_DATA_TIMES* ServerOpcode::get_if<SMSG_ACCOUNT_DATA_TIMES>() {
+    if (opcode == Opcode::SMSG_ACCOUNT_DATA_TIMES) {
+        return &SMSG_ACCOUNT_DATA_TIMES;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_ACCOUNT_DATA_TIMES& ServerOpcode::get<SMSG_ACCOUNT_DATA_TIMES>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_ACCOUNT_DATA_TIMES>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_GMTICKET_GETTICKET* ServerOpcode::get_if<SMSG_GMTICKET_GETTICKET>() {
+    if (opcode == Opcode::SMSG_GMTICKET_GETTICKET) {
+        return &SMSG_GMTICKET_GETTICKET;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_GMTICKET_GETTICKET& ServerOpcode::get<SMSG_GMTICKET_GETTICKET>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_GMTICKET_GETTICKET>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_GAMEOBJECT_SPAWN_ANIM* ServerOpcode::get_if<SMSG_GAMEOBJECT_SPAWN_ANIM>() {
+    if (opcode == Opcode::SMSG_GAMEOBJECT_SPAWN_ANIM) {
+        return &SMSG_GAMEOBJECT_SPAWN_ANIM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_GAMEOBJECT_SPAWN_ANIM& ServerOpcode::get<SMSG_GAMEOBJECT_SPAWN_ANIM>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_GAMEOBJECT_SPAWN_ANIM>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_GAMEOBJECT_DESPAWN_ANIM* ServerOpcode::get_if<SMSG_GAMEOBJECT_DESPAWN_ANIM>() {
+    if (opcode == Opcode::SMSG_GAMEOBJECT_DESPAWN_ANIM) {
+        return &SMSG_GAMEOBJECT_DESPAWN_ANIM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_GAMEOBJECT_DESPAWN_ANIM& ServerOpcode::get<SMSG_GAMEOBJECT_DESPAWN_ANIM>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_GAMEOBJECT_DESPAWN_ANIM>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_CORPSE_QUERY_Server* ServerOpcode::get_if<MSG_CORPSE_QUERY_Server>() {
+    if (opcode == Opcode::MSG_CORPSE_QUERY) {
+        return &MSG_CORPSE_QUERY;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_CORPSE_QUERY_Server& ServerOpcode::get<MSG_CORPSE_QUERY_Server>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_CORPSE_QUERY_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_GMTICKET_DELETETICKET* ServerOpcode::get_if<SMSG_GMTICKET_DELETETICKET>() {
+    if (opcode == Opcode::SMSG_GMTICKET_DELETETICKET) {
+        return &SMSG_GMTICKET_DELETETICKET;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_GMTICKET_DELETETICKET& ServerOpcode::get<SMSG_GMTICKET_DELETETICKET>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_GMTICKET_DELETETICKET>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_CHAT_WRONG_FACTION* ServerOpcode::get_if<SMSG_CHAT_WRONG_FACTION>() {
+    if (opcode == Opcode::SMSG_CHAT_WRONG_FACTION) {
+        return &SMSG_CHAT_WRONG_FACTION;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_CHAT_WRONG_FACTION& ServerOpcode::get<SMSG_CHAT_WRONG_FACTION>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_CHAT_WRONG_FACTION>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_GMTICKET_SYSTEMSTATUS* ServerOpcode::get_if<SMSG_GMTICKET_SYSTEMSTATUS>() {
+    if (opcode == Opcode::SMSG_GMTICKET_SYSTEMSTATUS) {
+        return &SMSG_GMTICKET_SYSTEMSTATUS;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_GMTICKET_SYSTEMSTATUS& ServerOpcode::get<SMSG_GMTICKET_SYSTEMSTATUS>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_GMTICKET_SYSTEMSTATUS>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SET_REST_START* ServerOpcode::get_if<SMSG_SET_REST_START>() {
+    if (opcode == Opcode::SMSG_SET_REST_START) {
+        return &SMSG_SET_REST_START;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SET_REST_START& ServerOpcode::get<SMSG_SET_REST_START>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SET_REST_START>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SPIRIT_HEALER_CONFIRM* ServerOpcode::get_if<SMSG_SPIRIT_HEALER_CONFIRM>() {
+    if (opcode == Opcode::SMSG_SPIRIT_HEALER_CONFIRM) {
+        return &SMSG_SPIRIT_HEALER_CONFIRM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SPIRIT_HEALER_CONFIRM& ServerOpcode::get<SMSG_SPIRIT_HEALER_CONFIRM>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SPIRIT_HEALER_CONFIRM>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_GOSSIP_POI* ServerOpcode::get_if<SMSG_GOSSIP_POI>() {
+    if (opcode == Opcode::SMSG_GOSSIP_POI) {
+        return &SMSG_GOSSIP_POI;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_GOSSIP_POI& ServerOpcode::get<SMSG_GOSSIP_POI>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_GOSSIP_POI>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_LOGIN_VERIFY_WORLD* ServerOpcode::get_if<SMSG_LOGIN_VERIFY_WORLD>() {
+    if (opcode == Opcode::SMSG_LOGIN_VERIFY_WORLD) {
+        return &SMSG_LOGIN_VERIFY_WORLD;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_LOGIN_VERIFY_WORLD& ServerOpcode::get<SMSG_LOGIN_VERIFY_WORLD>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_LOGIN_VERIFY_WORLD>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SEND_MAIL_RESULT* ServerOpcode::get_if<SMSG_SEND_MAIL_RESULT>() {
+    if (opcode == Opcode::SMSG_SEND_MAIL_RESULT) {
+        return &SMSG_SEND_MAIL_RESULT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SEND_MAIL_RESULT& ServerOpcode::get<SMSG_SEND_MAIL_RESULT>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SEND_MAIL_RESULT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_MAIL_LIST_RESULT* ServerOpcode::get_if<SMSG_MAIL_LIST_RESULT>() {
+    if (opcode == Opcode::SMSG_MAIL_LIST_RESULT) {
+        return &SMSG_MAIL_LIST_RESULT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_MAIL_LIST_RESULT& ServerOpcode::get<SMSG_MAIL_LIST_RESULT>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_MAIL_LIST_RESULT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_BATTLEFIELD_LIST* ServerOpcode::get_if<SMSG_BATTLEFIELD_LIST>() {
+    if (opcode == Opcode::SMSG_BATTLEFIELD_LIST) {
+        return &SMSG_BATTLEFIELD_LIST;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_BATTLEFIELD_LIST& ServerOpcode::get<SMSG_BATTLEFIELD_LIST>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_BATTLEFIELD_LIST>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_ITEM_TEXT_QUERY_RESPONSE* ServerOpcode::get_if<SMSG_ITEM_TEXT_QUERY_RESPONSE>() {
+    if (opcode == Opcode::SMSG_ITEM_TEXT_QUERY_RESPONSE) {
+        return &SMSG_ITEM_TEXT_QUERY_RESPONSE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_ITEM_TEXT_QUERY_RESPONSE& ServerOpcode::get<SMSG_ITEM_TEXT_QUERY_RESPONSE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_ITEM_TEXT_QUERY_RESPONSE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SPELLLOGMISS* ServerOpcode::get_if<SMSG_SPELLLOGMISS>() {
+    if (opcode == Opcode::SMSG_SPELLLOGMISS) {
+        return &SMSG_SPELLLOGMISS;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SPELLLOGMISS& ServerOpcode::get<SMSG_SPELLLOGMISS>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SPELLLOGMISS>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SPELLLOGEXECUTE* ServerOpcode::get_if<SMSG_SPELLLOGEXECUTE>() {
+    if (opcode == Opcode::SMSG_SPELLLOGEXECUTE) {
+        return &SMSG_SPELLLOGEXECUTE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SPELLLOGEXECUTE& ServerOpcode::get<SMSG_SPELLLOGEXECUTE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SPELLLOGEXECUTE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_PERIODICAURALOG* ServerOpcode::get_if<SMSG_PERIODICAURALOG>() {
+    if (opcode == Opcode::SMSG_PERIODICAURALOG) {
+        return &SMSG_PERIODICAURALOG;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_PERIODICAURALOG& ServerOpcode::get<SMSG_PERIODICAURALOG>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_PERIODICAURALOG>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SPELLDAMAGESHIELD* ServerOpcode::get_if<SMSG_SPELLDAMAGESHIELD>() {
+    if (opcode == Opcode::SMSG_SPELLDAMAGESHIELD) {
+        return &SMSG_SPELLDAMAGESHIELD;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SPELLDAMAGESHIELD& ServerOpcode::get<SMSG_SPELLDAMAGESHIELD>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SPELLDAMAGESHIELD>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SPELLNONMELEEDAMAGELOG* ServerOpcode::get_if<SMSG_SPELLNONMELEEDAMAGELOG>() {
+    if (opcode == Opcode::SMSG_SPELLNONMELEEDAMAGELOG) {
+        return &SMSG_SPELLNONMELEEDAMAGELOG;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SPELLNONMELEEDAMAGELOG& ServerOpcode::get<SMSG_SPELLNONMELEEDAMAGELOG>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SPELLNONMELEEDAMAGELOG>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_ZONE_UNDER_ATTACK* ServerOpcode::get_if<SMSG_ZONE_UNDER_ATTACK>() {
+    if (opcode == Opcode::SMSG_ZONE_UNDER_ATTACK) {
+        return &SMSG_ZONE_UNDER_ATTACK;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_ZONE_UNDER_ATTACK& ServerOpcode::get<SMSG_ZONE_UNDER_ATTACK>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_ZONE_UNDER_ATTACK>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_AUCTION_HELLO_Server* ServerOpcode::get_if<MSG_AUCTION_HELLO_Server>() {
+    if (opcode == Opcode::MSG_AUCTION_HELLO) {
+        return &MSG_AUCTION_HELLO;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_AUCTION_HELLO_Server& ServerOpcode::get<MSG_AUCTION_HELLO_Server>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_AUCTION_HELLO_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_AUCTION_COMMAND_RESULT* ServerOpcode::get_if<SMSG_AUCTION_COMMAND_RESULT>() {
+    if (opcode == Opcode::SMSG_AUCTION_COMMAND_RESULT) {
+        return &SMSG_AUCTION_COMMAND_RESULT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_AUCTION_COMMAND_RESULT& ServerOpcode::get<SMSG_AUCTION_COMMAND_RESULT>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_AUCTION_COMMAND_RESULT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_AUCTION_LIST_RESULT* ServerOpcode::get_if<SMSG_AUCTION_LIST_RESULT>() {
+    if (opcode == Opcode::SMSG_AUCTION_LIST_RESULT) {
+        return &SMSG_AUCTION_LIST_RESULT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_AUCTION_LIST_RESULT& ServerOpcode::get<SMSG_AUCTION_LIST_RESULT>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_AUCTION_LIST_RESULT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_AUCTION_OWNER_LIST_RESULT* ServerOpcode::get_if<SMSG_AUCTION_OWNER_LIST_RESULT>() {
+    if (opcode == Opcode::SMSG_AUCTION_OWNER_LIST_RESULT) {
+        return &SMSG_AUCTION_OWNER_LIST_RESULT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_AUCTION_OWNER_LIST_RESULT& ServerOpcode::get<SMSG_AUCTION_OWNER_LIST_RESULT>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_AUCTION_OWNER_LIST_RESULT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_AUCTION_BIDDER_NOTIFICATION* ServerOpcode::get_if<SMSG_AUCTION_BIDDER_NOTIFICATION>() {
+    if (opcode == Opcode::SMSG_AUCTION_BIDDER_NOTIFICATION) {
+        return &SMSG_AUCTION_BIDDER_NOTIFICATION;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_AUCTION_BIDDER_NOTIFICATION& ServerOpcode::get<SMSG_AUCTION_BIDDER_NOTIFICATION>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_AUCTION_BIDDER_NOTIFICATION>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_AUCTION_OWNER_NOTIFICATION* ServerOpcode::get_if<SMSG_AUCTION_OWNER_NOTIFICATION>() {
+    if (opcode == Opcode::SMSG_AUCTION_OWNER_NOTIFICATION) {
+        return &SMSG_AUCTION_OWNER_NOTIFICATION;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_AUCTION_OWNER_NOTIFICATION& ServerOpcode::get<SMSG_AUCTION_OWNER_NOTIFICATION>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_AUCTION_OWNER_NOTIFICATION>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_PROCRESIST* ServerOpcode::get_if<SMSG_PROCRESIST>() {
+    if (opcode == Opcode::SMSG_PROCRESIST) {
+        return &SMSG_PROCRESIST;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_PROCRESIST& ServerOpcode::get<SMSG_PROCRESIST>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_PROCRESIST>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_DISPEL_FAILED* ServerOpcode::get_if<SMSG_DISPEL_FAILED>() {
+    if (opcode == Opcode::SMSG_DISPEL_FAILED) {
+        return &SMSG_DISPEL_FAILED;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_DISPEL_FAILED& ServerOpcode::get<SMSG_DISPEL_FAILED>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_DISPEL_FAILED>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SPELLORDAMAGE_IMMUNE* ServerOpcode::get_if<SMSG_SPELLORDAMAGE_IMMUNE>() {
+    if (opcode == Opcode::SMSG_SPELLORDAMAGE_IMMUNE) {
+        return &SMSG_SPELLORDAMAGE_IMMUNE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SPELLORDAMAGE_IMMUNE& ServerOpcode::get<SMSG_SPELLORDAMAGE_IMMUNE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SPELLORDAMAGE_IMMUNE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_AUCTION_BIDDER_LIST_RESULT* ServerOpcode::get_if<SMSG_AUCTION_BIDDER_LIST_RESULT>() {
+    if (opcode == Opcode::SMSG_AUCTION_BIDDER_LIST_RESULT) {
+        return &SMSG_AUCTION_BIDDER_LIST_RESULT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_AUCTION_BIDDER_LIST_RESULT& ServerOpcode::get<SMSG_AUCTION_BIDDER_LIST_RESULT>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_AUCTION_BIDDER_LIST_RESULT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SET_FLAT_SPELL_MODIFIER* ServerOpcode::get_if<SMSG_SET_FLAT_SPELL_MODIFIER>() {
+    if (opcode == Opcode::SMSG_SET_FLAT_SPELL_MODIFIER) {
+        return &SMSG_SET_FLAT_SPELL_MODIFIER;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SET_FLAT_SPELL_MODIFIER& ServerOpcode::get<SMSG_SET_FLAT_SPELL_MODIFIER>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SET_FLAT_SPELL_MODIFIER>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SET_PCT_SPELL_MODIFIER* ServerOpcode::get_if<SMSG_SET_PCT_SPELL_MODIFIER>() {
+    if (opcode == Opcode::SMSG_SET_PCT_SPELL_MODIFIER) {
+        return &SMSG_SET_PCT_SPELL_MODIFIER;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SET_PCT_SPELL_MODIFIER& ServerOpcode::get<SMSG_SET_PCT_SPELL_MODIFIER>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SET_PCT_SPELL_MODIFIER>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_CORPSE_RECLAIM_DELAY* ServerOpcode::get_if<SMSG_CORPSE_RECLAIM_DELAY>() {
+    if (opcode == Opcode::SMSG_CORPSE_RECLAIM_DELAY) {
+        return &SMSG_CORPSE_RECLAIM_DELAY;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_CORPSE_RECLAIM_DELAY& ServerOpcode::get<SMSG_CORPSE_RECLAIM_DELAY>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_CORPSE_RECLAIM_DELAY>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_LIST_STABLED_PETS_Server* ServerOpcode::get_if<MSG_LIST_STABLED_PETS_Server>() {
+    if (opcode == Opcode::MSG_LIST_STABLED_PETS) {
+        return &MSG_LIST_STABLED_PETS;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_LIST_STABLED_PETS_Server& ServerOpcode::get<MSG_LIST_STABLED_PETS_Server>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_LIST_STABLED_PETS_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_STABLE_RESULT* ServerOpcode::get_if<SMSG_STABLE_RESULT>() {
+    if (opcode == Opcode::SMSG_STABLE_RESULT) {
+        return &SMSG_STABLE_RESULT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_STABLE_RESULT& ServerOpcode::get<SMSG_STABLE_RESULT>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_STABLE_RESULT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_QUEST_PUSH_RESULT* ServerOpcode::get_if<MSG_QUEST_PUSH_RESULT>() {
+    if (opcode == Opcode::MSG_QUEST_PUSH_RESULT) {
+        return &MSG_QUEST_PUSH_RESULT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_QUEST_PUSH_RESULT& ServerOpcode::get<MSG_QUEST_PUSH_RESULT>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_QUEST_PUSH_RESULT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_PLAY_MUSIC* ServerOpcode::get_if<SMSG_PLAY_MUSIC>() {
+    if (opcode == Opcode::SMSG_PLAY_MUSIC) {
+        return &SMSG_PLAY_MUSIC;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_PLAY_MUSIC& ServerOpcode::get<SMSG_PLAY_MUSIC>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_PLAY_MUSIC>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_PLAY_OBJECT_SOUND* ServerOpcode::get_if<SMSG_PLAY_OBJECT_SOUND>() {
+    if (opcode == Opcode::SMSG_PLAY_OBJECT_SOUND) {
+        return &SMSG_PLAY_OBJECT_SOUND;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_PLAY_OBJECT_SOUND& ServerOpcode::get<SMSG_PLAY_OBJECT_SOUND>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_PLAY_OBJECT_SOUND>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SPELLDISPELLOG* ServerOpcode::get_if<SMSG_SPELLDISPELLOG>() {
+    if (opcode == Opcode::SMSG_SPELLDISPELLOG) {
+        return &SMSG_SPELLDISPELLOG;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SPELLDISPELLOG& ServerOpcode::get<SMSG_SPELLDISPELLOG>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SPELLDISPELLOG>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_QUERY_NEXT_MAIL_TIME_Server* ServerOpcode::get_if<MSG_QUERY_NEXT_MAIL_TIME_Server>() {
+    if (opcode == Opcode::MSG_QUERY_NEXT_MAIL_TIME) {
+        return &MSG_QUERY_NEXT_MAIL_TIME;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_QUERY_NEXT_MAIL_TIME_Server& ServerOpcode::get<MSG_QUERY_NEXT_MAIL_TIME_Server>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_QUERY_NEXT_MAIL_TIME_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_RECEIVED_MAIL* ServerOpcode::get_if<SMSG_RECEIVED_MAIL>() {
+    if (opcode == Opcode::SMSG_RECEIVED_MAIL) {
+        return &SMSG_RECEIVED_MAIL;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_RECEIVED_MAIL& ServerOpcode::get<SMSG_RECEIVED_MAIL>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_RECEIVED_MAIL>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_RAID_GROUP_ONLY* ServerOpcode::get_if<SMSG_RAID_GROUP_ONLY>() {
+    if (opcode == Opcode::SMSG_RAID_GROUP_ONLY) {
+        return &SMSG_RAID_GROUP_ONLY;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_RAID_GROUP_ONLY& ServerOpcode::get<SMSG_RAID_GROUP_ONLY>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_RAID_GROUP_ONLY>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_PVP_CREDIT* ServerOpcode::get_if<SMSG_PVP_CREDIT>() {
+    if (opcode == Opcode::SMSG_PVP_CREDIT) {
+        return &SMSG_PVP_CREDIT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_PVP_CREDIT& ServerOpcode::get<SMSG_PVP_CREDIT>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_PVP_CREDIT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_AUCTION_REMOVED_NOTIFICATION* ServerOpcode::get_if<SMSG_AUCTION_REMOVED_NOTIFICATION>() {
+    if (opcode == Opcode::SMSG_AUCTION_REMOVED_NOTIFICATION) {
+        return &SMSG_AUCTION_REMOVED_NOTIFICATION;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_AUCTION_REMOVED_NOTIFICATION& ServerOpcode::get<SMSG_AUCTION_REMOVED_NOTIFICATION>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_AUCTION_REMOVED_NOTIFICATION>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SERVER_MESSAGE* ServerOpcode::get_if<SMSG_SERVER_MESSAGE>() {
+    if (opcode == Opcode::SMSG_SERVER_MESSAGE) {
+        return &SMSG_SERVER_MESSAGE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SERVER_MESSAGE& ServerOpcode::get<SMSG_SERVER_MESSAGE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SERVER_MESSAGE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_MEETINGSTONE_SETQUEUE* ServerOpcode::get_if<SMSG_MEETINGSTONE_SETQUEUE>() {
+    if (opcode == Opcode::SMSG_MEETINGSTONE_SETQUEUE) {
+        return &SMSG_MEETINGSTONE_SETQUEUE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_MEETINGSTONE_SETQUEUE& ServerOpcode::get<SMSG_MEETINGSTONE_SETQUEUE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_MEETINGSTONE_SETQUEUE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_MEETINGSTONE_COMPLETE* ServerOpcode::get_if<SMSG_MEETINGSTONE_COMPLETE>() {
+    if (opcode == Opcode::SMSG_MEETINGSTONE_COMPLETE) {
+        return &SMSG_MEETINGSTONE_COMPLETE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_MEETINGSTONE_COMPLETE& ServerOpcode::get<SMSG_MEETINGSTONE_COMPLETE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_MEETINGSTONE_COMPLETE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_MEETINGSTONE_IN_PROGRESS* ServerOpcode::get_if<SMSG_MEETINGSTONE_IN_PROGRESS>() {
+    if (opcode == Opcode::SMSG_MEETINGSTONE_IN_PROGRESS) {
+        return &SMSG_MEETINGSTONE_IN_PROGRESS;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_MEETINGSTONE_IN_PROGRESS& ServerOpcode::get<SMSG_MEETINGSTONE_IN_PROGRESS>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_MEETINGSTONE_IN_PROGRESS>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_MEETINGSTONE_MEMBER_ADDED* ServerOpcode::get_if<SMSG_MEETINGSTONE_MEMBER_ADDED>() {
+    if (opcode == Opcode::SMSG_MEETINGSTONE_MEMBER_ADDED) {
+        return &SMSG_MEETINGSTONE_MEMBER_ADDED;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_MEETINGSTONE_MEMBER_ADDED& ServerOpcode::get<SMSG_MEETINGSTONE_MEMBER_ADDED>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_MEETINGSTONE_MEMBER_ADDED>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_CANCEL_AUTO_REPEAT* ServerOpcode::get_if<SMSG_CANCEL_AUTO_REPEAT>() {
+    if (opcode == Opcode::SMSG_CANCEL_AUTO_REPEAT) {
+        return &SMSG_CANCEL_AUTO_REPEAT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_CANCEL_AUTO_REPEAT& ServerOpcode::get<SMSG_CANCEL_AUTO_REPEAT>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_CANCEL_AUTO_REPEAT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_STANDSTATE_UPDATE* ServerOpcode::get_if<SMSG_STANDSTATE_UPDATE>() {
+    if (opcode == Opcode::SMSG_STANDSTATE_UPDATE) {
+        return &SMSG_STANDSTATE_UPDATE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_STANDSTATE_UPDATE& ServerOpcode::get<SMSG_STANDSTATE_UPDATE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_STANDSTATE_UPDATE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_LOOT_ALL_PASSED* ServerOpcode::get_if<SMSG_LOOT_ALL_PASSED>() {
+    if (opcode == Opcode::SMSG_LOOT_ALL_PASSED) {
+        return &SMSG_LOOT_ALL_PASSED;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_LOOT_ALL_PASSED& ServerOpcode::get<SMSG_LOOT_ALL_PASSED>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_LOOT_ALL_PASSED>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_LOOT_ROLL_WON* ServerOpcode::get_if<SMSG_LOOT_ROLL_WON>() {
+    if (opcode == Opcode::SMSG_LOOT_ROLL_WON) {
+        return &SMSG_LOOT_ROLL_WON;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_LOOT_ROLL_WON& ServerOpcode::get<SMSG_LOOT_ROLL_WON>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_LOOT_ROLL_WON>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_LOOT_START_ROLL* ServerOpcode::get_if<SMSG_LOOT_START_ROLL>() {
+    if (opcode == Opcode::SMSG_LOOT_START_ROLL) {
+        return &SMSG_LOOT_START_ROLL;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_LOOT_START_ROLL& ServerOpcode::get<SMSG_LOOT_START_ROLL>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_LOOT_START_ROLL>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_LOOT_ROLL* ServerOpcode::get_if<SMSG_LOOT_ROLL>() {
+    if (opcode == Opcode::SMSG_LOOT_ROLL) {
+        return &SMSG_LOOT_ROLL;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_LOOT_ROLL& ServerOpcode::get<SMSG_LOOT_ROLL>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_LOOT_ROLL>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_LOOT_MASTER_LIST* ServerOpcode::get_if<SMSG_LOOT_MASTER_LIST>() {
+    if (opcode == Opcode::SMSG_LOOT_MASTER_LIST) {
+        return &SMSG_LOOT_MASTER_LIST;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_LOOT_MASTER_LIST& ServerOpcode::get<SMSG_LOOT_MASTER_LIST>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_LOOT_MASTER_LIST>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SET_FORCED_REACTIONS* ServerOpcode::get_if<SMSG_SET_FORCED_REACTIONS>() {
+    if (opcode == Opcode::SMSG_SET_FORCED_REACTIONS) {
+        return &SMSG_SET_FORCED_REACTIONS;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SET_FORCED_REACTIONS& ServerOpcode::get<SMSG_SET_FORCED_REACTIONS>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SET_FORCED_REACTIONS>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SPELL_FAILED_OTHER* ServerOpcode::get_if<SMSG_SPELL_FAILED_OTHER>() {
+    if (opcode == Opcode::SMSG_SPELL_FAILED_OTHER) {
+        return &SMSG_SPELL_FAILED_OTHER;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SPELL_FAILED_OTHER& ServerOpcode::get<SMSG_SPELL_FAILED_OTHER>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SPELL_FAILED_OTHER>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_GAMEOBJECT_RESET_STATE* ServerOpcode::get_if<SMSG_GAMEOBJECT_RESET_STATE>() {
+    if (opcode == Opcode::SMSG_GAMEOBJECT_RESET_STATE) {
+        return &SMSG_GAMEOBJECT_RESET_STATE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_GAMEOBJECT_RESET_STATE& ServerOpcode::get<SMSG_GAMEOBJECT_RESET_STATE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_GAMEOBJECT_RESET_STATE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_CHAT_PLAYER_NOT_FOUND* ServerOpcode::get_if<SMSG_CHAT_PLAYER_NOT_FOUND>() {
+    if (opcode == Opcode::SMSG_CHAT_PLAYER_NOT_FOUND) {
+        return &SMSG_CHAT_PLAYER_NOT_FOUND;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_CHAT_PLAYER_NOT_FOUND& ServerOpcode::get<SMSG_CHAT_PLAYER_NOT_FOUND>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_CHAT_PLAYER_NOT_FOUND>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_TALENT_WIPE_CONFIRM_Server* ServerOpcode::get_if<MSG_TALENT_WIPE_CONFIRM_Server>() {
+    if (opcode == Opcode::MSG_TALENT_WIPE_CONFIRM) {
+        return &MSG_TALENT_WIPE_CONFIRM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_TALENT_WIPE_CONFIRM_Server& ServerOpcode::get<MSG_TALENT_WIPE_CONFIRM_Server>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_TALENT_WIPE_CONFIRM_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SUMMON_REQUEST* ServerOpcode::get_if<SMSG_SUMMON_REQUEST>() {
+    if (opcode == Opcode::SMSG_SUMMON_REQUEST) {
+        return &SMSG_SUMMON_REQUEST;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SUMMON_REQUEST& ServerOpcode::get<SMSG_SUMMON_REQUEST>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SUMMON_REQUEST>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_MONSTER_MOVE_TRANSPORT* ServerOpcode::get_if<SMSG_MONSTER_MOVE_TRANSPORT>() {
+    if (opcode == Opcode::SMSG_MONSTER_MOVE_TRANSPORT) {
+        return &SMSG_MONSTER_MOVE_TRANSPORT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_MONSTER_MOVE_TRANSPORT& ServerOpcode::get<SMSG_MONSTER_MOVE_TRANSPORT>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_MONSTER_MOVE_TRANSPORT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_PET_BROKEN* ServerOpcode::get_if<SMSG_PET_BROKEN>() {
+    if (opcode == Opcode::SMSG_PET_BROKEN) {
+        return &SMSG_PET_BROKEN;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_PET_BROKEN& ServerOpcode::get<SMSG_PET_BROKEN>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_PET_BROKEN>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_FEATHER_FALL_Server* ServerOpcode::get_if<MSG_MOVE_FEATHER_FALL_Server>() {
+    if (opcode == Opcode::MSG_MOVE_FEATHER_FALL) {
+        return &MSG_MOVE_FEATHER_FALL;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_FEATHER_FALL_Server& ServerOpcode::get<MSG_MOVE_FEATHER_FALL_Server>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_FEATHER_FALL_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_WATER_WALK* ServerOpcode::get_if<MSG_MOVE_WATER_WALK>() {
+    if (opcode == Opcode::MSG_MOVE_WATER_WALK) {
+        return &MSG_MOVE_WATER_WALK;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_WATER_WALK& ServerOpcode::get<MSG_MOVE_WATER_WALK>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_WATER_WALK>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_FEIGN_DEATH_RESISTED* ServerOpcode::get_if<SMSG_FEIGN_DEATH_RESISTED>() {
+    if (opcode == Opcode::SMSG_FEIGN_DEATH_RESISTED) {
+        return &SMSG_FEIGN_DEATH_RESISTED;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_FEIGN_DEATH_RESISTED& ServerOpcode::get<SMSG_FEIGN_DEATH_RESISTED>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_FEIGN_DEATH_RESISTED>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_DUEL_COUNTDOWN* ServerOpcode::get_if<SMSG_DUEL_COUNTDOWN>() {
+    if (opcode == Opcode::SMSG_DUEL_COUNTDOWN) {
+        return &SMSG_DUEL_COUNTDOWN;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_DUEL_COUNTDOWN& ServerOpcode::get<SMSG_DUEL_COUNTDOWN>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_DUEL_COUNTDOWN>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_AREA_TRIGGER_MESSAGE* ServerOpcode::get_if<SMSG_AREA_TRIGGER_MESSAGE>() {
+    if (opcode == Opcode::SMSG_AREA_TRIGGER_MESSAGE) {
+        return &SMSG_AREA_TRIGGER_MESSAGE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_AREA_TRIGGER_MESSAGE& ServerOpcode::get<SMSG_AREA_TRIGGER_MESSAGE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_AREA_TRIGGER_MESSAGE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_MEETINGSTONE_JOINFAILED* ServerOpcode::get_if<SMSG_MEETINGSTONE_JOINFAILED>() {
+    if (opcode == Opcode::SMSG_MEETINGSTONE_JOINFAILED) {
+        return &SMSG_MEETINGSTONE_JOINFAILED;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_MEETINGSTONE_JOINFAILED& ServerOpcode::get<SMSG_MEETINGSTONE_JOINFAILED>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_MEETINGSTONE_JOINFAILED>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_PLAYER_SKINNED* ServerOpcode::get_if<SMSG_PLAYER_SKINNED>() {
+    if (opcode == Opcode::SMSG_PLAYER_SKINNED) {
+        return &SMSG_PLAYER_SKINNED;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_PLAYER_SKINNED& ServerOpcode::get<SMSG_PLAYER_SKINNED>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_PLAYER_SKINNED>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_DURABILITY_DAMAGE_DEATH* ServerOpcode::get_if<SMSG_DURABILITY_DAMAGE_DEATH>() {
+    if (opcode == Opcode::SMSG_DURABILITY_DAMAGE_DEATH) {
+        return &SMSG_DURABILITY_DAMAGE_DEATH;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_DURABILITY_DAMAGE_DEATH& ServerOpcode::get<SMSG_DURABILITY_DAMAGE_DEATH>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_DURABILITY_DAMAGE_DEATH>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_PETITION_RENAME* ServerOpcode::get_if<MSG_PETITION_RENAME>() {
+    if (opcode == Opcode::MSG_PETITION_RENAME) {
+        return &MSG_PETITION_RENAME;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_PETITION_RENAME& ServerOpcode::get<MSG_PETITION_RENAME>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_PETITION_RENAME>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_INIT_WORLD_STATES* ServerOpcode::get_if<SMSG_INIT_WORLD_STATES>() {
+    if (opcode == Opcode::SMSG_INIT_WORLD_STATES) {
+        return &SMSG_INIT_WORLD_STATES;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_INIT_WORLD_STATES& ServerOpcode::get<SMSG_INIT_WORLD_STATES>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_INIT_WORLD_STATES>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_UPDATE_WORLD_STATE* ServerOpcode::get_if<SMSG_UPDATE_WORLD_STATE>() {
+    if (opcode == Opcode::SMSG_UPDATE_WORLD_STATE) {
+        return &SMSG_UPDATE_WORLD_STATE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_UPDATE_WORLD_STATE& ServerOpcode::get<SMSG_UPDATE_WORLD_STATE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_UPDATE_WORLD_STATE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_ITEM_NAME_QUERY_RESPONSE* ServerOpcode::get_if<SMSG_ITEM_NAME_QUERY_RESPONSE>() {
+    if (opcode == Opcode::SMSG_ITEM_NAME_QUERY_RESPONSE) {
+        return &SMSG_ITEM_NAME_QUERY_RESPONSE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_ITEM_NAME_QUERY_RESPONSE& ServerOpcode::get<SMSG_ITEM_NAME_QUERY_RESPONSE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_ITEM_NAME_QUERY_RESPONSE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_PET_ACTION_FEEDBACK* ServerOpcode::get_if<SMSG_PET_ACTION_FEEDBACK>() {
+    if (opcode == Opcode::SMSG_PET_ACTION_FEEDBACK) {
+        return &SMSG_PET_ACTION_FEEDBACK;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_PET_ACTION_FEEDBACK& ServerOpcode::get<SMSG_PET_ACTION_FEEDBACK>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_PET_ACTION_FEEDBACK>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_CHAR_RENAME* ServerOpcode::get_if<SMSG_CHAR_RENAME>() {
+    if (opcode == Opcode::SMSG_CHAR_RENAME) {
+        return &SMSG_CHAR_RENAME;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_CHAR_RENAME& ServerOpcode::get<SMSG_CHAR_RENAME>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_CHAR_RENAME>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_INSTANCE_SAVE_CREATED* ServerOpcode::get_if<SMSG_INSTANCE_SAVE_CREATED>() {
+    if (opcode == Opcode::SMSG_INSTANCE_SAVE_CREATED) {
+        return &SMSG_INSTANCE_SAVE_CREATED;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_INSTANCE_SAVE_CREATED& ServerOpcode::get<SMSG_INSTANCE_SAVE_CREATED>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_INSTANCE_SAVE_CREATED>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_RAID_INSTANCE_INFO* ServerOpcode::get_if<SMSG_RAID_INSTANCE_INFO>() {
+    if (opcode == Opcode::SMSG_RAID_INSTANCE_INFO) {
+        return &SMSG_RAID_INSTANCE_INFO;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_RAID_INSTANCE_INFO& ServerOpcode::get<SMSG_RAID_INSTANCE_INFO>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_RAID_INSTANCE_INFO>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_PLAY_SOUND* ServerOpcode::get_if<SMSG_PLAY_SOUND>() {
+    if (opcode == Opcode::SMSG_PLAY_SOUND) {
+        return &SMSG_PLAY_SOUND;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_PLAY_SOUND& ServerOpcode::get<SMSG_PLAY_SOUND>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_PLAY_SOUND>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_BATTLEFIELD_STATUS* ServerOpcode::get_if<SMSG_BATTLEFIELD_STATUS>() {
+    if (opcode == Opcode::SMSG_BATTLEFIELD_STATUS) {
+        return &SMSG_BATTLEFIELD_STATUS;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_BATTLEFIELD_STATUS& ServerOpcode::get<SMSG_BATTLEFIELD_STATUS>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_BATTLEFIELD_STATUS>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_INSPECT_HONOR_STATS_Server* ServerOpcode::get_if<MSG_INSPECT_HONOR_STATS_Server>() {
+    if (opcode == Opcode::MSG_INSPECT_HONOR_STATS) {
+        return &MSG_INSPECT_HONOR_STATS;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_INSPECT_HONOR_STATS_Server& ServerOpcode::get<MSG_INSPECT_HONOR_STATS_Server>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_INSPECT_HONOR_STATS_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_FORCE_WALK_SPEED_CHANGE* ServerOpcode::get_if<SMSG_FORCE_WALK_SPEED_CHANGE>() {
+    if (opcode == Opcode::SMSG_FORCE_WALK_SPEED_CHANGE) {
+        return &SMSG_FORCE_WALK_SPEED_CHANGE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_FORCE_WALK_SPEED_CHANGE& ServerOpcode::get<SMSG_FORCE_WALK_SPEED_CHANGE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_FORCE_WALK_SPEED_CHANGE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_FORCE_SWIM_BACK_SPEED_CHANGE* ServerOpcode::get_if<SMSG_FORCE_SWIM_BACK_SPEED_CHANGE>() {
+    if (opcode == Opcode::SMSG_FORCE_SWIM_BACK_SPEED_CHANGE) {
+        return &SMSG_FORCE_SWIM_BACK_SPEED_CHANGE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_FORCE_SWIM_BACK_SPEED_CHANGE& ServerOpcode::get<SMSG_FORCE_SWIM_BACK_SPEED_CHANGE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_FORCE_SWIM_BACK_SPEED_CHANGE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_FORCE_TURN_RATE_CHANGE* ServerOpcode::get_if<SMSG_FORCE_TURN_RATE_CHANGE>() {
+    if (opcode == Opcode::SMSG_FORCE_TURN_RATE_CHANGE) {
+        return &SMSG_FORCE_TURN_RATE_CHANGE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_FORCE_TURN_RATE_CHANGE& ServerOpcode::get<SMSG_FORCE_TURN_RATE_CHANGE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_FORCE_TURN_RATE_CHANGE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_PVP_LOG_DATA_Server* ServerOpcode::get_if<MSG_PVP_LOG_DATA_Server>() {
+    if (opcode == Opcode::MSG_PVP_LOG_DATA) {
+        return &MSG_PVP_LOG_DATA;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_PVP_LOG_DATA_Server& ServerOpcode::get<MSG_PVP_LOG_DATA_Server>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_PVP_LOG_DATA_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_AREA_SPIRIT_HEALER_TIME* ServerOpcode::get_if<SMSG_AREA_SPIRIT_HEALER_TIME>() {
+    if (opcode == Opcode::SMSG_AREA_SPIRIT_HEALER_TIME) {
+        return &SMSG_AREA_SPIRIT_HEALER_TIME;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_AREA_SPIRIT_HEALER_TIME& ServerOpcode::get<SMSG_AREA_SPIRIT_HEALER_TIME>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_AREA_SPIRIT_HEALER_TIME>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_WARDEN_DATA* ServerOpcode::get_if<SMSG_WARDEN_DATA>() {
+    if (opcode == Opcode::SMSG_WARDEN_DATA) {
+        return &SMSG_WARDEN_DATA;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_WARDEN_DATA& ServerOpcode::get<SMSG_WARDEN_DATA>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_WARDEN_DATA>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_GROUP_JOINED_BATTLEGROUND* ServerOpcode::get_if<SMSG_GROUP_JOINED_BATTLEGROUND>() {
+    if (opcode == Opcode::SMSG_GROUP_JOINED_BATTLEGROUND) {
+        return &SMSG_GROUP_JOINED_BATTLEGROUND;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_GROUP_JOINED_BATTLEGROUND& ServerOpcode::get<SMSG_GROUP_JOINED_BATTLEGROUND>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_GROUP_JOINED_BATTLEGROUND>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_BATTLEGROUND_PLAYER_POSITIONS_Server* ServerOpcode::get_if<MSG_BATTLEGROUND_PLAYER_POSITIONS_Server>() {
+    if (opcode == Opcode::MSG_BATTLEGROUND_PLAYER_POSITIONS) {
+        return &MSG_BATTLEGROUND_PLAYER_POSITIONS;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_BATTLEGROUND_PLAYER_POSITIONS_Server& ServerOpcode::get<MSG_BATTLEGROUND_PLAYER_POSITIONS_Server>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_BATTLEGROUND_PLAYER_POSITIONS_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_BINDER_CONFIRM* ServerOpcode::get_if<SMSG_BINDER_CONFIRM>() {
+    if (opcode == Opcode::SMSG_BINDER_CONFIRM) {
+        return &SMSG_BINDER_CONFIRM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_BINDER_CONFIRM& ServerOpcode::get<SMSG_BINDER_CONFIRM>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_BINDER_CONFIRM>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_BATTLEGROUND_PLAYER_JOINED* ServerOpcode::get_if<SMSG_BATTLEGROUND_PLAYER_JOINED>() {
+    if (opcode == Opcode::SMSG_BATTLEGROUND_PLAYER_JOINED) {
+        return &SMSG_BATTLEGROUND_PLAYER_JOINED;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_BATTLEGROUND_PLAYER_JOINED& ServerOpcode::get<SMSG_BATTLEGROUND_PLAYER_JOINED>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_BATTLEGROUND_PLAYER_JOINED>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_BATTLEGROUND_PLAYER_LEFT* ServerOpcode::get_if<SMSG_BATTLEGROUND_PLAYER_LEFT>() {
+    if (opcode == Opcode::SMSG_BATTLEGROUND_PLAYER_LEFT) {
+        return &SMSG_BATTLEGROUND_PLAYER_LEFT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_BATTLEGROUND_PLAYER_LEFT& ServerOpcode::get<SMSG_BATTLEGROUND_PLAYER_LEFT>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_BATTLEGROUND_PLAYER_LEFT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_ADDON_INFO* ServerOpcode::get_if<SMSG_ADDON_INFO>() {
+    if (opcode == Opcode::SMSG_ADDON_INFO) {
+        return &SMSG_ADDON_INFO;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_ADDON_INFO& ServerOpcode::get<SMSG_ADDON_INFO>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_ADDON_INFO>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_PET_UNLEARN_CONFIRM* ServerOpcode::get_if<SMSG_PET_UNLEARN_CONFIRM>() {
+    if (opcode == Opcode::SMSG_PET_UNLEARN_CONFIRM) {
+        return &SMSG_PET_UNLEARN_CONFIRM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_PET_UNLEARN_CONFIRM& ServerOpcode::get<SMSG_PET_UNLEARN_CONFIRM>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_PET_UNLEARN_CONFIRM>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_PARTY_MEMBER_STATS_FULL* ServerOpcode::get_if<SMSG_PARTY_MEMBER_STATS_FULL>() {
+    if (opcode == Opcode::SMSG_PARTY_MEMBER_STATS_FULL) {
+        return &SMSG_PARTY_MEMBER_STATS_FULL;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_PARTY_MEMBER_STATS_FULL& ServerOpcode::get<SMSG_PARTY_MEMBER_STATS_FULL>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_PARTY_MEMBER_STATS_FULL>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_WEATHER* ServerOpcode::get_if<SMSG_WEATHER>() {
+    if (opcode == Opcode::SMSG_WEATHER) {
+        return &SMSG_WEATHER;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_WEATHER& ServerOpcode::get<SMSG_WEATHER>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_WEATHER>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_RAID_INSTANCE_MESSAGE* ServerOpcode::get_if<SMSG_RAID_INSTANCE_MESSAGE>() {
+    if (opcode == Opcode::SMSG_RAID_INSTANCE_MESSAGE) {
+        return &SMSG_RAID_INSTANCE_MESSAGE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_RAID_INSTANCE_MESSAGE& ServerOpcode::get<SMSG_RAID_INSTANCE_MESSAGE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_RAID_INSTANCE_MESSAGE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_CHAT_RESTRICTED* ServerOpcode::get_if<SMSG_CHAT_RESTRICTED>() {
+    if (opcode == Opcode::SMSG_CHAT_RESTRICTED) {
+        return &SMSG_CHAT_RESTRICTED;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_CHAT_RESTRICTED& ServerOpcode::get<SMSG_CHAT_RESTRICTED>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_CHAT_RESTRICTED>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SPLINE_SET_RUN_SPEED* ServerOpcode::get_if<SMSG_SPLINE_SET_RUN_SPEED>() {
+    if (opcode == Opcode::SMSG_SPLINE_SET_RUN_SPEED) {
+        return &SMSG_SPLINE_SET_RUN_SPEED;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SPLINE_SET_RUN_SPEED& ServerOpcode::get<SMSG_SPLINE_SET_RUN_SPEED>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SPLINE_SET_RUN_SPEED>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SPLINE_SET_RUN_BACK_SPEED* ServerOpcode::get_if<SMSG_SPLINE_SET_RUN_BACK_SPEED>() {
+    if (opcode == Opcode::SMSG_SPLINE_SET_RUN_BACK_SPEED) {
+        return &SMSG_SPLINE_SET_RUN_BACK_SPEED;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SPLINE_SET_RUN_BACK_SPEED& ServerOpcode::get<SMSG_SPLINE_SET_RUN_BACK_SPEED>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SPLINE_SET_RUN_BACK_SPEED>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SPLINE_SET_SWIM_SPEED* ServerOpcode::get_if<SMSG_SPLINE_SET_SWIM_SPEED>() {
+    if (opcode == Opcode::SMSG_SPLINE_SET_SWIM_SPEED) {
+        return &SMSG_SPLINE_SET_SWIM_SPEED;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SPLINE_SET_SWIM_SPEED& ServerOpcode::get<SMSG_SPLINE_SET_SWIM_SPEED>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SPLINE_SET_SWIM_SPEED>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SPLINE_SET_WALK_SPEED* ServerOpcode::get_if<SMSG_SPLINE_SET_WALK_SPEED>() {
+    if (opcode == Opcode::SMSG_SPLINE_SET_WALK_SPEED) {
+        return &SMSG_SPLINE_SET_WALK_SPEED;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SPLINE_SET_WALK_SPEED& ServerOpcode::get<SMSG_SPLINE_SET_WALK_SPEED>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SPLINE_SET_WALK_SPEED>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SPLINE_SET_SWIM_BACK_SPEED* ServerOpcode::get_if<SMSG_SPLINE_SET_SWIM_BACK_SPEED>() {
+    if (opcode == Opcode::SMSG_SPLINE_SET_SWIM_BACK_SPEED) {
+        return &SMSG_SPLINE_SET_SWIM_BACK_SPEED;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SPLINE_SET_SWIM_BACK_SPEED& ServerOpcode::get<SMSG_SPLINE_SET_SWIM_BACK_SPEED>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SPLINE_SET_SWIM_BACK_SPEED>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SPLINE_SET_TURN_RATE* ServerOpcode::get_if<SMSG_SPLINE_SET_TURN_RATE>() {
+    if (opcode == Opcode::SMSG_SPLINE_SET_TURN_RATE) {
+        return &SMSG_SPLINE_SET_TURN_RATE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SPLINE_SET_TURN_RATE& ServerOpcode::get<SMSG_SPLINE_SET_TURN_RATE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SPLINE_SET_TURN_RATE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SPLINE_MOVE_UNROOT* ServerOpcode::get_if<SMSG_SPLINE_MOVE_UNROOT>() {
+    if (opcode == Opcode::SMSG_SPLINE_MOVE_UNROOT) {
+        return &SMSG_SPLINE_MOVE_UNROOT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SPLINE_MOVE_UNROOT& ServerOpcode::get<SMSG_SPLINE_MOVE_UNROOT>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SPLINE_MOVE_UNROOT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SPLINE_MOVE_FEATHER_FALL* ServerOpcode::get_if<SMSG_SPLINE_MOVE_FEATHER_FALL>() {
+    if (opcode == Opcode::SMSG_SPLINE_MOVE_FEATHER_FALL) {
+        return &SMSG_SPLINE_MOVE_FEATHER_FALL;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SPLINE_MOVE_FEATHER_FALL& ServerOpcode::get<SMSG_SPLINE_MOVE_FEATHER_FALL>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SPLINE_MOVE_FEATHER_FALL>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SPLINE_MOVE_NORMAL_FALL* ServerOpcode::get_if<SMSG_SPLINE_MOVE_NORMAL_FALL>() {
+    if (opcode == Opcode::SMSG_SPLINE_MOVE_NORMAL_FALL) {
+        return &SMSG_SPLINE_MOVE_NORMAL_FALL;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SPLINE_MOVE_NORMAL_FALL& ServerOpcode::get<SMSG_SPLINE_MOVE_NORMAL_FALL>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SPLINE_MOVE_NORMAL_FALL>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SPLINE_MOVE_SET_HOVER* ServerOpcode::get_if<SMSG_SPLINE_MOVE_SET_HOVER>() {
+    if (opcode == Opcode::SMSG_SPLINE_MOVE_SET_HOVER) {
+        return &SMSG_SPLINE_MOVE_SET_HOVER;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SPLINE_MOVE_SET_HOVER& ServerOpcode::get<SMSG_SPLINE_MOVE_SET_HOVER>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SPLINE_MOVE_SET_HOVER>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SPLINE_MOVE_UNSET_HOVER* ServerOpcode::get_if<SMSG_SPLINE_MOVE_UNSET_HOVER>() {
+    if (opcode == Opcode::SMSG_SPLINE_MOVE_UNSET_HOVER) {
+        return &SMSG_SPLINE_MOVE_UNSET_HOVER;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SPLINE_MOVE_UNSET_HOVER& ServerOpcode::get<SMSG_SPLINE_MOVE_UNSET_HOVER>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SPLINE_MOVE_UNSET_HOVER>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SPLINE_MOVE_WATER_WALK* ServerOpcode::get_if<SMSG_SPLINE_MOVE_WATER_WALK>() {
+    if (opcode == Opcode::SMSG_SPLINE_MOVE_WATER_WALK) {
+        return &SMSG_SPLINE_MOVE_WATER_WALK;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SPLINE_MOVE_WATER_WALK& ServerOpcode::get<SMSG_SPLINE_MOVE_WATER_WALK>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SPLINE_MOVE_WATER_WALK>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SPLINE_MOVE_LAND_WALK* ServerOpcode::get_if<SMSG_SPLINE_MOVE_LAND_WALK>() {
+    if (opcode == Opcode::SMSG_SPLINE_MOVE_LAND_WALK) {
+        return &SMSG_SPLINE_MOVE_LAND_WALK;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SPLINE_MOVE_LAND_WALK& ServerOpcode::get<SMSG_SPLINE_MOVE_LAND_WALK>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SPLINE_MOVE_LAND_WALK>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SPLINE_MOVE_START_SWIM* ServerOpcode::get_if<SMSG_SPLINE_MOVE_START_SWIM>() {
+    if (opcode == Opcode::SMSG_SPLINE_MOVE_START_SWIM) {
+        return &SMSG_SPLINE_MOVE_START_SWIM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SPLINE_MOVE_START_SWIM& ServerOpcode::get<SMSG_SPLINE_MOVE_START_SWIM>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SPLINE_MOVE_START_SWIM>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SPLINE_MOVE_STOP_SWIM* ServerOpcode::get_if<SMSG_SPLINE_MOVE_STOP_SWIM>() {
+    if (opcode == Opcode::SMSG_SPLINE_MOVE_STOP_SWIM) {
+        return &SMSG_SPLINE_MOVE_STOP_SWIM;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SPLINE_MOVE_STOP_SWIM& ServerOpcode::get<SMSG_SPLINE_MOVE_STOP_SWIM>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SPLINE_MOVE_STOP_SWIM>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SPLINE_MOVE_SET_RUN_MODE* ServerOpcode::get_if<SMSG_SPLINE_MOVE_SET_RUN_MODE>() {
+    if (opcode == Opcode::SMSG_SPLINE_MOVE_SET_RUN_MODE) {
+        return &SMSG_SPLINE_MOVE_SET_RUN_MODE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SPLINE_MOVE_SET_RUN_MODE& ServerOpcode::get<SMSG_SPLINE_MOVE_SET_RUN_MODE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SPLINE_MOVE_SET_RUN_MODE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SPLINE_MOVE_SET_WALK_MODE* ServerOpcode::get_if<SMSG_SPLINE_MOVE_SET_WALK_MODE>() {
+    if (opcode == Opcode::SMSG_SPLINE_MOVE_SET_WALK_MODE) {
+        return &SMSG_SPLINE_MOVE_SET_WALK_MODE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SPLINE_MOVE_SET_WALK_MODE& ServerOpcode::get<SMSG_SPLINE_MOVE_SET_WALK_MODE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SPLINE_MOVE_SET_WALK_MODE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_MOVE_TIME_SKIPPED_Server* ServerOpcode::get_if<MSG_MOVE_TIME_SKIPPED_Server>() {
+    if (opcode == Opcode::MSG_MOVE_TIME_SKIPPED) {
+        return &MSG_MOVE_TIME_SKIPPED;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_MOVE_TIME_SKIPPED_Server& ServerOpcode::get<MSG_MOVE_TIME_SKIPPED_Server>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_TIME_SKIPPED_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SPLINE_MOVE_ROOT* ServerOpcode::get_if<SMSG_SPLINE_MOVE_ROOT>() {
+    if (opcode == Opcode::SMSG_SPLINE_MOVE_ROOT) {
+        return &SMSG_SPLINE_MOVE_ROOT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SPLINE_MOVE_ROOT& ServerOpcode::get<SMSG_SPLINE_MOVE_ROOT>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SPLINE_MOVE_ROOT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_INVALIDATE_PLAYER* ServerOpcode::get_if<SMSG_INVALIDATE_PLAYER>() {
+    if (opcode == Opcode::SMSG_INVALIDATE_PLAYER) {
+        return &SMSG_INVALIDATE_PLAYER;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_INVALIDATE_PLAYER& ServerOpcode::get<SMSG_INVALIDATE_PLAYER>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_INVALIDATE_PLAYER>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_INSTANCE_RESET* ServerOpcode::get_if<SMSG_INSTANCE_RESET>() {
+    if (opcode == Opcode::SMSG_INSTANCE_RESET) {
+        return &SMSG_INSTANCE_RESET;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_INSTANCE_RESET& ServerOpcode::get<SMSG_INSTANCE_RESET>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_INSTANCE_RESET>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_INSTANCE_RESET_FAILED* ServerOpcode::get_if<SMSG_INSTANCE_RESET_FAILED>() {
+    if (opcode == Opcode::SMSG_INSTANCE_RESET_FAILED) {
+        return &SMSG_INSTANCE_RESET_FAILED;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_INSTANCE_RESET_FAILED& ServerOpcode::get<SMSG_INSTANCE_RESET_FAILED>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_INSTANCE_RESET_FAILED>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_UPDATE_LAST_INSTANCE* ServerOpcode::get_if<SMSG_UPDATE_LAST_INSTANCE>() {
+    if (opcode == Opcode::SMSG_UPDATE_LAST_INSTANCE) {
+        return &SMSG_UPDATE_LAST_INSTANCE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_UPDATE_LAST_INSTANCE& ServerOpcode::get<SMSG_UPDATE_LAST_INSTANCE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_UPDATE_LAST_INSTANCE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_RAID_TARGET_UPDATE_Server* ServerOpcode::get_if<MSG_RAID_TARGET_UPDATE_Server>() {
+    if (opcode == Opcode::MSG_RAID_TARGET_UPDATE) {
+        return &MSG_RAID_TARGET_UPDATE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_RAID_TARGET_UPDATE_Server& ServerOpcode::get<MSG_RAID_TARGET_UPDATE_Server>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_RAID_TARGET_UPDATE_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::MSG_RAID_READY_CHECK_Server* ServerOpcode::get_if<MSG_RAID_READY_CHECK_Server>() {
+    if (opcode == Opcode::MSG_RAID_READY_CHECK) {
+        return &MSG_RAID_READY_CHECK;
+    }
+    return nullptr;
+}
+template <>
+vanilla::MSG_RAID_READY_CHECK_Server& ServerOpcode::get<MSG_RAID_READY_CHECK_Server>() {
+    auto p = ServerOpcode::get_if<vanilla::MSG_RAID_READY_CHECK_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_PET_ACTION_SOUND* ServerOpcode::get_if<SMSG_PET_ACTION_SOUND>() {
+    if (opcode == Opcode::SMSG_PET_ACTION_SOUND) {
+        return &SMSG_PET_ACTION_SOUND;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_PET_ACTION_SOUND& ServerOpcode::get<SMSG_PET_ACTION_SOUND>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_PET_ACTION_SOUND>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_PET_DISMISS_SOUND* ServerOpcode::get_if<SMSG_PET_DISMISS_SOUND>() {
+    if (opcode == Opcode::SMSG_PET_DISMISS_SOUND) {
+        return &SMSG_PET_DISMISS_SOUND;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_PET_DISMISS_SOUND& ServerOpcode::get<SMSG_PET_DISMISS_SOUND>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_PET_DISMISS_SOUND>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_GM_TICKET_STATUS_UPDATE* ServerOpcode::get_if<SMSG_GM_TICKET_STATUS_UPDATE>() {
+    if (opcode == Opcode::SMSG_GM_TICKET_STATUS_UPDATE) {
+        return &SMSG_GM_TICKET_STATUS_UPDATE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_GM_TICKET_STATUS_UPDATE& ServerOpcode::get<SMSG_GM_TICKET_STATUS_UPDATE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_GM_TICKET_STATUS_UPDATE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_UPDATE_INSTANCE_OWNERSHIP* ServerOpcode::get_if<SMSG_UPDATE_INSTANCE_OWNERSHIP>() {
+    if (opcode == Opcode::SMSG_UPDATE_INSTANCE_OWNERSHIP) {
+        return &SMSG_UPDATE_INSTANCE_OWNERSHIP;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_UPDATE_INSTANCE_OWNERSHIP& ServerOpcode::get<SMSG_UPDATE_INSTANCE_OWNERSHIP>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_UPDATE_INSTANCE_OWNERSHIP>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SPELLINSTAKILLLOG* ServerOpcode::get_if<SMSG_SPELLINSTAKILLLOG>() {
+    if (opcode == Opcode::SMSG_SPELLINSTAKILLLOG) {
+        return &SMSG_SPELLINSTAKILLLOG;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SPELLINSTAKILLLOG& ServerOpcode::get<SMSG_SPELLINSTAKILLLOG>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SPELLINSTAKILLLOG>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_SPELL_UPDATE_CHAIN_TARGETS* ServerOpcode::get_if<SMSG_SPELL_UPDATE_CHAIN_TARGETS>() {
+    if (opcode == Opcode::SMSG_SPELL_UPDATE_CHAIN_TARGETS) {
+        return &SMSG_SPELL_UPDATE_CHAIN_TARGETS;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_SPELL_UPDATE_CHAIN_TARGETS& ServerOpcode::get<SMSG_SPELL_UPDATE_CHAIN_TARGETS>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_SPELL_UPDATE_CHAIN_TARGETS>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_EXPECTED_SPAM_RECORDS* ServerOpcode::get_if<SMSG_EXPECTED_SPAM_RECORDS>() {
+    if (opcode == Opcode::SMSG_EXPECTED_SPAM_RECORDS) {
+        return &SMSG_EXPECTED_SPAM_RECORDS;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_EXPECTED_SPAM_RECORDS& ServerOpcode::get<SMSG_EXPECTED_SPAM_RECORDS>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_EXPECTED_SPAM_RECORDS>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::SMSG_DEFENSE_MESSAGE* ServerOpcode::get_if<SMSG_DEFENSE_MESSAGE>() {
+    if (opcode == Opcode::SMSG_DEFENSE_MESSAGE) {
+        return &SMSG_DEFENSE_MESSAGE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_DEFENSE_MESSAGE& ServerOpcode::get<SMSG_DEFENSE_MESSAGE>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_DEFENSE_MESSAGE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const ServerOpcode& opcode) {
     if (opcode.opcode == ServerOpcode::Opcode::SMSG_CHAR_CREATE) {
         return opcode.SMSG_CHAR_CREATE.write();;
     }
@@ -22630,6 +34197,9 @@ std::vector<unsigned char> write_opcode(const ServerOpcode& opcode) {
     }
     if (opcode.opcode == ServerOpcode::Opcode::SMSG_NEW_WORLD) {
         return opcode.SMSG_NEW_WORLD.write();;
+    }
+    if (opcode.opcode == ServerOpcode::Opcode::SMSG_TRANSFER_PENDING) {
+        return opcode.SMSG_TRANSFER_PENDING.write();;
     }
     if (opcode.opcode == ServerOpcode::Opcode::SMSG_TRANSFER_ABORTED) {
         return opcode.SMSG_TRANSFER_ABORTED.write();;
@@ -22658,11 +34228,20 @@ std::vector<unsigned char> write_opcode(const ServerOpcode& opcode) {
     if (opcode.opcode == ServerOpcode::Opcode::SMSG_GUILD_QUERY_RESPONSE) {
         return opcode.SMSG_GUILD_QUERY_RESPONSE.write();;
     }
+    if (opcode.opcode == ServerOpcode::Opcode::SMSG_ITEM_QUERY_SINGLE_RESPONSE) {
+        return opcode.SMSG_ITEM_QUERY_SINGLE_RESPONSE.write();;
+    }
     if (opcode.opcode == ServerOpcode::Opcode::SMSG_PAGE_TEXT_QUERY_RESPONSE) {
         return opcode.SMSG_PAGE_TEXT_QUERY_RESPONSE.write();;
     }
     if (opcode.opcode == ServerOpcode::Opcode::SMSG_QUEST_QUERY_RESPONSE) {
         return opcode.SMSG_QUEST_QUERY_RESPONSE.write();;
+    }
+    if (opcode.opcode == ServerOpcode::Opcode::SMSG_GAMEOBJECT_QUERY_RESPONSE) {
+        return opcode.SMSG_GAMEOBJECT_QUERY_RESPONSE.write();;
+    }
+    if (opcode.opcode == ServerOpcode::Opcode::SMSG_CREATURE_QUERY_RESPONSE) {
+        return opcode.SMSG_CREATURE_QUERY_RESPONSE.write();;
     }
     if (opcode.opcode == ServerOpcode::Opcode::SMSG_WHO) {
         return opcode.SMSG_WHO.write();;
@@ -22693,6 +34272,9 @@ std::vector<unsigned char> write_opcode(const ServerOpcode& opcode) {
     }
     if (opcode.opcode == ServerOpcode::Opcode::SMSG_GROUP_DESTROYED) {
         return opcode.SMSG_GROUP_DESTROYED.write();;
+    }
+    if (opcode.opcode == ServerOpcode::Opcode::SMSG_GROUP_LIST) {
+        return opcode.SMSG_GROUP_LIST.write();;
     }
     if (opcode.opcode == ServerOpcode::Opcode::SMSG_PARTY_MEMBER_STATS) {
         return opcode.SMSG_PARTY_MEMBER_STATS.write();;
@@ -22804,6 +34386,9 @@ std::vector<unsigned char> write_opcode(const ServerOpcode& opcode) {
     }
     if (opcode.opcode == ServerOpcode::Opcode::MSG_MOVE_SET_PITCH) {
         return opcode.MSG_MOVE_SET_PITCH.write();;
+    }
+    if (opcode.opcode == ServerOpcode::Opcode::MSG_MOVE_WORLDPORT_ACK) {
+        return opcode.MSG_MOVE_WORLDPORT_ACK.write_smsg();;
     }
     if (opcode.opcode == ServerOpcode::Opcode::SMSG_MONSTER_MOVE) {
         return opcode.SMSG_MONSTER_MOVE.write();;
@@ -23024,6 +34609,9 @@ std::vector<unsigned char> write_opcode(const ServerOpcode& opcode) {
     if (opcode.opcode == ServerOpcode::Opcode::SMSG_PET_NAME_INVALID) {
         return opcode.SMSG_PET_NAME_INVALID.write();;
     }
+    if (opcode.opcode == ServerOpcode::Opcode::SMSG_PET_SPELLS) {
+        return opcode.SMSG_PET_SPELLS.write();;
+    }
     if (opcode.opcode == ServerOpcode::Opcode::SMSG_PET_MODE) {
         return opcode.SMSG_PET_MODE.write();;
     }
@@ -23129,6 +34717,9 @@ std::vector<unsigned char> write_opcode(const ServerOpcode& opcode) {
     if (opcode.opcode == ServerOpcode::Opcode::SMSG_PETITION_SIGN_RESULTS) {
         return opcode.SMSG_PETITION_SIGN_RESULTS.write();;
     }
+    if (opcode.opcode == ServerOpcode::Opcode::MSG_PETITION_DECLINE) {
+        return opcode.MSG_PETITION_DECLINE.write_smsg();;
+    }
     if (opcode.opcode == ServerOpcode::Opcode::SMSG_TURN_IN_PETITION_RESULTS) {
         return opcode.SMSG_TURN_IN_PETITION_RESULTS.write();;
     }
@@ -23200,6 +34791,9 @@ std::vector<unsigned char> write_opcode(const ServerOpcode& opcode) {
     }
     if (opcode.opcode == ServerOpcode::Opcode::MSG_SAVE_GUILD_EMBLEM) {
         return opcode.MSG_SAVE_GUILD_EMBLEM.write();;
+    }
+    if (opcode.opcode == ServerOpcode::Opcode::MSG_TABARDVENDOR_ACTIVATE) {
+        return opcode.MSG_TABARDVENDOR_ACTIVATE.write_smsg();;
     }
     if (opcode.opcode == ServerOpcode::Opcode::SMSG_PLAY_SPELL_VISUAL) {
         return opcode.SMSG_PLAY_SPELL_VISUAL.write();;
@@ -23342,6 +34936,9 @@ std::vector<unsigned char> write_opcode(const ServerOpcode& opcode) {
     if (opcode.opcode == ServerOpcode::Opcode::SMSG_STABLE_RESULT) {
         return opcode.SMSG_STABLE_RESULT.write();;
     }
+    if (opcode.opcode == ServerOpcode::Opcode::MSG_QUEST_PUSH_RESULT) {
+        return opcode.MSG_QUEST_PUSH_RESULT.write_smsg();;
+    }
     if (opcode.opcode == ServerOpcode::Opcode::SMSG_PLAY_MUSIC) {
         return opcode.SMSG_PLAY_MUSIC.write();;
     }
@@ -23429,6 +35026,9 @@ std::vector<unsigned char> write_opcode(const ServerOpcode& opcode) {
     if (opcode.opcode == ServerOpcode::Opcode::MSG_MOVE_FEATHER_FALL) {
         return opcode.MSG_MOVE_FEATHER_FALL.write();;
     }
+    if (opcode.opcode == ServerOpcode::Opcode::MSG_MOVE_WATER_WALK) {
+        return opcode.MSG_MOVE_WATER_WALK.write_smsg();;
+    }
     if (opcode.opcode == ServerOpcode::Opcode::SMSG_FEIGN_DEATH_RESISTED) {
         return opcode.SMSG_FEIGN_DEATH_RESISTED.write();;
     }
@@ -23446,6 +35046,9 @@ std::vector<unsigned char> write_opcode(const ServerOpcode& opcode) {
     }
     if (opcode.opcode == ServerOpcode::Opcode::SMSG_DURABILITY_DAMAGE_DEATH) {
         return opcode.SMSG_DURABILITY_DAMAGE_DEATH.write();;
+    }
+    if (opcode.opcode == ServerOpcode::Opcode::MSG_PETITION_RENAME) {
+        return opcode.MSG_PETITION_RENAME.write_smsg();;
     }
     if (opcode.opcode == ServerOpcode::Opcode::SMSG_INIT_WORLD_STATES) {
         return opcode.SMSG_INIT_WORLD_STATES.write();;
@@ -23600,6 +35203,9 @@ std::vector<unsigned char> write_opcode(const ServerOpcode& opcode) {
     if (opcode.opcode == ServerOpcode::Opcode::MSG_RAID_TARGET_UPDATE) {
         return opcode.MSG_RAID_TARGET_UPDATE.write();;
     }
+    if (opcode.opcode == ServerOpcode::Opcode::MSG_RAID_READY_CHECK) {
+        return opcode.MSG_RAID_READY_CHECK.write();;
+    }
     if (opcode.opcode == ServerOpcode::Opcode::SMSG_PET_ACTION_SOUND) {
         return opcode.SMSG_PET_ACTION_SOUND.write();;
     }
@@ -23628,8 +35234,8 @@ std::vector<unsigned char> write_opcode(const ServerOpcode& opcode) {
     return {}; /* unreachable */
 }
 
-ServerOpcode read_server_opcode(Reader& reader) {
-    const uint16_t _size = reader.read_u16();
+WOW_WORLD_MESSAGES_CPP_EXPORT ServerOpcode read_server_opcode(Reader& reader) {
+    const uint16_t _size = reader.read_u16_be();
     const uint16_t opcode = reader.read_u16();
 
     ServerOpcode op;
@@ -23645,6 +35251,9 @@ ServerOpcode read_server_opcode(Reader& reader) {
     }
     if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::SMSG_NEW_WORLD)) {
         return ServerOpcode(::wow_world_messages::vanilla::SMSG_NEW_WORLD_read(reader));
+    }
+    if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::SMSG_TRANSFER_PENDING)) {
+        return ServerOpcode(::wow_world_messages::vanilla::SMSG_TRANSFER_PENDING_read(reader, _size - 2));
     }
     if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::SMSG_TRANSFER_ABORTED)) {
         return ServerOpcode(::wow_world_messages::vanilla::SMSG_TRANSFER_ABORTED_read(reader));
@@ -23673,11 +35282,20 @@ ServerOpcode read_server_opcode(Reader& reader) {
     if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::SMSG_GUILD_QUERY_RESPONSE)) {
         return ServerOpcode(::wow_world_messages::vanilla::SMSG_GUILD_QUERY_RESPONSE_read(reader));
     }
+    if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::SMSG_ITEM_QUERY_SINGLE_RESPONSE)) {
+        return ServerOpcode(::wow_world_messages::vanilla::SMSG_ITEM_QUERY_SINGLE_RESPONSE_read(reader, _size - 2));
+    }
     if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::SMSG_PAGE_TEXT_QUERY_RESPONSE)) {
         return ServerOpcode(::wow_world_messages::vanilla::SMSG_PAGE_TEXT_QUERY_RESPONSE_read(reader));
     }
     if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::SMSG_QUEST_QUERY_RESPONSE)) {
         return ServerOpcode(::wow_world_messages::vanilla::SMSG_QUEST_QUERY_RESPONSE_read(reader));
+    }
+    if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::SMSG_GAMEOBJECT_QUERY_RESPONSE)) {
+        return ServerOpcode(::wow_world_messages::vanilla::SMSG_GAMEOBJECT_QUERY_RESPONSE_read(reader, _size - 2));
+    }
+    if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::SMSG_CREATURE_QUERY_RESPONSE)) {
+        return ServerOpcode(::wow_world_messages::vanilla::SMSG_CREATURE_QUERY_RESPONSE_read(reader, _size - 2));
     }
     if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::SMSG_WHO)) {
         return ServerOpcode(::wow_world_messages::vanilla::SMSG_WHO_read(reader));
@@ -23708,6 +35326,9 @@ ServerOpcode read_server_opcode(Reader& reader) {
     }
     if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::SMSG_GROUP_DESTROYED)) {
         return ServerOpcode(::wow_world_messages::vanilla::SMSG_GROUP_DESTROYED{});
+    }
+    if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::SMSG_GROUP_LIST)) {
+        return ServerOpcode(::wow_world_messages::vanilla::SMSG_GROUP_LIST_read(reader, _size - 2));
     }
     if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::SMSG_PARTY_MEMBER_STATS)) {
         return ServerOpcode(::wow_world_messages::vanilla::SMSG_PARTY_MEMBER_STATS_read(reader));
@@ -23819,6 +35440,9 @@ ServerOpcode read_server_opcode(Reader& reader) {
     }
     if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::MSG_MOVE_SET_PITCH)) {
         return ServerOpcode(::wow_world_messages::vanilla::MSG_MOVE_SET_PITCH_Server_read(reader));
+    }
+    if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::MSG_MOVE_WORLDPORT_ACK)) {
+        return ServerOpcode(::wow_world_messages::vanilla::MSG_MOVE_WORLDPORT_ACK{});
     }
     if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::SMSG_MONSTER_MOVE)) {
         return ServerOpcode(::wow_world_messages::vanilla::SMSG_MONSTER_MOVE_read(reader));
@@ -24039,6 +35663,9 @@ ServerOpcode read_server_opcode(Reader& reader) {
     if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::SMSG_PET_NAME_INVALID)) {
         return ServerOpcode(::wow_world_messages::vanilla::SMSG_PET_NAME_INVALID{});
     }
+    if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::SMSG_PET_SPELLS)) {
+        return ServerOpcode(::wow_world_messages::vanilla::SMSG_PET_SPELLS_read(reader, _size - 2));
+    }
     if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::SMSG_PET_MODE)) {
         return ServerOpcode(::wow_world_messages::vanilla::SMSG_PET_MODE_read(reader));
     }
@@ -24144,6 +35771,9 @@ ServerOpcode read_server_opcode(Reader& reader) {
     if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::SMSG_PETITION_SIGN_RESULTS)) {
         return ServerOpcode(::wow_world_messages::vanilla::SMSG_PETITION_SIGN_RESULTS_read(reader));
     }
+    if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::MSG_PETITION_DECLINE)) {
+        return ServerOpcode(::wow_world_messages::vanilla::MSG_PETITION_DECLINE_read(reader));
+    }
     if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::SMSG_TURN_IN_PETITION_RESULTS)) {
         return ServerOpcode(::wow_world_messages::vanilla::SMSG_TURN_IN_PETITION_RESULTS_read(reader));
     }
@@ -24215,6 +35845,9 @@ ServerOpcode read_server_opcode(Reader& reader) {
     }
     if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::MSG_SAVE_GUILD_EMBLEM)) {
         return ServerOpcode(::wow_world_messages::vanilla::MSG_SAVE_GUILD_EMBLEM_Server_read(reader));
+    }
+    if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::MSG_TABARDVENDOR_ACTIVATE)) {
+        return ServerOpcode(::wow_world_messages::vanilla::MSG_TABARDVENDOR_ACTIVATE_read(reader));
     }
     if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::SMSG_PLAY_SPELL_VISUAL)) {
         return ServerOpcode(::wow_world_messages::vanilla::SMSG_PLAY_SPELL_VISUAL_read(reader));
@@ -24357,6 +35990,9 @@ ServerOpcode read_server_opcode(Reader& reader) {
     if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::SMSG_STABLE_RESULT)) {
         return ServerOpcode(::wow_world_messages::vanilla::SMSG_STABLE_RESULT_read(reader));
     }
+    if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::MSG_QUEST_PUSH_RESULT)) {
+        return ServerOpcode(::wow_world_messages::vanilla::MSG_QUEST_PUSH_RESULT_read(reader));
+    }
     if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::SMSG_PLAY_MUSIC)) {
         return ServerOpcode(::wow_world_messages::vanilla::SMSG_PLAY_MUSIC_read(reader));
     }
@@ -24444,6 +36080,9 @@ ServerOpcode read_server_opcode(Reader& reader) {
     if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::MSG_MOVE_FEATHER_FALL)) {
         return ServerOpcode(::wow_world_messages::vanilla::MSG_MOVE_FEATHER_FALL_Server_read(reader));
     }
+    if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::MSG_MOVE_WATER_WALK)) {
+        return ServerOpcode(::wow_world_messages::vanilla::MSG_MOVE_WATER_WALK_read(reader));
+    }
     if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::SMSG_FEIGN_DEATH_RESISTED)) {
         return ServerOpcode(::wow_world_messages::vanilla::SMSG_FEIGN_DEATH_RESISTED{});
     }
@@ -24461,6 +36100,9 @@ ServerOpcode read_server_opcode(Reader& reader) {
     }
     if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::SMSG_DURABILITY_DAMAGE_DEATH)) {
         return ServerOpcode(::wow_world_messages::vanilla::SMSG_DURABILITY_DAMAGE_DEATH{});
+    }
+    if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::MSG_PETITION_RENAME)) {
+        return ServerOpcode(::wow_world_messages::vanilla::MSG_PETITION_RENAME_read(reader));
     }
     if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::SMSG_INIT_WORLD_STATES)) {
         return ServerOpcode(::wow_world_messages::vanilla::SMSG_INIT_WORLD_STATES_read(reader));
@@ -24614,6 +36256,9 @@ ServerOpcode read_server_opcode(Reader& reader) {
     }
     if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::MSG_RAID_TARGET_UPDATE)) {
         return ServerOpcode(::wow_world_messages::vanilla::MSG_RAID_TARGET_UPDATE_Server_read(reader));
+    }
+    if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::MSG_RAID_READY_CHECK)) {
+        return ServerOpcode(::wow_world_messages::vanilla::MSG_RAID_READY_CHECK_Server_read(reader, _size - 2));
     }
     if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::SMSG_PET_ACTION_SOUND)) {
         return ServerOpcode(::wow_world_messages::vanilla::SMSG_PET_ACTION_SOUND_read(reader));

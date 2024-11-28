@@ -5,7 +5,7 @@ from print_struct import container_has_c_members
 import model
 from model import Container
 from print_struct.struct_util import print_if_statement_header, \
-    integer_type_to_size, integer_type_to_short, integer_type_to_c_str
+    integer_type_to_size, integer_type_to_short, integer_type_to_c_str, all_members_from_container
 from util import container_is_unencrypted, first_version_as_module, login_version_matches, is_world, get_type_prefix, \
     get_export_define, is_cpp
 from writer import Writer
@@ -188,70 +188,106 @@ def print_write_struct_member(s: Writer, d: model.Definition, module_name: str, 
 
             else:
                 if compressed:
-                    s.wln("# {d.name}_decompressed_size: u32")
-                    s.wln("_size += 4  # decompressed_size")
+                    s.open_curly("/* C89 Scope for compressed */")
+                    s.wln(f"unsigned char* {d.name}_uncompressed_data = NULL;")
+                    s.newline()
+                    s.wln("uint32_t compressed_i;")
+                    s.wln("size_t _size = 0;")
+                    s.wln("WowWorldWriter new_writer;")
+                    s.wln("WowWorldWriter* old_writer = writer;")
                     s.newline()
 
-                    s.wln(f"{d.name}_decompressed_size = await read_int(reader, 4)")
 
-                    s.wln(f"{d.name}_bytes = await reader.readexactly(body_size - _size)")
-                    s.newline()
+                    s.open_curly(f"for(compressed_i = 0; compressed_i < object->amount_of_{extra_indirection}{d.name}; ++compressed_i)")
+                    print_size_for_array_inner(s, inner_type, f"object->{extra_indirection}{d.name}", "_size")
+                    s.closing_curly() # for
 
-                    s.wln(f"{d.name}_reader = reader")
-                    s.open(f"if len({d.name}_bytes) != 0:")
-                    s.wln(f"{d.name}_bytes = zlib.decompress({d.name}_bytes, bufsize={d.name}_decompressed_size)")
-                    s.wln(f"{d.name}_reader = asyncio.StreamReader()")
-                    s.wln(f"{d.name}_reader.feed_data({d.name}_bytes)")
-                    s.wln(f"{d.name}_reader.feed_eof()")
-                    s.close()
+                    s.open_curly("if (_size)")
 
-                    s.newline()
-                    reader = f"{d.name}_reader"
+                    s.wln(f"{d.name}_uncompressed_data = malloc(_size);")
+                    s.wln(f"new_writer.destination = {d.name}_uncompressed_data;")
+                    s.wln(f"new_writer.length = _size;")
+                    s.wln(f"new_writer.index = 0;")
+                    s.wln("writer = &new_writer;")
+
 
                 fixed_prefix = "(*" if type(size) is model.ArraySizeFixed else ""
                 fixed_suffix = ")" if type(size) is model.ArraySizeFixed else ""
 
-                inner = ""
-                match inner_type:
-                    case model.ArrayTypeInteger(integer_type=integer_type):
-                        short = integer_type_to_short(integer_type).upper()
-                        inner = f"WRITE_{short}({fixed_prefix}{variable_name}{fixed_suffix}[i])"
+                print_array_inner_write(d, extra_indirection, fixed_prefix, fixed_suffix, inner_type, s, size,
+                                        variable_name)
 
-                    case model.ArrayTypeSpell():
-                        inner = f"WRITE_U32({fixed_prefix}{variable_name}{fixed_suffix}[i])"
+                if compressed:
+                    s.newline()
+                    s.wln(f"wwm_compress_data({d.name}_uncompressed_data, _size, old_writer->destination, old_writer->length - old_writer->index);")
+                    s.newline()
+                    s.wln(f"free({d.name}_uncompressed_data);")
 
-                    case model.ArrayTypeGUID():
-                        inner = f"WRITE_U64({fixed_prefix}{variable_name}{fixed_suffix}[i])"
-
-                    case model.ArrayTypeStruct(struct_data=e):
-                        version = first_version_as_module(e.tags)
-                        wlm_prefix = "WWM" if is_world(e.tags) else "WLM"
-                        inner = f"{wlm_prefix}_CHECK_RETURN_CODE({version}_{e.name}_write(writer, &{fixed_prefix}{variable_name}{fixed_suffix}[i]))"
-
-                    case model.ArrayTypeCstring():
-                        inner = f"WRITE_STRING({fixed_prefix}{variable_name}{fixed_suffix}[i])"
-
-                    case model.ArrayTypePackedGUID():
-                        inner = f"WWM_CHECK_RETURN_CODE(wwm_write_packed_guid(writer, {fixed_prefix}{variable_name}{fixed_suffix}[i]))"
-
-                    case v2:
-                        raise Exception(f"{v2}")
-
-                match size:
-                    case model.ArraySizeFixed(size=size):
-                        s.wln(f"WRITE_ARRAY({variable_name}, {size}, {inner});")
-                    case model.ArraySizeVariable(size=size):
-                        s.wln(f"WRITE_ARRAY({variable_name}, object->{extra_indirection}{size}, {inner});")
-                    case model.ArraySizeEndless():
-                        if not compressed:
-                            s.wln(
-                                f"WRITE_ARRAY({variable_name}, object->{extra_indirection}amount_of_{d.name}, {inner});")
-                        else:
-                            s.open(f"while not {d.name}_reader.at_eof():")
-                    case v:
-                        raise Exception(f"{v}")
+                    s.closing_curly() # if (_size)
+                    s.closing_curly() # C89 scope for compressed
 
     s.newline()
+
+
+def print_size_for_array_inner(s: Writer, inner_type: model.ArrayType, variable_name: str, size_variable_name: str):
+    inner_size = ""
+    match inner_type:
+        case model.ArrayTypeInteger(integer_type=integer_type):
+            inner_size = integer_type_to_size(integer_type)
+        case model.ArrayTypeSpell():
+            inner_size = 4
+        case model.ArrayTypeGUID():
+            inner_size = 8
+        case model.ArrayTypeStruct(struct_data=e):
+            version = first_version_as_module(e.tags)
+            inner_size = f"{version}_{e.name}_size(&{variable_name}[compressed_i])" if not e.sizes.constant_sized else str(
+                e.sizes.maximum_size)
+        case model.ArrayTypeCstring():
+            inner_size = f"STRING_SIZE({variable_name}[compressed_i])"
+        case model.ArrayTypePackedGUID():
+            inner_size = f"wwm_packed_guid_size({variable_name}[compressed_i]);"
+
+        case v2:
+            raise Exception(f"{v2}")
+    s.wln(f"{size_variable_name} += {str(inner_size)};")
+
+
+def print_array_inner_write(d: model.Definition, extra_indirection: str, fixed_prefix: str, fixed_suffix: str, inner_type: model.ArrayType, s: Writer, size: model.ArraySize, variable_name: str):
+    inner = ""
+    match inner_type:
+        case model.ArrayTypeInteger(integer_type=integer_type):
+            short = integer_type_to_short(integer_type).upper()
+            inner = f"WRITE_{short}({fixed_prefix}{variable_name}{fixed_suffix}[i])"
+
+        case model.ArrayTypeSpell():
+            inner = f"WRITE_U32({fixed_prefix}{variable_name}{fixed_suffix}[i])"
+
+        case model.ArrayTypeGUID():
+            inner = f"WRITE_U64({fixed_prefix}{variable_name}{fixed_suffix}[i])"
+
+        case model.ArrayTypeStruct(struct_data=e):
+            version = first_version_as_module(e.tags)
+            wlm_prefix = "WWM" if is_world(e.tags) else "WLM"
+            inner = f"{wlm_prefix}_CHECK_RETURN_CODE({version}_{e.name}_write(writer, &{fixed_prefix}{variable_name}{fixed_suffix}[i]))"
+
+        case model.ArrayTypeCstring():
+            inner = f"WRITE_STRING({fixed_prefix}{variable_name}{fixed_suffix}[i])"
+
+        case model.ArrayTypePackedGUID():
+            inner = f"WWM_CHECK_RETURN_CODE(wwm_write_packed_guid(writer, {fixed_prefix}{variable_name}{fixed_suffix}[i]))"
+
+        case v2:
+            raise Exception(f"{v2}")
+    match size:
+        case model.ArraySizeFixed(size=size):
+            s.wln(f"WRITE_ARRAY({variable_name}, {size}, {inner});")
+        case model.ArraySizeVariable(size=size):
+            s.wln(f"WRITE_ARRAY({variable_name}, object->{extra_indirection}{size}, {inner});")
+        case model.ArraySizeEndless():
+            s.wln(
+                f"WRITE_ARRAY({variable_name}, object->{extra_indirection}amount_of_{d.name}, {inner});")
+        case v:
+            raise Exception(f"{v}")
 
 
 def print_write(s: Writer, h: Writer, container: Container, object_type: model.ObjectType, module_name: str,
@@ -266,9 +302,9 @@ def print_write(s: Writer, h: Writer, container: Container, object_type: model.O
         function_declaration = f"{export}{result_type}Result {module_name}_{container.name}{function_suffix}_write({result_type}Writer* writer)"
     if is_cpp():
         if type(object_type) is model.ObjectTypeStruct:
-            function_declaration = f"void {container.name}_write(Writer& writer, const {container.name}& obj)"
+            function_declaration = f"{export}void {container.name}_write{function_suffix}(Writer& writer, const {container.name}& obj)"
         else:
-            function_declaration = f"std::vector<unsigned char> {container.name}::write() const"
+            function_declaration = f"{export}std::vector<unsigned char> {container.name}::write{function_suffix}() const"
 
     s.open_curly(function_declaration)
     if type(object_type) is not model.ObjectTypeStruct:
@@ -299,7 +335,7 @@ def print_write(s: Writer, h: Writer, container: Container, object_type: model.O
                 s.wln(f"writer.write_u8(0x{opcode:02x}); /* opcode */")
                 s.newline()
             case model.ObjectTypeSmsg(opcode=opcode):
-                s.wln(f"writer.write_u16_be({size} + 2); /* size */")
+                s.wln(f"writer.write_u16_be(static_cast<uint16_t>({size} + 2)); /* size */")
                 s.newline()
                 s.wln(f"writer.write_u16(0x{opcode:08x}); /* opcode */")
                 s.newline()
@@ -309,7 +345,7 @@ def print_write(s: Writer, h: Writer, container: Container, object_type: model.O
                 if container.sizes.constant_sized:
                     size = f"0x{container.sizes.maximum_size:04x}"
 
-                s.wln(f"writer.write_u16_be({size} + 4); /* size */")
+                s.wln(f"writer.write_u16_be(static_cast<uint16_t>({size} + 4)); /* size */")
                 s.newline()
                 s.wln(f"writer.write_u32(0x{opcode:08x}); /* opcode */")
                 s.newline()
@@ -347,7 +383,8 @@ def print_write(s: Writer, h: Writer, container: Container, object_type: model.O
         print_write_member(s, m, prefix, module_name, container.name, extra_indirection)
 
     if container.optional is not None:
-        s.open_curly(f"if(object->{extra_indirection}{container.optional.name} != NULL)")
+        deref = "obj." if is_cpp() else "object->"
+        s.open_curly(f"if({deref}{extra_indirection}{container.optional.name})")
 
         for m in container.optional.members:
             print_write_member(s, m, prefix, module_name, container.name, f"{container.optional.name}->")
@@ -389,7 +426,7 @@ def print_write_if_statement(s: Writer,
     if is_else_if:
         extra_elseif = "else "
 
-    print_if_statement_header(s, statement, extra_elseif, "self.", module_name)
+    print_if_statement_header(s, statement, extra_elseif, extra_indirection, module_name)
 
     for m in statement.members:
         print_write_member(s, m, prefix, module_name, container_name, extra_indirection)

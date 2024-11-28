@@ -95,8 +95,8 @@ struct UpdateMask {{
 static void update_mask_write(Writer& writer, const UpdateMask& mask) {{
     uint8_t amount_of_headers = 0;
 
-    for (int i = 0; i < UPDATE_MASK_HEADERS_LENGTH; ++i) {{
-        uint32_t header = mask.headers[i];
+    for (uint8_t i = 0; i < UPDATE_MASK_HEADERS_LENGTH; ++i) {{
+        const uint32_t header = mask.headers[i];
         if (header != 0) {{
             amount_of_headers = i + 1;
         }}
@@ -109,7 +109,7 @@ static void update_mask_write(Writer& writer, const UpdateMask& mask) {{
     }}
     
     for (int i = 0; i < amount_of_headers; ++i) {{
-        uint32_t header = mask.headers[i];
+        const uint32_t header = mask.headers[i];
         for (int j = 0; j < 32; ++j) {{
             if ((header & (1 << j)) != 0) {{
                 writer.write_u32(mask.values[i * 32 + j]);

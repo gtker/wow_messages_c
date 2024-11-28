@@ -64,7 +64,7 @@ public:
 
     void write_string(const std::string& value)
     {
-        const uint8_t length = value.size();
+        const uint8_t length = static_cast<uint8_t>(value.size());
         write_u8(length);
 
         for (const auto& v : value)
@@ -85,7 +85,7 @@ public:
 
     void write_sized_cstring(const std::string& value)
     {
-        write_u32(value.size() + 1);
+        write_u32(static_cast<uint32_t>(value.size() + 1));
         write_cstring(value);
     }
 

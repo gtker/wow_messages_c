@@ -6,7 +6,7 @@ namespace wow_world_messages {
 namespace all {
 
 Vector3d Vector3d_read(Reader& reader) {
-    Vector3d obj;
+    Vector3d obj{};
 
     obj.x = reader.read_float();
 
@@ -27,7 +27,7 @@ void Vector3d_write(Writer& writer, const Vector3d& obj) {
 }
 
 Vector2d Vector2d_read(Reader& reader) {
-    Vector2d obj;
+    Vector2d obj{};
 
     obj.x = reader.read_float();
 

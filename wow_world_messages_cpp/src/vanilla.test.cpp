@@ -228,6 +228,25 @@ int main(void) {
 
         world_test_compare_buffers(buffer.data(), write_buffer.data(), write_buffer.size(),  __FILE__ ":" STRINGIFY(__LINE__) " SMSG_NEW_WORLD 0", TEST_UTILS_SIDE_SERVER);
     }
+    /* SMSG_TRANSFER_PENDING */ {
+        const std::vector<unsigned char> buffer = {0, 6, 63, 0, 1, 0, 0, 0, };
+        auto reader = ByteReader(buffer);
+
+        const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
+        if (opcode.is_none()) {
+            printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_TRANSFER_PENDING 0 read invalid opcode");
+            return 1;
+        }
+
+        if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_TRANSFER_PENDING) {
+            printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_TRANSFER_PENDING 0 read invalid opcode");
+            return 1;
+        }
+
+        const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
+
+        world_test_compare_buffers(buffer.data(), write_buffer.data(), write_buffer.size(),  __FILE__ ":" STRINGIFY(__LINE__) " SMSG_TRANSFER_PENDING 0", TEST_UTILS_SIDE_SERVER);
+    }
     /* SMSG_CHARACTER_LOGIN_FAILED */ {
         const std::vector<unsigned char> buffer = {0, 3, 65, 0, 65, };
         auto reader = ByteReader(buffer);
@@ -417,6 +436,44 @@ int main(void) {
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
 
         world_test_compare_buffers(buffer.data(), write_buffer.data(), write_buffer.size(),  __FILE__ ":" STRINGIFY(__LINE__) " SMSG_PET_NAME_QUERY_RESPONSE 0", TEST_UTILS_SIDE_SERVER);
+    }
+    /* SMSG_ITEM_QUERY_SINGLE_RESPONSE */ {
+        const std::vector<unsigned char> buffer = {1, 224, 88, 0, 62, 28, 0, 0, 2, 0, 0, 0, 5, 0, 0, 0, 83, 109, 105, 116, 101, 39, 115, 32, 77, 105, 103, 104, 116, 121, 32, 72, 97, 109, 109, 101, 114, 0, 0, 0, 0, 154, 76, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 155, 60, 0, 0, 31, 12, 0, 0, 17, 0, 0, 0, 223, 5, 0, 0, 255, 1, 0, 0, 23, 0, 0, 0, 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 11, 0, 0, 0, 3, 0, 0, 0, 4, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 92, 66, 0, 0, 166, 66, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 172, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, };
+        auto reader = ByteReader(buffer);
+
+        const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
+        if (opcode.is_none()) {
+            printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_ITEM_QUERY_SINGLE_RESPONSE 0 read invalid opcode");
+            return 1;
+        }
+
+        if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_ITEM_QUERY_SINGLE_RESPONSE) {
+            printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_ITEM_QUERY_SINGLE_RESPONSE 0 read invalid opcode");
+            return 1;
+        }
+
+        const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
+
+        world_test_compare_buffers(buffer.data(), write_buffer.data(), write_buffer.size(),  __FILE__ ":" STRINGIFY(__LINE__) " SMSG_ITEM_QUERY_SINGLE_RESPONSE 0", TEST_UTILS_SIDE_SERVER);
+    }
+    /* SMSG_CREATURE_QUERY_RESPONSE */ {
+        const std::vector<unsigned char> buffer = {0, 46, 97, 0, 69, 0, 0, 0, 84, 104, 105, 110, 103, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, };
+        auto reader = ByteReader(buffer);
+
+        const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
+        if (opcode.is_none()) {
+            printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_CREATURE_QUERY_RESPONSE 0 read invalid opcode");
+            return 1;
+        }
+
+        if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_CREATURE_QUERY_RESPONSE) {
+            printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_CREATURE_QUERY_RESPONSE 0 read invalid opcode");
+            return 1;
+        }
+
+        const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
+
+        world_test_compare_buffers(buffer.data(), write_buffer.data(), write_buffer.size(),  __FILE__ ":" STRINGIFY(__LINE__) " SMSG_CREATURE_QUERY_RESPONSE 0", TEST_UTILS_SIDE_SERVER);
     }
     /* SMSG_IGNORE_LIST */ {
         const std::vector<unsigned char> buffer = {0, 11, 107, 0, 1, 239, 190, 173, 222, 254, 15, 220, 186, };

@@ -1,9 +1,10 @@
 import typing
 
-from print_struct import container_has_c_members
+from print_struct import container_has_c_members, container_has_free
 
 import model
-from print_struct.struct_util import container_should_have_size_function, all_members_from_container
+from print_struct.struct_util import container_should_have_size_function, all_members_from_container, \
+    container_has_compressed_array
 from util import first_login_version, VERSIONS, world_version_to_module_name, \
     should_print_container, container_is_unencrypted, login_version_matches, version_matches, version_to_module_name, \
     is_world, is_cpp
@@ -96,7 +97,6 @@ def print_individual_test(s: Writer, e: model.Container, test_case: model.TestCa
         for b in test_case.raw_bytes:
             s.w_no_indent(f"{b}, ")
         s.wln_no_indent("};")
-        s.wln("unsigned char write_buffer[sizeof(buffer)] = {0};")
         s.newline()
 
         s.wln(f"Wow{library_type}Reader reader = {library_prefix}_create_reader(buffer, sizeof(buffer));")
@@ -126,10 +126,23 @@ def print_individual_test(s: Writer, e: model.Container, test_case: model.TestCa
         s.wln(f"result = {function_version}_{e.name}_write(&writer{extra_argument});")
         s.newline()
 
+        s.open_curly(f"if (result != {library_prefix.upper()}_RESULT_SUCCESS)")
         s.wln(
-            f'wlm_test_compare_buffers(buffer, write_buffer, sizeof(write_buffer), __FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i}");')
+            f'printf(__FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i} failed to write: \'%s\'\\n", {library_prefix}_error_code_to_string(result));')
+        s.wln("return 1;")
+        s.newline()
+        s.closing_curly()  # if (result != 0)
+
+        if container_has_compressed_array(e):
+            s.wln("/* TODO compressed array compare do what? */")
+        else:
+            s.wln(
+                f'wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i}");')
 
         s.closing_curly()  # C89 scope
+
+        if container_has_free(e, function_version):
+            s.wln(f"{function_version}_{function_side}_opcode_free(&opcode);")
 
         s.closing_curly("while (0);")  # do
         s.newline()
@@ -171,9 +184,11 @@ public:
 };
 """)
 
+
     if is_cpp():
         tests.open_curly("int main()")
     else:
+        tests.wln("unsigned char write_buffer[1 << 16] = {0}; /* uint16_t max */")
         tests.open_curly("int main(void)")
 
 
@@ -209,6 +224,9 @@ public:
     size_t m_index = 0;
 };
     """)
+
+    if not is_cpp():
+        s.wln("unsigned char write_buffer[1 << 16] = {0}; /* uint16_t max */")
 
     s.open_curly("int main(void)")
 

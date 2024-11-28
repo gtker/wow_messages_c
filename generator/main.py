@@ -111,10 +111,10 @@ def sanitize_model(
     return m
 
 
-def print_includes(s: Writer, h: Writer, world: typing.Optional[model.WorldVersion], version_name: str,
+def print_includes(s: Writer, h: Writer, world: bool, version_name: str,
                    v: typing.Union[int | model.WorldVersion], m: model.Objects):
     include_dir = "wow_login_messages"
-    if world is not None:
+    if world:
         include_dir = "wow_world_messages"
 
     include_file = include_dir
@@ -128,8 +128,9 @@ def print_includes(s: Writer, h: Writer, world: typing.Optional[model.WorldVersi
     h.wln(f"#define {include_guard}")
     h.newline()
 
-    h.wln(f"#include \"{include_dir}/{include_file}.h{pp}\"")
-    if world is not None and version_name != "all":
+    if not world or version_name != "all" or not is_cpp():
+        h.wln(f"#include \"{include_dir}/{include_file}.h{pp}\"")
+    if world and version_name != "all":
         h.wln(f"#include \"{include_dir}/all.h{pp}\"")
     h.newline()
 
@@ -138,18 +139,18 @@ def print_includes(s: Writer, h: Writer, world: typing.Optional[model.WorldVersi
         h.wln('extern "C" {')
         h.wln("#endif /* __cplusplus */")
 
-    if world is not None or (version_name == "all" and world is None):
+    if world or (version_name == "all" and not world):
         s.wln(f"#include \"util.h{pp}\"")
         s.newline()
 
     s.wln(f"#include \"{include_dir}/{version_name}.h{pp}\"")
     s.newline()
 
-    if world is not None and version_name != "all":
+    if world and version_name != "all" and not is_cpp():
         s.wln("#include <string.h> /* memset */")
         s.newline()
 
-    if world is not None and not world_version_is_all(v):
+    if world and not world_version_is_all(v):
         if is_cpp():
             s.open_curly("namespace wow_world_messages")
             s.open_curly("namespace all")
@@ -218,7 +219,7 @@ def print_world(m: model.Objects, update_mask: list[model.UpdateMask], v: model.
 
     module_name = world_version_to_module_name(v)
 
-    print_includes(s, h, v, module_name, v, m)
+    print_includes(s, h, True, module_name, v, m)
 
     for d in filter(should_print, m.enums):
         print_enum(h, d)
@@ -268,7 +269,7 @@ def print_login(m: model.Objects, s: Writer, tests: Writer, v: int):
     module_name = login_version_to_module_name(v)
 
     h_includes = Writer()
-    print_includes(s, h_includes, None, module_name, v, m)
+    print_includes(s, h_includes, False, module_name, v, m)
 
     def typedef_existing(s: Writer, name: str, old_version: str, new_version: str):
         if is_cpp():

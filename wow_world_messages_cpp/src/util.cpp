@@ -57,7 +57,7 @@ static all::Vector3d from_packed(uint32_t p)
 
 void wwm_write_monster_move_spline(Writer& writer, const std::vector<all::Vector3d>& splines)
 {
-    writer.write_u32(splines.size());
+    writer.write_u32(static_cast<uint32_t>(splines.size()));
 
     if (splines.empty())
     {

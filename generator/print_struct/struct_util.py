@@ -16,17 +16,19 @@ def print_skip(container: model.Container, reason: str):
     print(f"Skipping {container.name} because it {reason}")
 
 
+def container_has_compressed_array(container: model.Container) -> bool:
+    for d in all_members_from_container(container):
+        match d.data_type:
+            case model.DataTypeArray(compressed=compressed):
+                if compressed:
+                    return True
+
+    return False
+
+
 def container_should_print(container: model.Container) -> bool:
     if container.tags.compressed is not None:
         print_skip(container, "is compressed")
-        return False
-
-    if is_cpp() and container.optional is not None:
-        print_skip(container, "cpp optional")
-        return False
-
-    if type(container.object_type) is model.ObjectTypeMsg and is_cpp():
-        print_skip(container, "cpp msg")
         return False
 
     for member in all_members_from_container(container):
@@ -37,7 +39,7 @@ def container_should_print(container: model.Container) -> bool:
                     return False
 
             case model.DataTypeArray(compressed=compressed, inner_type=inner_type, size=size):
-                if compressed:
+                if compressed and is_cpp():
                     print_skip(container, "has compressed array")
                     return False
 
@@ -89,6 +91,8 @@ def container_should_have_size_function(container: model.Container):
             if container.sizes.constant_sized:
                 return False
         case _:
+            if container.sizes.constant_sized:
+                return False
             if container.manual_size_subtraction is None and not is_cpp():
                 return False
 
@@ -298,12 +302,12 @@ def print_if_statement_header(
         s: Writer,
         statement: model.IfStatement,
         extra_elseif: str,
-        extra_self: str,
+        extra_indirection: str,
         module_name: str
 ):
     original_type = type_to_c_str(statement.original_type, module_name).replace(f"{module_name}_", '')
     original_type_pascal = pascal_case_to_snake_case(original_type).upper()
-    var_name = statement.variable_name
+    variable_name = f"obj.{extra_indirection}{statement.variable_name}" if is_cpp() else f"object->{extra_indirection}{statement.variable_name}"
 
     first_version = first_version_as_module(statement.original_type.tags).upper()
 
@@ -312,11 +316,11 @@ def print_if_statement_header(
             if len(statement.values) == 1:
                 if is_cpp():
                     s.open_curly(
-                        f"{extra_elseif}if (obj.{var_name} == {original_type}::{statement.values[0]})"
+                        f"{extra_elseif}if ({variable_name} == {original_type}::{statement.values[0]})"
                     )
                 else:
                     s.open_curly(
-                        f"{extra_elseif}if (object->{var_name} == {first_version}_{original_type_pascal}_{statement.values[0]})"
+                        f"{extra_elseif}if ({variable_name} == {first_version}_{original_type_pascal}_{statement.values[0]})"
                     )
             else:
                 s.w(f"{extra_elseif}if (")
@@ -325,10 +329,10 @@ def print_if_statement_header(
                         s.w_no_indent("|| ")
                     if is_cpp():
                         s.w_no_indent(
-                            f"obj.{var_name} == {original_type}::{val}")
+                            f"{variable_name} == {original_type}::{val}")
                     else:
                         s.w_no_indent(
-                            f"object->{var_name} == {first_version}_{original_type_pascal}_{val}")
+                            f"{variable_name} == {first_version}_{original_type_pascal}_{val}")
                 s.wln_no_indent(") {")
                 s.inc_indent()
 
@@ -339,10 +343,10 @@ def print_if_statement_header(
                     s.w_no_indent("|| ")
                 if is_cpp():
                     s.w_no_indent(
-                        f"(obj.{var_name} & {original_type_pascal}_{val}) != 0")
+                        f"({variable_name} & {original_type_pascal}_{val}) != 0")
                 else:
                     s.w_no_indent(
-                        f"(object->{var_name} & {first_version}_{original_type_pascal}_{val}) != 0")
+                        f"({variable_name} & {first_version}_{original_type_pascal}_{val}) != 0")
             s.wln_no_indent(") {")
             s.inc_indent()
         case _:

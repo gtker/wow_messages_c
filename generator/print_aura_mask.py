@@ -35,13 +35,11 @@ static size_t aura_mask_size(const AuraMask& mask) {
 }
 
 static AuraMask aura_mask_read(Reader& reader) {
-    uint32_t header = reader.read_u32();
+    const uint32_t header = reader.read_u32();
     
-    AuraMask mask;
+    AuraMask mask{};
     
     for(int i = 0; i < AURA_MASK_SIZE; ++i) {
-        mask.auras[i] = 0; /* initialize to 0 */
-        
         if ((header & (1 << i)) != 0) {
             mask.auras[i] = reader.read_u16();
         }

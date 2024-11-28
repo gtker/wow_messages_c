@@ -1,0 +1,10 @@
+---
+Checks:          'clang-diagnostic-*,clang-analyzer-*,performance-*'
+WarningsAsErrors: '*'
+HeaderFilterRegex: ''
+AnalyzeTemporaryDtors: false
+CheckOptions:
+  - key:             llvm-else-after-return.WarnOnConditionVariables
+    value:           'false'
+...
+

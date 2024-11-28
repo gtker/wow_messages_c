@@ -32,8 +32,6 @@ def print_login_utils_side(s: Writer, h: Writer, messages: list[model.Container]
                 or side_matches(container, side) == INVALID_OPCODE \
                 or (first_version_as_module(container.tags) == "all" and version_to_module_name(v) != "all"):
             return False
-        if type(container.object_type) is model.ObjectTypeMsg:
-            return False  # CPP MSG
         return True
 
     has_messages = False
@@ -78,24 +76,14 @@ def print_login_utils_side(s: Writer, h: Writer, messages: list[model.Container]
             h.wln(f"{module_name}::{e.name} {ty};")
 
         h.closing_curly(";")  # union
+        h.newline()
 
         h.open_curly("bool is_none() const noexcept")
         h.wln("return opcode == Opcode::NONE;")
         h.closing_curly()
 
         h.newline()
-        h.wln(f"explicit {side.capitalize()}Opcode() : {side.capitalize()}Opcode(Opcode::NONE) {{}}")
-        h.newline()
-
-        h.open_curly(f"explicit {side.capitalize()}Opcode(Opcode op) : opcode(op)")
-        for e in filter(matches, messages):
-            ty = e.name.replace("_Client", "").replace("_Server", "")
-
-            h.open_curly(f"if (opcode == Opcode::{ty})")
-            h.wln(f"new (&this->{ty}) {module_name}::{e.name}();")
-            h.closing_curly()  # if (opcode == Opcode
-
-        h.closing_curly()  # constructor
+        h.wln(f"explicit {side.capitalize()}Opcode() : opcode(Opcode::NONE), {first_opcode}() {{}}")
         h.newline()
 
         h.open_curly(f"{side.capitalize()}Opcode({side.capitalize()}Opcode&& other) noexcept")
@@ -105,7 +93,7 @@ def print_login_utils_side(s: Writer, h: Writer, messages: list[model.Container]
             ty = e.name.replace("_Client", "").replace("_Server", "")
 
             h.open_curly(f"if (opcode == Opcode::{ty})")
-            h.wln(f"this->{ty} = other.{ty};")
+            h.wln(f"this->{ty} = std::move(other.{ty});")
             h.closing_curly()  # if (opcode == Opcode
         h.closing_curly()
         h.newline()
@@ -130,10 +118,52 @@ def print_login_utils_side(s: Writer, h: Writer, messages: list[model.Container]
 
             h.open_curly(f"explicit {side.capitalize()}Opcode({module_name}::{e.name}&& obj)")
             h.wln(f"opcode = Opcode::{ty};")
-            h.wln(f"new (&this->{ty}) {module_name}::{e.name} (obj);")
+            h.wln(f"new (&this->{ty}) {module_name}::{e.name} (std::move(obj));")
             h.closing_curly()  # constructor
+        h.newline()
+
+        h.wln("template<typename T>")
+        h.wln("// NOLINTNEXTLINE")
+        h.wln("T& get(); // All possible types have been specialized")
+        h.newline()
+
+        h.wln("template<typename T>")
+        h.wln("// NOLINTNEXTLINE")
+        h.wln("T* get_if(); // All possible types have been specialized")
 
         h.closing_curly(";")  # struct sideOpcode
+        h.newline()
+
+        for e in filter(matches, messages):
+            ty = e.name.replace("_Client", "").replace("_Server", "")
+
+            h.wln("template<>")
+            h.wln(f"{module_name}::{e.name}* {side.capitalize()}Opcode::get_if();")
+
+            s.wln("template <>")
+            s.open_curly(f"{module_name}::{e.name}* {side.capitalize()}Opcode::get_if<{e.name}>()")
+            s.open_curly(f"if (opcode == Opcode::{ty})")
+            s.wln(f"return &{ty};")
+            s.closing_curly() # if opcode ==
+            s.wln("return nullptr;")
+            s.closing_curly() # get_if()
+
+            h.wln("template<>")
+            h.wln(f"{module_name}::{e.name}& {side.capitalize()}Opcode::get();")
+            s.wln("template <>")
+            s.open_curly(f"{module_name}::{e.name}& {side.capitalize()}Opcode::get<{e.name}>()")
+            s.wln(f"auto p = {side.capitalize()}Opcode::get_if<{module_name}::{e.name}>();")
+            s.open_curly("if (p)")
+            s.wln("return *p;")
+            s.closing_curly() # if p
+            s.wln("throw bad_opcode_access{};")
+
+            s.closing_curly() # get()
+
+            s.newline()
+        s.newline()
+        h.newline()
+
 
     else:
         h.open_curly("typedef struct")
@@ -172,7 +202,8 @@ def write_opcode_write(s: Writer, h: Writer, messages: list[model.Container], v:
                        side: str, module_name: str,
                        module_name_pascal: str, side_pascal: str):
     if is_cpp():
-        function_declaration = f"std::vector<unsigned char> write_opcode(const {side.capitalize()}Opcode& opcode)"
+        export = get_export_define(messages[0].tags)
+        function_declaration = f"{export} std::vector<unsigned char> write_opcode(const {side.capitalize()}Opcode& opcode)"
         h.wln(f"{function_declaration};")
         h.newline()
 
@@ -183,12 +214,14 @@ def write_opcode_write(s: Writer, h: Writer, messages: list[model.Container], v:
                     or side_matches(e, side) == INVALID_OPCODE \
                     or (first_version_as_module(e.tags) == "all" and version_to_module_name(v) != "all"):
                 continue
-            if type(e.object_type) is model.ObjectTypeMsg:
-                continue  # MSG CPP
-            version = first_version_as_module(e.tags)
             name = e.name.replace('_Client', '').replace('_Server', '')
             s.open_curly(f"if (opcode.opcode == {side.capitalize()}Opcode::Opcode::{name})")
-            s.wln(f"return opcode.{name}.write();;")
+
+            function_suffix: str = ""
+            if type(e.object_type) is model.ObjectTypeMsg:
+                first_char = side[0].lower()
+                function_suffix = f"_{first_char}msg"
+            s.wln(f"return opcode.{name}.write{function_suffix}();;")
             s.closing_curly()  # if
 
         s.newline()
@@ -206,7 +239,7 @@ def write_opcode_read(s: Writer, h: Writer, messages: list[model.Container], v: 
     size_field_size = 2 if side == "server" else 4
 
     if is_cpp():
-        function_declaration = f"{side.capitalize()}Opcode read_{side}_opcode(Reader& reader)"
+        function_declaration = f"{export} {side.capitalize()}Opcode read_{side}_opcode(Reader& reader)"
         h.wln(f"{function_declaration};")
         h.newline()
 
@@ -215,11 +248,11 @@ def write_opcode_read(s: Writer, h: Writer, messages: list[model.Container], v: 
         opcode_type = None
         if is_world(messages[0].tags):
             if side == "server":
-                s.wln("const uint16_t _size = reader.read_u16();")
+                s.wln("const uint16_t _size = reader.read_u16_be();")
                 s.wln("const uint16_t opcode = reader.read_u16();")
                 opcode_type = "uint16_t"
             else:
-                s.wln("const uint16_t _size = reader.read_u16();")
+                s.wln("const uint16_t _size = reader.read_u16_be();")
                 s.wln("const uint32_t opcode = reader.read_u32();")
                 opcode_type = "uint32_t"
         else:
@@ -235,8 +268,6 @@ def write_opcode_read(s: Writer, h: Writer, messages: list[model.Container], v: 
                     or side_matches(e, side) == INVALID_OPCODE \
                     or (first_version_as_module(e.tags) == "all" and version_to_module_name(v) != "all"):
                 continue
-            if type(e.object_type) is model.ObjectTypeMsg:
-                continue  # MSG CPP
             name = e.name.replace('_Client', '').replace('_Server', '')
             s.open_curly(f"if (opcode == static_cast<{opcode_type}>({side.capitalize()}Opcode::Opcode::{name}))")
             module = library_type(e.tags)

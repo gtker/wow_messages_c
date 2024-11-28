@@ -5,7 +5,7 @@
 namespace wow_login_messages {
 namespace all {
 Version Version_read(Reader& reader) {
-    Version obj;
+    Version obj{};
 
     obj.major = reader.read_u8();
 
@@ -18,7 +18,7 @@ Version Version_read(Reader& reader) {
     return obj;
 }
 
-void Version_write(Writer& writer, const Version& obj) {
+static void Version_write(Writer& writer, const Version& obj) {
     writer.write_u8(obj.major);
 
     writer.write_u8(obj.minor);
@@ -34,7 +34,7 @@ static size_t CMD_AUTH_LOGON_CHALLENGE_Client_size(const CMD_AUTH_LOGON_CHALLENG
 }
 
 CMD_AUTH_LOGON_CHALLENGE_Client CMD_AUTH_LOGON_CHALLENGE_Client_read(Reader& reader) {
-    CMD_AUTH_LOGON_CHALLENGE_Client obj;
+    CMD_AUTH_LOGON_CHALLENGE_Client obj{};
 
     obj.protocol_version = static_cast<ProtocolVersion>(reader.read_u8());
 
@@ -59,7 +59,7 @@ CMD_AUTH_LOGON_CHALLENGE_Client CMD_AUTH_LOGON_CHALLENGE_Client_read(Reader& rea
     return obj;
 }
 
-std::vector<unsigned char> CMD_AUTH_LOGON_CHALLENGE_Client::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_AUTH_LOGON_CHALLENGE_Client::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMD_AUTH_LOGON_CHALLENGE_Client_size(obj));
 
@@ -93,7 +93,7 @@ static size_t CMD_AUTH_RECONNECT_CHALLENGE_Client_size(const CMD_AUTH_RECONNECT_
 }
 
 CMD_AUTH_RECONNECT_CHALLENGE_Client CMD_AUTH_RECONNECT_CHALLENGE_Client_read(Reader& reader) {
-    CMD_AUTH_RECONNECT_CHALLENGE_Client obj;
+    CMD_AUTH_RECONNECT_CHALLENGE_Client obj{};
 
     obj.protocol_version = static_cast<ProtocolVersion>(reader.read_u8());
 
@@ -118,7 +118,7 @@ CMD_AUTH_RECONNECT_CHALLENGE_Client CMD_AUTH_RECONNECT_CHALLENGE_Client_read(Rea
     return obj;
 }
 
-std::vector<unsigned char> CMD_AUTH_RECONNECT_CHALLENGE_Client::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_AUTH_RECONNECT_CHALLENGE_Client::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMD_AUTH_RECONNECT_CHALLENGE_Client_size(obj));
 
@@ -147,7 +147,40 @@ std::vector<unsigned char> CMD_AUTH_RECONNECT_CHALLENGE_Client::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> write_opcode(const ClientOpcode& opcode) {
+template <>
+all::CMD_AUTH_LOGON_CHALLENGE_Client* ClientOpcode::get_if<CMD_AUTH_LOGON_CHALLENGE_Client>() {
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        return &CMD_AUTH_LOGON_CHALLENGE;
+    }
+    return nullptr;
+}
+template <>
+all::CMD_AUTH_LOGON_CHALLENGE_Client& ClientOpcode::get<CMD_AUTH_LOGON_CHALLENGE_Client>() {
+    auto p = ClientOpcode::get_if<all::CMD_AUTH_LOGON_CHALLENGE_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+all::CMD_AUTH_RECONNECT_CHALLENGE_Client* ClientOpcode::get_if<CMD_AUTH_RECONNECT_CHALLENGE_Client>() {
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        return &CMD_AUTH_RECONNECT_CHALLENGE;
+    }
+    return nullptr;
+}
+template <>
+all::CMD_AUTH_RECONNECT_CHALLENGE_Client& ClientOpcode::get<CMD_AUTH_RECONNECT_CHALLENGE_Client>() {
+    auto p = ClientOpcode::get_if<all::CMD_AUTH_RECONNECT_CHALLENGE_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const ClientOpcode& opcode) {
     if (opcode.opcode == ClientOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE) {
         return opcode.CMD_AUTH_LOGON_CHALLENGE.write();;
     }
@@ -158,7 +191,7 @@ std::vector<unsigned char> write_opcode(const ClientOpcode& opcode) {
     return {}; /* unreachable */
 }
 
-ClientOpcode read_client_opcode(Reader& reader) {
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode read_client_opcode(Reader& reader) {
     const uint8_t opcode = reader.read_u8();
 
     ClientOpcode op;
@@ -183,7 +216,7 @@ static size_t Realm_size(const Realm& obj) {
 }
 
 Realm Realm_read(Reader& reader) {
-    Realm obj;
+    Realm obj{};
 
     obj.realm_type = static_cast<RealmType>(reader.read_u32());
 
@@ -204,7 +237,7 @@ Realm Realm_read(Reader& reader) {
     return obj;
 }
 
-void Realm_write(Writer& writer, const Realm& obj) {
+static void Realm_write(Writer& writer, const Realm& obj) {
     writer.write_u32(static_cast<uint32_t>(obj.realm_type));
 
     writer.write_u8(static_cast<uint8_t>(obj.flag));
@@ -224,7 +257,7 @@ void Realm_write(Writer& writer, const Realm& obj) {
 }
 
 TelemetryKey TelemetryKey_read(Reader& reader) {
-    TelemetryKey obj;
+    TelemetryKey obj{};
 
     obj.unknown1 = reader.read_u16();
 
@@ -241,7 +274,7 @@ TelemetryKey TelemetryKey_read(Reader& reader) {
     return obj;
 }
 
-void TelemetryKey_write(Writer& writer, const TelemetryKey& obj) {
+static void TelemetryKey_write(Writer& writer, const TelemetryKey& obj) {
     writer.write_u16(obj.unknown1);
 
     writer.write_u32(obj.unknown2);
@@ -267,7 +300,7 @@ static size_t CMD_AUTH_LOGON_CHALLENGE_Server_size(const CMD_AUTH_LOGON_CHALLENG
 }
 
 CMD_AUTH_LOGON_CHALLENGE_Server CMD_AUTH_LOGON_CHALLENGE_Server_read(Reader& reader) {
-    CMD_AUTH_LOGON_CHALLENGE_Server obj;
+    CMD_AUTH_LOGON_CHALLENGE_Server obj{};
 
     (void)reader.read_u8();
 
@@ -280,13 +313,13 @@ CMD_AUTH_LOGON_CHALLENGE_Server CMD_AUTH_LOGON_CHALLENGE_Server_read(Reader& rea
 
         obj.generator_length = reader.read_u8();
 
-        for (auto i = 0; i < obj.generator_length; ++i) {
+        for (uint8_t i = 0; i < obj.generator_length; ++i) {
             obj.generator.push_back(reader.read_u8());
         }
 
         obj.large_safe_prime_length = reader.read_u8();
 
-        for (auto i = 0; i < obj.large_safe_prime_length; ++i) {
+        for (uint8_t i = 0; i < obj.large_safe_prime_length; ++i) {
             obj.large_safe_prime.push_back(reader.read_u8());
         }
 
@@ -302,7 +335,7 @@ CMD_AUTH_LOGON_CHALLENGE_Server CMD_AUTH_LOGON_CHALLENGE_Server_read(Reader& rea
     return obj;
 }
 
-std::vector<unsigned char> CMD_AUTH_LOGON_CHALLENGE_Server::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_AUTH_LOGON_CHALLENGE_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMD_AUTH_LOGON_CHALLENGE_Server_size(obj));
 
@@ -346,7 +379,7 @@ static size_t CMD_AUTH_LOGON_PROOF_Client_size(const CMD_AUTH_LOGON_PROOF_Client
 }
 
 CMD_AUTH_LOGON_PROOF_Client CMD_AUTH_LOGON_PROOF_Client_read(Reader& reader) {
-    CMD_AUTH_LOGON_PROOF_Client obj;
+    CMD_AUTH_LOGON_PROOF_Client obj{};
 
     for (auto i = 0; i < 32; ++i) {
         obj.client_public_key[i] = reader.read_u8();
@@ -362,14 +395,14 @@ CMD_AUTH_LOGON_PROOF_Client CMD_AUTH_LOGON_PROOF_Client_read(Reader& reader) {
 
     obj.number_of_telemetry_keys = reader.read_u8();
 
-    for (auto i = 0; i < obj.number_of_telemetry_keys; ++i) {
+    for (uint8_t i = 0; i < obj.number_of_telemetry_keys; ++i) {
         obj.telemetry_keys.push_back(::wow_login_messages::version2::TelemetryKey_read(reader));
     }
 
     return obj;
 }
 
-std::vector<unsigned char> CMD_AUTH_LOGON_PROOF_Client::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_AUTH_LOGON_PROOF_Client::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMD_AUTH_LOGON_PROOF_Client_size(obj));
 
@@ -407,7 +440,7 @@ static size_t CMD_AUTH_LOGON_PROOF_Server_size(const CMD_AUTH_LOGON_PROOF_Server
 }
 
 CMD_AUTH_LOGON_PROOF_Server CMD_AUTH_LOGON_PROOF_Server_read(Reader& reader) {
-    CMD_AUTH_LOGON_PROOF_Server obj;
+    CMD_AUTH_LOGON_PROOF_Server obj{};
 
     obj.result = static_cast<LoginResult>(reader.read_u8());
 
@@ -422,7 +455,7 @@ CMD_AUTH_LOGON_PROOF_Server CMD_AUTH_LOGON_PROOF_Server_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMD_AUTH_LOGON_PROOF_Server::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_AUTH_LOGON_PROOF_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMD_AUTH_LOGON_PROOF_Server_size(obj));
 
@@ -452,7 +485,7 @@ static size_t CMD_AUTH_RECONNECT_CHALLENGE_Server_size(const CMD_AUTH_RECONNECT_
 }
 
 CMD_AUTH_RECONNECT_CHALLENGE_Server CMD_AUTH_RECONNECT_CHALLENGE_Server_read(Reader& reader) {
-    CMD_AUTH_RECONNECT_CHALLENGE_Server obj;
+    CMD_AUTH_RECONNECT_CHALLENGE_Server obj{};
 
     obj.result = static_cast<LoginResult>(reader.read_u8());
 
@@ -469,7 +502,7 @@ CMD_AUTH_RECONNECT_CHALLENGE_Server CMD_AUTH_RECONNECT_CHALLENGE_Server_read(Rea
     return obj;
 }
 
-std::vector<unsigned char> CMD_AUTH_RECONNECT_CHALLENGE_Server::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_AUTH_RECONNECT_CHALLENGE_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMD_AUTH_RECONNECT_CHALLENGE_Server_size(obj));
 
@@ -490,19 +523,15 @@ std::vector<unsigned char> CMD_AUTH_RECONNECT_CHALLENGE_Server::write() const {
     return writer.m_buf;
 }
 
-static size_t CMD_AUTH_RECONNECT_PROOF_Server_size(const CMD_AUTH_RECONNECT_PROOF_Server& obj) {
-    return 1;
-}
-
 CMD_AUTH_RECONNECT_PROOF_Server CMD_AUTH_RECONNECT_PROOF_Server_read(Reader& reader) {
-    CMD_AUTH_RECONNECT_PROOF_Server obj;
+    CMD_AUTH_RECONNECT_PROOF_Server obj{};
 
     obj.result = static_cast<LoginResult>(reader.read_u8());
 
     return obj;
 }
 
-std::vector<unsigned char> CMD_AUTH_RECONNECT_PROOF_Server::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_AUTH_RECONNECT_PROOF_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0001);
 
@@ -513,12 +542,8 @@ std::vector<unsigned char> CMD_AUTH_RECONNECT_PROOF_Server::write() const {
     return writer.m_buf;
 }
 
-static size_t CMD_AUTH_RECONNECT_PROOF_Client_size(const CMD_AUTH_RECONNECT_PROOF_Client& obj) {
-    return 57;
-}
-
 CMD_AUTH_RECONNECT_PROOF_Client CMD_AUTH_RECONNECT_PROOF_Client_read(Reader& reader) {
-    CMD_AUTH_RECONNECT_PROOF_Client obj;
+    CMD_AUTH_RECONNECT_PROOF_Client obj{};
 
     for (auto i = 0; i < 16; ++i) {
         obj.proof_data[i] = reader.read_u8();
@@ -537,7 +562,7 @@ CMD_AUTH_RECONNECT_PROOF_Client CMD_AUTH_RECONNECT_PROOF_Client_read(Reader& rea
     return obj;
 }
 
-std::vector<unsigned char> CMD_AUTH_RECONNECT_PROOF_Client::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_AUTH_RECONNECT_PROOF_Client::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0039);
 
@@ -571,7 +596,7 @@ static size_t CMD_REALM_LIST_Server_size(const CMD_REALM_LIST_Server& obj) {
 }
 
 CMD_REALM_LIST_Server CMD_REALM_LIST_Server_read(Reader& reader) {
-    CMD_REALM_LIST_Server obj;
+    CMD_REALM_LIST_Server obj{};
 
     (void)reader.read_u16();
 
@@ -579,7 +604,7 @@ CMD_REALM_LIST_Server CMD_REALM_LIST_Server_read(Reader& reader) {
 
     obj.number_of_realms = reader.read_u8();
 
-    for (auto i = 0; i < obj.number_of_realms; ++i) {
+    for (uint8_t i = 0; i < obj.number_of_realms; ++i) {
         obj.realms.push_back(::wow_login_messages::version2::Realm_read(reader));
     }
 
@@ -588,7 +613,7 @@ CMD_REALM_LIST_Server CMD_REALM_LIST_Server_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMD_REALM_LIST_Server::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_REALM_LIST_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMD_REALM_LIST_Server_size(obj));
 
@@ -609,11 +634,7 @@ std::vector<unsigned char> CMD_REALM_LIST_Server::write() const {
     return writer.m_buf;
 }
 
-static size_t CMD_REALM_LIST_Client_size(const CMD_REALM_LIST_Client& obj) {
-    return 4;
-}
-
-std::vector<unsigned char> CMD_REALM_LIST_Client::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_REALM_LIST_Client::write() const {
     auto writer = Writer(0x0004);
 
     writer.write_u8(0x10); /* opcode */
@@ -628,7 +649,7 @@ static size_t CMD_XFER_INITIATE_size(const CMD_XFER_INITIATE& obj) {
 }
 
 CMD_XFER_INITIATE CMD_XFER_INITIATE_read(Reader& reader) {
-    CMD_XFER_INITIATE obj;
+    CMD_XFER_INITIATE obj{};
 
     obj.filename = reader.read_string();
 
@@ -641,7 +662,7 @@ CMD_XFER_INITIATE CMD_XFER_INITIATE_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMD_XFER_INITIATE::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_XFER_INITIATE::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMD_XFER_INITIATE_size(obj));
 
@@ -663,18 +684,18 @@ static size_t CMD_XFER_DATA_size(const CMD_XFER_DATA& obj) {
 }
 
 CMD_XFER_DATA CMD_XFER_DATA_read(Reader& reader) {
-    CMD_XFER_DATA obj;
+    CMD_XFER_DATA obj{};
 
     obj.size = reader.read_u16();
 
-    for (auto i = 0; i < obj.size; ++i) {
+    for (uint16_t i = 0; i < obj.size; ++i) {
         obj.data.push_back(reader.read_u8());
     }
 
     return obj;
 }
 
-std::vector<unsigned char> CMD_XFER_DATA::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_XFER_DATA::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMD_XFER_DATA_size(obj));
 
@@ -689,11 +710,7 @@ std::vector<unsigned char> CMD_XFER_DATA::write() const {
     return writer.m_buf;
 }
 
-static size_t CMD_XFER_ACCEPT_size(const CMD_XFER_ACCEPT& obj) {
-    return 0;
-}
-
-std::vector<unsigned char> CMD_XFER_ACCEPT::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_XFER_ACCEPT::write() const {
     auto writer = Writer(0x0000);
 
     writer.write_u8(0x32); /* opcode */
@@ -701,19 +718,15 @@ std::vector<unsigned char> CMD_XFER_ACCEPT::write() const {
     return writer.m_buf;
 }
 
-static size_t CMD_XFER_RESUME_size(const CMD_XFER_RESUME& obj) {
-    return 8;
-}
-
 CMD_XFER_RESUME CMD_XFER_RESUME_read(Reader& reader) {
-    CMD_XFER_RESUME obj;
+    CMD_XFER_RESUME obj{};
 
     obj.offset = reader.read_u64();
 
     return obj;
 }
 
-std::vector<unsigned char> CMD_XFER_RESUME::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_XFER_RESUME::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0008);
 
@@ -724,11 +737,7 @@ std::vector<unsigned char> CMD_XFER_RESUME::write() const {
     return writer.m_buf;
 }
 
-static size_t CMD_XFER_CANCEL_size(const CMD_XFER_CANCEL& obj) {
-    return 0;
-}
-
-std::vector<unsigned char> CMD_XFER_CANCEL::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_XFER_CANCEL::write() const {
     auto writer = Writer(0x0000);
 
     writer.write_u8(0x34); /* opcode */
@@ -736,7 +745,104 @@ std::vector<unsigned char> CMD_XFER_CANCEL::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> write_opcode(const ClientOpcode& opcode) {
+template <>
+version2::CMD_AUTH_LOGON_PROOF_Client* ClientOpcode::get_if<CMD_AUTH_LOGON_PROOF_Client>() {
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        return &CMD_AUTH_LOGON_PROOF;
+    }
+    return nullptr;
+}
+template <>
+version2::CMD_AUTH_LOGON_PROOF_Client& ClientOpcode::get<CMD_AUTH_LOGON_PROOF_Client>() {
+    auto p = ClientOpcode::get_if<version2::CMD_AUTH_LOGON_PROOF_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version2::CMD_AUTH_RECONNECT_PROOF_Client* ClientOpcode::get_if<CMD_AUTH_RECONNECT_PROOF_Client>() {
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        return &CMD_AUTH_RECONNECT_PROOF;
+    }
+    return nullptr;
+}
+template <>
+version2::CMD_AUTH_RECONNECT_PROOF_Client& ClientOpcode::get<CMD_AUTH_RECONNECT_PROOF_Client>() {
+    auto p = ClientOpcode::get_if<version2::CMD_AUTH_RECONNECT_PROOF_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version2::CMD_REALM_LIST_Client* ClientOpcode::get_if<CMD_REALM_LIST_Client>() {
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        return &CMD_REALM_LIST;
+    }
+    return nullptr;
+}
+template <>
+version2::CMD_REALM_LIST_Client& ClientOpcode::get<CMD_REALM_LIST_Client>() {
+    auto p = ClientOpcode::get_if<version2::CMD_REALM_LIST_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version2::CMD_XFER_ACCEPT* ClientOpcode::get_if<CMD_XFER_ACCEPT>() {
+    if (opcode == Opcode::CMD_XFER_ACCEPT) {
+        return &CMD_XFER_ACCEPT;
+    }
+    return nullptr;
+}
+template <>
+version2::CMD_XFER_ACCEPT& ClientOpcode::get<CMD_XFER_ACCEPT>() {
+    auto p = ClientOpcode::get_if<version2::CMD_XFER_ACCEPT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version2::CMD_XFER_RESUME* ClientOpcode::get_if<CMD_XFER_RESUME>() {
+    if (opcode == Opcode::CMD_XFER_RESUME) {
+        return &CMD_XFER_RESUME;
+    }
+    return nullptr;
+}
+template <>
+version2::CMD_XFER_RESUME& ClientOpcode::get<CMD_XFER_RESUME>() {
+    auto p = ClientOpcode::get_if<version2::CMD_XFER_RESUME>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version2::CMD_XFER_CANCEL* ClientOpcode::get_if<CMD_XFER_CANCEL>() {
+    if (opcode == Opcode::CMD_XFER_CANCEL) {
+        return &CMD_XFER_CANCEL;
+    }
+    return nullptr;
+}
+template <>
+version2::CMD_XFER_CANCEL& ClientOpcode::get<CMD_XFER_CANCEL>() {
+    auto p = ClientOpcode::get_if<version2::CMD_XFER_CANCEL>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const ClientOpcode& opcode) {
     if (opcode.opcode == ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
         return opcode.CMD_AUTH_LOGON_PROOF.write();;
     }
@@ -759,7 +865,7 @@ std::vector<unsigned char> write_opcode(const ClientOpcode& opcode) {
     return {}; /* unreachable */
 }
 
-ClientOpcode read_client_opcode(Reader& reader) {
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode read_client_opcode(Reader& reader) {
     const uint8_t opcode = reader.read_u8();
 
     ClientOpcode op;
@@ -785,7 +891,120 @@ ClientOpcode read_client_opcode(Reader& reader) {
 
     return op;
 }
-std::vector<unsigned char> write_opcode(const ServerOpcode& opcode) {
+template <>
+version2::CMD_AUTH_LOGON_CHALLENGE_Server* ServerOpcode::get_if<CMD_AUTH_LOGON_CHALLENGE_Server>() {
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        return &CMD_AUTH_LOGON_CHALLENGE;
+    }
+    return nullptr;
+}
+template <>
+version2::CMD_AUTH_LOGON_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_LOGON_CHALLENGE_Server>() {
+    auto p = ServerOpcode::get_if<version2::CMD_AUTH_LOGON_CHALLENGE_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version2::CMD_AUTH_LOGON_PROOF_Server* ServerOpcode::get_if<CMD_AUTH_LOGON_PROOF_Server>() {
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        return &CMD_AUTH_LOGON_PROOF;
+    }
+    return nullptr;
+}
+template <>
+version2::CMD_AUTH_LOGON_PROOF_Server& ServerOpcode::get<CMD_AUTH_LOGON_PROOF_Server>() {
+    auto p = ServerOpcode::get_if<version2::CMD_AUTH_LOGON_PROOF_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version2::CMD_AUTH_RECONNECT_CHALLENGE_Server* ServerOpcode::get_if<CMD_AUTH_RECONNECT_CHALLENGE_Server>() {
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        return &CMD_AUTH_RECONNECT_CHALLENGE;
+    }
+    return nullptr;
+}
+template <>
+version2::CMD_AUTH_RECONNECT_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_RECONNECT_CHALLENGE_Server>() {
+    auto p = ServerOpcode::get_if<version2::CMD_AUTH_RECONNECT_CHALLENGE_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version2::CMD_AUTH_RECONNECT_PROOF_Server* ServerOpcode::get_if<CMD_AUTH_RECONNECT_PROOF_Server>() {
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        return &CMD_AUTH_RECONNECT_PROOF;
+    }
+    return nullptr;
+}
+template <>
+version2::CMD_AUTH_RECONNECT_PROOF_Server& ServerOpcode::get<CMD_AUTH_RECONNECT_PROOF_Server>() {
+    auto p = ServerOpcode::get_if<version2::CMD_AUTH_RECONNECT_PROOF_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version2::CMD_REALM_LIST_Server* ServerOpcode::get_if<CMD_REALM_LIST_Server>() {
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        return &CMD_REALM_LIST;
+    }
+    return nullptr;
+}
+template <>
+version2::CMD_REALM_LIST_Server& ServerOpcode::get<CMD_REALM_LIST_Server>() {
+    auto p = ServerOpcode::get_if<version2::CMD_REALM_LIST_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version2::CMD_XFER_INITIATE* ServerOpcode::get_if<CMD_XFER_INITIATE>() {
+    if (opcode == Opcode::CMD_XFER_INITIATE) {
+        return &CMD_XFER_INITIATE;
+    }
+    return nullptr;
+}
+template <>
+version2::CMD_XFER_INITIATE& ServerOpcode::get<CMD_XFER_INITIATE>() {
+    auto p = ServerOpcode::get_if<version2::CMD_XFER_INITIATE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version2::CMD_XFER_DATA* ServerOpcode::get_if<CMD_XFER_DATA>() {
+    if (opcode == Opcode::CMD_XFER_DATA) {
+        return &CMD_XFER_DATA;
+    }
+    return nullptr;
+}
+template <>
+version2::CMD_XFER_DATA& ServerOpcode::get<CMD_XFER_DATA>() {
+    auto p = ServerOpcode::get_if<version2::CMD_XFER_DATA>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const ServerOpcode& opcode) {
     if (opcode.opcode == ServerOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE) {
         return opcode.CMD_AUTH_LOGON_CHALLENGE.write();;
     }
@@ -811,7 +1030,7 @@ std::vector<unsigned char> write_opcode(const ServerOpcode& opcode) {
     return {}; /* unreachable */
 }
 
-ServerOpcode read_server_opcode(Reader& reader) {
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode read_server_opcode(Reader& reader) {
     const uint8_t opcode = reader.read_u8();
 
     ServerOpcode op;
@@ -862,7 +1081,7 @@ static size_t CMD_AUTH_LOGON_CHALLENGE_Server_size(const CMD_AUTH_LOGON_CHALLENG
 }
 
 CMD_AUTH_LOGON_CHALLENGE_Server CMD_AUTH_LOGON_CHALLENGE_Server_read(Reader& reader) {
-    CMD_AUTH_LOGON_CHALLENGE_Server obj;
+    CMD_AUTH_LOGON_CHALLENGE_Server obj{};
 
     (void)reader.read_u8();
 
@@ -875,13 +1094,13 @@ CMD_AUTH_LOGON_CHALLENGE_Server CMD_AUTH_LOGON_CHALLENGE_Server_read(Reader& rea
 
         obj.generator_length = reader.read_u8();
 
-        for (auto i = 0; i < obj.generator_length; ++i) {
+        for (uint8_t i = 0; i < obj.generator_length; ++i) {
             obj.generator.push_back(reader.read_u8());
         }
 
         obj.large_safe_prime_length = reader.read_u8();
 
-        for (auto i = 0; i < obj.large_safe_prime_length; ++i) {
+        for (uint8_t i = 0; i < obj.large_safe_prime_length; ++i) {
             obj.large_safe_prime.push_back(reader.read_u8());
         }
 
@@ -907,7 +1126,7 @@ CMD_AUTH_LOGON_CHALLENGE_Server CMD_AUTH_LOGON_CHALLENGE_Server_read(Reader& rea
     return obj;
 }
 
-std::vector<unsigned char> CMD_AUTH_LOGON_CHALLENGE_Server::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_AUTH_LOGON_CHALLENGE_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMD_AUTH_LOGON_CHALLENGE_Server_size(obj));
 
@@ -967,7 +1186,7 @@ static size_t CMD_AUTH_LOGON_PROOF_Client_size(const CMD_AUTH_LOGON_PROOF_Client
 }
 
 CMD_AUTH_LOGON_PROOF_Client CMD_AUTH_LOGON_PROOF_Client_read(Reader& reader) {
-    CMD_AUTH_LOGON_PROOF_Client obj;
+    CMD_AUTH_LOGON_PROOF_Client obj{};
 
     for (auto i = 0; i < 32; ++i) {
         obj.client_public_key[i] = reader.read_u8();
@@ -983,7 +1202,7 @@ CMD_AUTH_LOGON_PROOF_Client CMD_AUTH_LOGON_PROOF_Client_read(Reader& reader) {
 
     obj.number_of_telemetry_keys = reader.read_u8();
 
-    for (auto i = 0; i < obj.number_of_telemetry_keys; ++i) {
+    for (uint8_t i = 0; i < obj.number_of_telemetry_keys; ++i) {
         obj.telemetry_keys.push_back(::wow_login_messages::version2::TelemetryKey_read(reader));
     }
 
@@ -1002,7 +1221,7 @@ CMD_AUTH_LOGON_PROOF_Client CMD_AUTH_LOGON_PROOF_Client_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMD_AUTH_LOGON_PROOF_Client::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_AUTH_LOGON_PROOF_Client::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMD_AUTH_LOGON_PROOF_Client_size(obj));
 
@@ -1046,7 +1265,7 @@ static size_t CMD_SURVEY_RESULT_size(const CMD_SURVEY_RESULT& obj) {
 }
 
 CMD_SURVEY_RESULT CMD_SURVEY_RESULT_read(Reader& reader) {
-    CMD_SURVEY_RESULT obj;
+    CMD_SURVEY_RESULT obj{};
 
     obj.survey_id = reader.read_u32();
 
@@ -1054,14 +1273,14 @@ CMD_SURVEY_RESULT CMD_SURVEY_RESULT_read(Reader& reader) {
 
     obj.compressed_data_length = reader.read_u16();
 
-    for (auto i = 0; i < obj.compressed_data_length; ++i) {
+    for (uint16_t i = 0; i < obj.compressed_data_length; ++i) {
         obj.data.push_back(reader.read_u8());
     }
 
     return obj;
 }
 
-std::vector<unsigned char> CMD_SURVEY_RESULT::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_SURVEY_RESULT::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMD_SURVEY_RESULT_size(obj));
 
@@ -1080,11 +1299,7 @@ std::vector<unsigned char> CMD_SURVEY_RESULT::write() const {
     return writer.m_buf;
 }
 
-static size_t CMD_REALM_LIST_Client_size(const CMD_REALM_LIST_Client& obj) {
-    return 4;
-}
-
-std::vector<unsigned char> CMD_REALM_LIST_Client::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_REALM_LIST_Client::write() const {
     auto writer = Writer(0x0004);
 
     writer.write_u8(0x10); /* opcode */
@@ -1094,11 +1309,7 @@ std::vector<unsigned char> CMD_REALM_LIST_Client::write() const {
     return writer.m_buf;
 }
 
-static size_t CMD_XFER_ACCEPT_size(const CMD_XFER_ACCEPT& obj) {
-    return 0;
-}
-
-std::vector<unsigned char> CMD_XFER_ACCEPT::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_XFER_ACCEPT::write() const {
     auto writer = Writer(0x0000);
 
     writer.write_u8(0x32); /* opcode */
@@ -1106,11 +1317,7 @@ std::vector<unsigned char> CMD_XFER_ACCEPT::write() const {
     return writer.m_buf;
 }
 
-static size_t CMD_XFER_CANCEL_size(const CMD_XFER_CANCEL& obj) {
-    return 0;
-}
-
-std::vector<unsigned char> CMD_XFER_CANCEL::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_XFER_CANCEL::write() const {
     auto writer = Writer(0x0000);
 
     writer.write_u8(0x34); /* opcode */
@@ -1118,7 +1325,104 @@ std::vector<unsigned char> CMD_XFER_CANCEL::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> write_opcode(const ClientOpcode& opcode) {
+template <>
+version3::CMD_AUTH_LOGON_PROOF_Client* ClientOpcode::get_if<CMD_AUTH_LOGON_PROOF_Client>() {
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        return &CMD_AUTH_LOGON_PROOF;
+    }
+    return nullptr;
+}
+template <>
+version3::CMD_AUTH_LOGON_PROOF_Client& ClientOpcode::get<CMD_AUTH_LOGON_PROOF_Client>() {
+    auto p = ClientOpcode::get_if<version3::CMD_AUTH_LOGON_PROOF_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version3::CMD_SURVEY_RESULT* ClientOpcode::get_if<CMD_SURVEY_RESULT>() {
+    if (opcode == Opcode::CMD_SURVEY_RESULT) {
+        return &CMD_SURVEY_RESULT;
+    }
+    return nullptr;
+}
+template <>
+version3::CMD_SURVEY_RESULT& ClientOpcode::get<CMD_SURVEY_RESULT>() {
+    auto p = ClientOpcode::get_if<version3::CMD_SURVEY_RESULT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version3::CMD_REALM_LIST_Client* ClientOpcode::get_if<CMD_REALM_LIST_Client>() {
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        return &CMD_REALM_LIST;
+    }
+    return nullptr;
+}
+template <>
+version3::CMD_REALM_LIST_Client& ClientOpcode::get<CMD_REALM_LIST_Client>() {
+    auto p = ClientOpcode::get_if<version3::CMD_REALM_LIST_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version3::CMD_XFER_ACCEPT* ClientOpcode::get_if<CMD_XFER_ACCEPT>() {
+    if (opcode == Opcode::CMD_XFER_ACCEPT) {
+        return &CMD_XFER_ACCEPT;
+    }
+    return nullptr;
+}
+template <>
+version3::CMD_XFER_ACCEPT& ClientOpcode::get<CMD_XFER_ACCEPT>() {
+    auto p = ClientOpcode::get_if<version3::CMD_XFER_ACCEPT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version3::CMD_XFER_RESUME* ClientOpcode::get_if<CMD_XFER_RESUME>() {
+    if (opcode == Opcode::CMD_XFER_RESUME) {
+        return &CMD_XFER_RESUME;
+    }
+    return nullptr;
+}
+template <>
+version3::CMD_XFER_RESUME& ClientOpcode::get<CMD_XFER_RESUME>() {
+    auto p = ClientOpcode::get_if<version3::CMD_XFER_RESUME>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version3::CMD_XFER_CANCEL* ClientOpcode::get_if<CMD_XFER_CANCEL>() {
+    if (opcode == Opcode::CMD_XFER_CANCEL) {
+        return &CMD_XFER_CANCEL;
+    }
+    return nullptr;
+}
+template <>
+version3::CMD_XFER_CANCEL& ClientOpcode::get<CMD_XFER_CANCEL>() {
+    auto p = ClientOpcode::get_if<version3::CMD_XFER_CANCEL>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const ClientOpcode& opcode) {
     if (opcode.opcode == ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
         return opcode.CMD_AUTH_LOGON_PROOF.write();;
     }
@@ -1141,7 +1445,7 @@ std::vector<unsigned char> write_opcode(const ClientOpcode& opcode) {
     return {}; /* unreachable */
 }
 
-ClientOpcode read_client_opcode(Reader& reader) {
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode read_client_opcode(Reader& reader) {
     const uint8_t opcode = reader.read_u8();
 
     ClientOpcode op;
@@ -1167,7 +1471,88 @@ ClientOpcode read_client_opcode(Reader& reader) {
 
     return op;
 }
-std::vector<unsigned char> write_opcode(const ServerOpcode& opcode) {
+template <>
+version3::CMD_AUTH_LOGON_CHALLENGE_Server* ServerOpcode::get_if<CMD_AUTH_LOGON_CHALLENGE_Server>() {
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        return &CMD_AUTH_LOGON_CHALLENGE;
+    }
+    return nullptr;
+}
+template <>
+version3::CMD_AUTH_LOGON_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_LOGON_CHALLENGE_Server>() {
+    auto p = ServerOpcode::get_if<version3::CMD_AUTH_LOGON_CHALLENGE_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version3::CMD_AUTH_LOGON_PROOF_Server* ServerOpcode::get_if<CMD_AUTH_LOGON_PROOF_Server>() {
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        return &CMD_AUTH_LOGON_PROOF;
+    }
+    return nullptr;
+}
+template <>
+version3::CMD_AUTH_LOGON_PROOF_Server& ServerOpcode::get<CMD_AUTH_LOGON_PROOF_Server>() {
+    auto p = ServerOpcode::get_if<version3::CMD_AUTH_LOGON_PROOF_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version3::CMD_REALM_LIST_Server* ServerOpcode::get_if<CMD_REALM_LIST_Server>() {
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        return &CMD_REALM_LIST;
+    }
+    return nullptr;
+}
+template <>
+version3::CMD_REALM_LIST_Server& ServerOpcode::get<CMD_REALM_LIST_Server>() {
+    auto p = ServerOpcode::get_if<version3::CMD_REALM_LIST_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version3::CMD_XFER_INITIATE* ServerOpcode::get_if<CMD_XFER_INITIATE>() {
+    if (opcode == Opcode::CMD_XFER_INITIATE) {
+        return &CMD_XFER_INITIATE;
+    }
+    return nullptr;
+}
+template <>
+version3::CMD_XFER_INITIATE& ServerOpcode::get<CMD_XFER_INITIATE>() {
+    auto p = ServerOpcode::get_if<version3::CMD_XFER_INITIATE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version3::CMD_XFER_DATA* ServerOpcode::get_if<CMD_XFER_DATA>() {
+    if (opcode == Opcode::CMD_XFER_DATA) {
+        return &CMD_XFER_DATA;
+    }
+    return nullptr;
+}
+template <>
+version3::CMD_XFER_DATA& ServerOpcode::get<CMD_XFER_DATA>() {
+    auto p = ServerOpcode::get_if<version3::CMD_XFER_DATA>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const ServerOpcode& opcode) {
     if (opcode.opcode == ServerOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE) {
         return opcode.CMD_AUTH_LOGON_CHALLENGE.write();;
     }
@@ -1187,7 +1572,7 @@ std::vector<unsigned char> write_opcode(const ServerOpcode& opcode) {
     return {}; /* unreachable */
 }
 
-ServerOpcode read_server_opcode(Reader& reader) {
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode read_server_opcode(Reader& reader) {
     const uint8_t opcode = reader.read_u8();
 
     ServerOpcode op;
@@ -1221,7 +1606,7 @@ static size_t Realm_size(const Realm& obj) {
 }
 
 Realm Realm_read(Reader& reader) {
-    Realm obj;
+    Realm obj{};
 
     obj.realm_type = static_cast<RealmType>(reader.read_u8());
 
@@ -1244,7 +1629,7 @@ Realm Realm_read(Reader& reader) {
     return obj;
 }
 
-void Realm_write(Writer& writer, const Realm& obj) {
+static void Realm_write(Writer& writer, const Realm& obj) {
     writer.write_u8(static_cast<uint8_t>(obj.realm_type));
 
     writer.write_bool8(obj.locked);
@@ -1285,7 +1670,7 @@ static size_t CMD_AUTH_LOGON_CHALLENGE_Server_size(const CMD_AUTH_LOGON_CHALLENG
 }
 
 CMD_AUTH_LOGON_CHALLENGE_Server CMD_AUTH_LOGON_CHALLENGE_Server_read(Reader& reader) {
-    CMD_AUTH_LOGON_CHALLENGE_Server obj;
+    CMD_AUTH_LOGON_CHALLENGE_Server obj{};
 
     (void)reader.read_u8();
 
@@ -1298,13 +1683,13 @@ CMD_AUTH_LOGON_CHALLENGE_Server CMD_AUTH_LOGON_CHALLENGE_Server_read(Reader& rea
 
         obj.generator_length = reader.read_u8();
 
-        for (auto i = 0; i < obj.generator_length; ++i) {
+        for (uint8_t i = 0; i < obj.generator_length; ++i) {
             obj.generator.push_back(reader.read_u8());
         }
 
         obj.large_safe_prime_length = reader.read_u8();
 
-        for (auto i = 0; i < obj.large_safe_prime_length; ++i) {
+        for (uint8_t i = 0; i < obj.large_safe_prime_length; ++i) {
             obj.large_safe_prime.push_back(reader.read_u8());
         }
 
@@ -1342,7 +1727,7 @@ CMD_AUTH_LOGON_CHALLENGE_Server CMD_AUTH_LOGON_CHALLENGE_Server_read(Reader& rea
     return obj;
 }
 
-std::vector<unsigned char> CMD_AUTH_LOGON_CHALLENGE_Server::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_AUTH_LOGON_CHALLENGE_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMD_AUTH_LOGON_CHALLENGE_Server_size(obj));
 
@@ -1418,7 +1803,7 @@ static size_t CMD_AUTH_LOGON_PROOF_Client_size(const CMD_AUTH_LOGON_PROOF_Client
 }
 
 CMD_AUTH_LOGON_PROOF_Client CMD_AUTH_LOGON_PROOF_Client_read(Reader& reader) {
-    CMD_AUTH_LOGON_PROOF_Client obj;
+    CMD_AUTH_LOGON_PROOF_Client obj{};
 
     for (auto i = 0; i < 32; ++i) {
         obj.client_public_key[i] = reader.read_u8();
@@ -1434,7 +1819,7 @@ CMD_AUTH_LOGON_PROOF_Client CMD_AUTH_LOGON_PROOF_Client_read(Reader& reader) {
 
     obj.number_of_telemetry_keys = reader.read_u8();
 
-    for (auto i = 0; i < obj.number_of_telemetry_keys; ++i) {
+    for (uint8_t i = 0; i < obj.number_of_telemetry_keys; ++i) {
         obj.telemetry_keys.push_back(::wow_login_messages::version2::TelemetryKey_read(reader));
     }
 
@@ -1459,7 +1844,7 @@ CMD_AUTH_LOGON_PROOF_Client CMD_AUTH_LOGON_PROOF_Client_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMD_AUTH_LOGON_PROOF_Client::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_AUTH_LOGON_PROOF_Client::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMD_AUTH_LOGON_PROOF_Client_size(obj));
 
@@ -1515,7 +1900,7 @@ static size_t CMD_AUTH_LOGON_PROOF_Server_size(const CMD_AUTH_LOGON_PROOF_Server
 }
 
 CMD_AUTH_LOGON_PROOF_Server CMD_AUTH_LOGON_PROOF_Server_read(Reader& reader) {
-    CMD_AUTH_LOGON_PROOF_Server obj;
+    CMD_AUTH_LOGON_PROOF_Server obj{};
 
     obj.result = static_cast<LoginResult>(reader.read_u8());
 
@@ -1532,7 +1917,7 @@ CMD_AUTH_LOGON_PROOF_Server CMD_AUTH_LOGON_PROOF_Server_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMD_AUTH_LOGON_PROOF_Server::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_AUTH_LOGON_PROOF_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMD_AUTH_LOGON_PROOF_Server_size(obj));
 
@@ -1553,12 +1938,8 @@ std::vector<unsigned char> CMD_AUTH_LOGON_PROOF_Server::write() const {
     return writer.m_buf;
 }
 
-static size_t CMD_AUTH_RECONNECT_PROOF_Server_size(const CMD_AUTH_RECONNECT_PROOF_Server& obj) {
-    return 3;
-}
-
 CMD_AUTH_RECONNECT_PROOF_Server CMD_AUTH_RECONNECT_PROOF_Server_read(Reader& reader) {
-    CMD_AUTH_RECONNECT_PROOF_Server obj;
+    CMD_AUTH_RECONNECT_PROOF_Server obj{};
 
     obj.result = static_cast<LoginResult>(reader.read_u8());
 
@@ -1567,7 +1948,7 @@ CMD_AUTH_RECONNECT_PROOF_Server CMD_AUTH_RECONNECT_PROOF_Server_read(Reader& rea
     return obj;
 }
 
-std::vector<unsigned char> CMD_AUTH_RECONNECT_PROOF_Server::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_AUTH_RECONNECT_PROOF_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0003);
 
@@ -1580,11 +1961,7 @@ std::vector<unsigned char> CMD_AUTH_RECONNECT_PROOF_Server::write() const {
     return writer.m_buf;
 }
 
-static size_t CMD_REALM_LIST_Client_size(const CMD_REALM_LIST_Client& obj) {
-    return 4;
-}
-
-std::vector<unsigned char> CMD_REALM_LIST_Client::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_REALM_LIST_Client::write() const {
     auto writer = Writer(0x0004);
 
     writer.write_u8(0x10); /* opcode */
@@ -1605,7 +1982,7 @@ static size_t CMD_REALM_LIST_Server_size(const CMD_REALM_LIST_Server& obj) {
 }
 
 CMD_REALM_LIST_Server CMD_REALM_LIST_Server_read(Reader& reader) {
-    CMD_REALM_LIST_Server obj;
+    CMD_REALM_LIST_Server obj{};
 
     (void)reader.read_u16();
 
@@ -1613,7 +1990,7 @@ CMD_REALM_LIST_Server CMD_REALM_LIST_Server_read(Reader& reader) {
 
     obj.number_of_realms = reader.read_u8();
 
-    for (auto i = 0; i < obj.number_of_realms; ++i) {
+    for (uint8_t i = 0; i < obj.number_of_realms; ++i) {
         obj.realms.push_back(::wow_login_messages::version5::Realm_read(reader));
     }
 
@@ -1622,7 +1999,7 @@ CMD_REALM_LIST_Server CMD_REALM_LIST_Server_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMD_REALM_LIST_Server::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_REALM_LIST_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMD_REALM_LIST_Server_size(obj));
 
@@ -1643,11 +2020,7 @@ std::vector<unsigned char> CMD_REALM_LIST_Server::write() const {
     return writer.m_buf;
 }
 
-static size_t CMD_XFER_ACCEPT_size(const CMD_XFER_ACCEPT& obj) {
-    return 0;
-}
-
-std::vector<unsigned char> CMD_XFER_ACCEPT::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_XFER_ACCEPT::write() const {
     auto writer = Writer(0x0000);
 
     writer.write_u8(0x32); /* opcode */
@@ -1655,11 +2028,7 @@ std::vector<unsigned char> CMD_XFER_ACCEPT::write() const {
     return writer.m_buf;
 }
 
-static size_t CMD_XFER_CANCEL_size(const CMD_XFER_CANCEL& obj) {
-    return 0;
-}
-
-std::vector<unsigned char> CMD_XFER_CANCEL::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_XFER_CANCEL::write() const {
     auto writer = Writer(0x0000);
 
     writer.write_u8(0x34); /* opcode */
@@ -1667,7 +2036,104 @@ std::vector<unsigned char> CMD_XFER_CANCEL::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> write_opcode(const ClientOpcode& opcode) {
+template <>
+version5::CMD_AUTH_LOGON_PROOF_Client* ClientOpcode::get_if<CMD_AUTH_LOGON_PROOF_Client>() {
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        return &CMD_AUTH_LOGON_PROOF;
+    }
+    return nullptr;
+}
+template <>
+version5::CMD_AUTH_LOGON_PROOF_Client& ClientOpcode::get<CMD_AUTH_LOGON_PROOF_Client>() {
+    auto p = ClientOpcode::get_if<version5::CMD_AUTH_LOGON_PROOF_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version5::CMD_AUTH_RECONNECT_PROOF_Client* ClientOpcode::get_if<CMD_AUTH_RECONNECT_PROOF_Client>() {
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        return &CMD_AUTH_RECONNECT_PROOF;
+    }
+    return nullptr;
+}
+template <>
+version5::CMD_AUTH_RECONNECT_PROOF_Client& ClientOpcode::get<CMD_AUTH_RECONNECT_PROOF_Client>() {
+    auto p = ClientOpcode::get_if<version5::CMD_AUTH_RECONNECT_PROOF_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version5::CMD_REALM_LIST_Client* ClientOpcode::get_if<CMD_REALM_LIST_Client>() {
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        return &CMD_REALM_LIST;
+    }
+    return nullptr;
+}
+template <>
+version5::CMD_REALM_LIST_Client& ClientOpcode::get<CMD_REALM_LIST_Client>() {
+    auto p = ClientOpcode::get_if<version5::CMD_REALM_LIST_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version5::CMD_XFER_ACCEPT* ClientOpcode::get_if<CMD_XFER_ACCEPT>() {
+    if (opcode == Opcode::CMD_XFER_ACCEPT) {
+        return &CMD_XFER_ACCEPT;
+    }
+    return nullptr;
+}
+template <>
+version5::CMD_XFER_ACCEPT& ClientOpcode::get<CMD_XFER_ACCEPT>() {
+    auto p = ClientOpcode::get_if<version5::CMD_XFER_ACCEPT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version5::CMD_XFER_RESUME* ClientOpcode::get_if<CMD_XFER_RESUME>() {
+    if (opcode == Opcode::CMD_XFER_RESUME) {
+        return &CMD_XFER_RESUME;
+    }
+    return nullptr;
+}
+template <>
+version5::CMD_XFER_RESUME& ClientOpcode::get<CMD_XFER_RESUME>() {
+    auto p = ClientOpcode::get_if<version5::CMD_XFER_RESUME>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version5::CMD_XFER_CANCEL* ClientOpcode::get_if<CMD_XFER_CANCEL>() {
+    if (opcode == Opcode::CMD_XFER_CANCEL) {
+        return &CMD_XFER_CANCEL;
+    }
+    return nullptr;
+}
+template <>
+version5::CMD_XFER_CANCEL& ClientOpcode::get<CMD_XFER_CANCEL>() {
+    auto p = ClientOpcode::get_if<version5::CMD_XFER_CANCEL>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const ClientOpcode& opcode) {
     if (opcode.opcode == ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
         return opcode.CMD_AUTH_LOGON_PROOF.write();;
     }
@@ -1690,7 +2156,7 @@ std::vector<unsigned char> write_opcode(const ClientOpcode& opcode) {
     return {}; /* unreachable */
 }
 
-ClientOpcode read_client_opcode(Reader& reader) {
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode read_client_opcode(Reader& reader) {
     const uint8_t opcode = reader.read_u8();
 
     ClientOpcode op;
@@ -1716,7 +2182,120 @@ ClientOpcode read_client_opcode(Reader& reader) {
 
     return op;
 }
-std::vector<unsigned char> write_opcode(const ServerOpcode& opcode) {
+template <>
+version5::CMD_AUTH_LOGON_CHALLENGE_Server* ServerOpcode::get_if<CMD_AUTH_LOGON_CHALLENGE_Server>() {
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        return &CMD_AUTH_LOGON_CHALLENGE;
+    }
+    return nullptr;
+}
+template <>
+version5::CMD_AUTH_LOGON_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_LOGON_CHALLENGE_Server>() {
+    auto p = ServerOpcode::get_if<version5::CMD_AUTH_LOGON_CHALLENGE_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version5::CMD_AUTH_LOGON_PROOF_Server* ServerOpcode::get_if<CMD_AUTH_LOGON_PROOF_Server>() {
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        return &CMD_AUTH_LOGON_PROOF;
+    }
+    return nullptr;
+}
+template <>
+version5::CMD_AUTH_LOGON_PROOF_Server& ServerOpcode::get<CMD_AUTH_LOGON_PROOF_Server>() {
+    auto p = ServerOpcode::get_if<version5::CMD_AUTH_LOGON_PROOF_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version5::CMD_AUTH_RECONNECT_CHALLENGE_Server* ServerOpcode::get_if<CMD_AUTH_RECONNECT_CHALLENGE_Server>() {
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        return &CMD_AUTH_RECONNECT_CHALLENGE;
+    }
+    return nullptr;
+}
+template <>
+version5::CMD_AUTH_RECONNECT_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_RECONNECT_CHALLENGE_Server>() {
+    auto p = ServerOpcode::get_if<version5::CMD_AUTH_RECONNECT_CHALLENGE_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version5::CMD_AUTH_RECONNECT_PROOF_Server* ServerOpcode::get_if<CMD_AUTH_RECONNECT_PROOF_Server>() {
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        return &CMD_AUTH_RECONNECT_PROOF;
+    }
+    return nullptr;
+}
+template <>
+version5::CMD_AUTH_RECONNECT_PROOF_Server& ServerOpcode::get<CMD_AUTH_RECONNECT_PROOF_Server>() {
+    auto p = ServerOpcode::get_if<version5::CMD_AUTH_RECONNECT_PROOF_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version5::CMD_REALM_LIST_Server* ServerOpcode::get_if<CMD_REALM_LIST_Server>() {
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        return &CMD_REALM_LIST;
+    }
+    return nullptr;
+}
+template <>
+version5::CMD_REALM_LIST_Server& ServerOpcode::get<CMD_REALM_LIST_Server>() {
+    auto p = ServerOpcode::get_if<version5::CMD_REALM_LIST_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version5::CMD_XFER_INITIATE* ServerOpcode::get_if<CMD_XFER_INITIATE>() {
+    if (opcode == Opcode::CMD_XFER_INITIATE) {
+        return &CMD_XFER_INITIATE;
+    }
+    return nullptr;
+}
+template <>
+version5::CMD_XFER_INITIATE& ServerOpcode::get<CMD_XFER_INITIATE>() {
+    auto p = ServerOpcode::get_if<version5::CMD_XFER_INITIATE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version5::CMD_XFER_DATA* ServerOpcode::get_if<CMD_XFER_DATA>() {
+    if (opcode == Opcode::CMD_XFER_DATA) {
+        return &CMD_XFER_DATA;
+    }
+    return nullptr;
+}
+template <>
+version5::CMD_XFER_DATA& ServerOpcode::get<CMD_XFER_DATA>() {
+    auto p = ServerOpcode::get_if<version5::CMD_XFER_DATA>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const ServerOpcode& opcode) {
     if (opcode.opcode == ServerOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE) {
         return opcode.CMD_AUTH_LOGON_CHALLENGE.write();;
     }
@@ -1742,7 +2321,7 @@ std::vector<unsigned char> write_opcode(const ServerOpcode& opcode) {
     return {}; /* unreachable */
 }
 
-ServerOpcode read_server_opcode(Reader& reader) {
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode read_server_opcode(Reader& reader) {
     const uint8_t opcode = reader.read_u8();
 
     ServerOpcode op;
@@ -1777,11 +2356,7 @@ ServerOpcode read_server_opcode(Reader& reader) {
 
 namespace wow_login_messages {
 namespace version6 {
-static size_t CMD_REALM_LIST_Client_size(const CMD_REALM_LIST_Client& obj) {
-    return 4;
-}
-
-std::vector<unsigned char> CMD_REALM_LIST_Client::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_REALM_LIST_Client::write() const {
     auto writer = Writer(0x0004);
 
     writer.write_u8(0x10); /* opcode */
@@ -1802,7 +2377,7 @@ static size_t CMD_REALM_LIST_Server_size(const CMD_REALM_LIST_Server& obj) {
 }
 
 CMD_REALM_LIST_Server CMD_REALM_LIST_Server_read(Reader& reader) {
-    CMD_REALM_LIST_Server obj;
+    CMD_REALM_LIST_Server obj{};
 
     (void)reader.read_u16();
 
@@ -1810,7 +2385,7 @@ CMD_REALM_LIST_Server CMD_REALM_LIST_Server_read(Reader& reader) {
 
     obj.number_of_realms = reader.read_u16();
 
-    for (auto i = 0; i < obj.number_of_realms; ++i) {
+    for (uint16_t i = 0; i < obj.number_of_realms; ++i) {
         obj.realms.push_back(::wow_login_messages::version5::Realm_read(reader));
     }
 
@@ -1819,7 +2394,7 @@ CMD_REALM_LIST_Server CMD_REALM_LIST_Server_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMD_REALM_LIST_Server::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_REALM_LIST_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMD_REALM_LIST_Server_size(obj));
 
@@ -1840,11 +2415,7 @@ std::vector<unsigned char> CMD_REALM_LIST_Server::write() const {
     return writer.m_buf;
 }
 
-static size_t CMD_XFER_ACCEPT_size(const CMD_XFER_ACCEPT& obj) {
-    return 0;
-}
-
-std::vector<unsigned char> CMD_XFER_ACCEPT::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_XFER_ACCEPT::write() const {
     auto writer = Writer(0x0000);
 
     writer.write_u8(0x32); /* opcode */
@@ -1852,11 +2423,7 @@ std::vector<unsigned char> CMD_XFER_ACCEPT::write() const {
     return writer.m_buf;
 }
 
-static size_t CMD_XFER_CANCEL_size(const CMD_XFER_CANCEL& obj) {
-    return 0;
-}
-
-std::vector<unsigned char> CMD_XFER_CANCEL::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_XFER_CANCEL::write() const {
     auto writer = Writer(0x0000);
 
     writer.write_u8(0x34); /* opcode */
@@ -1864,7 +2431,104 @@ std::vector<unsigned char> CMD_XFER_CANCEL::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> write_opcode(const ClientOpcode& opcode) {
+template <>
+version6::CMD_AUTH_LOGON_PROOF_Client* ClientOpcode::get_if<CMD_AUTH_LOGON_PROOF_Client>() {
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        return &CMD_AUTH_LOGON_PROOF;
+    }
+    return nullptr;
+}
+template <>
+version6::CMD_AUTH_LOGON_PROOF_Client& ClientOpcode::get<CMD_AUTH_LOGON_PROOF_Client>() {
+    auto p = ClientOpcode::get_if<version6::CMD_AUTH_LOGON_PROOF_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version6::CMD_AUTH_RECONNECT_PROOF_Client* ClientOpcode::get_if<CMD_AUTH_RECONNECT_PROOF_Client>() {
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        return &CMD_AUTH_RECONNECT_PROOF;
+    }
+    return nullptr;
+}
+template <>
+version6::CMD_AUTH_RECONNECT_PROOF_Client& ClientOpcode::get<CMD_AUTH_RECONNECT_PROOF_Client>() {
+    auto p = ClientOpcode::get_if<version6::CMD_AUTH_RECONNECT_PROOF_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version6::CMD_REALM_LIST_Client* ClientOpcode::get_if<CMD_REALM_LIST_Client>() {
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        return &CMD_REALM_LIST;
+    }
+    return nullptr;
+}
+template <>
+version6::CMD_REALM_LIST_Client& ClientOpcode::get<CMD_REALM_LIST_Client>() {
+    auto p = ClientOpcode::get_if<version6::CMD_REALM_LIST_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version6::CMD_XFER_ACCEPT* ClientOpcode::get_if<CMD_XFER_ACCEPT>() {
+    if (opcode == Opcode::CMD_XFER_ACCEPT) {
+        return &CMD_XFER_ACCEPT;
+    }
+    return nullptr;
+}
+template <>
+version6::CMD_XFER_ACCEPT& ClientOpcode::get<CMD_XFER_ACCEPT>() {
+    auto p = ClientOpcode::get_if<version6::CMD_XFER_ACCEPT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version6::CMD_XFER_RESUME* ClientOpcode::get_if<CMD_XFER_RESUME>() {
+    if (opcode == Opcode::CMD_XFER_RESUME) {
+        return &CMD_XFER_RESUME;
+    }
+    return nullptr;
+}
+template <>
+version6::CMD_XFER_RESUME& ClientOpcode::get<CMD_XFER_RESUME>() {
+    auto p = ClientOpcode::get_if<version6::CMD_XFER_RESUME>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version6::CMD_XFER_CANCEL* ClientOpcode::get_if<CMD_XFER_CANCEL>() {
+    if (opcode == Opcode::CMD_XFER_CANCEL) {
+        return &CMD_XFER_CANCEL;
+    }
+    return nullptr;
+}
+template <>
+version6::CMD_XFER_CANCEL& ClientOpcode::get<CMD_XFER_CANCEL>() {
+    auto p = ClientOpcode::get_if<version6::CMD_XFER_CANCEL>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const ClientOpcode& opcode) {
     if (opcode.opcode == ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
         return opcode.CMD_AUTH_LOGON_PROOF.write();;
     }
@@ -1887,7 +2551,7 @@ std::vector<unsigned char> write_opcode(const ClientOpcode& opcode) {
     return {}; /* unreachable */
 }
 
-ClientOpcode read_client_opcode(Reader& reader) {
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode read_client_opcode(Reader& reader) {
     const uint8_t opcode = reader.read_u8();
 
     ClientOpcode op;
@@ -1913,7 +2577,120 @@ ClientOpcode read_client_opcode(Reader& reader) {
 
     return op;
 }
-std::vector<unsigned char> write_opcode(const ServerOpcode& opcode) {
+template <>
+version6::CMD_AUTH_LOGON_CHALLENGE_Server* ServerOpcode::get_if<CMD_AUTH_LOGON_CHALLENGE_Server>() {
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        return &CMD_AUTH_LOGON_CHALLENGE;
+    }
+    return nullptr;
+}
+template <>
+version6::CMD_AUTH_LOGON_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_LOGON_CHALLENGE_Server>() {
+    auto p = ServerOpcode::get_if<version6::CMD_AUTH_LOGON_CHALLENGE_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version6::CMD_AUTH_LOGON_PROOF_Server* ServerOpcode::get_if<CMD_AUTH_LOGON_PROOF_Server>() {
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        return &CMD_AUTH_LOGON_PROOF;
+    }
+    return nullptr;
+}
+template <>
+version6::CMD_AUTH_LOGON_PROOF_Server& ServerOpcode::get<CMD_AUTH_LOGON_PROOF_Server>() {
+    auto p = ServerOpcode::get_if<version6::CMD_AUTH_LOGON_PROOF_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version6::CMD_AUTH_RECONNECT_CHALLENGE_Server* ServerOpcode::get_if<CMD_AUTH_RECONNECT_CHALLENGE_Server>() {
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        return &CMD_AUTH_RECONNECT_CHALLENGE;
+    }
+    return nullptr;
+}
+template <>
+version6::CMD_AUTH_RECONNECT_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_RECONNECT_CHALLENGE_Server>() {
+    auto p = ServerOpcode::get_if<version6::CMD_AUTH_RECONNECT_CHALLENGE_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version6::CMD_AUTH_RECONNECT_PROOF_Server* ServerOpcode::get_if<CMD_AUTH_RECONNECT_PROOF_Server>() {
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        return &CMD_AUTH_RECONNECT_PROOF;
+    }
+    return nullptr;
+}
+template <>
+version6::CMD_AUTH_RECONNECT_PROOF_Server& ServerOpcode::get<CMD_AUTH_RECONNECT_PROOF_Server>() {
+    auto p = ServerOpcode::get_if<version6::CMD_AUTH_RECONNECT_PROOF_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version6::CMD_REALM_LIST_Server* ServerOpcode::get_if<CMD_REALM_LIST_Server>() {
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        return &CMD_REALM_LIST;
+    }
+    return nullptr;
+}
+template <>
+version6::CMD_REALM_LIST_Server& ServerOpcode::get<CMD_REALM_LIST_Server>() {
+    auto p = ServerOpcode::get_if<version6::CMD_REALM_LIST_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version6::CMD_XFER_INITIATE* ServerOpcode::get_if<CMD_XFER_INITIATE>() {
+    if (opcode == Opcode::CMD_XFER_INITIATE) {
+        return &CMD_XFER_INITIATE;
+    }
+    return nullptr;
+}
+template <>
+version6::CMD_XFER_INITIATE& ServerOpcode::get<CMD_XFER_INITIATE>() {
+    auto p = ServerOpcode::get_if<version6::CMD_XFER_INITIATE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version6::CMD_XFER_DATA* ServerOpcode::get_if<CMD_XFER_DATA>() {
+    if (opcode == Opcode::CMD_XFER_DATA) {
+        return &CMD_XFER_DATA;
+    }
+    return nullptr;
+}
+template <>
+version6::CMD_XFER_DATA& ServerOpcode::get<CMD_XFER_DATA>() {
+    auto p = ServerOpcode::get_if<version6::CMD_XFER_DATA>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const ServerOpcode& opcode) {
     if (opcode.opcode == ServerOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE) {
         return opcode.CMD_AUTH_LOGON_CHALLENGE.write();;
     }
@@ -1939,7 +2716,7 @@ std::vector<unsigned char> write_opcode(const ServerOpcode& opcode) {
     return {}; /* unreachable */
 }
 
-ServerOpcode read_server_opcode(Reader& reader) {
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode read_server_opcode(Reader& reader) {
     const uint8_t opcode = reader.read_u8();
 
     ServerOpcode op;
@@ -1974,11 +2751,7 @@ ServerOpcode read_server_opcode(Reader& reader) {
 
 namespace wow_login_messages {
 namespace version7 {
-static size_t CMD_REALM_LIST_Client_size(const CMD_REALM_LIST_Client& obj) {
-    return 4;
-}
-
-std::vector<unsigned char> CMD_REALM_LIST_Client::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_REALM_LIST_Client::write() const {
     auto writer = Writer(0x0004);
 
     writer.write_u8(0x10); /* opcode */
@@ -1988,11 +2761,7 @@ std::vector<unsigned char> CMD_REALM_LIST_Client::write() const {
     return writer.m_buf;
 }
 
-static size_t CMD_XFER_ACCEPT_size(const CMD_XFER_ACCEPT& obj) {
-    return 0;
-}
-
-std::vector<unsigned char> CMD_XFER_ACCEPT::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_XFER_ACCEPT::write() const {
     auto writer = Writer(0x0000);
 
     writer.write_u8(0x32); /* opcode */
@@ -2000,11 +2769,7 @@ std::vector<unsigned char> CMD_XFER_ACCEPT::write() const {
     return writer.m_buf;
 }
 
-static size_t CMD_XFER_CANCEL_size(const CMD_XFER_CANCEL& obj) {
-    return 0;
-}
-
-std::vector<unsigned char> CMD_XFER_CANCEL::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_XFER_CANCEL::write() const {
     auto writer = Writer(0x0000);
 
     writer.write_u8(0x34); /* opcode */
@@ -2012,7 +2777,104 @@ std::vector<unsigned char> CMD_XFER_CANCEL::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> write_opcode(const ClientOpcode& opcode) {
+template <>
+version7::CMD_AUTH_LOGON_PROOF_Client* ClientOpcode::get_if<CMD_AUTH_LOGON_PROOF_Client>() {
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        return &CMD_AUTH_LOGON_PROOF;
+    }
+    return nullptr;
+}
+template <>
+version7::CMD_AUTH_LOGON_PROOF_Client& ClientOpcode::get<CMD_AUTH_LOGON_PROOF_Client>() {
+    auto p = ClientOpcode::get_if<version7::CMD_AUTH_LOGON_PROOF_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version7::CMD_AUTH_RECONNECT_PROOF_Client* ClientOpcode::get_if<CMD_AUTH_RECONNECT_PROOF_Client>() {
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        return &CMD_AUTH_RECONNECT_PROOF;
+    }
+    return nullptr;
+}
+template <>
+version7::CMD_AUTH_RECONNECT_PROOF_Client& ClientOpcode::get<CMD_AUTH_RECONNECT_PROOF_Client>() {
+    auto p = ClientOpcode::get_if<version7::CMD_AUTH_RECONNECT_PROOF_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version7::CMD_REALM_LIST_Client* ClientOpcode::get_if<CMD_REALM_LIST_Client>() {
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        return &CMD_REALM_LIST;
+    }
+    return nullptr;
+}
+template <>
+version7::CMD_REALM_LIST_Client& ClientOpcode::get<CMD_REALM_LIST_Client>() {
+    auto p = ClientOpcode::get_if<version7::CMD_REALM_LIST_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version7::CMD_XFER_ACCEPT* ClientOpcode::get_if<CMD_XFER_ACCEPT>() {
+    if (opcode == Opcode::CMD_XFER_ACCEPT) {
+        return &CMD_XFER_ACCEPT;
+    }
+    return nullptr;
+}
+template <>
+version7::CMD_XFER_ACCEPT& ClientOpcode::get<CMD_XFER_ACCEPT>() {
+    auto p = ClientOpcode::get_if<version7::CMD_XFER_ACCEPT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version7::CMD_XFER_RESUME* ClientOpcode::get_if<CMD_XFER_RESUME>() {
+    if (opcode == Opcode::CMD_XFER_RESUME) {
+        return &CMD_XFER_RESUME;
+    }
+    return nullptr;
+}
+template <>
+version7::CMD_XFER_RESUME& ClientOpcode::get<CMD_XFER_RESUME>() {
+    auto p = ClientOpcode::get_if<version7::CMD_XFER_RESUME>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version7::CMD_XFER_CANCEL* ClientOpcode::get_if<CMD_XFER_CANCEL>() {
+    if (opcode == Opcode::CMD_XFER_CANCEL) {
+        return &CMD_XFER_CANCEL;
+    }
+    return nullptr;
+}
+template <>
+version7::CMD_XFER_CANCEL& ClientOpcode::get<CMD_XFER_CANCEL>() {
+    auto p = ClientOpcode::get_if<version7::CMD_XFER_CANCEL>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const ClientOpcode& opcode) {
     if (opcode.opcode == ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
         return opcode.CMD_AUTH_LOGON_PROOF.write();;
     }
@@ -2035,7 +2897,7 @@ std::vector<unsigned char> write_opcode(const ClientOpcode& opcode) {
     return {}; /* unreachable */
 }
 
-ClientOpcode read_client_opcode(Reader& reader) {
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode read_client_opcode(Reader& reader) {
     const uint8_t opcode = reader.read_u8();
 
     ClientOpcode op;
@@ -2061,7 +2923,120 @@ ClientOpcode read_client_opcode(Reader& reader) {
 
     return op;
 }
-std::vector<unsigned char> write_opcode(const ServerOpcode& opcode) {
+template <>
+version7::CMD_AUTH_LOGON_CHALLENGE_Server* ServerOpcode::get_if<CMD_AUTH_LOGON_CHALLENGE_Server>() {
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        return &CMD_AUTH_LOGON_CHALLENGE;
+    }
+    return nullptr;
+}
+template <>
+version7::CMD_AUTH_LOGON_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_LOGON_CHALLENGE_Server>() {
+    auto p = ServerOpcode::get_if<version7::CMD_AUTH_LOGON_CHALLENGE_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version7::CMD_AUTH_LOGON_PROOF_Server* ServerOpcode::get_if<CMD_AUTH_LOGON_PROOF_Server>() {
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        return &CMD_AUTH_LOGON_PROOF;
+    }
+    return nullptr;
+}
+template <>
+version7::CMD_AUTH_LOGON_PROOF_Server& ServerOpcode::get<CMD_AUTH_LOGON_PROOF_Server>() {
+    auto p = ServerOpcode::get_if<version7::CMD_AUTH_LOGON_PROOF_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version7::CMD_AUTH_RECONNECT_CHALLENGE_Server* ServerOpcode::get_if<CMD_AUTH_RECONNECT_CHALLENGE_Server>() {
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        return &CMD_AUTH_RECONNECT_CHALLENGE;
+    }
+    return nullptr;
+}
+template <>
+version7::CMD_AUTH_RECONNECT_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_RECONNECT_CHALLENGE_Server>() {
+    auto p = ServerOpcode::get_if<version7::CMD_AUTH_RECONNECT_CHALLENGE_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version7::CMD_AUTH_RECONNECT_PROOF_Server* ServerOpcode::get_if<CMD_AUTH_RECONNECT_PROOF_Server>() {
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        return &CMD_AUTH_RECONNECT_PROOF;
+    }
+    return nullptr;
+}
+template <>
+version7::CMD_AUTH_RECONNECT_PROOF_Server& ServerOpcode::get<CMD_AUTH_RECONNECT_PROOF_Server>() {
+    auto p = ServerOpcode::get_if<version7::CMD_AUTH_RECONNECT_PROOF_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version7::CMD_REALM_LIST_Server* ServerOpcode::get_if<CMD_REALM_LIST_Server>() {
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        return &CMD_REALM_LIST;
+    }
+    return nullptr;
+}
+template <>
+version7::CMD_REALM_LIST_Server& ServerOpcode::get<CMD_REALM_LIST_Server>() {
+    auto p = ServerOpcode::get_if<version7::CMD_REALM_LIST_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version7::CMD_XFER_INITIATE* ServerOpcode::get_if<CMD_XFER_INITIATE>() {
+    if (opcode == Opcode::CMD_XFER_INITIATE) {
+        return &CMD_XFER_INITIATE;
+    }
+    return nullptr;
+}
+template <>
+version7::CMD_XFER_INITIATE& ServerOpcode::get<CMD_XFER_INITIATE>() {
+    auto p = ServerOpcode::get_if<version7::CMD_XFER_INITIATE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version7::CMD_XFER_DATA* ServerOpcode::get_if<CMD_XFER_DATA>() {
+    if (opcode == Opcode::CMD_XFER_DATA) {
+        return &CMD_XFER_DATA;
+    }
+    return nullptr;
+}
+template <>
+version7::CMD_XFER_DATA& ServerOpcode::get<CMD_XFER_DATA>() {
+    auto p = ServerOpcode::get_if<version7::CMD_XFER_DATA>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const ServerOpcode& opcode) {
     if (opcode.opcode == ServerOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE) {
         return opcode.CMD_AUTH_LOGON_CHALLENGE.write();;
     }
@@ -2087,7 +3062,7 @@ std::vector<unsigned char> write_opcode(const ServerOpcode& opcode) {
     return {}; /* unreachable */
 }
 
-ServerOpcode read_server_opcode(Reader& reader) {
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode read_server_opcode(Reader& reader) {
     const uint8_t opcode = reader.read_u8();
 
     ServerOpcode op;
@@ -2133,7 +3108,7 @@ static size_t Realm_size(const Realm& obj) {
 }
 
 Realm Realm_read(Reader& reader) {
-    Realm obj;
+    Realm obj{};
 
     obj.realm_type = static_cast<RealmType>(reader.read_u8());
 
@@ -2160,7 +3135,7 @@ Realm Realm_read(Reader& reader) {
     return obj;
 }
 
-void Realm_write(Writer& writer, const Realm& obj) {
+static void Realm_write(Writer& writer, const Realm& obj) {
     writer.write_u8(static_cast<uint8_t>(obj.realm_type));
 
     writer.write_bool8(obj.locked);
@@ -2209,7 +3184,7 @@ static size_t CMD_AUTH_LOGON_CHALLENGE_Server_size(const CMD_AUTH_LOGON_CHALLENG
 }
 
 CMD_AUTH_LOGON_CHALLENGE_Server CMD_AUTH_LOGON_CHALLENGE_Server_read(Reader& reader) {
-    CMD_AUTH_LOGON_CHALLENGE_Server obj;
+    CMD_AUTH_LOGON_CHALLENGE_Server obj{};
 
     (void)reader.read_u8();
 
@@ -2222,13 +3197,13 @@ CMD_AUTH_LOGON_CHALLENGE_Server CMD_AUTH_LOGON_CHALLENGE_Server_read(Reader& rea
 
         obj.generator_length = reader.read_u8();
 
-        for (auto i = 0; i < obj.generator_length; ++i) {
+        for (uint8_t i = 0; i < obj.generator_length; ++i) {
             obj.generator.push_back(reader.read_u8());
         }
 
         obj.large_safe_prime_length = reader.read_u8();
 
-        for (auto i = 0; i < obj.large_safe_prime_length; ++i) {
+        for (uint8_t i = 0; i < obj.large_safe_prime_length; ++i) {
             obj.large_safe_prime.push_back(reader.read_u8());
         }
 
@@ -2270,7 +3245,7 @@ CMD_AUTH_LOGON_CHALLENGE_Server CMD_AUTH_LOGON_CHALLENGE_Server_read(Reader& rea
     return obj;
 }
 
-std::vector<unsigned char> CMD_AUTH_LOGON_CHALLENGE_Server::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_AUTH_LOGON_CHALLENGE_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMD_AUTH_LOGON_CHALLENGE_Server_size(obj));
 
@@ -2354,7 +3329,7 @@ static size_t CMD_AUTH_LOGON_PROOF_Client_size(const CMD_AUTH_LOGON_PROOF_Client
 }
 
 CMD_AUTH_LOGON_PROOF_Client CMD_AUTH_LOGON_PROOF_Client_read(Reader& reader) {
-    CMD_AUTH_LOGON_PROOF_Client obj;
+    CMD_AUTH_LOGON_PROOF_Client obj{};
 
     for (auto i = 0; i < 32; ++i) {
         obj.client_public_key[i] = reader.read_u8();
@@ -2370,7 +3345,7 @@ CMD_AUTH_LOGON_PROOF_Client CMD_AUTH_LOGON_PROOF_Client_read(Reader& reader) {
 
     obj.number_of_telemetry_keys = reader.read_u8();
 
-    for (auto i = 0; i < obj.number_of_telemetry_keys; ++i) {
+    for (uint8_t i = 0; i < obj.number_of_telemetry_keys; ++i) {
         obj.telemetry_keys.push_back(::wow_login_messages::version2::TelemetryKey_read(reader));
     }
 
@@ -2399,7 +3374,7 @@ CMD_AUTH_LOGON_PROOF_Client CMD_AUTH_LOGON_PROOF_Client_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMD_AUTH_LOGON_PROOF_Client::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_AUTH_LOGON_PROOF_Client::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMD_AUTH_LOGON_PROOF_Client_size(obj));
 
@@ -2462,7 +3437,7 @@ static size_t CMD_AUTH_LOGON_PROOF_Server_size(const CMD_AUTH_LOGON_PROOF_Server
 }
 
 CMD_AUTH_LOGON_PROOF_Server CMD_AUTH_LOGON_PROOF_Server_read(Reader& reader) {
-    CMD_AUTH_LOGON_PROOF_Server obj;
+    CMD_AUTH_LOGON_PROOF_Server obj{};
 
     obj.result = static_cast<LoginResult>(reader.read_u8());
 
@@ -2485,7 +3460,7 @@ CMD_AUTH_LOGON_PROOF_Server CMD_AUTH_LOGON_PROOF_Server_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMD_AUTH_LOGON_PROOF_Server::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_AUTH_LOGON_PROOF_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMD_AUTH_LOGON_PROOF_Server_size(obj));
 
@@ -2523,7 +3498,7 @@ static size_t CMD_AUTH_RECONNECT_CHALLENGE_Server_size(const CMD_AUTH_RECONNECT_
 }
 
 CMD_AUTH_RECONNECT_CHALLENGE_Server CMD_AUTH_RECONNECT_CHALLENGE_Server_read(Reader& reader) {
-    CMD_AUTH_RECONNECT_CHALLENGE_Server obj;
+    CMD_AUTH_RECONNECT_CHALLENGE_Server obj{};
 
     obj.result = static_cast<LoginResult>(reader.read_u8());
 
@@ -2540,7 +3515,7 @@ CMD_AUTH_RECONNECT_CHALLENGE_Server CMD_AUTH_RECONNECT_CHALLENGE_Server_read(Rea
     return obj;
 }
 
-std::vector<unsigned char> CMD_AUTH_RECONNECT_CHALLENGE_Server::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_AUTH_RECONNECT_CHALLENGE_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMD_AUTH_RECONNECT_CHALLENGE_Server_size(obj));
 
@@ -2561,12 +3536,8 @@ std::vector<unsigned char> CMD_AUTH_RECONNECT_CHALLENGE_Server::write() const {
     return writer.m_buf;
 }
 
-static size_t CMD_AUTH_RECONNECT_PROOF_Server_size(const CMD_AUTH_RECONNECT_PROOF_Server& obj) {
-    return 3;
-}
-
 CMD_AUTH_RECONNECT_PROOF_Server CMD_AUTH_RECONNECT_PROOF_Server_read(Reader& reader) {
-    CMD_AUTH_RECONNECT_PROOF_Server obj;
+    CMD_AUTH_RECONNECT_PROOF_Server obj{};
 
     obj.result = static_cast<LoginResult>(reader.read_u8());
 
@@ -2575,7 +3546,7 @@ CMD_AUTH_RECONNECT_PROOF_Server CMD_AUTH_RECONNECT_PROOF_Server_read(Reader& rea
     return obj;
 }
 
-std::vector<unsigned char> CMD_AUTH_RECONNECT_PROOF_Server::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_AUTH_RECONNECT_PROOF_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(0x0003);
 
@@ -2588,11 +3559,7 @@ std::vector<unsigned char> CMD_AUTH_RECONNECT_PROOF_Server::write() const {
     return writer.m_buf;
 }
 
-static size_t CMD_REALM_LIST_Client_size(const CMD_REALM_LIST_Client& obj) {
-    return 4;
-}
-
-std::vector<unsigned char> CMD_REALM_LIST_Client::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_REALM_LIST_Client::write() const {
     auto writer = Writer(0x0004);
 
     writer.write_u8(0x10); /* opcode */
@@ -2613,7 +3580,7 @@ static size_t CMD_REALM_LIST_Server_size(const CMD_REALM_LIST_Server& obj) {
 }
 
 CMD_REALM_LIST_Server CMD_REALM_LIST_Server_read(Reader& reader) {
-    CMD_REALM_LIST_Server obj;
+    CMD_REALM_LIST_Server obj{};
 
     (void)reader.read_u16();
 
@@ -2621,7 +3588,7 @@ CMD_REALM_LIST_Server CMD_REALM_LIST_Server_read(Reader& reader) {
 
     obj.number_of_realms = reader.read_u16();
 
-    for (auto i = 0; i < obj.number_of_realms; ++i) {
+    for (uint16_t i = 0; i < obj.number_of_realms; ++i) {
         obj.realms.push_back(::wow_login_messages::version8::Realm_read(reader));
     }
 
@@ -2630,7 +3597,7 @@ CMD_REALM_LIST_Server CMD_REALM_LIST_Server_read(Reader& reader) {
     return obj;
 }
 
-std::vector<unsigned char> CMD_REALM_LIST_Server::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_REALM_LIST_Server::write() const {
     const auto& obj = *this;
     auto writer = Writer(CMD_REALM_LIST_Server_size(obj));
 
@@ -2651,11 +3618,7 @@ std::vector<unsigned char> CMD_REALM_LIST_Server::write() const {
     return writer.m_buf;
 }
 
-static size_t CMD_XFER_ACCEPT_size(const CMD_XFER_ACCEPT& obj) {
-    return 0;
-}
-
-std::vector<unsigned char> CMD_XFER_ACCEPT::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_XFER_ACCEPT::write() const {
     auto writer = Writer(0x0000);
 
     writer.write_u8(0x32); /* opcode */
@@ -2663,11 +3626,7 @@ std::vector<unsigned char> CMD_XFER_ACCEPT::write() const {
     return writer.m_buf;
 }
 
-static size_t CMD_XFER_CANCEL_size(const CMD_XFER_CANCEL& obj) {
-    return 0;
-}
-
-std::vector<unsigned char> CMD_XFER_CANCEL::write() const {
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_XFER_CANCEL::write() const {
     auto writer = Writer(0x0000);
 
     writer.write_u8(0x34); /* opcode */
@@ -2675,7 +3634,104 @@ std::vector<unsigned char> CMD_XFER_CANCEL::write() const {
     return writer.m_buf;
 }
 
-std::vector<unsigned char> write_opcode(const ClientOpcode& opcode) {
+template <>
+version8::CMD_AUTH_LOGON_PROOF_Client* ClientOpcode::get_if<CMD_AUTH_LOGON_PROOF_Client>() {
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        return &CMD_AUTH_LOGON_PROOF;
+    }
+    return nullptr;
+}
+template <>
+version8::CMD_AUTH_LOGON_PROOF_Client& ClientOpcode::get<CMD_AUTH_LOGON_PROOF_Client>() {
+    auto p = ClientOpcode::get_if<version8::CMD_AUTH_LOGON_PROOF_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version8::CMD_AUTH_RECONNECT_PROOF_Client* ClientOpcode::get_if<CMD_AUTH_RECONNECT_PROOF_Client>() {
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        return &CMD_AUTH_RECONNECT_PROOF;
+    }
+    return nullptr;
+}
+template <>
+version8::CMD_AUTH_RECONNECT_PROOF_Client& ClientOpcode::get<CMD_AUTH_RECONNECT_PROOF_Client>() {
+    auto p = ClientOpcode::get_if<version8::CMD_AUTH_RECONNECT_PROOF_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version8::CMD_REALM_LIST_Client* ClientOpcode::get_if<CMD_REALM_LIST_Client>() {
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        return &CMD_REALM_LIST;
+    }
+    return nullptr;
+}
+template <>
+version8::CMD_REALM_LIST_Client& ClientOpcode::get<CMD_REALM_LIST_Client>() {
+    auto p = ClientOpcode::get_if<version8::CMD_REALM_LIST_Client>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version8::CMD_XFER_ACCEPT* ClientOpcode::get_if<CMD_XFER_ACCEPT>() {
+    if (opcode == Opcode::CMD_XFER_ACCEPT) {
+        return &CMD_XFER_ACCEPT;
+    }
+    return nullptr;
+}
+template <>
+version8::CMD_XFER_ACCEPT& ClientOpcode::get<CMD_XFER_ACCEPT>() {
+    auto p = ClientOpcode::get_if<version8::CMD_XFER_ACCEPT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version8::CMD_XFER_RESUME* ClientOpcode::get_if<CMD_XFER_RESUME>() {
+    if (opcode == Opcode::CMD_XFER_RESUME) {
+        return &CMD_XFER_RESUME;
+    }
+    return nullptr;
+}
+template <>
+version8::CMD_XFER_RESUME& ClientOpcode::get<CMD_XFER_RESUME>() {
+    auto p = ClientOpcode::get_if<version8::CMD_XFER_RESUME>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version8::CMD_XFER_CANCEL* ClientOpcode::get_if<CMD_XFER_CANCEL>() {
+    if (opcode == Opcode::CMD_XFER_CANCEL) {
+        return &CMD_XFER_CANCEL;
+    }
+    return nullptr;
+}
+template <>
+version8::CMD_XFER_CANCEL& ClientOpcode::get<CMD_XFER_CANCEL>() {
+    auto p = ClientOpcode::get_if<version8::CMD_XFER_CANCEL>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const ClientOpcode& opcode) {
     if (opcode.opcode == ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
         return opcode.CMD_AUTH_LOGON_PROOF.write();;
     }
@@ -2698,7 +3754,7 @@ std::vector<unsigned char> write_opcode(const ClientOpcode& opcode) {
     return {}; /* unreachable */
 }
 
-ClientOpcode read_client_opcode(Reader& reader) {
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode read_client_opcode(Reader& reader) {
     const uint8_t opcode = reader.read_u8();
 
     ClientOpcode op;
@@ -2724,7 +3780,120 @@ ClientOpcode read_client_opcode(Reader& reader) {
 
     return op;
 }
-std::vector<unsigned char> write_opcode(const ServerOpcode& opcode) {
+template <>
+version8::CMD_AUTH_LOGON_CHALLENGE_Server* ServerOpcode::get_if<CMD_AUTH_LOGON_CHALLENGE_Server>() {
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        return &CMD_AUTH_LOGON_CHALLENGE;
+    }
+    return nullptr;
+}
+template <>
+version8::CMD_AUTH_LOGON_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_LOGON_CHALLENGE_Server>() {
+    auto p = ServerOpcode::get_if<version8::CMD_AUTH_LOGON_CHALLENGE_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version8::CMD_AUTH_LOGON_PROOF_Server* ServerOpcode::get_if<CMD_AUTH_LOGON_PROOF_Server>() {
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        return &CMD_AUTH_LOGON_PROOF;
+    }
+    return nullptr;
+}
+template <>
+version8::CMD_AUTH_LOGON_PROOF_Server& ServerOpcode::get<CMD_AUTH_LOGON_PROOF_Server>() {
+    auto p = ServerOpcode::get_if<version8::CMD_AUTH_LOGON_PROOF_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version8::CMD_AUTH_RECONNECT_CHALLENGE_Server* ServerOpcode::get_if<CMD_AUTH_RECONNECT_CHALLENGE_Server>() {
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        return &CMD_AUTH_RECONNECT_CHALLENGE;
+    }
+    return nullptr;
+}
+template <>
+version8::CMD_AUTH_RECONNECT_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_RECONNECT_CHALLENGE_Server>() {
+    auto p = ServerOpcode::get_if<version8::CMD_AUTH_RECONNECT_CHALLENGE_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version8::CMD_AUTH_RECONNECT_PROOF_Server* ServerOpcode::get_if<CMD_AUTH_RECONNECT_PROOF_Server>() {
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        return &CMD_AUTH_RECONNECT_PROOF;
+    }
+    return nullptr;
+}
+template <>
+version8::CMD_AUTH_RECONNECT_PROOF_Server& ServerOpcode::get<CMD_AUTH_RECONNECT_PROOF_Server>() {
+    auto p = ServerOpcode::get_if<version8::CMD_AUTH_RECONNECT_PROOF_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version8::CMD_REALM_LIST_Server* ServerOpcode::get_if<CMD_REALM_LIST_Server>() {
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        return &CMD_REALM_LIST;
+    }
+    return nullptr;
+}
+template <>
+version8::CMD_REALM_LIST_Server& ServerOpcode::get<CMD_REALM_LIST_Server>() {
+    auto p = ServerOpcode::get_if<version8::CMD_REALM_LIST_Server>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version8::CMD_XFER_INITIATE* ServerOpcode::get_if<CMD_XFER_INITIATE>() {
+    if (opcode == Opcode::CMD_XFER_INITIATE) {
+        return &CMD_XFER_INITIATE;
+    }
+    return nullptr;
+}
+template <>
+version8::CMD_XFER_INITIATE& ServerOpcode::get<CMD_XFER_INITIATE>() {
+    auto p = ServerOpcode::get_if<version8::CMD_XFER_INITIATE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+version8::CMD_XFER_DATA* ServerOpcode::get_if<CMD_XFER_DATA>() {
+    if (opcode == Opcode::CMD_XFER_DATA) {
+        return &CMD_XFER_DATA;
+    }
+    return nullptr;
+}
+template <>
+version8::CMD_XFER_DATA& ServerOpcode::get<CMD_XFER_DATA>() {
+    auto p = ServerOpcode::get_if<version8::CMD_XFER_DATA>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const ServerOpcode& opcode) {
     if (opcode.opcode == ServerOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE) {
         return opcode.CMD_AUTH_LOGON_CHALLENGE.write();;
     }
@@ -2750,7 +3919,7 @@ std::vector<unsigned char> write_opcode(const ServerOpcode& opcode) {
     return {}; /* unreachable */
 }
 
-ServerOpcode read_server_opcode(Reader& reader) {
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode read_server_opcode(Reader& reader) {
     const uint8_t opcode = reader.read_u8();
 
     ServerOpcode op;

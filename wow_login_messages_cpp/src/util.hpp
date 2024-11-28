@@ -2,6 +2,7 @@
 #define WOW_LOGIN_MESSAGES_CPP_UTIL_H
 
 #include <cstdint>
+#include <cstring>
 #include <string>
 #include <vector>
 
@@ -40,15 +41,25 @@ public:
         m_buf.push_back(static_cast<unsigned char>(value >> 56));
     }
 
-    void write_i32(const int32_t value) { return write_u32(value); }
+    void write_i32(const int32_t value)
+    {
+        uint32_t val;
+        memcpy(&val, &value, 4);
+        return write_u32(val);
+    }
 
-    void write_float(const float value) { return write_u32(value); }
+    void write_float(const float value)
+    {
+        uint32_t val;
+        memcpy(&val, &value, 4);
+        return write_u32(val);
+    }
 
     void write_bool8(const bool value) { return write_u8(value ? 1 : 0); }
 
     void write_string(const std::string& value)
     {
-        const uint8_t length = value.size();
+        const uint8_t length = static_cast<uint8_t>(value.size());
         write_u8(length);
 
         for (const auto& v : value)

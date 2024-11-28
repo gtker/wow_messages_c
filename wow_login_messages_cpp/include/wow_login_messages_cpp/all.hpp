@@ -59,7 +59,7 @@ struct CMD_AUTH_LOGON_CHALLENGE_Client {
     uint32_t client_ip_address;
     std::string account_name;
 
-    std::vector<unsigned char> write() const;
+    WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct CMD_AUTH_RECONNECT_CHALLENGE_Client {
@@ -72,7 +72,7 @@ struct CMD_AUTH_RECONNECT_CHALLENGE_Client {
     uint32_t client_ip_address;
     std::string account_name;
 
-    std::vector<unsigned char> write() const;
+    WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct ClientOpcode {
@@ -86,29 +86,21 @@ struct ClientOpcode {
         all::CMD_AUTH_LOGON_CHALLENGE_Client CMD_AUTH_LOGON_CHALLENGE;
         all::CMD_AUTH_RECONNECT_CHALLENGE_Client CMD_AUTH_RECONNECT_CHALLENGE;
     };
+
     bool is_none() const noexcept {
         return opcode == Opcode::NONE;
     }
 
-    explicit ClientOpcode() : ClientOpcode(Opcode::NONE) {}
-
-    explicit ClientOpcode(Opcode op) : opcode(op) {
-        if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
-            new (&this->CMD_AUTH_LOGON_CHALLENGE) all::CMD_AUTH_LOGON_CHALLENGE_Client();
-        }
-        if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
-            new (&this->CMD_AUTH_RECONNECT_CHALLENGE) all::CMD_AUTH_RECONNECT_CHALLENGE_Client();
-        }
-    }
+    explicit ClientOpcode() : opcode(Opcode::NONE), CMD_AUTH_LOGON_CHALLENGE() {}
 
     ClientOpcode(ClientOpcode&& other) noexcept {
         this->opcode = other.opcode;
         other.opcode = Opcode::NONE;
         if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
-            this->CMD_AUTH_LOGON_CHALLENGE = other.CMD_AUTH_LOGON_CHALLENGE;
+            this->CMD_AUTH_LOGON_CHALLENGE = std::move(other.CMD_AUTH_LOGON_CHALLENGE);
         }
         if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
-            this->CMD_AUTH_RECONNECT_CHALLENGE = other.CMD_AUTH_RECONNECT_CHALLENGE;
+            this->CMD_AUTH_RECONNECT_CHALLENGE = std::move(other.CMD_AUTH_RECONNECT_CHALLENGE);
         }
     }
 
@@ -123,16 +115,34 @@ struct ClientOpcode {
 
     explicit ClientOpcode(all::CMD_AUTH_LOGON_CHALLENGE_Client&& obj) {
         opcode = Opcode::CMD_AUTH_LOGON_CHALLENGE;
-        new (&this->CMD_AUTH_LOGON_CHALLENGE) all::CMD_AUTH_LOGON_CHALLENGE_Client (obj);
+        new (&this->CMD_AUTH_LOGON_CHALLENGE) all::CMD_AUTH_LOGON_CHALLENGE_Client (std::move(obj));
     }
     explicit ClientOpcode(all::CMD_AUTH_RECONNECT_CHALLENGE_Client&& obj) {
         opcode = Opcode::CMD_AUTH_RECONNECT_CHALLENGE;
-        new (&this->CMD_AUTH_RECONNECT_CHALLENGE) all::CMD_AUTH_RECONNECT_CHALLENGE_Client (obj);
+        new (&this->CMD_AUTH_RECONNECT_CHALLENGE) all::CMD_AUTH_RECONNECT_CHALLENGE_Client (std::move(obj));
     }
-};
-std::vector<unsigned char> write_opcode(const ClientOpcode& opcode);
 
-ClientOpcode read_client_opcode(Reader& reader);
+    template<typename T>
+    // NOLINTNEXTLINE
+    T& get(); // All possible types have been specialized
+
+    template<typename T>
+    // NOLINTNEXTLINE
+    T* get_if(); // All possible types have been specialized
+};
+
+template<>
+all::CMD_AUTH_LOGON_CHALLENGE_Client* ClientOpcode::get_if();
+template<>
+all::CMD_AUTH_LOGON_CHALLENGE_Client& ClientOpcode::get();
+template<>
+all::CMD_AUTH_RECONNECT_CHALLENGE_Client* ClientOpcode::get_if();
+template<>
+all::CMD_AUTH_RECONNECT_CHALLENGE_Client& ClientOpcode::get();
+
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const ClientOpcode& opcode);
+
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode read_client_opcode(Reader& reader);
 
 } // namespace all
 } // namespace wow_login_messages
