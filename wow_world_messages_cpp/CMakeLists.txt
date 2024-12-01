@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.28)
 project(wow_world_messages_cpp LANGUAGES CXX VERSION 0.1.0)
 
-add_library(wow_world_messages_cpp_wow_world_messages_cpp src/all.cpp src/vanilla.cpp src/util.cpp)
+add_library(wow_world_messages_cpp_wow_world_messages_cpp src/all.cpp src/vanilla.cpp src/util.cpp src/puff.c)
 target_sources(wow_world_messages_cpp_wow_world_messages_cpp
         PUBLIC
         FILE_SET HEADERS

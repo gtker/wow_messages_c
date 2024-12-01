@@ -463,9 +463,8 @@ WOW_WORLD_MESSAGES_C_EXPORT const char* wwm_error_code_to_string(const WowWorldR
     return "";
 }
 
-uint32_t wwm_adler32(const unsigned char *data, const size_t len)
+static uint32_t wwm_adler32(const unsigned char* data, const size_t len)
 {
-
     uint32_t a = 1, b = 0;
     size_t index;
 

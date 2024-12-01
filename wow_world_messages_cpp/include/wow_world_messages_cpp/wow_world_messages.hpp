@@ -3,12 +3,12 @@
 
 
 #include <array>
+#include <cstddef>
+#include <cstdint>
 #include <cstring>
-#include <stddef.h>
-#include <stdint.h>
+#include <memory>
 #include <string>
 #include <vector>
-#include <memory>
 
 #include "wow_world_messages_cpp/all.hpp"
 
@@ -129,7 +129,9 @@ public:
     virtual ~Reader() = default;
 };
 
-struct bad_opcode_access final : std::exception {};
+struct bad_opcode_access final : std::exception
+{
+};
 
 } /* namespace wow_world_messages */
 

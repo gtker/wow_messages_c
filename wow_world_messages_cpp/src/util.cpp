@@ -1,5 +1,10 @@
 #include "util.hpp"
 
+extern "C" {
+#include "puff.h"
+#undef NIL
+}
+
 namespace wow_world_messages {
 namespace all {
 ::wow_world_messages::all::Vector3d Vector3d_read(Reader& reader);
@@ -94,6 +99,82 @@ std::vector<all::Vector3d> wwm_read_monster_move_spline(Reader& reader)
     }
 
     return splines;
+}
+
+static uint32_t wwm_adler32(const unsigned char* data, const size_t len)
+{
+    uint32_t a = 1, b = 0;
+    size_t index;
+
+    constexpr uint32_t MOD_ADLER = 65521;
+    for (index = 0; index < len; ++index)
+    {
+        a = (a + data[index]) % MOD_ADLER;
+        b = (b + a) % MOD_ADLER;
+    }
+
+    return (b << 16) | a;
+}
+
+constexpr auto WWM_COMPRESS_EXTRA_LENGTH = 11;
+
+std::vector<unsigned char> compress_data(const std::vector<unsigned char>& buffer)
+{
+    if (buffer.empty())
+    {
+        return {};
+    }
+
+    auto dst = std::vector<unsigned char>(buffer.size() + WWM_COMPRESS_EXTRA_LENGTH, 0);
+
+    size_t index = 0;
+
+    dst[index] = 0x78;
+    index += 1;
+    dst[index] = 0x01;
+    index += 1;
+
+    dst[index] = 0x01; /* BFINAL and no compression */
+    index += 1;
+
+    auto src_length = static_cast<uint16_t>(buffer.size());
+    dst[index] = (unsigned char)src_length; /* LEN */
+    index += 1;
+    dst[index] = (unsigned char)(src_length >> 8); /* LEN */
+    index += 1;
+
+    dst[index] = ((unsigned char)src_length) ^ 0xff; /* NLEN */
+    index += 1;
+    dst[index] = ((unsigned char)(src_length >> 8)) ^ 0xff; /* NLEN */
+    index += 1;
+
+    dst.insert(dst.end(), buffer.begin(), buffer.end());
+    index += buffer.size();
+
+    auto adler32 = wwm_adler32(buffer.data(), buffer.size());
+
+    dst[index] = (unsigned char)adler32;
+    index += 1;
+    dst[index] = (unsigned char)(adler32 >> 8);
+    index += 1;
+    dst[index] = (unsigned char)(adler32 >> 16);
+    index += 1;
+    dst[index] = (unsigned char)(adler32 >> 24);
+
+    return dst;
+}
+
+std::vector<unsigned char> decompress_data(const std::vector<unsigned char>& buffer)
+{
+    auto source_length = static_cast<unsigned long>(buffer.size());
+    unsigned long destination_length = 0;
+    puff(NULL, &destination_length, buffer.data(), &source_length);
+
+
+    auto compressed = std::vector<unsigned char>(destination_length, 0);
+    puff(compressed.data(), &destination_length, buffer.data(), &source_length);
+
+    return compressed;
 }
 
 }  // namespace util

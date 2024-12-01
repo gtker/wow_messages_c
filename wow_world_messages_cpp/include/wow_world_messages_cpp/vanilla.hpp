@@ -1,6 +1,8 @@
 #ifndef WOW_WORLD_MESSAGES_CPP_VANILLA_HPP
 #define WOW_WORLD_MESSAGES_CPP_VANILLA_HPP
 
+/* clang-format off */
+
 #include "wow_world_messages_cpp/wow_world_messages.hpp"
 #include "wow_world_messages_cpp/all.hpp"
 
@@ -10094,6 +10096,18 @@ struct SMSG_AUTH_CHALLENGE {
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
+struct CMSG_AUTH_SESSION {
+    uint32_t build;
+    uint32_t server_id;
+    std::string username;
+    uint32_t client_seed;
+    std::array<uint8_t, 20> client_proof;
+    uint32_t amount_of_addon_info;
+    std::vector<vanilla::AddonInfo> addon_info;
+
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
+};
+
 struct SMSG_AUTH_RESPONSE {
     WorldResult result;
     uint32_t billing_time;
@@ -10219,6 +10233,19 @@ struct SMSG_REMOVED_SPELL {
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
+struct CMSG_GMTICKET_CREATE {
+    GmTicketType category;
+    Map map;
+    all::Vector3d position;
+    std::string message;
+    std::string reserved_for_future_use;
+    uint32_t chat_data_line_count;
+    uint32_t amount_of_compressed_chat_data;
+    std::vector<uint8_t> compressed_chat_data;
+
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
+};
+
 struct SMSG_GMTICKET_CREATE {
     GmTicketResponse response;
 
@@ -10246,6 +10273,14 @@ struct SMSG_ACCOUNT_DATA_TIMES {
 
 struct CMSG_REQUEST_ACCOUNT_DATA {
     uint32_t data_type;
+
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
+};
+
+struct CMSG_UPDATE_ACCOUNT_DATA {
+    AccountDataType data_type;
+    uint32_t amount_of_compressed_data;
+    std::vector<uint8_t> compressed_data;
 
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
@@ -12164,6 +12199,7 @@ struct ClientOpcode {
         MSG_MINIMAP_PING = 469,
         CMSG_PING = 476,
         CMSG_SETSHEATHED = 480,
+        CMSG_AUTH_SESSION = 493,
         CMSG_PET_CAST_SPELL = 496,
         MSG_SAVE_GUILD_EMBLEM = 497,
         MSG_TABARDVENDOR_ACTIVATE = 498,
@@ -12171,8 +12207,10 @@ struct ClientOpcode {
         MSG_RANDOM_ROLL = 507,
         MSG_LOOKING_FOR_GROUP = 511,
         CMSG_UNLEARN_SKILL = 514,
+        CMSG_GMTICKET_CREATE = 517,
         CMSG_GMTICKET_UPDATETEXT = 519,
         CMSG_REQUEST_ACCOUNT_DATA = 522,
+        CMSG_UPDATE_ACCOUNT_DATA = 523,
         CMSG_GMTICKET_GETTICKET = 529,
         MSG_CORPSE_QUERY = 534,
         CMSG_GMTICKET_DELETETICKET = 535,
@@ -12470,6 +12508,7 @@ struct ClientOpcode {
         vanilla::MSG_MINIMAP_PING_Client MSG_MINIMAP_PING;
         vanilla::CMSG_PING CMSG_PING;
         vanilla::CMSG_SETSHEATHED CMSG_SETSHEATHED;
+        vanilla::CMSG_AUTH_SESSION CMSG_AUTH_SESSION;
         vanilla::CMSG_PET_CAST_SPELL CMSG_PET_CAST_SPELL;
         vanilla::MSG_SAVE_GUILD_EMBLEM_Client MSG_SAVE_GUILD_EMBLEM;
         vanilla::MSG_TABARDVENDOR_ACTIVATE MSG_TABARDVENDOR_ACTIVATE;
@@ -12477,8 +12516,10 @@ struct ClientOpcode {
         vanilla::MSG_RANDOM_ROLL_Client MSG_RANDOM_ROLL;
         vanilla::MSG_LOOKING_FOR_GROUP_Client MSG_LOOKING_FOR_GROUP;
         vanilla::CMSG_UNLEARN_SKILL CMSG_UNLEARN_SKILL;
+        vanilla::CMSG_GMTICKET_CREATE CMSG_GMTICKET_CREATE;
         vanilla::CMSG_GMTICKET_UPDATETEXT CMSG_GMTICKET_UPDATETEXT;
         vanilla::CMSG_REQUEST_ACCOUNT_DATA CMSG_REQUEST_ACCOUNT_DATA;
+        vanilla::CMSG_UPDATE_ACCOUNT_DATA CMSG_UPDATE_ACCOUNT_DATA;
         vanilla::CMSG_GMTICKET_GETTICKET CMSG_GMTICKET_GETTICKET;
         vanilla::MSG_CORPSE_QUERY_Client MSG_CORPSE_QUERY;
         vanilla::CMSG_GMTICKET_DELETETICKET CMSG_GMTICKET_DELETETICKET;
@@ -13170,6 +13211,9 @@ struct ClientOpcode {
         if (opcode == Opcode::CMSG_SETSHEATHED) {
             this->CMSG_SETSHEATHED = std::move(other.CMSG_SETSHEATHED);
         }
+        if (opcode == Opcode::CMSG_AUTH_SESSION) {
+            this->CMSG_AUTH_SESSION = std::move(other.CMSG_AUTH_SESSION);
+        }
         if (opcode == Opcode::CMSG_PET_CAST_SPELL) {
             this->CMSG_PET_CAST_SPELL = std::move(other.CMSG_PET_CAST_SPELL);
         }
@@ -13191,11 +13235,17 @@ struct ClientOpcode {
         if (opcode == Opcode::CMSG_UNLEARN_SKILL) {
             this->CMSG_UNLEARN_SKILL = std::move(other.CMSG_UNLEARN_SKILL);
         }
+        if (opcode == Opcode::CMSG_GMTICKET_CREATE) {
+            this->CMSG_GMTICKET_CREATE = std::move(other.CMSG_GMTICKET_CREATE);
+        }
         if (opcode == Opcode::CMSG_GMTICKET_UPDATETEXT) {
             this->CMSG_GMTICKET_UPDATETEXT = std::move(other.CMSG_GMTICKET_UPDATETEXT);
         }
         if (opcode == Opcode::CMSG_REQUEST_ACCOUNT_DATA) {
             this->CMSG_REQUEST_ACCOUNT_DATA = std::move(other.CMSG_REQUEST_ACCOUNT_DATA);
+        }
+        if (opcode == Opcode::CMSG_UPDATE_ACCOUNT_DATA) {
+            this->CMSG_UPDATE_ACCOUNT_DATA = std::move(other.CMSG_UPDATE_ACCOUNT_DATA);
         }
         if (opcode == Opcode::CMSG_GMTICKET_GETTICKET) {
             this->CMSG_GMTICKET_GETTICKET = std::move(other.CMSG_GMTICKET_GETTICKET);
@@ -14082,6 +14132,9 @@ struct ClientOpcode {
         if (opcode == Opcode::CMSG_SETSHEATHED) {
             this->CMSG_SETSHEATHED.~CMSG_SETSHEATHED();
         }
+        if (opcode == Opcode::CMSG_AUTH_SESSION) {
+            this->CMSG_AUTH_SESSION.~CMSG_AUTH_SESSION();
+        }
         if (opcode == Opcode::CMSG_PET_CAST_SPELL) {
             this->CMSG_PET_CAST_SPELL.~CMSG_PET_CAST_SPELL();
         }
@@ -14103,11 +14156,17 @@ struct ClientOpcode {
         if (opcode == Opcode::CMSG_UNLEARN_SKILL) {
             this->CMSG_UNLEARN_SKILL.~CMSG_UNLEARN_SKILL();
         }
+        if (opcode == Opcode::CMSG_GMTICKET_CREATE) {
+            this->CMSG_GMTICKET_CREATE.~CMSG_GMTICKET_CREATE();
+        }
         if (opcode == Opcode::CMSG_GMTICKET_UPDATETEXT) {
             this->CMSG_GMTICKET_UPDATETEXT.~CMSG_GMTICKET_UPDATETEXT();
         }
         if (opcode == Opcode::CMSG_REQUEST_ACCOUNT_DATA) {
             this->CMSG_REQUEST_ACCOUNT_DATA.~CMSG_REQUEST_ACCOUNT_DATA();
+        }
+        if (opcode == Opcode::CMSG_UPDATE_ACCOUNT_DATA) {
+            this->CMSG_UPDATE_ACCOUNT_DATA.~CMSG_UPDATE_ACCOUNT_DATA();
         }
         if (opcode == Opcode::CMSG_GMTICKET_GETTICKET) {
             this->CMSG_GMTICKET_GETTICKET.~CMSG_GMTICKET_GETTICKET();
@@ -15186,6 +15245,10 @@ struct ClientOpcode {
         opcode = Opcode::CMSG_SETSHEATHED;
         new (&this->CMSG_SETSHEATHED) vanilla::CMSG_SETSHEATHED (std::move(obj));
     }
+    explicit ClientOpcode(vanilla::CMSG_AUTH_SESSION&& obj) {
+        opcode = Opcode::CMSG_AUTH_SESSION;
+        new (&this->CMSG_AUTH_SESSION) vanilla::CMSG_AUTH_SESSION (std::move(obj));
+    }
     explicit ClientOpcode(vanilla::CMSG_PET_CAST_SPELL&& obj) {
         opcode = Opcode::CMSG_PET_CAST_SPELL;
         new (&this->CMSG_PET_CAST_SPELL) vanilla::CMSG_PET_CAST_SPELL (std::move(obj));
@@ -15214,6 +15277,10 @@ struct ClientOpcode {
         opcode = Opcode::CMSG_UNLEARN_SKILL;
         new (&this->CMSG_UNLEARN_SKILL) vanilla::CMSG_UNLEARN_SKILL (std::move(obj));
     }
+    explicit ClientOpcode(vanilla::CMSG_GMTICKET_CREATE&& obj) {
+        opcode = Opcode::CMSG_GMTICKET_CREATE;
+        new (&this->CMSG_GMTICKET_CREATE) vanilla::CMSG_GMTICKET_CREATE (std::move(obj));
+    }
     explicit ClientOpcode(vanilla::CMSG_GMTICKET_UPDATETEXT&& obj) {
         opcode = Opcode::CMSG_GMTICKET_UPDATETEXT;
         new (&this->CMSG_GMTICKET_UPDATETEXT) vanilla::CMSG_GMTICKET_UPDATETEXT (std::move(obj));
@@ -15221,6 +15288,10 @@ struct ClientOpcode {
     explicit ClientOpcode(vanilla::CMSG_REQUEST_ACCOUNT_DATA&& obj) {
         opcode = Opcode::CMSG_REQUEST_ACCOUNT_DATA;
         new (&this->CMSG_REQUEST_ACCOUNT_DATA) vanilla::CMSG_REQUEST_ACCOUNT_DATA (std::move(obj));
+    }
+    explicit ClientOpcode(vanilla::CMSG_UPDATE_ACCOUNT_DATA&& obj) {
+        opcode = Opcode::CMSG_UPDATE_ACCOUNT_DATA;
+        new (&this->CMSG_UPDATE_ACCOUNT_DATA) vanilla::CMSG_UPDATE_ACCOUNT_DATA (std::move(obj));
     }
     explicit ClientOpcode(vanilla::CMSG_GMTICKET_GETTICKET&& obj) {
         opcode = Opcode::CMSG_GMTICKET_GETTICKET;
@@ -16409,6 +16480,10 @@ vanilla::CMSG_SETSHEATHED* ClientOpcode::get_if();
 template<>
 vanilla::CMSG_SETSHEATHED& ClientOpcode::get();
 template<>
+vanilla::CMSG_AUTH_SESSION* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_AUTH_SESSION& ClientOpcode::get();
+template<>
 vanilla::CMSG_PET_CAST_SPELL* ClientOpcode::get_if();
 template<>
 vanilla::CMSG_PET_CAST_SPELL& ClientOpcode::get();
@@ -16437,6 +16512,10 @@ vanilla::CMSG_UNLEARN_SKILL* ClientOpcode::get_if();
 template<>
 vanilla::CMSG_UNLEARN_SKILL& ClientOpcode::get();
 template<>
+vanilla::CMSG_GMTICKET_CREATE* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_GMTICKET_CREATE& ClientOpcode::get();
+template<>
 vanilla::CMSG_GMTICKET_UPDATETEXT* ClientOpcode::get_if();
 template<>
 vanilla::CMSG_GMTICKET_UPDATETEXT& ClientOpcode::get();
@@ -16444,6 +16523,10 @@ template<>
 vanilla::CMSG_REQUEST_ACCOUNT_DATA* ClientOpcode::get_if();
 template<>
 vanilla::CMSG_REQUEST_ACCOUNT_DATA& ClientOpcode::get();
+template<>
+vanilla::CMSG_UPDATE_ACCOUNT_DATA* ClientOpcode::get_if();
+template<>
+vanilla::CMSG_UPDATE_ACCOUNT_DATA& ClientOpcode::get();
 template<>
 vanilla::CMSG_GMTICKET_GETTICKET* ClientOpcode::get_if();
 template<>

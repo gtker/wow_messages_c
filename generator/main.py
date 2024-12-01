@@ -127,6 +127,11 @@ def print_includes(s: Writer, h: Writer, world: bool, version_name: str,
     h.wln(f"#ifndef {include_guard}")
     h.wln(f"#define {include_guard}")
     h.newline()
+    h.wln("/* clang-format off */")
+    h.newline()
+
+    s.wln("/* clang-format off */")
+    s.newline()
 
     if not world or version_name != "all" or not is_cpp():
         h.wln(f"#include \"{include_dir}/{include_file}.h{pp}\"")

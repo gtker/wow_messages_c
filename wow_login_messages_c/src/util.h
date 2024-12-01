@@ -188,7 +188,7 @@ static WowLoginResult wlm_read_string(WowLoginReader* stream, WowLoginString* st
     return WLM_RESULT_SUCCESS;
 }
 
-#define READ_STRING(variable) WLM_CHECK_RETURN_CODE(wlm_read_string(reader, &variable));
+#define READ_STRING(variable) WLM_CHECK_RETURN_CODE(wlm_read_string(reader, &variable))
 
 static WowLoginResult wlm_write_string(WowLoginWriter* stream, const WowLoginString* string)
 {
@@ -222,7 +222,7 @@ static WowLoginResult wlm_read_cstring(WowLoginReader* stream, WowLoginString* s
     return WLM_RESULT_SUCCESS;
 }
 
-#define READ_CSTRING(variable) WLM_CHECK_RETURN_CODE(wlm_read_cstring(reader, &variable));
+#define READ_CSTRING(variable) WLM_CHECK_RETURN_CODE(wlm_read_cstring(reader, &variable))
 
 static WowLoginResult wlm_write_cstring(WowLoginWriter* stream, const WowLoginString* string)
 {

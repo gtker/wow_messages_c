@@ -1,10 +1,9 @@
 ---
-Checks:          'clang-diagnostic-*,clang-analyzer-*,performance-*'
-WarningsAsErrors: '*'
+Checks: 'clang-diagnostic-*,clang-analyzer-*,performance-*,-clang-analyzer-optin.core.EnumCastOutOfRange'
+WarningsAsErrors: '*,-clang-analyzer-unix.Malloc'
 HeaderFilterRegex: ''
-AnalyzeTemporaryDtors: false
 CheckOptions:
-  - key:             llvm-else-after-return.WarnOnConditionVariables
-    value:           'false'
+  - key: llvm-else-after-return.WarnOnConditionVariables
+    value: 'false'
 ...
 

@@ -1,6 +1,8 @@
 #ifndef WOW_LOGIN_MESSAGES_CPP_ALL_HPP
 #define WOW_LOGIN_MESSAGES_CPP_ALL_HPP
 
+/* clang-format off */
+
 #include "wow_login_messages_cpp/wow_login_messages.hpp"
 
 namespace wow_login_messages {

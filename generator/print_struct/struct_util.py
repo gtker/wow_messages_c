@@ -39,10 +39,6 @@ def container_should_print(container: model.Container) -> bool:
                     return False
 
             case model.DataTypeArray(compressed=compressed, inner_type=inner_type, size=size):
-                if compressed and is_cpp():
-                    print_skip(container, "has compressed array")
-                    return False
-
                 match inner_type:
                     case model.ArrayTypeStruct(struct_data=e):
                         if not container_should_print(e):

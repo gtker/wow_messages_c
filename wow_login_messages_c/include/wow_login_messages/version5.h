@@ -1,6 +1,8 @@
 #ifndef WOW_LOGIN_MESSAGES_VERSION5_H
 #define WOW_LOGIN_MESSAGES_VERSION5_H
 
+/* clang-format off */
+
 #include "wow_login_messages/wow_login_messages.h"
 
 #ifdef __cplusplus

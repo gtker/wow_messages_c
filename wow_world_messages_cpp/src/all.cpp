@@ -1,3 +1,5 @@
+/* clang-format off */
+
 #include "util.hpp"
 
 #include "wow_world_messages_cpp/all.hpp"

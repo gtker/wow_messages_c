@@ -1,6 +1,8 @@
 #ifndef WOW_WORLD_MESSAGES_CPP_ALL_HPP
 #define WOW_WORLD_MESSAGES_CPP_ALL_HPP
 
+/* clang-format off */
+
 
 namespace wow_world_messages {
 namespace all {

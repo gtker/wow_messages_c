@@ -1,6 +1,8 @@
 #ifndef WOW_WORLD_MESSAGES_ALL_H
 #define WOW_WORLD_MESSAGES_ALL_H
 
+/* clang-format off */
+
 #include "wow_world_messages/wow_world_messages.h"
 
 #ifdef __cplusplus

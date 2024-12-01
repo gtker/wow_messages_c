@@ -1,3 +1,5 @@
+/* clang-format off */
+
 #include "util.h"
 
 #include "wow_world_messages/vanilla.h"
@@ -1942,7 +1944,7 @@ static size_t vanilla_NpcTextUpdate_size(const vanilla_NpcTextUpdate* object) {
     /* C89 scope to allow variable declarations */ {
         int i;
         for(i = 0; i < 2; ++i) {
-            _size += STRING_SIZE((*object->texts[i]));;
+            _size += STRING_SIZE((*object->texts[i]));
         }
     }
 
@@ -2002,7 +2004,7 @@ static size_t vanilla_Object_size(const vanilla_Object* object) {
         /* C89 scope to allow variable declarations */ {
             int i;
             for(i = 0; i < (int)object->count; ++i) {
-                _size += wwm_packed_guid_size(object->guids[i]);;
+                _size += wwm_packed_guid_size(object->guids[i]);
             }
         }
 
@@ -3593,7 +3595,7 @@ static size_t vanilla_SMSG_GUILD_QUERY_RESPONSE_size(const vanilla_SMSG_GUILD_QU
     /* C89 scope to allow variable declarations */ {
         int i;
         for(i = 0; i < 10; ++i) {
-            _size += STRING_SIZE((*object->rank_names[i]));;
+            _size += STRING_SIZE((*object->rank_names[i]));
         }
     }
 
@@ -4040,7 +4042,7 @@ static size_t vanilla_SMSG_QUEST_QUERY_RESPONSE_size(const vanilla_SMSG_QUEST_QU
     /* C89 scope to allow variable declarations */ {
         int i;
         for(i = 0; i < 4; ++i) {
-            _size += STRING_SIZE((*object->objective_texts[i]));;
+            _size += STRING_SIZE((*object->objective_texts[i]));
         }
     }
 
@@ -4431,7 +4433,7 @@ static size_t vanilla_CMSG_WHO_size(const vanilla_CMSG_WHO* object) {
     /* C89 scope to allow variable declarations */ {
         int i;
         for(i = 0; i < (int)object->amount_of_strings; ++i) {
-            _size += STRING_SIZE(object->search_strings[i]);;
+            _size += STRING_SIZE(object->search_strings[i]);
         }
     }
 
@@ -5065,7 +5067,7 @@ static WowWorldResult vanilla_SMSG_GROUP_LIST_read(WowWorldReader* reader, vanil
     _size += 4;
 
     READ_ARRAY_ALLOCATE(object->members, object->amount_of_members, sizeof(vanilla_GroupListMember));
-    READ_ARRAY(object->members, object->amount_of_members, WWM_CHECK_RETURN_CODE(vanilla_GroupListMember_read(reader, &object->members[i]));_size += vanilla_GroupListMember_size(&object->members[i]));
+    READ_ARRAY(object->members, object->amount_of_members, WWM_CHECK_RETURN_CODE(vanilla_GroupListMember_read(reader, &object->members[i]));_size += vanilla_GroupListMember_size(&object->members[i]););
 
     READ_U64(object->leader);
     _size += 8;
@@ -5869,7 +5871,7 @@ static size_t vanilla_SMSG_GUILD_EVENT_size(const vanilla_SMSG_GUILD_EVENT* obje
     /* C89 scope to allow variable declarations */ {
         int i;
         for(i = 0; i < (int)object->amount_of_events; ++i) {
-            _size += STRING_SIZE(object->event_descriptions[i]);;
+            _size += STRING_SIZE(object->event_descriptions[i]);
         }
     }
 
@@ -12855,7 +12857,7 @@ static size_t vanilla_SMSG_SHOWTAXINODES_size(const vanilla_SMSG_SHOWTAXINODES* 
     /* C89 scope to allow variable declarations */ {
         int i;
         for(i = 0; i < (int)object->amount_of_nodes; ++i) {
-            _size += 4;;
+            _size += 4;
         }
     }
 
@@ -12882,7 +12884,7 @@ static WowWorldResult vanilla_SMSG_SHOWTAXINODES_read(WowWorldReader* reader, va
         object->nodes = malloc(_current_size);
         while (_size < body_size) {
             READ_U32(object->nodes[i]);
-            _size += 4;;
+            _size += 4;
             ++i;
 
             if (i * sizeof(*object->nodes) >= _current_size) {
@@ -14505,15 +14507,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUTH_SESSION_write(WowWo
             _size += vanilla_AddonInfo_size(&object->addon_info[compressed_i]);
         }
         if (_size) {
+            WRITE_U32(_size);
+
             addon_info_uncompressed_data = malloc(_size);
-            new_writer.destination = addon_info_uncompressed_data;
-            new_writer.length = _size;
-            new_writer.index = 0;
+            new_writer = wwm_create_writer(addon_info_uncompressed_data, _size);
             writer = &new_writer;
             WRITE_ARRAY(object->addon_info, object->amount_of_addon_info, WWM_CHECK_RETURN_CODE(vanilla_AddonInfo_write(writer, &object->addon_info[i])));
 
             wwm_compress_data(addon_info_uncompressed_data, _size, old_writer->destination, old_writer->length - old_writer->index);
-
             free(addon_info_uncompressed_data);
         }
     }
@@ -15107,15 +15108,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GMTICKET_CREATE_write(Wo
                 _size += 1;
             }
             if (_size) {
+                WRITE_U32(_size);
+
                 compressed_chat_data_uncompressed_data = malloc(_size);
-                new_writer.destination = compressed_chat_data_uncompressed_data;
-                new_writer.length = _size;
-                new_writer.index = 0;
+                new_writer = wwm_create_writer(compressed_chat_data_uncompressed_data, _size);
                 writer = &new_writer;
                 WRITE_ARRAY(object->compressed_chat_data, object->amount_of_compressed_chat_data, WRITE_U8(object->compressed_chat_data[i]));
 
                 wwm_compress_data(compressed_chat_data_uncompressed_data, _size, old_writer->destination, old_writer->length - old_writer->index);
-
                 free(compressed_chat_data_uncompressed_data);
             }
         }
@@ -15354,15 +15354,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_UPDATE_ACCOUNT_DATA_writ
             _size += 1;
         }
         if (_size) {
+            WRITE_U32(_size);
+
             compressed_data_uncompressed_data = malloc(_size);
-            new_writer.destination = compressed_data_uncompressed_data;
-            new_writer.length = _size;
-            new_writer.index = 0;
+            new_writer = wwm_create_writer(compressed_data_uncompressed_data, _size);
             writer = &new_writer;
             WRITE_ARRAY(object->compressed_data, object->amount_of_compressed_data, WRITE_U8(object->compressed_data[i]));
 
             wwm_compress_data(compressed_data_uncompressed_data, _size, old_writer->destination, old_writer->length - old_writer->index);
-
             free(compressed_data_uncompressed_data);
         }
     }
@@ -20156,7 +20155,7 @@ static size_t vanilla_SMSG_WARDEN_DATA_size(const vanilla_SMSG_WARDEN_DATA* obje
     /* C89 scope to allow variable declarations */ {
         int i;
         for(i = 0; i < (int)object->amount_of_encrypted_data; ++i) {
-            _size += 1;;
+            _size += 1;
         }
     }
 
@@ -20174,7 +20173,7 @@ static WowWorldResult vanilla_SMSG_WARDEN_DATA_read(WowWorldReader* reader, vani
         object->encrypted_data = malloc(_current_size);
         while (_size < body_size) {
             READ_U8(object->encrypted_data[i]);
-            _size += 1;;
+            _size += 1;
             ++i;
 
             if (i * sizeof(*object->encrypted_data) >= _current_size) {
@@ -20211,7 +20210,7 @@ static size_t vanilla_CMSG_WARDEN_DATA_size(const vanilla_CMSG_WARDEN_DATA* obje
     /* C89 scope to allow variable declarations */ {
         int i;
         for(i = 0; i < (int)object->amount_of_encrypted_data; ++i) {
-            _size += 1;;
+            _size += 1;
         }
     }
 
@@ -20229,7 +20228,7 @@ static WowWorldResult vanilla_CMSG_WARDEN_DATA_read(WowWorldReader* reader, vani
         object->encrypted_data = malloc(_current_size);
         while (_size < body_size) {
             READ_U8(object->encrypted_data[i]);
-            _size += 1;;
+            _size += 1;
             ++i;
 
             if (i * sizeof(*object->encrypted_data) >= _current_size) {
@@ -21914,7 +21913,7 @@ static size_t vanilla_SMSG_EXPECTED_SPAM_RECORDS_size(const vanilla_SMSG_EXPECTE
     /* C89 scope to allow variable declarations */ {
         int i;
         for(i = 0; i < (int)object->amount_of_records; ++i) {
-            _size += STRING_SIZE(object->records[i]);;
+            _size += STRING_SIZE(object->records[i]);
         }
     }
 

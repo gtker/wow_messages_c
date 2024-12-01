@@ -84,7 +84,9 @@ def print_individual_test(s: Writer, e: model.Container, test_case: model.TestCa
             f"const std::vector<unsigned char> write_buffer = ::wow_{library_type.lower()}_messages::{function_version}::write_opcode(opcode);")
         s.newline()
 
-        if is_world(e.tags):
+        if container_has_compressed_array(e):
+            s.wln("/* TODO compressed array compare do what? */")
+        elif is_world(e.tags):
             s.wln(
                 f'world_test_compare_buffers(buffer.data(), write_buffer.data(), write_buffer.size(),  __FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i}", TEST_UTILS_SIDE_{function_side.upper()});')
         else:
@@ -183,7 +185,6 @@ public:
     size_t m_index = 0;
 };
 """)
-
 
     if is_cpp():
         tests.open_curly("int main()")

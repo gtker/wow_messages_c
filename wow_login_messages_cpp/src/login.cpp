@@ -1,3 +1,5 @@
+/* clang-format off */
+
 #include "util.hpp"
 
 #include "wow_login_messages_cpp/all.hpp"
@@ -207,6 +209,8 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode read_client_opcode(Reader& reader) {
 }
 } // namespace all
 } // namespace wow_login_messages
+/* clang-format off */
+
 #include "wow_login_messages_cpp/version2.hpp"
 
 namespace wow_login_messages {
@@ -1061,6 +1065,8 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode read_server_opcode(Reader& reader) {
 }
 } // namespace version2
 } // namespace wow_login_messages
+/* clang-format off */
+
 #include "wow_login_messages_cpp/version3.hpp"
 
 namespace wow_login_messages {
@@ -1597,6 +1603,8 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode read_server_opcode(Reader& reader) {
 }
 } // namespace version3
 } // namespace wow_login_messages
+/* clang-format off */
+
 #include "wow_login_messages_cpp/version5.hpp"
 
 namespace wow_login_messages {
@@ -2352,6 +2360,8 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode read_server_opcode(Reader& reader) {
 }
 } // namespace version5
 } // namespace wow_login_messages
+/* clang-format off */
+
 #include "wow_login_messages_cpp/version6.hpp"
 
 namespace wow_login_messages {
@@ -2747,6 +2757,8 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode read_server_opcode(Reader& reader) {
 }
 } // namespace version6
 } // namespace wow_login_messages
+/* clang-format off */
+
 #include "wow_login_messages_cpp/version7.hpp"
 
 namespace wow_login_messages {
@@ -3093,6 +3105,8 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode read_server_opcode(Reader& reader) {
 }
 } // namespace version7
 } // namespace wow_login_messages
+/* clang-format off */
+
 #include "wow_login_messages_cpp/version8.hpp"
 
 namespace wow_login_messages {

@@ -1,3 +1,5 @@
+/* clang-format off */
+
 #include "util.h"
 
 #include "wow_login_messages/all.h"
@@ -185,6 +187,8 @@ WOW_LOGIN_MESSAGES_C_EXPORT void all_client_opcode_free(AllClientOpcodeContainer
             break;
     }
 }
+
+/* clang-format off */
 
 #include "wow_login_messages/version2.h"
 
@@ -771,6 +775,8 @@ WOW_LOGIN_MESSAGES_C_EXPORT void version2_server_opcode_free(Version2ServerOpcod
     }
 }
 
+/* clang-format off */
+
 #include "wow_login_messages/version3.h"
 
 static WowLoginResult version3_CMD_AUTH_LOGON_CHALLENGE_Server_read(WowLoginReader* reader, version3_CMD_AUTH_LOGON_CHALLENGE_Server* object) {
@@ -1081,6 +1087,8 @@ WOW_LOGIN_MESSAGES_C_EXPORT void version3_server_opcode_free(Version3ServerOpcod
             break;
     }
 }
+
+/* clang-format off */
 
 #include "wow_login_messages/version5.h"
 
@@ -1582,6 +1590,8 @@ WOW_LOGIN_MESSAGES_C_EXPORT void version5_server_opcode_free(Version5ServerOpcod
     }
 }
 
+/* clang-format off */
+
 #include "wow_login_messages/version6.h"
 
 WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version6_CMD_REALM_LIST_Client_write(WowLoginWriter* writer) {
@@ -1754,6 +1764,8 @@ WOW_LOGIN_MESSAGES_C_EXPORT void version6_server_opcode_free(Version6ServerOpcod
     }
 }
 
+/* clang-format off */
+
 #include "wow_login_messages/version7.h"
 
 WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version7_CMD_REALM_LIST_Client_write(WowLoginWriter* writer) {
@@ -1870,6 +1882,8 @@ WOW_LOGIN_MESSAGES_C_EXPORT void version7_server_opcode_free(Version7ServerOpcod
             break;
     }
 }
+
+/* clang-format off */
 
 #include "wow_login_messages/version8.h"
 

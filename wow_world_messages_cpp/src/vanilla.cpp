@@ -1,3 +1,5 @@
+/* clang-format off */
+
 #include "util.hpp"
 
 #include "wow_world_messages_cpp/vanilla.hpp"
@@ -1805,7 +1807,7 @@ static size_t Object_size(const Object& obj) {
         _size += 4;
 
         for(const auto& v : obj.guids) {
-            _size += wow_world_messages::util::wwm_packed_guid_size(v);;
+            _size += wow_world_messages::util::wwm_packed_guid_size(v);
         }
 
     }
@@ -12779,7 +12781,7 @@ static size_t SMSG_SHOWTAXINODES_size(const SMSG_SHOWTAXINODES& obj) {
     size_t _size = 16;
 
     for(const auto& v : obj.nodes) {
-        _size += 4;;
+        _size += 4;
     }
 
     return _size;
@@ -14444,6 +14446,120 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_AUTH_CHALLENGE::wr
     return writer.m_buf;
 }
 
+static size_t CMSG_AUTH_SESSION_size(const CMSG_AUTH_SESSION& obj) {
+    size_t _size = 33 + obj.username.size();
+
+    auto writer = Writer(0);
+    for (const auto& v : obj.addon_info) {
+        AddonInfo_write(writer, v);
+    }
+
+    if (!writer.m_buf.empty()) {
+        _size += ::wow_world_messages::util::compress_data(writer.m_buf).size();
+    }
+
+    return _size;
+}
+
+CMSG_AUTH_SESSION CMSG_AUTH_SESSION_read(Reader& reader, size_t body_size) {
+    CMSG_AUTH_SESSION obj{};
+    size_t _size = 0;
+
+    obj.build = reader.read_u32();
+    _size += 4;
+
+    obj.server_id = reader.read_u32();
+    _size += 4;
+
+    obj.username = reader.read_cstring();
+    _size += obj.username.size() + 1;
+
+    obj.client_seed = reader.read_u32();
+    _size += 4;
+
+    for (auto i = 0; i < 20; ++i) {
+        obj.client_proof[i] = reader.read_u8();
+        _size += 1;
+    }
+
+    /* addon_info_decompressed_size: u32 */
+    auto addon_info_decompressed_size = reader.read_u32();
+    (void)addon_info_decompressed_size;
+    _size += 4;
+
+    if((body_size - _size) == 0) {
+        return obj;
+    }
+
+    auto addon_info_compressed_data = std::vector<unsigned char>(body_size - _size, 0);
+    for(size_t i = 0; i < body_size - _size; ++i) {
+        addon_info_compressed_data.push_back(reader.read_u8());
+    }
+
+    if (addon_info_decompressed_size == 0) {
+        return obj;
+    }
+
+    auto addon_info_decompressed_data = ::wow_world_messages::util::decompress_data(addon_info_compressed_data);
+
+    if (addon_info_decompressed_data.empty()) {
+        return obj;
+    }
+
+    auto addon_info_new_reader = ByteReader(addon_info_decompressed_data);
+
+    while (!addon_info_new_reader.is_at_end()) {
+        obj.addon_info.push_back(::wow_world_messages::vanilla::AddonInfo_read(addon_info_new_reader));
+        _size += vanilla::AddonInfo_size(obj.addon_info.back());
+    }
+
+    return obj;
+}
+
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_AUTH_SESSION::write() const {
+    const auto& obj = *this;
+    auto writer = Writer(CMSG_AUTH_SESSION_size(obj));
+
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_AUTH_SESSION_size(obj) + 4)); /* size */
+
+    writer.write_u32(0x000001ed); /* opcode */
+
+    writer.write_u32(obj.build);
+
+    writer.write_u32(obj.server_id);
+
+    writer.write_cstring(obj.username);
+
+    writer.write_u32(obj.client_seed);
+
+    for (const auto& v : obj.client_proof) {
+        writer.write_u8(v);
+    }
+
+    auto old_writer = writer;
+    writer = Writer(0);
+
+    for (const auto& v : obj.addon_info) {
+        AddonInfo_write(writer, v);
+    }
+
+    if (!writer.m_buf.empty()) {
+        auto addon_info_compressed_data = ::wow_world_messages::util::compress_data(writer.m_buf);
+        old_writer.write_u32(addon_info_compressed_data.size());
+
+        for (const auto v : addon_info_compressed_data) {
+            old_writer.write_u8(v);
+        }
+    }
+    else {
+        old_writer.write_u32(0);
+    }
+
+    writer = old_writer;
+
+    return writer.m_buf;
+}
+
 static size_t SMSG_AUTH_RESPONSE_size(const SMSG_AUTH_RESPONSE& obj) {
     size_t _size = 1;
 
@@ -14920,6 +15036,130 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_REMOVED_SPELL::wri
     return writer.m_buf;
 }
 
+static size_t CMSG_GMTICKET_CREATE_size(const CMSG_GMTICKET_CREATE& obj) {
+    size_t _size = 19 + obj.message.size() + obj.reserved_for_future_use.size();
+
+    if (obj.category == GmTicketType::BEHAVIOR_HARASSMENT) {
+        _size += 4;
+
+        auto writer = Writer(0);
+        for (const auto& v : obj.compressed_chat_data) {
+            writer.write_u8(v);
+        }
+
+        if (!writer.m_buf.empty()) {
+            _size += ::wow_world_messages::util::compress_data(writer.m_buf).size();
+        }
+
+    }
+
+    return _size;
+}
+
+CMSG_GMTICKET_CREATE CMSG_GMTICKET_CREATE_read(Reader& reader, size_t body_size) {
+    CMSG_GMTICKET_CREATE obj{};
+    size_t _size = 0;
+
+    obj.category = static_cast<GmTicketType>(reader.read_u8());
+    _size += 1;
+
+    obj.map = static_cast<Map>(reader.read_u32());
+    _size += 4;
+
+    obj.position = ::wow_world_messages::all::Vector3d_read(reader);
+    _size += 12;
+
+    obj.message = reader.read_cstring();
+    _size += obj.message.size() + 1;
+
+    obj.reserved_for_future_use = reader.read_cstring();
+    _size += obj.reserved_for_future_use.size() + 1;
+
+    if (obj.category == GmTicketType::BEHAVIOR_HARASSMENT) {
+        obj.chat_data_line_count = reader.read_u32();
+        _size += 4;
+
+        /* compressed_chat_data_decompressed_size: u32 */
+        auto compressed_chat_data_decompressed_size = reader.read_u32();
+        (void)compressed_chat_data_decompressed_size;
+        _size += 4;
+
+        if((body_size - _size) == 0) {
+            return obj;
+        }
+
+        auto compressed_chat_data_compressed_data = std::vector<unsigned char>(body_size - _size, 0);
+        for(size_t i = 0; i < body_size - _size; ++i) {
+            compressed_chat_data_compressed_data.push_back(reader.read_u8());
+        }
+
+        if (compressed_chat_data_decompressed_size == 0) {
+            return obj;
+        }
+
+        auto compressed_chat_data_decompressed_data = ::wow_world_messages::util::decompress_data(compressed_chat_data_compressed_data);
+
+        if (compressed_chat_data_decompressed_data.empty()) {
+            return obj;
+        }
+
+        auto compressed_chat_data_new_reader = ByteReader(compressed_chat_data_decompressed_data);
+
+        while (!compressed_chat_data_new_reader.is_at_end()) {
+            obj.compressed_chat_data.push_back(compressed_chat_data_new_reader.read_u8());
+            _size += 1;
+        }
+
+    }
+    return obj;
+}
+
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GMTICKET_CREATE::write() const {
+    const auto& obj = *this;
+    auto writer = Writer(CMSG_GMTICKET_CREATE_size(obj));
+
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_GMTICKET_CREATE_size(obj) + 4)); /* size */
+
+    writer.write_u32(0x00000205); /* opcode */
+
+    writer.write_u8(static_cast<uint8_t>(obj.category));
+
+    writer.write_u32(static_cast<uint32_t>(obj.map));
+
+    Vector3d_write(writer, obj.position);
+
+    writer.write_cstring(obj.message);
+
+    writer.write_cstring(obj.reserved_for_future_use);
+
+    if (obj.category == GmTicketType::BEHAVIOR_HARASSMENT) {
+        writer.write_u32(obj.chat_data_line_count);
+
+        auto old_writer = writer;
+        writer = Writer(0);
+
+        for (const auto& v : obj.compressed_chat_data) {
+            writer.write_u8(v);
+        }
+
+        if (!writer.m_buf.empty()) {
+            auto compressed_chat_data_compressed_data = ::wow_world_messages::util::compress_data(writer.m_buf);
+            old_writer.write_u32(compressed_chat_data_compressed_data.size());
+
+            for (const auto v : compressed_chat_data_compressed_data) {
+                old_writer.write_u8(v);
+            }
+        }
+        else {
+            old_writer.write_u32(0);
+        }
+
+        writer = old_writer;
+
+    }
+    return writer.m_buf;
+}
+
 SMSG_GMTICKET_CREATE SMSG_GMTICKET_CREATE_read(Reader& reader) {
     SMSG_GMTICKET_CREATE obj{};
 
@@ -15033,6 +15273,96 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_REQUEST_ACCOUNT_DA
     writer.write_u32(0x0000020a); /* opcode */
 
     writer.write_u32(obj.data_type);
+
+    return writer.m_buf;
+}
+
+static size_t CMSG_UPDATE_ACCOUNT_DATA_size(const CMSG_UPDATE_ACCOUNT_DATA& obj) {
+    size_t _size = 4;
+
+    auto writer = Writer(0);
+    for (const auto& v : obj.compressed_data) {
+        writer.write_u8(v);
+    }
+
+    if (!writer.m_buf.empty()) {
+        _size += ::wow_world_messages::util::compress_data(writer.m_buf).size();
+    }
+
+    return _size;
+}
+
+CMSG_UPDATE_ACCOUNT_DATA CMSG_UPDATE_ACCOUNT_DATA_read(Reader& reader, size_t body_size) {
+    CMSG_UPDATE_ACCOUNT_DATA obj{};
+    size_t _size = 0;
+
+    obj.data_type = static_cast<AccountDataType>(reader.read_u32());
+    _size += 4;
+
+    /* compressed_data_decompressed_size: u32 */
+    auto compressed_data_decompressed_size = reader.read_u32();
+    (void)compressed_data_decompressed_size;
+    _size += 4;
+
+    if((body_size - _size) == 0) {
+        return obj;
+    }
+
+    auto compressed_data_compressed_data = std::vector<unsigned char>(body_size - _size, 0);
+    for(size_t i = 0; i < body_size - _size; ++i) {
+        compressed_data_compressed_data.push_back(reader.read_u8());
+    }
+
+    if (compressed_data_decompressed_size == 0) {
+        return obj;
+    }
+
+    auto compressed_data_decompressed_data = ::wow_world_messages::util::decompress_data(compressed_data_compressed_data);
+
+    if (compressed_data_decompressed_data.empty()) {
+        return obj;
+    }
+
+    auto compressed_data_new_reader = ByteReader(compressed_data_decompressed_data);
+
+    while (!compressed_data_new_reader.is_at_end()) {
+        obj.compressed_data.push_back(compressed_data_new_reader.read_u8());
+        _size += 1;
+    }
+
+    return obj;
+}
+
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_UPDATE_ACCOUNT_DATA::write() const {
+    const auto& obj = *this;
+    auto writer = Writer(CMSG_UPDATE_ACCOUNT_DATA_size(obj));
+
+    writer.write_u16_be(static_cast<uint16_t>((uint16_t)CMSG_UPDATE_ACCOUNT_DATA_size(obj) + 4)); /* size */
+
+    writer.write_u32(0x0000020b); /* opcode */
+
+    writer.write_u32(static_cast<uint32_t>(obj.data_type));
+
+    auto old_writer = writer;
+    writer = Writer(0);
+
+    for (const auto& v : obj.compressed_data) {
+        writer.write_u8(v);
+    }
+
+    if (!writer.m_buf.empty()) {
+        auto compressed_data_compressed_data = ::wow_world_messages::util::compress_data(writer.m_buf);
+        old_writer.write_u32(compressed_data_compressed_data.size());
+
+        for (const auto v : compressed_data_compressed_data) {
+            old_writer.write_u8(v);
+        }
+    }
+    else {
+        old_writer.write_u32(0);
+    }
+
+    writer = old_writer;
 
     return writer.m_buf;
 }
@@ -20074,7 +20404,7 @@ static size_t SMSG_WARDEN_DATA_size(const SMSG_WARDEN_DATA& obj) {
     size_t _size = 0;
 
     for(const auto& v : obj.encrypted_data) {
-        _size += 1;;
+        _size += 1;
     }
 
     return _size;
@@ -20111,7 +20441,7 @@ static size_t CMSG_WARDEN_DATA_size(const CMSG_WARDEN_DATA& obj) {
     size_t _size = 0;
 
     for(const auto& v : obj.encrypted_data) {
-        _size += 1;;
+        _size += 1;
     }
 
     return _size;
@@ -25024,6 +25354,22 @@ vanilla::CMSG_SETSHEATHED& ClientOpcode::get<CMSG_SETSHEATHED>() {
 }
 
 template <>
+vanilla::CMSG_AUTH_SESSION* ClientOpcode::get_if<CMSG_AUTH_SESSION>() {
+    if (opcode == Opcode::CMSG_AUTH_SESSION) {
+        return &CMSG_AUTH_SESSION;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_AUTH_SESSION& ClientOpcode::get<CMSG_AUTH_SESSION>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_AUTH_SESSION>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
 vanilla::CMSG_PET_CAST_SPELL* ClientOpcode::get_if<CMSG_PET_CAST_SPELL>() {
     if (opcode == Opcode::CMSG_PET_CAST_SPELL) {
         return &CMSG_PET_CAST_SPELL;
@@ -25136,6 +25482,22 @@ vanilla::CMSG_UNLEARN_SKILL& ClientOpcode::get<CMSG_UNLEARN_SKILL>() {
 }
 
 template <>
+vanilla::CMSG_GMTICKET_CREATE* ClientOpcode::get_if<CMSG_GMTICKET_CREATE>() {
+    if (opcode == Opcode::CMSG_GMTICKET_CREATE) {
+        return &CMSG_GMTICKET_CREATE;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_GMTICKET_CREATE& ClientOpcode::get<CMSG_GMTICKET_CREATE>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_GMTICKET_CREATE>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
 vanilla::CMSG_GMTICKET_UPDATETEXT* ClientOpcode::get_if<CMSG_GMTICKET_UPDATETEXT>() {
     if (opcode == Opcode::CMSG_GMTICKET_UPDATETEXT) {
         return &CMSG_GMTICKET_UPDATETEXT;
@@ -25161,6 +25523,22 @@ vanilla::CMSG_REQUEST_ACCOUNT_DATA* ClientOpcode::get_if<CMSG_REQUEST_ACCOUNT_DA
 template <>
 vanilla::CMSG_REQUEST_ACCOUNT_DATA& ClientOpcode::get<CMSG_REQUEST_ACCOUNT_DATA>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_REQUEST_ACCOUNT_DATA>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
+vanilla::CMSG_UPDATE_ACCOUNT_DATA* ClientOpcode::get_if<CMSG_UPDATE_ACCOUNT_DATA>() {
+    if (opcode == Opcode::CMSG_UPDATE_ACCOUNT_DATA) {
+        return &CMSG_UPDATE_ACCOUNT_DATA;
+    }
+    return nullptr;
+}
+template <>
+vanilla::CMSG_UPDATE_ACCOUNT_DATA& ClientOpcode::get<CMSG_UPDATE_ACCOUNT_DATA>() {
+    auto p = ClientOpcode::get_if<vanilla::CMSG_UPDATE_ACCOUNT_DATA>();
     if (p) {
         return *p;
     }
@@ -27364,6 +27742,9 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const Clie
     if (opcode.opcode == ClientOpcode::Opcode::CMSG_SETSHEATHED) {
         return opcode.CMSG_SETSHEATHED.write();;
     }
+    if (opcode.opcode == ClientOpcode::Opcode::CMSG_AUTH_SESSION) {
+        return opcode.CMSG_AUTH_SESSION.write();;
+    }
     if (opcode.opcode == ClientOpcode::Opcode::CMSG_PET_CAST_SPELL) {
         return opcode.CMSG_PET_CAST_SPELL.write();;
     }
@@ -27385,11 +27766,17 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const Clie
     if (opcode.opcode == ClientOpcode::Opcode::CMSG_UNLEARN_SKILL) {
         return opcode.CMSG_UNLEARN_SKILL.write();;
     }
+    if (opcode.opcode == ClientOpcode::Opcode::CMSG_GMTICKET_CREATE) {
+        return opcode.CMSG_GMTICKET_CREATE.write();;
+    }
     if (opcode.opcode == ClientOpcode::Opcode::CMSG_GMTICKET_UPDATETEXT) {
         return opcode.CMSG_GMTICKET_UPDATETEXT.write();;
     }
     if (opcode.opcode == ClientOpcode::Opcode::CMSG_REQUEST_ACCOUNT_DATA) {
         return opcode.CMSG_REQUEST_ACCOUNT_DATA.write();;
+    }
+    if (opcode.opcode == ClientOpcode::Opcode::CMSG_UPDATE_ACCOUNT_DATA) {
+        return opcode.CMSG_UPDATE_ACCOUNT_DATA.write();;
     }
     if (opcode.opcode == ClientOpcode::Opcode::CMSG_GMTICKET_GETTICKET) {
         return opcode.CMSG_GMTICKET_GETTICKET.write();;
@@ -28283,6 +28670,9 @@ WOW_WORLD_MESSAGES_CPP_EXPORT ClientOpcode read_client_opcode(Reader& reader) {
     if (opcode == static_cast<uint32_t>(ClientOpcode::Opcode::CMSG_SETSHEATHED)) {
         return ClientOpcode(::wow_world_messages::vanilla::CMSG_SETSHEATHED_read(reader));
     }
+    if (opcode == static_cast<uint32_t>(ClientOpcode::Opcode::CMSG_AUTH_SESSION)) {
+        return ClientOpcode(::wow_world_messages::vanilla::CMSG_AUTH_SESSION_read(reader, _size - 4));
+    }
     if (opcode == static_cast<uint32_t>(ClientOpcode::Opcode::CMSG_PET_CAST_SPELL)) {
         return ClientOpcode(::wow_world_messages::vanilla::CMSG_PET_CAST_SPELL_read(reader));
     }
@@ -28304,11 +28694,17 @@ WOW_WORLD_MESSAGES_CPP_EXPORT ClientOpcode read_client_opcode(Reader& reader) {
     if (opcode == static_cast<uint32_t>(ClientOpcode::Opcode::CMSG_UNLEARN_SKILL)) {
         return ClientOpcode(::wow_world_messages::vanilla::CMSG_UNLEARN_SKILL_read(reader));
     }
+    if (opcode == static_cast<uint32_t>(ClientOpcode::Opcode::CMSG_GMTICKET_CREATE)) {
+        return ClientOpcode(::wow_world_messages::vanilla::CMSG_GMTICKET_CREATE_read(reader, _size - 4));
+    }
     if (opcode == static_cast<uint32_t>(ClientOpcode::Opcode::CMSG_GMTICKET_UPDATETEXT)) {
         return ClientOpcode(::wow_world_messages::vanilla::CMSG_GMTICKET_UPDATETEXT_read(reader));
     }
     if (opcode == static_cast<uint32_t>(ClientOpcode::Opcode::CMSG_REQUEST_ACCOUNT_DATA)) {
         return ClientOpcode(::wow_world_messages::vanilla::CMSG_REQUEST_ACCOUNT_DATA_read(reader));
+    }
+    if (opcode == static_cast<uint32_t>(ClientOpcode::Opcode::CMSG_UPDATE_ACCOUNT_DATA)) {
+        return ClientOpcode(::wow_world_messages::vanilla::CMSG_UPDATE_ACCOUNT_DATA_read(reader, _size - 4));
     }
     if (opcode == static_cast<uint32_t>(ClientOpcode::Opcode::CMSG_GMTICKET_GETTICKET)) {
         return ClientOpcode(::wow_world_messages::vanilla::CMSG_GMTICKET_GETTICKET{});

@@ -117,11 +117,33 @@ public:
     std::vector<unsigned char> m_buf;
 };
 
+class ByteReader final : public wow_world_messages::Reader
+{
+public:
+    explicit ByteReader(std::vector<unsigned char> buf) : m_buf(std::move(buf)) {}
+
+    uint8_t read_u8() override
+    {
+        const uint8_t value = m_buf[m_index];
+        m_index += 1;
+
+        return value;
+    }
+
+    bool is_at_end() const { return m_index < m_buf.size(); }
+
+    std::vector<unsigned char> m_buf;
+    size_t m_index = 0;
+};
+
 namespace util {
 size_t wwm_packed_guid_size(uint64_t value);
 size_t wwm_monster_move_spline_size(const std::vector<all::Vector3d>& splines);
 void wwm_write_monster_move_spline(Writer& writer, const std::vector<all::Vector3d>& splines);
 std::vector<all::Vector3d> wwm_read_monster_move_spline(Reader& reader);
+
+std::vector<unsigned char> compress_data(const std::vector<unsigned char>& buffer);
+std::vector<unsigned char> decompress_data(const std::vector<unsigned char>& buffer);
 }  // namespace util
 
 } /* namespace wow_world_messages */
