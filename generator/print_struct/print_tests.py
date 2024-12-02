@@ -4,7 +4,7 @@ from print_struct import container_has_c_members, container_has_free
 
 import model
 from print_struct.struct_util import container_should_have_size_function, all_members_from_container, \
-    container_has_compressed_array
+    container_has_compressed_array, container_uses_compression
 from util import first_login_version, VERSIONS, world_version_to_module_name, \
     should_print_container, container_is_unencrypted, login_version_matches, version_matches, version_to_module_name, \
     is_world, is_cpp
@@ -84,8 +84,33 @@ def print_individual_test(s: Writer, e: model.Container, test_case: model.TestCa
             f"const std::vector<unsigned char> write_buffer = ::wow_{library_type.lower()}_messages::{function_version}::write_opcode(opcode);")
         s.newline()
 
-        if container_has_compressed_array(e):
-            s.wln("/* TODO compressed array compare do what? */")
+        if container_uses_compression(e):
+            s.wln("auto reader2 = ByteReader(write_buffer);")
+            s.newline()
+
+            s.wln(
+                f"const auto opcode2 = ::wow_{library_type.lower()}_messages::{function_version}::read_{function_side}_opcode(reader2);")
+
+            s.open_curly("if (opcode2.is_none())")
+            s.wln(
+                f'printf(__FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i} read invalid second opcode");')
+            s.wln("return 1;")
+            s.closing_curly()  # if (opcode2.is_none())
+            s.newline()
+
+            s.open_curly(
+                f"if (opcode2.opcode != ::wow_{library_type.lower()}_messages::{function_version}::{function_side.capitalize()}Opcode::Opcode::{opcode_id})")
+            s.wln(
+                f'printf(__FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i} read invalid second opcode");')
+            s.wln("return 1;")
+            s.closing_curly()  # if (opcode.opcode)
+            s.newline()
+
+            s.wln(
+                f"const std::vector<unsigned char> write_buffer2 = ::wow_{library_type.lower()}_messages::{function_version}::write_opcode(opcode2);")
+            s.newline()
+            s.wln(
+                f'world_test_compare_buffers(write_buffer.data(), write_buffer2.data(), write_buffer2.size(),  __FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i}", TEST_UTILS_SIDE_{function_side.upper()});')
         elif is_world(e.tags):
             s.wln(
                 f'world_test_compare_buffers(buffer.data(), write_buffer.data(), write_buffer.size(),  __FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i}", TEST_UTILS_SIDE_{function_side.upper()});')
@@ -135,7 +160,7 @@ def print_individual_test(s: Writer, e: model.Container, test_case: model.TestCa
         s.newline()
         s.closing_curly()  # if (result != 0)
 
-        if container_has_compressed_array(e):
+        if container_uses_compression(e):
             s.wln("/* TODO compressed array compare do what? */")
         else:
             s.wln(
@@ -198,7 +223,7 @@ def print_login_test_suffix(tests: Writer):
     tests.closing_curly()
 
 
-def print_world_tests(s: Writer, messages: typing.Iterator[model.Container], v: model.WorldVersion):
+def print_world_tests(s: Writer, messages: typing.List[model.Container], v: model.WorldVersion):
     module_name = world_version_to_module_name(v)
     pp = "pp" if is_cpp() else ""
     cpp = "_cpp" if is_cpp() else ""

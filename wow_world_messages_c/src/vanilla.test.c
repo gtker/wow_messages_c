@@ -3124,6 +3124,39 @@ int main(void) {
         }
     }while (0);
 
+    /* SMSG_COMPRESSED_UPDATE_OBJECT */
+    do {
+        unsigned char buffer[] = {0, 137, 246, 1, 60, 1, 0, 0, 120, 1, 99, 97, 96, 96, 96, 100, 58, 236, 17, 120, 64, 158, 53, 8, 200, 134, 3, 191, 51, 13, 14, 140, 64, 222, 195, 39, 172, 12, 140, 242, 206, 10, 140, 30, 129, 32, 185, 3, 242, 138, 64, 18, 194, 110, 176, 63, 206, 205, 192, 160, 1, 228, 131, 20, 242, 3, 113, 10, 16, 51, 29, 47, 217, 192, 132, 110, 218, 81, 225, 147, 246, 40, 166, 1, 213, 0, 213, 66, 76, 131, 176, 113, 153, 198, 222, 130, 97, 218, 231, 154, 9, 168, 110, 3, 170, 129, 155, 6, 97, 55, 216, 95, 199, 234, 182, 192, 45, 24, 166, 45, 157, 177, 21, 213, 109, 64, 53, 112, 211, 32, 108, 236, 110, 3, 0, 54, 76, 48, 33, };
+
+        WowWorldReader reader = wwm_create_reader(buffer, sizeof(buffer));
+
+        VanillaServerOpcodeContainer opcode;
+        WowWorldResult result = vanilla_server_opcode_read(&reader, &opcode);
+
+        if (result != WWM_RESULT_SUCCESS) {
+            printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_COMPRESSED_UPDATE_OBJECT 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
+            return 1;
+
+        }
+        if (opcode.opcode != SMSG_COMPRESSED_UPDATE_OBJECT) {
+            printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_COMPRESSED_UPDATE_OBJECT 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_COMPRESSED_UPDATE_OBJECT);
+            return 1;
+
+        }
+        /* C89 scope to allow variable declarations */ {
+            WowWorldWriter writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
+            result = vanilla_SMSG_COMPRESSED_UPDATE_OBJECT_write(&writer, &opcode.body.SMSG_COMPRESSED_UPDATE_OBJECT);
+
+            if (result != WWM_RESULT_SUCCESS) {
+                printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_COMPRESSED_UPDATE_OBJECT 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
+                return 1;
+
+            }
+            /* TODO compressed array compare do what? */
+        }
+        vanilla_server_opcode_free(&opcode);
+    }while (0);
+
     /* SMSG_ACCOUNT_DATA_TIMES */
     do {
         unsigned char buffer[] = {0, 130, 9, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, };
@@ -3670,6 +3703,71 @@ int main(void) {
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_BATTLEFIELD_STATUS 0");
         }
+    }while (0);
+
+    /* SMSG_COMPRESSED_MOVES */
+    do {
+        unsigned char buffer[] = {0, 50, 251, 2, 46, 0, 0, 0, 120, 1, 211, 189, 203, 192, 40, 145, 183, 154, 251, 216, 186, 88, 230, 195, 43, 212, 151, 59, 49, 32, 3, 70, 32, 167, 100, 57, 247, 177, 245, 239, 95, 29, 58, 121, 102, 137, 19, 0, 38, 30, 14, 73, };
+
+        WowWorldReader reader = wwm_create_reader(buffer, sizeof(buffer));
+
+        VanillaServerOpcodeContainer opcode;
+        WowWorldResult result = vanilla_server_opcode_read(&reader, &opcode);
+
+        if (result != WWM_RESULT_SUCCESS) {
+            printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_COMPRESSED_MOVES 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
+            return 1;
+
+        }
+        if (opcode.opcode != SMSG_COMPRESSED_MOVES) {
+            printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_COMPRESSED_MOVES 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_COMPRESSED_MOVES);
+            return 1;
+
+        }
+        /* C89 scope to allow variable declarations */ {
+            WowWorldWriter writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
+            result = vanilla_SMSG_COMPRESSED_MOVES_write(&writer, &opcode.body.SMSG_COMPRESSED_MOVES);
+
+            if (result != WWM_RESULT_SUCCESS) {
+                printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_COMPRESSED_MOVES 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
+                return 1;
+
+            }
+            /* TODO compressed array compare do what? */
+        }
+        vanilla_server_opcode_free(&opcode);
+    }while (0);
+
+    do {
+        unsigned char buffer[] = {0, 70, 251, 2, 59, 0, 0, 0, 120, 1, 179, 186, 203, 112, 59, 95, 198, 65, 220, 224, 99, 245, 27, 177, 35, 215, 23, 55, 31, 109, 80, 148, 113, 210, 87, 100, 0, 2, 70, 6, 134, 99, 28, 12, 12, 204, 64, 102, 235, 107, 177, 35, 92, 229, 205, 71, 21, 183, 203, 58, 49, 20, 0, 5, 12, 24, 24, 0, 88, 227, 17, 4, };
+
+        WowWorldReader reader = wwm_create_reader(buffer, sizeof(buffer));
+
+        VanillaServerOpcodeContainer opcode;
+        WowWorldResult result = vanilla_server_opcode_read(&reader, &opcode);
+
+        if (result != WWM_RESULT_SUCCESS) {
+            printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_COMPRESSED_MOVES 1 failed to read: '%s'\n", wwm_error_code_to_string(result));
+            return 1;
+
+        }
+        if (opcode.opcode != SMSG_COMPRESSED_MOVES) {
+            printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_COMPRESSED_MOVES 1 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_COMPRESSED_MOVES);
+            return 1;
+
+        }
+        /* C89 scope to allow variable declarations */ {
+            WowWorldWriter writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
+            result = vanilla_SMSG_COMPRESSED_MOVES_write(&writer, &opcode.body.SMSG_COMPRESSED_MOVES);
+
+            if (result != WWM_RESULT_SUCCESS) {
+                printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_COMPRESSED_MOVES 1 failed to write: '%s'\n", wwm_error_code_to_string(result));
+                return 1;
+
+            }
+            /* TODO compressed array compare do what? */
+        }
+        vanilla_server_opcode_free(&opcode);
     }while (0);
 
     /* SMSG_SPLINE_SET_RUN_SPEED */

@@ -197,6 +197,6 @@ void wwm_monster_move_spline_free(const MonsterMoveSpline* value);
 #define WWM_COMPRESS_EXTRA_LENGTH 11
 
 size_t wwm_compress_data(const unsigned char* src, size_t src_length, unsigned char* dst, size_t dst_length);
-bool wwm_decompress_data(const unsigned char* src, size_t src_length, unsigned char* dst, size_t dst_length);
+size_t wwm_decompress_data(const unsigned char* src, size_t src_length, unsigned char* dst, size_t dst_length);
 
 #endif

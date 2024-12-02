@@ -18,6 +18,12 @@ public:
         m_buf.push_back(static_cast<unsigned char>(value >> 8));
     }
 
+    void write_u16_be_at_first_index(const uint16_t value)
+    {
+        m_buf[1] = static_cast<uint8_t>(value);
+        m_buf[0] = static_cast<uint8_t>(value >> 8);
+    }
+
     void write_u16_be(const uint16_t value)
     {
         m_buf.push_back(static_cast<unsigned char>(value >> 8));

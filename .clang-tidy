@@ -1,6 +1,6 @@
 ---
-Checks: 'clang-diagnostic-*,clang-analyzer-*,performance-*,-clang-analyzer-optin.core.EnumCastOutOfRange'
-WarningsAsErrors: '*,-clang-analyzer-unix.Malloc'
+Checks: 'clang-diagnostic-*,clang-analyzer-*,performance-*,-clang-analyzer-optin.core.EnumCastOutOfRange,-clang-analyzer-unix.Malloc'
+WarningsAsErrors: '*'
 HeaderFilterRegex: ''
 CheckOptions:
   - key: llvm-else-after-return.WarnOnConditionVariables

@@ -26,6 +26,7 @@ def container_find_definition_by_name(e: model.Container, name: str) -> model.De
 def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, container_is_compressed: bool,
                              module_name: str, extra_indirection: str, container: model.Container):
     variable_name = f"object->{extra_indirection}{d.name}"
+    reader = "reader"
     if is_cpp():
         variable_name = f"obj.{extra_indirection}{d.name}"
 
@@ -35,6 +36,9 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
             if type(d.data_type) is not model.DataTypeArray:
                 s.w(f"{variable_name} = ")
 
+    if container_is_compressed:
+        reader = "byte_reader"
+
     util_namespace = f"::wow_world_messages::util::" if is_cpp() else ""
 
     match d.data_type:
@@ -42,7 +46,7 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
             size = integer_type_to_size(integer_type)
             short = integer_type_to_short(integer_type)
             if is_cpp():
-                s.wln_no_indent(f"reader.read_{short}();")
+                s.wln_no_indent(f"{reader}.read_{short}();")
             elif d.constant_value is not None or d.size_of_fields_before_size is not None:
                 s.wln(f"SKIP_FORWARD_BYTES({size});")
             else:
@@ -53,7 +57,7 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
         case model.DataTypeBool(integer_type=integer_type):
             size = integer_type_to_size(integer_type)
             if is_cpp():
-                s.wln_no_indent(f"reader.read_bool{size * 8}();")
+                s.wln_no_indent(f"{reader}.read_bool{size * 8}();")
             else:
                 s.wln(f"READ_BOOL{size * 8}({variable_name});")
 
@@ -65,7 +69,7 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
         ) | model.DataTypeEnum(integer_type=integer_type, type_name=type_name):
             short = integer_type_to_short(integer_type)
             if is_cpp():
-                s.wln_no_indent(f"static_cast<{type_name}>(reader.read_{short}());")
+                s.wln_no_indent(f"static_cast<{type_name}>({reader}.read_{short}());")
             else:
                 # enums can only be int in C, so we need to set upper bytes to 0
                 s.wln(f"{variable_name} = 0;")
@@ -77,7 +81,7 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
 
         case model.DataTypeString():
             if is_cpp():
-                s.wln_no_indent("reader.read_string();")
+                s.wln_no_indent(f"{reader}.read_string();")
             else:
                 s.wln(f"READ_STRING({variable_name});")
 
@@ -86,7 +90,7 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
                     f"_size += {variable_name}.size() + 1;" if is_cpp() else f"_size += STRING_SIZE({variable_name}) + 1;")
         case model.DataTypeCstring():
             if is_cpp():
-                s.wln_no_indent("reader.read_cstring();")
+                s.wln_no_indent(f"{reader}.read_cstring();")
             else:
                 s.wln(f"READ_CSTRING({variable_name});")
 
@@ -96,7 +100,7 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
 
         case model.DataTypeSizedCstring():
             if is_cpp():
-                s.wln_no_indent("reader.read_sized_cstring();")
+                s.wln_no_indent(f"{reader}.read_sized_cstring();")
             else:
                 s.wln(f"READ_SIZED_CSTRING({variable_name});")
 
@@ -107,7 +111,7 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
              | model.DataTypeDateTime() | model.DataTypeGold() | model.DataTypeSeconds() \
              | model.DataTypeMilliseconds() | model.DataTypeIPAddress():
             if is_cpp():
-                s.wln_no_indent("reader.read_u32();")
+                s.wln_no_indent(f"{reader}.read_u32();")
             else:
                 s.wln(f"READ_U32({variable_name});")
 
@@ -116,7 +120,7 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
 
         case model.DataTypeGUID():
             if is_cpp():
-                s.wln_no_indent("reader.read_u64();")
+                s.wln_no_indent(f"{reader}.read_u64();")
             else:
                 s.wln(f"READ_U64({variable_name});")
 
@@ -125,7 +129,7 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
 
         case model.DataTypeLevel():
             if is_cpp():
-                s.wln_no_indent("reader.read_u8();")
+                s.wln_no_indent(f"{reader}.read_u8();")
             else:
                 s.wln(f"READ_U8({variable_name});")
 
@@ -134,7 +138,7 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
 
         case model.DataTypeLevel16() | model.DataTypeSpell16():
             if is_cpp():
-                s.wln_no_indent("reader.read_u16();")
+                s.wln_no_indent(f"{reader}.read_u16();")
             else:
                 s.wln(f"READ_U16({variable_name});")
 
@@ -143,7 +147,7 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
 
         case model.DataTypePackedGUID():
             if is_cpp():
-                s.wln_no_indent(f"reader.read_packed_guid();")
+                s.wln_no_indent(f"{reader}.read_packed_guid();")
             else:
                 s.wln(f"READ_PACKED_GUID({variable_name});")
 
@@ -152,7 +156,7 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
 
         case model.DataTypeFloatingPoint() | model.DataTypePopulation():
             if is_cpp():
-                s.wln_no_indent("reader.read_float();")
+                s.wln_no_indent(f"{reader}.read_float();")
             else:
                 s.wln(f"READ_FLOAT({variable_name});")
 
@@ -162,11 +166,11 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
         case model.DataTypeStruct(struct_data=e):
             version = first_version_as_module(e.tags)
             if is_cpp():
-                s.wln_no_indent(f"::wow_{library_type(e.tags)}_messages::{version}::{e.name}_read(reader);")
+                s.wln_no_indent(f"::wow_{library_type(e.tags)}_messages::{version}::{e.name}_read({reader});")
             else:
                 wlm_prefix = "WWM" if is_world(e.tags) else "WLM"
 
-                s.wln(f"{wlm_prefix}_CHECK_RETURN_CODE({version}_{e.name}_read(reader, &{variable_name}));")
+                s.wln(f"{wlm_prefix}_CHECK_RETURN_CODE({version}_{e.name}_read({reader}, &{variable_name}));")
 
             if needs_size:
                 if e.sizes.constant_sized:
@@ -176,9 +180,9 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
 
         case model.DataTypeUpdateMask():
             if is_cpp():
-                s.wln_no_indent(f"{module_name}::update_mask_read(reader);")
+                s.wln_no_indent(f"{module_name}::update_mask_read({reader});")
             else:
-                s.wln(f"{module_name}_update_mask_read(reader, &{variable_name});")
+                s.wln(f"{module_name}_update_mask_read({reader}, &{variable_name});")
 
             if needs_size:
                 s.wln(f"_size += {d.name}.size();")
@@ -186,9 +190,9 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
         case model.DataTypeAuraMask():
             if is_cpp():
                 this_namespace = f"::wow_world_messages::{module_name}::"
-                s.wln_no_indent(f"{this_namespace}aura_mask_read(reader);")
+                s.wln_no_indent(f"{this_namespace}aura_mask_read({reader});")
             else:
-                s.wln(f"WWM_CHECK_RETURN_CODE({module_name}_aura_mask_read(reader, &{variable_name}));")
+                s.wln(f"WWM_CHECK_RETURN_CODE({module_name}_aura_mask_read({reader}, &{variable_name}));")
 
             if needs_size:
                 prefix = "" if is_cpp() else f"{module_name}_"
@@ -196,7 +200,7 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
 
         case model.DataTypeMonsterMoveSpline():
             if is_cpp():
-                s.wln_no_indent(f"{util_namespace}wwm_read_monster_move_spline(reader);")
+                s.wln_no_indent(f"{util_namespace}wwm_read_monster_move_spline({reader});")
             else:
                 s.wln(f"READ_MONSTER_MOVE_SPLINE({variable_name});")
 
@@ -251,23 +255,23 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
             if needs_size:
                 s.wln(f"_size += {d.name}.size();")
 
-        case model.DataTypeArray(compressed=compressed, size=size, inner_type=inner_type):
+        case model.DataTypeArray(compressed=compressed, size=array_size, inner_type=inner_type):
             if is_cpp():
-                reader = "reader"
                 if compressed:
-                    s.wln(f"/* {d.name}_decompressed_size: u32 */")
-                    s.wln(f"auto {d.name}_decompressed_size = reader.read_u32();")
-                    s.wln(f"(void){d.name}_decompressed_size;")
-                    s.wln("_size += 4;")
-                    s.newline()
                     s.open_curly("if((body_size - _size) == 0)")
                     s.wln("return obj;")
                     s.closing_curly()
                     s.newline()
 
+                    s.wln(f"/* {d.name}_decompressed_size: u32 */")
+                    s.wln(f"auto {d.name}_decompressed_size = reader.read_u32();")
+                    s.wln(f"(void){d.name}_decompressed_size;")
+                    s.wln("_size += 4;")
+                    s.newline()
+
                     s.wln(f"auto {d.name}_compressed_data = std::vector<unsigned char>(body_size - _size, 0);")
                     s.open_curly("for(size_t i = 0; i < body_size - _size; ++i)")
-                    s.wln(f"{d.name}_compressed_data.push_back(reader.read_u8());")
+                    s.wln(f"{d.name}_compressed_data[i] = reader.read_u8();")
                     s.closing_curly()
                     s.newline()
 
@@ -290,17 +294,20 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
 
                     s.newline()
 
-                match size:
+                match array_size:
                     case model.ArraySizeFixed(size=size_fixed_size):
                         s.open_curly(f"for (auto i = 0; i < {size_fixed_size}; ++i)")
                     case model.ArraySizeVariable(size=size_variable_size):
                         size_var = f"obj.{extra_indirection}{size_variable_size}"
                         definition: model.Definition = container_find_definition_by_name(container, size_variable_size)
-                        loop_type = integer_type_to_c_str(definition.data_type.integer_type)
+                        loop_type = integer_type_to_c_str(
+                            definition.data_type.integer_type)  # type: ignore[attr-defined]
                         s.open_curly(f"for ({loop_type} i = 0; i < {size_var}; ++i)")
                     case model.ArraySizeEndless():
                         if compressed:
                             s.open_curly(f"while (!{d.name}_new_reader.is_at_end())")
+                        elif container_is_compressed:
+                            s.open_curly(f"while (!byte_reader.is_at_end())")
                         else:
                             s.open_curly("while (_size < body_size)")
                     case _:
@@ -330,7 +337,7 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
                     case v2:
                         raise Exception(f"{v2}")
 
-                match size:
+                match array_size:
                     case model.ArraySizeFixed():
                         s.wln(f"{variable_name}[i] = {inner};")
                     case model.ArraySizeVariable() | model.ArraySizeEndless():
@@ -338,7 +345,7 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
                     case _:
                         raise Exception("unknown array size")
 
-                if needs_size or isinstance(size, model.ArraySizeEndless):
+                if needs_size or isinstance(array_size, model.ArraySizeEndless):
                     s.w("_size += ")
                     match inner_type:
                         case model.ArrayTypeInteger(integer_type=integer_type):
@@ -371,13 +378,14 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
 
             else:
                 if compressed:
-                    s.wln(f"/* {d.name}_decompressed_size: u32 */")
-                    s.wln(f"READ_U32({d.name}_decompressed_size);")
-                    s.wln("_size += 4;")
-                    s.newline()
                     s.open_curly("if((body_size - _size) > (reader->length - reader->index))")
                     s.wln("return WWM_RESULT_NOT_ENOUGH_BYTES;")
                     s.closing_curly()
+                    s.newline()
+
+                    s.wln(f"/* {d.name}_decompressed_size: u32 */")
+                    s.wln(f"READ_U32({d.name}_decompressed_size);")
+                    s.wln("_size += 4;")
                     s.newline()
 
                     s.wln(f"{variable_name} = NULL;")
@@ -400,8 +408,8 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
 
                     s.newline()
 
-                fixed_prefix = "(*" if type(size) is model.ArraySizeFixed else ""
-                fixed_suffix = ")" if type(size) is model.ArraySizeFixed else ""
+                fixed_prefix = "(*" if type(array_size) is model.ArraySizeFixed else ""
+                fixed_suffix = ")" if type(array_size) is model.ArraySizeFixed else ""
 
                 inner = ""
                 match inner_type:
@@ -432,7 +440,7 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
                     case v2:
                         raise Exception(f"{v2}")
 
-                match size:
+                match array_size:
                     case model.ArraySizeFixed(size=array_size):
                         extra = ""
                         if needs_size:
@@ -450,8 +458,6 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
                         s.wln(f"READ_ARRAY({variable_name}, object->{extra_indirection}{array_size}, {inner}{extra});")
 
                     case model.ArraySizeEndless():
-                        if container_is_compressed:
-                            s.open(f"while not reader.at_eof():")
                         s.wln(f"object->amount_of_{d.name} = 0;")
                         s.open_curly("/* C89 scope to allow variable declarations */")
                         s.wln("int i = 0;")
@@ -459,13 +465,14 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
                         s.newline()
                         s.wln(f"{variable_name} = malloc(_current_size);")
 
-                        if compressed:
+                        if compressed or container.tags.compressed:
                             s.open_curly("while ((reader->index + 1) < reader->length)")
                         else:
                             s.open_curly("while (_size < body_size)")
                         s.wln(f"{inner};")
 
-                        if (needs_size or isinstance(size, model.ArraySizeEndless)) and not compressed:
+                        if (needs_size or isinstance(array_size,
+                                                     model.ArraySizeEndless)) and not compressed and not container.tags.compressed:
                             s.wln(f"_size += {array_size_inner_action(inner_type, '', '', variable_name, 'i')};")
 
                         s.wln("++i;")
@@ -542,8 +549,26 @@ def print_read(s: Writer, container: Container, module_name: str):
         s.wln(f"{container.name} obj{{}};")
         if needs_size:
             s.wln("size_t _size = 0;")
-
         s.newline()
+
+        if container.tags.compressed:
+            s.write_block("""
+                const auto decompressed_size = reader.read_u32();
+
+                if (decompressed_size == 0) {
+                    return obj;
+                }
+
+                auto compressed_data = std::vector<unsigned char>{};
+
+                for (size_t i = 0; i < (body_size - 4); ++i)
+                {
+                   compressed_data.push_back(reader.read_u8());
+                }
+
+                auto decompressed_data = ::wow_world_messages::util::decompress_data(compressed_data);
+                auto byte_reader = ByteReader(decompressed_data);
+            """)
 
         for m in container.members:
             print_read_member(s, m, container, needs_size, module_name, "")
@@ -560,6 +585,8 @@ def print_read(s: Writer, container: Container, module_name: str):
 
             s.closing_curly()
 
+        if container.tags.compressed:
+            s.wln("(void)_size;")
         s.wln("return obj;")
 
         s.closing_curly()  # * *_read(Reader&)
@@ -591,15 +618,25 @@ def print_read(s: Writer, container: Container, module_name: str):
             s.newline()
 
         if container.tags.compressed:
-            s.write_block("""
-    decompressed_size = await read_int(reader, 4)
-    compressed_bytes = await reader.readexactly(body_size - 4)
-    decompressed_bytes = zlib.decompress(compressed_bytes, bufsize=decompressed_size)
-    reader = asyncio.StreamReader()
-    reader.feed_data(decompressed_bytes)
-    reader.feed_eof()
-            """)
-            s.newline()
+            if is_cpp():
+                pass
+            else:
+                s.write_block("""
+                    WowWorldReader stack_reader;
+                    unsigned char* _compressed_data = NULL;
+                    uint32_t _decompressed_size;
+                    READ_U32(_decompressed_size);
+                    _size += 4;
+                    
+                    _compressed_data = malloc(_decompressed_size);
+
+                    if (!wwm_decompress_data(&reader->source[reader->index], body_size - _size, _compressed_data, _decompressed_size)) {
+                        return WWM_RESULT_COMPRESSION_ERROR;
+                    }
+                    
+                    stack_reader = wwm_create_reader(_compressed_data, _decompressed_size);
+                    reader = &stack_reader;
+                """)
 
         for m in container.members:
             print_read_member(s, m, container, needs_size, module_name, "")

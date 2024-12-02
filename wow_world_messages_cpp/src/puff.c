@@ -372,7 +372,7 @@ local int construct(struct huffman *h, const short *length, int n)
      */
     for (symbol = 0; symbol < n; symbol++)
         if (length[symbol] != 0)
-            h->symbol[offs[length[symbol]]++] = symbol;
+            h->symbol[offs[length[symbol]]++] = (short)symbol;
 
     /* return zero for complete set, positive for incomplete set */
     return left;
@@ -465,7 +465,7 @@ local int codes(struct state *s,
             if (s->out != NIL) {
                 if (s->outcnt == s->outlen)
                     return 1;
-                s->out[s->outcnt] = symbol;
+                s->out[s->outcnt] = (unsigned char)symbol;
             }
             s->outcnt++;
         }
@@ -689,7 +689,7 @@ local int dynamic(struct state *s)
 
     /* read code length code lengths (really), missing lengths are zero */
     for (index = 0; index < ncode; index++)
-        lengths[order[index]] = bits(s, 3);
+        lengths[order[index]] = (short)bits(s, 3);
     for (; index < 19; index++)
         lengths[order[index]] = 0;
 
@@ -708,7 +708,7 @@ local int dynamic(struct state *s)
         if (symbol < 0)
             return symbol;          /* invalid symbol */
         if (symbol < 16)                /* length in 0..15 */
-            lengths[index++] = symbol;
+            lengths[index++] = (short)symbol;
         else {                          /* repeat instruction */
             len = 0;                    /* assume repeating zeros */
             if (symbol == 16) {         /* repeat last length 3..6 times */
@@ -724,7 +724,7 @@ local int dynamic(struct state *s)
             if (index + symbol > nlen + ndist)
                 return -6;              /* too many lengths! */
             while (symbol--)            /* repeat last or zero symbol times */
-                lengths[index++] = len;
+                lengths[index++] = (short)len;
         }
     }
 

@@ -73,91 +73,91 @@ struct UpdateMask {{
     h.newline()
 
     s.write_block(f"""
-{set_declaration} {{
-    uint32_t block = static_cast<uint32_t>(offset) / 32;
-    uint32_t bit = static_cast<uint32_t>(offset) % 32;
+        {set_declaration} {{
+            uint32_t block = static_cast<uint32_t>(offset) / 32;
+            uint32_t bit = static_cast<uint32_t>(offset) % 32;
 
-    mask.headers[block] |= 1 << bit;
-    mask.values[static_cast<uint32_t>(offset)] = value;
-}}
-
-{get_declaration} {{
-    uint32_t block = static_cast<uint32_t>(offset) / 32;
-    uint32_t bit = static_cast<uint32_t>(offset) % 32;
-    
-    if((mask.headers[block] & 1 << bit) != 0) {{
-        return mask.values[static_cast<uint32_t>(offset)];
-    }}
-
-    return 0;
-}}
-
-static void update_mask_write(Writer& writer, const UpdateMask& mask) {{
-    uint8_t amount_of_headers = 0;
-
-    for (uint8_t i = 0; i < UPDATE_MASK_HEADERS_LENGTH; ++i) {{
-        const uint32_t header = mask.headers[i];
-        if (header != 0) {{
-            amount_of_headers = i + 1;
+            mask.headers[block] |= 1 << bit;
+            mask.values[static_cast<uint32_t>(offset)] = value;
         }}
-    }}
 
-    writer.write_u8(amount_of_headers);
+        {get_declaration} {{
+            uint32_t block = static_cast<uint32_t>(offset) / 32;
+            uint32_t bit = static_cast<uint32_t>(offset) % 32;
+            
+            if((mask.headers[block] & 1 << bit) != 0) {{
+                return mask.values[static_cast<uint32_t>(offset)];
+            }}
 
-    for (int i = 0; i < amount_of_headers; ++i) {{
-        writer.write_u32(mask.headers[i]);
-    }}
-    
-    for (int i = 0; i < amount_of_headers; ++i) {{
-        const uint32_t header = mask.headers[i];
-        for (int j = 0; j < 32; ++j) {{
-            if ((header & (1 << j)) != 0) {{
-                writer.write_u32(mask.values[i * 32 + j]);
+            return 0;
+        }}
+
+        static void update_mask_write(Writer& writer, const UpdateMask& mask) {{
+            uint8_t amount_of_headers = 0;
+
+            for (uint8_t i = 0; i < UPDATE_MASK_HEADERS_LENGTH; ++i) {{
+                const uint32_t header = mask.headers[i];
+                if (header != 0) {{
+                    amount_of_headers = i + 1;
+                }}
+            }}
+
+            writer.write_u8(amount_of_headers);
+
+            for (int i = 0; i < amount_of_headers; ++i) {{
+                writer.write_u32(mask.headers[i]);
+            }}
+            
+            for (int i = 0; i < amount_of_headers; ++i) {{
+                const uint32_t header = mask.headers[i];
+                for (int j = 0; j < 32; ++j) {{
+                    if ((header & (1 << j)) != 0) {{
+                        writer.write_u32(mask.values[i * 32 + j]);
+                    }}
+                }}
             }}
         }}
-    }}
-}}
 
-static UpdateMask update_mask_read(Reader& reader) {{
-    UpdateMask mask{{}};
+        static UpdateMask update_mask_read(Reader& reader) {{
+            UpdateMask mask{{}};
 
-    uint8_t amount_of_headers = reader.read_u8();
+            uint8_t amount_of_headers = reader.read_u8();
 
-    for (int i = 0; i < amount_of_headers; ++i) {{
-        mask.headers[i] = reader.read_u32();
-    }}
-
-    for (int i = 0; i < amount_of_headers; ++i) {{
-        uint32_t header = mask.headers[i];
-        for (int j = 0; j < 32; ++j) {{
-            if ((header & (1 << j)) != 0) {{
-                mask.values[i * 32 + j] = reader.read_u32();
+            for (int i = 0; i < amount_of_headers; ++i) {{
+                mask.headers[i] = reader.read_u32();
             }}
-        }}
-    }}
-    
-    return mask;
-}}
 
-static size_t update_mask_size(const UpdateMask& mask) {{
-    size_t max_header = 0;
-    size_t amount_of_values = 0;
-    
-    size_t size = 1; /* initial u8 */
-    
-    for(int i = 0; i < UPDATE_MASK_HEADERS_LENGTH; ++i) {{
-        uint32_t header = mask.headers[i];
-        for(int j = 0; j < 32; ++j) {{
-            if((header & (1 << j)) != 0) {{
-                max_header = i + 1;
-                amount_of_values += 4;
+            for (int i = 0; i < amount_of_headers; ++i) {{
+                uint32_t header = mask.headers[i];
+                for (int j = 0; j < 32; ++j) {{
+                    if ((header & (1 << j)) != 0) {{
+                        mask.values[i * 32 + j] = reader.read_u32();
+                    }}
+                }}
             }}
+            
+            return mask;
         }}
-    }}
-    
-    return size + amount_of_values + (max_header * 4);
-}}
-""")
+
+        static size_t update_mask_size(const UpdateMask& mask) {{
+            size_t max_header = 0;
+            size_t amount_of_values = 0;
+            
+            size_t size = 1; /* initial u8 */
+            
+            for(int i = 0; i < UPDATE_MASK_HEADERS_LENGTH; ++i) {{
+                uint32_t header = mask.headers[i];
+                for(int j = 0; j < 32; ++j) {{
+                    if((header & (1 << j)) != 0) {{
+                        max_header = i + 1;
+                        amount_of_values += 4;
+                    }}
+                }}
+            }}
+            
+            return size + amount_of_values + (max_header * 4);
+        }}
+        """)
 
 
 def print_update_mask_c(s: Writer, h: Writer, update_mask: list[model.UpdateMask], module_name: str):

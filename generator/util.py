@@ -128,8 +128,10 @@ def container_is_unencrypted(name: str) -> bool:
 def version_to_module_name(v: typing.Union[int | model.WorldVersion]) -> str:
     if type(v) is int:
         return login_version_to_module_name(v)
-    else:
+    elif type(v) is model.WorldVersion:
         return world_version_to_module_name(v)
+    else:
+        raise Exception("invalid version type")
 
 
 def world_version_to_module_name(v: model.WorldVersion) -> str:
@@ -231,12 +233,14 @@ def first_version_as_module(tags: model.ObjectTags) -> str:
             match w:
                 case model.WorldVersionsAll():
                     return "all"
-                case model.WorldVersionsSpecific(versions=versions):
-                    for v in versions:
+                case model.WorldVersionsSpecific(versions=world_versions):
+                    for v in world_versions:
                         return world_version_to_module_name(v)
 
                 case _:
                     raise Exception("invalid world versions type")
+
+    raise Exception("invalid version type")
 
 
 def get_export_define(tags: model.ObjectTags) -> str:
@@ -261,13 +265,12 @@ def is_world(tags: model.ObjectTags) -> bool:
 
 
 def version_matches(tags: model.ObjectTags, value: typing.Union[int | model.WorldVersion]) -> bool:
-    match tags.version:
-        case model.ObjectVersionsLogin():
-            return login_version_matches(tags, value)
-        case model.ObjectVersionsWorld():
-            return world_version_matches(tags, value)
-        case v:
-            raise Exception(f"unknown tag {v}")
+    if type(value) is int:
+        return login_version_matches(tags, value)
+    elif type(value) is model.WorldVersion:
+        return world_version_matches(tags, value)
+    else:
+        raise Exception(f"unknown tag {value}")
 
 
 def login_version_matches(tags: model.ObjectTags, value: int) -> bool:
@@ -313,6 +316,9 @@ def container_needs_size_in_read(container: model.Container) -> bool:
                     return True
 
         return False
+
+    if container.tags.compressed:
+        return True
 
     if container.optional is not None:
         return True

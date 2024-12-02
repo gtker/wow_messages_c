@@ -125,54 +125,56 @@ std::vector<unsigned char> compress_data(const std::vector<unsigned char>& buffe
         return {};
     }
 
-    auto dst = std::vector<unsigned char>(buffer.size() + WWM_COMPRESS_EXTRA_LENGTH, 0);
+    auto dst = std::vector<unsigned char>();
+    dst.reserve(buffer.size() + WWM_COMPRESS_EXTRA_LENGTH);
 
-    size_t index = 0;
+    dst.push_back(0x78);
+    dst.push_back(0x01);
 
-    dst[index] = 0x78;
-    index += 1;
-    dst[index] = 0x01;
-    index += 1;
-
-    dst[index] = 0x01; /* BFINAL and no compression */
-    index += 1;
+    dst.push_back(0x01); /* BFINAL and no compression */
 
     auto src_length = static_cast<uint16_t>(buffer.size());
-    dst[index] = (unsigned char)src_length; /* LEN */
-    index += 1;
-    dst[index] = (unsigned char)(src_length >> 8); /* LEN */
-    index += 1;
+    dst.push_back((unsigned char)src_length); /* LEN */
+    dst.push_back((unsigned char)(src_length >> 8)); /* LEN */
 
-    dst[index] = ((unsigned char)src_length) ^ 0xff; /* NLEN */
-    index += 1;
-    dst[index] = ((unsigned char)(src_length >> 8)) ^ 0xff; /* NLEN */
-    index += 1;
+    dst.push_back(((unsigned char)src_length) ^ 0xff); /* NLEN */
+    dst.push_back(((unsigned char)(src_length >> 8)) ^ 0xff); /* NLEN */
 
     dst.insert(dst.end(), buffer.begin(), buffer.end());
-    index += buffer.size();
 
     auto adler32 = wwm_adler32(buffer.data(), buffer.size());
 
-    dst[index] = (unsigned char)adler32;
-    index += 1;
-    dst[index] = (unsigned char)(adler32 >> 8);
-    index += 1;
-    dst[index] = (unsigned char)(adler32 >> 16);
-    index += 1;
-    dst[index] = (unsigned char)(adler32 >> 24);
+    dst.push_back((unsigned char)adler32);
+    dst.push_back((unsigned char)(adler32 >> 8));
+    dst.push_back((unsigned char)(adler32 >> 16));
+    dst.push_back((unsigned char)(adler32 >> 24));
 
     return dst;
 }
 
 std::vector<unsigned char> decompress_data(const std::vector<unsigned char>& buffer)
 {
-    auto source_length = static_cast<unsigned long>(buffer.size());
+    auto source_length = static_cast<unsigned long>((buffer.size() - 2));
     unsigned long destination_length = 0;
-    puff(NULL, &destination_length, buffer.data(), &source_length);
+    auto result = puff(NULL, &destination_length, buffer.data() + 2, &source_length);
+    if (result != 0)
+    {
+#ifndef NDEBUG
+        printf("Result1 %d\n", result);
+#endif
+        return {};
+    }
 
 
     auto compressed = std::vector<unsigned char>(destination_length, 0);
-    puff(compressed.data(), &destination_length, buffer.data(), &source_length);
+    result = puff(compressed.data(), &destination_length, buffer.data() + 2, &source_length);
+    if (result != 0)
+    {
+#ifndef NDEBUG
+        printf("Result2 %d\n", result);
+#endif
+        return {};
+    }
 
     return compressed;
 }

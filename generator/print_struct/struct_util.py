@@ -5,7 +5,7 @@ from util import pascal_case_to_snake_case, first_version_as_module, world_versi
     version_to_module_name, is_cpp
 from writer import Writer
 
-SKIPS = {}
+SKIPS: typing.Dict[str, int] = {}
 
 
 def print_skip(container: model.Container, reason: str):
@@ -13,8 +13,17 @@ def print_skip(container: model.Container, reason: str):
         SKIPS[reason] += 1
     else:
         SKIPS[reason] = 1
-    print(f"Skipping {container.name} because it {reason}")
+    print(f"Skipping {'cpp' if is_cpp() else 'c'} {container.name} because it {reason}")
 
+
+def container_uses_compression(container: model.Container) -> bool:
+    if container.tags.compressed:
+        return True
+
+    if container_has_compressed_array(container):
+        return True
+
+    return False
 
 def container_has_compressed_array(container: model.Container) -> bool:
     for d in all_members_from_container(container):
@@ -27,10 +36,6 @@ def container_has_compressed_array(container: model.Container) -> bool:
 
 
 def container_should_print(container: model.Container) -> bool:
-    if container.tags.compressed is not None:
-        print_skip(container, "is compressed")
-        return False
-
     for member in all_members_from_container(container):
         match member.data_type:
             case model.DataTypeStruct(struct_data=e):
@@ -305,7 +310,7 @@ def print_if_statement_header(
     original_type_pascal = pascal_case_to_snake_case(original_type).upper()
     variable_name = f"obj.{extra_indirection}{statement.variable_name}" if is_cpp() else f"object->{extra_indirection}{statement.variable_name}"
 
-    first_version = first_version_as_module(statement.original_type.tags).upper()
+    first_version = first_version_as_module(statement.original_type.tags).upper() # type: ignore[attr-defined]
 
     match statement.definer_type:
         case model.DefinerType.ENUM:

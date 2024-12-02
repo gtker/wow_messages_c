@@ -10170,6 +10170,14 @@ struct SMSG_PARTYKILLLOG {
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
+struct SMSG_COMPRESSED_UPDATE_OBJECT {
+    uint32_t amount_of_objects;
+    uint8_t has_transport;
+    std::vector<vanilla::Object> objects;
+
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
+};
+
 struct SMSG_PLAY_SPELL_IMPACT {
     uint64_t guid;
     uint32_t spell_visual_kit;
@@ -11715,6 +11723,13 @@ struct SMSG_RAID_INSTANCE_MESSAGE {
     RaidInstanceMessage message_type;
     Map map;
     uint32_t time_left;
+
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
+};
+
+struct SMSG_COMPRESSED_MOVES {
+    uint32_t amount_of_moves;
+    std::vector<vanilla::CompressedMove> moves;
 
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
@@ -17144,6 +17159,7 @@ struct ServerOpcode {
         MSG_TABARDVENDOR_ACTIVATE = 498,
         SMSG_PLAY_SPELL_VISUAL = 499,
         SMSG_PARTYKILLLOG = 501,
+        SMSG_COMPRESSED_UPDATE_OBJECT = 502,
         SMSG_PLAY_SPELL_IMPACT = 503,
         SMSG_EXPLORATION_EXPERIENCE = 504,
         MSG_RANDOM_ROLL = 507,
@@ -17253,6 +17269,7 @@ struct ServerOpcode {
         SMSG_PARTY_MEMBER_STATS_FULL = 754,
         SMSG_WEATHER = 756,
         SMSG_RAID_INSTANCE_MESSAGE = 762,
+        SMSG_COMPRESSED_MOVES = 763,
         SMSG_CHAT_RESTRICTED = 765,
         SMSG_SPLINE_SET_RUN_SPEED = 766,
         SMSG_SPLINE_SET_RUN_BACK_SPEED = 767,
@@ -17495,6 +17512,7 @@ struct ServerOpcode {
         vanilla::MSG_TABARDVENDOR_ACTIVATE MSG_TABARDVENDOR_ACTIVATE;
         vanilla::SMSG_PLAY_SPELL_VISUAL SMSG_PLAY_SPELL_VISUAL;
         vanilla::SMSG_PARTYKILLLOG SMSG_PARTYKILLLOG;
+        vanilla::SMSG_COMPRESSED_UPDATE_OBJECT SMSG_COMPRESSED_UPDATE_OBJECT;
         vanilla::SMSG_PLAY_SPELL_IMPACT SMSG_PLAY_SPELL_IMPACT;
         vanilla::SMSG_EXPLORATION_EXPERIENCE SMSG_EXPLORATION_EXPERIENCE;
         vanilla::MSG_RANDOM_ROLL_Server MSG_RANDOM_ROLL;
@@ -17604,6 +17622,7 @@ struct ServerOpcode {
         vanilla::SMSG_PARTY_MEMBER_STATS_FULL SMSG_PARTY_MEMBER_STATS_FULL;
         vanilla::SMSG_WEATHER SMSG_WEATHER;
         vanilla::SMSG_RAID_INSTANCE_MESSAGE SMSG_RAID_INSTANCE_MESSAGE;
+        vanilla::SMSG_COMPRESSED_MOVES SMSG_COMPRESSED_MOVES;
         vanilla::SMSG_CHAT_RESTRICTED SMSG_CHAT_RESTRICTED;
         vanilla::SMSG_SPLINE_SET_RUN_SPEED SMSG_SPLINE_SET_RUN_SPEED;
         vanilla::SMSG_SPLINE_SET_RUN_BACK_SPEED SMSG_SPLINE_SET_RUN_BACK_SPEED;
@@ -18264,6 +18283,9 @@ struct ServerOpcode {
         if (opcode == Opcode::SMSG_PARTYKILLLOG) {
             this->SMSG_PARTYKILLLOG = std::move(other.SMSG_PARTYKILLLOG);
         }
+        if (opcode == Opcode::SMSG_COMPRESSED_UPDATE_OBJECT) {
+            this->SMSG_COMPRESSED_UPDATE_OBJECT = std::move(other.SMSG_COMPRESSED_UPDATE_OBJECT);
+        }
         if (opcode == Opcode::SMSG_PLAY_SPELL_IMPACT) {
             this->SMSG_PLAY_SPELL_IMPACT = std::move(other.SMSG_PLAY_SPELL_IMPACT);
         }
@@ -18590,6 +18612,9 @@ struct ServerOpcode {
         }
         if (opcode == Opcode::SMSG_RAID_INSTANCE_MESSAGE) {
             this->SMSG_RAID_INSTANCE_MESSAGE = std::move(other.SMSG_RAID_INSTANCE_MESSAGE);
+        }
+        if (opcode == Opcode::SMSG_COMPRESSED_MOVES) {
+            this->SMSG_COMPRESSED_MOVES = std::move(other.SMSG_COMPRESSED_MOVES);
         }
         if (opcode == Opcode::SMSG_CHAT_RESTRICTED) {
             this->SMSG_CHAT_RESTRICTED = std::move(other.SMSG_CHAT_RESTRICTED);
@@ -19311,6 +19336,9 @@ struct ServerOpcode {
         if (opcode == Opcode::SMSG_PARTYKILLLOG) {
             this->SMSG_PARTYKILLLOG.~SMSG_PARTYKILLLOG();
         }
+        if (opcode == Opcode::SMSG_COMPRESSED_UPDATE_OBJECT) {
+            this->SMSG_COMPRESSED_UPDATE_OBJECT.~SMSG_COMPRESSED_UPDATE_OBJECT();
+        }
         if (opcode == Opcode::SMSG_PLAY_SPELL_IMPACT) {
             this->SMSG_PLAY_SPELL_IMPACT.~SMSG_PLAY_SPELL_IMPACT();
         }
@@ -19637,6 +19665,9 @@ struct ServerOpcode {
         }
         if (opcode == Opcode::SMSG_RAID_INSTANCE_MESSAGE) {
             this->SMSG_RAID_INSTANCE_MESSAGE.~SMSG_RAID_INSTANCE_MESSAGE();
+        }
+        if (opcode == Opcode::SMSG_COMPRESSED_MOVES) {
+            this->SMSG_COMPRESSED_MOVES.~SMSG_COMPRESSED_MOVES();
         }
         if (opcode == Opcode::SMSG_CHAT_RESTRICTED) {
             this->SMSG_CHAT_RESTRICTED.~SMSG_CHAT_RESTRICTED();
@@ -20562,6 +20593,10 @@ struct ServerOpcode {
         opcode = Opcode::SMSG_PARTYKILLLOG;
         new (&this->SMSG_PARTYKILLLOG) vanilla::SMSG_PARTYKILLLOG (std::move(obj));
     }
+    explicit ServerOpcode(vanilla::SMSG_COMPRESSED_UPDATE_OBJECT&& obj) {
+        opcode = Opcode::SMSG_COMPRESSED_UPDATE_OBJECT;
+        new (&this->SMSG_COMPRESSED_UPDATE_OBJECT) vanilla::SMSG_COMPRESSED_UPDATE_OBJECT (std::move(obj));
+    }
     explicit ServerOpcode(vanilla::SMSG_PLAY_SPELL_IMPACT&& obj) {
         opcode = Opcode::SMSG_PLAY_SPELL_IMPACT;
         new (&this->SMSG_PLAY_SPELL_IMPACT) vanilla::SMSG_PLAY_SPELL_IMPACT (std::move(obj));
@@ -20997,6 +21032,10 @@ struct ServerOpcode {
     explicit ServerOpcode(vanilla::SMSG_RAID_INSTANCE_MESSAGE&& obj) {
         opcode = Opcode::SMSG_RAID_INSTANCE_MESSAGE;
         new (&this->SMSG_RAID_INSTANCE_MESSAGE) vanilla::SMSG_RAID_INSTANCE_MESSAGE (std::move(obj));
+    }
+    explicit ServerOpcode(vanilla::SMSG_COMPRESSED_MOVES&& obj) {
+        opcode = Opcode::SMSG_COMPRESSED_MOVES;
+        new (&this->SMSG_COMPRESSED_MOVES) vanilla::SMSG_COMPRESSED_MOVES (std::move(obj));
     }
     explicit ServerOpcode(vanilla::SMSG_CHAT_RESTRICTED&& obj) {
         opcode = Opcode::SMSG_CHAT_RESTRICTED;
@@ -21965,6 +22004,10 @@ vanilla::SMSG_PARTYKILLLOG* ServerOpcode::get_if();
 template<>
 vanilla::SMSG_PARTYKILLLOG& ServerOpcode::get();
 template<>
+vanilla::SMSG_COMPRESSED_UPDATE_OBJECT* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_COMPRESSED_UPDATE_OBJECT& ServerOpcode::get();
+template<>
 vanilla::SMSG_PLAY_SPELL_IMPACT* ServerOpcode::get_if();
 template<>
 vanilla::SMSG_PLAY_SPELL_IMPACT& ServerOpcode::get();
@@ -22400,6 +22443,10 @@ template<>
 vanilla::SMSG_RAID_INSTANCE_MESSAGE* ServerOpcode::get_if();
 template<>
 vanilla::SMSG_RAID_INSTANCE_MESSAGE& ServerOpcode::get();
+template<>
+vanilla::SMSG_COMPRESSED_MOVES* ServerOpcode::get_if();
+template<>
+vanilla::SMSG_COMPRESSED_MOVES& ServerOpcode::get();
 template<>
 vanilla::SMSG_CHAT_RESTRICTED* ServerOpcode::get_if();
 template<>

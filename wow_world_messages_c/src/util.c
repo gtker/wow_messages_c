@@ -458,6 +458,8 @@ WOW_WORLD_MESSAGES_C_EXPORT const char* wwm_error_code_to_string(const WowWorldR
             return "Success";
         case WWM_RESULT_NOT_ENOUGH_BYTES:
             return "Not enough bytes";
+        case WWM_RESULT_COMPRESSION_ERROR:
+            return "Compression error";
     }
 
     return "";
@@ -524,7 +526,7 @@ size_t wwm_compress_data(const unsigned char* src, const size_t src_length, unsi
     return index;
 }
 
-bool wwm_decompress_data(const unsigned char* src, const size_t src_length, unsigned char* dst, const size_t dst_length)
+size_t wwm_decompress_data(const unsigned char* src, const size_t src_length, unsigned char* dst, const size_t dst_length)
 {
     unsigned long source_length = (unsigned long)(src_length - 2);
     unsigned long destination_length = (unsigned long)dst_length;
@@ -533,8 +535,8 @@ bool wwm_decompress_data(const unsigned char* src, const size_t src_length, unsi
     const int ret = puff(dst, &destination_length, src + 2, &source_length);
     if (ret != 0)
     {
-        return false;
+        return 0;
     }
 
-    return true;
+    return destination_length;
 }

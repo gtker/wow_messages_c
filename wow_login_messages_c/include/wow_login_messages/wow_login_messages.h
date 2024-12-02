@@ -29,7 +29,7 @@ typedef struct
 typedef enum
 {
     WLM_RESULT_SUCCESS = 0,
-    WLM_RESULT_NOT_ENOUGH_BYTES
+    WLM_RESULT_NOT_ENOUGH_BYTES = -1
 } WowLoginResult;
 
 typedef struct

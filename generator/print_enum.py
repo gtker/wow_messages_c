@@ -10,18 +10,14 @@ from writer import Writer
 
 
 def value_to_integer(val: str, integer_type: model.IntegerType) -> str:
-    value = int(val)
-    if integer_type_to_size(integer_type) <= 4 and value > 2147483647:
-        value = value.to_bytes(integer_type_to_size(integer_type), byteorder=sys.byteorder, signed=False)
-        value = str(int.from_bytes(value, byteorder=sys.byteorder, signed=True))
-        if value == "-2147483648":
+    value: int = int(val)
+    if integer_type_to_size(integer_type) <= 4 and int(val) > 2147483647:
+        value_bytes: bytes = value.to_bytes(integer_type_to_size(integer_type), byteorder=sys.byteorder, signed=False)
+        val = str(int.from_bytes(value_bytes, byteorder=sys.byteorder, signed=True))
+        if val == "-2147483648":
             return "-2147483647 - 1"  # Work around MSVC parsing it as unary negate operator, then as unsigned integer
-        else:
-            return value
 
-    else:
-        return val
-
+    return val
 
 def print_enum(h: Writer, enum: Definer):
     first_version = first_version_as_module(enum.tags).upper()

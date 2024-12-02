@@ -21,21 +21,18 @@ def print_size(s: Writer, container: model.Container, module_name: str):
         s.open_curly(
             f"static size_t {module_name}_{container.name}_size(const {first_version_as_module(container.tags)}_{container.name}* object)")
 
-    if container.tags.compressed:
-        print_size_for_compressed_container(s, container)
-    else:
-        print_size_until_inner_members(s, container.members, container.manual_size_subtraction,
-                                       True, container.optional is not None, module_name, "")
-        if container.optional is not None:
-            deref = "obj." if is_cpp() else "object->"
-            s.open_curly(
-                f"if({deref}{container.optional.name})" if is_cpp() else f"if({deref}{container.optional.name})")
-            print_size_until_inner_members(s, container.optional.members, container.manual_size_subtraction, False,
-                                           False, module_name, f"{container.optional.name}->")
-            s.closing_curly()  # optional_statement_header
-            s.newline()
+    print_size_until_inner_members(s, container.members, container.manual_size_subtraction,
+                                   True, container.optional is not None, module_name, "")
+    if container.optional is not None:
+        deref = "obj." if is_cpp() else "object->"
+        s.open_curly(
+            f"if({deref}{container.optional.name})" if is_cpp() else f"if({deref}{container.optional.name})")
+        print_size_until_inner_members(s, container.optional.members, container.manual_size_subtraction, False,
+                                       False, module_name, f"{container.optional.name}->")
+        s.closing_curly()  # optional_statement_header
+        s.newline()
 
-            s.wln("return _size;")
+        s.wln("return _size;")
 
     s.closing_curly()
     s.newline()
@@ -69,18 +66,6 @@ def print_size_until_inner_members(s: Writer, members: list[model.StructMember],
 
         if return_early and not has_optional:
             s.wln(f"return _size;")
-
-
-def print_size_for_compressed_container(s, container):
-    s.wln("_fmt = ''")
-    s.wln("_data = []")
-    s.newline()
-    for m in container.members:
-        print_write_member(s, m, "_")
-    s.wln("_uncompressed_data = struct.pack(_fmt, *_data)")
-    s.wln("_compressed_data = zlib.compress(_uncompressed_data)")
-    s.wln("return len(_compressed_data) + 4")
-
 
 def array_size_inner_values(
         array: model.DataTypeArray, name: str, extra_indirection: str,
@@ -296,10 +281,10 @@ def print_size_for_array(s: Writer, d: model.Definition, extra_indirection: str,
     fixed_prefix = "(*" if type(size) is model.ArraySizeFixed else ""
     fixed_suffix = ")" if type(size) is model.ArraySizeFixed else ""
     match size:
-        case model.ArraySizeFixed(size=size):
-            loop_max = size
-        case model.ArraySizeVariable(size=size):
-            loop_max = f"(int)object->{extra_indirection}{size}"
+        case model.ArraySizeFixed(size=ssize):
+            loop_max = ssize
+        case model.ArraySizeVariable(size=ssize):
+            loop_max = f"(int)object->{extra_indirection}{ssize}"
         case model.ArraySizeEndless():
             loop_max = f"(int)object->amount_of_{d.name}"
     if is_cpp():

@@ -14434,13 +14434,13 @@ static WowWorldResult vanilla_CMSG_AUTH_SESSION_read(WowWorldReader* reader, van
     READ_ARRAY_ALLOCATE(object->client_proof, 20, sizeof(uint8_t));
     READ_ARRAY(object->client_proof, 20, READ_U8((*object->client_proof)[i]);_size += 1;);
 
-    /* addon_info_decompressed_size: u32 */
-    READ_U32(addon_info_decompressed_size);
-    _size += 4;
-
     if((body_size - _size) > (reader->length - reader->index)) {
         return WWM_RESULT_NOT_ENOUGH_BYTES;
     }
+
+    /* addon_info_decompressed_size: u32 */
+    READ_U32(addon_info_decompressed_size);
+    _size += 4;
 
     object->addon_info = NULL;
     if(addon_info_decompressed_size) {
@@ -14507,7 +14507,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUTH_SESSION_write(WowWo
             _size += vanilla_AddonInfo_size(&object->addon_info[compressed_i]);
         }
         if (_size) {
-            WRITE_U32(_size);
+            WRITE_U32((uint32_t)_size);
 
             addon_info_uncompressed_data = malloc(_size);
             new_writer = wwm_create_writer(addon_info_uncompressed_data, _size);
@@ -14775,6 +14775,102 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PARTYKILLLOG_write(WowWo
     return WWM_RESULT_SUCCESS;
 }
 
+static size_t vanilla_SMSG_COMPRESSED_UPDATE_OBJECT_size(const vanilla_SMSG_COMPRESSED_UPDATE_OBJECT* object) {
+    size_t _size = 5;
+
+    /* C89 scope to allow variable declarations */ {
+        int i;
+        for(i = 0; i < (int)object->amount_of_objects; ++i) {
+            _size += vanilla_Object_size(&object->objects[i]);
+        }
+    }
+
+    return _size;
+}
+
+static WowWorldResult vanilla_SMSG_COMPRESSED_UPDATE_OBJECT_read(WowWorldReader* reader, vanilla_SMSG_COMPRESSED_UPDATE_OBJECT* object, size_t body_size) {
+    size_t _size = 0;
+
+    WowWorldReader stack_reader;
+    unsigned char* _compressed_data = NULL;
+    uint32_t _decompressed_size;
+    READ_U32(_decompressed_size);
+    _size += 4;
+
+    _compressed_data = malloc(_decompressed_size);
+
+    if (!wwm_decompress_data(&reader->source[reader->index], body_size - _size, _compressed_data, _decompressed_size)) {
+        return WWM_RESULT_COMPRESSION_ERROR;
+    }
+
+    stack_reader = wwm_create_reader(_compressed_data, _decompressed_size);
+    reader = &stack_reader;
+
+    READ_U32(object->amount_of_objects);
+    _size += 4;
+
+    READ_U8(object->has_transport);
+    _size += 1;
+
+    READ_ARRAY_ALLOCATE(object->objects, object->amount_of_objects, sizeof(vanilla_Object));
+    READ_ARRAY(object->objects, object->amount_of_objects, WWM_CHECK_RETURN_CODE(vanilla_Object_read(reader, &object->objects[i]));_size += vanilla_Object_size(&object->objects[i]););
+
+    return WWM_RESULT_SUCCESS;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_COMPRESSED_UPDATE_OBJECT_write(WowWorldWriter* writer, const vanilla_SMSG_COMPRESSED_UPDATE_OBJECT* object) {
+    WowWorldWriter* old_writer = writer;
+    unsigned char* _decompressed_data;
+    WowWorldWriter stack_writer;
+    size_t _compressed_data_length;
+    size_t saved_writer_index;
+    const size_t _decompressed_data_length = vanilla_SMSG_COMPRESSED_UPDATE_OBJECT_size(object);
+
+
+    WRITE_U16_BE(0 /* place holder */ + 2); /* size */
+
+    WRITE_U16(0x000001f6); /* opcode */
+
+    WRITE_U32(_decompressed_data_length);
+    writer = &stack_writer;
+
+    if (_decompressed_data_length == 0) {
+        return WWM_RESULT_SUCCESS;
+    }
+
+    _decompressed_data = malloc(_decompressed_data_length);
+    stack_writer = wwm_create_writer(_decompressed_data, _decompressed_data_length);
+
+    WRITE_U32(object->amount_of_objects);
+
+    WRITE_U8(object->has_transport);
+
+    WRITE_ARRAY(object->objects, object->amount_of_objects, WWM_CHECK_RETURN_CODE(vanilla_Object_write(writer, &object->objects[i])));
+
+    writer = old_writer;
+    _compressed_data_length = wwm_compress_data(stack_writer.destination, stack_writer.length, &writer->destination[writer->index], writer->length - writer->index);
+    writer->index += _compressed_data_length;
+    saved_writer_index = writer->index;
+    writer->index = 0;
+
+    WRITE_U16_BE(_compressed_data_length + 4 + 4); /* size */
+
+    writer->index = saved_writer_index;
+
+
+    return WWM_RESULT_SUCCESS;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_COMPRESSED_UPDATE_OBJECT_free(vanilla_SMSG_COMPRESSED_UPDATE_OBJECT* object) {
+    size_t i;
+
+    for (i = 0; i < object->amount_of_objects; ++i) {
+        vanilla_Object_free(&((object->objects)[i]));
+    }
+    free(object->objects);
+    object->objects = NULL;
+}
+
 static WowWorldResult vanilla_SMSG_PLAY_SPELL_IMPACT_read(WowWorldReader* reader, vanilla_SMSG_PLAY_SPELL_IMPACT* object) {
     READ_U64(object->guid);
 
@@ -15031,13 +15127,13 @@ static WowWorldResult vanilla_CMSG_GMTICKET_CREATE_read(WowWorldReader* reader, 
         READ_U32(object->chat_data_line_count);
         _size += 4;
 
-        /* compressed_chat_data_decompressed_size: u32 */
-        READ_U32(compressed_chat_data_decompressed_size);
-        _size += 4;
-
         if((body_size - _size) > (reader->length - reader->index)) {
             return WWM_RESULT_NOT_ENOUGH_BYTES;
         }
+
+        /* compressed_chat_data_decompressed_size: u32 */
+        READ_U32(compressed_chat_data_decompressed_size);
+        _size += 4;
 
         object->compressed_chat_data = NULL;
         if(compressed_chat_data_decompressed_size) {
@@ -15108,7 +15204,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GMTICKET_CREATE_write(Wo
                 _size += 1;
             }
             if (_size) {
-                WRITE_U32(_size);
+                WRITE_U32((uint32_t)_size);
 
                 compressed_chat_data_uncompressed_data = malloc(_size);
                 new_writer = wwm_create_writer(compressed_chat_data_uncompressed_data, _size);
@@ -15289,13 +15385,13 @@ static WowWorldResult vanilla_CMSG_UPDATE_ACCOUNT_DATA_read(WowWorldReader* read
     READ_U32(object->data_type);
     _size += 4;
 
-    /* compressed_data_decompressed_size: u32 */
-    READ_U32(compressed_data_decompressed_size);
-    _size += 4;
-
     if((body_size - _size) > (reader->length - reader->index)) {
         return WWM_RESULT_NOT_ENOUGH_BYTES;
     }
+
+    /* compressed_data_decompressed_size: u32 */
+    READ_U32(compressed_data_decompressed_size);
+    _size += 4;
 
     object->compressed_data = NULL;
     if(compressed_data_decompressed_size) {
@@ -15354,7 +15450,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_UPDATE_ACCOUNT_DATA_writ
             _size += 1;
         }
         if (_size) {
-            WRITE_U32(_size);
+            WRITE_U32((uint32_t)_size);
 
             compressed_data_uncompressed_data = malloc(_size);
             new_writer = wwm_create_writer(compressed_data_uncompressed_data, _size);
@@ -20914,6 +21010,108 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_RAID_INSTANCE_MESSAGE_wr
     return WWM_RESULT_SUCCESS;
 }
 
+static size_t vanilla_SMSG_COMPRESSED_MOVES_size(const vanilla_SMSG_COMPRESSED_MOVES* object) {
+    size_t _size = 0;
+
+    /* C89 scope to allow variable declarations */ {
+        int i;
+        for(i = 0; i < (int)object->amount_of_moves; ++i) {
+            _size += vanilla_CompressedMove_size(&object->moves[i]);
+        }
+    }
+
+    return _size;
+}
+
+static WowWorldResult vanilla_SMSG_COMPRESSED_MOVES_read(WowWorldReader* reader, vanilla_SMSG_COMPRESSED_MOVES* object, size_t body_size) {
+    size_t _size = 0;
+
+    WowWorldReader stack_reader;
+    unsigned char* _compressed_data = NULL;
+    uint32_t _decompressed_size;
+    READ_U32(_decompressed_size);
+    _size += 4;
+
+    _compressed_data = malloc(_decompressed_size);
+
+    if (!wwm_decompress_data(&reader->source[reader->index], body_size - _size, _compressed_data, _decompressed_size)) {
+        return WWM_RESULT_COMPRESSION_ERROR;
+    }
+
+    stack_reader = wwm_create_reader(_compressed_data, _decompressed_size);
+    reader = &stack_reader;
+
+    object->amount_of_moves = 0;
+    /* C89 scope to allow variable declarations */ {
+        int i = 0;
+        size_t _current_size = 8 * sizeof(*object->moves);
+
+        object->moves = malloc(_current_size);
+        while ((reader->index + 1) < reader->length) {
+            WWM_CHECK_RETURN_CODE(vanilla_CompressedMove_read(reader, &object->moves[i]));
+            ++i;
+
+            if (i * sizeof(*object->moves) >= _current_size) {
+                _current_size *= 2;
+                object->moves = realloc(object->moves, _current_size);
+            }
+        }
+
+        object->amount_of_moves = i;
+    }
+
+    return WWM_RESULT_SUCCESS;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_COMPRESSED_MOVES_write(WowWorldWriter* writer, const vanilla_SMSG_COMPRESSED_MOVES* object) {
+    WowWorldWriter* old_writer = writer;
+    unsigned char* _decompressed_data;
+    WowWorldWriter stack_writer;
+    size_t _compressed_data_length;
+    size_t saved_writer_index;
+    const size_t _decompressed_data_length = vanilla_SMSG_COMPRESSED_MOVES_size(object);
+
+
+    WRITE_U16_BE(0 /* place holder */ + 2); /* size */
+
+    WRITE_U16(0x000002fb); /* opcode */
+
+    WRITE_U32(_decompressed_data_length);
+    writer = &stack_writer;
+
+    if (_decompressed_data_length == 0) {
+        return WWM_RESULT_SUCCESS;
+    }
+
+    _decompressed_data = malloc(_decompressed_data_length);
+    stack_writer = wwm_create_writer(_decompressed_data, _decompressed_data_length);
+
+    WRITE_ARRAY(object->moves, object->amount_of_moves, WWM_CHECK_RETURN_CODE(vanilla_CompressedMove_write(writer, &object->moves[i])));
+
+    writer = old_writer;
+    _compressed_data_length = wwm_compress_data(stack_writer.destination, stack_writer.length, &writer->destination[writer->index], writer->length - writer->index);
+    writer->index += _compressed_data_length;
+    saved_writer_index = writer->index;
+    writer->index = 0;
+
+    WRITE_U16_BE(_compressed_data_length + 4 + 4); /* size */
+
+    writer->index = saved_writer_index;
+
+
+    return WWM_RESULT_SUCCESS;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_COMPRESSED_MOVES_free(vanilla_SMSG_COMPRESSED_MOVES* object) {
+    size_t i;
+
+    for (i = 0; i < object->amount_of_moves; ++i) {
+        vanilla_CompressedMove_free(&((object->moves)[i]));
+    }
+    free(object->moves);
+    object->moves = NULL;
+}
+
 static size_t vanilla_CMSG_GUILD_INFO_TEXT_size(const vanilla_CMSG_GUILD_INFO_TEXT* object) {
     return 1 + STRING_SIZE(object->guild_info);
 }
@@ -23619,6 +23817,9 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_server_opcode_read(WowWorldRe
         case SMSG_PARTYKILLLOG:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PARTYKILLLOG_read(reader, &opcodes->body.SMSG_PARTYKILLLOG));
             break;
+        case SMSG_COMPRESSED_UPDATE_OBJECT:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_COMPRESSED_UPDATE_OBJECT_read(reader, &opcodes->body.SMSG_COMPRESSED_UPDATE_OBJECT, _size - 2));
+            break;
         case SMSG_PLAY_SPELL_IMPACT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PLAY_SPELL_IMPACT_read(reader, &opcodes->body.SMSG_PLAY_SPELL_IMPACT));
             break;
@@ -23924,6 +24125,9 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_server_opcode_read(WowWorldRe
             break;
         case SMSG_RAID_INSTANCE_MESSAGE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_RAID_INSTANCE_MESSAGE_read(reader, &opcodes->body.SMSG_RAID_INSTANCE_MESSAGE));
+            break;
+        case SMSG_COMPRESSED_MOVES:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_COMPRESSED_MOVES_read(reader, &opcodes->body.SMSG_COMPRESSED_MOVES, _size - 2));
             break;
         case SMSG_SPLINE_SET_RUN_SPEED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_SET_RUN_SPEED_read(reader, &opcodes->body.SMSG_SPLINE_SET_RUN_SPEED));
@@ -24294,6 +24498,9 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_server_opcode_free(VanillaServerOpcodeC
         case SMSG_AUTH_RESPONSE:
             vanilla_SMSG_AUTH_RESPONSE_free(&opcodes->body.SMSG_AUTH_RESPONSE);
             break;
+        case SMSG_COMPRESSED_UPDATE_OBJECT:
+            vanilla_SMSG_COMPRESSED_UPDATE_OBJECT_free(&opcodes->body.SMSG_COMPRESSED_UPDATE_OBJECT);
+            break;
         case SMSG_ACCOUNT_DATA_TIMES:
             vanilla_SMSG_ACCOUNT_DATA_TIMES_free(&opcodes->body.SMSG_ACCOUNT_DATA_TIMES);
             break;
@@ -24404,6 +24611,9 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_server_opcode_free(VanillaServerOpcodeC
             break;
         case SMSG_PARTY_MEMBER_STATS_FULL:
             vanilla_SMSG_PARTY_MEMBER_STATS_FULL_free(&opcodes->body.SMSG_PARTY_MEMBER_STATS_FULL);
+            break;
+        case SMSG_COMPRESSED_MOVES:
+            vanilla_SMSG_COMPRESSED_MOVES_free(&opcodes->body.SMSG_COMPRESSED_MOVES);
             break;
         case MSG_RAID_TARGET_UPDATE:
             vanilla_MSG_RAID_TARGET_UPDATE_Server_free(&opcodes->body.MSG_RAID_TARGET_UPDATE_Server);

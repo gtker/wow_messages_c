@@ -24,6 +24,16 @@ class Writer:
         self.wln(f"}}{s}")
 
     def write_block(self, s: str):
+        def count_spaces(x: str):
+            for index, ch in enumerate(x):
+                if index == 0 and ch == '\n' and x[1] == ' ':
+                    continue
+                if ch != ' ':
+                    return index
+            return len(x)
+        prefix_spaces = count_spaces(s)
+        prefix_spaces = (prefix_spaces - 1) if (prefix_spaces > 0) else 0
+
         for i, line in enumerate(s.splitlines()):
             if i == 0:
                 continue
@@ -32,7 +42,7 @@ class Writer:
                 self.newline()
                 continue
 
-            self.wln(line)
+            self.wln(line[prefix_spaces:])
 
     def column(self) -> int:
         for i, ch in enumerate(reversed(self.__inner)):

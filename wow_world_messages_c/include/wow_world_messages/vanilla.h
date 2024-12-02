@@ -10227,6 +10227,15 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PARTYKILLLOG_write(WowWorldWriter* writer, const vanilla_SMSG_PARTYKILLLOG* object);
 
 typedef struct {
+    uint32_t amount_of_objects;
+    uint8_t has_transport;
+    vanilla_Object* objects;
+
+} vanilla_SMSG_COMPRESSED_UPDATE_OBJECT;
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_COMPRESSED_UPDATE_OBJECT_write(WowWorldWriter* writer, const vanilla_SMSG_COMPRESSED_UPDATE_OBJECT* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_COMPRESSED_UPDATE_OBJECT_free(vanilla_SMSG_COMPRESSED_UPDATE_OBJECT* object);
+
+typedef struct {
     uint64_t guid;
     uint32_t spell_visual_kit;
 
@@ -11755,6 +11764,14 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_RAID_INSTANCE_MESSAGE_write(WowWorldWriter* writer, const vanilla_SMSG_RAID_INSTANCE_MESSAGE* object);
 
 typedef struct {
+    uint32_t amount_of_moves;
+    vanilla_CompressedMove* moves;
+
+} vanilla_SMSG_COMPRESSED_MOVES;
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_COMPRESSED_MOVES_write(WowWorldWriter* writer, const vanilla_SMSG_COMPRESSED_MOVES* object);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_COMPRESSED_MOVES_free(vanilla_SMSG_COMPRESSED_MOVES* object);
+
+typedef struct {
     WowWorldString guild_info;
 
 } vanilla_CMSG_GUILD_INFO_TEXT;
@@ -12419,6 +12436,7 @@ typedef enum {
     SMSG_PLAY_SPELL_VISUAL = 499,
     CMSG_ZONEUPDATE = 500,
     SMSG_PARTYKILLLOG = 501,
+    SMSG_COMPRESSED_UPDATE_OBJECT = 502,
     SMSG_PLAY_SPELL_IMPACT = 503,
     SMSG_EXPLORATION_EXPERIENCE = 504,
     MSG_RANDOM_ROLL = 507,
@@ -12615,6 +12633,7 @@ typedef enum {
     CMSG_PET_SPELL_AUTOCAST = 755,
     SMSG_WEATHER = 756,
     SMSG_RAID_INSTANCE_MESSAGE = 762,
+    SMSG_COMPRESSED_MOVES = 763,
     CMSG_GUILD_INFO_TEXT = 764,
     SMSG_CHAT_RESTRICTED = 765,
     SMSG_SPLINE_SET_RUN_SPEED = 766,
@@ -13109,6 +13128,7 @@ typedef struct {
         vanilla_MSG_TABARDVENDOR_ACTIVATE MSG_TABARDVENDOR_ACTIVATE;
         vanilla_SMSG_PLAY_SPELL_VISUAL SMSG_PLAY_SPELL_VISUAL;
         vanilla_SMSG_PARTYKILLLOG SMSG_PARTYKILLLOG;
+        vanilla_SMSG_COMPRESSED_UPDATE_OBJECT SMSG_COMPRESSED_UPDATE_OBJECT;
         vanilla_SMSG_PLAY_SPELL_IMPACT SMSG_PLAY_SPELL_IMPACT;
         vanilla_SMSG_EXPLORATION_EXPERIENCE SMSG_EXPLORATION_EXPERIENCE;
         vanilla_MSG_RANDOM_ROLL_Server MSG_RANDOM_ROLL_Server;
@@ -13211,6 +13231,7 @@ typedef struct {
         vanilla_SMSG_PARTY_MEMBER_STATS_FULL SMSG_PARTY_MEMBER_STATS_FULL;
         vanilla_SMSG_WEATHER SMSG_WEATHER;
         vanilla_SMSG_RAID_INSTANCE_MESSAGE SMSG_RAID_INSTANCE_MESSAGE;
+        vanilla_SMSG_COMPRESSED_MOVES SMSG_COMPRESSED_MOVES;
         vanilla_SMSG_SPLINE_SET_RUN_SPEED SMSG_SPLINE_SET_RUN_SPEED;
         vanilla_SMSG_SPLINE_SET_RUN_BACK_SPEED SMSG_SPLINE_SET_RUN_BACK_SPEED;
         vanilla_SMSG_SPLINE_SET_SWIM_SPEED SMSG_SPLINE_SET_SWIM_SPEED;

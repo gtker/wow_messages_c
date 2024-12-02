@@ -31,7 +31,8 @@ typedef struct
 typedef enum
 {
     WWM_RESULT_SUCCESS = 0,
-    WWM_RESULT_NOT_ENOUGH_BYTES
+    WWM_RESULT_NOT_ENOUGH_BYTES = -1,
+    WWM_RESULT_COMPRESSION_ERROR = -2
 } WowWorldResult;
 
 typedef struct

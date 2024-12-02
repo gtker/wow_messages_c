@@ -238,10 +238,12 @@ def print_world(m: model.Objects, update_mask: list[model.UpdateMask], v: model.
     for e in filter(should_print, m.structs):
         print_struct(s, h, e, module_name)
 
-    for e in filter(should_print, m.messages):
+    filtered_messages = list(filter(should_print, m.messages))
+
+    for e in filtered_messages:
         print_struct(s, h, e, module_name)
 
-    print_login_utils(s, h, list(filter(should_print, m.messages)), v)
+    print_login_utils(s, h, filtered_messages, v)
 
     print_footer(s, h, v, module_name)
 
@@ -256,7 +258,7 @@ def print_world(m: model.Objects, update_mask: list[model.UpdateMask], v: model.
 
     if module_name != "all":
         tests = Writer()
-        print_world_tests(tests, filter(should_print, m.messages), v)
+        print_world_tests(tests, filtered_messages, v)
 
         file_path = f"{source_dir}/{module_name}.test.c{pp}"
         write_file_if_not_same(tests, file_path)
@@ -264,6 +266,7 @@ def print_world(m: model.Objects, update_mask: list[model.UpdateMask], v: model.
     print()
     for reason, amount in struct_util.SKIPS.items():
         print(f"{reason}: {amount}")
+    struct_util.SKIPS.clear()
 
 
 def print_login(m: model.Objects, s: Writer, tests: Writer, v: int):

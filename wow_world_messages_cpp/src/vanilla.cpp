@@ -147,6 +147,7 @@ static size_t update_mask_size(const UpdateMask& mask) {
 
     return size + amount_of_values + (max_header * 4);
 }
+
 static size_t Addon_size(const Addon& obj) {
     size_t _size = 3;
 
@@ -14482,18 +14483,18 @@ CMSG_AUTH_SESSION CMSG_AUTH_SESSION_read(Reader& reader, size_t body_size) {
         _size += 1;
     }
 
+    if((body_size - _size) == 0) {
+        return obj;
+    }
+
     /* addon_info_decompressed_size: u32 */
     auto addon_info_decompressed_size = reader.read_u32();
     (void)addon_info_decompressed_size;
     _size += 4;
 
-    if((body_size - _size) == 0) {
-        return obj;
-    }
-
     auto addon_info_compressed_data = std::vector<unsigned char>(body_size - _size, 0);
     for(size_t i = 0; i < body_size - _size; ++i) {
-        addon_info_compressed_data.push_back(reader.read_u8());
+        addon_info_compressed_data[i] = reader.read_u8();
     }
 
     if (addon_info_decompressed_size == 0) {
@@ -14545,7 +14546,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_AUTH_SESSION::writ
 
     if (!writer.m_buf.empty()) {
         auto addon_info_compressed_data = ::wow_world_messages::util::compress_data(writer.m_buf);
-        old_writer.write_u32(addon_info_compressed_data.size());
+        old_writer.write_u32(static_cast<uint32_t>(addon_info_compressed_data.size()));
 
         for (const auto v : addon_info_compressed_data) {
             old_writer.write_u8(v);
@@ -14818,6 +14819,78 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_PARTYKILLLOG::writ
     return writer.m_buf;
 }
 
+static size_t SMSG_COMPRESSED_UPDATE_OBJECT_size(const SMSG_COMPRESSED_UPDATE_OBJECT& obj) {
+    size_t _size = 5;
+
+    for(const auto& v : obj.objects) {
+        _size += Object_size(v);
+    }
+
+    return _size;
+}
+
+SMSG_COMPRESSED_UPDATE_OBJECT SMSG_COMPRESSED_UPDATE_OBJECT_read(Reader& reader, size_t body_size) {
+    SMSG_COMPRESSED_UPDATE_OBJECT obj{};
+    size_t _size = 0;
+
+    const auto decompressed_size = reader.read_u32();
+
+    if (decompressed_size == 0) {
+        return obj;
+    }
+
+    auto compressed_data = std::vector<unsigned char>{};
+
+    for (size_t i = 0; i < (body_size - 4); ++i)
+    {
+       compressed_data.push_back(reader.read_u8());
+    }
+
+    auto decompressed_data = ::wow_world_messages::util::decompress_data(compressed_data);
+    auto byte_reader = ByteReader(decompressed_data);
+
+    obj.amount_of_objects = byte_reader.read_u32();
+    _size += 4;
+
+    obj.has_transport = byte_reader.read_u8();
+    _size += 1;
+
+    for (uint32_t i = 0; i < obj.amount_of_objects; ++i) {
+        obj.objects.push_back(::wow_world_messages::vanilla::Object_read(byte_reader));
+        _size += vanilla::Object_size(obj.objects.back());
+    }
+
+    (void)_size;
+    return obj;
+}
+
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_COMPRESSED_UPDATE_OBJECT::write() const {
+    const auto& obj = *this;
+    auto writer = Writer(0 /* place holder */);
+
+    writer.write_u16_be(static_cast<uint16_t>(0 /* place holder */ + 2)); /* size */
+
+    writer.write_u16(0x000001f6); /* opcode */
+
+    writer.write_u32(SMSG_COMPRESSED_UPDATE_OBJECT_size(obj));
+
+    auto old_writer = writer;
+    writer = Writer(0);
+    writer.write_u32(obj.amount_of_objects);
+
+    writer.write_u8(obj.has_transport);
+
+    for (const auto& v : obj.objects) {
+        Object_write(writer, v);
+    }
+
+    const auto compressed_data = ::wow_world_messages::util::compress_data(writer.m_buf);
+    old_writer.write_u16_be_at_first_index(compressed_data.size() + 4 + 2);
+    old_writer.m_buf.insert(old_writer.m_buf.end(), compressed_data.begin(), compressed_data.end());
+
+    return old_writer.m_buf;
+}
+
 SMSG_PLAY_SPELL_IMPACT SMSG_PLAY_SPELL_IMPACT_read(Reader& reader) {
     SMSG_PLAY_SPELL_IMPACT obj{};
 
@@ -15079,18 +15152,18 @@ CMSG_GMTICKET_CREATE CMSG_GMTICKET_CREATE_read(Reader& reader, size_t body_size)
         obj.chat_data_line_count = reader.read_u32();
         _size += 4;
 
+        if((body_size - _size) == 0) {
+            return obj;
+        }
+
         /* compressed_chat_data_decompressed_size: u32 */
         auto compressed_chat_data_decompressed_size = reader.read_u32();
         (void)compressed_chat_data_decompressed_size;
         _size += 4;
 
-        if((body_size - _size) == 0) {
-            return obj;
-        }
-
         auto compressed_chat_data_compressed_data = std::vector<unsigned char>(body_size - _size, 0);
         for(size_t i = 0; i < body_size - _size; ++i) {
-            compressed_chat_data_compressed_data.push_back(reader.read_u8());
+            compressed_chat_data_compressed_data[i] = reader.read_u8();
         }
 
         if (compressed_chat_data_decompressed_size == 0) {
@@ -15144,7 +15217,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_GMTICKET_CREATE::w
 
         if (!writer.m_buf.empty()) {
             auto compressed_chat_data_compressed_data = ::wow_world_messages::util::compress_data(writer.m_buf);
-            old_writer.write_u32(compressed_chat_data_compressed_data.size());
+            old_writer.write_u32(static_cast<uint32_t>(compressed_chat_data_compressed_data.size()));
 
             for (const auto v : compressed_chat_data_compressed_data) {
                 old_writer.write_u8(v);
@@ -15299,18 +15372,18 @@ CMSG_UPDATE_ACCOUNT_DATA CMSG_UPDATE_ACCOUNT_DATA_read(Reader& reader, size_t bo
     obj.data_type = static_cast<AccountDataType>(reader.read_u32());
     _size += 4;
 
+    if((body_size - _size) == 0) {
+        return obj;
+    }
+
     /* compressed_data_decompressed_size: u32 */
     auto compressed_data_decompressed_size = reader.read_u32();
     (void)compressed_data_decompressed_size;
     _size += 4;
 
-    if((body_size - _size) == 0) {
-        return obj;
-    }
-
     auto compressed_data_compressed_data = std::vector<unsigned char>(body_size - _size, 0);
     for(size_t i = 0; i < body_size - _size; ++i) {
-        compressed_data_compressed_data.push_back(reader.read_u8());
+        compressed_data_compressed_data[i] = reader.read_u8();
     }
 
     if (compressed_data_decompressed_size == 0) {
@@ -15352,7 +15425,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_UPDATE_ACCOUNT_DAT
 
     if (!writer.m_buf.empty()) {
         auto compressed_data_compressed_data = ::wow_world_messages::util::compress_data(writer.m_buf);
-        old_writer.write_u32(compressed_data_compressed_data.size());
+        old_writer.write_u32(static_cast<uint32_t>(compressed_data_compressed_data.size()));
 
         for (const auto v : compressed_data_compressed_data) {
             old_writer.write_u8(v);
@@ -21102,6 +21175,68 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_RAID_INSTANCE_MESS
     writer.write_u32(obj.time_left);
 
     return writer.m_buf;
+}
+
+static size_t SMSG_COMPRESSED_MOVES_size(const SMSG_COMPRESSED_MOVES& obj) {
+    size_t _size = 0;
+
+    for(const auto& v : obj.moves) {
+        _size += CompressedMove_size(v);
+    }
+
+    return _size;
+}
+
+SMSG_COMPRESSED_MOVES SMSG_COMPRESSED_MOVES_read(Reader& reader, size_t body_size) {
+    SMSG_COMPRESSED_MOVES obj{};
+    size_t _size = 0;
+
+    const auto decompressed_size = reader.read_u32();
+
+    if (decompressed_size == 0) {
+        return obj;
+    }
+
+    auto compressed_data = std::vector<unsigned char>{};
+
+    for (size_t i = 0; i < (body_size - 4); ++i)
+    {
+       compressed_data.push_back(reader.read_u8());
+    }
+
+    auto decompressed_data = ::wow_world_messages::util::decompress_data(compressed_data);
+    auto byte_reader = ByteReader(decompressed_data);
+
+    while (!byte_reader.is_at_end()) {
+        obj.moves.push_back(::wow_world_messages::vanilla::CompressedMove_read(byte_reader));
+        _size += vanilla::CompressedMove_size(obj.moves.back());
+    }
+
+    (void)_size;
+    return obj;
+}
+
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_COMPRESSED_MOVES::write() const {
+    const auto& obj = *this;
+    auto writer = Writer(0 /* place holder */);
+
+    writer.write_u16_be(static_cast<uint16_t>(0 /* place holder */ + 2)); /* size */
+
+    writer.write_u16(0x000002fb); /* opcode */
+
+    writer.write_u32(SMSG_COMPRESSED_MOVES_size(obj));
+
+    auto old_writer = writer;
+    writer = Writer(0);
+    for (const auto& v : obj.moves) {
+        CompressedMove_write(writer, v);
+    }
+
+    const auto compressed_data = ::wow_world_messages::util::compress_data(writer.m_buf);
+    old_writer.write_u16_be_at_first_index(compressed_data.size() + 4 + 2);
+    old_writer.m_buf.insert(old_writer.m_buf.end(), compressed_data.begin(), compressed_data.end());
+
+    return old_writer.m_buf;
 }
 
 static size_t CMSG_GUILD_INFO_TEXT_size(const CMSG_GUILD_INFO_TEXT& obj) {
@@ -32293,6 +32428,22 @@ vanilla::SMSG_PARTYKILLLOG& ServerOpcode::get<SMSG_PARTYKILLLOG>() {
 }
 
 template <>
+vanilla::SMSG_COMPRESSED_UPDATE_OBJECT* ServerOpcode::get_if<SMSG_COMPRESSED_UPDATE_OBJECT>() {
+    if (opcode == Opcode::SMSG_COMPRESSED_UPDATE_OBJECT) {
+        return &SMSG_COMPRESSED_UPDATE_OBJECT;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_COMPRESSED_UPDATE_OBJECT& ServerOpcode::get<SMSG_COMPRESSED_UPDATE_OBJECT>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_COMPRESSED_UPDATE_OBJECT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
 vanilla::SMSG_PLAY_SPELL_IMPACT* ServerOpcode::get_if<SMSG_PLAY_SPELL_IMPACT>() {
     if (opcode == Opcode::SMSG_PLAY_SPELL_IMPACT) {
         return &SMSG_PLAY_SPELL_IMPACT;
@@ -34037,6 +34188,22 @@ vanilla::SMSG_RAID_INSTANCE_MESSAGE& ServerOpcode::get<SMSG_RAID_INSTANCE_MESSAG
 }
 
 template <>
+vanilla::SMSG_COMPRESSED_MOVES* ServerOpcode::get_if<SMSG_COMPRESSED_MOVES>() {
+    if (opcode == Opcode::SMSG_COMPRESSED_MOVES) {
+        return &SMSG_COMPRESSED_MOVES;
+    }
+    return nullptr;
+}
+template <>
+vanilla::SMSG_COMPRESSED_MOVES& ServerOpcode::get<SMSG_COMPRESSED_MOVES>() {
+    auto p = ServerOpcode::get_if<vanilla::SMSG_COMPRESSED_MOVES>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
 vanilla::SMSG_CHAT_RESTRICTED* ServerOpcode::get_if<SMSG_CHAT_RESTRICTED>() {
     if (opcode == Opcode::SMSG_CHAT_RESTRICTED) {
         return &SMSG_CHAT_RESTRICTED;
@@ -35197,6 +35364,9 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const Serv
     if (opcode.opcode == ServerOpcode::Opcode::SMSG_PARTYKILLLOG) {
         return opcode.SMSG_PARTYKILLLOG.write();;
     }
+    if (opcode.opcode == ServerOpcode::Opcode::SMSG_COMPRESSED_UPDATE_OBJECT) {
+        return opcode.SMSG_COMPRESSED_UPDATE_OBJECT.write();;
+    }
     if (opcode.opcode == ServerOpcode::Opcode::SMSG_PLAY_SPELL_IMPACT) {
         return opcode.SMSG_PLAY_SPELL_IMPACT.write();;
     }
@@ -35523,6 +35693,9 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const Serv
     }
     if (opcode.opcode == ServerOpcode::Opcode::SMSG_RAID_INSTANCE_MESSAGE) {
         return opcode.SMSG_RAID_INSTANCE_MESSAGE.write();;
+    }
+    if (opcode.opcode == ServerOpcode::Opcode::SMSG_COMPRESSED_MOVES) {
+        return opcode.SMSG_COMPRESSED_MOVES.write();;
     }
     if (opcode.opcode == ServerOpcode::Opcode::SMSG_CHAT_RESTRICTED) {
         return opcode.SMSG_CHAT_RESTRICTED.write();;
@@ -36251,6 +36424,9 @@ WOW_WORLD_MESSAGES_CPP_EXPORT ServerOpcode read_server_opcode(Reader& reader) {
     if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::SMSG_PARTYKILLLOG)) {
         return ServerOpcode(::wow_world_messages::vanilla::SMSG_PARTYKILLLOG_read(reader));
     }
+    if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::SMSG_COMPRESSED_UPDATE_OBJECT)) {
+        return ServerOpcode(::wow_world_messages::vanilla::SMSG_COMPRESSED_UPDATE_OBJECT_read(reader, _size - 2));
+    }
     if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::SMSG_PLAY_SPELL_IMPACT)) {
         return ServerOpcode(::wow_world_messages::vanilla::SMSG_PLAY_SPELL_IMPACT_read(reader));
     }
@@ -36577,6 +36753,9 @@ WOW_WORLD_MESSAGES_CPP_EXPORT ServerOpcode read_server_opcode(Reader& reader) {
     }
     if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::SMSG_RAID_INSTANCE_MESSAGE)) {
         return ServerOpcode(::wow_world_messages::vanilla::SMSG_RAID_INSTANCE_MESSAGE_read(reader));
+    }
+    if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::SMSG_COMPRESSED_MOVES)) {
+        return ServerOpcode(::wow_world_messages::vanilla::SMSG_COMPRESSED_MOVES_read(reader, _size - 2));
     }
     if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::SMSG_CHAT_RESTRICTED)) {
         return ServerOpcode(::wow_world_messages::vanilla::SMSG_CHAT_RESTRICTED{});
