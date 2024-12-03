@@ -6,7 +6,6 @@
 
 namespace wow_world_messages {
 namespace all {
-
 Vector3d Vector3d_read(Reader& reader) {
     Vector3d obj{};
 

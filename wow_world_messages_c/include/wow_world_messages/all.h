@@ -8,7 +8,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
-
 typedef struct {
     float x;
     float y;

@@ -3,14 +3,13 @@ from print_struct import container_has_c_members
 import model
 from model import Container
 from print_struct.print_write import array_size_inner_action
-from print_struct.print_size import print_size_for_array
 from print_struct.struct_util import (
     integer_type_to_size,
-    print_if_statement_header, all_members_from_container,
+    print_if_statement_header, all_members_from_container, container_module_prefix,
 )
 from print_struct.struct_util import integer_type_to_short, integer_type_to_c_str
-from util import container_needs_size_in_read, first_version_as_module, get_type_prefix, is_world, is_cpp, library_type, \
-    snake_case_to_pascal_case, container_is_unencrypted
+from util import container_needs_size_in_read, get_type_prefix, is_world, is_cpp, library_type, \
+    snake_case_to_pascal_case
 from print_struct.struct_util import array_type_to_c_str
 from writer import Writer
 
@@ -152,7 +151,8 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
                 s.wln(f"READ_PACKED_GUID({variable_name});")
 
             if needs_size:
-                s.wln(f"_size += packed_guid_size({d.name});")
+                prefix = "::wow_world_messages::util::" if is_cpp() else ""
+                s.wln(f"_size += {prefix}wwm_packed_guid_size({variable_name});")
 
         case model.DataTypeFloatingPoint() | model.DataTypePopulation():
             if is_cpp():
@@ -164,7 +164,7 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
                 s.wln(f"_size += 4;")
 
         case model.DataTypeStruct(struct_data=e):
-            version = first_version_as_module(e.tags)
+            version = container_module_prefix(e.tags, module_name)
             if is_cpp():
                 s.wln_no_indent(f"::wow_{library_type(e.tags)}_messages::{version}::{e.name}_read({reader});")
             else:
@@ -332,7 +332,7 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
                         inner = f"{reader}.read_packed_guid()"
 
                     case model.ArrayTypeStruct(struct_data=e):
-                        inner = f"::wow_{library_type(e.tags)}_messages::{first_version_as_module(e.tags)}::{e.name}_read({reader})"
+                        inner = f"::wow_{library_type(e.tags)}_messages::{container_module_prefix(e.tags, module_name)}::{e.name}_read({reader})"
 
                     case v2:
                         raise Exception(f"{v2}")
@@ -424,7 +424,7 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
                         inner = f"READ_U64({fixed_prefix}{variable_name}{fixed_suffix}[i])"
 
                     case model.ArrayTypeStruct(struct_data=e):
-                        version = first_version_as_module(e.tags)
+                        version = container_module_prefix(e.tags, module_name)
                         wlm_prefix = "WWM" if is_world(e.tags) else "WLM"
                         inner = f"{wlm_prefix}_CHECK_RETURN_CODE({version}_{e.name}_read(reader, &{fixed_prefix}{variable_name}{fixed_suffix}[i]))"
 
@@ -444,17 +444,17 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
                     case model.ArraySizeFixed(size=array_size):
                         extra = ""
                         if needs_size:
-                            extra = f";_size += {array_size_inner_action(inner_type, '', '', variable_name, 'i')};"
+                            extra = f";_size += {array_size_inner_action(inner_type, '', '', variable_name, 'i', module_name)};"
                         s.wln(
-                            f"READ_ARRAY_ALLOCATE({variable_name}, {array_size}, sizeof({array_type_to_c_str(inner_type)}));")
+                            f"READ_ARRAY_ALLOCATE({variable_name}, {array_size}, sizeof({array_type_to_c_str(inner_type, module_name, is_world(container.tags))}));")
                         s.wln(f"READ_ARRAY({variable_name}, {array_size}, {inner}{extra});")
 
                     case model.ArraySizeVariable(size=array_size):
                         extra = ""
                         if needs_size:
-                            extra = f";_size += {array_size_inner_action(inner_type, '', '', variable_name, 'i')};"
+                            extra = f";_size += {array_size_inner_action(inner_type, '', '', variable_name, 'i', module_name)};"
                         s.wln(
-                            f"READ_ARRAY_ALLOCATE({variable_name}, object->{extra_indirection}{array_size}, sizeof({array_type_to_c_str(inner_type)}));")
+                            f"READ_ARRAY_ALLOCATE({variable_name}, object->{extra_indirection}{array_size}, sizeof({array_type_to_c_str(inner_type, module_name, is_world(container.tags))}));")
                         s.wln(f"READ_ARRAY({variable_name}, object->{extra_indirection}{array_size}, {inner}{extra});")
 
                     case model.ArraySizeEndless():
@@ -473,7 +473,7 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
 
                         if (needs_size or isinstance(array_size,
                                                      model.ArraySizeEndless)) and not compressed and not container.tags.compressed:
-                            s.wln(f"_size += {array_size_inner_action(inner_type, '', '', variable_name, 'i')};")
+                            s.wln(f"_size += {array_size_inner_action(inner_type, '', '', variable_name, 'i', module_name)};")
 
                         s.wln("++i;")
                         s.newline()
@@ -596,7 +596,7 @@ def print_read(s: Writer, container: Container, module_name: str):
 
         result_type = get_type_prefix(container.tags)
         s.open_curly(
-            f"{export}{result_type}Result {module_name}_{container.name}_read({result_type}Reader* reader, {first_version_as_module(container.tags)}_{container.name}* object{body_size})")
+            f"{export}{result_type}Result {module_name}_{container.name}_read({result_type}Reader* reader, {container_module_prefix(container.tags, module_name)}_{container.name}* object{body_size})")
 
         if needs_size:
             s.wln("size_t _size = 0;")

@@ -96,6 +96,9 @@
 
 /* input and output state */
 struct state {
+    /* input limit error return state for bits() and decode() */
+    jmp_buf env;
+
     /* output state */
     unsigned char *out;         /* output buffer */
     unsigned long outlen;       /* available space at out */
@@ -107,9 +110,6 @@ struct state {
     unsigned long incnt;        /* bytes read so far */
     int bitbuf;                 /* bit buffer */
     int bitcnt;                 /* number of bits in bit buffer */
-
-    /* input limit error return state for bits() and decode() */
-    jmp_buf env;
 };
 
 /*

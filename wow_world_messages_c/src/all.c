@@ -4,7 +4,6 @@
 
 #include "wow_world_messages/all.h"
 
-
 WowWorldResult all_Vector3d_read(WowWorldReader* reader, all_Vector3d* object) {
     READ_FLOAT(object->x);
 

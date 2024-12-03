@@ -1,12 +1,12 @@
 import typing
 
 import model
-from print_struct.print_write import print_write_member, print_array_inner_write, array_size_inner_action
+from print_struct.print_write import print_array_inner_write, array_size_inner_action
 from print_struct.struct_util import (
     integer_type_to_size,
-    print_if_statement_header, container_should_have_size_function)
+    print_if_statement_header, container_should_have_size_function, container_module_prefix)
 
-from util import first_version_as_module, is_cpp
+from util import is_cpp
 from writer import Writer
 
 
@@ -15,11 +15,10 @@ def print_size(s: Writer, container: model.Container, module_name: str):
         return
 
     if is_cpp():
-        s.open_curly(
-            f"static size_t {container.name}_size(const {container.name}& obj)")
+        s.open_curly(f"static size_t {container.name}_size(const {container.name}& obj)")
     else:
         s.open_curly(
-            f"static size_t {module_name}_{container.name}_size(const {first_version_as_module(container.tags)}_{container.name}* object)")
+            f"static size_t {module_name}_{container.name}_size(const {container_module_prefix(container.tags, module_name)}_{container.name}* object)")
 
     print_size_until_inner_members(s, container.members, container.manual_size_subtraction,
                                    True, container.optional is not None, module_name, "")
@@ -96,7 +95,7 @@ def array_size_inner_values(
         case model.ArraySizeVariable(size=array_size):
             return f"{size} * obj.{extra_indirection}{name}.size()" if is_cpp() else f"{size} * object->{extra_indirection}{array_size}"
         case model.ArraySizeEndless():
-            return None
+            return f"{size} * obj.{extra_indirection}{name}.size()" if is_cpp() else f"{size} * object->{extra_indirection}amount_of_{name}"
 
         case v2:
             raise Exception(f"{v2}")
@@ -227,7 +226,7 @@ def print_size_inner(s: Writer, m: model.StructMember, module_name: str, extra_i
                         s.open_curly(
                             f"for(compressed_i = 0; compressed_i < object->amount_of_{d.name}; ++compressed_i)")
                         s.wln(
-                            f"compressed_size += {array_size_inner_action(inner_type, '', '', f'object->{d.name}', 'compressed_i')};")
+                            f"compressed_size += {array_size_inner_action(inner_type, '', '', f'object->{d.name}', 'compressed_i', module_name)};")
                         s.closing_curly()  # for compressed i
                         s.newline()
 
@@ -238,7 +237,7 @@ def print_size_inner(s: Writer, m: model.StructMember, module_name: str, extra_i
                         s.newline()
                         s.wln(f"stack_writer = wwm_create_writer({d.name}_uncompressed_data, compressed_size);")
 
-                        print_array_inner_write(d, extra_indirection, "", "", inner_type, s, size, f"object->{d.name}")
+                        print_array_inner_write(d, extra_indirection, "", "", inner_type, s, size, f"object->{d.name}", module_name)
                         s.newline()
 
                         s.wln(
@@ -254,7 +253,7 @@ def print_size_inner(s: Writer, m: model.StructMember, module_name: str, extra_i
                     elif compressed and is_cpp():
                         s.wln("auto writer = Writer(0);")
                         s.open_curly(f"for (const auto& v : obj.{d.name})")
-                        print_array_inner_write(d, extra_indirection, "", "", inner_type, s, size, f"obj.{d.name}")
+                        print_array_inner_write(d, extra_indirection, "", "", inner_type, s, size, f"obj.{d.name}", module_name)
                         s.closing_curly()
                         s.newline()
 
@@ -262,7 +261,7 @@ def print_size_inner(s: Writer, m: model.StructMember, module_name: str, extra_i
                         s.wln("_size += ::wow_world_messages::util::compress_data(writer.m_buf).size();")
                         s.closing_curly()  # if (writer.m_buf.size())
                     else:
-                        print_size_for_array(s, d, extra_indirection, inner_type, size)
+                        print_size_for_array(s, d, extra_indirection, inner_type, size, module_name)
                 case v:
                     raise Exception(f"{v}")
 
@@ -276,7 +275,7 @@ def print_size_inner(s: Writer, m: model.StructMember, module_name: str, extra_i
 
 
 def print_size_for_array(s: Writer, d: model.Definition, extra_indirection: str, inner_type: model.ArrayType,
-                         size: model.ArraySize):
+                         size: model.ArraySize, module_name: str):
     variable_name = f"obj{extra_indirection}.{d.name}" if is_cpp() else f"object{extra_indirection}->{d.name}"
     fixed_prefix = "(*" if type(size) is model.ArraySizeFixed else ""
     fixed_suffix = ")" if type(size) is model.ArraySizeFixed else ""
@@ -287,6 +286,8 @@ def print_size_for_array(s: Writer, d: model.Definition, extra_indirection: str,
             loop_max = f"(int)object->{extra_indirection}{ssize}"
         case model.ArraySizeEndless():
             loop_max = f"(int)object->amount_of_{d.name}"
+        case _:
+            raise Exception("invalid size")
     if is_cpp():
         s.open_curly(f"for(const auto& v : {variable_name})")
     else:
@@ -294,7 +295,7 @@ def print_size_for_array(s: Writer, d: model.Definition, extra_indirection: str,
         s.wln("int i;")
         s.open_curly(f"for(i = 0; i < {loop_max}; ++i)")
 
-    s.wln(f"_size += {array_size_inner_action(inner_type, fixed_prefix, fixed_suffix, variable_name, 'i')};")
+    s.wln(f"_size += {array_size_inner_action(inner_type, fixed_prefix, fixed_suffix, variable_name, 'i', module_name)};")
 
     if not is_cpp():
         s.closing_curly()  # C89 scope

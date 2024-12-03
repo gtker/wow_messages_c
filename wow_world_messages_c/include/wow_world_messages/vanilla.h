@@ -5322,11 +5322,6 @@ typedef enum {
     VANILLA_WEAPON_FLAGS_UNSHEATHE_WEAPONS = 32
 } vanilla_WeaponFlags;
 
-#define VANILLA_AURA_MASK_SIZE 32
-typedef struct {
-    uint16_t auras[VANILLA_AURA_MASK_SIZE];
-} vanilla_AuraMask;
-
 typedef enum {
     VANILLA_OBJECT_GUID = 0,
     VANILLA_OBJECT_TYPE = 2,
@@ -7155,6 +7150,11 @@ typedef struct {
     uint32_t value;
 
 } vanilla_WorldState;
+
+#define VANILLA_AURA_MASK_SIZE 32
+typedef struct {
+    uint16_t auras[VANILLA_AURA_MASK_SIZE];
+} vanilla_AuraMask;
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BOOTME_write(WowWorldWriter* writer);
 

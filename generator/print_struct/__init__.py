@@ -1,6 +1,6 @@
-from print_struct.struct_util import print_if_statement_header, container_has_c_members, all_members_from_container
-from util import first_version_as_module, get_export_define, is_cpp, pascal_case_to_snake_case, \
-    snake_case_to_pascal_case
+from print_struct.struct_util import print_if_statement_header, container_has_c_members, all_members_from_container, \
+    container_module_prefix
+from util import get_export_define, is_cpp, snake_case_to_pascal_case
 
 import model
 from print_struct.print_members import print_members_definitions, print_member_definition
@@ -11,8 +11,6 @@ from writer import Writer
 
 
 def print_struct(s: Writer, h: Writer, container: model.Container, module_name: str):
-    first_module = first_version_as_module(container.tags)
-
     if container_has_c_members(container) or is_cpp():
         if is_cpp():
             h.open_curly(f"struct {container.name}")
@@ -44,14 +42,14 @@ def print_struct(s: Writer, h: Writer, container: model.Container, module_name: 
                 h.open_curly("typedef struct")
                 for member in container.optional.members:
                     print_member_definition(h, member, module_name)
-                h.closing_curly(f" {first_module}_{container.name}_{container.optional.name};")
+                h.closing_curly(f" {module_name}_{container.name}_{container.optional.name};")
                 h.newline()
 
             h.open_curly(f"typedef struct")
             print_members_definitions(h, container, module_name)
             if container.optional is not None:
-                h.wln(f"{first_module}_{container.name}_{container.optional.name}* {container.optional.name};")
-            h.closing_curly(f" {first_module}_{container.name};")
+                h.wln(f"{module_name}_{container.name}_{container.optional.name}* {container.optional.name};")
+            h.closing_curly(f" {module_name}_{container.name};")
 
     print_size(s, container, module_name)
 
@@ -209,7 +207,7 @@ def print_free_struct_member(s: Writer, d: model.Definition, module_name: str, e
 
         case model.DataTypeStruct(struct_data=e):
             if container_has_free(e, module_name):
-                version = first_version_as_module(e.tags)
+                version = container_module_prefix(e.tags, module_name)
 
                 s.wln(f"{version}_{e.name}_free(&{variable_name});")
 
@@ -262,7 +260,7 @@ def print_free_struct_member(s: Writer, d: model.Definition, module_name: str, e
                 case model.ArrayTypeStruct(struct_data=struct_data):
                     if container_has_free(struct_data, module_name):
                         s.open_curly(f"for (i = 0; i < {loop_variable}; ++i)")
-                        s.wln(f"{first_version_as_module(struct_data.tags)}_{struct_data.name}_free(&(({extra}{variable_name})[i]));")
+                        s.wln(f"{container_module_prefix(struct_data.tags, module_name)}_{struct_data.name}_free(&(({extra}{variable_name})[i]));")
                         s.closing_curly() # for int i
 
             s.wln(f"free({variable_name});")

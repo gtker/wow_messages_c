@@ -1,9 +1,8 @@
 #ifndef WOW_LOGIN_MESSAGES_TEST_UTILS_H
 #define WOW_LOGIN_MESSAGES_TEST_UTILS_H
 
-#include "wow_login_messages/wow_login_messages.h"
-
 #include <stdio.h>
+#include <stdint.h>
 
 #define STRINGIFY2(x) #x
 #define STRINGIFY(x) STRINGIFY2(x)

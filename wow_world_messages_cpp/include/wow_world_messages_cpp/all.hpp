@@ -6,7 +6,6 @@
 
 namespace wow_world_messages {
 namespace all {
-
 struct Vector3d {
     float x;
     float y;

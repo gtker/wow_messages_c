@@ -5,7 +5,8 @@ from print_struct import container_has_c_members
 import model
 from model import Container
 from print_struct.struct_util import print_if_statement_header, \
-    integer_type_to_size, integer_type_to_short, integer_type_to_c_str, all_members_from_container
+    integer_type_to_size, integer_type_to_short, integer_type_to_c_str, all_members_from_container, \
+    container_module_prefix
 from util import container_is_unencrypted, first_version_as_module, login_version_matches, is_world, get_type_prefix, \
     get_export_define, is_cpp
 from writer import Writer
@@ -111,7 +112,7 @@ def print_write_struct_member(s: Writer, d: model.Definition, module_name: str, 
             if is_cpp():
                 s.wln(f"{e.name}_write(writer, {variable_name});")
             else:
-                version = first_version_as_module(e.tags)
+                version = container_module_prefix(e.tags, module_name)
                 wlm_prefix = "WWM" if is_world(e.tags) else "WLM"
 
                 s.wln(f"{wlm_prefix}_CHECK_RETURN_CODE({version}_{e.name}_write(writer, &object->{d.name}));")
@@ -167,7 +168,7 @@ def print_write_struct_member(s: Writer, d: model.Definition, module_name: str, 
 
                 s.open_curly(f"for (const auto& v : {variable_name})")
                 print_array_inner_write(d, extra_indirection, "", "", inner_type, s, size,
-                                        variable_name)
+                                        variable_name, module_name)
                 s.closing_curly()  # for (const auto& v
 
                 if compressed:
@@ -205,7 +206,7 @@ def print_write_struct_member(s: Writer, d: model.Definition, module_name: str, 
                     s.open_curly(
                         f"for(compressed_i = 0; compressed_i < object->amount_of_{extra_indirection}{d.name}; ++compressed_i)")
                     s.wln(
-                        f"_size += {array_size_inner_action(inner_type, '', '', f'object->{extra_indirection}{d.name}', 'compressed_i')};")
+                        f"_size += {array_size_inner_action(inner_type, '', '', f'object->{extra_indirection}{d.name}', 'compressed_i', module_name)};")
                     s.closing_curly()  # for
 
                     s.open_curly("if (_size)")
@@ -221,7 +222,7 @@ def print_write_struct_member(s: Writer, d: model.Definition, module_name: str, 
                 fixed_suffix = ")" if type(size) is model.ArraySizeFixed else ""
 
                 print_array_inner_write(d, extra_indirection, fixed_prefix, fixed_suffix, inner_type, s, size,
-                                        variable_name)
+                                        variable_name, module_name)
 
                 if compressed:
                     s.newline()
@@ -236,7 +237,7 @@ def print_write_struct_member(s: Writer, d: model.Definition, module_name: str, 
 
 
 def array_size_inner_action(inner_type: model.ArrayType, fixed_prefix: str, fixed_suffix: str,
-                            variable_name: str, index_variable: str) -> str:
+                            variable_name: str, index_variable: str, module_name) -> str:
     match inner_type:
         case model.ArrayTypeInteger(integer_type=integer_type):
             return f"{integer_type_to_size(integer_type)}"
@@ -245,13 +246,13 @@ def array_size_inner_action(inner_type: model.ArrayType, fixed_prefix: str, fixe
             return "4"
 
         case model.ArrayTypeStruct(struct_data=e):
-            version = first_version_as_module(e.tags)
+            version = container_module_prefix(e.tags, module_name)
             size = f"{version}_{e.name}_size(&{fixed_prefix}{variable_name}[{index_variable}]{fixed_suffix})" if not e.sizes.constant_sized else str(
                 e.sizes.maximum_size)
             return f"{e.name}_size(v)" if is_cpp() and not e.sizes.constant_sized else size
 
         case model.ArrayTypeCstring():
-            return f"v.size() + 1;" if is_cpp() else f"STRING_SIZE({fixed_prefix}{variable_name}[{index_variable}]{fixed_suffix})"
+            return f"v.size() + 1" if is_cpp() else f"STRING_SIZE({fixed_prefix}{variable_name}[{index_variable}]{fixed_suffix}) + 1"
 
         case model.ArrayTypePackedGUID():
             return f"wow_world_messages::util::wwm_packed_guid_size(v)" if is_cpp() else f"wwm_packed_guid_size({fixed_prefix}{variable_name}[{index_variable}]{fixed_suffix})"
@@ -261,7 +262,7 @@ def array_size_inner_action(inner_type: model.ArrayType, fixed_prefix: str, fixe
 
 
 def print_array_inner_write(d: model.Definition, extra_indirection: str, fixed_prefix: str, fixed_suffix: str,
-                            inner_type: model.ArrayType, s: Writer, size: model.ArraySize, variable_name: str):
+                            inner_type: model.ArrayType, s: Writer, size: model.ArraySize, variable_name: str, module_name: str):
     if is_cpp():
         match inner_type:
             case model.ArrayTypeInteger(integer_type=integer_type):
@@ -300,12 +301,12 @@ def print_array_inner_write(d: model.Definition, extra_indirection: str, fixed_p
                 inner = f"WRITE_U64({fixed_prefix}{variable_name}{fixed_suffix}[i])"
 
             case model.ArrayTypeStruct(struct_data=e):
-                version = first_version_as_module(e.tags)
+                version = container_module_prefix(e.tags, module_name)
                 wlm_prefix = "WWM" if is_world(e.tags) else "WLM"
                 inner = f"{wlm_prefix}_CHECK_RETURN_CODE({version}_{e.name}_write(writer, &{fixed_prefix}{variable_name}{fixed_suffix}[i]))"
 
             case model.ArrayTypeCstring():
-                inner = f"WRITE_STRING({fixed_prefix}{variable_name}{fixed_suffix}[i])"
+                inner = f"WRITE_CSTRING({fixed_prefix}{variable_name}{fixed_suffix}[i])"
 
             case model.ArrayTypePackedGUID():
                 inner = f"WWM_CHECK_RETURN_CODE(wwm_write_packed_guid(writer, {fixed_prefix}{variable_name}{fixed_suffix}[i]))"
@@ -331,7 +332,8 @@ def print_write(s: Writer, h: Writer, container: Container, object_type: model.O
     if is_world(container.tags) and module_name == "all":
         export = ""
     function_suffix = f"_{object_type.container_type_tag.lower()}" if object_type != container.object_type else ""
-    function_declaration = f"{export}{result_type}Result {module_name}_{container.name}{function_suffix}_write({result_type}Writer* writer, const {first_version_as_module(container.tags)}_{container.name}* object)"
+    module_prefix = container_module_prefix(container.tags, module_name)
+    function_declaration = f"{export}{result_type}Result {module_name}_{container.name}{function_suffix}_write({result_type}Writer* writer, const {module_prefix}_{container.name}* object)"
     if not container_has_c_members(container):
         function_declaration = f"{export}{result_type}Result {module_name}_{container.name}{function_suffix}_write({result_type}Writer* writer)"
     if is_cpp():
@@ -387,7 +389,7 @@ def print_write(s: Writer, h: Writer, container: Container, object_type: model.O
                 opcode_size = 4
 
         if container.tags.compressed:
-            s.wln(f"writer.write_u32({container.name}_size(obj));")
+            s.wln(f"writer.write_u32(static_cast<uint32_t>({container.name}_size(obj)));")
             s.newline()
             s.wln("auto old_writer = writer;")
             s.wln("writer = Writer(0);")
@@ -401,7 +403,7 @@ def print_write(s: Writer, h: Writer, container: Container, object_type: model.O
                 WowWorldWriter stack_writer;
                 size_t _compressed_data_length;
                 size_t saved_writer_index;
-                const size_t _decompressed_data_length = {module_name}_{container.name}_size(object);
+                const uint32_t _decompressed_data_length = (uint32_t){module_name}_{container.name}_size(object);
             """)
             s.newline()
 
@@ -467,7 +469,7 @@ def print_write(s: Writer, h: Writer, container: Container, object_type: model.O
         if type(object_type) is not model.ObjectTypeStruct:
             if container.tags.compressed:
                 s.wln("const auto compressed_data = ::wow_world_messages::util::compress_data(writer.m_buf);")
-                s.wln(f"old_writer.write_u16_be_at_first_index(compressed_data.size() + 4 + {opcode_size});")
+                s.wln(f"old_writer.write_u16_be_at_first_index(static_cast<uint16_t>(compressed_data.size() + 4 + {opcode_size}));")
                 s.wln(
                     "old_writer.m_buf.insert(old_writer.m_buf.end(), compressed_data.begin(), compressed_data.end());")
                 s.newline()
@@ -484,7 +486,7 @@ def print_write(s: Writer, h: Writer, container: Container, object_type: model.O
                 saved_writer_index = writer->index;
                 writer->index = 0;
                 
-                WRITE_U16_BE(_compressed_data_length + 4 + {opcode_size}); /* size */
+                WRITE_U16_BE((uint16_t)(_compressed_data_length + 4 + {opcode_size})); /* size */
                 
                 writer->index = saved_writer_index;
             """)

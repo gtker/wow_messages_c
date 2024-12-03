@@ -68,7 +68,7 @@ def print_individual_test(s: Writer, e: model.Container, test_case: model.TestCa
         s.open_curly("if (opcode.is_none())")
         s.wln(
             f'printf(__FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i} read invalid opcode");')
-        s.wln("return 1;")
+        s.wln("abort();")
         s.closing_curly()  # if (opcode.is_none())
         s.newline()
 
@@ -76,7 +76,7 @@ def print_individual_test(s: Writer, e: model.Container, test_case: model.TestCa
             f"if (opcode.opcode != ::wow_{library_type.lower()}_messages::{function_version}::{function_side.capitalize()}Opcode::Opcode::{opcode_id})")
         s.wln(
             f'printf(__FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i} read invalid opcode");')
-        s.wln("return 1;")
+        s.wln("abort();")
         s.closing_curly()  # if (opcode.opcode)
         s.newline()
 
@@ -94,7 +94,7 @@ def print_individual_test(s: Writer, e: model.Container, test_case: model.TestCa
             s.open_curly("if (opcode2.is_none())")
             s.wln(
                 f'printf(__FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i} read invalid second opcode");')
-            s.wln("return 1;")
+            s.wln("abort();")
             s.closing_curly()  # if (opcode2.is_none())
             s.newline()
 
@@ -102,7 +102,7 @@ def print_individual_test(s: Writer, e: model.Container, test_case: model.TestCa
                 f"if (opcode2.opcode != ::wow_{library_type.lower()}_messages::{function_version}::{function_side.capitalize()}Opcode::Opcode::{opcode_id})")
             s.wln(
                 f'printf(__FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i} read invalid second opcode");')
-            s.wln("return 1;")
+            s.wln("abort();")
             s.closing_curly()  # if (opcode.opcode)
             s.newline()
 
@@ -136,14 +136,14 @@ def print_individual_test(s: Writer, e: model.Container, test_case: model.TestCa
         s.open_curly(f"if (result != {library_prefix.upper()}_RESULT_SUCCESS)")
         s.wln(
             f'printf(__FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i} failed to read: \'%s\'\\n", {library_prefix}_error_code_to_string(result));')
-        s.wln("return 1;")
+        s.wln("abort();")
         s.newline()
         s.closing_curly()  # if (result != 0)
 
         s.open_curly(f"if (opcode.opcode != {opcode_id})")
         s.wln(
             f'printf(__FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i} read wrong opcode: \'0x%x\' instead of \'0x%x\'\\n", opcode.opcode, {opcode_id});')
-        s.wln("return 1;")
+        s.wln("abort();")
         s.newline()
         s.closing_curly()  # if (opcode.opcode != opcode)
 
@@ -156,7 +156,7 @@ def print_individual_test(s: Writer, e: model.Container, test_case: model.TestCa
         s.open_curly(f"if (result != {library_prefix.upper()}_RESULT_SUCCESS)")
         s.wln(
             f'printf(__FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i} failed to write: \'%s\'\\n", {library_prefix}_error_code_to_string(result));')
-        s.wln("return 1;")
+        s.wln("abort();")
         s.newline()
         s.closing_curly()  # if (result != 0)
 
@@ -190,6 +190,10 @@ def print_login_test_prefix(tests: Writer, m: model.IntermediateRepresentationSc
 
     tests.wln("#include \"test_utils.h\"")
     tests.newline()
+
+    if not is_cpp():
+        tests.wln("#include <stdlib.h> /* abort() */")
+        tests.newline()
 
     if is_cpp():
         tests.write_block("""
@@ -231,6 +235,10 @@ def print_world_tests(s: Writer, messages: typing.List[model.Container], v: mode
     s.wln("#include \"test_utils.h\"")
     s.newline()
 
+    if not is_cpp():
+        s.wln("#include <stdlib.h> /* abort() */")
+        s.newline()
+
     if is_cpp():
         s.write_block("""
 class ByteReader final : public wow_world_messages::Reader
@@ -254,7 +262,9 @@ public:
     if not is_cpp():
         s.wln("unsigned char write_buffer[1 << 16] = {0}; /* uint16_t max */")
 
-    s.open_curly("int main(void)")
+    extra_void: str = "" if is_cpp() else "void"
+
+    s.open_curly(f"int main({extra_void})")
 
     for e in messages:
         if len(e.tests) != 0:

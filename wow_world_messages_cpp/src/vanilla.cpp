@@ -19,50 +19,6 @@ namespace wow_world_messages {
 
 namespace wow_world_messages {
 namespace vanilla {
-static size_t aura_mask_size(const AuraMask& mask) {
-    size_t size = 4; /* uint32_t header */
-
-    for(const auto v : mask.auras) {
-        if(v != 0) {
-            size += 2; /* uint16_t members */
-        }
-    }
-
-    return size;
-}
-
-static AuraMask aura_mask_read(Reader& reader) {
-    const uint32_t header = reader.read_u32();
-
-    AuraMask mask{};
-
-    for(int i = 0; i < AURA_MASK_SIZE; ++i) {
-        if ((header & (1 << i)) != 0) {
-            mask.auras[i] = reader.read_u16();
-        }
-    }
-
-    return mask;
-}
-
-static void aura_mask_write(Writer& writer, const AuraMask& mask) {
-    uint32_t header = 0;
-
-    for(int i = 0; i < AURA_MASK_SIZE; ++i) {
-        if (mask.auras[i] != 0) {
-            header |= 1 << i;
-        }
-    }
-
-    writer.write_u32(header);
-
-    for(int i = 0; i < AURA_MASK_SIZE; ++i) {
-        if (mask.auras[i] != 0) {
-            writer.write_u16(mask.auras[i]);
-        }
-    }
-}
-
 WOW_WORLD_MESSAGES_CPP_EXPORT void update_mask_set(UpdateMask& mask, UpdateMaskValues offset, uint32_t value) {
     uint32_t block = static_cast<uint32_t>(offset) / 32;
     uint32_t bit = static_cast<uint32_t>(offset) % 32;
@@ -1753,7 +1709,7 @@ static size_t NpcTextUpdate_size(const NpcTextUpdate& obj) {
     size_t _size = 32;
 
     for(const auto& v : obj.texts) {
-        _size += v.size() + 1;;
+        _size += v.size() + 1;
     }
 
     return _size;
@@ -2670,6 +2626,51 @@ static void WorldState_write(Writer& writer, const WorldState& obj) {
 
 }
 
+static size_t aura_mask_size(const AuraMask& mask) {
+    size_t size = 4; /* uint32_t header */
+
+    for(const auto v : mask.auras) {
+        if(v != 0) {
+            size += 2; /* uint16_t members */
+        }
+    }
+
+    return size;
+}
+
+static AuraMask aura_mask_read(Reader& reader) {
+    const uint32_t header = reader.read_u32();
+
+    AuraMask mask{};
+
+    for(int i = 0; i < AURA_MASK_SIZE; ++i) {
+        if ((header & (1 << i)) != 0) {
+            mask.auras[i] = reader.read_u16();
+        }
+    }
+
+    return mask;
+}
+
+static void aura_mask_write(Writer& writer, const AuraMask& mask) {
+    uint32_t header = 0;
+
+    for(int i = 0; i < AURA_MASK_SIZE; ++i) {
+        if (mask.auras[i] != 0) {
+            header |= 1 << i;
+        }
+    }
+
+    writer.write_u32(header);
+
+    for(int i = 0; i < AURA_MASK_SIZE; ++i) {
+        if (mask.auras[i] != 0) {
+            writer.write_u16(mask.auras[i]);
+        }
+    }
+}
+
+
 WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_BOOTME::write() const {
     auto writer = Writer(0x0000);
 
@@ -3332,7 +3333,7 @@ static size_t SMSG_GUILD_QUERY_RESPONSE_size(const SMSG_GUILD_QUERY_RESPONSE& ob
     size_t _size = 25 + obj.name.size();
 
     for(const auto& v : obj.rank_names) {
-        _size += v.size() + 1;;
+        _size += v.size() + 1;
     }
 
     return _size;
@@ -3762,7 +3763,7 @@ static size_t SMSG_QUEST_QUERY_RESPONSE_size(const SMSG_QUEST_QUERY_RESPONSE& ob
     size_t _size = 220 + obj.title.size() + obj.objective_text.size() + obj.details.size() + obj.end_text.size();
 
     for(const auto& v : obj.objective_texts) {
-        _size += v.size() + 1;;
+        _size += v.size() + 1;
     }
 
     return _size;
@@ -4129,7 +4130,7 @@ static size_t CMSG_WHO_size(const CMSG_WHO& obj) {
     size_t _size = 26 + obj.player_name.size() + obj.guild_name.size() + 4 * obj.zones.size();
 
     for(const auto& v : obj.search_strings) {
-        _size += v.size() + 1;;
+        _size += v.size() + 1;
     }
 
     return _size;
@@ -5497,7 +5498,7 @@ static size_t SMSG_GUILD_EVENT_size(const SMSG_GUILD_EVENT& obj) {
     size_t _size = 2;
 
     for(const auto& v : obj.event_descriptions) {
-        _size += v.size() + 1;;
+        _size += v.size() + 1;
     }
 
     return _size;
@@ -9967,13 +9968,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPELL_FAILURE::wri
 }
 
 static size_t SMSG_SPELL_COOLDOWN_size(const SMSG_SPELL_COOLDOWN& obj) {
-    size_t _size = 8;
-
-    for(const auto& v : obj.cooldowns) {
-        _size += 8;
-    }
-
-    return _size;
+    return 8 + 8 * obj.cooldowns.size();
 }
 
 SMSG_SPELL_COOLDOWN SMSG_SPELL_COOLDOWN_read(Reader& reader, size_t body_size) {
@@ -12779,13 +12774,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_BUY_FAILED::write(
 }
 
 static size_t SMSG_SHOWTAXINODES_size(const SMSG_SHOWTAXINODES& obj) {
-    size_t _size = 16;
-
-    for(const auto& v : obj.nodes) {
-        _size += 4;
-    }
-
-    return _size;
+    return 16 + 4 * obj.nodes.size();
 }
 
 SMSG_SHOWTAXINODES SMSG_SHOWTAXINODES_read(Reader& reader, size_t body_size) {
@@ -14872,7 +14861,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_COMPRESSED_UPDATE_
 
     writer.write_u16(0x000001f6); /* opcode */
 
-    writer.write_u32(SMSG_COMPRESSED_UPDATE_OBJECT_size(obj));
+    writer.write_u32(static_cast<uint32_t>(SMSG_COMPRESSED_UPDATE_OBJECT_size(obj)));
 
     auto old_writer = writer;
     writer = Writer(0);
@@ -14885,7 +14874,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_COMPRESSED_UPDATE_
     }
 
     const auto compressed_data = ::wow_world_messages::util::compress_data(writer.m_buf);
-    old_writer.write_u16_be_at_first_index(compressed_data.size() + 4 + 2);
+    old_writer.write_u16_be_at_first_index(static_cast<uint16_t>(compressed_data.size() + 4 + 2));
     old_writer.m_buf.insert(old_writer.m_buf.end(), compressed_data.begin(), compressed_data.end());
 
     return old_writer.m_buf;
@@ -17358,13 +17347,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_PROCRESIST::write(
 }
 
 static size_t SMSG_DISPEL_FAILED_size(const SMSG_DISPEL_FAILED& obj) {
-    size_t _size = 16;
-
-    for(const auto& v : obj.spells) {
-        _size += 4;
-    }
-
-    return _size;
+    return 16 + 4 * obj.spells.size();
 }
 
 SMSG_DISPEL_FAILED SMSG_DISPEL_FAILED_read(Reader& reader, size_t body_size) {
@@ -20474,13 +20457,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_AREA_SPIRIT_HEALER
 }
 
 static size_t SMSG_WARDEN_DATA_size(const SMSG_WARDEN_DATA& obj) {
-    size_t _size = 0;
-
-    for(const auto& v : obj.encrypted_data) {
-        _size += 1;
-    }
-
-    return _size;
+    return 0 + 1 * obj.encrypted_data.size();
 }
 
 SMSG_WARDEN_DATA SMSG_WARDEN_DATA_read(Reader& reader, size_t body_size) {
@@ -20511,13 +20488,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_WARDEN_DATA::write
 }
 
 static size_t CMSG_WARDEN_DATA_size(const CMSG_WARDEN_DATA& obj) {
-    size_t _size = 0;
-
-    for(const auto& v : obj.encrypted_data) {
-        _size += 1;
-    }
-
-    return _size;
+    return 0 + 1 * obj.encrypted_data.size();
 }
 
 CMSG_WARDEN_DATA CMSG_WARDEN_DATA_read(Reader& reader, size_t body_size) {
@@ -21224,7 +21195,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_COMPRESSED_MOVES::
 
     writer.write_u16(0x000002fb); /* opcode */
 
-    writer.write_u32(SMSG_COMPRESSED_MOVES_size(obj));
+    writer.write_u32(static_cast<uint32_t>(SMSG_COMPRESSED_MOVES_size(obj)));
 
     auto old_writer = writer;
     writer = Writer(0);
@@ -21233,7 +21204,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_COMPRESSED_MOVES::
     }
 
     const auto compressed_data = ::wow_world_messages::util::compress_data(writer.m_buf);
-    old_writer.write_u16_be_at_first_index(compressed_data.size() + 4 + 2);
+    old_writer.write_u16_be_at_first_index(static_cast<uint16_t>(compressed_data.size() + 4 + 2));
     old_writer.m_buf.insert(old_writer.m_buf.end(), compressed_data.begin(), compressed_data.end());
 
     return old_writer.m_buf;
@@ -22336,7 +22307,7 @@ static size_t SMSG_EXPECTED_SPAM_RECORDS_size(const SMSG_EXPECTED_SPAM_RECORDS& 
     size_t _size = 4;
 
     for(const auto& v : obj.records) {
-        _size += v.size() + 1;;
+        _size += v.size() + 1;
     }
 
     return _size;

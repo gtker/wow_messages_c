@@ -18,7 +18,7 @@ public:
     size_t m_index = 0;
 };
 
-int main(void) {
+int main() {
     /* CMSG_WORLD_TELEPORT */ {
         const std::vector<unsigned char> buffer = {0, 28, 8, 0, 0, 0, 239, 190, 173, 222, 1, 0, 0, 0, 0, 0, 128, 63, 0, 0, 0, 64, 0, 0, 64, 64, 0, 0, 128, 64, };
         auto reader = ByteReader(buffer);
@@ -26,12 +26,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_WORLD_TELEPORT 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_WORLD_TELEPORT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_WORLD_TELEPORT 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -45,12 +45,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_WORLD_TELEPORT 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_WORLD_TELEPORT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_WORLD_TELEPORT 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -64,12 +64,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_TELEPORT_TO_UNIT 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_TELEPORT_TO_UNIT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_TELEPORT_TO_UNIT 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -83,12 +83,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_CHAR_CREATE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_CHAR_CREATE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_CHAR_CREATE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -102,12 +102,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_CHAR_ENUM 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_CHAR_ENUM) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_CHAR_ENUM 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -121,12 +121,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_CHAR_DELETE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_CHAR_DELETE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_CHAR_DELETE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -140,12 +140,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_CHAR_CREATE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_CHAR_CREATE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_CHAR_CREATE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -159,12 +159,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_CHAR_ENUM 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_CHAR_ENUM) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_CHAR_ENUM 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -178,12 +178,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_CHAR_DELETE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_CHAR_DELETE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_CHAR_DELETE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -197,12 +197,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_PLAYER_LOGIN 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_PLAYER_LOGIN) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_PLAYER_LOGIN 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -216,12 +216,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_NEW_WORLD 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_NEW_WORLD) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_NEW_WORLD 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -235,12 +235,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_TRANSFER_PENDING 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_TRANSFER_PENDING) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_TRANSFER_PENDING 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -254,12 +254,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_CHARACTER_LOGIN_FAILED 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_CHARACTER_LOGIN_FAILED) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_CHARACTER_LOGIN_FAILED 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -273,12 +273,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_LOGIN_SETTIMESPEED 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_LOGIN_SETTIMESPEED) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_LOGIN_SETTIMESPEED 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -292,12 +292,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_PLAYER_LOGOUT 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_PLAYER_LOGOUT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_PLAYER_LOGOUT 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -311,12 +311,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_LOGOUT_REQUEST 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_LOGOUT_REQUEST) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_LOGOUT_REQUEST 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -330,12 +330,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_LOGOUT_RESPONSE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_LOGOUT_RESPONSE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_LOGOUT_RESPONSE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -349,12 +349,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_LOGOUT_COMPLETE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_LOGOUT_COMPLETE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_LOGOUT_COMPLETE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -368,12 +368,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_NAME_QUERY_RESPONSE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_NAME_QUERY_RESPONSE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_NAME_QUERY_RESPONSE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -387,12 +387,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_NAME_QUERY_RESPONSE 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_NAME_QUERY_RESPONSE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_NAME_QUERY_RESPONSE 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -406,12 +406,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_PET_NAME_QUERY 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_PET_NAME_QUERY) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_PET_NAME_QUERY 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -425,12 +425,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_PET_NAME_QUERY_RESPONSE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_PET_NAME_QUERY_RESPONSE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_PET_NAME_QUERY_RESPONSE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -444,12 +444,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_ITEM_QUERY_SINGLE_RESPONSE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_ITEM_QUERY_SINGLE_RESPONSE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_ITEM_QUERY_SINGLE_RESPONSE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -463,12 +463,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_CREATURE_QUERY_RESPONSE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_CREATURE_QUERY_RESPONSE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_CREATURE_QUERY_RESPONSE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -482,12 +482,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_IGNORE_LIST 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_IGNORE_LIST) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_IGNORE_LIST 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -501,12 +501,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_IGNORE_LIST 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_IGNORE_LIST) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_IGNORE_LIST 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -520,12 +520,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_MESSAGECHAT 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_MESSAGECHAT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_MESSAGECHAT 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -539,12 +539,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_MESSAGECHAT 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_MESSAGECHAT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_MESSAGECHAT 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -558,12 +558,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_JOIN_CHANNEL 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_JOIN_CHANNEL) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_JOIN_CHANNEL 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -577,12 +577,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_JOIN_CHANNEL 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_JOIN_CHANNEL) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_JOIN_CHANNEL 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -596,12 +596,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_UPDATE_OBJECT 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_UPDATE_OBJECT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_UPDATE_OBJECT 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -615,12 +615,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_UPDATE_OBJECT 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_UPDATE_OBJECT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_UPDATE_OBJECT 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -634,12 +634,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_DESTROY_OBJECT 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_DESTROY_OBJECT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_DESTROY_OBJECT 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -653,12 +653,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_USE_ITEM 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_USE_ITEM) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_USE_ITEM 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -672,12 +672,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_FORWARD_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::MSG_MOVE_START_FORWARD) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_FORWARD_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -691,12 +691,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_FORWARD_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::MSG_MOVE_START_FORWARD) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_FORWARD_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -710,12 +710,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_BACKWARD_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::MSG_MOVE_START_BACKWARD) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_BACKWARD_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -729,12 +729,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_BACKWARD_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::MSG_MOVE_START_BACKWARD) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_BACKWARD_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -748,12 +748,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_STOP_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::MSG_MOVE_STOP) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_STOP_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -767,12 +767,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_STOP_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::MSG_MOVE_STOP) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_STOP_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -786,12 +786,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_STRAFE_LEFT_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::MSG_MOVE_START_STRAFE_LEFT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_STRAFE_LEFT_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -805,12 +805,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_STRAFE_LEFT_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::MSG_MOVE_START_STRAFE_LEFT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_STRAFE_LEFT_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -824,12 +824,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_STRAFE_RIGHT_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::MSG_MOVE_START_STRAFE_RIGHT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_STRAFE_RIGHT_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -843,12 +843,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_STRAFE_RIGHT_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::MSG_MOVE_START_STRAFE_RIGHT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_STRAFE_RIGHT_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -862,12 +862,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_STOP_STRAFE_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::MSG_MOVE_STOP_STRAFE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_STOP_STRAFE_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -881,12 +881,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_STOP_STRAFE_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::MSG_MOVE_STOP_STRAFE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_STOP_STRAFE_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -900,12 +900,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_JUMP_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::MSG_MOVE_JUMP) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_JUMP_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -919,12 +919,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_JUMP_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::MSG_MOVE_JUMP) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_JUMP_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -938,12 +938,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_TURN_LEFT_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::MSG_MOVE_START_TURN_LEFT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_TURN_LEFT_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -957,12 +957,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_TURN_LEFT_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::MSG_MOVE_START_TURN_LEFT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_TURN_LEFT_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -976,12 +976,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_TURN_RIGHT_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::MSG_MOVE_START_TURN_RIGHT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_TURN_RIGHT_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -995,12 +995,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_TURN_RIGHT_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::MSG_MOVE_START_TURN_RIGHT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_TURN_RIGHT_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1014,12 +1014,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_STOP_TURN_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::MSG_MOVE_STOP_TURN) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_STOP_TURN_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1033,12 +1033,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_STOP_TURN_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::MSG_MOVE_STOP_TURN) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_STOP_TURN_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1052,12 +1052,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_SET_RUN_MODE_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::MSG_MOVE_SET_RUN_MODE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_SET_RUN_MODE_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1071,12 +1071,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_SET_RUN_MODE_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::MSG_MOVE_SET_RUN_MODE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_SET_RUN_MODE_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1090,12 +1090,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_SET_WALK_MODE_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::MSG_MOVE_SET_WALK_MODE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_SET_WALK_MODE_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1109,12 +1109,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_SET_WALK_MODE_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::MSG_MOVE_SET_WALK_MODE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_SET_WALK_MODE_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1128,12 +1128,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_TELEPORT_ACK_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::MSG_MOVE_TELEPORT_ACK) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_TELEPORT_ACK_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1147,12 +1147,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_TELEPORT_ACK_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::MSG_MOVE_TELEPORT_ACK) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_TELEPORT_ACK_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1166,12 +1166,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_FALL_LAND_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::MSG_MOVE_FALL_LAND) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_FALL_LAND_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1185,12 +1185,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_FALL_LAND_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::MSG_MOVE_FALL_LAND) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_FALL_LAND_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1204,12 +1204,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_SET_FACING_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::MSG_MOVE_SET_FACING) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_SET_FACING_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1223,12 +1223,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_SET_FACING_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::MSG_MOVE_SET_FACING) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_SET_FACING_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1242,12 +1242,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_FORCE_RUN_SPEED_CHANGE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_FORCE_RUN_SPEED_CHANGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_FORCE_RUN_SPEED_CHANGE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1261,12 +1261,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_FORCE_RUN_SPEED_CHANGE_ACK 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_FORCE_RUN_SPEED_CHANGE_ACK) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_FORCE_RUN_SPEED_CHANGE_ACK 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1280,12 +1280,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_HEARTBEAT_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::MSG_MOVE_HEARTBEAT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_HEARTBEAT_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1299,12 +1299,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_HEARTBEAT_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::MSG_MOVE_HEARTBEAT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_HEARTBEAT_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1318,12 +1318,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_TUTORIAL_FLAGS 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_TUTORIAL_FLAGS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_TUTORIAL_FLAGS 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1337,12 +1337,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_STANDSTATECHANGE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_STANDSTATECHANGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_STANDSTATECHANGE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1356,12 +1356,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_TEXT_EMOTE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_TEXT_EMOTE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_TEXT_EMOTE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1375,12 +1375,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_AUTOEQUIP_ITEM 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_AUTOEQUIP_ITEM) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_AUTOEQUIP_ITEM 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1394,12 +1394,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_INITIATE_TRADE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_INITIATE_TRADE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_INITIATE_TRADE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1413,12 +1413,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_CANCEL_TRADE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_CANCEL_TRADE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_CANCEL_TRADE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1432,12 +1432,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_INITIAL_SPELLS 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_INITIAL_SPELLS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_INITIAL_SPELLS 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1451,12 +1451,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_CAST_SPELL 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_CAST_SPELL) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_CAST_SPELL 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1470,12 +1470,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_CANCEL_CAST 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_CANCEL_CAST) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_CANCEL_CAST 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1489,12 +1489,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_CANCEL_CAST 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_CANCEL_CAST) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_CANCEL_CAST 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1508,12 +1508,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_SET_SELECTION 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_SET_SELECTION) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_SET_SELECTION 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1527,12 +1527,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_ATTACKSWING 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_ATTACKSWING) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_ATTACKSWING 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1546,12 +1546,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_ATTACKSTART 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_ATTACKSTART) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_ATTACKSTART 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1565,12 +1565,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_ATTACKSTOP 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_ATTACKSTOP) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_ATTACKSTOP 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1584,12 +1584,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_ATTACKERSTATEUPDATE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_ATTACKERSTATEUPDATE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_ATTACKERSTATEUPDATE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1603,12 +1603,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_ITEM_PUSH_RESULT 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_ITEM_PUSH_RESULT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_ITEM_PUSH_RESULT 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1622,12 +1622,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_QUERY_TIME 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_QUERY_TIME) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_QUERY_TIME 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1641,12 +1641,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_QUERY_TIME_RESPONSE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_QUERY_TIME_RESPONSE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_QUERY_TIME_RESPONSE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1660,12 +1660,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_PING 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_PING) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_PING 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1679,12 +1679,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_PONG 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_PONG) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_PONG 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1698,12 +1698,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_SETSHEATHED 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_SETSHEATHED) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_SETSHEATHED 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1717,12 +1717,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_AUTH_CHALLENGE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_AUTH_CHALLENGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_AUTH_CHALLENGE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1736,12 +1736,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_AUTH_SESSION 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_AUTH_SESSION) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_AUTH_SESSION 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1751,12 +1751,12 @@ int main(void) {
         const auto opcode2 = ::wow_world_messages::vanilla::read_client_opcode(reader2);
         if (opcode2.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_AUTH_SESSION 0 read invalid second opcode");
-            return 1;
+            abort();
         }
 
         if (opcode2.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_AUTH_SESSION) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_AUTH_SESSION 0 read invalid second opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer2 = ::wow_world_messages::vanilla::write_opcode(opcode2);
@@ -1770,12 +1770,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_AUTH_RESPONSE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_AUTH_RESPONSE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_AUTH_RESPONSE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1789,12 +1789,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_AUTH_RESPONSE 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_AUTH_RESPONSE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_AUTH_RESPONSE 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1808,12 +1808,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_AUTH_RESPONSE 2 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_AUTH_RESPONSE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_AUTH_RESPONSE 2 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1827,12 +1827,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_ZONEUPDATE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_ZONEUPDATE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_ZONEUPDATE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1846,12 +1846,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_ZONEUPDATE 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_ZONEUPDATE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_ZONEUPDATE 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1865,12 +1865,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_COMPRESSED_UPDATE_OBJECT 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_COMPRESSED_UPDATE_OBJECT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_COMPRESSED_UPDATE_OBJECT 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1880,12 +1880,12 @@ int main(void) {
         const auto opcode2 = ::wow_world_messages::vanilla::read_server_opcode(reader2);
         if (opcode2.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_COMPRESSED_UPDATE_OBJECT 0 read invalid second opcode");
-            return 1;
+            abort();
         }
 
         if (opcode2.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_COMPRESSED_UPDATE_OBJECT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_COMPRESSED_UPDATE_OBJECT 0 read invalid second opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer2 = ::wow_world_messages::vanilla::write_opcode(opcode2);
@@ -1899,12 +1899,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_ACCOUNT_DATA_TIMES 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_ACCOUNT_DATA_TIMES) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_ACCOUNT_DATA_TIMES 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1918,12 +1918,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_REQUEST_ACCOUNT_DATA 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_REQUEST_ACCOUNT_DATA) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_REQUEST_ACCOUNT_DATA 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1937,12 +1937,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_UPDATE_ACCOUNT_DATA 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_UPDATE_ACCOUNT_DATA) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_UPDATE_ACCOUNT_DATA 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1952,12 +1952,12 @@ int main(void) {
         const auto opcode2 = ::wow_world_messages::vanilla::read_client_opcode(reader2);
         if (opcode2.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_UPDATE_ACCOUNT_DATA 0 read invalid second opcode");
-            return 1;
+            abort();
         }
 
         if (opcode2.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_UPDATE_ACCOUNT_DATA) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_UPDATE_ACCOUNT_DATA 0 read invalid second opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer2 = ::wow_world_messages::vanilla::write_opcode(opcode2);
@@ -1971,12 +1971,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_UPDATE_ACCOUNT_DATA 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_UPDATE_ACCOUNT_DATA) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_UPDATE_ACCOUNT_DATA 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -1986,12 +1986,12 @@ int main(void) {
         const auto opcode2 = ::wow_world_messages::vanilla::read_client_opcode(reader2);
         if (opcode2.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_UPDATE_ACCOUNT_DATA 1 read invalid second opcode");
-            return 1;
+            abort();
         }
 
         if (opcode2.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_UPDATE_ACCOUNT_DATA) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_UPDATE_ACCOUNT_DATA 1 read invalid second opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer2 = ::wow_world_messages::vanilla::write_opcode(opcode2);
@@ -2005,12 +2005,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_GMTICKET_GETTICKET 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_GMTICKET_GETTICKET) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_GMTICKET_GETTICKET 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -2024,12 +2024,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_LOGIN_VERIFY_WORLD 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_LOGIN_VERIFY_WORLD) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_LOGIN_VERIFY_WORLD 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -2043,12 +2043,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_LEARN_TALENT 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_LEARN_TALENT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_LEARN_TALENT 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -2062,12 +2062,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_AUCTION_HELLO_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::MSG_AUCTION_HELLO) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_AUCTION_HELLO_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -2081,12 +2081,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_SET_ACTIVE_MOVER 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_SET_ACTIVE_MOVER) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_SET_ACTIVE_MOVER 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -2100,12 +2100,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_QUERY_NEXT_MAIL_TIME_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::MSG_QUERY_NEXT_MAIL_TIME) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_QUERY_NEXT_MAIL_TIME_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -2119,12 +2119,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_MEETINGSTONE_INFO 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_MEETINGSTONE_INFO) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_MEETINGSTONE_INFO 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -2138,12 +2138,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_CHAR_RENAME 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_CHAR_RENAME) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_CHAR_RENAME 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -2157,12 +2157,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_CHAR_RENAME 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_CHAR_RENAME) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_CHAR_RENAME 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -2176,12 +2176,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_CHAR_RENAME 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_CHAR_RENAME) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_CHAR_RENAME 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -2195,12 +2195,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_REQUEST_RAID_INFO 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_REQUEST_RAID_INFO) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_REQUEST_RAID_INFO 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -2214,12 +2214,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_MOVE_TIME_SKIPPED 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_MOVE_TIME_SKIPPED) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_MOVE_TIME_SKIPPED 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -2233,12 +2233,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_BATTLEFIELD_STATUS 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ClientOpcode::Opcode::CMSG_BATTLEFIELD_STATUS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_BATTLEFIELD_STATUS 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -2252,12 +2252,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_COMPRESSED_MOVES 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_COMPRESSED_MOVES) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_COMPRESSED_MOVES 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -2267,12 +2267,12 @@ int main(void) {
         const auto opcode2 = ::wow_world_messages::vanilla::read_server_opcode(reader2);
         if (opcode2.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_COMPRESSED_MOVES 0 read invalid second opcode");
-            return 1;
+            abort();
         }
 
         if (opcode2.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_COMPRESSED_MOVES) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_COMPRESSED_MOVES 0 read invalid second opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer2 = ::wow_world_messages::vanilla::write_opcode(opcode2);
@@ -2286,12 +2286,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_COMPRESSED_MOVES 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_COMPRESSED_MOVES) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_COMPRESSED_MOVES 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);
@@ -2301,12 +2301,12 @@ int main(void) {
         const auto opcode2 = ::wow_world_messages::vanilla::read_server_opcode(reader2);
         if (opcode2.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_COMPRESSED_MOVES 1 read invalid second opcode");
-            return 1;
+            abort();
         }
 
         if (opcode2.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_COMPRESSED_MOVES) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_COMPRESSED_MOVES 1 read invalid second opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer2 = ::wow_world_messages::vanilla::write_opcode(opcode2);
@@ -2320,12 +2320,12 @@ int main(void) {
         const auto opcode = ::wow_world_messages::vanilla::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_SPLINE_SET_RUN_SPEED 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_world_messages::vanilla::ServerOpcode::Opcode::SMSG_SPLINE_SET_RUN_SPEED) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_SPLINE_SET_RUN_SPEED 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_world_messages::vanilla::write_opcode(opcode);

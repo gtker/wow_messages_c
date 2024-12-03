@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.28)
 project(wow_world_messages_cpp LANGUAGES CXX VERSION 0.1.0)
 
-add_library(wow_world_messages_cpp_wow_world_messages_cpp src/all.cpp src/vanilla.cpp src/util.cpp src/puff.c)
+add_library(wow_world_messages_cpp_wow_world_messages_cpp src/all.cpp src/vanilla.cpp src/tbc.cpp src/util.cpp src/puff.c)
 target_sources(wow_world_messages_cpp_wow_world_messages_cpp
         PUBLIC
         FILE_SET HEADERS
@@ -41,7 +41,11 @@ write_basic_package_version_file(
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/wow_world_messages_cppConfigVersion.cmake" DESTINATION lib/cmake/wow_world_messages_cpp)
 
 if (BUILD_TESTING)
-    add_executable(WowWorldMessagesCpp_vanilla.test src/vanilla.test.cpp)
-    target_link_libraries(WowWorldMessagesCpp_vanilla.test PRIVATE wow_messages_test_utils)
-    add_test(NAME WowWorldMessagesCpp_vanilla.test COMMAND WowWorldMessagesCpp_vanilla.test)
+    add_executable(wow_world_messages_cpp_vanilla.test src/vanilla.test.cpp)
+    target_link_libraries(wow_world_messages_cpp_vanilla.test PRIVATE wow_messages_test_utils)
+    add_test(NAME wow_world_messages_cpp_vanilla.test COMMAND wow_world_messages_cpp_vanilla.test)
+
+    add_executable(wow_world_messages_cpp_tbc.test src/tbc.test.cpp)
+    target_link_libraries(wow_world_messages_cpp_tbc.test PRIVATE wow_messages_test_utils)
+    add_test(NAME wow_world_messages_cpp_tbc.test COMMAND wow_world_messages_cpp_tbc.test)
 endif ()

@@ -2,7 +2,7 @@ import typing
 
 import model
 from util import pascal_case_to_snake_case, first_version_as_module, world_version_to_module_name, \
-    version_to_module_name, is_cpp
+    version_to_module_name, is_cpp, is_world
 from writer import Writer
 
 SKIPS: typing.Dict[str, int] = {}
@@ -164,8 +164,15 @@ def integer_type_to_c_str(integer_type: model.IntegerType) -> str:
     size = integer_type_to_size(integer_type) * 8
     return f"{prefix}int{size}_t"
 
+def container_module_prefix(tags: model.ObjectTags, module_name: str) -> str:
+    first_module = first_version_as_module(tags)
+    version = module_name if (is_world(tags) and first_module != "all") else first_module
+    return version
+
 
 def type_to_c_str(ty: model.DataType, module_name: str) -> str:
+    is_world = module_name in {"vanilla", "tbc", "wrath"}
+
     match ty:
         case model.DataTypeInteger(integer_type=integer_type):
             return integer_type_to_c_str(integer_type)
@@ -176,14 +183,14 @@ def type_to_c_str(ty: model.DataType, module_name: str) -> str:
             if is_cpp():
                 return "std::string"
 
-            if module_name in {"vanilla", "tbc", "wrath"}:
+            if is_world:
                 return "WowWorldString"
 
             return "WowLoginString"
         case model.DataTypeFloatingPoint():
             return "float"
         case model.DataTypeStruct(struct_data=e):
-            version = first_version_as_module(e.tags)
+            version = container_module_prefix(e.tags, module_name)
             separator = "::" if is_cpp() else "_"
             return f"{version}{separator}{e.name}"
         case model.DataTypeEnum(type_name=type_name):
@@ -194,9 +201,9 @@ def type_to_c_str(ty: model.DataType, module_name: str) -> str:
         case model.DataTypeArray(size=size, inner_type=inner_type):
             match size:
                 case model.ArraySizeFixed():
-                    return f"{array_type_to_c_str(inner_type)}"
+                    return f"{array_type_to_c_str(inner_type, module_name, is_world)}"
 
-            return f"std::vector<{array_type_to_c_str(inner_type)}>" if is_cpp() else f"{array_type_to_c_str(inner_type)}*"
+            return f"std::vector<{array_type_to_c_str(inner_type, module_name, is_world)}>" if is_cpp() else f"{array_type_to_c_str(inner_type, module_name, is_world)}*"
 
         case model.DataTypeLevel():
             return "uint8_t"
@@ -244,7 +251,7 @@ def type_to_c_str(ty: model.DataType, module_name: str) -> str:
             raise Exception(f"{v}")
 
 
-def array_type_to_c_str(ty: model.ArrayType):
+def array_type_to_c_str(ty: model.ArrayType, module_name: str, is_world: bool):
     match ty:
         case model.ArrayTypeCstring():
             return "std::string" if is_cpp() else "WowWorldString"
@@ -257,7 +264,7 @@ def array_type_to_c_str(ty: model.ArrayType):
         case model.ArrayTypePackedGUID():
             return "uint64_t"
         case model.ArrayTypeStruct(struct_data=struct_data):
-            version = first_version_as_module(struct_data.tags)
+            version = container_module_prefix(struct_data.tags, module_name)
             separator = "::" if is_cpp() else "_"
             return f"{version}{separator}{struct_data.name}"
         case v:
@@ -310,7 +317,7 @@ def print_if_statement_header(
     original_type_pascal = pascal_case_to_snake_case(original_type).upper()
     variable_name = f"obj.{extra_indirection}{statement.variable_name}" if is_cpp() else f"object->{extra_indirection}{statement.variable_name}"
 
-    first_version = first_version_as_module(statement.original_type.tags).upper() # type: ignore[attr-defined]
+    first_version = container_module_prefix(statement.original_type.tags, module_name).upper() # type: ignore[attr-defined]
 
     match statement.definer_type:
         case model.DefinerType.ENUM:

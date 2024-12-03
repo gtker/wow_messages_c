@@ -1,6 +1,8 @@
 #include "wow_world_messages/vanilla.h"
 #include "test_utils.h"
 
+#include <stdlib.h> /* abort() */
+
 unsigned char write_buffer[1 << 16] = {0}; /* uint16_t max */
 int main(void) {
     /* CMSG_WORLD_TELEPORT */
@@ -14,12 +16,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_WORLD_TELEPORT 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_WORLD_TELEPORT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_WORLD_TELEPORT 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_WORLD_TELEPORT);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -28,7 +30,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_WORLD_TELEPORT 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_WORLD_TELEPORT 0");
@@ -45,12 +47,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_WORLD_TELEPORT 1 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_WORLD_TELEPORT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_WORLD_TELEPORT 1 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_WORLD_TELEPORT);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -59,7 +61,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_WORLD_TELEPORT 1 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_WORLD_TELEPORT 1");
@@ -77,12 +79,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_TELEPORT_TO_UNIT 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_TELEPORT_TO_UNIT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_TELEPORT_TO_UNIT 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_TELEPORT_TO_UNIT);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -91,7 +93,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_TELEPORT_TO_UNIT 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_TELEPORT_TO_UNIT 0");
@@ -110,12 +112,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_CHAR_CREATE 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_CHAR_CREATE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_CHAR_CREATE 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_CHAR_CREATE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -124,7 +126,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_CHAR_CREATE 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_CHAR_CREATE 0");
@@ -143,12 +145,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_CHAR_ENUM 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_CHAR_ENUM) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_CHAR_ENUM 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_CHAR_ENUM);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -157,7 +159,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_CHAR_ENUM 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_CHAR_ENUM 0");
@@ -175,12 +177,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_CHAR_DELETE 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_CHAR_DELETE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_CHAR_DELETE 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_CHAR_DELETE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -189,7 +191,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_CHAR_DELETE 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_CHAR_DELETE 0");
@@ -207,12 +209,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_CHAR_CREATE 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != SMSG_CHAR_CREATE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_CHAR_CREATE 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_CHAR_CREATE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -221,7 +223,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_CHAR_CREATE 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_CHAR_CREATE 0");
@@ -239,12 +241,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_CHAR_ENUM 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != SMSG_CHAR_ENUM) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_CHAR_ENUM 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_CHAR_ENUM);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -253,7 +255,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_CHAR_ENUM 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_CHAR_ENUM 0");
@@ -272,12 +274,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_CHAR_DELETE 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != SMSG_CHAR_DELETE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_CHAR_DELETE 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_CHAR_DELETE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -286,7 +288,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_CHAR_DELETE 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_CHAR_DELETE 0");
@@ -304,12 +306,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_PLAYER_LOGIN 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_PLAYER_LOGIN) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_PLAYER_LOGIN 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_PLAYER_LOGIN);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -318,7 +320,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_PLAYER_LOGIN 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_PLAYER_LOGIN 0");
@@ -336,12 +338,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_NEW_WORLD 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != SMSG_NEW_WORLD) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_NEW_WORLD 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_NEW_WORLD);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -350,7 +352,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_NEW_WORLD 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_NEW_WORLD 0");
@@ -368,12 +370,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_TRANSFER_PENDING 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != SMSG_TRANSFER_PENDING) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_TRANSFER_PENDING 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_TRANSFER_PENDING);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -382,7 +384,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_TRANSFER_PENDING 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_TRANSFER_PENDING 0");
@@ -401,12 +403,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_CHARACTER_LOGIN_FAILED 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != SMSG_CHARACTER_LOGIN_FAILED) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_CHARACTER_LOGIN_FAILED 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_CHARACTER_LOGIN_FAILED);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -415,7 +417,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_CHARACTER_LOGIN_FAILED 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_CHARACTER_LOGIN_FAILED 0");
@@ -433,12 +435,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_LOGIN_SETTIMESPEED 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != SMSG_LOGIN_SETTIMESPEED) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_LOGIN_SETTIMESPEED 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_LOGIN_SETTIMESPEED);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -447,7 +449,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_LOGIN_SETTIMESPEED 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_LOGIN_SETTIMESPEED 0");
@@ -465,12 +467,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_PLAYER_LOGOUT 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_PLAYER_LOGOUT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_PLAYER_LOGOUT 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_PLAYER_LOGOUT);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -479,7 +481,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_PLAYER_LOGOUT 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_PLAYER_LOGOUT 0");
@@ -497,12 +499,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_LOGOUT_REQUEST 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_LOGOUT_REQUEST) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_LOGOUT_REQUEST 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_LOGOUT_REQUEST);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -511,7 +513,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_LOGOUT_REQUEST 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_LOGOUT_REQUEST 0");
@@ -529,12 +531,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_LOGOUT_RESPONSE 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != SMSG_LOGOUT_RESPONSE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_LOGOUT_RESPONSE 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_LOGOUT_RESPONSE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -543,7 +545,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_LOGOUT_RESPONSE 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_LOGOUT_RESPONSE 0");
@@ -561,12 +563,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_LOGOUT_COMPLETE 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != SMSG_LOGOUT_COMPLETE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_LOGOUT_COMPLETE 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_LOGOUT_COMPLETE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -575,7 +577,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_LOGOUT_COMPLETE 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_LOGOUT_COMPLETE 0");
@@ -593,12 +595,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_NAME_QUERY_RESPONSE 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != SMSG_NAME_QUERY_RESPONSE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_NAME_QUERY_RESPONSE 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_NAME_QUERY_RESPONSE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -607,7 +609,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_NAME_QUERY_RESPONSE 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_NAME_QUERY_RESPONSE 0");
@@ -625,12 +627,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_NAME_QUERY_RESPONSE 1 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != SMSG_NAME_QUERY_RESPONSE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_NAME_QUERY_RESPONSE 1 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_NAME_QUERY_RESPONSE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -639,7 +641,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_NAME_QUERY_RESPONSE 1 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_NAME_QUERY_RESPONSE 1");
@@ -658,12 +660,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_PET_NAME_QUERY 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_PET_NAME_QUERY) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_PET_NAME_QUERY 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_PET_NAME_QUERY);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -672,7 +674,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_PET_NAME_QUERY 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_PET_NAME_QUERY 0");
@@ -690,12 +692,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_PET_NAME_QUERY_RESPONSE 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != SMSG_PET_NAME_QUERY_RESPONSE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_PET_NAME_QUERY_RESPONSE 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_PET_NAME_QUERY_RESPONSE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -704,7 +706,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_PET_NAME_QUERY_RESPONSE 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_PET_NAME_QUERY_RESPONSE 0");
@@ -723,12 +725,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_ITEM_QUERY_SINGLE_RESPONSE 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != SMSG_ITEM_QUERY_SINGLE_RESPONSE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_ITEM_QUERY_SINGLE_RESPONSE 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_ITEM_QUERY_SINGLE_RESPONSE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -737,7 +739,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_ITEM_QUERY_SINGLE_RESPONSE 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_ITEM_QUERY_SINGLE_RESPONSE 0");
@@ -756,12 +758,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_CREATURE_QUERY_RESPONSE 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != SMSG_CREATURE_QUERY_RESPONSE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_CREATURE_QUERY_RESPONSE 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_CREATURE_QUERY_RESPONSE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -770,7 +772,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_CREATURE_QUERY_RESPONSE 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_CREATURE_QUERY_RESPONSE 0");
@@ -789,12 +791,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_IGNORE_LIST 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != SMSG_IGNORE_LIST) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_IGNORE_LIST 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_IGNORE_LIST);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -803,7 +805,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_IGNORE_LIST 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_IGNORE_LIST 0");
@@ -821,12 +823,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_IGNORE_LIST 1 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != SMSG_IGNORE_LIST) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_IGNORE_LIST 1 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_IGNORE_LIST);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -835,7 +837,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_IGNORE_LIST 1 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_IGNORE_LIST 1");
@@ -854,12 +856,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_MESSAGECHAT 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_MESSAGECHAT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_MESSAGECHAT 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_MESSAGECHAT);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -868,7 +870,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_MESSAGECHAT 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_MESSAGECHAT 0");
@@ -887,12 +889,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_MESSAGECHAT 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != SMSG_MESSAGECHAT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_MESSAGECHAT 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_MESSAGECHAT);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -901,7 +903,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_MESSAGECHAT 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_MESSAGECHAT 0");
@@ -920,12 +922,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_JOIN_CHANNEL 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_JOIN_CHANNEL) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_JOIN_CHANNEL 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_JOIN_CHANNEL);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -934,7 +936,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_JOIN_CHANNEL 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_JOIN_CHANNEL 0");
@@ -952,12 +954,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_JOIN_CHANNEL 1 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_JOIN_CHANNEL) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_JOIN_CHANNEL 1 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_JOIN_CHANNEL);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -966,7 +968,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_JOIN_CHANNEL 1 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_JOIN_CHANNEL 1");
@@ -985,12 +987,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_UPDATE_OBJECT 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != SMSG_UPDATE_OBJECT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_UPDATE_OBJECT 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_UPDATE_OBJECT);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -999,7 +1001,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_UPDATE_OBJECT 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_UPDATE_OBJECT 0");
@@ -1017,12 +1019,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_UPDATE_OBJECT 1 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != SMSG_UPDATE_OBJECT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_UPDATE_OBJECT 1 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_UPDATE_OBJECT);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1031,7 +1033,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_UPDATE_OBJECT 1 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_UPDATE_OBJECT 1");
@@ -1050,12 +1052,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_DESTROY_OBJECT 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != SMSG_DESTROY_OBJECT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_DESTROY_OBJECT 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_DESTROY_OBJECT);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1064,7 +1066,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_DESTROY_OBJECT 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_DESTROY_OBJECT 0");
@@ -1082,12 +1084,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_USE_ITEM 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_USE_ITEM) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_USE_ITEM 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_USE_ITEM);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1096,7 +1098,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_USE_ITEM 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_USE_ITEM 0");
@@ -1115,12 +1117,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_FORWARD_Client 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != MSG_MOVE_START_FORWARD) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_FORWARD_Client 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, MSG_MOVE_START_FORWARD);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1129,7 +1131,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_FORWARD_Client 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_FORWARD_Client 0");
@@ -1148,12 +1150,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_FORWARD_Server 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != MSG_MOVE_START_FORWARD) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_FORWARD_Server 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, MSG_MOVE_START_FORWARD);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1162,7 +1164,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_FORWARD_Server 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_FORWARD_Server 0");
@@ -1181,12 +1183,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_BACKWARD_Client 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != MSG_MOVE_START_BACKWARD) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_BACKWARD_Client 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, MSG_MOVE_START_BACKWARD);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1195,7 +1197,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_BACKWARD_Client 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_BACKWARD_Client 0");
@@ -1214,12 +1216,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_BACKWARD_Server 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != MSG_MOVE_START_BACKWARD) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_BACKWARD_Server 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, MSG_MOVE_START_BACKWARD);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1228,7 +1230,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_BACKWARD_Server 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_BACKWARD_Server 0");
@@ -1247,12 +1249,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_STOP_Client 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != MSG_MOVE_STOP) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_STOP_Client 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, MSG_MOVE_STOP);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1261,7 +1263,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_STOP_Client 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_STOP_Client 0");
@@ -1280,12 +1282,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_STOP_Server 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != MSG_MOVE_STOP) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_STOP_Server 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, MSG_MOVE_STOP);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1294,7 +1296,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_STOP_Server 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_STOP_Server 0");
@@ -1313,12 +1315,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_STRAFE_LEFT_Client 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != MSG_MOVE_START_STRAFE_LEFT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_STRAFE_LEFT_Client 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, MSG_MOVE_START_STRAFE_LEFT);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1327,7 +1329,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_STRAFE_LEFT_Client 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_STRAFE_LEFT_Client 0");
@@ -1346,12 +1348,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_STRAFE_LEFT_Server 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != MSG_MOVE_START_STRAFE_LEFT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_STRAFE_LEFT_Server 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, MSG_MOVE_START_STRAFE_LEFT);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1360,7 +1362,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_STRAFE_LEFT_Server 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_STRAFE_LEFT_Server 0");
@@ -1379,12 +1381,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_STRAFE_RIGHT_Client 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != MSG_MOVE_START_STRAFE_RIGHT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_STRAFE_RIGHT_Client 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, MSG_MOVE_START_STRAFE_RIGHT);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1393,7 +1395,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_STRAFE_RIGHT_Client 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_STRAFE_RIGHT_Client 0");
@@ -1412,12 +1414,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_STRAFE_RIGHT_Server 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != MSG_MOVE_START_STRAFE_RIGHT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_STRAFE_RIGHT_Server 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, MSG_MOVE_START_STRAFE_RIGHT);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1426,7 +1428,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_STRAFE_RIGHT_Server 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_STRAFE_RIGHT_Server 0");
@@ -1445,12 +1447,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_STOP_STRAFE_Client 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != MSG_MOVE_STOP_STRAFE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_STOP_STRAFE_Client 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, MSG_MOVE_STOP_STRAFE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1459,7 +1461,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_STOP_STRAFE_Client 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_STOP_STRAFE_Client 0");
@@ -1478,12 +1480,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_STOP_STRAFE_Server 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != MSG_MOVE_STOP_STRAFE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_STOP_STRAFE_Server 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, MSG_MOVE_STOP_STRAFE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1492,7 +1494,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_STOP_STRAFE_Server 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_STOP_STRAFE_Server 0");
@@ -1511,12 +1513,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_JUMP_Client 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != MSG_MOVE_JUMP) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_JUMP_Client 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, MSG_MOVE_JUMP);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1525,7 +1527,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_JUMP_Client 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_JUMP_Client 0");
@@ -1544,12 +1546,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_JUMP_Server 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != MSG_MOVE_JUMP) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_JUMP_Server 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, MSG_MOVE_JUMP);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1558,7 +1560,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_JUMP_Server 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_JUMP_Server 0");
@@ -1577,12 +1579,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_TURN_LEFT_Client 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != MSG_MOVE_START_TURN_LEFT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_TURN_LEFT_Client 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, MSG_MOVE_START_TURN_LEFT);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1591,7 +1593,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_TURN_LEFT_Client 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_TURN_LEFT_Client 0");
@@ -1610,12 +1612,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_TURN_LEFT_Server 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != MSG_MOVE_START_TURN_LEFT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_TURN_LEFT_Server 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, MSG_MOVE_START_TURN_LEFT);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1624,7 +1626,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_TURN_LEFT_Server 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_TURN_LEFT_Server 0");
@@ -1643,12 +1645,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_TURN_RIGHT_Client 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != MSG_MOVE_START_TURN_RIGHT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_TURN_RIGHT_Client 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, MSG_MOVE_START_TURN_RIGHT);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1657,7 +1659,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_TURN_RIGHT_Client 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_TURN_RIGHT_Client 0");
@@ -1676,12 +1678,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_TURN_RIGHT_Server 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != MSG_MOVE_START_TURN_RIGHT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_TURN_RIGHT_Server 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, MSG_MOVE_START_TURN_RIGHT);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1690,7 +1692,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_TURN_RIGHT_Server 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_START_TURN_RIGHT_Server 0");
@@ -1709,12 +1711,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_STOP_TURN_Client 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != MSG_MOVE_STOP_TURN) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_STOP_TURN_Client 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, MSG_MOVE_STOP_TURN);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1723,7 +1725,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_STOP_TURN_Client 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_STOP_TURN_Client 0");
@@ -1742,12 +1744,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_STOP_TURN_Server 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != MSG_MOVE_STOP_TURN) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_STOP_TURN_Server 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, MSG_MOVE_STOP_TURN);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1756,7 +1758,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_STOP_TURN_Server 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_STOP_TURN_Server 0");
@@ -1775,12 +1777,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_SET_RUN_MODE_Client 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != MSG_MOVE_SET_RUN_MODE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_SET_RUN_MODE_Client 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, MSG_MOVE_SET_RUN_MODE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1789,7 +1791,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_SET_RUN_MODE_Client 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_SET_RUN_MODE_Client 0");
@@ -1808,12 +1810,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_SET_RUN_MODE_Server 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != MSG_MOVE_SET_RUN_MODE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_SET_RUN_MODE_Server 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, MSG_MOVE_SET_RUN_MODE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1822,7 +1824,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_SET_RUN_MODE_Server 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_SET_RUN_MODE_Server 0");
@@ -1841,12 +1843,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_SET_WALK_MODE_Client 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != MSG_MOVE_SET_WALK_MODE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_SET_WALK_MODE_Client 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, MSG_MOVE_SET_WALK_MODE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1855,7 +1857,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_SET_WALK_MODE_Client 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_SET_WALK_MODE_Client 0");
@@ -1874,12 +1876,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_SET_WALK_MODE_Server 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != MSG_MOVE_SET_WALK_MODE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_SET_WALK_MODE_Server 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, MSG_MOVE_SET_WALK_MODE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1888,7 +1890,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_SET_WALK_MODE_Server 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_SET_WALK_MODE_Server 0");
@@ -1907,12 +1909,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_TELEPORT_ACK_Client 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != MSG_MOVE_TELEPORT_ACK) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_TELEPORT_ACK_Client 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, MSG_MOVE_TELEPORT_ACK);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1921,7 +1923,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_TELEPORT_ACK_Client 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_TELEPORT_ACK_Client 0");
@@ -1939,12 +1941,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_TELEPORT_ACK_Server 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != MSG_MOVE_TELEPORT_ACK) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_TELEPORT_ACK_Server 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, MSG_MOVE_TELEPORT_ACK);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1953,7 +1955,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_TELEPORT_ACK_Server 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_TELEPORT_ACK_Server 0");
@@ -1972,12 +1974,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_FALL_LAND_Client 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != MSG_MOVE_FALL_LAND) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_FALL_LAND_Client 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, MSG_MOVE_FALL_LAND);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1986,7 +1988,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_FALL_LAND_Client 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_FALL_LAND_Client 0");
@@ -2005,12 +2007,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_FALL_LAND_Server 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != MSG_MOVE_FALL_LAND) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_FALL_LAND_Server 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, MSG_MOVE_FALL_LAND);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -2019,7 +2021,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_FALL_LAND_Server 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_FALL_LAND_Server 0");
@@ -2038,12 +2040,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_SET_FACING_Client 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != MSG_MOVE_SET_FACING) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_SET_FACING_Client 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, MSG_MOVE_SET_FACING);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -2052,7 +2054,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_SET_FACING_Client 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_SET_FACING_Client 0");
@@ -2071,12 +2073,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_SET_FACING_Server 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != MSG_MOVE_SET_FACING) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_SET_FACING_Server 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, MSG_MOVE_SET_FACING);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -2085,7 +2087,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_SET_FACING_Server 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_SET_FACING_Server 0");
@@ -2104,12 +2106,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_FORCE_RUN_SPEED_CHANGE 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != SMSG_FORCE_RUN_SPEED_CHANGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_FORCE_RUN_SPEED_CHANGE 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_FORCE_RUN_SPEED_CHANGE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -2118,7 +2120,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_FORCE_RUN_SPEED_CHANGE 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_FORCE_RUN_SPEED_CHANGE 0");
@@ -2136,12 +2138,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_FORCE_RUN_SPEED_CHANGE_ACK 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_FORCE_RUN_SPEED_CHANGE_ACK) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_FORCE_RUN_SPEED_CHANGE_ACK 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_FORCE_RUN_SPEED_CHANGE_ACK);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -2150,7 +2152,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_FORCE_RUN_SPEED_CHANGE_ACK 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_FORCE_RUN_SPEED_CHANGE_ACK 0");
@@ -2169,12 +2171,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_HEARTBEAT_Client 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != MSG_MOVE_HEARTBEAT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_HEARTBEAT_Client 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, MSG_MOVE_HEARTBEAT);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -2183,7 +2185,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_HEARTBEAT_Client 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_HEARTBEAT_Client 0");
@@ -2202,12 +2204,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_HEARTBEAT_Server 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != MSG_MOVE_HEARTBEAT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_HEARTBEAT_Server 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, MSG_MOVE_HEARTBEAT);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -2216,7 +2218,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_HEARTBEAT_Server 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_HEARTBEAT_Server 0");
@@ -2235,12 +2237,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_TUTORIAL_FLAGS 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != SMSG_TUTORIAL_FLAGS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_TUTORIAL_FLAGS 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_TUTORIAL_FLAGS);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -2249,7 +2251,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_TUTORIAL_FLAGS 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_TUTORIAL_FLAGS 0");
@@ -2268,12 +2270,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_STANDSTATECHANGE 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_STANDSTATECHANGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_STANDSTATECHANGE 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_STANDSTATECHANGE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -2282,7 +2284,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_STANDSTATECHANGE 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_STANDSTATECHANGE 0");
@@ -2300,12 +2302,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_TEXT_EMOTE 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_TEXT_EMOTE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_TEXT_EMOTE 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_TEXT_EMOTE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -2314,7 +2316,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_TEXT_EMOTE 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_TEXT_EMOTE 0");
@@ -2332,12 +2334,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_AUTOEQUIP_ITEM 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_AUTOEQUIP_ITEM) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_AUTOEQUIP_ITEM 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_AUTOEQUIP_ITEM);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -2346,7 +2348,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_AUTOEQUIP_ITEM 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_AUTOEQUIP_ITEM 0");
@@ -2364,12 +2366,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_INITIATE_TRADE 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_INITIATE_TRADE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_INITIATE_TRADE 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_INITIATE_TRADE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -2378,7 +2380,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_INITIATE_TRADE 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_INITIATE_TRADE 0");
@@ -2396,12 +2398,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_CANCEL_TRADE 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_CANCEL_TRADE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_CANCEL_TRADE 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_CANCEL_TRADE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -2410,7 +2412,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_CANCEL_TRADE 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_CANCEL_TRADE 0");
@@ -2428,12 +2430,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_INITIAL_SPELLS 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != SMSG_INITIAL_SPELLS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_INITIAL_SPELLS 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_INITIAL_SPELLS);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -2442,7 +2444,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_INITIAL_SPELLS 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_INITIAL_SPELLS 0");
@@ -2461,12 +2463,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_CAST_SPELL 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_CAST_SPELL) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_CAST_SPELL 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_CAST_SPELL);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -2475,7 +2477,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_CAST_SPELL 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_CAST_SPELL 0");
@@ -2494,12 +2496,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_CANCEL_CAST 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_CANCEL_CAST) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_CANCEL_CAST 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_CANCEL_CAST);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -2508,7 +2510,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_CANCEL_CAST 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_CANCEL_CAST 0");
@@ -2525,12 +2527,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_CANCEL_CAST 1 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_CANCEL_CAST) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_CANCEL_CAST 1 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_CANCEL_CAST);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -2539,7 +2541,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_CANCEL_CAST 1 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_CANCEL_CAST 1");
@@ -2557,12 +2559,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_SET_SELECTION 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_SET_SELECTION) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_SET_SELECTION 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_SET_SELECTION);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -2571,7 +2573,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_SET_SELECTION 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_SET_SELECTION 0");
@@ -2589,12 +2591,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_ATTACKSWING 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_ATTACKSWING) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_ATTACKSWING 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_ATTACKSWING);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -2603,7 +2605,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_ATTACKSWING 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_ATTACKSWING 0");
@@ -2621,12 +2623,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_ATTACKSTART 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != SMSG_ATTACKSTART) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_ATTACKSTART 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_ATTACKSTART);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -2635,7 +2637,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_ATTACKSTART 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_ATTACKSTART 0");
@@ -2653,12 +2655,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_ATTACKSTOP 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != SMSG_ATTACKSTOP) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_ATTACKSTOP 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_ATTACKSTOP);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -2667,7 +2669,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_ATTACKSTOP 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_ATTACKSTOP 0");
@@ -2685,12 +2687,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_ATTACKERSTATEUPDATE 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != SMSG_ATTACKERSTATEUPDATE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_ATTACKERSTATEUPDATE 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_ATTACKERSTATEUPDATE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -2699,7 +2701,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_ATTACKERSTATEUPDATE 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_ATTACKERSTATEUPDATE 0");
@@ -2718,12 +2720,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_ITEM_PUSH_RESULT 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != SMSG_ITEM_PUSH_RESULT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_ITEM_PUSH_RESULT 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_ITEM_PUSH_RESULT);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -2732,7 +2734,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_ITEM_PUSH_RESULT 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_ITEM_PUSH_RESULT 0");
@@ -2750,12 +2752,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_QUERY_TIME 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_QUERY_TIME) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_QUERY_TIME 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_QUERY_TIME);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -2764,7 +2766,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_QUERY_TIME 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_QUERY_TIME 0");
@@ -2782,12 +2784,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_QUERY_TIME_RESPONSE 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != SMSG_QUERY_TIME_RESPONSE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_QUERY_TIME_RESPONSE 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_QUERY_TIME_RESPONSE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -2796,7 +2798,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_QUERY_TIME_RESPONSE 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_QUERY_TIME_RESPONSE 0");
@@ -2814,12 +2816,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_PING 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_PING) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_PING 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_PING);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -2828,7 +2830,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_PING 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_PING 0");
@@ -2846,12 +2848,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_PONG 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != SMSG_PONG) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_PONG 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_PONG);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -2860,7 +2862,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_PONG 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_PONG 0");
@@ -2878,12 +2880,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_SETSHEATHED 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_SETSHEATHED) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_SETSHEATHED 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_SETSHEATHED);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -2892,7 +2894,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_SETSHEATHED 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_SETSHEATHED 0");
@@ -2910,12 +2912,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_AUTH_CHALLENGE 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != SMSG_AUTH_CHALLENGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_AUTH_CHALLENGE 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_AUTH_CHALLENGE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -2924,7 +2926,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_AUTH_CHALLENGE 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_AUTH_CHALLENGE 0");
@@ -2942,12 +2944,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_AUTH_SESSION 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_AUTH_SESSION) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_AUTH_SESSION 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_AUTH_SESSION);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -2956,7 +2958,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_AUTH_SESSION 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             /* TODO compressed array compare do what? */
@@ -2975,12 +2977,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_AUTH_RESPONSE 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != SMSG_AUTH_RESPONSE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_AUTH_RESPONSE 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_AUTH_RESPONSE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -2989,7 +2991,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_AUTH_RESPONSE 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_AUTH_RESPONSE 0");
@@ -3007,12 +3009,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_AUTH_RESPONSE 1 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != SMSG_AUTH_RESPONSE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_AUTH_RESPONSE 1 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_AUTH_RESPONSE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -3021,7 +3023,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_AUTH_RESPONSE 1 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_AUTH_RESPONSE 1");
@@ -3039,12 +3041,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_AUTH_RESPONSE 2 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != SMSG_AUTH_RESPONSE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_AUTH_RESPONSE 2 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_AUTH_RESPONSE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -3053,7 +3055,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_AUTH_RESPONSE 2 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_AUTH_RESPONSE 2");
@@ -3072,12 +3074,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_ZONEUPDATE 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_ZONEUPDATE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_ZONEUPDATE 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_ZONEUPDATE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -3086,7 +3088,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_ZONEUPDATE 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_ZONEUPDATE 0");
@@ -3103,12 +3105,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_ZONEUPDATE 1 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_ZONEUPDATE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_ZONEUPDATE 1 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_ZONEUPDATE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -3117,7 +3119,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_ZONEUPDATE 1 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_ZONEUPDATE 1");
@@ -3135,12 +3137,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_COMPRESSED_UPDATE_OBJECT 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != SMSG_COMPRESSED_UPDATE_OBJECT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_COMPRESSED_UPDATE_OBJECT 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_COMPRESSED_UPDATE_OBJECT);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -3149,7 +3151,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_COMPRESSED_UPDATE_OBJECT 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             /* TODO compressed array compare do what? */
@@ -3168,12 +3170,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_ACCOUNT_DATA_TIMES 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != SMSG_ACCOUNT_DATA_TIMES) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_ACCOUNT_DATA_TIMES 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_ACCOUNT_DATA_TIMES);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -3182,7 +3184,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_ACCOUNT_DATA_TIMES 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_ACCOUNT_DATA_TIMES 0");
@@ -3201,12 +3203,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_REQUEST_ACCOUNT_DATA 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_REQUEST_ACCOUNT_DATA) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_REQUEST_ACCOUNT_DATA 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_REQUEST_ACCOUNT_DATA);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -3215,7 +3217,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_REQUEST_ACCOUNT_DATA 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_REQUEST_ACCOUNT_DATA 0");
@@ -3233,12 +3235,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_UPDATE_ACCOUNT_DATA 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_UPDATE_ACCOUNT_DATA) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_UPDATE_ACCOUNT_DATA 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_UPDATE_ACCOUNT_DATA);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -3247,7 +3249,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_UPDATE_ACCOUNT_DATA 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             /* TODO compressed array compare do what? */
@@ -3265,12 +3267,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_UPDATE_ACCOUNT_DATA 1 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_UPDATE_ACCOUNT_DATA) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_UPDATE_ACCOUNT_DATA 1 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_UPDATE_ACCOUNT_DATA);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -3279,7 +3281,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_UPDATE_ACCOUNT_DATA 1 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             /* TODO compressed array compare do what? */
@@ -3298,12 +3300,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_GMTICKET_GETTICKET 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_GMTICKET_GETTICKET) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_GMTICKET_GETTICKET 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_GMTICKET_GETTICKET);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -3312,7 +3314,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_GMTICKET_GETTICKET 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_GMTICKET_GETTICKET 0");
@@ -3330,12 +3332,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_LOGIN_VERIFY_WORLD 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != SMSG_LOGIN_VERIFY_WORLD) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_LOGIN_VERIFY_WORLD 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_LOGIN_VERIFY_WORLD);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -3344,7 +3346,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_LOGIN_VERIFY_WORLD 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_LOGIN_VERIFY_WORLD 0");
@@ -3362,12 +3364,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_LEARN_TALENT 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_LEARN_TALENT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_LEARN_TALENT 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_LEARN_TALENT);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -3376,7 +3378,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_LEARN_TALENT 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_LEARN_TALENT 0");
@@ -3394,12 +3396,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_AUCTION_HELLO_Client 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != MSG_AUCTION_HELLO) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_AUCTION_HELLO_Client 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, MSG_AUCTION_HELLO);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -3408,7 +3410,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_AUCTION_HELLO_Client 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " MSG_AUCTION_HELLO_Client 0");
@@ -3426,12 +3428,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_SET_ACTIVE_MOVER 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_SET_ACTIVE_MOVER) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_SET_ACTIVE_MOVER 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_SET_ACTIVE_MOVER);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -3440,7 +3442,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_SET_ACTIVE_MOVER 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_SET_ACTIVE_MOVER 0");
@@ -3458,12 +3460,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_QUERY_NEXT_MAIL_TIME_Client 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != MSG_QUERY_NEXT_MAIL_TIME) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_QUERY_NEXT_MAIL_TIME_Client 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, MSG_QUERY_NEXT_MAIL_TIME);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -3472,7 +3474,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " MSG_QUERY_NEXT_MAIL_TIME_Client 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " MSG_QUERY_NEXT_MAIL_TIME_Client 0");
@@ -3490,12 +3492,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_MEETINGSTONE_INFO 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_MEETINGSTONE_INFO) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_MEETINGSTONE_INFO 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_MEETINGSTONE_INFO);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -3504,7 +3506,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_MEETINGSTONE_INFO 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_MEETINGSTONE_INFO 0");
@@ -3522,12 +3524,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_CHAR_RENAME 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_CHAR_RENAME) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_CHAR_RENAME 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_CHAR_RENAME);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -3536,7 +3538,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_CHAR_RENAME 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_CHAR_RENAME 0");
@@ -3555,12 +3557,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_CHAR_RENAME 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != SMSG_CHAR_RENAME) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_CHAR_RENAME 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_CHAR_RENAME);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -3569,7 +3571,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_CHAR_RENAME 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_CHAR_RENAME 0");
@@ -3587,12 +3589,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_CHAR_RENAME 1 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != SMSG_CHAR_RENAME) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_CHAR_RENAME 1 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_CHAR_RENAME);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -3601,7 +3603,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_CHAR_RENAME 1 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_CHAR_RENAME 1");
@@ -3620,12 +3622,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_REQUEST_RAID_INFO 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_REQUEST_RAID_INFO) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_REQUEST_RAID_INFO 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_REQUEST_RAID_INFO);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -3634,7 +3636,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_REQUEST_RAID_INFO 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_REQUEST_RAID_INFO 0");
@@ -3652,12 +3654,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_MOVE_TIME_SKIPPED 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_MOVE_TIME_SKIPPED) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_MOVE_TIME_SKIPPED 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_MOVE_TIME_SKIPPED);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -3666,7 +3668,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_MOVE_TIME_SKIPPED 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_MOVE_TIME_SKIPPED 0");
@@ -3684,12 +3686,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_BATTLEFIELD_STATUS 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMSG_BATTLEFIELD_STATUS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_BATTLEFIELD_STATUS 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMSG_BATTLEFIELD_STATUS);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -3698,7 +3700,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMSG_BATTLEFIELD_STATUS 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_BATTLEFIELD_STATUS 0");
@@ -3716,12 +3718,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_COMPRESSED_MOVES 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != SMSG_COMPRESSED_MOVES) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_COMPRESSED_MOVES 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_COMPRESSED_MOVES);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -3730,7 +3732,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_COMPRESSED_MOVES 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             /* TODO compressed array compare do what? */
@@ -3748,12 +3750,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_COMPRESSED_MOVES 1 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != SMSG_COMPRESSED_MOVES) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_COMPRESSED_MOVES 1 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_COMPRESSED_MOVES);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -3762,7 +3764,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_COMPRESSED_MOVES 1 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             /* TODO compressed array compare do what? */
@@ -3781,12 +3783,12 @@ int main(void) {
 
         if (result != WWM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_SPLINE_SET_RUN_SPEED 0 failed to read: '%s'\n", wwm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != SMSG_SPLINE_SET_RUN_SPEED) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_SPLINE_SET_RUN_SPEED 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, SMSG_SPLINE_SET_RUN_SPEED);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -3795,7 +3797,7 @@ int main(void) {
 
             if (result != WWM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " SMSG_SPLINE_SET_RUN_SPEED 0 failed to write: '%s'\n", wwm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_SPLINE_SET_RUN_SPEED 0");

@@ -1,8 +1,8 @@
 import typing
 
 import model
-from print_struct.struct_util import container_has_c_members
-from util import login_version_matches, first_version_as_module, first_login_version, \
+from print_struct.struct_util import container_has_c_members, container_module_prefix
+from util import first_version_as_module, \
     get_type_prefix, is_world, version_to_module_name, version_matches, get_export_define, container_needs_size_in_read, \
     is_cpp, library_type
 from writer import Writer
@@ -182,7 +182,7 @@ def print_login_utils_side(s: Writer, h: Writer, messages: list[model.Container]
                 continue
             if not container_has_c_members(e):
                 continue
-            version = first_version_as_module(e.tags)
+            version = container_module_prefix(e.tags, module_name)
             h.wln(f"{version}_{e.name} {e.name};")
 
         h.closing_curly(" body;")  # union
@@ -276,8 +276,9 @@ def write_opcode_read(s: Writer, h: Writer, messages: list[model.Container], v: 
             else:
                 body_size = f", _size - {size_field_size}" if container_needs_size_in_read(e) else ""
 
+                module_prefix = container_module_prefix(e.tags, module_name)
                 s.wln(
-                    f"return {side.capitalize()}Opcode(::wow_{module}_messages::{first_version_as_module(e.tags)}::{e.name}_read(reader{body_size}));")
+                    f"return {side.capitalize()}Opcode(::wow_{module}_messages::{module_prefix}::{e.name}_read(reader{body_size}));")
 
             s.closing_curly()  # if opcode == opcode
 
@@ -331,7 +332,7 @@ def write_opcode_read(s: Writer, h: Writer, messages: list[model.Container], v: 
 
             body_size = f", _size - {size_field_size}" if container_needs_size_in_read(e) else ""
 
-            version = first_version_as_module(e.tags)
+            version = container_module_prefix(e.tags, module_name)
             s.wln(
                 f"{wlm_prefix}_CHECK_RETURN_CODE({version}_{e.name}_read(reader, &opcodes->body.{e.name}{body_size}));")
 
@@ -378,7 +379,7 @@ def write_opcode_free(s: Writer, h: Writer, messages: list[model.Container], v: 
         s.wln(f"case {e.name.replace('_Client', '').replace('_Server', '')}:")
         s.inc_indent()
 
-        version = first_version_as_module(e.tags)
+        version = container_module_prefix(e.tags, module_name)
         s.wln(f"{version}_{e.name}_free(&opcodes->body.{e.name});")
 
         s.wln("break;")

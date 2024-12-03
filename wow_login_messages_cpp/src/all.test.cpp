@@ -33,12 +33,12 @@ int main() {
         const auto opcode = ::wow_login_messages::all::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::all::ClientOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::all::write_opcode(opcode);
@@ -52,12 +52,12 @@ int main() {
         const auto opcode = ::wow_login_messages::all::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::all::ClientOpcode::Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::all::write_opcode(opcode);
@@ -71,12 +71,12 @@ int main() {
         const auto opcode = ::wow_login_messages::all::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Client 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::all::ClientOpcode::Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Client 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::all::write_opcode(opcode);
@@ -90,12 +90,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version2::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version2::ServerOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version2::write_opcode(opcode);
@@ -109,12 +109,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version2::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version2::ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version2::write_opcode(opcode);
@@ -128,12 +128,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version2::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version2::ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version2::write_opcode(opcode);
@@ -147,12 +147,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version2::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 2 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version2::ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 2 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version2::write_opcode(opcode);
@@ -166,12 +166,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version2::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version2::ServerOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version2::write_opcode(opcode);
@@ -185,12 +185,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version2::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version2::ServerOpcode::Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version2::write_opcode(opcode);
@@ -204,12 +204,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version2::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Server 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version2::ServerOpcode::Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Server 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version2::write_opcode(opcode);
@@ -223,12 +223,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version2::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version2::ServerOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version2::write_opcode(opcode);
@@ -242,12 +242,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version2::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version2::ServerOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version2::write_opcode(opcode);
@@ -261,12 +261,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version2::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 2 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version2::ServerOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 2 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version2::write_opcode(opcode);
@@ -280,12 +280,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version2::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version2::ClientOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version2::write_opcode(opcode);
@@ -299,12 +299,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version2::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version2::ServerOpcode::Opcode::CMD_REALM_LIST) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version2::write_opcode(opcode);
@@ -318,12 +318,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version2::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version2::ServerOpcode::Opcode::CMD_REALM_LIST) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version2::write_opcode(opcode);
@@ -337,12 +337,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version2::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version2::ClientOpcode::Opcode::CMD_REALM_LIST) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version2::write_opcode(opcode);
@@ -356,12 +356,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version2::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_XFER_INITIATE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version2::ServerOpcode::Opcode::CMD_XFER_INITIATE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_XFER_INITIATE 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version2::write_opcode(opcode);
@@ -375,12 +375,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version2::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_XFER_DATA 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version2::ServerOpcode::Opcode::CMD_XFER_DATA) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_XFER_DATA 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version2::write_opcode(opcode);
@@ -394,12 +394,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version2::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_XFER_ACCEPT 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version2::ClientOpcode::Opcode::CMD_XFER_ACCEPT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_XFER_ACCEPT 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version2::write_opcode(opcode);
@@ -413,12 +413,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version2::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_XFER_RESUME 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version2::ClientOpcode::Opcode::CMD_XFER_RESUME) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_XFER_RESUME 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version2::write_opcode(opcode);
@@ -432,12 +432,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version2::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_XFER_CANCEL 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version2::ClientOpcode::Opcode::CMD_XFER_CANCEL) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_XFER_CANCEL 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version2::write_opcode(opcode);
@@ -451,12 +451,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version3::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version3::ServerOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version3::write_opcode(opcode);
@@ -470,12 +470,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version3::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version3::ServerOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version3::write_opcode(opcode);
@@ -489,12 +489,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version3::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version3::ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version3::write_opcode(opcode);
@@ -508,12 +508,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version3::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version3::ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version3::write_opcode(opcode);
@@ -527,12 +527,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version3::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 2 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version3::ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 2 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version3::write_opcode(opcode);
@@ -546,12 +546,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version3::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 3 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version3::ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 3 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version3::write_opcode(opcode);
@@ -565,12 +565,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version3::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_SURVEY_RESULT 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version3::ClientOpcode::Opcode::CMD_SURVEY_RESULT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_SURVEY_RESULT 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version3::write_opcode(opcode);
@@ -584,12 +584,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version5::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version5::ServerOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version5::write_opcode(opcode);
@@ -603,12 +603,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version5::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version5::ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version5::write_opcode(opcode);
@@ -622,12 +622,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version5::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version5::ServerOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version5::write_opcode(opcode);
@@ -641,12 +641,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version5::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version5::ServerOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version5::write_opcode(opcode);
@@ -660,12 +660,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version5::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version5::ServerOpcode::Opcode::CMD_REALM_LIST) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version5::write_opcode(opcode);
@@ -679,12 +679,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version6::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version6::ServerOpcode::Opcode::CMD_REALM_LIST) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version6::write_opcode(opcode);
@@ -698,12 +698,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version8::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version8::ServerOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version8::write_opcode(opcode);
@@ -717,12 +717,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version8::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version8::ServerOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version8::write_opcode(opcode);
@@ -736,12 +736,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version8::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 2 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version8::ServerOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 2 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version8::write_opcode(opcode);
@@ -755,12 +755,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version8::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 3 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version8::ServerOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 3 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version8::write_opcode(opcode);
@@ -774,12 +774,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version8::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 4 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version8::ServerOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 4 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version8::write_opcode(opcode);
@@ -793,12 +793,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version8::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 5 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version8::ServerOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 5 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version8::write_opcode(opcode);
@@ -812,12 +812,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version8::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 6 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version8::ServerOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 6 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version8::write_opcode(opcode);
@@ -831,12 +831,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version8::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version8::ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version8::write_opcode(opcode);
@@ -850,12 +850,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version8::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version8::ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version8::write_opcode(opcode);
@@ -869,12 +869,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version8::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 2 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version8::ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 2 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version8::write_opcode(opcode);
@@ -888,12 +888,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version8::read_client_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 3 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version8::ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 3 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version8::write_opcode(opcode);
@@ -907,12 +907,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version8::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version8::ServerOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version8::write_opcode(opcode);
@@ -926,12 +926,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version8::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Server 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version8::ServerOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Server 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version8::write_opcode(opcode);
@@ -945,12 +945,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version8::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version8::ServerOpcode::Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version8::write_opcode(opcode);
@@ -964,12 +964,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version8::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Server 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version8::ServerOpcode::Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Server 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version8::write_opcode(opcode);
@@ -983,12 +983,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version8::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version8::ServerOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version8::write_opcode(opcode);
@@ -1002,12 +1002,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version8::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version8::ServerOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version8::write_opcode(opcode);
@@ -1021,12 +1021,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version8::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version8::ServerOpcode::Opcode::CMD_REALM_LIST) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 0 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version8::write_opcode(opcode);
@@ -1040,12 +1040,12 @@ int main() {
         const auto opcode = ::wow_login_messages::version8::read_server_opcode(reader);
         if (opcode.is_none()) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         if (opcode.opcode != ::wow_login_messages::version8::ServerOpcode::Opcode::CMD_REALM_LIST) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 1 read invalid opcode");
-            return 1;
+            abort();
         }
 
         const std::vector<unsigned char> write_buffer = ::wow_login_messages::version8::write_opcode(opcode);

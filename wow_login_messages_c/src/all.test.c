@@ -7,6 +7,8 @@
 #include "wow_login_messages/version8.h"
 #include "test_utils.h"
 
+#include <stdlib.h> /* abort() */
+
 unsigned char write_buffer[1 << 16] = {0}; /* uint16_t max */
 int main(void) {
     /* CMD_AUTH_LOGON_CHALLENGE_Client */
@@ -20,12 +22,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Client 0 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_AUTH_LOGON_CHALLENGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Client 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_AUTH_LOGON_CHALLENGE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -34,7 +36,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Client 0 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Client 0");
@@ -53,12 +55,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Client 0 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_AUTH_RECONNECT_CHALLENGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Client 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_AUTH_RECONNECT_CHALLENGE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -67,7 +69,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Client 0 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Client 0");
@@ -85,12 +87,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Client 1 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_AUTH_RECONNECT_CHALLENGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Client 1 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_AUTH_RECONNECT_CHALLENGE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -99,7 +101,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Client 1 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Client 1");
@@ -118,12 +120,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 0 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_AUTH_LOGON_CHALLENGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_AUTH_LOGON_CHALLENGE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -132,7 +134,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 0 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 0");
@@ -151,12 +153,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 0 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_AUTH_LOGON_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_AUTH_LOGON_PROOF);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -165,7 +167,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 0 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 0");
@@ -183,12 +185,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 1 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_AUTH_LOGON_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 1 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_AUTH_LOGON_PROOF);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -197,7 +199,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 1 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 1");
@@ -215,12 +217,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 2 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_AUTH_LOGON_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 2 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_AUTH_LOGON_PROOF);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -229,7 +231,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 2 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 2");
@@ -248,12 +250,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Server 0 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_AUTH_LOGON_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Server 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_AUTH_LOGON_PROOF);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -262,7 +264,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Server 0 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Server 0");
@@ -281,12 +283,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Server 0 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_AUTH_RECONNECT_CHALLENGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Server 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_AUTH_RECONNECT_CHALLENGE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -295,7 +297,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Server 0 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Server 0");
@@ -313,12 +315,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Server 1 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_AUTH_RECONNECT_CHALLENGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Server 1 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_AUTH_RECONNECT_CHALLENGE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -327,7 +329,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Server 1 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Server 1");
@@ -346,12 +348,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 0 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_AUTH_RECONNECT_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_AUTH_RECONNECT_PROOF);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -360,7 +362,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 0 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 0");
@@ -377,12 +379,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 1 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_AUTH_RECONNECT_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 1 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_AUTH_RECONNECT_PROOF);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -391,7 +393,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 1 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 1");
@@ -408,12 +410,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 2 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_AUTH_RECONNECT_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 2 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_AUTH_RECONNECT_PROOF);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -422,7 +424,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 2 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 2");
@@ -440,12 +442,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Client 0 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_AUTH_RECONNECT_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Client 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_AUTH_RECONNECT_PROOF);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -454,7 +456,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Client 0 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Client 0");
@@ -473,12 +475,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 0 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_REALM_LIST) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_REALM_LIST);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -487,7 +489,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 0 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 0");
@@ -505,12 +507,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 1 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_REALM_LIST) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 1 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_REALM_LIST);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -519,7 +521,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 1 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 1");
@@ -538,12 +540,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Client 0 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_REALM_LIST) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Client 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_REALM_LIST);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -552,7 +554,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Client 0 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Client 0");
@@ -570,12 +572,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_XFER_INITIATE 0 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_XFER_INITIATE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_XFER_INITIATE 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_XFER_INITIATE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -584,7 +586,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_XFER_INITIATE 0 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_XFER_INITIATE 0");
@@ -603,12 +605,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_XFER_DATA 0 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_XFER_DATA) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_XFER_DATA 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_XFER_DATA);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -617,7 +619,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_XFER_DATA 0 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_XFER_DATA 0");
@@ -636,12 +638,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_XFER_ACCEPT 0 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_XFER_ACCEPT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_XFER_ACCEPT 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_XFER_ACCEPT);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -650,7 +652,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_XFER_ACCEPT 0 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_XFER_ACCEPT 0");
@@ -668,12 +670,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_XFER_RESUME 0 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_XFER_RESUME) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_XFER_RESUME 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_XFER_RESUME);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -682,7 +684,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_XFER_RESUME 0 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_XFER_RESUME 0");
@@ -700,12 +702,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_XFER_CANCEL 0 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_XFER_CANCEL) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_XFER_CANCEL 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_XFER_CANCEL);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -714,7 +716,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_XFER_CANCEL 0 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_XFER_CANCEL 0");
@@ -732,12 +734,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 0 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_AUTH_LOGON_CHALLENGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_AUTH_LOGON_CHALLENGE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -746,7 +748,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 0 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 0");
@@ -764,12 +766,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 1 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_AUTH_LOGON_CHALLENGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 1 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_AUTH_LOGON_CHALLENGE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -778,7 +780,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 1 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 1");
@@ -797,12 +799,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 0 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_AUTH_LOGON_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_AUTH_LOGON_PROOF);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -811,7 +813,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 0 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 0");
@@ -829,12 +831,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 1 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_AUTH_LOGON_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 1 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_AUTH_LOGON_PROOF);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -843,7 +845,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 1 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 1");
@@ -861,12 +863,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 2 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_AUTH_LOGON_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 2 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_AUTH_LOGON_PROOF);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -875,7 +877,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 2 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 2");
@@ -893,12 +895,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 3 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_AUTH_LOGON_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 3 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_AUTH_LOGON_PROOF);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -907,7 +909,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 3 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 3");
@@ -926,12 +928,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_SURVEY_RESULT 0 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_SURVEY_RESULT) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_SURVEY_RESULT 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_SURVEY_RESULT);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -940,7 +942,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_SURVEY_RESULT 0 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_SURVEY_RESULT 0");
@@ -959,12 +961,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 0 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_AUTH_LOGON_CHALLENGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_AUTH_LOGON_CHALLENGE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -973,7 +975,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 0 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 0");
@@ -992,12 +994,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 0 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_AUTH_LOGON_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_AUTH_LOGON_PROOF);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1006,7 +1008,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 0 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 0");
@@ -1025,12 +1027,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Server 0 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_AUTH_LOGON_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Server 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_AUTH_LOGON_PROOF);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1039,7 +1041,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Server 0 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Server 0");
@@ -1058,12 +1060,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 0 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_AUTH_RECONNECT_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_AUTH_RECONNECT_PROOF);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1072,7 +1074,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 0 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 0");
@@ -1090,12 +1092,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 0 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_REALM_LIST) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_REALM_LIST);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1104,7 +1106,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 0 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 0");
@@ -1123,12 +1125,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 0 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_REALM_LIST) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_REALM_LIST);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1137,7 +1139,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 0 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 0");
@@ -1156,12 +1158,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 0 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_AUTH_LOGON_CHALLENGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_AUTH_LOGON_CHALLENGE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1170,7 +1172,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 0 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 0");
@@ -1188,12 +1190,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 1 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_AUTH_LOGON_CHALLENGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 1 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_AUTH_LOGON_CHALLENGE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1202,7 +1204,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 1 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 1");
@@ -1220,12 +1222,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 2 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_AUTH_LOGON_CHALLENGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 2 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_AUTH_LOGON_CHALLENGE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1234,7 +1236,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 2 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 2");
@@ -1252,12 +1254,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 3 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_AUTH_LOGON_CHALLENGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 3 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_AUTH_LOGON_CHALLENGE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1266,7 +1268,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 3 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 3");
@@ -1284,12 +1286,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 4 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_AUTH_LOGON_CHALLENGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 4 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_AUTH_LOGON_CHALLENGE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1298,7 +1300,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 4 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 4");
@@ -1316,12 +1318,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 5 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_AUTH_LOGON_CHALLENGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 5 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_AUTH_LOGON_CHALLENGE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1330,7 +1332,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 5 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 5");
@@ -1348,12 +1350,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 6 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_AUTH_LOGON_CHALLENGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 6 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_AUTH_LOGON_CHALLENGE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1362,7 +1364,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 6 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 6");
@@ -1381,12 +1383,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 0 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_AUTH_LOGON_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_AUTH_LOGON_PROOF);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1395,7 +1397,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 0 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 0");
@@ -1413,12 +1415,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 1 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_AUTH_LOGON_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 1 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_AUTH_LOGON_PROOF);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1427,7 +1429,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 1 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 1");
@@ -1445,12 +1447,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 2 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_AUTH_LOGON_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 2 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_AUTH_LOGON_PROOF);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1459,7 +1461,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 2 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 2");
@@ -1477,12 +1479,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 3 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_AUTH_LOGON_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 3 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_AUTH_LOGON_PROOF);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1491,7 +1493,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 3 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 3");
@@ -1510,12 +1512,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Server 0 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_AUTH_LOGON_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Server 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_AUTH_LOGON_PROOF);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1524,7 +1526,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Server 0 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Server 0");
@@ -1542,12 +1544,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Server 1 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_AUTH_LOGON_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Server 1 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_AUTH_LOGON_PROOF);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1556,7 +1558,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Server 1 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Server 1");
@@ -1575,12 +1577,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Server 0 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_AUTH_RECONNECT_CHALLENGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Server 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_AUTH_RECONNECT_CHALLENGE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1589,7 +1591,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Server 0 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Server 0");
@@ -1607,12 +1609,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Server 1 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_AUTH_RECONNECT_CHALLENGE) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Server 1 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_AUTH_RECONNECT_CHALLENGE);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1621,7 +1623,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Server 1 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Server 1");
@@ -1640,12 +1642,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 0 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_AUTH_RECONNECT_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_AUTH_RECONNECT_PROOF);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1654,7 +1656,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 0 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 0");
@@ -1671,12 +1673,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 1 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_AUTH_RECONNECT_PROOF) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 1 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_AUTH_RECONNECT_PROOF);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1685,7 +1687,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 1 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 1");
@@ -1703,12 +1705,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 0 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_REALM_LIST) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 0 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_REALM_LIST);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1717,7 +1719,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 0 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 0");
@@ -1735,12 +1737,12 @@ int main(void) {
 
         if (result != WLM_RESULT_SUCCESS) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 1 failed to read: '%s'\n", wlm_error_code_to_string(result));
-            return 1;
+            abort();
 
         }
         if (opcode.opcode != CMD_REALM_LIST) {
             printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 1 read wrong opcode: '0x%x' instead of '0x%x'\n", opcode.opcode, CMD_REALM_LIST);
-            return 1;
+            abort();
 
         }
         /* C89 scope to allow variable declarations */ {
@@ -1749,7 +1751,7 @@ int main(void) {
 
             if (result != WLM_RESULT_SUCCESS) {
                 printf(__FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 1 failed to write: '%s'\n", wlm_error_code_to_string(result));
-                return 1;
+                abort();
 
             }
             wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 1");

@@ -71,7 +71,7 @@ static void test_utils_compare_buffers(const unsigned char* buffer,
         }
         puts("");
 
-        exit(EXIT_FAILURE);
+        abort();
     }
 }
 
@@ -84,7 +84,7 @@ void world_test_compare_buffers(const unsigned char* buffer,
     size_t i;
     uint32_t opcode = 0;
     uint32_t write_opcode = 0;
-    bool failed = false;
+    int failed = 0;
 
     uint32_t size = buffer[0] << 8 | buffer[1];
     uint32_t write_size = write_buffer[0] << 8 | write_buffer[1];
@@ -105,14 +105,14 @@ void world_test_compare_buffers(const unsigned char* buffer,
     {
         printf("%s wrote incorrect size:\n", location);
         printf(__FILE__ ":" STRINGIFY(__LINE__) " expected 0x%04x but got 0x%04x:\n", size, write_size);
-        failed = true;
+        failed = 1;
     }
 
     if (opcode != write_opcode)
     {
         printf("%s wrote incorrect opcode:\n", location);
         printf(__FILE__ ":" STRINGIFY(__LINE__) " expected 0x%04x but got 0x%04x:\n", opcode, write_opcode);
-        failed = true;
+        failed = 1;
     }
 
     i = side == TEST_UTILS_SIDE_CLIENT ? 6 : 4;

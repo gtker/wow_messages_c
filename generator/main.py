@@ -87,7 +87,6 @@ def main():
         for v in VERSIONS:
             update_mask = m.vanilla_update_mask if v == VANILLA else m.tbc_update_mask if v == TBC else m.wrath_update_mask if v == WRATH else None
             print_world(m.world, update_mask, v)
-            break
 
     print("Finished generating files")
 
@@ -99,6 +98,8 @@ def sanitize_model(
         for d in all_members_from_container(e):
             if d.name == "class":
                 d.name = "class_type"
+            if d.name == "float":
+                d.name = "float_type"
 
         return container
 
@@ -227,16 +228,17 @@ def print_world(m: model.Objects, update_mask: list[model.UpdateMask], v: model.
     print_includes(s, h, True, module_name, v, m)
 
     for d in filter(should_print, m.enums):
-        print_enum(h, d)
+        print_enum(h, d, module_name)
 
     for d in filter(should_print, m.flags):
-        print_enum(h, d)
+        print_enum(h, d, module_name)
 
-    print_aura_mask(s, h, v)
     print_update_mask(s, h, update_mask, module_name)
 
     for e in filter(should_print, m.structs):
         print_struct(s, h, e, module_name)
+
+    print_aura_mask(s, h, v)
 
     filtered_messages = list(filter(should_print, m.messages))
 
@@ -296,7 +298,7 @@ def print_login(m: model.Objects, s: Writer, tests: Writer, v: int):
             typedef_existing(h, d.name, login_version_to_module_name(version), module_name)
             continue
 
-        print_enum(h, d)
+        print_enum(h, d, module_name)
 
     for d in filter(should_print, m.flags):
         if not version_matches(d.tags, v):
@@ -308,7 +310,7 @@ def print_login(m: model.Objects, s: Writer, tests: Writer, v: int):
             typedef_existing(h, d.name, login_version_to_module_name(version), module_name)
             continue
 
-        print_enum(h, d)
+        print_enum(h, d, module_name)
 
     for e in filter(should_print, m.structs):
         version = first_login_version(e.tags)
