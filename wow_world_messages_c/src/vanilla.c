@@ -1930,6 +1930,11 @@ static WowWorldResult vanilla_NpcTextUpdate_write(WowWorldWriter* writer, const 
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT void vanilla_NpcTextUpdate_free(vanilla_NpcTextUpdate* object) {
+    size_t i;
+
+    for (i = 0; i < 2; ++i) {
+        FREE_STRING(((*object->texts)[i]));
+    }
     free(object->texts);
     object->texts = NULL;
     free(object->emotes);
@@ -3649,8 +3654,13 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GUILD_QUERY_RESPONSE_wri
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GUILD_QUERY_RESPONSE_free(vanilla_SMSG_GUILD_QUERY_RESPONSE* object) {
+    size_t i;
+
     FREE_STRING(object->name);
 
+    for (i = 0; i < 10; ++i) {
+        FREE_STRING(((*object->rank_names)[i]));
+    }
     free(object->rank_names);
     object->rank_names = NULL;
 }
@@ -4173,6 +4183,8 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUEST_QUERY_RESPONSE_wri
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_QUEST_QUERY_RESPONSE_free(vanilla_SMSG_QUEST_QUERY_RESPONSE* object) {
+    size_t i;
+
     free(object->rewards);
     object->rewards = NULL;
     free(object->choice_rewards);
@@ -4187,6 +4199,9 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_QUEST_QUERY_RESPONSE_free(vanilla_
 
     free(object->objectives);
     object->objectives = NULL;
+    for (i = 0; i < 4; ++i) {
+        FREE_STRING(((*object->objective_texts)[i]));
+    }
     free(object->objective_texts);
     object->objective_texts = NULL;
 }
@@ -4496,12 +4511,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_WHO_write(WowWorldWriter
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_WHO_free(vanilla_CMSG_WHO* object) {
+    size_t i;
+
     FREE_STRING(object->player_name);
 
     FREE_STRING(object->guild_name);
 
     free(object->zones);
     object->zones = NULL;
+    for (i = 0; i < object->amount_of_strings; ++i) {
+        FREE_STRING(((object->search_strings)[i]));
+    }
     free(object->search_strings);
     object->search_strings = NULL;
 }
@@ -5906,6 +5926,11 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GUILD_EVENT_write(WowWor
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GUILD_EVENT_free(vanilla_SMSG_GUILD_EVENT* object) {
+    size_t i;
+
+    for (i = 0; i < object->amount_of_events; ++i) {
+        FREE_STRING(((object->event_descriptions)[i]));
+    }
     free(object->event_descriptions);
     object->event_descriptions = NULL;
 }
@@ -14797,6 +14822,8 @@ static WowWorldResult vanilla_SMSG_COMPRESSED_UPDATE_OBJECT_read(WowWorldReader*
     READ_ARRAY_ALLOCATE(object->objects, object->amount_of_objects, sizeof(vanilla_Object));
     READ_ARRAY(object->objects, object->amount_of_objects, WWM_CHECK_RETURN_CODE(vanilla_Object_read(reader, &object->objects[i]));_size += vanilla_Object_size(&object->objects[i]););
 
+    free(_compressed_data);
+
     return WWM_RESULT_SUCCESS;
 }
 
@@ -14838,6 +14865,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_COMPRESSED_UPDATE_OBJECT
     WRITE_U16_BE((uint16_t)(_compressed_data_length + 4 + 4)); /* size */
 
     writer->index = saved_writer_index;
+    free(_decompressed_data);
 
 
     return WWM_RESULT_SUCCESS;
@@ -21015,6 +21043,8 @@ static WowWorldResult vanilla_SMSG_COMPRESSED_MOVES_read(WowWorldReader* reader,
         object->amount_of_moves = i;
     }
 
+    free(_compressed_data);
+
     return WWM_RESULT_SUCCESS;
 }
 
@@ -21052,6 +21082,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_COMPRESSED_MOVES_write(W
     WRITE_U16_BE((uint16_t)(_compressed_data_length + 4 + 4)); /* size */
 
     writer->index = saved_writer_index;
+    free(_decompressed_data);
 
 
     return WWM_RESULT_SUCCESS;
@@ -22096,6 +22127,11 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_EXPECTED_SPAM_RECORDS_wr
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_EXPECTED_SPAM_RECORDS_free(vanilla_SMSG_EXPECTED_SPAM_RECORDS* object) {
+    size_t i;
+
+    for (i = 0; i < object->amount_of_records; ++i) {
+        FREE_STRING(((object->records)[i]));
+    }
     free(object->records);
     object->records = NULL;
 }
@@ -22129,6 +22165,771 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_DEFENSE_MESSAGE_write(Wo
 WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_DEFENSE_MESSAGE_free(vanilla_SMSG_DEFENSE_MESSAGE* object) {
     FREE_STRING(object->message);
 
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_client_write_opcode(WowWorldWriter* writer, const VanillaClientOpcodeContainer* opcodes) {
+    switch (opcodes->opcode) {
+        case CMSG_DBLOOKUP:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_DBLOOKUP_write(writer, &opcodes->body.CMSG_DBLOOKUP));
+            break;
+        case CMSG_WORLD_TELEPORT:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_WORLD_TELEPORT_write(writer, &opcodes->body.CMSG_WORLD_TELEPORT));
+            break;
+        case CMSG_TELEPORT_TO_UNIT:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_TELEPORT_TO_UNIT_write(writer, &opcodes->body.CMSG_TELEPORT_TO_UNIT));
+            break;
+        case CMSG_CHAR_CREATE:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHAR_CREATE_write(writer, &opcodes->body.CMSG_CHAR_CREATE));
+            break;
+        case CMSG_CHAR_DELETE:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHAR_DELETE_write(writer, &opcodes->body.CMSG_CHAR_DELETE));
+            break;
+        case CMSG_PLAYER_LOGIN:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_PLAYER_LOGIN_write(writer, &opcodes->body.CMSG_PLAYER_LOGIN));
+            break;
+        case CMSG_NAME_QUERY:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_NAME_QUERY_write(writer, &opcodes->body.CMSG_NAME_QUERY));
+            break;
+        case CMSG_PET_NAME_QUERY:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_PET_NAME_QUERY_write(writer, &opcodes->body.CMSG_PET_NAME_QUERY));
+            break;
+        case CMSG_GUILD_QUERY:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_GUILD_QUERY_write(writer, &opcodes->body.CMSG_GUILD_QUERY));
+            break;
+        case CMSG_ITEM_QUERY_SINGLE:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_ITEM_QUERY_SINGLE_write(writer, &opcodes->body.CMSG_ITEM_QUERY_SINGLE));
+            break;
+        case CMSG_PAGE_TEXT_QUERY:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_PAGE_TEXT_QUERY_write(writer, &opcodes->body.CMSG_PAGE_TEXT_QUERY));
+            break;
+        case CMSG_QUEST_QUERY:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_QUEST_QUERY_write(writer, &opcodes->body.CMSG_QUEST_QUERY));
+            break;
+        case CMSG_GAMEOBJECT_QUERY:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_GAMEOBJECT_QUERY_write(writer, &opcodes->body.CMSG_GAMEOBJECT_QUERY));
+            break;
+        case CMSG_CREATURE_QUERY:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_CREATURE_QUERY_write(writer, &opcodes->body.CMSG_CREATURE_QUERY));
+            break;
+        case CMSG_WHO:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_WHO_write(writer, &opcodes->body.CMSG_WHO));
+            break;
+        case CMSG_WHOIS:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_WHOIS_write(writer, &opcodes->body.CMSG_WHOIS));
+            break;
+        case CMSG_ADD_FRIEND:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_ADD_FRIEND_write(writer, &opcodes->body.CMSG_ADD_FRIEND));
+            break;
+        case CMSG_DEL_FRIEND:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_DEL_FRIEND_write(writer, &opcodes->body.CMSG_DEL_FRIEND));
+            break;
+        case CMSG_ADD_IGNORE:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_ADD_IGNORE_write(writer, &opcodes->body.CMSG_ADD_IGNORE));
+            break;
+        case CMSG_DEL_IGNORE:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_DEL_IGNORE_write(writer, &opcodes->body.CMSG_DEL_IGNORE));
+            break;
+        case CMSG_GROUP_INVITE:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_GROUP_INVITE_write(writer, &opcodes->body.CMSG_GROUP_INVITE));
+            break;
+        case CMSG_GROUP_UNINVITE:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_GROUP_UNINVITE_write(writer, &opcodes->body.CMSG_GROUP_UNINVITE));
+            break;
+        case CMSG_GROUP_UNINVITE_GUID:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_GROUP_UNINVITE_GUID_write(writer, &opcodes->body.CMSG_GROUP_UNINVITE_GUID));
+            break;
+        case CMSG_GROUP_SET_LEADER:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_GROUP_SET_LEADER_write(writer, &opcodes->body.CMSG_GROUP_SET_LEADER));
+            break;
+        case CMSG_LOOT_METHOD:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_LOOT_METHOD_write(writer, &opcodes->body.CMSG_LOOT_METHOD));
+            break;
+        case CMSG_GUILD_CREATE:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_GUILD_CREATE_write(writer, &opcodes->body.CMSG_GUILD_CREATE));
+            break;
+        case CMSG_GUILD_INVITE:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_GUILD_INVITE_write(writer, &opcodes->body.CMSG_GUILD_INVITE));
+            break;
+        case CMSG_GUILD_PROMOTE:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_GUILD_PROMOTE_write(writer, &opcodes->body.CMSG_GUILD_PROMOTE));
+            break;
+        case CMSG_GUILD_DEMOTE:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_GUILD_DEMOTE_write(writer, &opcodes->body.CMSG_GUILD_DEMOTE));
+            break;
+        case CMSG_GUILD_REMOVE:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_GUILD_REMOVE_write(writer, &opcodes->body.CMSG_GUILD_REMOVE));
+            break;
+        case CMSG_GUILD_LEADER:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_GUILD_LEADER_write(writer, &opcodes->body.CMSG_GUILD_LEADER));
+            break;
+        case CMSG_GUILD_MOTD:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_GUILD_MOTD_write(writer, &opcodes->body.CMSG_GUILD_MOTD));
+            break;
+        case CMSG_MESSAGECHAT:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_MESSAGECHAT_write(writer, &opcodes->body.CMSG_MESSAGECHAT));
+            break;
+        case CMSG_JOIN_CHANNEL:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_JOIN_CHANNEL_write(writer, &opcodes->body.CMSG_JOIN_CHANNEL));
+            break;
+        case CMSG_LEAVE_CHANNEL:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_LEAVE_CHANNEL_write(writer, &opcodes->body.CMSG_LEAVE_CHANNEL));
+            break;
+        case CMSG_CHANNEL_LIST:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_LIST_write(writer, &opcodes->body.CMSG_CHANNEL_LIST));
+            break;
+        case CMSG_CHANNEL_PASSWORD:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_PASSWORD_write(writer, &opcodes->body.CMSG_CHANNEL_PASSWORD));
+            break;
+        case CMSG_CHANNEL_SET_OWNER:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_SET_OWNER_write(writer, &opcodes->body.CMSG_CHANNEL_SET_OWNER));
+            break;
+        case CMSG_CHANNEL_OWNER:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_OWNER_write(writer, &opcodes->body.CMSG_CHANNEL_OWNER));
+            break;
+        case CMSG_CHANNEL_MODERATOR:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_MODERATOR_write(writer, &opcodes->body.CMSG_CHANNEL_MODERATOR));
+            break;
+        case CMSG_CHANNEL_UNMODERATOR:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_UNMODERATOR_write(writer, &opcodes->body.CMSG_CHANNEL_UNMODERATOR));
+            break;
+        case CMSG_CHANNEL_MUTE:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_MUTE_write(writer, &opcodes->body.CMSG_CHANNEL_MUTE));
+            break;
+        case CMSG_CHANNEL_UNMUTE:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_UNMUTE_write(writer, &opcodes->body.CMSG_CHANNEL_UNMUTE));
+            break;
+        case CMSG_CHANNEL_INVITE:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_INVITE_write(writer, &opcodes->body.CMSG_CHANNEL_INVITE));
+            break;
+        case CMSG_CHANNEL_KICK:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_KICK_write(writer, &opcodes->body.CMSG_CHANNEL_KICK));
+            break;
+        case CMSG_CHANNEL_BAN:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_BAN_write(writer, &opcodes->body.CMSG_CHANNEL_BAN));
+            break;
+        case CMSG_CHANNEL_UNBAN:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_UNBAN_write(writer, &opcodes->body.CMSG_CHANNEL_UNBAN));
+            break;
+        case CMSG_CHANNEL_ANNOUNCEMENTS:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_ANNOUNCEMENTS_write(writer, &opcodes->body.CMSG_CHANNEL_ANNOUNCEMENTS));
+            break;
+        case CMSG_CHANNEL_MODERATE:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_MODERATE_write(writer, &opcodes->body.CMSG_CHANNEL_MODERATE));
+            break;
+        case CMSG_USE_ITEM:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_USE_ITEM_write(writer, &opcodes->body.CMSG_USE_ITEM));
+            break;
+        case CMSG_OPEN_ITEM:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_OPEN_ITEM_write(writer, &opcodes->body.CMSG_OPEN_ITEM));
+            break;
+        case CMSG_READ_ITEM:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_READ_ITEM_write(writer, &opcodes->body.CMSG_READ_ITEM));
+            break;
+        case CMSG_GAMEOBJ_USE:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_GAMEOBJ_USE_write(writer, &opcodes->body.CMSG_GAMEOBJ_USE));
+            break;
+        case CMSG_AREATRIGGER:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_AREATRIGGER_write(writer, &opcodes->body.CMSG_AREATRIGGER));
+            break;
+        case MSG_MOVE_START_FORWARD:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_FORWARD_Client_write(writer, &opcodes->body.MSG_MOVE_START_FORWARD_Client));
+            break;
+        case MSG_MOVE_START_BACKWARD:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_BACKWARD_Client_write(writer, &opcodes->body.MSG_MOVE_START_BACKWARD_Client));
+            break;
+        case MSG_MOVE_STOP:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_STOP_Client_write(writer, &opcodes->body.MSG_MOVE_STOP_Client));
+            break;
+        case MSG_MOVE_START_STRAFE_LEFT:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_STRAFE_LEFT_Client_write(writer, &opcodes->body.MSG_MOVE_START_STRAFE_LEFT_Client));
+            break;
+        case MSG_MOVE_START_STRAFE_RIGHT:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_STRAFE_RIGHT_Client_write(writer, &opcodes->body.MSG_MOVE_START_STRAFE_RIGHT_Client));
+            break;
+        case MSG_MOVE_STOP_STRAFE:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_STOP_STRAFE_Client_write(writer, &opcodes->body.MSG_MOVE_STOP_STRAFE_Client));
+            break;
+        case MSG_MOVE_JUMP:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_JUMP_Client_write(writer, &opcodes->body.MSG_MOVE_JUMP_Client));
+            break;
+        case MSG_MOVE_START_TURN_LEFT:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_TURN_LEFT_Client_write(writer, &opcodes->body.MSG_MOVE_START_TURN_LEFT_Client));
+            break;
+        case MSG_MOVE_START_TURN_RIGHT:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_TURN_RIGHT_Client_write(writer, &opcodes->body.MSG_MOVE_START_TURN_RIGHT_Client));
+            break;
+        case MSG_MOVE_STOP_TURN:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_STOP_TURN_Client_write(writer, &opcodes->body.MSG_MOVE_STOP_TURN_Client));
+            break;
+        case MSG_MOVE_START_PITCH_UP:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_PITCH_UP_Client_write(writer, &opcodes->body.MSG_MOVE_START_PITCH_UP_Client));
+            break;
+        case MSG_MOVE_START_PITCH_DOWN:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_PITCH_DOWN_Client_write(writer, &opcodes->body.MSG_MOVE_START_PITCH_DOWN_Client));
+            break;
+        case MSG_MOVE_STOP_PITCH:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_STOP_PITCH_Client_write(writer, &opcodes->body.MSG_MOVE_STOP_PITCH_Client));
+            break;
+        case MSG_MOVE_SET_RUN_MODE:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_SET_RUN_MODE_Client_write(writer, &opcodes->body.MSG_MOVE_SET_RUN_MODE_Client));
+            break;
+        case MSG_MOVE_SET_WALK_MODE:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_SET_WALK_MODE_Client_write(writer, &opcodes->body.MSG_MOVE_SET_WALK_MODE_Client));
+            break;
+        case MSG_MOVE_TELEPORT_ACK:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_TELEPORT_ACK_Client_write(writer, &opcodes->body.MSG_MOVE_TELEPORT_ACK_Client));
+            break;
+        case MSG_MOVE_FALL_LAND:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_FALL_LAND_Client_write(writer, &opcodes->body.MSG_MOVE_FALL_LAND_Client));
+            break;
+        case MSG_MOVE_START_SWIM:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_SWIM_Client_write(writer, &opcodes->body.MSG_MOVE_START_SWIM_Client));
+            break;
+        case MSG_MOVE_STOP_SWIM:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_STOP_SWIM_Client_write(writer, &opcodes->body.MSG_MOVE_STOP_SWIM_Client));
+            break;
+        case MSG_MOVE_SET_FACING:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_SET_FACING_Client_write(writer, &opcodes->body.MSG_MOVE_SET_FACING_Client));
+            break;
+        case MSG_MOVE_SET_PITCH:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_SET_PITCH_Client_write(writer, &opcodes->body.MSG_MOVE_SET_PITCH_Client));
+            break;
+        case CMSG_MOVE_SET_RAW_POSITION:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_MOVE_SET_RAW_POSITION_write(writer, &opcodes->body.CMSG_MOVE_SET_RAW_POSITION));
+            break;
+        case CMSG_FORCE_RUN_SPEED_CHANGE_ACK:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_FORCE_RUN_SPEED_CHANGE_ACK_write(writer, &opcodes->body.CMSG_FORCE_RUN_SPEED_CHANGE_ACK));
+            break;
+        case CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK_write(writer, &opcodes->body.CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK));
+            break;
+        case CMSG_FORCE_SWIM_SPEED_CHANGE_ACK:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_FORCE_SWIM_SPEED_CHANGE_ACK_write(writer, &opcodes->body.CMSG_FORCE_SWIM_SPEED_CHANGE_ACK));
+            break;
+        case CMSG_FORCE_MOVE_ROOT_ACK:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_FORCE_MOVE_ROOT_ACK_write(writer, &opcodes->body.CMSG_FORCE_MOVE_ROOT_ACK));
+            break;
+        case CMSG_FORCE_MOVE_UNROOT_ACK:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_FORCE_MOVE_UNROOT_ACK_write(writer, &opcodes->body.CMSG_FORCE_MOVE_UNROOT_ACK));
+            break;
+        case MSG_MOVE_HEARTBEAT:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_HEARTBEAT_Client_write(writer, &opcodes->body.MSG_MOVE_HEARTBEAT_Client));
+            break;
+        case CMSG_MOVE_KNOCK_BACK_ACK:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_MOVE_KNOCK_BACK_ACK_write(writer, &opcodes->body.CMSG_MOVE_KNOCK_BACK_ACK));
+            break;
+        case CMSG_MOVE_HOVER_ACK:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_MOVE_HOVER_ACK_write(writer, &opcodes->body.CMSG_MOVE_HOVER_ACK));
+            break;
+        case CMSG_TUTORIAL_FLAG:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_TUTORIAL_FLAG_write(writer, &opcodes->body.CMSG_TUTORIAL_FLAG));
+            break;
+        case CMSG_STANDSTATECHANGE:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_STANDSTATECHANGE_write(writer, &opcodes->body.CMSG_STANDSTATECHANGE));
+            break;
+        case CMSG_EMOTE:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_EMOTE_write(writer, &opcodes->body.CMSG_EMOTE));
+            break;
+        case CMSG_TEXT_EMOTE:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_TEXT_EMOTE_write(writer, &opcodes->body.CMSG_TEXT_EMOTE));
+            break;
+        case CMSG_AUTOSTORE_LOOT_ITEM:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_AUTOSTORE_LOOT_ITEM_write(writer, &opcodes->body.CMSG_AUTOSTORE_LOOT_ITEM));
+            break;
+        case CMSG_AUTOEQUIP_ITEM:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_AUTOEQUIP_ITEM_write(writer, &opcodes->body.CMSG_AUTOEQUIP_ITEM));
+            break;
+        case CMSG_AUTOSTORE_BAG_ITEM:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_AUTOSTORE_BAG_ITEM_write(writer, &opcodes->body.CMSG_AUTOSTORE_BAG_ITEM));
+            break;
+        case CMSG_SWAP_ITEM:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_SWAP_ITEM_write(writer, &opcodes->body.CMSG_SWAP_ITEM));
+            break;
+        case CMSG_SWAP_INV_ITEM:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_SWAP_INV_ITEM_write(writer, &opcodes->body.CMSG_SWAP_INV_ITEM));
+            break;
+        case CMSG_SPLIT_ITEM:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_SPLIT_ITEM_write(writer, &opcodes->body.CMSG_SPLIT_ITEM));
+            break;
+        case CMSG_AUTOEQUIP_ITEM_SLOT:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_AUTOEQUIP_ITEM_SLOT_write(writer, &opcodes->body.CMSG_AUTOEQUIP_ITEM_SLOT));
+            break;
+        case CMSG_DESTROYITEM:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_DESTROYITEM_write(writer, &opcodes->body.CMSG_DESTROYITEM));
+            break;
+        case CMSG_INSPECT:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_INSPECT_write(writer, &opcodes->body.CMSG_INSPECT));
+            break;
+        case CMSG_INITIATE_TRADE:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_INITIATE_TRADE_write(writer, &opcodes->body.CMSG_INITIATE_TRADE));
+            break;
+        case CMSG_ACCEPT_TRADE:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_ACCEPT_TRADE_write(writer, &opcodes->body.CMSG_ACCEPT_TRADE));
+            break;
+        case CMSG_SET_TRADE_ITEM:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_SET_TRADE_ITEM_write(writer, &opcodes->body.CMSG_SET_TRADE_ITEM));
+            break;
+        case CMSG_CLEAR_TRADE_ITEM:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_CLEAR_TRADE_ITEM_write(writer, &opcodes->body.CMSG_CLEAR_TRADE_ITEM));
+            break;
+        case CMSG_SET_TRADE_GOLD:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_SET_TRADE_GOLD_write(writer, &opcodes->body.CMSG_SET_TRADE_GOLD));
+            break;
+        case CMSG_SET_FACTION_ATWAR:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_SET_FACTION_ATWAR_write(writer, &opcodes->body.CMSG_SET_FACTION_ATWAR));
+            break;
+        case CMSG_SET_ACTION_BUTTON:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_SET_ACTION_BUTTON_write(writer, &opcodes->body.CMSG_SET_ACTION_BUTTON));
+            break;
+        case CMSG_CAST_SPELL:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_CAST_SPELL_write(writer, &opcodes->body.CMSG_CAST_SPELL));
+            break;
+        case CMSG_CANCEL_CAST:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_CANCEL_CAST_write(writer, &opcodes->body.CMSG_CANCEL_CAST));
+            break;
+        case CMSG_CANCEL_AURA:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_CANCEL_AURA_write(writer, &opcodes->body.CMSG_CANCEL_AURA));
+            break;
+        case CMSG_CANCEL_CHANNELLING:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_CANCEL_CHANNELLING_write(writer, &opcodes->body.CMSG_CANCEL_CHANNELLING));
+            break;
+        case CMSG_SET_SELECTION:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_SET_SELECTION_write(writer, &opcodes->body.CMSG_SET_SELECTION));
+            break;
+        case CMSG_SET_TARGET_OBSOLETE:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_SET_TARGET_OBSOLETE_write(writer, &opcodes->body.CMSG_SET_TARGET_OBSOLETE));
+            break;
+        case CMSG_ATTACKSWING:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_ATTACKSWING_write(writer, &opcodes->body.CMSG_ATTACKSWING));
+            break;
+        case CMSG_RESURRECT_RESPONSE:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_RESURRECT_RESPONSE_write(writer, &opcodes->body.CMSG_RESURRECT_RESPONSE));
+            break;
+        case CMSG_LOOT:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_LOOT_write(writer, &opcodes->body.CMSG_LOOT));
+            break;
+        case CMSG_LOOT_RELEASE:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_LOOT_RELEASE_write(writer, &opcodes->body.CMSG_LOOT_RELEASE));
+            break;
+        case CMSG_DUEL_ACCEPTED:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_DUEL_ACCEPTED_write(writer, &opcodes->body.CMSG_DUEL_ACCEPTED));
+            break;
+        case CMSG_DUEL_CANCELLED:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_DUEL_CANCELLED_write(writer, &opcodes->body.CMSG_DUEL_CANCELLED));
+            break;
+        case CMSG_PET_SET_ACTION:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_PET_SET_ACTION_write(writer, &opcodes->body.CMSG_PET_SET_ACTION));
+            break;
+        case CMSG_PET_ACTION:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_PET_ACTION_write(writer, &opcodes->body.CMSG_PET_ACTION));
+            break;
+        case CMSG_PET_ABANDON:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_PET_ABANDON_write(writer, &opcodes->body.CMSG_PET_ABANDON));
+            break;
+        case CMSG_PET_RENAME:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_PET_RENAME_write(writer, &opcodes->body.CMSG_PET_RENAME));
+            break;
+        case CMSG_GOSSIP_HELLO:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_GOSSIP_HELLO_write(writer, &opcodes->body.CMSG_GOSSIP_HELLO));
+            break;
+        case CMSG_GOSSIP_SELECT_OPTION:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_GOSSIP_SELECT_OPTION_write(writer, &opcodes->body.CMSG_GOSSIP_SELECT_OPTION));
+            break;
+        case CMSG_NPC_TEXT_QUERY:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_NPC_TEXT_QUERY_write(writer, &opcodes->body.CMSG_NPC_TEXT_QUERY));
+            break;
+        case CMSG_QUESTGIVER_STATUS_QUERY:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_QUESTGIVER_STATUS_QUERY_write(writer, &opcodes->body.CMSG_QUESTGIVER_STATUS_QUERY));
+            break;
+        case CMSG_QUESTGIVER_HELLO:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_QUESTGIVER_HELLO_write(writer, &opcodes->body.CMSG_QUESTGIVER_HELLO));
+            break;
+        case CMSG_QUESTGIVER_QUERY_QUEST:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_QUESTGIVER_QUERY_QUEST_write(writer, &opcodes->body.CMSG_QUESTGIVER_QUERY_QUEST));
+            break;
+        case CMSG_QUESTGIVER_ACCEPT_QUEST:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_QUESTGIVER_ACCEPT_QUEST_write(writer, &opcodes->body.CMSG_QUESTGIVER_ACCEPT_QUEST));
+            break;
+        case CMSG_QUESTGIVER_COMPLETE_QUEST:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_QUESTGIVER_COMPLETE_QUEST_write(writer, &opcodes->body.CMSG_QUESTGIVER_COMPLETE_QUEST));
+            break;
+        case CMSG_QUESTGIVER_REQUEST_REWARD:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_QUESTGIVER_REQUEST_REWARD_write(writer, &opcodes->body.CMSG_QUESTGIVER_REQUEST_REWARD));
+            break;
+        case CMSG_QUESTGIVER_CHOOSE_REWARD:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_QUESTGIVER_CHOOSE_REWARD_write(writer, &opcodes->body.CMSG_QUESTGIVER_CHOOSE_REWARD));
+            break;
+        case CMSG_QUESTLOG_SWAP_QUEST:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_QUESTLOG_SWAP_QUEST_write(writer, &opcodes->body.CMSG_QUESTLOG_SWAP_QUEST));
+            break;
+        case CMSG_QUESTLOG_REMOVE_QUEST:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_QUESTLOG_REMOVE_QUEST_write(writer, &opcodes->body.CMSG_QUESTLOG_REMOVE_QUEST));
+            break;
+        case CMSG_QUEST_CONFIRM_ACCEPT:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_QUEST_CONFIRM_ACCEPT_write(writer, &opcodes->body.CMSG_QUEST_CONFIRM_ACCEPT));
+            break;
+        case CMSG_PUSHQUESTTOPARTY:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_PUSHQUESTTOPARTY_write(writer, &opcodes->body.CMSG_PUSHQUESTTOPARTY));
+            break;
+        case CMSG_LIST_INVENTORY:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_LIST_INVENTORY_write(writer, &opcodes->body.CMSG_LIST_INVENTORY));
+            break;
+        case CMSG_SELL_ITEM:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_SELL_ITEM_write(writer, &opcodes->body.CMSG_SELL_ITEM));
+            break;
+        case CMSG_BUY_ITEM:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_BUY_ITEM_write(writer, &opcodes->body.CMSG_BUY_ITEM));
+            break;
+        case CMSG_BUY_ITEM_IN_SLOT:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_BUY_ITEM_IN_SLOT_write(writer, &opcodes->body.CMSG_BUY_ITEM_IN_SLOT));
+            break;
+        case CMSG_TAXINODE_STATUS_QUERY:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_TAXINODE_STATUS_QUERY_write(writer, &opcodes->body.CMSG_TAXINODE_STATUS_QUERY));
+            break;
+        case CMSG_TAXIQUERYAVAILABLENODES:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_TAXIQUERYAVAILABLENODES_write(writer, &opcodes->body.CMSG_TAXIQUERYAVAILABLENODES));
+            break;
+        case CMSG_ACTIVATETAXI:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_ACTIVATETAXI_write(writer, &opcodes->body.CMSG_ACTIVATETAXI));
+            break;
+        case CMSG_TRAINER_LIST:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_TRAINER_LIST_write(writer, &opcodes->body.CMSG_TRAINER_LIST));
+            break;
+        case CMSG_TRAINER_BUY_SPELL:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_TRAINER_BUY_SPELL_write(writer, &opcodes->body.CMSG_TRAINER_BUY_SPELL));
+            break;
+        case CMSG_BINDER_ACTIVATE:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_BINDER_ACTIVATE_write(writer, &opcodes->body.CMSG_BINDER_ACTIVATE));
+            break;
+        case CMSG_BANKER_ACTIVATE:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_BANKER_ACTIVATE_write(writer, &opcodes->body.CMSG_BANKER_ACTIVATE));
+            break;
+        case CMSG_BUY_BANK_SLOT:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_BUY_BANK_SLOT_write(writer, &opcodes->body.CMSG_BUY_BANK_SLOT));
+            break;
+        case CMSG_PETITION_SHOWLIST:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_PETITION_SHOWLIST_write(writer, &opcodes->body.CMSG_PETITION_SHOWLIST));
+            break;
+        case CMSG_PETITION_BUY:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_PETITION_BUY_write(writer, &opcodes->body.CMSG_PETITION_BUY));
+            break;
+        case CMSG_PETITION_SHOW_SIGNATURES:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_PETITION_SHOW_SIGNATURES_write(writer, &opcodes->body.CMSG_PETITION_SHOW_SIGNATURES));
+            break;
+        case CMSG_PETITION_SIGN:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_PETITION_SIGN_write(writer, &opcodes->body.CMSG_PETITION_SIGN));
+            break;
+        case MSG_PETITION_DECLINE:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_PETITION_DECLINE_cmsg_write(writer, &opcodes->body.MSG_PETITION_DECLINE));
+            break;
+        case CMSG_OFFER_PETITION:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_OFFER_PETITION_write(writer, &opcodes->body.CMSG_OFFER_PETITION));
+            break;
+        case CMSG_TURN_IN_PETITION:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_TURN_IN_PETITION_write(writer, &opcodes->body.CMSG_TURN_IN_PETITION));
+            break;
+        case CMSG_PETITION_QUERY:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_PETITION_QUERY_write(writer, &opcodes->body.CMSG_PETITION_QUERY));
+            break;
+        case CMSG_BUG:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_BUG_write(writer, &opcodes->body.CMSG_BUG));
+            break;
+        case CMSG_RECLAIM_CORPSE:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_RECLAIM_CORPSE_write(writer, &opcodes->body.CMSG_RECLAIM_CORPSE));
+            break;
+        case CMSG_WRAP_ITEM:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_WRAP_ITEM_write(writer, &opcodes->body.CMSG_WRAP_ITEM));
+            break;
+        case MSG_MINIMAP_PING:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MINIMAP_PING_Client_write(writer, &opcodes->body.MSG_MINIMAP_PING_Client));
+            break;
+        case CMSG_PING:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_PING_write(writer, &opcodes->body.CMSG_PING));
+            break;
+        case CMSG_SETSHEATHED:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_SETSHEATHED_write(writer, &opcodes->body.CMSG_SETSHEATHED));
+            break;
+        case CMSG_AUTH_SESSION:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_AUTH_SESSION_write(writer, &opcodes->body.CMSG_AUTH_SESSION));
+            break;
+        case CMSG_PET_CAST_SPELL:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_PET_CAST_SPELL_write(writer, &opcodes->body.CMSG_PET_CAST_SPELL));
+            break;
+        case MSG_SAVE_GUILD_EMBLEM:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_SAVE_GUILD_EMBLEM_Client_write(writer, &opcodes->body.MSG_SAVE_GUILD_EMBLEM_Client));
+            break;
+        case MSG_TABARDVENDOR_ACTIVATE:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_TABARDVENDOR_ACTIVATE_cmsg_write(writer, &opcodes->body.MSG_TABARDVENDOR_ACTIVATE));
+            break;
+        case CMSG_ZONEUPDATE:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_ZONEUPDATE_write(writer, &opcodes->body.CMSG_ZONEUPDATE));
+            break;
+        case MSG_RANDOM_ROLL:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_RANDOM_ROLL_Client_write(writer, &opcodes->body.MSG_RANDOM_ROLL_Client));
+            break;
+        case CMSG_UNLEARN_SKILL:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_UNLEARN_SKILL_write(writer, &opcodes->body.CMSG_UNLEARN_SKILL));
+            break;
+        case CMSG_GMTICKET_CREATE:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_GMTICKET_CREATE_write(writer, &opcodes->body.CMSG_GMTICKET_CREATE));
+            break;
+        case CMSG_GMTICKET_UPDATETEXT:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_GMTICKET_UPDATETEXT_write(writer, &opcodes->body.CMSG_GMTICKET_UPDATETEXT));
+            break;
+        case CMSG_REQUEST_ACCOUNT_DATA:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_REQUEST_ACCOUNT_DATA_write(writer, &opcodes->body.CMSG_REQUEST_ACCOUNT_DATA));
+            break;
+        case CMSG_UPDATE_ACCOUNT_DATA:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_UPDATE_ACCOUNT_DATA_write(writer, &opcodes->body.CMSG_UPDATE_ACCOUNT_DATA));
+            break;
+        case CMSG_SPIRIT_HEALER_ACTIVATE:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_SPIRIT_HEALER_ACTIVATE_write(writer, &opcodes->body.CMSG_SPIRIT_HEALER_ACTIVATE));
+            break;
+        case CMSG_CHAT_IGNORED:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHAT_IGNORED_write(writer, &opcodes->body.CMSG_CHAT_IGNORED));
+            break;
+        case CMSG_GUILD_RANK:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_GUILD_RANK_write(writer, &opcodes->body.CMSG_GUILD_RANK));
+            break;
+        case CMSG_GUILD_ADD_RANK:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_GUILD_ADD_RANK_write(writer, &opcodes->body.CMSG_GUILD_ADD_RANK));
+            break;
+        case CMSG_GUILD_SET_PUBLIC_NOTE:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_GUILD_SET_PUBLIC_NOTE_write(writer, &opcodes->body.CMSG_GUILD_SET_PUBLIC_NOTE));
+            break;
+        case CMSG_GUILD_SET_OFFICER_NOTE:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_GUILD_SET_OFFICER_NOTE_write(writer, &opcodes->body.CMSG_GUILD_SET_OFFICER_NOTE));
+            break;
+        case CMSG_SEND_MAIL:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_SEND_MAIL_write(writer, &opcodes->body.CMSG_SEND_MAIL));
+            break;
+        case CMSG_GET_MAIL_LIST:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_GET_MAIL_LIST_write(writer, &opcodes->body.CMSG_GET_MAIL_LIST));
+            break;
+        case CMSG_BATTLEFIELD_LIST:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_BATTLEFIELD_LIST_write(writer, &opcodes->body.CMSG_BATTLEFIELD_LIST));
+            break;
+        case CMSG_BATTLEFIELD_JOIN:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_BATTLEFIELD_JOIN_write(writer, &opcodes->body.CMSG_BATTLEFIELD_JOIN));
+            break;
+        case CMSG_ITEM_TEXT_QUERY:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_ITEM_TEXT_QUERY_write(writer, &opcodes->body.CMSG_ITEM_TEXT_QUERY));
+            break;
+        case CMSG_MAIL_TAKE_MONEY:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_MAIL_TAKE_MONEY_write(writer, &opcodes->body.CMSG_MAIL_TAKE_MONEY));
+            break;
+        case CMSG_MAIL_TAKE_ITEM:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_MAIL_TAKE_ITEM_write(writer, &opcodes->body.CMSG_MAIL_TAKE_ITEM));
+            break;
+        case CMSG_MAIL_MARK_AS_READ:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_MAIL_MARK_AS_READ_write(writer, &opcodes->body.CMSG_MAIL_MARK_AS_READ));
+            break;
+        case CMSG_MAIL_RETURN_TO_SENDER:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_MAIL_RETURN_TO_SENDER_write(writer, &opcodes->body.CMSG_MAIL_RETURN_TO_SENDER));
+            break;
+        case CMSG_MAIL_DELETE:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_MAIL_DELETE_write(writer, &opcodes->body.CMSG_MAIL_DELETE));
+            break;
+        case CMSG_MAIL_CREATE_TEXT_ITEM:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_MAIL_CREATE_TEXT_ITEM_write(writer, &opcodes->body.CMSG_MAIL_CREATE_TEXT_ITEM));
+            break;
+        case CMSG_LEARN_TALENT:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_LEARN_TALENT_write(writer, &opcodes->body.CMSG_LEARN_TALENT));
+            break;
+        case CMSG_TOGGLE_PVP:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_TOGGLE_PVP_write(writer, &opcodes->body.CMSG_TOGGLE_PVP));
+            break;
+        case MSG_AUCTION_HELLO:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_AUCTION_HELLO_Client_write(writer, &opcodes->body.MSG_AUCTION_HELLO_Client));
+            break;
+        case CMSG_AUCTION_SELL_ITEM:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_AUCTION_SELL_ITEM_write(writer, &opcodes->body.CMSG_AUCTION_SELL_ITEM));
+            break;
+        case CMSG_AUCTION_REMOVE_ITEM:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_AUCTION_REMOVE_ITEM_write(writer, &opcodes->body.CMSG_AUCTION_REMOVE_ITEM));
+            break;
+        case CMSG_AUCTION_LIST_ITEMS:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_AUCTION_LIST_ITEMS_write(writer, &opcodes->body.CMSG_AUCTION_LIST_ITEMS));
+            break;
+        case CMSG_AUCTION_LIST_OWNER_ITEMS:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_AUCTION_LIST_OWNER_ITEMS_write(writer, &opcodes->body.CMSG_AUCTION_LIST_OWNER_ITEMS));
+            break;
+        case CMSG_AUCTION_PLACE_BID:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_AUCTION_PLACE_BID_write(writer, &opcodes->body.CMSG_AUCTION_PLACE_BID));
+            break;
+        case CMSG_AUCTION_LIST_BIDDER_ITEMS:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_AUCTION_LIST_BIDDER_ITEMS_write(writer, &opcodes->body.CMSG_AUCTION_LIST_BIDDER_ITEMS));
+            break;
+        case CMSG_SET_AMMO:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_SET_AMMO_write(writer, &opcodes->body.CMSG_SET_AMMO));
+            break;
+        case CMSG_SET_ACTIVE_MOVER:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_SET_ACTIVE_MOVER_write(writer, &opcodes->body.CMSG_SET_ACTIVE_MOVER));
+            break;
+        case CMSG_PET_CANCEL_AURA:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_PET_CANCEL_AURA_write(writer, &opcodes->body.CMSG_PET_CANCEL_AURA));
+            break;
+        case MSG_LIST_STABLED_PETS:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_LIST_STABLED_PETS_Client_write(writer, &opcodes->body.MSG_LIST_STABLED_PETS_Client));
+            break;
+        case CMSG_STABLE_PET:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_STABLE_PET_write(writer, &opcodes->body.CMSG_STABLE_PET));
+            break;
+        case CMSG_UNSTABLE_PET:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_UNSTABLE_PET_write(writer, &opcodes->body.CMSG_UNSTABLE_PET));
+            break;
+        case CMSG_BUY_STABLE_SLOT:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_BUY_STABLE_SLOT_write(writer, &opcodes->body.CMSG_BUY_STABLE_SLOT));
+            break;
+        case CMSG_STABLE_SWAP_PET:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_STABLE_SWAP_PET_write(writer, &opcodes->body.CMSG_STABLE_SWAP_PET));
+            break;
+        case MSG_QUEST_PUSH_RESULT:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_QUEST_PUSH_RESULT_cmsg_write(writer, &opcodes->body.MSG_QUEST_PUSH_RESULT));
+            break;
+        case CMSG_FAR_SIGHT:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_FAR_SIGHT_write(writer, &opcodes->body.CMSG_FAR_SIGHT));
+            break;
+        case CMSG_GROUP_CHANGE_SUB_GROUP:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_GROUP_CHANGE_SUB_GROUP_write(writer, &opcodes->body.CMSG_GROUP_CHANGE_SUB_GROUP));
+            break;
+        case CMSG_REQUEST_PARTY_MEMBER_STATS:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_REQUEST_PARTY_MEMBER_STATS_write(writer, &opcodes->body.CMSG_REQUEST_PARTY_MEMBER_STATS));
+            break;
+        case CMSG_GROUP_SWAP_SUB_GROUP:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_GROUP_SWAP_SUB_GROUP_write(writer, &opcodes->body.CMSG_GROUP_SWAP_SUB_GROUP));
+            break;
+        case CMSG_AUTOSTORE_BANK_ITEM:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_AUTOSTORE_BANK_ITEM_write(writer, &opcodes->body.CMSG_AUTOSTORE_BANK_ITEM));
+            break;
+        case CMSG_AUTOBANK_ITEM:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_AUTOBANK_ITEM_write(writer, &opcodes->body.CMSG_AUTOBANK_ITEM));
+            break;
+        case CMSG_GROUP_ASSISTANT_LEADER:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_GROUP_ASSISTANT_LEADER_write(writer, &opcodes->body.CMSG_GROUP_ASSISTANT_LEADER));
+            break;
+        case CMSG_BUYBACK_ITEM:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_BUYBACK_ITEM_write(writer, &opcodes->body.CMSG_BUYBACK_ITEM));
+            break;
+        case CMSG_MEETINGSTONE_JOIN:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_MEETINGSTONE_JOIN_write(writer, &opcodes->body.CMSG_MEETINGSTONE_JOIN));
+            break;
+        case CMSG_LOOT_ROLL:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_LOOT_ROLL_write(writer, &opcodes->body.CMSG_LOOT_ROLL));
+            break;
+        case CMSG_LOOT_MASTER_GIVE:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_LOOT_MASTER_GIVE_write(writer, &opcodes->body.CMSG_LOOT_MASTER_GIVE));
+            break;
+        case CMSG_REPAIR_ITEM:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_REPAIR_ITEM_write(writer, &opcodes->body.CMSG_REPAIR_ITEM));
+            break;
+        case MSG_TALENT_WIPE_CONFIRM:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_TALENT_WIPE_CONFIRM_Client_write(writer, &opcodes->body.MSG_TALENT_WIPE_CONFIRM_Client));
+            break;
+        case CMSG_SUMMON_RESPONSE:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_SUMMON_RESPONSE_write(writer, &opcodes->body.CMSG_SUMMON_RESPONSE));
+            break;
+        case MSG_MOVE_WATER_WALK:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_WATER_WALK_cmsg_write(writer, &opcodes->body.MSG_MOVE_WATER_WALK));
+            break;
+        case CMSG_SET_ACTIONBAR_TOGGLES:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_SET_ACTIONBAR_TOGGLES_write(writer, &opcodes->body.CMSG_SET_ACTIONBAR_TOGGLES));
+            break;
+        case MSG_PETITION_RENAME:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_PETITION_RENAME_cmsg_write(writer, &opcodes->body.MSG_PETITION_RENAME));
+            break;
+        case CMSG_ITEM_NAME_QUERY:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_ITEM_NAME_QUERY_write(writer, &opcodes->body.CMSG_ITEM_NAME_QUERY));
+            break;
+        case CMSG_CHAR_RENAME:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHAR_RENAME_write(writer, &opcodes->body.CMSG_CHAR_RENAME));
+            break;
+        case CMSG_MOVE_SPLINE_DONE:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_MOVE_SPLINE_DONE_write(writer, &opcodes->body.CMSG_MOVE_SPLINE_DONE));
+            break;
+        case CMSG_MOVE_FALL_RESET:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_MOVE_FALL_RESET_write(writer, &opcodes->body.CMSG_MOVE_FALL_RESET));
+            break;
+        case CMSG_MOVE_TIME_SKIPPED:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_MOVE_TIME_SKIPPED_write(writer, &opcodes->body.CMSG_MOVE_TIME_SKIPPED));
+            break;
+        case CMSG_MOVE_FEATHER_FALL_ACK:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_MOVE_FEATHER_FALL_ACK_write(writer, &opcodes->body.CMSG_MOVE_FEATHER_FALL_ACK));
+            break;
+        case CMSG_MOVE_WATER_WALK_ACK:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_MOVE_WATER_WALK_ACK_write(writer, &opcodes->body.CMSG_MOVE_WATER_WALK_ACK));
+            break;
+        case CMSG_MOVE_NOT_ACTIVE_MOVER:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_MOVE_NOT_ACTIVE_MOVER_write(writer, &opcodes->body.CMSG_MOVE_NOT_ACTIVE_MOVER));
+            break;
+        case CMSG_BATTLEFIELD_PORT:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_BATTLEFIELD_PORT_write(writer, &opcodes->body.CMSG_BATTLEFIELD_PORT));
+            break;
+        case MSG_INSPECT_HONOR_STATS:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_INSPECT_HONOR_STATS_Client_write(writer, &opcodes->body.MSG_INSPECT_HONOR_STATS_Client));
+            break;
+        case CMSG_BATTLEMASTER_HELLO:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_BATTLEMASTER_HELLO_write(writer, &opcodes->body.CMSG_BATTLEMASTER_HELLO));
+            break;
+        case CMSG_FORCE_WALK_SPEED_CHANGE_ACK:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_FORCE_WALK_SPEED_CHANGE_ACK_write(writer, &opcodes->body.CMSG_FORCE_WALK_SPEED_CHANGE_ACK));
+            break;
+        case CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK_write(writer, &opcodes->body.CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK));
+            break;
+        case CMSG_FORCE_TURN_RATE_CHANGE_ACK:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_FORCE_TURN_RATE_CHANGE_ACK_write(writer, &opcodes->body.CMSG_FORCE_TURN_RATE_CHANGE_ACK));
+            break;
+        case CMSG_LEAVE_BATTLEFIELD:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_LEAVE_BATTLEFIELD_write(writer, &opcodes->body.CMSG_LEAVE_BATTLEFIELD));
+            break;
+        case CMSG_AREA_SPIRIT_HEALER_QUERY:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_AREA_SPIRIT_HEALER_QUERY_write(writer, &opcodes->body.CMSG_AREA_SPIRIT_HEALER_QUERY));
+            break;
+        case CMSG_AREA_SPIRIT_HEALER_QUEUE:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_AREA_SPIRIT_HEALER_QUEUE_write(writer, &opcodes->body.CMSG_AREA_SPIRIT_HEALER_QUEUE));
+            break;
+        case CMSG_WARDEN_DATA:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_WARDEN_DATA_write(writer, &opcodes->body.CMSG_WARDEN_DATA));
+            break;
+        case CMSG_PET_STOP_ATTACK:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_PET_STOP_ATTACK_write(writer, &opcodes->body.CMSG_PET_STOP_ATTACK));
+            break;
+        case CMSG_BATTLEMASTER_JOIN:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_BATTLEMASTER_JOIN_write(writer, &opcodes->body.CMSG_BATTLEMASTER_JOIN));
+            break;
+        case CMSG_PET_UNLEARN:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_PET_UNLEARN_write(writer, &opcodes->body.CMSG_PET_UNLEARN));
+            break;
+        case CMSG_PET_SPELL_AUTOCAST:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_PET_SPELL_AUTOCAST_write(writer, &opcodes->body.CMSG_PET_SPELL_AUTOCAST));
+            break;
+        case CMSG_GUILD_INFO_TEXT:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_GUILD_INFO_TEXT_write(writer, &opcodes->body.CMSG_GUILD_INFO_TEXT));
+            break;
+        case CMSG_ACTIVATETAXIEXPRESS:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_ACTIVATETAXIEXPRESS_write(writer, &opcodes->body.CMSG_ACTIVATETAXIEXPRESS));
+            break;
+        case CMSG_SET_FACTION_INACTIVE:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_SET_FACTION_INACTIVE_write(writer, &opcodes->body.CMSG_SET_FACTION_INACTIVE));
+            break;
+        case CMSG_SET_WATCHED_FACTION:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_SET_WATCHED_FACTION_write(writer, &opcodes->body.CMSG_SET_WATCHED_FACTION));
+            break;
+        case MSG_RAID_TARGET_UPDATE:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_RAID_TARGET_UPDATE_Client_write(writer, &opcodes->body.MSG_RAID_TARGET_UPDATE_Client));
+            break;
+        case MSG_RAID_READY_CHECK:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_RAID_READY_CHECK_Client_write(writer, &opcodes->body.MSG_RAID_READY_CHECK_Client));
+            break;
+        case CMSG_GMSURVEY_SUBMIT:
+            WWM_CHECK_RETURN_CODE(vanilla_CMSG_GMSURVEY_SUBMIT_write(writer, &opcodes->body.CMSG_GMSURVEY_SUBMIT));
+            break;
+        default:
+            break;
+    }
+
+    return WWM_RESULT_SUCCESS;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_client_opcode_read(WowWorldReader* reader, VanillaClientOpcodeContainer* opcodes) {
@@ -23207,6 +24008,981 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_client_opcode_free(VanillaClientOpcodeC
         default:
             break;
     }
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_server_write_opcode(WowWorldWriter* writer, const VanillaServerOpcodeContainer* opcodes) {
+    switch (opcodes->opcode) {
+        case SMSG_CHAR_CREATE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_CHAR_CREATE_write(writer, &opcodes->body.SMSG_CHAR_CREATE));
+            break;
+        case SMSG_CHAR_ENUM:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_CHAR_ENUM_write(writer, &opcodes->body.SMSG_CHAR_ENUM));
+            break;
+        case SMSG_CHAR_DELETE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_CHAR_DELETE_write(writer, &opcodes->body.SMSG_CHAR_DELETE));
+            break;
+        case SMSG_NEW_WORLD:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_NEW_WORLD_write(writer, &opcodes->body.SMSG_NEW_WORLD));
+            break;
+        case SMSG_TRANSFER_PENDING:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_TRANSFER_PENDING_write(writer, &opcodes->body.SMSG_TRANSFER_PENDING));
+            break;
+        case SMSG_TRANSFER_ABORTED:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_TRANSFER_ABORTED_write(writer, &opcodes->body.SMSG_TRANSFER_ABORTED));
+            break;
+        case SMSG_CHARACTER_LOGIN_FAILED:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_CHARACTER_LOGIN_FAILED_write(writer, &opcodes->body.SMSG_CHARACTER_LOGIN_FAILED));
+            break;
+        case SMSG_LOGIN_SETTIMESPEED:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_LOGIN_SETTIMESPEED_write(writer, &opcodes->body.SMSG_LOGIN_SETTIMESPEED));
+            break;
+        case SMSG_LOGOUT_RESPONSE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_LOGOUT_RESPONSE_write(writer, &opcodes->body.SMSG_LOGOUT_RESPONSE));
+            break;
+        case SMSG_NAME_QUERY_RESPONSE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_NAME_QUERY_RESPONSE_write(writer, &opcodes->body.SMSG_NAME_QUERY_RESPONSE));
+            break;
+        case SMSG_PET_NAME_QUERY_RESPONSE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_PET_NAME_QUERY_RESPONSE_write(writer, &opcodes->body.SMSG_PET_NAME_QUERY_RESPONSE));
+            break;
+        case SMSG_GUILD_QUERY_RESPONSE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_GUILD_QUERY_RESPONSE_write(writer, &opcodes->body.SMSG_GUILD_QUERY_RESPONSE));
+            break;
+        case SMSG_ITEM_QUERY_SINGLE_RESPONSE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_ITEM_QUERY_SINGLE_RESPONSE_write(writer, &opcodes->body.SMSG_ITEM_QUERY_SINGLE_RESPONSE));
+            break;
+        case SMSG_PAGE_TEXT_QUERY_RESPONSE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_PAGE_TEXT_QUERY_RESPONSE_write(writer, &opcodes->body.SMSG_PAGE_TEXT_QUERY_RESPONSE));
+            break;
+        case SMSG_QUEST_QUERY_RESPONSE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUEST_QUERY_RESPONSE_write(writer, &opcodes->body.SMSG_QUEST_QUERY_RESPONSE));
+            break;
+        case SMSG_GAMEOBJECT_QUERY_RESPONSE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_GAMEOBJECT_QUERY_RESPONSE_write(writer, &opcodes->body.SMSG_GAMEOBJECT_QUERY_RESPONSE));
+            break;
+        case SMSG_CREATURE_QUERY_RESPONSE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_CREATURE_QUERY_RESPONSE_write(writer, &opcodes->body.SMSG_CREATURE_QUERY_RESPONSE));
+            break;
+        case SMSG_WHO:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_WHO_write(writer, &opcodes->body.SMSG_WHO));
+            break;
+        case SMSG_WHOIS:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_WHOIS_write(writer, &opcodes->body.SMSG_WHOIS));
+            break;
+        case SMSG_FRIEND_LIST:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_FRIEND_LIST_write(writer, &opcodes->body.SMSG_FRIEND_LIST));
+            break;
+        case SMSG_FRIEND_STATUS:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_FRIEND_STATUS_write(writer, &opcodes->body.SMSG_FRIEND_STATUS));
+            break;
+        case SMSG_IGNORE_LIST:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_IGNORE_LIST_write(writer, &opcodes->body.SMSG_IGNORE_LIST));
+            break;
+        case SMSG_GROUP_INVITE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_GROUP_INVITE_write(writer, &opcodes->body.SMSG_GROUP_INVITE));
+            break;
+        case SMSG_GROUP_DECLINE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_GROUP_DECLINE_write(writer, &opcodes->body.SMSG_GROUP_DECLINE));
+            break;
+        case SMSG_GROUP_SET_LEADER:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_GROUP_SET_LEADER_write(writer, &opcodes->body.SMSG_GROUP_SET_LEADER));
+            break;
+        case SMSG_GROUP_LIST:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_GROUP_LIST_write(writer, &opcodes->body.SMSG_GROUP_LIST));
+            break;
+        case SMSG_PARTY_MEMBER_STATS:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_PARTY_MEMBER_STATS_write(writer, &opcodes->body.SMSG_PARTY_MEMBER_STATS));
+            break;
+        case SMSG_PARTY_COMMAND_RESULT:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_PARTY_COMMAND_RESULT_write(writer, &opcodes->body.SMSG_PARTY_COMMAND_RESULT));
+            break;
+        case SMSG_GUILD_INVITE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_GUILD_INVITE_write(writer, &opcodes->body.SMSG_GUILD_INVITE));
+            break;
+        case SMSG_GUILD_INFO:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_GUILD_INFO_write(writer, &opcodes->body.SMSG_GUILD_INFO));
+            break;
+        case SMSG_GUILD_ROSTER:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_GUILD_ROSTER_write(writer, &opcodes->body.SMSG_GUILD_ROSTER));
+            break;
+        case SMSG_GUILD_EVENT:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_GUILD_EVENT_write(writer, &opcodes->body.SMSG_GUILD_EVENT));
+            break;
+        case SMSG_GUILD_COMMAND_RESULT:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_GUILD_COMMAND_RESULT_write(writer, &opcodes->body.SMSG_GUILD_COMMAND_RESULT));
+            break;
+        case SMSG_MESSAGECHAT:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_MESSAGECHAT_write(writer, &opcodes->body.SMSG_MESSAGECHAT));
+            break;
+        case SMSG_CHANNEL_NOTIFY:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_CHANNEL_NOTIFY_write(writer, &opcodes->body.SMSG_CHANNEL_NOTIFY));
+            break;
+        case SMSG_CHANNEL_LIST:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_CHANNEL_LIST_write(writer, &opcodes->body.SMSG_CHANNEL_LIST));
+            break;
+        case SMSG_UPDATE_OBJECT:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_UPDATE_OBJECT_write(writer, &opcodes->body.SMSG_UPDATE_OBJECT));
+            break;
+        case SMSG_DESTROY_OBJECT:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_DESTROY_OBJECT_write(writer, &opcodes->body.SMSG_DESTROY_OBJECT));
+            break;
+        case SMSG_READ_ITEM_OK:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_READ_ITEM_OK_write(writer, &opcodes->body.SMSG_READ_ITEM_OK));
+            break;
+        case SMSG_READ_ITEM_FAILED:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_READ_ITEM_FAILED_write(writer, &opcodes->body.SMSG_READ_ITEM_FAILED));
+            break;
+        case SMSG_ITEM_COOLDOWN:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_ITEM_COOLDOWN_write(writer, &opcodes->body.SMSG_ITEM_COOLDOWN));
+            break;
+        case SMSG_GAMEOBJECT_CUSTOM_ANIM:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_GAMEOBJECT_CUSTOM_ANIM_write(writer, &opcodes->body.SMSG_GAMEOBJECT_CUSTOM_ANIM));
+            break;
+        case MSG_MOVE_START_FORWARD:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_FORWARD_Server_write(writer, &opcodes->body.MSG_MOVE_START_FORWARD_Server));
+            break;
+        case MSG_MOVE_START_BACKWARD:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_BACKWARD_Server_write(writer, &opcodes->body.MSG_MOVE_START_BACKWARD_Server));
+            break;
+        case MSG_MOVE_STOP:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_STOP_Server_write(writer, &opcodes->body.MSG_MOVE_STOP_Server));
+            break;
+        case MSG_MOVE_START_STRAFE_LEFT:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_STRAFE_LEFT_Server_write(writer, &opcodes->body.MSG_MOVE_START_STRAFE_LEFT_Server));
+            break;
+        case MSG_MOVE_START_STRAFE_RIGHT:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_STRAFE_RIGHT_Server_write(writer, &opcodes->body.MSG_MOVE_START_STRAFE_RIGHT_Server));
+            break;
+        case MSG_MOVE_STOP_STRAFE:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_STOP_STRAFE_Server_write(writer, &opcodes->body.MSG_MOVE_STOP_STRAFE_Server));
+            break;
+        case MSG_MOVE_JUMP:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_JUMP_Server_write(writer, &opcodes->body.MSG_MOVE_JUMP_Server));
+            break;
+        case MSG_MOVE_START_TURN_LEFT:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_TURN_LEFT_Server_write(writer, &opcodes->body.MSG_MOVE_START_TURN_LEFT_Server));
+            break;
+        case MSG_MOVE_START_TURN_RIGHT:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_TURN_RIGHT_Server_write(writer, &opcodes->body.MSG_MOVE_START_TURN_RIGHT_Server));
+            break;
+        case MSG_MOVE_STOP_TURN:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_STOP_TURN_Server_write(writer, &opcodes->body.MSG_MOVE_STOP_TURN_Server));
+            break;
+        case MSG_MOVE_START_PITCH_UP:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_PITCH_UP_Server_write(writer, &opcodes->body.MSG_MOVE_START_PITCH_UP_Server));
+            break;
+        case MSG_MOVE_START_PITCH_DOWN:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_PITCH_DOWN_Server_write(writer, &opcodes->body.MSG_MOVE_START_PITCH_DOWN_Server));
+            break;
+        case MSG_MOVE_STOP_PITCH:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_STOP_PITCH_Server_write(writer, &opcodes->body.MSG_MOVE_STOP_PITCH_Server));
+            break;
+        case MSG_MOVE_SET_RUN_MODE:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_SET_RUN_MODE_Server_write(writer, &opcodes->body.MSG_MOVE_SET_RUN_MODE_Server));
+            break;
+        case MSG_MOVE_SET_WALK_MODE:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_SET_WALK_MODE_Server_write(writer, &opcodes->body.MSG_MOVE_SET_WALK_MODE_Server));
+            break;
+        case MSG_MOVE_TELEPORT_ACK:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_TELEPORT_ACK_Server_write(writer, &opcodes->body.MSG_MOVE_TELEPORT_ACK_Server));
+            break;
+        case MSG_MOVE_FALL_LAND:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_FALL_LAND_Server_write(writer, &opcodes->body.MSG_MOVE_FALL_LAND_Server));
+            break;
+        case MSG_MOVE_START_SWIM:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_SWIM_Server_write(writer, &opcodes->body.MSG_MOVE_START_SWIM_Server));
+            break;
+        case MSG_MOVE_STOP_SWIM:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_STOP_SWIM_Server_write(writer, &opcodes->body.MSG_MOVE_STOP_SWIM_Server));
+            break;
+        case MSG_MOVE_SET_FACING:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_SET_FACING_Server_write(writer, &opcodes->body.MSG_MOVE_SET_FACING_Server));
+            break;
+        case MSG_MOVE_SET_PITCH:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_SET_PITCH_Server_write(writer, &opcodes->body.MSG_MOVE_SET_PITCH_Server));
+            break;
+        case SMSG_MONSTER_MOVE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_MONSTER_MOVE_write(writer, &opcodes->body.SMSG_MONSTER_MOVE));
+            break;
+        case SMSG_MOVE_WATER_WALK:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_MOVE_WATER_WALK_write(writer, &opcodes->body.SMSG_MOVE_WATER_WALK));
+            break;
+        case SMSG_MOVE_LAND_WALK:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_MOVE_LAND_WALK_write(writer, &opcodes->body.SMSG_MOVE_LAND_WALK));
+            break;
+        case SMSG_FORCE_RUN_SPEED_CHANGE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_FORCE_RUN_SPEED_CHANGE_write(writer, &opcodes->body.SMSG_FORCE_RUN_SPEED_CHANGE));
+            break;
+        case SMSG_FORCE_RUN_BACK_SPEED_CHANGE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_FORCE_RUN_BACK_SPEED_CHANGE_write(writer, &opcodes->body.SMSG_FORCE_RUN_BACK_SPEED_CHANGE));
+            break;
+        case SMSG_FORCE_SWIM_SPEED_CHANGE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_FORCE_SWIM_SPEED_CHANGE_write(writer, &opcodes->body.SMSG_FORCE_SWIM_SPEED_CHANGE));
+            break;
+        case SMSG_FORCE_MOVE_ROOT:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_FORCE_MOVE_ROOT_write(writer, &opcodes->body.SMSG_FORCE_MOVE_ROOT));
+            break;
+        case SMSG_FORCE_MOVE_UNROOT:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_FORCE_MOVE_UNROOT_write(writer, &opcodes->body.SMSG_FORCE_MOVE_UNROOT));
+            break;
+        case MSG_MOVE_HEARTBEAT:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_HEARTBEAT_Server_write(writer, &opcodes->body.MSG_MOVE_HEARTBEAT_Server));
+            break;
+        case SMSG_MOVE_KNOCK_BACK:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_MOVE_KNOCK_BACK_write(writer, &opcodes->body.SMSG_MOVE_KNOCK_BACK));
+            break;
+        case SMSG_MOVE_FEATHER_FALL:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_MOVE_FEATHER_FALL_write(writer, &opcodes->body.SMSG_MOVE_FEATHER_FALL));
+            break;
+        case SMSG_MOVE_NORMAL_FALL:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_MOVE_NORMAL_FALL_write(writer, &opcodes->body.SMSG_MOVE_NORMAL_FALL));
+            break;
+        case SMSG_MOVE_SET_HOVER:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_MOVE_SET_HOVER_write(writer, &opcodes->body.SMSG_MOVE_SET_HOVER));
+            break;
+        case SMSG_MOVE_UNSET_HOVER:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_MOVE_UNSET_HOVER_write(writer, &opcodes->body.SMSG_MOVE_UNSET_HOVER));
+            break;
+        case SMSG_TRIGGER_CINEMATIC:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_TRIGGER_CINEMATIC_write(writer, &opcodes->body.SMSG_TRIGGER_CINEMATIC));
+            break;
+        case SMSG_TUTORIAL_FLAGS:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_TUTORIAL_FLAGS_write(writer, &opcodes->body.SMSG_TUTORIAL_FLAGS));
+            break;
+        case SMSG_EMOTE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_EMOTE_write(writer, &opcodes->body.SMSG_EMOTE));
+            break;
+        case SMSG_TEXT_EMOTE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_TEXT_EMOTE_write(writer, &opcodes->body.SMSG_TEXT_EMOTE));
+            break;
+        case SMSG_INVENTORY_CHANGE_FAILURE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_INVENTORY_CHANGE_FAILURE_write(writer, &opcodes->body.SMSG_INVENTORY_CHANGE_FAILURE));
+            break;
+        case SMSG_OPEN_CONTAINER:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_OPEN_CONTAINER_write(writer, &opcodes->body.SMSG_OPEN_CONTAINER));
+            break;
+        case SMSG_INSPECT:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_INSPECT_write(writer, &opcodes->body.SMSG_INSPECT));
+            break;
+        case SMSG_TRADE_STATUS:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_TRADE_STATUS_write(writer, &opcodes->body.SMSG_TRADE_STATUS));
+            break;
+        case SMSG_TRADE_STATUS_EXTENDED:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_TRADE_STATUS_EXTENDED_write(writer, &opcodes->body.SMSG_TRADE_STATUS_EXTENDED));
+            break;
+        case SMSG_INITIALIZE_FACTIONS:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_INITIALIZE_FACTIONS_write(writer, &opcodes->body.SMSG_INITIALIZE_FACTIONS));
+            break;
+        case SMSG_SET_FACTION_VISIBLE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SET_FACTION_VISIBLE_write(writer, &opcodes->body.SMSG_SET_FACTION_VISIBLE));
+            break;
+        case SMSG_SET_FACTION_STANDING:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SET_FACTION_STANDING_write(writer, &opcodes->body.SMSG_SET_FACTION_STANDING));
+            break;
+        case SMSG_SET_PROFICIENCY:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SET_PROFICIENCY_write(writer, &opcodes->body.SMSG_SET_PROFICIENCY));
+            break;
+        case SMSG_ACTION_BUTTONS:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_ACTION_BUTTONS_write(writer, &opcodes->body.SMSG_ACTION_BUTTONS));
+            break;
+        case SMSG_INITIAL_SPELLS:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_INITIAL_SPELLS_write(writer, &opcodes->body.SMSG_INITIAL_SPELLS));
+            break;
+        case SMSG_LEARNED_SPELL:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_LEARNED_SPELL_write(writer, &opcodes->body.SMSG_LEARNED_SPELL));
+            break;
+        case SMSG_SUPERCEDED_SPELL:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SUPERCEDED_SPELL_write(writer, &opcodes->body.SMSG_SUPERCEDED_SPELL));
+            break;
+        case SMSG_CAST_RESULT:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_CAST_RESULT_write(writer, &opcodes->body.SMSG_CAST_RESULT));
+            break;
+        case SMSG_SPELL_START:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELL_START_write(writer, &opcodes->body.SMSG_SPELL_START));
+            break;
+        case SMSG_SPELL_GO:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELL_GO_write(writer, &opcodes->body.SMSG_SPELL_GO));
+            break;
+        case SMSG_SPELL_FAILURE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELL_FAILURE_write(writer, &opcodes->body.SMSG_SPELL_FAILURE));
+            break;
+        case SMSG_SPELL_COOLDOWN:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELL_COOLDOWN_write(writer, &opcodes->body.SMSG_SPELL_COOLDOWN));
+            break;
+        case SMSG_COOLDOWN_EVENT:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_COOLDOWN_EVENT_write(writer, &opcodes->body.SMSG_COOLDOWN_EVENT));
+            break;
+        case SMSG_UPDATE_AURA_DURATION:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_UPDATE_AURA_DURATION_write(writer, &opcodes->body.SMSG_UPDATE_AURA_DURATION));
+            break;
+        case SMSG_PET_CAST_FAILED:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_PET_CAST_FAILED_write(writer, &opcodes->body.SMSG_PET_CAST_FAILED));
+            break;
+        case MSG_CHANNEL_START:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_CHANNEL_START_Server_write(writer, &opcodes->body.MSG_CHANNEL_START_Server));
+            break;
+        case MSG_CHANNEL_UPDATE:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_CHANNEL_UPDATE_Server_write(writer, &opcodes->body.MSG_CHANNEL_UPDATE_Server));
+            break;
+        case SMSG_AI_REACTION:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_AI_REACTION_write(writer, &opcodes->body.SMSG_AI_REACTION));
+            break;
+        case SMSG_ATTACKSTART:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_ATTACKSTART_write(writer, &opcodes->body.SMSG_ATTACKSTART));
+            break;
+        case SMSG_ATTACKSTOP:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_ATTACKSTOP_write(writer, &opcodes->body.SMSG_ATTACKSTOP));
+            break;
+        case SMSG_ATTACKERSTATEUPDATE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_ATTACKERSTATEUPDATE_write(writer, &opcodes->body.SMSG_ATTACKERSTATEUPDATE));
+            break;
+        case SMSG_SPELLHEALLOG:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELLHEALLOG_write(writer, &opcodes->body.SMSG_SPELLHEALLOG));
+            break;
+        case SMSG_SPELLENERGIZELOG:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELLENERGIZELOG_write(writer, &opcodes->body.SMSG_SPELLENERGIZELOG));
+            break;
+        case SMSG_BINDPOINTUPDATE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_BINDPOINTUPDATE_write(writer, &opcodes->body.SMSG_BINDPOINTUPDATE));
+            break;
+        case SMSG_PLAYERBOUND:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_PLAYERBOUND_write(writer, &opcodes->body.SMSG_PLAYERBOUND));
+            break;
+        case SMSG_CLIENT_CONTROL_UPDATE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_CLIENT_CONTROL_UPDATE_write(writer, &opcodes->body.SMSG_CLIENT_CONTROL_UPDATE));
+            break;
+        case SMSG_RESURRECT_REQUEST:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_RESURRECT_REQUEST_write(writer, &opcodes->body.SMSG_RESURRECT_REQUEST));
+            break;
+        case SMSG_LOOT_RESPONSE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_LOOT_RESPONSE_write(writer, &opcodes->body.SMSG_LOOT_RESPONSE));
+            break;
+        case SMSG_LOOT_RELEASE_RESPONSE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_LOOT_RELEASE_RESPONSE_write(writer, &opcodes->body.SMSG_LOOT_RELEASE_RESPONSE));
+            break;
+        case SMSG_LOOT_REMOVED:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_LOOT_REMOVED_write(writer, &opcodes->body.SMSG_LOOT_REMOVED));
+            break;
+        case SMSG_LOOT_MONEY_NOTIFY:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_LOOT_MONEY_NOTIFY_write(writer, &opcodes->body.SMSG_LOOT_MONEY_NOTIFY));
+            break;
+        case SMSG_ITEM_PUSH_RESULT:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_ITEM_PUSH_RESULT_write(writer, &opcodes->body.SMSG_ITEM_PUSH_RESULT));
+            break;
+        case SMSG_DUEL_REQUESTED:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_DUEL_REQUESTED_write(writer, &opcodes->body.SMSG_DUEL_REQUESTED));
+            break;
+        case SMSG_DUEL_COMPLETE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_DUEL_COMPLETE_write(writer, &opcodes->body.SMSG_DUEL_COMPLETE));
+            break;
+        case SMSG_DUEL_WINNER:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_DUEL_WINNER_write(writer, &opcodes->body.SMSG_DUEL_WINNER));
+            break;
+        case SMSG_MOUNTRESULT:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_MOUNTRESULT_write(writer, &opcodes->body.SMSG_MOUNTRESULT));
+            break;
+        case SMSG_DISMOUNTRESULT:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_DISMOUNTRESULT_write(writer, &opcodes->body.SMSG_DISMOUNTRESULT));
+            break;
+        case SMSG_MOUNTSPECIAL_ANIM:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_MOUNTSPECIAL_ANIM_write(writer, &opcodes->body.SMSG_MOUNTSPECIAL_ANIM));
+            break;
+        case SMSG_PET_TAME_FAILURE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_PET_TAME_FAILURE_write(writer, &opcodes->body.SMSG_PET_TAME_FAILURE));
+            break;
+        case SMSG_PET_SPELLS:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_PET_SPELLS_write(writer, &opcodes->body.SMSG_PET_SPELLS));
+            break;
+        case SMSG_PET_MODE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_PET_MODE_write(writer, &opcodes->body.SMSG_PET_MODE));
+            break;
+        case SMSG_GOSSIP_MESSAGE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_GOSSIP_MESSAGE_write(writer, &opcodes->body.SMSG_GOSSIP_MESSAGE));
+            break;
+        case SMSG_NPC_TEXT_UPDATE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_NPC_TEXT_UPDATE_write(writer, &opcodes->body.SMSG_NPC_TEXT_UPDATE));
+            break;
+        case SMSG_QUESTGIVER_STATUS:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUESTGIVER_STATUS_write(writer, &opcodes->body.SMSG_QUESTGIVER_STATUS));
+            break;
+        case SMSG_QUESTGIVER_QUEST_LIST:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUESTGIVER_QUEST_LIST_write(writer, &opcodes->body.SMSG_QUESTGIVER_QUEST_LIST));
+            break;
+        case SMSG_QUESTGIVER_QUEST_DETAILS:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUESTGIVER_QUEST_DETAILS_write(writer, &opcodes->body.SMSG_QUESTGIVER_QUEST_DETAILS));
+            break;
+        case SMSG_QUESTGIVER_REQUEST_ITEMS:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUESTGIVER_REQUEST_ITEMS_write(writer, &opcodes->body.SMSG_QUESTGIVER_REQUEST_ITEMS));
+            break;
+        case SMSG_QUESTGIVER_OFFER_REWARD:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUESTGIVER_OFFER_REWARD_write(writer, &opcodes->body.SMSG_QUESTGIVER_OFFER_REWARD));
+            break;
+        case SMSG_QUESTGIVER_QUEST_INVALID:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUESTGIVER_QUEST_INVALID_write(writer, &opcodes->body.SMSG_QUESTGIVER_QUEST_INVALID));
+            break;
+        case SMSG_QUESTGIVER_QUEST_COMPLETE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUESTGIVER_QUEST_COMPLETE_write(writer, &opcodes->body.SMSG_QUESTGIVER_QUEST_COMPLETE));
+            break;
+        case SMSG_QUESTGIVER_QUEST_FAILED:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUESTGIVER_QUEST_FAILED_write(writer, &opcodes->body.SMSG_QUESTGIVER_QUEST_FAILED));
+            break;
+        case SMSG_QUESTUPDATE_FAILED:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUESTUPDATE_FAILED_write(writer, &opcodes->body.SMSG_QUESTUPDATE_FAILED));
+            break;
+        case SMSG_QUESTUPDATE_FAILEDTIMER:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUESTUPDATE_FAILEDTIMER_write(writer, &opcodes->body.SMSG_QUESTUPDATE_FAILEDTIMER));
+            break;
+        case SMSG_QUESTUPDATE_COMPLETE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUESTUPDATE_COMPLETE_write(writer, &opcodes->body.SMSG_QUESTUPDATE_COMPLETE));
+            break;
+        case SMSG_QUESTUPDATE_ADD_KILL:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUESTUPDATE_ADD_KILL_write(writer, &opcodes->body.SMSG_QUESTUPDATE_ADD_KILL));
+            break;
+        case SMSG_QUESTUPDATE_ADD_ITEM:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUESTUPDATE_ADD_ITEM_write(writer, &opcodes->body.SMSG_QUESTUPDATE_ADD_ITEM));
+            break;
+        case SMSG_QUEST_CONFIRM_ACCEPT:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUEST_CONFIRM_ACCEPT_write(writer, &opcodes->body.SMSG_QUEST_CONFIRM_ACCEPT));
+            break;
+        case SMSG_LIST_INVENTORY:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_LIST_INVENTORY_write(writer, &opcodes->body.SMSG_LIST_INVENTORY));
+            break;
+        case SMSG_SELL_ITEM:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SELL_ITEM_write(writer, &opcodes->body.SMSG_SELL_ITEM));
+            break;
+        case SMSG_BUY_ITEM:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_BUY_ITEM_write(writer, &opcodes->body.SMSG_BUY_ITEM));
+            break;
+        case SMSG_BUY_FAILED:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_BUY_FAILED_write(writer, &opcodes->body.SMSG_BUY_FAILED));
+            break;
+        case SMSG_SHOWTAXINODES:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SHOWTAXINODES_write(writer, &opcodes->body.SMSG_SHOWTAXINODES));
+            break;
+        case SMSG_TAXINODE_STATUS:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_TAXINODE_STATUS_write(writer, &opcodes->body.SMSG_TAXINODE_STATUS));
+            break;
+        case SMSG_ACTIVATETAXIREPLY:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_ACTIVATETAXIREPLY_write(writer, &opcodes->body.SMSG_ACTIVATETAXIREPLY));
+            break;
+        case SMSG_TRAINER_LIST:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_TRAINER_LIST_write(writer, &opcodes->body.SMSG_TRAINER_LIST));
+            break;
+        case SMSG_TRAINER_BUY_SUCCEEDED:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_TRAINER_BUY_SUCCEEDED_write(writer, &opcodes->body.SMSG_TRAINER_BUY_SUCCEEDED));
+            break;
+        case SMSG_TRAINER_BUY_FAILED:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_TRAINER_BUY_FAILED_write(writer, &opcodes->body.SMSG_TRAINER_BUY_FAILED));
+            break;
+        case SMSG_SHOW_BANK:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SHOW_BANK_write(writer, &opcodes->body.SMSG_SHOW_BANK));
+            break;
+        case SMSG_BUY_BANK_SLOT_RESULT:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_BUY_BANK_SLOT_RESULT_write(writer, &opcodes->body.SMSG_BUY_BANK_SLOT_RESULT));
+            break;
+        case SMSG_PETITION_SHOWLIST:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_PETITION_SHOWLIST_write(writer, &opcodes->body.SMSG_PETITION_SHOWLIST));
+            break;
+        case SMSG_PETITION_SHOW_SIGNATURES:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_PETITION_SHOW_SIGNATURES_write(writer, &opcodes->body.SMSG_PETITION_SHOW_SIGNATURES));
+            break;
+        case SMSG_PETITION_SIGN_RESULTS:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_PETITION_SIGN_RESULTS_write(writer, &opcodes->body.SMSG_PETITION_SIGN_RESULTS));
+            break;
+        case MSG_PETITION_DECLINE:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_PETITION_DECLINE_smsg_write(writer, &opcodes->body.MSG_PETITION_DECLINE));
+            break;
+        case SMSG_TURN_IN_PETITION_RESULTS:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_TURN_IN_PETITION_RESULTS_write(writer, &opcodes->body.SMSG_TURN_IN_PETITION_RESULTS));
+            break;
+        case SMSG_PETITION_QUERY_RESPONSE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_PETITION_QUERY_RESPONSE_write(writer, &opcodes->body.SMSG_PETITION_QUERY_RESPONSE));
+            break;
+        case SMSG_NOTIFICATION:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_NOTIFICATION_write(writer, &opcodes->body.SMSG_NOTIFICATION));
+            break;
+        case SMSG_PLAYED_TIME:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_PLAYED_TIME_write(writer, &opcodes->body.SMSG_PLAYED_TIME));
+            break;
+        case SMSG_QUERY_TIME_RESPONSE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUERY_TIME_RESPONSE_write(writer, &opcodes->body.SMSG_QUERY_TIME_RESPONSE));
+            break;
+        case SMSG_LOG_XPGAIN:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_LOG_XPGAIN_write(writer, &opcodes->body.SMSG_LOG_XPGAIN));
+            break;
+        case SMSG_LEVELUP_INFO:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_LEVELUP_INFO_write(writer, &opcodes->body.SMSG_LEVELUP_INFO));
+            break;
+        case MSG_MINIMAP_PING:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MINIMAP_PING_Server_write(writer, &opcodes->body.MSG_MINIMAP_PING_Server));
+            break;
+        case SMSG_RESISTLOG:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_RESISTLOG_write(writer, &opcodes->body.SMSG_RESISTLOG));
+            break;
+        case SMSG_ENCHANTMENTLOG:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_ENCHANTMENTLOG_write(writer, &opcodes->body.SMSG_ENCHANTMENTLOG));
+            break;
+        case SMSG_START_MIRROR_TIMER:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_START_MIRROR_TIMER_write(writer, &opcodes->body.SMSG_START_MIRROR_TIMER));
+            break;
+        case SMSG_PAUSE_MIRROR_TIMER:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_PAUSE_MIRROR_TIMER_write(writer, &opcodes->body.SMSG_PAUSE_MIRROR_TIMER));
+            break;
+        case SMSG_STOP_MIRROR_TIMER:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_STOP_MIRROR_TIMER_write(writer, &opcodes->body.SMSG_STOP_MIRROR_TIMER));
+            break;
+        case SMSG_PONG:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_PONG_write(writer, &opcodes->body.SMSG_PONG));
+            break;
+        case SMSG_CLEAR_COOLDOWN:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_CLEAR_COOLDOWN_write(writer, &opcodes->body.SMSG_CLEAR_COOLDOWN));
+            break;
+        case SMSG_GAMEOBJECT_PAGETEXT:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_GAMEOBJECT_PAGETEXT_write(writer, &opcodes->body.SMSG_GAMEOBJECT_PAGETEXT));
+            break;
+        case SMSG_SPELL_DELAYED:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELL_DELAYED_write(writer, &opcodes->body.SMSG_SPELL_DELAYED));
+            break;
+        case SMSG_ITEM_TIME_UPDATE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_ITEM_TIME_UPDATE_write(writer, &opcodes->body.SMSG_ITEM_TIME_UPDATE));
+            break;
+        case SMSG_ITEM_ENCHANT_TIME_UPDATE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_ITEM_ENCHANT_TIME_UPDATE_write(writer, &opcodes->body.SMSG_ITEM_ENCHANT_TIME_UPDATE));
+            break;
+        case SMSG_AUTH_CHALLENGE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_AUTH_CHALLENGE_write(writer, &opcodes->body.SMSG_AUTH_CHALLENGE));
+            break;
+        case SMSG_AUTH_RESPONSE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_AUTH_RESPONSE_write(writer, &opcodes->body.SMSG_AUTH_RESPONSE));
+            break;
+        case MSG_SAVE_GUILD_EMBLEM:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_SAVE_GUILD_EMBLEM_Server_write(writer, &opcodes->body.MSG_SAVE_GUILD_EMBLEM_Server));
+            break;
+        case MSG_TABARDVENDOR_ACTIVATE:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_TABARDVENDOR_ACTIVATE_smsg_write(writer, &opcodes->body.MSG_TABARDVENDOR_ACTIVATE));
+            break;
+        case SMSG_PLAY_SPELL_VISUAL:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_PLAY_SPELL_VISUAL_write(writer, &opcodes->body.SMSG_PLAY_SPELL_VISUAL));
+            break;
+        case SMSG_PARTYKILLLOG:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_PARTYKILLLOG_write(writer, &opcodes->body.SMSG_PARTYKILLLOG));
+            break;
+        case SMSG_COMPRESSED_UPDATE_OBJECT:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_COMPRESSED_UPDATE_OBJECT_write(writer, &opcodes->body.SMSG_COMPRESSED_UPDATE_OBJECT));
+            break;
+        case SMSG_PLAY_SPELL_IMPACT:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_PLAY_SPELL_IMPACT_write(writer, &opcodes->body.SMSG_PLAY_SPELL_IMPACT));
+            break;
+        case SMSG_EXPLORATION_EXPERIENCE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_EXPLORATION_EXPERIENCE_write(writer, &opcodes->body.SMSG_EXPLORATION_EXPERIENCE));
+            break;
+        case MSG_RANDOM_ROLL:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_RANDOM_ROLL_Server_write(writer, &opcodes->body.MSG_RANDOM_ROLL_Server));
+            break;
+        case SMSG_ENVIRONMENTAL_DAMAGE_LOG:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_ENVIRONMENTAL_DAMAGE_LOG_write(writer, &opcodes->body.SMSG_ENVIRONMENTAL_DAMAGE_LOG));
+            break;
+        case MSG_LOOKING_FOR_GROUP:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_LOOKING_FOR_GROUP_Server_write(writer, &opcodes->body.MSG_LOOKING_FOR_GROUP_Server));
+            break;
+        case SMSG_REMOVED_SPELL:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_REMOVED_SPELL_write(writer, &opcodes->body.SMSG_REMOVED_SPELL));
+            break;
+        case SMSG_GMTICKET_CREATE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_GMTICKET_CREATE_write(writer, &opcodes->body.SMSG_GMTICKET_CREATE));
+            break;
+        case SMSG_GMTICKET_UPDATETEXT:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_GMTICKET_UPDATETEXT_write(writer, &opcodes->body.SMSG_GMTICKET_UPDATETEXT));
+            break;
+        case SMSG_ACCOUNT_DATA_TIMES:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_ACCOUNT_DATA_TIMES_write(writer, &opcodes->body.SMSG_ACCOUNT_DATA_TIMES));
+            break;
+        case SMSG_GMTICKET_GETTICKET:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_GMTICKET_GETTICKET_write(writer, &opcodes->body.SMSG_GMTICKET_GETTICKET));
+            break;
+        case SMSG_GAMEOBJECT_SPAWN_ANIM:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_GAMEOBJECT_SPAWN_ANIM_write(writer, &opcodes->body.SMSG_GAMEOBJECT_SPAWN_ANIM));
+            break;
+        case SMSG_GAMEOBJECT_DESPAWN_ANIM:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_GAMEOBJECT_DESPAWN_ANIM_write(writer, &opcodes->body.SMSG_GAMEOBJECT_DESPAWN_ANIM));
+            break;
+        case MSG_CORPSE_QUERY:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_CORPSE_QUERY_Server_write(writer, &opcodes->body.MSG_CORPSE_QUERY_Server));
+            break;
+        case SMSG_GMTICKET_DELETETICKET:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_GMTICKET_DELETETICKET_write(writer, &opcodes->body.SMSG_GMTICKET_DELETETICKET));
+            break;
+        case SMSG_GMTICKET_SYSTEMSTATUS:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_GMTICKET_SYSTEMSTATUS_write(writer, &opcodes->body.SMSG_GMTICKET_SYSTEMSTATUS));
+            break;
+        case SMSG_SET_REST_START:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SET_REST_START_write(writer, &opcodes->body.SMSG_SET_REST_START));
+            break;
+        case SMSG_SPIRIT_HEALER_CONFIRM:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPIRIT_HEALER_CONFIRM_write(writer, &opcodes->body.SMSG_SPIRIT_HEALER_CONFIRM));
+            break;
+        case SMSG_GOSSIP_POI:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_GOSSIP_POI_write(writer, &opcodes->body.SMSG_GOSSIP_POI));
+            break;
+        case SMSG_LOGIN_VERIFY_WORLD:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_LOGIN_VERIFY_WORLD_write(writer, &opcodes->body.SMSG_LOGIN_VERIFY_WORLD));
+            break;
+        case SMSG_SEND_MAIL_RESULT:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SEND_MAIL_RESULT_write(writer, &opcodes->body.SMSG_SEND_MAIL_RESULT));
+            break;
+        case SMSG_MAIL_LIST_RESULT:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_MAIL_LIST_RESULT_write(writer, &opcodes->body.SMSG_MAIL_LIST_RESULT));
+            break;
+        case SMSG_BATTLEFIELD_LIST:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_BATTLEFIELD_LIST_write(writer, &opcodes->body.SMSG_BATTLEFIELD_LIST));
+            break;
+        case SMSG_ITEM_TEXT_QUERY_RESPONSE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_ITEM_TEXT_QUERY_RESPONSE_write(writer, &opcodes->body.SMSG_ITEM_TEXT_QUERY_RESPONSE));
+            break;
+        case SMSG_SPELLLOGMISS:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELLLOGMISS_write(writer, &opcodes->body.SMSG_SPELLLOGMISS));
+            break;
+        case SMSG_SPELLLOGEXECUTE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELLLOGEXECUTE_write(writer, &opcodes->body.SMSG_SPELLLOGEXECUTE));
+            break;
+        case SMSG_PERIODICAURALOG:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_PERIODICAURALOG_write(writer, &opcodes->body.SMSG_PERIODICAURALOG));
+            break;
+        case SMSG_SPELLDAMAGESHIELD:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELLDAMAGESHIELD_write(writer, &opcodes->body.SMSG_SPELLDAMAGESHIELD));
+            break;
+        case SMSG_SPELLNONMELEEDAMAGELOG:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELLNONMELEEDAMAGELOG_write(writer, &opcodes->body.SMSG_SPELLNONMELEEDAMAGELOG));
+            break;
+        case SMSG_ZONE_UNDER_ATTACK:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_ZONE_UNDER_ATTACK_write(writer, &opcodes->body.SMSG_ZONE_UNDER_ATTACK));
+            break;
+        case MSG_AUCTION_HELLO:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_AUCTION_HELLO_Server_write(writer, &opcodes->body.MSG_AUCTION_HELLO_Server));
+            break;
+        case SMSG_AUCTION_COMMAND_RESULT:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_AUCTION_COMMAND_RESULT_write(writer, &opcodes->body.SMSG_AUCTION_COMMAND_RESULT));
+            break;
+        case SMSG_AUCTION_LIST_RESULT:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_AUCTION_LIST_RESULT_write(writer, &opcodes->body.SMSG_AUCTION_LIST_RESULT));
+            break;
+        case SMSG_AUCTION_OWNER_LIST_RESULT:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_AUCTION_OWNER_LIST_RESULT_write(writer, &opcodes->body.SMSG_AUCTION_OWNER_LIST_RESULT));
+            break;
+        case SMSG_AUCTION_BIDDER_NOTIFICATION:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_AUCTION_BIDDER_NOTIFICATION_write(writer, &opcodes->body.SMSG_AUCTION_BIDDER_NOTIFICATION));
+            break;
+        case SMSG_AUCTION_OWNER_NOTIFICATION:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_AUCTION_OWNER_NOTIFICATION_write(writer, &opcodes->body.SMSG_AUCTION_OWNER_NOTIFICATION));
+            break;
+        case SMSG_PROCRESIST:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_PROCRESIST_write(writer, &opcodes->body.SMSG_PROCRESIST));
+            break;
+        case SMSG_DISPEL_FAILED:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_DISPEL_FAILED_write(writer, &opcodes->body.SMSG_DISPEL_FAILED));
+            break;
+        case SMSG_SPELLORDAMAGE_IMMUNE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELLORDAMAGE_IMMUNE_write(writer, &opcodes->body.SMSG_SPELLORDAMAGE_IMMUNE));
+            break;
+        case SMSG_AUCTION_BIDDER_LIST_RESULT:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_AUCTION_BIDDER_LIST_RESULT_write(writer, &opcodes->body.SMSG_AUCTION_BIDDER_LIST_RESULT));
+            break;
+        case SMSG_SET_FLAT_SPELL_MODIFIER:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SET_FLAT_SPELL_MODIFIER_write(writer, &opcodes->body.SMSG_SET_FLAT_SPELL_MODIFIER));
+            break;
+        case SMSG_SET_PCT_SPELL_MODIFIER:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SET_PCT_SPELL_MODIFIER_write(writer, &opcodes->body.SMSG_SET_PCT_SPELL_MODIFIER));
+            break;
+        case SMSG_CORPSE_RECLAIM_DELAY:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_CORPSE_RECLAIM_DELAY_write(writer, &opcodes->body.SMSG_CORPSE_RECLAIM_DELAY));
+            break;
+        case MSG_LIST_STABLED_PETS:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_LIST_STABLED_PETS_Server_write(writer, &opcodes->body.MSG_LIST_STABLED_PETS_Server));
+            break;
+        case SMSG_STABLE_RESULT:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_STABLE_RESULT_write(writer, &opcodes->body.SMSG_STABLE_RESULT));
+            break;
+        case MSG_QUEST_PUSH_RESULT:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_QUEST_PUSH_RESULT_smsg_write(writer, &opcodes->body.MSG_QUEST_PUSH_RESULT));
+            break;
+        case SMSG_PLAY_MUSIC:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_PLAY_MUSIC_write(writer, &opcodes->body.SMSG_PLAY_MUSIC));
+            break;
+        case SMSG_PLAY_OBJECT_SOUND:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_PLAY_OBJECT_SOUND_write(writer, &opcodes->body.SMSG_PLAY_OBJECT_SOUND));
+            break;
+        case SMSG_SPELLDISPELLOG:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELLDISPELLOG_write(writer, &opcodes->body.SMSG_SPELLDISPELLOG));
+            break;
+        case MSG_QUERY_NEXT_MAIL_TIME:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_QUERY_NEXT_MAIL_TIME_Server_write(writer, &opcodes->body.MSG_QUERY_NEXT_MAIL_TIME_Server));
+            break;
+        case SMSG_RECEIVED_MAIL:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_RECEIVED_MAIL_write(writer, &opcodes->body.SMSG_RECEIVED_MAIL));
+            break;
+        case SMSG_RAID_GROUP_ONLY:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_RAID_GROUP_ONLY_write(writer, &opcodes->body.SMSG_RAID_GROUP_ONLY));
+            break;
+        case SMSG_PVP_CREDIT:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_PVP_CREDIT_write(writer, &opcodes->body.SMSG_PVP_CREDIT));
+            break;
+        case SMSG_AUCTION_REMOVED_NOTIFICATION:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_AUCTION_REMOVED_NOTIFICATION_write(writer, &opcodes->body.SMSG_AUCTION_REMOVED_NOTIFICATION));
+            break;
+        case SMSG_SERVER_MESSAGE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SERVER_MESSAGE_write(writer, &opcodes->body.SMSG_SERVER_MESSAGE));
+            break;
+        case SMSG_MEETINGSTONE_SETQUEUE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_MEETINGSTONE_SETQUEUE_write(writer, &opcodes->body.SMSG_MEETINGSTONE_SETQUEUE));
+            break;
+        case SMSG_MEETINGSTONE_MEMBER_ADDED:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_MEETINGSTONE_MEMBER_ADDED_write(writer, &opcodes->body.SMSG_MEETINGSTONE_MEMBER_ADDED));
+            break;
+        case SMSG_STANDSTATE_UPDATE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_STANDSTATE_UPDATE_write(writer, &opcodes->body.SMSG_STANDSTATE_UPDATE));
+            break;
+        case SMSG_LOOT_ALL_PASSED:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_LOOT_ALL_PASSED_write(writer, &opcodes->body.SMSG_LOOT_ALL_PASSED));
+            break;
+        case SMSG_LOOT_ROLL_WON:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_LOOT_ROLL_WON_write(writer, &opcodes->body.SMSG_LOOT_ROLL_WON));
+            break;
+        case SMSG_LOOT_START_ROLL:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_LOOT_START_ROLL_write(writer, &opcodes->body.SMSG_LOOT_START_ROLL));
+            break;
+        case SMSG_LOOT_ROLL:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_LOOT_ROLL_write(writer, &opcodes->body.SMSG_LOOT_ROLL));
+            break;
+        case SMSG_LOOT_MASTER_LIST:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_LOOT_MASTER_LIST_write(writer, &opcodes->body.SMSG_LOOT_MASTER_LIST));
+            break;
+        case SMSG_SET_FORCED_REACTIONS:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SET_FORCED_REACTIONS_write(writer, &opcodes->body.SMSG_SET_FORCED_REACTIONS));
+            break;
+        case SMSG_SPELL_FAILED_OTHER:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELL_FAILED_OTHER_write(writer, &opcodes->body.SMSG_SPELL_FAILED_OTHER));
+            break;
+        case SMSG_GAMEOBJECT_RESET_STATE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_GAMEOBJECT_RESET_STATE_write(writer, &opcodes->body.SMSG_GAMEOBJECT_RESET_STATE));
+            break;
+        case SMSG_CHAT_PLAYER_NOT_FOUND:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_CHAT_PLAYER_NOT_FOUND_write(writer, &opcodes->body.SMSG_CHAT_PLAYER_NOT_FOUND));
+            break;
+        case MSG_TALENT_WIPE_CONFIRM:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_TALENT_WIPE_CONFIRM_Server_write(writer, &opcodes->body.MSG_TALENT_WIPE_CONFIRM_Server));
+            break;
+        case SMSG_SUMMON_REQUEST:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SUMMON_REQUEST_write(writer, &opcodes->body.SMSG_SUMMON_REQUEST));
+            break;
+        case SMSG_MONSTER_MOVE_TRANSPORT:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_MONSTER_MOVE_TRANSPORT_write(writer, &opcodes->body.SMSG_MONSTER_MOVE_TRANSPORT));
+            break;
+        case MSG_MOVE_FEATHER_FALL:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_FEATHER_FALL_Server_write(writer, &opcodes->body.MSG_MOVE_FEATHER_FALL_Server));
+            break;
+        case MSG_MOVE_WATER_WALK:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_WATER_WALK_smsg_write(writer, &opcodes->body.MSG_MOVE_WATER_WALK));
+            break;
+        case SMSG_DUEL_COUNTDOWN:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_DUEL_COUNTDOWN_write(writer, &opcodes->body.SMSG_DUEL_COUNTDOWN));
+            break;
+        case SMSG_AREA_TRIGGER_MESSAGE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_AREA_TRIGGER_MESSAGE_write(writer, &opcodes->body.SMSG_AREA_TRIGGER_MESSAGE));
+            break;
+        case SMSG_MEETINGSTONE_JOINFAILED:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_MEETINGSTONE_JOINFAILED_write(writer, &opcodes->body.SMSG_MEETINGSTONE_JOINFAILED));
+            break;
+        case SMSG_PLAYER_SKINNED:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_PLAYER_SKINNED_write(writer, &opcodes->body.SMSG_PLAYER_SKINNED));
+            break;
+        case MSG_PETITION_RENAME:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_PETITION_RENAME_smsg_write(writer, &opcodes->body.MSG_PETITION_RENAME));
+            break;
+        case SMSG_INIT_WORLD_STATES:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_INIT_WORLD_STATES_write(writer, &opcodes->body.SMSG_INIT_WORLD_STATES));
+            break;
+        case SMSG_UPDATE_WORLD_STATE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_UPDATE_WORLD_STATE_write(writer, &opcodes->body.SMSG_UPDATE_WORLD_STATE));
+            break;
+        case SMSG_ITEM_NAME_QUERY_RESPONSE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_ITEM_NAME_QUERY_RESPONSE_write(writer, &opcodes->body.SMSG_ITEM_NAME_QUERY_RESPONSE));
+            break;
+        case SMSG_PET_ACTION_FEEDBACK:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_PET_ACTION_FEEDBACK_write(writer, &opcodes->body.SMSG_PET_ACTION_FEEDBACK));
+            break;
+        case SMSG_CHAR_RENAME:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_CHAR_RENAME_write(writer, &opcodes->body.SMSG_CHAR_RENAME));
+            break;
+        case SMSG_INSTANCE_SAVE_CREATED:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_INSTANCE_SAVE_CREATED_write(writer, &opcodes->body.SMSG_INSTANCE_SAVE_CREATED));
+            break;
+        case SMSG_RAID_INSTANCE_INFO:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_RAID_INSTANCE_INFO_write(writer, &opcodes->body.SMSG_RAID_INSTANCE_INFO));
+            break;
+        case SMSG_PLAY_SOUND:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_PLAY_SOUND_write(writer, &opcodes->body.SMSG_PLAY_SOUND));
+            break;
+        case SMSG_BATTLEFIELD_STATUS:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_BATTLEFIELD_STATUS_write(writer, &opcodes->body.SMSG_BATTLEFIELD_STATUS));
+            break;
+        case MSG_INSPECT_HONOR_STATS:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_INSPECT_HONOR_STATS_Server_write(writer, &opcodes->body.MSG_INSPECT_HONOR_STATS_Server));
+            break;
+        case SMSG_FORCE_WALK_SPEED_CHANGE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_FORCE_WALK_SPEED_CHANGE_write(writer, &opcodes->body.SMSG_FORCE_WALK_SPEED_CHANGE));
+            break;
+        case SMSG_FORCE_SWIM_BACK_SPEED_CHANGE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_FORCE_SWIM_BACK_SPEED_CHANGE_write(writer, &opcodes->body.SMSG_FORCE_SWIM_BACK_SPEED_CHANGE));
+            break;
+        case SMSG_FORCE_TURN_RATE_CHANGE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_FORCE_TURN_RATE_CHANGE_write(writer, &opcodes->body.SMSG_FORCE_TURN_RATE_CHANGE));
+            break;
+        case MSG_PVP_LOG_DATA:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_PVP_LOG_DATA_Server_write(writer, &opcodes->body.MSG_PVP_LOG_DATA_Server));
+            break;
+        case SMSG_AREA_SPIRIT_HEALER_TIME:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_AREA_SPIRIT_HEALER_TIME_write(writer, &opcodes->body.SMSG_AREA_SPIRIT_HEALER_TIME));
+            break;
+        case SMSG_WARDEN_DATA:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_WARDEN_DATA_write(writer, &opcodes->body.SMSG_WARDEN_DATA));
+            break;
+        case SMSG_GROUP_JOINED_BATTLEGROUND:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_GROUP_JOINED_BATTLEGROUND_write(writer, &opcodes->body.SMSG_GROUP_JOINED_BATTLEGROUND));
+            break;
+        case MSG_BATTLEGROUND_PLAYER_POSITIONS:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_BATTLEGROUND_PLAYER_POSITIONS_Server_write(writer, &opcodes->body.MSG_BATTLEGROUND_PLAYER_POSITIONS_Server));
+            break;
+        case SMSG_BINDER_CONFIRM:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_BINDER_CONFIRM_write(writer, &opcodes->body.SMSG_BINDER_CONFIRM));
+            break;
+        case SMSG_BATTLEGROUND_PLAYER_JOINED:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_BATTLEGROUND_PLAYER_JOINED_write(writer, &opcodes->body.SMSG_BATTLEGROUND_PLAYER_JOINED));
+            break;
+        case SMSG_BATTLEGROUND_PLAYER_LEFT:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_BATTLEGROUND_PLAYER_LEFT_write(writer, &opcodes->body.SMSG_BATTLEGROUND_PLAYER_LEFT));
+            break;
+        case SMSG_ADDON_INFO:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_ADDON_INFO_write(writer, &opcodes->body.SMSG_ADDON_INFO));
+            break;
+        case SMSG_PET_UNLEARN_CONFIRM:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_PET_UNLEARN_CONFIRM_write(writer, &opcodes->body.SMSG_PET_UNLEARN_CONFIRM));
+            break;
+        case SMSG_PARTY_MEMBER_STATS_FULL:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_PARTY_MEMBER_STATS_FULL_write(writer, &opcodes->body.SMSG_PARTY_MEMBER_STATS_FULL));
+            break;
+        case SMSG_WEATHER:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_WEATHER_write(writer, &opcodes->body.SMSG_WEATHER));
+            break;
+        case SMSG_RAID_INSTANCE_MESSAGE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_RAID_INSTANCE_MESSAGE_write(writer, &opcodes->body.SMSG_RAID_INSTANCE_MESSAGE));
+            break;
+        case SMSG_COMPRESSED_MOVES:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_COMPRESSED_MOVES_write(writer, &opcodes->body.SMSG_COMPRESSED_MOVES));
+            break;
+        case SMSG_SPLINE_SET_RUN_SPEED:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_SET_RUN_SPEED_write(writer, &opcodes->body.SMSG_SPLINE_SET_RUN_SPEED));
+            break;
+        case SMSG_SPLINE_SET_RUN_BACK_SPEED:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_SET_RUN_BACK_SPEED_write(writer, &opcodes->body.SMSG_SPLINE_SET_RUN_BACK_SPEED));
+            break;
+        case SMSG_SPLINE_SET_SWIM_SPEED:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_SET_SWIM_SPEED_write(writer, &opcodes->body.SMSG_SPLINE_SET_SWIM_SPEED));
+            break;
+        case SMSG_SPLINE_SET_WALK_SPEED:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_SET_WALK_SPEED_write(writer, &opcodes->body.SMSG_SPLINE_SET_WALK_SPEED));
+            break;
+        case SMSG_SPLINE_SET_SWIM_BACK_SPEED:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_SET_SWIM_BACK_SPEED_write(writer, &opcodes->body.SMSG_SPLINE_SET_SWIM_BACK_SPEED));
+            break;
+        case SMSG_SPLINE_SET_TURN_RATE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_SET_TURN_RATE_write(writer, &opcodes->body.SMSG_SPLINE_SET_TURN_RATE));
+            break;
+        case SMSG_SPLINE_MOVE_UNROOT:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_MOVE_UNROOT_write(writer, &opcodes->body.SMSG_SPLINE_MOVE_UNROOT));
+            break;
+        case SMSG_SPLINE_MOVE_FEATHER_FALL:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_MOVE_FEATHER_FALL_write(writer, &opcodes->body.SMSG_SPLINE_MOVE_FEATHER_FALL));
+            break;
+        case SMSG_SPLINE_MOVE_NORMAL_FALL:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_MOVE_NORMAL_FALL_write(writer, &opcodes->body.SMSG_SPLINE_MOVE_NORMAL_FALL));
+            break;
+        case SMSG_SPLINE_MOVE_SET_HOVER:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_MOVE_SET_HOVER_write(writer, &opcodes->body.SMSG_SPLINE_MOVE_SET_HOVER));
+            break;
+        case SMSG_SPLINE_MOVE_UNSET_HOVER:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_MOVE_UNSET_HOVER_write(writer, &opcodes->body.SMSG_SPLINE_MOVE_UNSET_HOVER));
+            break;
+        case SMSG_SPLINE_MOVE_WATER_WALK:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_MOVE_WATER_WALK_write(writer, &opcodes->body.SMSG_SPLINE_MOVE_WATER_WALK));
+            break;
+        case SMSG_SPLINE_MOVE_LAND_WALK:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_MOVE_LAND_WALK_write(writer, &opcodes->body.SMSG_SPLINE_MOVE_LAND_WALK));
+            break;
+        case SMSG_SPLINE_MOVE_START_SWIM:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_MOVE_START_SWIM_write(writer, &opcodes->body.SMSG_SPLINE_MOVE_START_SWIM));
+            break;
+        case SMSG_SPLINE_MOVE_STOP_SWIM:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_MOVE_STOP_SWIM_write(writer, &opcodes->body.SMSG_SPLINE_MOVE_STOP_SWIM));
+            break;
+        case SMSG_SPLINE_MOVE_SET_RUN_MODE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_MOVE_SET_RUN_MODE_write(writer, &opcodes->body.SMSG_SPLINE_MOVE_SET_RUN_MODE));
+            break;
+        case SMSG_SPLINE_MOVE_SET_WALK_MODE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_MOVE_SET_WALK_MODE_write(writer, &opcodes->body.SMSG_SPLINE_MOVE_SET_WALK_MODE));
+            break;
+        case MSG_MOVE_TIME_SKIPPED:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_TIME_SKIPPED_Server_write(writer, &opcodes->body.MSG_MOVE_TIME_SKIPPED_Server));
+            break;
+        case SMSG_SPLINE_MOVE_ROOT:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_MOVE_ROOT_write(writer, &opcodes->body.SMSG_SPLINE_MOVE_ROOT));
+            break;
+        case SMSG_INVALIDATE_PLAYER:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_INVALIDATE_PLAYER_write(writer, &opcodes->body.SMSG_INVALIDATE_PLAYER));
+            break;
+        case SMSG_INSTANCE_RESET:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_INSTANCE_RESET_write(writer, &opcodes->body.SMSG_INSTANCE_RESET));
+            break;
+        case SMSG_INSTANCE_RESET_FAILED:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_INSTANCE_RESET_FAILED_write(writer, &opcodes->body.SMSG_INSTANCE_RESET_FAILED));
+            break;
+        case SMSG_UPDATE_LAST_INSTANCE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_UPDATE_LAST_INSTANCE_write(writer, &opcodes->body.SMSG_UPDATE_LAST_INSTANCE));
+            break;
+        case MSG_RAID_TARGET_UPDATE:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_RAID_TARGET_UPDATE_Server_write(writer, &opcodes->body.MSG_RAID_TARGET_UPDATE_Server));
+            break;
+        case MSG_RAID_READY_CHECK:
+            WWM_CHECK_RETURN_CODE(vanilla_MSG_RAID_READY_CHECK_Server_write(writer, &opcodes->body.MSG_RAID_READY_CHECK_Server));
+            break;
+        case SMSG_PET_ACTION_SOUND:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_PET_ACTION_SOUND_write(writer, &opcodes->body.SMSG_PET_ACTION_SOUND));
+            break;
+        case SMSG_PET_DISMISS_SOUND:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_PET_DISMISS_SOUND_write(writer, &opcodes->body.SMSG_PET_DISMISS_SOUND));
+            break;
+        case SMSG_GM_TICKET_STATUS_UPDATE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_GM_TICKET_STATUS_UPDATE_write(writer, &opcodes->body.SMSG_GM_TICKET_STATUS_UPDATE));
+            break;
+        case SMSG_UPDATE_INSTANCE_OWNERSHIP:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_UPDATE_INSTANCE_OWNERSHIP_write(writer, &opcodes->body.SMSG_UPDATE_INSTANCE_OWNERSHIP));
+            break;
+        case SMSG_SPELLINSTAKILLLOG:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELLINSTAKILLLOG_write(writer, &opcodes->body.SMSG_SPELLINSTAKILLLOG));
+            break;
+        case SMSG_SPELL_UPDATE_CHAIN_TARGETS:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELL_UPDATE_CHAIN_TARGETS_write(writer, &opcodes->body.SMSG_SPELL_UPDATE_CHAIN_TARGETS));
+            break;
+        case SMSG_EXPECTED_SPAM_RECORDS:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_EXPECTED_SPAM_RECORDS_write(writer, &opcodes->body.SMSG_EXPECTED_SPAM_RECORDS));
+            break;
+        case SMSG_DEFENSE_MESSAGE:
+            WWM_CHECK_RETURN_CODE(vanilla_SMSG_DEFENSE_MESSAGE_write(writer, &opcodes->body.SMSG_DEFENSE_MESSAGE));
+            break;
+        default:
+            break;
+    }
+
+    return WWM_RESULT_SUCCESS;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_server_opcode_read(WowWorldReader* reader, VanillaServerOpcodeContainer* opcodes) {

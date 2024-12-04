@@ -9264,6 +9264,22 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult tbc_CMSG_MESSAGECHAT_write(WowWorldWr
 WOW_WORLD_MESSAGES_C_EXPORT void tbc_CMSG_MESSAGECHAT_free(tbc_CMSG_MESSAGECHAT* object);
 
 typedef struct {
+    tbc_ChatType chat_type;
+    tbc_Language language;
+    WowWorldString sender;
+    NamedGuid target1;
+    NamedGuid target2;
+    WowWorldString channel_name;
+    uint64_t target4;
+    uint64_t target5;
+    WowWorldString message;
+    tbc_PlayerChatTag tag;
+
+} tbc_SMSG_MESSAGECHAT;
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult tbc_SMSG_MESSAGECHAT_write(WowWorldWriter* writer, const tbc_SMSG_MESSAGECHAT* object);
+WOW_WORLD_MESSAGES_C_EXPORT void tbc_SMSG_MESSAGECHAT_free(tbc_SMSG_MESSAGECHAT* object);
+
+typedef struct {
     uint32_t channel_id;
     uint8_t unknown1;
     uint8_t unknown2;
@@ -14112,6 +14128,29 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult tbc_CMSG_VOICE_SESSION_ENABLE_write(WowWorldWriter* writer, const tbc_CMSG_VOICE_SESSION_ENABLE* object);
 
 typedef struct {
+    tbc_ChatType chat_type;
+    tbc_Language language;
+    WowWorldString sender;
+    NamedGuid target1;
+    WowWorldString message1;
+    tbc_PlayerChatTag chat_tag1;
+    NamedGuid target2;
+    WowWorldString message2;
+    tbc_PlayerChatTag chat_tag2;
+    WowWorldString channel_name;
+    uint64_t target4;
+    WowWorldString message3;
+    tbc_PlayerChatTag chat_tag3;
+    uint64_t target5;
+    WowWorldString message4;
+    tbc_PlayerChatTag chat_tag4;
+    WowWorldString sender_name;
+
+} tbc_SMSG_GM_MESSAGECHAT;
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult tbc_SMSG_GM_MESSAGECHAT_write(WowWorldWriter* writer, const tbc_SMSG_GM_MESSAGECHAT* object);
+WOW_WORLD_MESSAGES_C_EXPORT void tbc_SMSG_GM_MESSAGECHAT_free(tbc_SMSG_GM_MESSAGECHAT* object);
+
+typedef struct {
     tbc_CommentatorEnableOption option;
 
 } tbc_CMSG_COMMENTATOR_ENABLE;
@@ -14637,6 +14676,7 @@ typedef enum {
     SMSG_GUILD_EVENT = 146,
     SMSG_GUILD_COMMAND_RESULT = 147,
     CMSG_MESSAGECHAT = 149,
+    SMSG_MESSAGECHAT = 150,
     CMSG_JOIN_CHANNEL = 151,
     CMSG_LEAVE_CHANNEL = 152,
     SMSG_CHANNEL_NOTIFY = 153,
@@ -15238,6 +15278,7 @@ typedef enum {
     MSG_MOVE_UPDATE_CAN_FLY = 941,
     MSG_RAID_READY_CHECK_CONFIRM = 942,
     CMSG_VOICE_SESSION_ENABLE = 943,
+    SMSG_GM_MESSAGECHAT = 946,
     CMSG_COMMENTATOR_ENABLE = 948,
     SMSG_CLEAR_TARGET = 958,
     SMSG_CROSSED_INEBRIATION_THRESHOLD = 960,
@@ -15610,6 +15651,8 @@ typedef struct {
     } body;
 } TbcClientOpcodeContainer;
 
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult tbc_client_write_opcode(WowWorldWriter* writer, const TbcClientOpcodeContainer* opcodes);
+
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult tbc_client_opcode_read(WowWorldReader* reader, TbcClientOpcodeContainer* opcodes);
 
 WOW_WORLD_MESSAGES_C_EXPORT void tbc_client_opcode_free(TbcClientOpcodeContainer* opcodes);
@@ -15651,6 +15694,7 @@ typedef struct {
         tbc_SMSG_GUILD_ROSTER SMSG_GUILD_ROSTER;
         tbc_SMSG_GUILD_EVENT SMSG_GUILD_EVENT;
         tbc_SMSG_GUILD_COMMAND_RESULT SMSG_GUILD_COMMAND_RESULT;
+        tbc_SMSG_MESSAGECHAT SMSG_MESSAGECHAT;
         tbc_SMSG_CHANNEL_NOTIFY SMSG_CHANNEL_NOTIFY;
         tbc_SMSG_CHANNEL_LIST SMSG_CHANNEL_LIST;
         tbc_SMSG_UPDATE_OBJECT SMSG_UPDATE_OBJECT;
@@ -15980,6 +16024,7 @@ typedef struct {
         tbc_SMSG_DISMOUNT SMSG_DISMOUNT;
         tbc_MSG_MOVE_UPDATE_CAN_FLY_Server MSG_MOVE_UPDATE_CAN_FLY_Server;
         tbc_MSG_RAID_READY_CHECK_CONFIRM_Server MSG_RAID_READY_CHECK_CONFIRM_Server;
+        tbc_SMSG_GM_MESSAGECHAT SMSG_GM_MESSAGECHAT;
         tbc_SMSG_CLEAR_TARGET SMSG_CLEAR_TARGET;
         tbc_SMSG_CROSSED_INEBRIATION_THRESHOLD SMSG_CROSSED_INEBRIATION_THRESHOLD;
         tbc_SMSG_KICK_REASON SMSG_KICK_REASON;
@@ -16008,6 +16053,8 @@ typedef struct {
         tbc_SMSG_SPLINE_MOVE_UNSET_FLYING SMSG_SPLINE_MOVE_UNSET_FLYING;
     } body;
 } TbcServerOpcodeContainer;
+
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult tbc_server_write_opcode(WowWorldWriter* writer, const TbcServerOpcodeContainer* opcodes);
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult tbc_server_opcode_read(WowWorldReader* reader, TbcServerOpcodeContainer* opcodes);
 

@@ -105,6 +105,8 @@ def print_free(s: Writer, h: Writer, e: model.Container, module_name):
                     case model.ArrayTypeStruct(struct_data=struct_data):
                         if container_has_free(struct_data, module_name):
                             needs_loop = True
+                    case model.ArrayTypeCstring():
+                        needs_loop = True
 
     if needs_loop:
         s.wln("size_t i;")
@@ -221,11 +223,13 @@ def print_free_struct_member(s: Writer, d: model.Definition, module_name: str, e
             s.wln(f"wwm_monster_move_spline_free(&{variable_name});")
             s.newline()
 
+        case model.DataTypeNamedGUID():
+            s.wln(f"wwm_named_guid_free(&{variable_name});")
+            s.newline()
+
         case model.DataTypeEnchantMask():
             s.wln(f"{d.name} = await EnchantMask.read(reader)")
 
-        case model.DataTypeNamedGUID():
-            s.wln(f"{d.name} = await NamedGuid.read(reader)")
 
         case model.DataTypeInspectTalentGearMask():
             s.wln(f"{d.name} = await InspectTalentGearMask.read(reader)")
@@ -255,6 +259,8 @@ def print_free_struct_member(s: Writer, d: model.Definition, module_name: str, e
                     loop_variable = f"object->{size}"
                 case model.ArraySizeEndless():
                     loop_variable = f"object->amount_of_{d.name}"
+                case _:
+                    raise Exception("invalid size")
 
             match inner_type:
                 case model.ArrayTypeStruct(struct_data=struct_data):
@@ -262,6 +268,10 @@ def print_free_struct_member(s: Writer, d: model.Definition, module_name: str, e
                         s.open_curly(f"for (i = 0; i < {loop_variable}; ++i)")
                         s.wln(f"{container_module_prefix(struct_data.tags, module_name)}_{struct_data.name}_free(&(({extra}{variable_name})[i]));")
                         s.closing_curly() # for int i
+                case model.ArrayTypeCstring():
+                    s.open_curly(f"for (i = 0; i < {loop_variable}; ++i)")
+                    s.wln(f"FREE_STRING((({extra}{variable_name})[i]));")
+                    s.closing_curly() # for int i
 
             s.wln(f"free({variable_name});")
             s.wln(f"{variable_name} = NULL;")

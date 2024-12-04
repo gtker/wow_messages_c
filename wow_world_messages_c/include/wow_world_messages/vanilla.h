@@ -12935,6 +12935,8 @@ typedef struct {
     } body;
 } VanillaClientOpcodeContainer;
 
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_client_write_opcode(WowWorldWriter* writer, const VanillaClientOpcodeContainer* opcodes);
+
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_client_opcode_read(WowWorldReader* reader, VanillaClientOpcodeContainer* opcodes);
 
 WOW_WORLD_MESSAGES_C_EXPORT void vanilla_client_opcode_free(VanillaClientOpcodeContainer* opcodes);
@@ -13267,6 +13269,8 @@ typedef struct {
         vanilla_SMSG_DEFENSE_MESSAGE SMSG_DEFENSE_MESSAGE;
     } body;
 } VanillaServerOpcodeContainer;
+
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_server_write_opcode(WowWorldWriter* writer, const VanillaServerOpcodeContainer* opcodes);
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_server_opcode_read(WowWorldReader* reader, VanillaServerOpcodeContainer* opcodes);
 

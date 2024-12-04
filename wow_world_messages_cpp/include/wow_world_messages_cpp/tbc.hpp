@@ -9203,6 +9203,21 @@ struct CMSG_MESSAGECHAT {
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
+struct SMSG_MESSAGECHAT {
+    ChatType chat_type;
+    Language language;
+    std::string sender;
+    NamedGuid target1;
+    NamedGuid target2;
+    std::string channel_name;
+    uint64_t target4;
+    uint64_t target5;
+    std::string message;
+    PlayerChatTag tag;
+
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
+};
+
 struct CMSG_JOIN_CHANNEL {
     uint32_t channel_id;
     uint8_t unknown1;
@@ -14032,6 +14047,28 @@ struct MSG_RAID_READY_CHECK_CONFIRM_Server {
 struct CMSG_VOICE_SESSION_ENABLE {
     bool voice_enabled;
     bool microphone_enabled;
+
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
+};
+
+struct SMSG_GM_MESSAGECHAT {
+    ChatType chat_type;
+    Language language;
+    std::string sender;
+    NamedGuid target1;
+    std::string message1;
+    PlayerChatTag chat_tag1;
+    NamedGuid target2;
+    std::string message2;
+    PlayerChatTag chat_tag2;
+    std::string channel_name;
+    uint64_t target4;
+    std::string message3;
+    PlayerChatTag chat_tag3;
+    uint64_t target5;
+    std::string message4;
+    PlayerChatTag chat_tag4;
+    std::string sender_name;
 
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
@@ -20628,6 +20665,7 @@ struct ServerOpcode {
         SMSG_GUILD_ROSTER = 138,
         SMSG_GUILD_EVENT = 146,
         SMSG_GUILD_COMMAND_RESULT = 147,
+        SMSG_MESSAGECHAT = 150,
         SMSG_CHANNEL_NOTIFY = 153,
         SMSG_CHANNEL_LIST = 155,
         SMSG_UPDATE_OBJECT = 169,
@@ -20980,6 +21018,7 @@ struct ServerOpcode {
         SMSG_DISMOUNT = 940,
         MSG_MOVE_UPDATE_CAN_FLY = 941,
         MSG_RAID_READY_CHECK_CONFIRM = 942,
+        SMSG_GM_MESSAGECHAT = 946,
         SMSG_CLEAR_TARGET = 958,
         SMSG_CROSSED_INEBRIATION_THRESHOLD = 960,
         SMSG_KICK_REASON = 964,
@@ -21046,6 +21085,7 @@ struct ServerOpcode {
         tbc::SMSG_GUILD_ROSTER SMSG_GUILD_ROSTER;
         tbc::SMSG_GUILD_EVENT SMSG_GUILD_EVENT;
         tbc::SMSG_GUILD_COMMAND_RESULT SMSG_GUILD_COMMAND_RESULT;
+        tbc::SMSG_MESSAGECHAT SMSG_MESSAGECHAT;
         tbc::SMSG_CHANNEL_NOTIFY SMSG_CHANNEL_NOTIFY;
         tbc::SMSG_CHANNEL_LIST SMSG_CHANNEL_LIST;
         tbc::SMSG_UPDATE_OBJECT SMSG_UPDATE_OBJECT;
@@ -21398,6 +21438,7 @@ struct ServerOpcode {
         tbc::SMSG_DISMOUNT SMSG_DISMOUNT;
         tbc::MSG_MOVE_UPDATE_CAN_FLY_Server MSG_MOVE_UPDATE_CAN_FLY;
         tbc::MSG_RAID_READY_CHECK_CONFIRM_Server MSG_RAID_READY_CHECK_CONFIRM;
+        tbc::SMSG_GM_MESSAGECHAT SMSG_GM_MESSAGECHAT;
         tbc::SMSG_CLEAR_TARGET SMSG_CLEAR_TARGET;
         tbc::SMSG_CROSSED_INEBRIATION_THRESHOLD SMSG_CROSSED_INEBRIATION_THRESHOLD;
         tbc::SMSG_KICK_REASON SMSG_KICK_REASON;
@@ -21545,6 +21586,9 @@ struct ServerOpcode {
         }
         if (opcode == Opcode::SMSG_GUILD_COMMAND_RESULT) {
             this->SMSG_GUILD_COMMAND_RESULT = std::move(other.SMSG_GUILD_COMMAND_RESULT);
+        }
+        if (opcode == Opcode::SMSG_MESSAGECHAT) {
+            this->SMSG_MESSAGECHAT = std::move(other.SMSG_MESSAGECHAT);
         }
         if (opcode == Opcode::SMSG_CHANNEL_NOTIFY) {
             this->SMSG_CHANNEL_NOTIFY = std::move(other.SMSG_CHANNEL_NOTIFY);
@@ -22602,6 +22646,9 @@ struct ServerOpcode {
         if (opcode == Opcode::MSG_RAID_READY_CHECK_CONFIRM) {
             this->MSG_RAID_READY_CHECK_CONFIRM = std::move(other.MSG_RAID_READY_CHECK_CONFIRM);
         }
+        if (opcode == Opcode::SMSG_GM_MESSAGECHAT) {
+            this->SMSG_GM_MESSAGECHAT = std::move(other.SMSG_GM_MESSAGECHAT);
+        }
         if (opcode == Opcode::SMSG_CLEAR_TARGET) {
             this->SMSG_CLEAR_TARGET = std::move(other.SMSG_CLEAR_TARGET);
         }
@@ -22793,6 +22840,9 @@ struct ServerOpcode {
         }
         if (opcode == Opcode::SMSG_GUILD_COMMAND_RESULT) {
             this->SMSG_GUILD_COMMAND_RESULT.~SMSG_GUILD_COMMAND_RESULT();
+        }
+        if (opcode == Opcode::SMSG_MESSAGECHAT) {
+            this->SMSG_MESSAGECHAT.~SMSG_MESSAGECHAT();
         }
         if (opcode == Opcode::SMSG_CHANNEL_NOTIFY) {
             this->SMSG_CHANNEL_NOTIFY.~SMSG_CHANNEL_NOTIFY();
@@ -23850,6 +23900,9 @@ struct ServerOpcode {
         if (opcode == Opcode::MSG_RAID_READY_CHECK_CONFIRM) {
             this->MSG_RAID_READY_CHECK_CONFIRM.~MSG_RAID_READY_CHECK_CONFIRM_Server();
         }
+        if (opcode == Opcode::SMSG_GM_MESSAGECHAT) {
+            this->SMSG_GM_MESSAGECHAT.~SMSG_GM_MESSAGECHAT();
+        }
         if (opcode == Opcode::SMSG_CLEAR_TARGET) {
             this->SMSG_CLEAR_TARGET.~SMSG_CLEAR_TARGET();
         }
@@ -24077,6 +24130,10 @@ struct ServerOpcode {
     explicit ServerOpcode(tbc::SMSG_GUILD_COMMAND_RESULT&& obj) {
         opcode = Opcode::SMSG_GUILD_COMMAND_RESULT;
         new (&this->SMSG_GUILD_COMMAND_RESULT) tbc::SMSG_GUILD_COMMAND_RESULT (std::move(obj));
+    }
+    explicit ServerOpcode(tbc::SMSG_MESSAGECHAT&& obj) {
+        opcode = Opcode::SMSG_MESSAGECHAT;
+        new (&this->SMSG_MESSAGECHAT) tbc::SMSG_MESSAGECHAT (std::move(obj));
     }
     explicit ServerOpcode(tbc::SMSG_CHANNEL_NOTIFY&& obj) {
         opcode = Opcode::SMSG_CHANNEL_NOTIFY;
@@ -25486,6 +25543,10 @@ struct ServerOpcode {
         opcode = Opcode::MSG_RAID_READY_CHECK_CONFIRM;
         new (&this->MSG_RAID_READY_CHECK_CONFIRM) tbc::MSG_RAID_READY_CHECK_CONFIRM_Server (std::move(obj));
     }
+    explicit ServerOpcode(tbc::SMSG_GM_MESSAGECHAT&& obj) {
+        opcode = Opcode::SMSG_GM_MESSAGECHAT;
+        new (&this->SMSG_GM_MESSAGECHAT) tbc::SMSG_GM_MESSAGECHAT (std::move(obj));
+    }
     explicit ServerOpcode(tbc::SMSG_CLEAR_TARGET&& obj) {
         opcode = Opcode::SMSG_CLEAR_TARGET;
         new (&this->SMSG_CLEAR_TARGET) tbc::SMSG_CLEAR_TARGET (std::move(obj));
@@ -25748,6 +25809,10 @@ template<>
 tbc::SMSG_GUILD_COMMAND_RESULT* ServerOpcode::get_if();
 template<>
 tbc::SMSG_GUILD_COMMAND_RESULT& ServerOpcode::get();
+template<>
+tbc::SMSG_MESSAGECHAT* ServerOpcode::get_if();
+template<>
+tbc::SMSG_MESSAGECHAT& ServerOpcode::get();
 template<>
 tbc::SMSG_CHANNEL_NOTIFY* ServerOpcode::get_if();
 template<>
@@ -27156,6 +27221,10 @@ template<>
 tbc::MSG_RAID_READY_CHECK_CONFIRM_Server* ServerOpcode::get_if();
 template<>
 tbc::MSG_RAID_READY_CHECK_CONFIRM_Server& ServerOpcode::get();
+template<>
+tbc::SMSG_GM_MESSAGECHAT* ServerOpcode::get_if();
+template<>
+tbc::SMSG_GM_MESSAGECHAT& ServerOpcode::get();
 template<>
 tbc::SMSG_CLEAR_TARGET* ServerOpcode::get_if();
 template<>

@@ -432,6 +432,51 @@ void wwm_monster_move_spline_free(const MonsterMoveSpline* value)
     free(value->splines);
 }
 
+
+WowWorldResult wwm_read_named_guid(WowWorldReader* stream, NamedGuid* value)
+{
+    WWM_CHECK_RETURN_CODE(wwm_read_uint64(stream, &value->guid));
+
+    if (value->guid != 0)
+    {
+        WWM_CHECK_RETURN_CODE(wwm_read_cstring(stream, &value->name));
+    }
+
+    return WWM_RESULT_SUCCESS;
+}
+
+WowWorldResult wwm_write_named_guid(WowWorldWriter* stream, const NamedGuid* value)
+{
+    WWM_CHECK_RETURN_CODE(wwm_write_uint64(stream, value->guid));
+
+    if (value->guid != 0)
+    {
+        WWM_CHECK_RETURN_CODE(wwm_write_cstring(stream, &value->name));
+    }
+
+    return WWM_RESULT_SUCCESS;
+}
+
+size_t wwm_named_guid_size(const NamedGuid* value)
+{
+    size_t size = 8; /* guid */
+
+    if (value->guid != 0)
+    {
+        size += STRING_SIZE(value->name) + 1;
+    }
+
+    return size;
+}
+
+void wwm_named_guid_free(NamedGuid* value)
+{
+    if (value->guid != 0)
+    {
+        FREE_STRING(value->name);
+    }
+}
+
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldReader wwm_create_reader(const unsigned char* const source, const size_t length)
 {
     WowWorldReader reader;

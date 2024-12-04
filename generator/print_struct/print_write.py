@@ -139,7 +139,10 @@ def print_write_struct_member(s: Writer, d: model.Definition, module_name: str, 
             s.wln(f"WRITE_ENCHANT_MASK_{module_name}({variable_name});")
 
         case model.DataTypeNamedGUID():
-            s.wln(f"WRITE_NAMED_GUID({variable_name});")
+            if is_cpp():
+                s.wln(f"::wow_world_messages::util::wwm_write_named_guid(writer, {variable_name});")
+            else:
+                s.wln(f"WRITE_NAMED_GUID({variable_name});")
 
         case model.DataTypeInspectTalentGearMask():
             s.wln(f"WRITE_INSPECT_TALENT_GEAR_MASK({variable_name});")
@@ -489,6 +492,7 @@ def print_write(s: Writer, h: Writer, container: Container, object_type: model.O
                 WRITE_U16_BE((uint16_t)(_compressed_data_length + 4 + {opcode_size})); /* size */
                 
                 writer->index = saved_writer_index;
+                free(_decompressed_data);
             """)
 
         s.newline()

@@ -6266,6 +6266,98 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_MESSAGECHAT::write
     return writer.m_buf;
 }
 
+static size_t SMSG_MESSAGECHAT_size(const SMSG_MESSAGECHAT& obj) {
+    size_t _size = 11 + obj.message.size();
+
+    if (obj.chat_type == ChatType::MONSTER_SAY|| obj.chat_type == ChatType::MONSTER_PARTY|| obj.chat_type == ChatType::MONSTER_YELL|| obj.chat_type == ChatType::MONSTER_WHISPER|| obj.chat_type == ChatType::RAID_BOSS_WHISPER|| obj.chat_type == ChatType::RAID_BOSS_EMOTE|| obj.chat_type == ChatType::MONSTER_EMOTE) {
+        _size += 5 + obj.sender.size() + ::wow_world_messages::util::wwm_named_guid_size(obj.target1);
+    }
+    else if (obj.chat_type == ChatType::BG_SYSTEM_NEUTRAL|| obj.chat_type == ChatType::BG_SYSTEM_ALLIANCE|| obj.chat_type == ChatType::BG_SYSTEM_HORDE) {
+        _size += 0 + ::wow_world_messages::util::wwm_named_guid_size(obj.target2);
+    }
+    else if (obj.chat_type == ChatType::CHANNEL) {
+        _size += 9 + obj.channel_name.size();
+    }
+    else if (obj.chat_type == ChatType::SYSTEM|| obj.chat_type == ChatType::SAY|| obj.chat_type == ChatType::PARTY|| obj.chat_type == ChatType::RAID|| obj.chat_type == ChatType::GUILD|| obj.chat_type == ChatType::OFFICER|| obj.chat_type == ChatType::YELL|| obj.chat_type == ChatType::WHISPER|| obj.chat_type == ChatType::WHISPER_INFORM|| obj.chat_type == ChatType::REPLY|| obj.chat_type == ChatType::EMOTE|| obj.chat_type == ChatType::TEXT_EMOTE|| obj.chat_type == ChatType::CHANNEL_JOIN|| obj.chat_type == ChatType::CHANNEL_LEAVE|| obj.chat_type == ChatType::CHANNEL_LIST|| obj.chat_type == ChatType::CHANNEL_NOTICE|| obj.chat_type == ChatType::CHANNEL_NOTICE_USER|| obj.chat_type == ChatType::AFK|| obj.chat_type == ChatType::DND|| obj.chat_type == ChatType::IGNORED|| obj.chat_type == ChatType::SKILL|| obj.chat_type == ChatType::LOOT|| obj.chat_type == ChatType::MONEY|| obj.chat_type == ChatType::OPENING|| obj.chat_type == ChatType::TRADESKILLS|| obj.chat_type == ChatType::PET_INFO|| obj.chat_type == ChatType::COMBAT_MISC_INFO|| obj.chat_type == ChatType::COMBAT_XP_GAIN|| obj.chat_type == ChatType::COMBAT_HONOR_GAIN|| obj.chat_type == ChatType::COMBAT_FACTION_CHANGE|| obj.chat_type == ChatType::RAID_LEADER|| obj.chat_type == ChatType::RAID_WARNING|| obj.chat_type == ChatType::FILTERED|| obj.chat_type == ChatType::BATTLEGROUND|| obj.chat_type == ChatType::BATTLEGROUND_LEADER|| obj.chat_type == ChatType::RESTRICTED) {
+        _size += 8;
+    }
+
+    return _size;
+}
+
+SMSG_MESSAGECHAT SMSG_MESSAGECHAT_read(Reader& reader) {
+    SMSG_MESSAGECHAT obj{};
+
+    obj.chat_type = static_cast<ChatType>(reader.read_u8());
+
+    obj.language = static_cast<Language>(reader.read_u32());
+
+    if (obj.chat_type == ChatType::MONSTER_SAY|| obj.chat_type == ChatType::MONSTER_PARTY|| obj.chat_type == ChatType::MONSTER_YELL|| obj.chat_type == ChatType::MONSTER_WHISPER|| obj.chat_type == ChatType::RAID_BOSS_WHISPER|| obj.chat_type == ChatType::RAID_BOSS_EMOTE|| obj.chat_type == ChatType::MONSTER_EMOTE) {
+        obj.sender = reader.read_sized_cstring();
+
+        obj.target1 = ::wow_world_messages::util::wwm_read_named_guid(reader);
+
+    }
+    else if (obj.chat_type == ChatType::BG_SYSTEM_NEUTRAL|| obj.chat_type == ChatType::BG_SYSTEM_ALLIANCE|| obj.chat_type == ChatType::BG_SYSTEM_HORDE) {
+        obj.target2 = ::wow_world_messages::util::wwm_read_named_guid(reader);
+
+    }
+    else if (obj.chat_type == ChatType::CHANNEL) {
+        obj.channel_name = reader.read_cstring();
+
+        obj.target4 = reader.read_u64();
+
+    }
+    else if (obj.chat_type == ChatType::SYSTEM|| obj.chat_type == ChatType::SAY|| obj.chat_type == ChatType::PARTY|| obj.chat_type == ChatType::RAID|| obj.chat_type == ChatType::GUILD|| obj.chat_type == ChatType::OFFICER|| obj.chat_type == ChatType::YELL|| obj.chat_type == ChatType::WHISPER|| obj.chat_type == ChatType::WHISPER_INFORM|| obj.chat_type == ChatType::REPLY|| obj.chat_type == ChatType::EMOTE|| obj.chat_type == ChatType::TEXT_EMOTE|| obj.chat_type == ChatType::CHANNEL_JOIN|| obj.chat_type == ChatType::CHANNEL_LEAVE|| obj.chat_type == ChatType::CHANNEL_LIST|| obj.chat_type == ChatType::CHANNEL_NOTICE|| obj.chat_type == ChatType::CHANNEL_NOTICE_USER|| obj.chat_type == ChatType::AFK|| obj.chat_type == ChatType::DND|| obj.chat_type == ChatType::IGNORED|| obj.chat_type == ChatType::SKILL|| obj.chat_type == ChatType::LOOT|| obj.chat_type == ChatType::MONEY|| obj.chat_type == ChatType::OPENING|| obj.chat_type == ChatType::TRADESKILLS|| obj.chat_type == ChatType::PET_INFO|| obj.chat_type == ChatType::COMBAT_MISC_INFO|| obj.chat_type == ChatType::COMBAT_XP_GAIN|| obj.chat_type == ChatType::COMBAT_HONOR_GAIN|| obj.chat_type == ChatType::COMBAT_FACTION_CHANGE|| obj.chat_type == ChatType::RAID_LEADER|| obj.chat_type == ChatType::RAID_WARNING|| obj.chat_type == ChatType::FILTERED|| obj.chat_type == ChatType::BATTLEGROUND|| obj.chat_type == ChatType::BATTLEGROUND_LEADER|| obj.chat_type == ChatType::RESTRICTED) {
+        obj.target5 = reader.read_u64();
+
+    }
+    obj.message = reader.read_sized_cstring();
+
+    obj.tag = static_cast<PlayerChatTag>(reader.read_u8());
+
+    return obj;
+}
+
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_MESSAGECHAT::write() const {
+    const auto& obj = *this;
+    auto writer = Writer(SMSG_MESSAGECHAT_size(obj));
+
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_MESSAGECHAT_size(obj) + 2)); /* size */
+
+    writer.write_u16(0x00000096); /* opcode */
+
+    writer.write_u8(static_cast<uint8_t>(obj.chat_type));
+
+    writer.write_u32(static_cast<uint32_t>(obj.language));
+
+    if (obj.chat_type == ChatType::MONSTER_SAY|| obj.chat_type == ChatType::MONSTER_PARTY|| obj.chat_type == ChatType::MONSTER_YELL|| obj.chat_type == ChatType::MONSTER_WHISPER|| obj.chat_type == ChatType::RAID_BOSS_WHISPER|| obj.chat_type == ChatType::RAID_BOSS_EMOTE|| obj.chat_type == ChatType::MONSTER_EMOTE) {
+        writer.write_sized_cstring(obj.sender);
+
+        ::wow_world_messages::util::wwm_write_named_guid(writer, obj.target1);
+
+    }
+    else if (obj.chat_type == ChatType::BG_SYSTEM_NEUTRAL|| obj.chat_type == ChatType::BG_SYSTEM_ALLIANCE|| obj.chat_type == ChatType::BG_SYSTEM_HORDE) {
+        ::wow_world_messages::util::wwm_write_named_guid(writer, obj.target2);
+
+    }
+    else if (obj.chat_type == ChatType::CHANNEL) {
+        writer.write_cstring(obj.channel_name);
+
+        writer.write_u64(obj.target4);
+
+    }
+    else if (obj.chat_type == ChatType::SYSTEM|| obj.chat_type == ChatType::SAY|| obj.chat_type == ChatType::PARTY|| obj.chat_type == ChatType::RAID|| obj.chat_type == ChatType::GUILD|| obj.chat_type == ChatType::OFFICER|| obj.chat_type == ChatType::YELL|| obj.chat_type == ChatType::WHISPER|| obj.chat_type == ChatType::WHISPER_INFORM|| obj.chat_type == ChatType::REPLY|| obj.chat_type == ChatType::EMOTE|| obj.chat_type == ChatType::TEXT_EMOTE|| obj.chat_type == ChatType::CHANNEL_JOIN|| obj.chat_type == ChatType::CHANNEL_LEAVE|| obj.chat_type == ChatType::CHANNEL_LIST|| obj.chat_type == ChatType::CHANNEL_NOTICE|| obj.chat_type == ChatType::CHANNEL_NOTICE_USER|| obj.chat_type == ChatType::AFK|| obj.chat_type == ChatType::DND|| obj.chat_type == ChatType::IGNORED|| obj.chat_type == ChatType::SKILL|| obj.chat_type == ChatType::LOOT|| obj.chat_type == ChatType::MONEY|| obj.chat_type == ChatType::OPENING|| obj.chat_type == ChatType::TRADESKILLS|| obj.chat_type == ChatType::PET_INFO|| obj.chat_type == ChatType::COMBAT_MISC_INFO|| obj.chat_type == ChatType::COMBAT_XP_GAIN|| obj.chat_type == ChatType::COMBAT_HONOR_GAIN|| obj.chat_type == ChatType::COMBAT_FACTION_CHANGE|| obj.chat_type == ChatType::RAID_LEADER|| obj.chat_type == ChatType::RAID_WARNING|| obj.chat_type == ChatType::FILTERED|| obj.chat_type == ChatType::BATTLEGROUND|| obj.chat_type == ChatType::BATTLEGROUND_LEADER|| obj.chat_type == ChatType::RESTRICTED) {
+        writer.write_u64(obj.target5);
+
+    }
+    writer.write_sized_cstring(obj.message);
+
+    writer.write_u8(static_cast<uint8_t>(obj.tag));
+
+    return writer.m_buf;
+}
+
 static size_t CMSG_JOIN_CHANNEL_size(const CMSG_JOIN_CHANNEL& obj) {
     return 8 + obj.channel_name.size() + obj.channel_password.size();
 }
@@ -25572,6 +25664,126 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_VOICE_SESSION_ENAB
     return writer.m_buf;
 }
 
+static size_t SMSG_GM_MESSAGECHAT_size(const SMSG_GM_MESSAGECHAT& obj) {
+    size_t _size = 5;
+
+    if (obj.chat_type == ChatType::MONSTER_SAY|| obj.chat_type == ChatType::MONSTER_PARTY|| obj.chat_type == ChatType::MONSTER_YELL|| obj.chat_type == ChatType::MONSTER_WHISPER|| obj.chat_type == ChatType::RAID_BOSS_WHISPER|| obj.chat_type == ChatType::RAID_BOSS_EMOTE|| obj.chat_type == ChatType::MONSTER_EMOTE) {
+        _size += 11 + obj.sender.size() + ::wow_world_messages::util::wwm_named_guid_size(obj.target1) + obj.message1.size();
+    }
+    else if (obj.chat_type == ChatType::BG_SYSTEM_NEUTRAL|| obj.chat_type == ChatType::BG_SYSTEM_ALLIANCE|| obj.chat_type == ChatType::BG_SYSTEM_HORDE) {
+        _size += 6 + ::wow_world_messages::util::wwm_named_guid_size(obj.target2) + obj.message2.size();
+    }
+    else if (obj.chat_type == ChatType::CHANNEL) {
+        _size += 15 + obj.channel_name.size() + obj.message3.size();
+    }
+    else if (obj.chat_type == ChatType::SYSTEM|| obj.chat_type == ChatType::SAY|| obj.chat_type == ChatType::PARTY|| obj.chat_type == ChatType::RAID|| obj.chat_type == ChatType::GUILD|| obj.chat_type == ChatType::OFFICER|| obj.chat_type == ChatType::YELL|| obj.chat_type == ChatType::WHISPER|| obj.chat_type == ChatType::WHISPER_INFORM|| obj.chat_type == ChatType::REPLY|| obj.chat_type == ChatType::EMOTE|| obj.chat_type == ChatType::TEXT_EMOTE|| obj.chat_type == ChatType::CHANNEL_JOIN|| obj.chat_type == ChatType::CHANNEL_LEAVE|| obj.chat_type == ChatType::CHANNEL_LIST|| obj.chat_type == ChatType::CHANNEL_NOTICE|| obj.chat_type == ChatType::CHANNEL_NOTICE_USER|| obj.chat_type == ChatType::AFK|| obj.chat_type == ChatType::DND|| obj.chat_type == ChatType::IGNORED|| obj.chat_type == ChatType::SKILL|| obj.chat_type == ChatType::LOOT|| obj.chat_type == ChatType::MONEY|| obj.chat_type == ChatType::OPENING|| obj.chat_type == ChatType::TRADESKILLS|| obj.chat_type == ChatType::PET_INFO|| obj.chat_type == ChatType::COMBAT_MISC_INFO|| obj.chat_type == ChatType::COMBAT_XP_GAIN|| obj.chat_type == ChatType::COMBAT_HONOR_GAIN|| obj.chat_type == ChatType::COMBAT_FACTION_CHANGE|| obj.chat_type == ChatType::RAID_LEADER|| obj.chat_type == ChatType::RAID_WARNING|| obj.chat_type == ChatType::FILTERED|| obj.chat_type == ChatType::BATTLEGROUND|| obj.chat_type == ChatType::BATTLEGROUND_LEADER|| obj.chat_type == ChatType::RESTRICTED) {
+        _size += 19 + obj.message4.size() + obj.sender_name.size();
+    }
+
+    return _size;
+}
+
+SMSG_GM_MESSAGECHAT SMSG_GM_MESSAGECHAT_read(Reader& reader) {
+    SMSG_GM_MESSAGECHAT obj{};
+
+    obj.chat_type = static_cast<ChatType>(reader.read_u8());
+
+    obj.language = static_cast<Language>(reader.read_u32());
+
+    if (obj.chat_type == ChatType::MONSTER_SAY|| obj.chat_type == ChatType::MONSTER_PARTY|| obj.chat_type == ChatType::MONSTER_YELL|| obj.chat_type == ChatType::MONSTER_WHISPER|| obj.chat_type == ChatType::RAID_BOSS_WHISPER|| obj.chat_type == ChatType::RAID_BOSS_EMOTE|| obj.chat_type == ChatType::MONSTER_EMOTE) {
+        obj.sender = reader.read_sized_cstring();
+
+        obj.target1 = ::wow_world_messages::util::wwm_read_named_guid(reader);
+
+        obj.message1 = reader.read_sized_cstring();
+
+        obj.chat_tag1 = static_cast<PlayerChatTag>(reader.read_u8());
+
+    }
+    else if (obj.chat_type == ChatType::BG_SYSTEM_NEUTRAL|| obj.chat_type == ChatType::BG_SYSTEM_ALLIANCE|| obj.chat_type == ChatType::BG_SYSTEM_HORDE) {
+        obj.target2 = ::wow_world_messages::util::wwm_read_named_guid(reader);
+
+        obj.message2 = reader.read_sized_cstring();
+
+        obj.chat_tag2 = static_cast<PlayerChatTag>(reader.read_u8());
+
+    }
+    else if (obj.chat_type == ChatType::CHANNEL) {
+        obj.channel_name = reader.read_cstring();
+
+        obj.target4 = reader.read_u64();
+
+        obj.message3 = reader.read_sized_cstring();
+
+        obj.chat_tag3 = static_cast<PlayerChatTag>(reader.read_u8());
+
+    }
+    else if (obj.chat_type == ChatType::SYSTEM|| obj.chat_type == ChatType::SAY|| obj.chat_type == ChatType::PARTY|| obj.chat_type == ChatType::RAID|| obj.chat_type == ChatType::GUILD|| obj.chat_type == ChatType::OFFICER|| obj.chat_type == ChatType::YELL|| obj.chat_type == ChatType::WHISPER|| obj.chat_type == ChatType::WHISPER_INFORM|| obj.chat_type == ChatType::REPLY|| obj.chat_type == ChatType::EMOTE|| obj.chat_type == ChatType::TEXT_EMOTE|| obj.chat_type == ChatType::CHANNEL_JOIN|| obj.chat_type == ChatType::CHANNEL_LEAVE|| obj.chat_type == ChatType::CHANNEL_LIST|| obj.chat_type == ChatType::CHANNEL_NOTICE|| obj.chat_type == ChatType::CHANNEL_NOTICE_USER|| obj.chat_type == ChatType::AFK|| obj.chat_type == ChatType::DND|| obj.chat_type == ChatType::IGNORED|| obj.chat_type == ChatType::SKILL|| obj.chat_type == ChatType::LOOT|| obj.chat_type == ChatType::MONEY|| obj.chat_type == ChatType::OPENING|| obj.chat_type == ChatType::TRADESKILLS|| obj.chat_type == ChatType::PET_INFO|| obj.chat_type == ChatType::COMBAT_MISC_INFO|| obj.chat_type == ChatType::COMBAT_XP_GAIN|| obj.chat_type == ChatType::COMBAT_HONOR_GAIN|| obj.chat_type == ChatType::COMBAT_FACTION_CHANGE|| obj.chat_type == ChatType::RAID_LEADER|| obj.chat_type == ChatType::RAID_WARNING|| obj.chat_type == ChatType::FILTERED|| obj.chat_type == ChatType::BATTLEGROUND|| obj.chat_type == ChatType::BATTLEGROUND_LEADER|| obj.chat_type == ChatType::RESTRICTED) {
+        obj.target5 = reader.read_u64();
+
+        obj.message4 = reader.read_sized_cstring();
+
+        obj.chat_tag4 = static_cast<PlayerChatTag>(reader.read_u8());
+
+        obj.sender_name = reader.read_sized_cstring();
+
+    }
+    return obj;
+}
+
+WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_GM_MESSAGECHAT::write() const {
+    const auto& obj = *this;
+    auto writer = Writer(SMSG_GM_MESSAGECHAT_size(obj));
+
+    writer.write_u16_be(static_cast<uint16_t>(SMSG_GM_MESSAGECHAT_size(obj) + 2)); /* size */
+
+    writer.write_u16(0x000003b2); /* opcode */
+
+    writer.write_u8(static_cast<uint8_t>(obj.chat_type));
+
+    writer.write_u32(static_cast<uint32_t>(obj.language));
+
+    if (obj.chat_type == ChatType::MONSTER_SAY|| obj.chat_type == ChatType::MONSTER_PARTY|| obj.chat_type == ChatType::MONSTER_YELL|| obj.chat_type == ChatType::MONSTER_WHISPER|| obj.chat_type == ChatType::RAID_BOSS_WHISPER|| obj.chat_type == ChatType::RAID_BOSS_EMOTE|| obj.chat_type == ChatType::MONSTER_EMOTE) {
+        writer.write_sized_cstring(obj.sender);
+
+        ::wow_world_messages::util::wwm_write_named_guid(writer, obj.target1);
+
+        writer.write_sized_cstring(obj.message1);
+
+        writer.write_u8(static_cast<uint8_t>(obj.chat_tag1));
+
+    }
+    else if (obj.chat_type == ChatType::BG_SYSTEM_NEUTRAL|| obj.chat_type == ChatType::BG_SYSTEM_ALLIANCE|| obj.chat_type == ChatType::BG_SYSTEM_HORDE) {
+        ::wow_world_messages::util::wwm_write_named_guid(writer, obj.target2);
+
+        writer.write_sized_cstring(obj.message2);
+
+        writer.write_u8(static_cast<uint8_t>(obj.chat_tag2));
+
+    }
+    else if (obj.chat_type == ChatType::CHANNEL) {
+        writer.write_cstring(obj.channel_name);
+
+        writer.write_u64(obj.target4);
+
+        writer.write_sized_cstring(obj.message3);
+
+        writer.write_u8(static_cast<uint8_t>(obj.chat_tag3));
+
+    }
+    else if (obj.chat_type == ChatType::SYSTEM|| obj.chat_type == ChatType::SAY|| obj.chat_type == ChatType::PARTY|| obj.chat_type == ChatType::RAID|| obj.chat_type == ChatType::GUILD|| obj.chat_type == ChatType::OFFICER|| obj.chat_type == ChatType::YELL|| obj.chat_type == ChatType::WHISPER|| obj.chat_type == ChatType::WHISPER_INFORM|| obj.chat_type == ChatType::REPLY|| obj.chat_type == ChatType::EMOTE|| obj.chat_type == ChatType::TEXT_EMOTE|| obj.chat_type == ChatType::CHANNEL_JOIN|| obj.chat_type == ChatType::CHANNEL_LEAVE|| obj.chat_type == ChatType::CHANNEL_LIST|| obj.chat_type == ChatType::CHANNEL_NOTICE|| obj.chat_type == ChatType::CHANNEL_NOTICE_USER|| obj.chat_type == ChatType::AFK|| obj.chat_type == ChatType::DND|| obj.chat_type == ChatType::IGNORED|| obj.chat_type == ChatType::SKILL|| obj.chat_type == ChatType::LOOT|| obj.chat_type == ChatType::MONEY|| obj.chat_type == ChatType::OPENING|| obj.chat_type == ChatType::TRADESKILLS|| obj.chat_type == ChatType::PET_INFO|| obj.chat_type == ChatType::COMBAT_MISC_INFO|| obj.chat_type == ChatType::COMBAT_XP_GAIN|| obj.chat_type == ChatType::COMBAT_HONOR_GAIN|| obj.chat_type == ChatType::COMBAT_FACTION_CHANGE|| obj.chat_type == ChatType::RAID_LEADER|| obj.chat_type == ChatType::RAID_WARNING|| obj.chat_type == ChatType::FILTERED|| obj.chat_type == ChatType::BATTLEGROUND|| obj.chat_type == ChatType::BATTLEGROUND_LEADER|| obj.chat_type == ChatType::RESTRICTED) {
+        writer.write_u64(obj.target5);
+
+        writer.write_sized_cstring(obj.message4);
+
+        writer.write_u8(static_cast<uint8_t>(obj.chat_tag4));
+
+        writer.write_sized_cstring(obj.sender_name);
+
+    }
+    return writer.m_buf;
+}
+
 CMSG_COMMENTATOR_ENABLE CMSG_COMMENTATOR_ENABLE_read(Reader& reader) {
     CMSG_COMMENTATOR_ENABLE obj{};
 
@@ -36295,6 +36507,22 @@ tbc::SMSG_GUILD_COMMAND_RESULT& ServerOpcode::get<SMSG_GUILD_COMMAND_RESULT>() {
 }
 
 template <>
+tbc::SMSG_MESSAGECHAT* ServerOpcode::get_if<SMSG_MESSAGECHAT>() {
+    if (opcode == Opcode::SMSG_MESSAGECHAT) {
+        return &SMSG_MESSAGECHAT;
+    }
+    return nullptr;
+}
+template <>
+tbc::SMSG_MESSAGECHAT& ServerOpcode::get<SMSG_MESSAGECHAT>() {
+    auto p = ServerOpcode::get_if<tbc::SMSG_MESSAGECHAT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
 tbc::SMSG_CHANNEL_NOTIFY* ServerOpcode::get_if<SMSG_CHANNEL_NOTIFY>() {
     if (opcode == Opcode::SMSG_CHANNEL_NOTIFY) {
         return &SMSG_CHANNEL_NOTIFY;
@@ -41927,6 +42155,22 @@ tbc::MSG_RAID_READY_CHECK_CONFIRM_Server& ServerOpcode::get<MSG_RAID_READY_CHECK
 }
 
 template <>
+tbc::SMSG_GM_MESSAGECHAT* ServerOpcode::get_if<SMSG_GM_MESSAGECHAT>() {
+    if (opcode == Opcode::SMSG_GM_MESSAGECHAT) {
+        return &SMSG_GM_MESSAGECHAT;
+    }
+    return nullptr;
+}
+template <>
+tbc::SMSG_GM_MESSAGECHAT& ServerOpcode::get<SMSG_GM_MESSAGECHAT>() {
+    auto p = ServerOpcode::get_if<tbc::SMSG_GM_MESSAGECHAT>();
+    if (p) {
+        return *p;
+    }
+    throw bad_opcode_access{};
+}
+
+template <>
 tbc::SMSG_CLEAR_TARGET* ServerOpcode::get_if<SMSG_CLEAR_TARGET>() {
     if (opcode == Opcode::SMSG_CLEAR_TARGET) {
         return &SMSG_CLEAR_TARGET;
@@ -42454,6 +42698,9 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const Serv
     }
     if (opcode.opcode == ServerOpcode::Opcode::SMSG_GUILD_COMMAND_RESULT) {
         return opcode.SMSG_GUILD_COMMAND_RESULT.write();;
+    }
+    if (opcode.opcode == ServerOpcode::Opcode::SMSG_MESSAGECHAT) {
+        return opcode.SMSG_MESSAGECHAT.write();;
     }
     if (opcode.opcode == ServerOpcode::Opcode::SMSG_CHANNEL_NOTIFY) {
         return opcode.SMSG_CHANNEL_NOTIFY.write();;
@@ -43511,6 +43758,9 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const Serv
     if (opcode.opcode == ServerOpcode::Opcode::MSG_RAID_READY_CHECK_CONFIRM) {
         return opcode.MSG_RAID_READY_CHECK_CONFIRM.write();;
     }
+    if (opcode.opcode == ServerOpcode::Opcode::SMSG_GM_MESSAGECHAT) {
+        return opcode.SMSG_GM_MESSAGECHAT.write();;
+    }
     if (opcode.opcode == ServerOpcode::Opcode::SMSG_CLEAR_TARGET) {
         return opcode.SMSG_CLEAR_TARGET.write();;
     }
@@ -43709,6 +43959,9 @@ WOW_WORLD_MESSAGES_CPP_EXPORT ServerOpcode read_server_opcode(Reader& reader) {
     }
     if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::SMSG_GUILD_COMMAND_RESULT)) {
         return ServerOpcode(::wow_world_messages::tbc::SMSG_GUILD_COMMAND_RESULT_read(reader));
+    }
+    if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::SMSG_MESSAGECHAT)) {
+        return ServerOpcode(::wow_world_messages::tbc::SMSG_MESSAGECHAT_read(reader));
     }
     if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::SMSG_CHANNEL_NOTIFY)) {
         return ServerOpcode(::wow_world_messages::tbc::SMSG_CHANNEL_NOTIFY_read(reader, _size - 2));
@@ -44765,6 +45018,9 @@ WOW_WORLD_MESSAGES_CPP_EXPORT ServerOpcode read_server_opcode(Reader& reader) {
     }
     if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::MSG_RAID_READY_CHECK_CONFIRM)) {
         return ServerOpcode(::wow_world_messages::tbc::MSG_RAID_READY_CHECK_CONFIRM_Server_read(reader));
+    }
+    if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::SMSG_GM_MESSAGECHAT)) {
+        return ServerOpcode(::wow_world_messages::tbc::SMSG_GM_MESSAGECHAT_read(reader));
     }
     if (opcode == static_cast<uint16_t>(ServerOpcode::Opcode::SMSG_CLEAR_TARGET)) {
         return ServerOpcode(::wow_world_messages::tbc::SMSG_CLEAR_TARGET_read(reader));

@@ -129,6 +129,28 @@ public:
     virtual ~Reader() = default;
 };
 
+class NamedGuid
+{
+public:
+    NamedGuid() : m_guid(0), m_name() {}
+    NamedGuid(uint64_t guid, std::string&& name) : m_guid(guid), m_name(name) {}
+
+    WOW_WORLD_MESSAGES_CPP_EXPORT const std::string* name() const
+    {
+        if (m_guid != 0)
+        {
+            return &m_name;
+        }
+
+        return nullptr;
+    }
+    WOW_WORLD_MESSAGES_CPP_EXPORT uint64_t guid() const { return m_guid; }
+
+private:
+    uint64_t m_guid;
+    std::string m_name;
+};
+
 struct bad_opcode_access final : std::exception
 {
 };

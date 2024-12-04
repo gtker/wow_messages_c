@@ -55,10 +55,6 @@ def container_should_print(container: model.Container) -> bool:
                 print_skip(container, f"has enchant mask")
                 return False
 
-            case model.DataTypeNamedGUID():
-                print_skip(container, f"has named guid")
-                return False
-
             case model.DataTypeInspectTalentGearMask():
                 print_skip(container, f"has inspect talent gear mask")
                 return False
@@ -242,7 +238,7 @@ def type_to_c_str(ty: model.DataType, module_name: str) -> str:
         case model.DataTypeMonsterMoveSpline():
             return "std::vector<::wow_world_messages::all::Vector3d>" if is_cpp() else "MonsterMoveSpline"
         case model.DataTypeNamedGUID():
-            return "NamedGUID"
+            return "NamedGuid"
         case model.DataTypeVariableItemRandomProperty():
             return "VariableItemRandomProperty"
         case model.DataTypeCacheMask():

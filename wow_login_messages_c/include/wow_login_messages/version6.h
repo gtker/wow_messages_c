@@ -82,6 +82,8 @@ typedef struct {
     } body;
 } Version6ClientOpcodeContainer;
 
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version6_client_write_opcode(WowLoginWriter* writer, const Version6ClientOpcodeContainer* opcodes);
+
 WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version6_client_opcode_read(WowLoginReader* reader, Version6ClientOpcodeContainer* opcodes);
 
 WOW_LOGIN_MESSAGES_C_EXPORT void version6_client_opcode_free(Version6ClientOpcodeContainer* opcodes);
@@ -99,6 +101,8 @@ typedef struct {
         version2_CMD_XFER_DATA CMD_XFER_DATA;
     } body;
 } Version6ServerOpcodeContainer;
+
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version6_server_write_opcode(WowLoginWriter* writer, const Version6ServerOpcodeContainer* opcodes);
 
 WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version6_server_opcode_read(WowLoginReader* reader, Version6ServerOpcodeContainer* opcodes);
 

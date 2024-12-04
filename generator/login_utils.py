@@ -201,14 +201,17 @@ def print_login_utils_side(s: Writer, h: Writer, messages: list[model.Container]
 def write_opcode_write(s: Writer, h: Writer, messages: list[model.Container], v: typing.Union[int | model.WorldVersion],
                        side: str, module_name: str,
                        module_name_pascal: str, side_pascal: str):
+    export = get_export_define(messages[0].tags)
+    function_declaration = f"{export} std::vector<unsigned char> write_opcode(const {side.capitalize()}Opcode& opcode)"
+    if not is_cpp():
+        result_type = get_type_prefix(messages[0].tags)
+        function_declaration =  f"{export} {result_type}Result {module_name}_{side}_write_opcode({result_type}Writer* writer, const {module_name_pascal}{side.capitalize()}OpcodeContainer* opcodes)"
+    h.wln(f"{function_declaration};")
+    h.newline()
+
+    s.open_curly(function_declaration)
+
     if is_cpp():
-        export = get_export_define(messages[0].tags)
-        function_declaration = f"{export} std::vector<unsigned char> write_opcode(const {side.capitalize()}Opcode& opcode)"
-        h.wln(f"{function_declaration};")
-        h.newline()
-
-        s.open_curly(function_declaration)
-
         for e in messages:
             if not version_matches(e.tags, v) \
                     or side_matches(e, side) == INVALID_OPCODE \
@@ -226,9 +229,38 @@ def write_opcode_write(s: Writer, h: Writer, messages: list[model.Container], v:
 
         s.newline()
         s.wln("return {}; /* unreachable */")
+    else:
+        s.open_curly("switch (opcodes->opcode)")
 
-        s.closing_curly()  # function decl
+        wlm_prefix = "WWM" if is_world(messages[0].tags) else "WLM"
+        for e in messages:
+            if not version_matches(e.tags, v) \
+                    or side_matches(e, side) == INVALID_OPCODE \
+                    or (first_version_as_module(e.tags) == "all" and version_to_module_name(v) != "all"):
+                continue
+            if not container_has_c_members(e):
+                continue
+
+            s.wln(f"case {e.name.replace('_Client', '').replace('_Server', '')}:")
+            s.inc_indent()
+
+            version = container_module_prefix(e.tags, module_name)
+            extra_msg = "" if not type(e.object_type) is model.ObjectTypeMsg else f"_{side[0]}msg"
+            s.wln(f"{wlm_prefix}_CHECK_RETURN_CODE({version}_{e.name}{extra_msg}_write(writer, &opcodes->body.{e.name}));")
+
+            s.wln("break;")
+            s.dec_indent()
+
+        s.wln("default:")
+        s.inc_indent()
+        s.wln("break;")
+        s.dec_indent()
+
+        s.closing_curly()  # switch
         s.newline()
+        s.wln(f"return {wlm_prefix}_RESULT_SUCCESS;")
+    s.closing_curly()  # function decl
+    s.newline()
 
 
 def write_opcode_read(s: Writer, h: Writer, messages: list[model.Container], v: typing.Union[int | model.WorldVersion],

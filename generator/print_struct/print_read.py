@@ -214,10 +214,13 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
                 s.wln(f"_size += {d.name}.size();")
 
         case model.DataTypeNamedGUID():
-            s.wln(f"READ_NAMED_GUID({variable_name});")
+            if is_cpp():
+                s.wln_no_indent(f"{util_namespace}wwm_read_named_guid({reader});")
+            else:
+                s.wln(f"READ_NAMED_GUID({variable_name});")
 
             if needs_size:
-                s.wln(f"_size += {d.name}.size();")
+                s.wln(f"_size += {util_namespace}wwm_named_guid_size({variable_name});")
 
         case model.DataTypeInspectTalentGearMask():
             s.wln(f"READ_INSPECT_TALENT_GEAR_MASK({variable_name});")
@@ -661,6 +664,10 @@ def print_read(s: Writer, container: Container, module_name: str):
                         s.wln(f"free({d.name}_compressed_data);")
                         s.closing_curly()  # if ({} compressed_data)
                         s.newline()
+
+        if container.tags.compressed and not is_cpp():
+            s.wln("free(_compressed_data);")
+            s.newline()
 
         if is_world(container.tags):
             s.wln("return WWM_RESULT_SUCCESS;")

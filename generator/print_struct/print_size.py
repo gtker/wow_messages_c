@@ -126,9 +126,10 @@ def addable_size_value(
              | model.DataTypeAddonArray() | model.DataTypeCacheMask() \
              | model.DataTypeVariableItemRandomProperty() \
              | model.DataTypeInspectTalentGearMask() \
-             | model.DataTypeNamedGUID() \
              | model.DataTypeEnchantMask():
             return 0, f"{extra_indirection}{name}.size()"
+        case model.DataTypeNamedGUID():
+            return 0, f"{namespace}wwm_named_guid_size({variable_name})" if is_cpp() else f"wwm_named_guid_size(&{variable_name})"
         case model.DataTypeUpdateMask():
             return 0, f"{module_name}::update_mask_size({variable_name})" if is_cpp() else f"{module_name}_update_mask_size(&{variable_name})"
         case model.DataTypeMonsterMoveSpline():

@@ -157,6 +157,21 @@ WOW_LOGIN_MESSAGES_C_EXPORT void all_CMD_AUTH_RECONNECT_CHALLENGE_Client_free(al
 
 }
 
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult all_client_write_opcode(WowLoginWriter* writer, const AllClientOpcodeContainer* opcodes) {
+    switch (opcodes->opcode) {
+        case CMD_AUTH_LOGON_CHALLENGE:
+            WLM_CHECK_RETURN_CODE(all_CMD_AUTH_LOGON_CHALLENGE_Client_write(writer, &opcodes->body.CMD_AUTH_LOGON_CHALLENGE_Client));
+            break;
+        case CMD_AUTH_RECONNECT_CHALLENGE:
+            WLM_CHECK_RETURN_CODE(all_CMD_AUTH_RECONNECT_CHALLENGE_Client_write(writer, &opcodes->body.CMD_AUTH_RECONNECT_CHALLENGE_Client));
+            break;
+        default:
+            break;
+    }
+
+    return WLM_RESULT_SUCCESS;
+}
+
 WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult all_client_opcode_read(WowLoginReader* reader, AllClientOpcodeContainer* opcodes) {
     opcodes->opcode = 0;
     READ_U8(opcodes->opcode);
@@ -683,6 +698,24 @@ WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version2_CMD_XFER_CANCEL_write(WowLog
     return WLM_RESULT_SUCCESS;
 }
 
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version2_client_write_opcode(WowLoginWriter* writer, const Version2ClientOpcodeContainer* opcodes) {
+    switch (opcodes->opcode) {
+        case CMD_AUTH_LOGON_PROOF:
+            WLM_CHECK_RETURN_CODE(version2_CMD_AUTH_LOGON_PROOF_Client_write(writer, &opcodes->body.CMD_AUTH_LOGON_PROOF_Client));
+            break;
+        case CMD_AUTH_RECONNECT_PROOF:
+            WLM_CHECK_RETURN_CODE(version2_CMD_AUTH_RECONNECT_PROOF_Client_write(writer, &opcodes->body.CMD_AUTH_RECONNECT_PROOF_Client));
+            break;
+        case CMD_XFER_RESUME:
+            WLM_CHECK_RETURN_CODE(version2_CMD_XFER_RESUME_write(writer, &opcodes->body.CMD_XFER_RESUME));
+            break;
+        default:
+            break;
+    }
+
+    return WLM_RESULT_SUCCESS;
+}
+
 WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version2_client_opcode_read(WowLoginReader* reader, Version2ClientOpcodeContainer* opcodes) {
     opcodes->opcode = 0;
     READ_U8(opcodes->opcode);
@@ -715,6 +748,36 @@ WOW_LOGIN_MESSAGES_C_EXPORT void version2_client_opcode_free(Version2ClientOpcod
         default:
             break;
     }
+}
+
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version2_server_write_opcode(WowLoginWriter* writer, const Version2ServerOpcodeContainer* opcodes) {
+    switch (opcodes->opcode) {
+        case CMD_AUTH_LOGON_CHALLENGE:
+            WLM_CHECK_RETURN_CODE(version2_CMD_AUTH_LOGON_CHALLENGE_Server_write(writer, &opcodes->body.CMD_AUTH_LOGON_CHALLENGE_Server));
+            break;
+        case CMD_AUTH_LOGON_PROOF:
+            WLM_CHECK_RETURN_CODE(version2_CMD_AUTH_LOGON_PROOF_Server_write(writer, &opcodes->body.CMD_AUTH_LOGON_PROOF_Server));
+            break;
+        case CMD_AUTH_RECONNECT_CHALLENGE:
+            WLM_CHECK_RETURN_CODE(version2_CMD_AUTH_RECONNECT_CHALLENGE_Server_write(writer, &opcodes->body.CMD_AUTH_RECONNECT_CHALLENGE_Server));
+            break;
+        case CMD_AUTH_RECONNECT_PROOF:
+            WLM_CHECK_RETURN_CODE(version2_CMD_AUTH_RECONNECT_PROOF_Server_write(writer, &opcodes->body.CMD_AUTH_RECONNECT_PROOF_Server));
+            break;
+        case CMD_REALM_LIST:
+            WLM_CHECK_RETURN_CODE(version2_CMD_REALM_LIST_Server_write(writer, &opcodes->body.CMD_REALM_LIST_Server));
+            break;
+        case CMD_XFER_INITIATE:
+            WLM_CHECK_RETURN_CODE(version2_CMD_XFER_INITIATE_write(writer, &opcodes->body.CMD_XFER_INITIATE));
+            break;
+        case CMD_XFER_DATA:
+            WLM_CHECK_RETURN_CODE(version2_CMD_XFER_DATA_write(writer, &opcodes->body.CMD_XFER_DATA));
+            break;
+        default:
+            break;
+    }
+
+    return WLM_RESULT_SUCCESS;
 }
 
 WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version2_server_opcode_read(WowLoginReader* reader, Version2ServerOpcodeContainer* opcodes) {
@@ -1005,6 +1068,24 @@ WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version3_CMD_XFER_CANCEL_write(WowLog
     return WLM_RESULT_SUCCESS;
 }
 
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version3_client_write_opcode(WowLoginWriter* writer, const Version3ClientOpcodeContainer* opcodes) {
+    switch (opcodes->opcode) {
+        case CMD_AUTH_LOGON_PROOF:
+            WLM_CHECK_RETURN_CODE(version3_CMD_AUTH_LOGON_PROOF_Client_write(writer, &opcodes->body.CMD_AUTH_LOGON_PROOF_Client));
+            break;
+        case CMD_SURVEY_RESULT:
+            WLM_CHECK_RETURN_CODE(version3_CMD_SURVEY_RESULT_write(writer, &opcodes->body.CMD_SURVEY_RESULT));
+            break;
+        case CMD_XFER_RESUME:
+            WLM_CHECK_RETURN_CODE(version2_CMD_XFER_RESUME_write(writer, &opcodes->body.CMD_XFER_RESUME));
+            break;
+        default:
+            break;
+    }
+
+    return WLM_RESULT_SUCCESS;
+}
+
 WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version3_client_opcode_read(WowLoginReader* reader, Version3ClientOpcodeContainer* opcodes) {
     opcodes->opcode = 0;
     READ_U8(opcodes->opcode);
@@ -1037,6 +1118,30 @@ WOW_LOGIN_MESSAGES_C_EXPORT void version3_client_opcode_free(Version3ClientOpcod
         default:
             break;
     }
+}
+
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version3_server_write_opcode(WowLoginWriter* writer, const Version3ServerOpcodeContainer* opcodes) {
+    switch (opcodes->opcode) {
+        case CMD_AUTH_LOGON_CHALLENGE:
+            WLM_CHECK_RETURN_CODE(version3_CMD_AUTH_LOGON_CHALLENGE_Server_write(writer, &opcodes->body.CMD_AUTH_LOGON_CHALLENGE_Server));
+            break;
+        case CMD_AUTH_LOGON_PROOF:
+            WLM_CHECK_RETURN_CODE(version2_CMD_AUTH_LOGON_PROOF_Server_write(writer, &opcodes->body.CMD_AUTH_LOGON_PROOF_Server));
+            break;
+        case CMD_REALM_LIST:
+            WLM_CHECK_RETURN_CODE(version2_CMD_REALM_LIST_Server_write(writer, &opcodes->body.CMD_REALM_LIST_Server));
+            break;
+        case CMD_XFER_INITIATE:
+            WLM_CHECK_RETURN_CODE(version2_CMD_XFER_INITIATE_write(writer, &opcodes->body.CMD_XFER_INITIATE));
+            break;
+        case CMD_XFER_DATA:
+            WLM_CHECK_RETURN_CODE(version2_CMD_XFER_DATA_write(writer, &opcodes->body.CMD_XFER_DATA));
+            break;
+        default:
+            break;
+    }
+
+    return WLM_RESULT_SUCCESS;
 }
 
 WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version3_server_opcode_read(WowLoginReader* reader, Version3ServerOpcodeContainer* opcodes) {
@@ -1498,6 +1603,24 @@ WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version5_CMD_XFER_CANCEL_write(WowLog
     return WLM_RESULT_SUCCESS;
 }
 
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version5_client_write_opcode(WowLoginWriter* writer, const Version5ClientOpcodeContainer* opcodes) {
+    switch (opcodes->opcode) {
+        case CMD_AUTH_LOGON_PROOF:
+            WLM_CHECK_RETURN_CODE(version5_CMD_AUTH_LOGON_PROOF_Client_write(writer, &opcodes->body.CMD_AUTH_LOGON_PROOF_Client));
+            break;
+        case CMD_AUTH_RECONNECT_PROOF:
+            WLM_CHECK_RETURN_CODE(version2_CMD_AUTH_RECONNECT_PROOF_Client_write(writer, &opcodes->body.CMD_AUTH_RECONNECT_PROOF_Client));
+            break;
+        case CMD_XFER_RESUME:
+            WLM_CHECK_RETURN_CODE(version2_CMD_XFER_RESUME_write(writer, &opcodes->body.CMD_XFER_RESUME));
+            break;
+        default:
+            break;
+    }
+
+    return WLM_RESULT_SUCCESS;
+}
+
 WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version5_client_opcode_read(WowLoginReader* reader, Version5ClientOpcodeContainer* opcodes) {
     opcodes->opcode = 0;
     READ_U8(opcodes->opcode);
@@ -1530,6 +1653,36 @@ WOW_LOGIN_MESSAGES_C_EXPORT void version5_client_opcode_free(Version5ClientOpcod
         default:
             break;
     }
+}
+
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version5_server_write_opcode(WowLoginWriter* writer, const Version5ServerOpcodeContainer* opcodes) {
+    switch (opcodes->opcode) {
+        case CMD_AUTH_LOGON_CHALLENGE:
+            WLM_CHECK_RETURN_CODE(version5_CMD_AUTH_LOGON_CHALLENGE_Server_write(writer, &opcodes->body.CMD_AUTH_LOGON_CHALLENGE_Server));
+            break;
+        case CMD_AUTH_LOGON_PROOF:
+            WLM_CHECK_RETURN_CODE(version5_CMD_AUTH_LOGON_PROOF_Server_write(writer, &opcodes->body.CMD_AUTH_LOGON_PROOF_Server));
+            break;
+        case CMD_AUTH_RECONNECT_CHALLENGE:
+            WLM_CHECK_RETURN_CODE(version2_CMD_AUTH_RECONNECT_CHALLENGE_Server_write(writer, &opcodes->body.CMD_AUTH_RECONNECT_CHALLENGE_Server));
+            break;
+        case CMD_AUTH_RECONNECT_PROOF:
+            WLM_CHECK_RETURN_CODE(version5_CMD_AUTH_RECONNECT_PROOF_Server_write(writer, &opcodes->body.CMD_AUTH_RECONNECT_PROOF_Server));
+            break;
+        case CMD_REALM_LIST:
+            WLM_CHECK_RETURN_CODE(version5_CMD_REALM_LIST_Server_write(writer, &opcodes->body.CMD_REALM_LIST_Server));
+            break;
+        case CMD_XFER_INITIATE:
+            WLM_CHECK_RETURN_CODE(version2_CMD_XFER_INITIATE_write(writer, &opcodes->body.CMD_XFER_INITIATE));
+            break;
+        case CMD_XFER_DATA:
+            WLM_CHECK_RETURN_CODE(version2_CMD_XFER_DATA_write(writer, &opcodes->body.CMD_XFER_DATA));
+            break;
+        default:
+            break;
+    }
+
+    return WLM_RESULT_SUCCESS;
 }
 
 WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version5_server_opcode_read(WowLoginReader* reader, Version5ServerOpcodeContainer* opcodes) {
@@ -1672,6 +1825,24 @@ WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version6_CMD_XFER_CANCEL_write(WowLog
     return WLM_RESULT_SUCCESS;
 }
 
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version6_client_write_opcode(WowLoginWriter* writer, const Version6ClientOpcodeContainer* opcodes) {
+    switch (opcodes->opcode) {
+        case CMD_AUTH_LOGON_PROOF:
+            WLM_CHECK_RETURN_CODE(version5_CMD_AUTH_LOGON_PROOF_Client_write(writer, &opcodes->body.CMD_AUTH_LOGON_PROOF_Client));
+            break;
+        case CMD_AUTH_RECONNECT_PROOF:
+            WLM_CHECK_RETURN_CODE(version2_CMD_AUTH_RECONNECT_PROOF_Client_write(writer, &opcodes->body.CMD_AUTH_RECONNECT_PROOF_Client));
+            break;
+        case CMD_XFER_RESUME:
+            WLM_CHECK_RETURN_CODE(version2_CMD_XFER_RESUME_write(writer, &opcodes->body.CMD_XFER_RESUME));
+            break;
+        default:
+            break;
+    }
+
+    return WLM_RESULT_SUCCESS;
+}
+
 WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version6_client_opcode_read(WowLoginReader* reader, Version6ClientOpcodeContainer* opcodes) {
     opcodes->opcode = 0;
     READ_U8(opcodes->opcode);
@@ -1704,6 +1875,36 @@ WOW_LOGIN_MESSAGES_C_EXPORT void version6_client_opcode_free(Version6ClientOpcod
         default:
             break;
     }
+}
+
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version6_server_write_opcode(WowLoginWriter* writer, const Version6ServerOpcodeContainer* opcodes) {
+    switch (opcodes->opcode) {
+        case CMD_AUTH_LOGON_CHALLENGE:
+            WLM_CHECK_RETURN_CODE(version5_CMD_AUTH_LOGON_CHALLENGE_Server_write(writer, &opcodes->body.CMD_AUTH_LOGON_CHALLENGE_Server));
+            break;
+        case CMD_AUTH_LOGON_PROOF:
+            WLM_CHECK_RETURN_CODE(version5_CMD_AUTH_LOGON_PROOF_Server_write(writer, &opcodes->body.CMD_AUTH_LOGON_PROOF_Server));
+            break;
+        case CMD_AUTH_RECONNECT_CHALLENGE:
+            WLM_CHECK_RETURN_CODE(version2_CMD_AUTH_RECONNECT_CHALLENGE_Server_write(writer, &opcodes->body.CMD_AUTH_RECONNECT_CHALLENGE_Server));
+            break;
+        case CMD_AUTH_RECONNECT_PROOF:
+            WLM_CHECK_RETURN_CODE(version5_CMD_AUTH_RECONNECT_PROOF_Server_write(writer, &opcodes->body.CMD_AUTH_RECONNECT_PROOF_Server));
+            break;
+        case CMD_REALM_LIST:
+            WLM_CHECK_RETURN_CODE(version6_CMD_REALM_LIST_Server_write(writer, &opcodes->body.CMD_REALM_LIST_Server));
+            break;
+        case CMD_XFER_INITIATE:
+            WLM_CHECK_RETURN_CODE(version2_CMD_XFER_INITIATE_write(writer, &opcodes->body.CMD_XFER_INITIATE));
+            break;
+        case CMD_XFER_DATA:
+            WLM_CHECK_RETURN_CODE(version2_CMD_XFER_DATA_write(writer, &opcodes->body.CMD_XFER_DATA));
+            break;
+        default:
+            break;
+    }
+
+    return WLM_RESULT_SUCCESS;
 }
 
 WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version6_server_opcode_read(WowLoginReader* reader, Version6ServerOpcodeContainer* opcodes) {
@@ -1791,6 +1992,24 @@ WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version7_CMD_XFER_CANCEL_write(WowLog
     return WLM_RESULT_SUCCESS;
 }
 
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version7_client_write_opcode(WowLoginWriter* writer, const Version7ClientOpcodeContainer* opcodes) {
+    switch (opcodes->opcode) {
+        case CMD_AUTH_LOGON_PROOF:
+            WLM_CHECK_RETURN_CODE(version5_CMD_AUTH_LOGON_PROOF_Client_write(writer, &opcodes->body.CMD_AUTH_LOGON_PROOF_Client));
+            break;
+        case CMD_AUTH_RECONNECT_PROOF:
+            WLM_CHECK_RETURN_CODE(version2_CMD_AUTH_RECONNECT_PROOF_Client_write(writer, &opcodes->body.CMD_AUTH_RECONNECT_PROOF_Client));
+            break;
+        case CMD_XFER_RESUME:
+            WLM_CHECK_RETURN_CODE(version2_CMD_XFER_RESUME_write(writer, &opcodes->body.CMD_XFER_RESUME));
+            break;
+        default:
+            break;
+    }
+
+    return WLM_RESULT_SUCCESS;
+}
+
 WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version7_client_opcode_read(WowLoginReader* reader, Version7ClientOpcodeContainer* opcodes) {
     opcodes->opcode = 0;
     READ_U8(opcodes->opcode);
@@ -1823,6 +2042,36 @@ WOW_LOGIN_MESSAGES_C_EXPORT void version7_client_opcode_free(Version7ClientOpcod
         default:
             break;
     }
+}
+
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version7_server_write_opcode(WowLoginWriter* writer, const Version7ServerOpcodeContainer* opcodes) {
+    switch (opcodes->opcode) {
+        case CMD_AUTH_LOGON_CHALLENGE:
+            WLM_CHECK_RETURN_CODE(version5_CMD_AUTH_LOGON_CHALLENGE_Server_write(writer, &opcodes->body.CMD_AUTH_LOGON_CHALLENGE_Server));
+            break;
+        case CMD_AUTH_LOGON_PROOF:
+            WLM_CHECK_RETURN_CODE(version5_CMD_AUTH_LOGON_PROOF_Server_write(writer, &opcodes->body.CMD_AUTH_LOGON_PROOF_Server));
+            break;
+        case CMD_AUTH_RECONNECT_CHALLENGE:
+            WLM_CHECK_RETURN_CODE(version2_CMD_AUTH_RECONNECT_CHALLENGE_Server_write(writer, &opcodes->body.CMD_AUTH_RECONNECT_CHALLENGE_Server));
+            break;
+        case CMD_AUTH_RECONNECT_PROOF:
+            WLM_CHECK_RETURN_CODE(version5_CMD_AUTH_RECONNECT_PROOF_Server_write(writer, &opcodes->body.CMD_AUTH_RECONNECT_PROOF_Server));
+            break;
+        case CMD_REALM_LIST:
+            WLM_CHECK_RETURN_CODE(version6_CMD_REALM_LIST_Server_write(writer, &opcodes->body.CMD_REALM_LIST_Server));
+            break;
+        case CMD_XFER_INITIATE:
+            WLM_CHECK_RETURN_CODE(version2_CMD_XFER_INITIATE_write(writer, &opcodes->body.CMD_XFER_INITIATE));
+            break;
+        case CMD_XFER_DATA:
+            WLM_CHECK_RETURN_CODE(version2_CMD_XFER_DATA_write(writer, &opcodes->body.CMD_XFER_DATA));
+            break;
+        default:
+            break;
+    }
+
+    return WLM_RESULT_SUCCESS;
 }
 
 WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version7_server_opcode_read(WowLoginReader* reader, Version7ServerOpcodeContainer* opcodes) {
@@ -2385,6 +2634,24 @@ WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version8_CMD_XFER_CANCEL_write(WowLog
     return WLM_RESULT_SUCCESS;
 }
 
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version8_client_write_opcode(WowLoginWriter* writer, const Version8ClientOpcodeContainer* opcodes) {
+    switch (opcodes->opcode) {
+        case CMD_AUTH_LOGON_PROOF:
+            WLM_CHECK_RETURN_CODE(version8_CMD_AUTH_LOGON_PROOF_Client_write(writer, &opcodes->body.CMD_AUTH_LOGON_PROOF_Client));
+            break;
+        case CMD_AUTH_RECONNECT_PROOF:
+            WLM_CHECK_RETURN_CODE(version2_CMD_AUTH_RECONNECT_PROOF_Client_write(writer, &opcodes->body.CMD_AUTH_RECONNECT_PROOF_Client));
+            break;
+        case CMD_XFER_RESUME:
+            WLM_CHECK_RETURN_CODE(version2_CMD_XFER_RESUME_write(writer, &opcodes->body.CMD_XFER_RESUME));
+            break;
+        default:
+            break;
+    }
+
+    return WLM_RESULT_SUCCESS;
+}
+
 WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version8_client_opcode_read(WowLoginReader* reader, Version8ClientOpcodeContainer* opcodes) {
     opcodes->opcode = 0;
     READ_U8(opcodes->opcode);
@@ -2417,6 +2684,36 @@ WOW_LOGIN_MESSAGES_C_EXPORT void version8_client_opcode_free(Version8ClientOpcod
         default:
             break;
     }
+}
+
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version8_server_write_opcode(WowLoginWriter* writer, const Version8ServerOpcodeContainer* opcodes) {
+    switch (opcodes->opcode) {
+        case CMD_AUTH_LOGON_CHALLENGE:
+            WLM_CHECK_RETURN_CODE(version8_CMD_AUTH_LOGON_CHALLENGE_Server_write(writer, &opcodes->body.CMD_AUTH_LOGON_CHALLENGE_Server));
+            break;
+        case CMD_AUTH_LOGON_PROOF:
+            WLM_CHECK_RETURN_CODE(version8_CMD_AUTH_LOGON_PROOF_Server_write(writer, &opcodes->body.CMD_AUTH_LOGON_PROOF_Server));
+            break;
+        case CMD_AUTH_RECONNECT_CHALLENGE:
+            WLM_CHECK_RETURN_CODE(version8_CMD_AUTH_RECONNECT_CHALLENGE_Server_write(writer, &opcodes->body.CMD_AUTH_RECONNECT_CHALLENGE_Server));
+            break;
+        case CMD_AUTH_RECONNECT_PROOF:
+            WLM_CHECK_RETURN_CODE(version8_CMD_AUTH_RECONNECT_PROOF_Server_write(writer, &opcodes->body.CMD_AUTH_RECONNECT_PROOF_Server));
+            break;
+        case CMD_REALM_LIST:
+            WLM_CHECK_RETURN_CODE(version8_CMD_REALM_LIST_Server_write(writer, &opcodes->body.CMD_REALM_LIST_Server));
+            break;
+        case CMD_XFER_INITIATE:
+            WLM_CHECK_RETURN_CODE(version2_CMD_XFER_INITIATE_write(writer, &opcodes->body.CMD_XFER_INITIATE));
+            break;
+        case CMD_XFER_DATA:
+            WLM_CHECK_RETURN_CODE(version2_CMD_XFER_DATA_write(writer, &opcodes->body.CMD_XFER_DATA));
+            break;
+        default:
+            break;
+    }
+
+    return WLM_RESULT_SUCCESS;
 }
 
 WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version8_server_opcode_read(WowLoginReader* reader, Version8ServerOpcodeContainer* opcodes) {

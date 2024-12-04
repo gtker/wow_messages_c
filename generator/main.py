@@ -15,7 +15,6 @@ from print_addon_array import print_addon_array
 from print_aura_mask import print_aura_mask
 from print_cache_mask import print_cache_mask
 from print_enum import print_enum
-from print_named_guid import print_named_guid
 from print_struct import print_struct, container_has_c_members, struct_util
 from print_struct.print_tests import print_login_tests, print_world_tests, print_login_test_prefix, \
     print_login_test_suffix

@@ -164,6 +164,13 @@ size_t wwm_monster_move_spline_size(const MonsterMoveSpline* value);
 
 void wwm_monster_move_spline_free(const MonsterMoveSpline* value);
 
+WowWorldResult wwm_read_named_guid(WowWorldReader* stream, NamedGuid* value);
+#define READ_NAMED_GUID(variable) WWM_CHECK_RETURN_CODE(wwm_read_named_guid(reader, &variable))
+WowWorldResult wwm_write_named_guid(WowWorldWriter* stream, const NamedGuid* value);
+#define WRITE_NAMED_GUID(variable) WWM_CHECK_RETURN_CODE(wwm_write_named_guid(writer, &variable))
+size_t wwm_named_guid_size(const NamedGuid* value);
+void wwm_named_guid_free(NamedGuid* value);
+
 #define READ_ARRAY_ALLOCATE(variable, arrayLength, elementSize) \
     do                                                          \
     {                                                           \

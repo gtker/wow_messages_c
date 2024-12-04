@@ -101,6 +101,40 @@ std::vector<all::Vector3d> wwm_read_monster_move_spline(Reader& reader)
     return splines;
 }
 
+size_t wwm_named_guid_size(const NamedGuid& guid)
+{
+    size_t size = 8; /* guid */
+    const auto name = guid.name();
+    if (name)
+    {
+        size += name->size();
+    }
+
+    return size;
+}
+void wwm_write_named_guid(Writer& writer, const NamedGuid& guid)
+{
+    writer.write_u64(guid.guid());
+    const auto name = guid.name();
+
+    if (name)
+    {
+        writer.write_cstring(*name);
+    }
+}
+
+NamedGuid wwm_read_named_guid(Reader& reader)
+{
+    auto g = reader.read_u64();
+
+    if (g != 0)
+    {
+        return {g, reader.read_cstring()};
+    }
+
+    return {};
+}
+
 static uint32_t wwm_adler32(const unsigned char* data, const size_t len)
 {
     uint32_t a = 1, b = 0;
@@ -156,7 +190,7 @@ std::vector<unsigned char> decompress_data(const std::vector<unsigned char>& buf
 {
     auto source_length = static_cast<unsigned long>((buffer.size() - 2));
     unsigned long destination_length = 0;
-    auto result = puff(NULL, &destination_length, buffer.data() + 2, &source_length);
+    auto result = puff(nullptr, &destination_length, buffer.data() + 2, &source_length);
     if (result != 0)
     {
 #ifndef NDEBUG

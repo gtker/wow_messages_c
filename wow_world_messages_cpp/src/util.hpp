@@ -148,6 +148,10 @@ size_t wwm_monster_move_spline_size(const std::vector<all::Vector3d>& splines);
 void wwm_write_monster_move_spline(Writer& writer, const std::vector<all::Vector3d>& splines);
 std::vector<all::Vector3d> wwm_read_monster_move_spline(Reader& reader);
 
+size_t wwm_named_guid_size(const NamedGuid& guid);
+void wwm_write_named_guid(Writer& writer, const NamedGuid& guid);
+NamedGuid wwm_read_named_guid(Reader& reader);
+
 std::vector<unsigned char> compress_data(const std::vector<unsigned char>& buffer);
 std::vector<unsigned char> decompress_data(const std::vector<unsigned char>& buffer);
 }  // namespace util
