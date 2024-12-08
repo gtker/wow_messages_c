@@ -90,12 +90,13 @@ typedef struct {
     } body;
 } AllClientOpcodeContainer;
 
-WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult all_client_write_opcode(WowLoginWriter* writer, const AllClientOpcodeContainer* opcodes);
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult all_client_opcode_write(WowLoginWriter* writer, const AllClientOpcodeContainer* opcodes);
 
 WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult all_client_opcode_read(WowLoginReader* reader, AllClientOpcodeContainer* opcodes);
 
 WOW_LOGIN_MESSAGES_C_EXPORT void all_client_opcode_free(AllClientOpcodeContainer* opcodes);
 
+WOW_LOGIN_MESSAGES_C_EXPORT char* all_client_opcode_to_str(AllClientOpcodeContainer* opcodes);
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

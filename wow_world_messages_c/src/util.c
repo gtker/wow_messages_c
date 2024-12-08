@@ -299,7 +299,7 @@ size_t wwm_packed_guid_size(const uint64_t value)
 
 WowWorldResult wwm_read_packed_guid(WowWorldReader* stream, uint64_t* value)
 {
-    int i;
+    uint64_t i;
     uint8_t header;
     size_t index = WWM_CHECK_LENGTH(1);
 
@@ -312,7 +312,7 @@ WowWorldResult wwm_read_packed_guid(WowWorldReader* stream, uint64_t* value)
         if (byte_has_value)
         {
             index = WWM_CHECK_LENGTH(1);
-            *value |= stream->source[index] << i * 8;
+            *value |= (uint64_t)stream->source[index] << i * 8;
         }
     }
 
@@ -477,6 +477,35 @@ void wwm_named_guid_free(NamedGuid* value)
     }
 }
 
+WowWorldResult wwm_read_variable_item_random_property(WowWorldReader* reader, VariableItemRandomProperty* value)
+{
+    READ_U32(value->item_random_property_id);
+
+    if (value->item_random_property_id != 0)
+    {
+        READ_U32(value->item_suffix_factor);
+    }
+
+    return WWM_RESULT_SUCCESS;
+}
+
+WowWorldResult wwm_write_variable_item_random_property(WowWorldWriter* writer, const VariableItemRandomProperty* value)
+{
+    WRITE_U32(value->item_random_property_id);
+
+    if (value->item_random_property_id != 0)
+    {
+        WRITE_U32(value->item_suffix_factor);
+    }
+
+    return WWM_RESULT_SUCCESS;
+}
+
+size_t wwm_variable_item_random_property_size(const VariableItemRandomProperty* value)
+{
+    return (value->item_random_property_id == 0) ? 4 : 8;
+}
+
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldReader wwm_create_reader(const unsigned char* const source, const size_t length)
 {
     WowWorldReader reader;
@@ -505,6 +534,8 @@ WOW_WORLD_MESSAGES_C_EXPORT const char* wwm_error_code_to_string(const WowWorldR
             return "Not enough bytes";
         case WWM_RESULT_COMPRESSION_ERROR:
             return "Compression error";
+        case WWM_RESULT_MALLOC_FAIL:
+            return "Malloc fail";
     }
 
     return "";
@@ -567,6 +598,7 @@ size_t wwm_compress_data(const unsigned char* src, const size_t src_length, unsi
     dst[index] = (unsigned char)(adler32 >> 16);
     index += 1;
     dst[index] = (unsigned char)(adler32 >> 24);
+    index += 1;
 
     return index;
 }

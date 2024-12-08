@@ -355,6 +355,8 @@ WOW_LOGIN_MESSAGES_C_EXPORT const char* wlm_error_code_to_string(const WowLoginR
             return "Success";
         case WLM_RESULT_NOT_ENOUGH_BYTES:
             return "Not enough bytes";
+        case WLM_RESULT_MALLOC_FAIL:
+            return "Malloc fail";
     }
 
     return "";

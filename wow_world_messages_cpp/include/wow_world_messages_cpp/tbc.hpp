@@ -7999,6 +7999,17 @@ struct GuildBankSocket {
     uint32_t gem;
 };
 
+struct GuildBankSlot {
+    uint8_t slot;
+    uint32_t item;
+    VariableItemRandomProperty item_random_property_id;
+    uint8_t amount_of_items;
+    uint32_t enchant;
+    uint8_t charges;
+    uint8_t amount_of_sockets;
+    std::vector<tbc::GuildBankSocket> sockets;
+};
+
 struct GuildBankTab {
     std::string tab_name;
     std::string tab_icon;
@@ -13104,6 +13115,12 @@ struct CMSG_BATTLEMASTER_JOIN {
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
+struct SMSG_ADDON_INFO {
+    std::vector<Addon> addons;
+
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
+};
+
 struct CMSG_PET_UNLEARN {
     uint64_t pet;
 
@@ -14183,6 +14200,19 @@ struct CMSG_GUILD_BANK_QUERY_TAB {
     uint64_t bank;
     uint8_t tab;
     bool full_update;
+
+    WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
+};
+
+struct SMSG_GUILD_BANK_LIST {
+    uint64_t bank_balance;
+    uint8_t tab_id;
+    uint32_t amount_of_allowed_item_withdraws;
+    GuildBankTabResult tab_result;
+    uint8_t amount_of_bank_tabs;
+    std::vector<tbc::GuildBankTab> tabs;
+    uint8_t amount_of_slot_updates;
+    std::vector<tbc::GuildBankSlot> slot_updates;
 
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
@@ -19093,1533 +19123,1535 @@ struct ClientOpcode {
 
     template<typename T>
     // NOLINTNEXTLINE
-    T& get(); // All possible types have been specialized
+    WOW_WORLD_MESSAGES_CPP_EXPORT T& get(); // All possible types have been specialized
 
     template<typename T>
     // NOLINTNEXTLINE
-    T* get_if(); // All possible types have been specialized
+    WOW_WORLD_MESSAGES_CPP_EXPORT T* get_if(); // All possible types have been specialized
+
+    WOW_WORLD_MESSAGES_CPP_EXPORT const char* to_string() const;
 };
 
 template<>
-tbc::CMSG_BOOTME* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_BOOTME* ClientOpcode::get_if();
 template<>
-tbc::CMSG_BOOTME& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_BOOTME& ClientOpcode::get();
 template<>
-tbc::CMSG_DBLOOKUP* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_DBLOOKUP* ClientOpcode::get_if();
 template<>
-tbc::CMSG_DBLOOKUP& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_DBLOOKUP& ClientOpcode::get();
 template<>
-tbc::CMSG_WORLD_TELEPORT* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_WORLD_TELEPORT* ClientOpcode::get_if();
 template<>
-tbc::CMSG_WORLD_TELEPORT& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_WORLD_TELEPORT& ClientOpcode::get();
 template<>
-tbc::CMSG_TELEPORT_TO_UNIT* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_TELEPORT_TO_UNIT* ClientOpcode::get_if();
 template<>
-tbc::CMSG_TELEPORT_TO_UNIT& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_TELEPORT_TO_UNIT& ClientOpcode::get();
 template<>
-tbc::CMSG_CHAR_CREATE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHAR_CREATE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_CHAR_CREATE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHAR_CREATE& ClientOpcode::get();
 template<>
-tbc::CMSG_CHAR_ENUM* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHAR_ENUM* ClientOpcode::get_if();
 template<>
-tbc::CMSG_CHAR_ENUM& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHAR_ENUM& ClientOpcode::get();
 template<>
-tbc::CMSG_CHAR_DELETE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHAR_DELETE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_CHAR_DELETE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHAR_DELETE& ClientOpcode::get();
 template<>
-tbc::CMSG_PLAYER_LOGIN* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PLAYER_LOGIN* ClientOpcode::get_if();
 template<>
-tbc::CMSG_PLAYER_LOGIN& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PLAYER_LOGIN& ClientOpcode::get();
 template<>
-tbc::CMSG_PLAYER_LOGOUT* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PLAYER_LOGOUT* ClientOpcode::get_if();
 template<>
-tbc::CMSG_PLAYER_LOGOUT& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PLAYER_LOGOUT& ClientOpcode::get();
 template<>
-tbc::CMSG_LOGOUT_REQUEST* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_LOGOUT_REQUEST* ClientOpcode::get_if();
 template<>
-tbc::CMSG_LOGOUT_REQUEST& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_LOGOUT_REQUEST& ClientOpcode::get();
 template<>
-tbc::CMSG_LOGOUT_CANCEL* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_LOGOUT_CANCEL* ClientOpcode::get_if();
 template<>
-tbc::CMSG_LOGOUT_CANCEL& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_LOGOUT_CANCEL& ClientOpcode::get();
 template<>
-tbc::CMSG_NAME_QUERY* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_NAME_QUERY* ClientOpcode::get_if();
 template<>
-tbc::CMSG_NAME_QUERY& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_NAME_QUERY& ClientOpcode::get();
 template<>
-tbc::CMSG_PET_NAME_QUERY* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PET_NAME_QUERY* ClientOpcode::get_if();
 template<>
-tbc::CMSG_PET_NAME_QUERY& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PET_NAME_QUERY& ClientOpcode::get();
 template<>
-tbc::CMSG_GUILD_QUERY* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_QUERY* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GUILD_QUERY& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_QUERY& ClientOpcode::get();
 template<>
-tbc::CMSG_ITEM_QUERY_SINGLE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_ITEM_QUERY_SINGLE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_ITEM_QUERY_SINGLE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_ITEM_QUERY_SINGLE& ClientOpcode::get();
 template<>
-tbc::CMSG_PAGE_TEXT_QUERY* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PAGE_TEXT_QUERY* ClientOpcode::get_if();
 template<>
-tbc::CMSG_PAGE_TEXT_QUERY& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PAGE_TEXT_QUERY& ClientOpcode::get();
 template<>
-tbc::CMSG_QUEST_QUERY* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_QUEST_QUERY* ClientOpcode::get_if();
 template<>
-tbc::CMSG_QUEST_QUERY& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_QUEST_QUERY& ClientOpcode::get();
 template<>
-tbc::CMSG_GAMEOBJECT_QUERY* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GAMEOBJECT_QUERY* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GAMEOBJECT_QUERY& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GAMEOBJECT_QUERY& ClientOpcode::get();
 template<>
-tbc::CMSG_CREATURE_QUERY* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CREATURE_QUERY* ClientOpcode::get_if();
 template<>
-tbc::CMSG_CREATURE_QUERY& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CREATURE_QUERY& ClientOpcode::get();
 template<>
-tbc::CMSG_WHO* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_WHO* ClientOpcode::get_if();
 template<>
-tbc::CMSG_WHO& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_WHO& ClientOpcode::get();
 template<>
-tbc::CMSG_WHOIS* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_WHOIS* ClientOpcode::get_if();
 template<>
-tbc::CMSG_WHOIS& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_WHOIS& ClientOpcode::get();
 template<>
-tbc::CMSG_CONTACT_LIST* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CONTACT_LIST* ClientOpcode::get_if();
 template<>
-tbc::CMSG_CONTACT_LIST& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CONTACT_LIST& ClientOpcode::get();
 template<>
-tbc::CMSG_ADD_FRIEND* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_ADD_FRIEND* ClientOpcode::get_if();
 template<>
-tbc::CMSG_ADD_FRIEND& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_ADD_FRIEND& ClientOpcode::get();
 template<>
-tbc::CMSG_DEL_FRIEND* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_DEL_FRIEND* ClientOpcode::get_if();
 template<>
-tbc::CMSG_DEL_FRIEND& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_DEL_FRIEND& ClientOpcode::get();
 template<>
-tbc::CMSG_SET_CONTACT_NOTES* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_CONTACT_NOTES* ClientOpcode::get_if();
 template<>
-tbc::CMSG_SET_CONTACT_NOTES& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_CONTACT_NOTES& ClientOpcode::get();
 template<>
-tbc::CMSG_ADD_IGNORE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_ADD_IGNORE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_ADD_IGNORE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_ADD_IGNORE& ClientOpcode::get();
 template<>
-tbc::CMSG_DEL_IGNORE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_DEL_IGNORE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_DEL_IGNORE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_DEL_IGNORE& ClientOpcode::get();
 template<>
-tbc::CMSG_GROUP_INVITE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GROUP_INVITE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GROUP_INVITE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GROUP_INVITE& ClientOpcode::get();
 template<>
-tbc::CMSG_GROUP_CANCEL* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GROUP_CANCEL* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GROUP_CANCEL& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GROUP_CANCEL& ClientOpcode::get();
 template<>
-tbc::CMSG_GROUP_ACCEPT* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GROUP_ACCEPT* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GROUP_ACCEPT& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GROUP_ACCEPT& ClientOpcode::get();
 template<>
-tbc::CMSG_GROUP_DECLINE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GROUP_DECLINE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GROUP_DECLINE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GROUP_DECLINE& ClientOpcode::get();
 template<>
-tbc::CMSG_GROUP_UNINVITE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GROUP_UNINVITE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GROUP_UNINVITE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GROUP_UNINVITE& ClientOpcode::get();
 template<>
-tbc::CMSG_GROUP_UNINVITE_GUID* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GROUP_UNINVITE_GUID* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GROUP_UNINVITE_GUID& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GROUP_UNINVITE_GUID& ClientOpcode::get();
 template<>
-tbc::CMSG_GROUP_SET_LEADER* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GROUP_SET_LEADER* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GROUP_SET_LEADER& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GROUP_SET_LEADER& ClientOpcode::get();
 template<>
-tbc::CMSG_LOOT_METHOD* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_LOOT_METHOD* ClientOpcode::get_if();
 template<>
-tbc::CMSG_LOOT_METHOD& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_LOOT_METHOD& ClientOpcode::get();
 template<>
-tbc::CMSG_GROUP_DISBAND* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GROUP_DISBAND* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GROUP_DISBAND& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GROUP_DISBAND& ClientOpcode::get();
 template<>
-tbc::CMSG_GUILD_CREATE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_CREATE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GUILD_CREATE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_CREATE& ClientOpcode::get();
 template<>
-tbc::CMSG_GUILD_INVITE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_INVITE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GUILD_INVITE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_INVITE& ClientOpcode::get();
 template<>
-tbc::CMSG_GUILD_ACCEPT* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_ACCEPT* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GUILD_ACCEPT& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_ACCEPT& ClientOpcode::get();
 template<>
-tbc::CMSG_GUILD_DECLINE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_DECLINE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GUILD_DECLINE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_DECLINE& ClientOpcode::get();
 template<>
-tbc::CMSG_GUILD_INFO* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_INFO* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GUILD_INFO& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_INFO& ClientOpcode::get();
 template<>
-tbc::CMSG_GUILD_ROSTER* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_ROSTER* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GUILD_ROSTER& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_ROSTER& ClientOpcode::get();
 template<>
-tbc::CMSG_GUILD_PROMOTE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_PROMOTE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GUILD_PROMOTE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_PROMOTE& ClientOpcode::get();
 template<>
-tbc::CMSG_GUILD_DEMOTE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_DEMOTE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GUILD_DEMOTE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_DEMOTE& ClientOpcode::get();
 template<>
-tbc::CMSG_GUILD_LEAVE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_LEAVE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GUILD_LEAVE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_LEAVE& ClientOpcode::get();
 template<>
-tbc::CMSG_GUILD_REMOVE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_REMOVE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GUILD_REMOVE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_REMOVE& ClientOpcode::get();
 template<>
-tbc::CMSG_GUILD_DISBAND* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_DISBAND* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GUILD_DISBAND& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_DISBAND& ClientOpcode::get();
 template<>
-tbc::CMSG_GUILD_LEADER* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_LEADER* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GUILD_LEADER& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_LEADER& ClientOpcode::get();
 template<>
-tbc::CMSG_GUILD_MOTD* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_MOTD* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GUILD_MOTD& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_MOTD& ClientOpcode::get();
 template<>
-tbc::CMSG_MESSAGECHAT* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MESSAGECHAT* ClientOpcode::get_if();
 template<>
-tbc::CMSG_MESSAGECHAT& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MESSAGECHAT& ClientOpcode::get();
 template<>
-tbc::CMSG_JOIN_CHANNEL* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_JOIN_CHANNEL* ClientOpcode::get_if();
 template<>
-tbc::CMSG_JOIN_CHANNEL& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_JOIN_CHANNEL& ClientOpcode::get();
 template<>
-tbc::CMSG_LEAVE_CHANNEL* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_LEAVE_CHANNEL* ClientOpcode::get_if();
 template<>
-tbc::CMSG_LEAVE_CHANNEL& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_LEAVE_CHANNEL& ClientOpcode::get();
 template<>
-tbc::CMSG_CHANNEL_LIST* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHANNEL_LIST* ClientOpcode::get_if();
 template<>
-tbc::CMSG_CHANNEL_LIST& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHANNEL_LIST& ClientOpcode::get();
 template<>
-tbc::CMSG_CHANNEL_PASSWORD* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHANNEL_PASSWORD* ClientOpcode::get_if();
 template<>
-tbc::CMSG_CHANNEL_PASSWORD& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHANNEL_PASSWORD& ClientOpcode::get();
 template<>
-tbc::CMSG_CHANNEL_SET_OWNER* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHANNEL_SET_OWNER* ClientOpcode::get_if();
 template<>
-tbc::CMSG_CHANNEL_SET_OWNER& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHANNEL_SET_OWNER& ClientOpcode::get();
 template<>
-tbc::CMSG_CHANNEL_OWNER* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHANNEL_OWNER* ClientOpcode::get_if();
 template<>
-tbc::CMSG_CHANNEL_OWNER& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHANNEL_OWNER& ClientOpcode::get();
 template<>
-tbc::CMSG_CHANNEL_MODERATOR* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHANNEL_MODERATOR* ClientOpcode::get_if();
 template<>
-tbc::CMSG_CHANNEL_MODERATOR& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHANNEL_MODERATOR& ClientOpcode::get();
 template<>
-tbc::CMSG_CHANNEL_UNMODERATOR* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHANNEL_UNMODERATOR* ClientOpcode::get_if();
 template<>
-tbc::CMSG_CHANNEL_UNMODERATOR& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHANNEL_UNMODERATOR& ClientOpcode::get();
 template<>
-tbc::CMSG_CHANNEL_MUTE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHANNEL_MUTE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_CHANNEL_MUTE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHANNEL_MUTE& ClientOpcode::get();
 template<>
-tbc::CMSG_CHANNEL_UNMUTE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHANNEL_UNMUTE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_CHANNEL_UNMUTE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHANNEL_UNMUTE& ClientOpcode::get();
 template<>
-tbc::CMSG_CHANNEL_INVITE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHANNEL_INVITE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_CHANNEL_INVITE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHANNEL_INVITE& ClientOpcode::get();
 template<>
-tbc::CMSG_CHANNEL_KICK* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHANNEL_KICK* ClientOpcode::get_if();
 template<>
-tbc::CMSG_CHANNEL_KICK& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHANNEL_KICK& ClientOpcode::get();
 template<>
-tbc::CMSG_CHANNEL_BAN* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHANNEL_BAN* ClientOpcode::get_if();
 template<>
-tbc::CMSG_CHANNEL_BAN& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHANNEL_BAN& ClientOpcode::get();
 template<>
-tbc::CMSG_CHANNEL_UNBAN* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHANNEL_UNBAN* ClientOpcode::get_if();
 template<>
-tbc::CMSG_CHANNEL_UNBAN& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHANNEL_UNBAN& ClientOpcode::get();
 template<>
-tbc::CMSG_CHANNEL_ANNOUNCEMENTS* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHANNEL_ANNOUNCEMENTS* ClientOpcode::get_if();
 template<>
-tbc::CMSG_CHANNEL_ANNOUNCEMENTS& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHANNEL_ANNOUNCEMENTS& ClientOpcode::get();
 template<>
-tbc::CMSG_CHANNEL_MODERATE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHANNEL_MODERATE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_CHANNEL_MODERATE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHANNEL_MODERATE& ClientOpcode::get();
 template<>
-tbc::CMSG_USE_ITEM* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_USE_ITEM* ClientOpcode::get_if();
 template<>
-tbc::CMSG_USE_ITEM& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_USE_ITEM& ClientOpcode::get();
 template<>
-tbc::CMSG_OPEN_ITEM* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_OPEN_ITEM* ClientOpcode::get_if();
 template<>
-tbc::CMSG_OPEN_ITEM& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_OPEN_ITEM& ClientOpcode::get();
 template<>
-tbc::CMSG_READ_ITEM* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_READ_ITEM* ClientOpcode::get_if();
 template<>
-tbc::CMSG_READ_ITEM& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_READ_ITEM& ClientOpcode::get();
 template<>
-tbc::CMSG_GAMEOBJ_USE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GAMEOBJ_USE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GAMEOBJ_USE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GAMEOBJ_USE& ClientOpcode::get();
 template<>
-tbc::CMSG_AREATRIGGER* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_AREATRIGGER* ClientOpcode::get_if();
 template<>
-tbc::CMSG_AREATRIGGER& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_AREATRIGGER& ClientOpcode::get();
 template<>
-tbc::MSG_MOVE_START_FORWARD_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_FORWARD_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_MOVE_START_FORWARD_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_FORWARD_Client& ClientOpcode::get();
 template<>
-tbc::MSG_MOVE_START_BACKWARD_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_BACKWARD_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_MOVE_START_BACKWARD_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_BACKWARD_Client& ClientOpcode::get();
 template<>
-tbc::MSG_MOVE_STOP_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_STOP_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_MOVE_STOP_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_STOP_Client& ClientOpcode::get();
 template<>
-tbc::MSG_MOVE_START_STRAFE_LEFT_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_STRAFE_LEFT_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_MOVE_START_STRAFE_LEFT_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_STRAFE_LEFT_Client& ClientOpcode::get();
 template<>
-tbc::MSG_MOVE_START_STRAFE_RIGHT_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_STRAFE_RIGHT_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_MOVE_START_STRAFE_RIGHT_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_STRAFE_RIGHT_Client& ClientOpcode::get();
 template<>
-tbc::MSG_MOVE_STOP_STRAFE_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_STOP_STRAFE_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_MOVE_STOP_STRAFE_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_STOP_STRAFE_Client& ClientOpcode::get();
 template<>
-tbc::MSG_MOVE_JUMP_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_JUMP_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_MOVE_JUMP_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_JUMP_Client& ClientOpcode::get();
 template<>
-tbc::MSG_MOVE_START_TURN_LEFT_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_TURN_LEFT_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_MOVE_START_TURN_LEFT_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_TURN_LEFT_Client& ClientOpcode::get();
 template<>
-tbc::MSG_MOVE_START_TURN_RIGHT_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_TURN_RIGHT_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_MOVE_START_TURN_RIGHT_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_TURN_RIGHT_Client& ClientOpcode::get();
 template<>
-tbc::MSG_MOVE_STOP_TURN_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_STOP_TURN_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_MOVE_STOP_TURN_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_STOP_TURN_Client& ClientOpcode::get();
 template<>
-tbc::MSG_MOVE_START_PITCH_UP_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_PITCH_UP_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_MOVE_START_PITCH_UP_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_PITCH_UP_Client& ClientOpcode::get();
 template<>
-tbc::MSG_MOVE_START_PITCH_DOWN_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_PITCH_DOWN_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_MOVE_START_PITCH_DOWN_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_PITCH_DOWN_Client& ClientOpcode::get();
 template<>
-tbc::MSG_MOVE_STOP_PITCH_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_STOP_PITCH_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_MOVE_STOP_PITCH_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_STOP_PITCH_Client& ClientOpcode::get();
 template<>
-tbc::MSG_MOVE_SET_RUN_MODE_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_SET_RUN_MODE_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_MOVE_SET_RUN_MODE_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_SET_RUN_MODE_Client& ClientOpcode::get();
 template<>
-tbc::MSG_MOVE_SET_WALK_MODE_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_SET_WALK_MODE_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_MOVE_SET_WALK_MODE_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_SET_WALK_MODE_Client& ClientOpcode::get();
 template<>
-tbc::MSG_MOVE_TELEPORT_Server* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_TELEPORT_Server* ClientOpcode::get_if();
 template<>
-tbc::MSG_MOVE_TELEPORT_Server& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_TELEPORT_Server& ClientOpcode::get();
 template<>
-tbc::MSG_MOVE_TELEPORT_ACK_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_TELEPORT_ACK_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_MOVE_TELEPORT_ACK_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_TELEPORT_ACK_Client& ClientOpcode::get();
 template<>
-tbc::MSG_MOVE_FALL_LAND_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_FALL_LAND_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_MOVE_FALL_LAND_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_FALL_LAND_Client& ClientOpcode::get();
 template<>
-tbc::MSG_MOVE_START_SWIM_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_SWIM_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_MOVE_START_SWIM_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_SWIM_Client& ClientOpcode::get();
 template<>
-tbc::MSG_MOVE_STOP_SWIM_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_STOP_SWIM_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_MOVE_STOP_SWIM_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_STOP_SWIM_Client& ClientOpcode::get();
 template<>
-tbc::MSG_MOVE_SET_FACING_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_SET_FACING_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_MOVE_SET_FACING_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_SET_FACING_Client& ClientOpcode::get();
 template<>
-tbc::MSG_MOVE_SET_PITCH_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_SET_PITCH_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_MOVE_SET_PITCH_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_SET_PITCH_Client& ClientOpcode::get();
 template<>
-tbc::MSG_MOVE_WORLDPORT_ACK* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_WORLDPORT_ACK* ClientOpcode::get_if();
 template<>
-tbc::MSG_MOVE_WORLDPORT_ACK& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_WORLDPORT_ACK& ClientOpcode::get();
 template<>
-tbc::CMSG_MOVE_SET_RAW_POSITION* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MOVE_SET_RAW_POSITION* ClientOpcode::get_if();
 template<>
-tbc::CMSG_MOVE_SET_RAW_POSITION& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MOVE_SET_RAW_POSITION& ClientOpcode::get();
 template<>
-tbc::CMSG_FORCE_RUN_SPEED_CHANGE_ACK* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_FORCE_RUN_SPEED_CHANGE_ACK* ClientOpcode::get_if();
 template<>
-tbc::CMSG_FORCE_RUN_SPEED_CHANGE_ACK& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_FORCE_RUN_SPEED_CHANGE_ACK& ClientOpcode::get();
 template<>
-tbc::CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK* ClientOpcode::get_if();
 template<>
-tbc::CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK& ClientOpcode::get();
 template<>
-tbc::CMSG_FORCE_SWIM_SPEED_CHANGE_ACK* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_FORCE_SWIM_SPEED_CHANGE_ACK* ClientOpcode::get_if();
 template<>
-tbc::CMSG_FORCE_SWIM_SPEED_CHANGE_ACK& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_FORCE_SWIM_SPEED_CHANGE_ACK& ClientOpcode::get();
 template<>
-tbc::CMSG_FORCE_MOVE_ROOT_ACK* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_FORCE_MOVE_ROOT_ACK* ClientOpcode::get_if();
 template<>
-tbc::CMSG_FORCE_MOVE_ROOT_ACK& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_FORCE_MOVE_ROOT_ACK& ClientOpcode::get();
 template<>
-tbc::CMSG_FORCE_MOVE_UNROOT_ACK* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_FORCE_MOVE_UNROOT_ACK* ClientOpcode::get_if();
 template<>
-tbc::CMSG_FORCE_MOVE_UNROOT_ACK& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_FORCE_MOVE_UNROOT_ACK& ClientOpcode::get();
 template<>
-tbc::MSG_MOVE_HEARTBEAT_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_HEARTBEAT_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_MOVE_HEARTBEAT_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_HEARTBEAT_Client& ClientOpcode::get();
 template<>
-tbc::CMSG_MOVE_KNOCK_BACK_ACK* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MOVE_KNOCK_BACK_ACK* ClientOpcode::get_if();
 template<>
-tbc::CMSG_MOVE_KNOCK_BACK_ACK& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MOVE_KNOCK_BACK_ACK& ClientOpcode::get();
 template<>
-tbc::CMSG_MOVE_HOVER_ACK* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MOVE_HOVER_ACK* ClientOpcode::get_if();
 template<>
-tbc::CMSG_MOVE_HOVER_ACK& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MOVE_HOVER_ACK& ClientOpcode::get();
 template<>
-tbc::MSG_MOVE_HOVER* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_HOVER* ClientOpcode::get_if();
 template<>
-tbc::MSG_MOVE_HOVER& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_HOVER& ClientOpcode::get();
 template<>
-tbc::CMSG_NEXT_CINEMATIC_CAMERA* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_NEXT_CINEMATIC_CAMERA* ClientOpcode::get_if();
 template<>
-tbc::CMSG_NEXT_CINEMATIC_CAMERA& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_NEXT_CINEMATIC_CAMERA& ClientOpcode::get();
 template<>
-tbc::CMSG_COMPLETE_CINEMATIC* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_COMPLETE_CINEMATIC* ClientOpcode::get_if();
 template<>
-tbc::CMSG_COMPLETE_CINEMATIC& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_COMPLETE_CINEMATIC& ClientOpcode::get();
 template<>
-tbc::CMSG_TUTORIAL_FLAG* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_TUTORIAL_FLAG* ClientOpcode::get_if();
 template<>
-tbc::CMSG_TUTORIAL_FLAG& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_TUTORIAL_FLAG& ClientOpcode::get();
 template<>
-tbc::CMSG_TUTORIAL_CLEAR* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_TUTORIAL_CLEAR* ClientOpcode::get_if();
 template<>
-tbc::CMSG_TUTORIAL_CLEAR& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_TUTORIAL_CLEAR& ClientOpcode::get();
 template<>
-tbc::CMSG_TUTORIAL_RESET* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_TUTORIAL_RESET* ClientOpcode::get_if();
 template<>
-tbc::CMSG_TUTORIAL_RESET& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_TUTORIAL_RESET& ClientOpcode::get();
 template<>
-tbc::CMSG_STANDSTATECHANGE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_STANDSTATECHANGE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_STANDSTATECHANGE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_STANDSTATECHANGE& ClientOpcode::get();
 template<>
-tbc::CMSG_EMOTE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_EMOTE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_EMOTE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_EMOTE& ClientOpcode::get();
 template<>
-tbc::CMSG_TEXT_EMOTE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_TEXT_EMOTE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_TEXT_EMOTE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_TEXT_EMOTE& ClientOpcode::get();
 template<>
-tbc::CMSG_AUTOSTORE_LOOT_ITEM* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_AUTOSTORE_LOOT_ITEM* ClientOpcode::get_if();
 template<>
-tbc::CMSG_AUTOSTORE_LOOT_ITEM& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_AUTOSTORE_LOOT_ITEM& ClientOpcode::get();
 template<>
-tbc::CMSG_AUTOEQUIP_ITEM* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_AUTOEQUIP_ITEM* ClientOpcode::get_if();
 template<>
-tbc::CMSG_AUTOEQUIP_ITEM& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_AUTOEQUIP_ITEM& ClientOpcode::get();
 template<>
-tbc::CMSG_AUTOSTORE_BAG_ITEM* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_AUTOSTORE_BAG_ITEM* ClientOpcode::get_if();
 template<>
-tbc::CMSG_AUTOSTORE_BAG_ITEM& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_AUTOSTORE_BAG_ITEM& ClientOpcode::get();
 template<>
-tbc::CMSG_SWAP_ITEM* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SWAP_ITEM* ClientOpcode::get_if();
 template<>
-tbc::CMSG_SWAP_ITEM& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SWAP_ITEM& ClientOpcode::get();
 template<>
-tbc::CMSG_SWAP_INV_ITEM* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SWAP_INV_ITEM* ClientOpcode::get_if();
 template<>
-tbc::CMSG_SWAP_INV_ITEM& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SWAP_INV_ITEM& ClientOpcode::get();
 template<>
-tbc::CMSG_SPLIT_ITEM* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SPLIT_ITEM* ClientOpcode::get_if();
 template<>
-tbc::CMSG_SPLIT_ITEM& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SPLIT_ITEM& ClientOpcode::get();
 template<>
-tbc::CMSG_AUTOEQUIP_ITEM_SLOT* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_AUTOEQUIP_ITEM_SLOT* ClientOpcode::get_if();
 template<>
-tbc::CMSG_AUTOEQUIP_ITEM_SLOT& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_AUTOEQUIP_ITEM_SLOT& ClientOpcode::get();
 template<>
-tbc::CMSG_DESTROYITEM* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_DESTROYITEM* ClientOpcode::get_if();
 template<>
-tbc::CMSG_DESTROYITEM& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_DESTROYITEM& ClientOpcode::get();
 template<>
-tbc::CMSG_INSPECT* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_INSPECT* ClientOpcode::get_if();
 template<>
-tbc::CMSG_INSPECT& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_INSPECT& ClientOpcode::get();
 template<>
-tbc::CMSG_INITIATE_TRADE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_INITIATE_TRADE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_INITIATE_TRADE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_INITIATE_TRADE& ClientOpcode::get();
 template<>
-tbc::CMSG_BEGIN_TRADE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_BEGIN_TRADE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_BEGIN_TRADE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_BEGIN_TRADE& ClientOpcode::get();
 template<>
-tbc::CMSG_BUSY_TRADE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_BUSY_TRADE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_BUSY_TRADE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_BUSY_TRADE& ClientOpcode::get();
 template<>
-tbc::CMSG_IGNORE_TRADE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_IGNORE_TRADE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_IGNORE_TRADE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_IGNORE_TRADE& ClientOpcode::get();
 template<>
-tbc::CMSG_ACCEPT_TRADE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_ACCEPT_TRADE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_ACCEPT_TRADE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_ACCEPT_TRADE& ClientOpcode::get();
 template<>
-tbc::CMSG_UNACCEPT_TRADE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_UNACCEPT_TRADE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_UNACCEPT_TRADE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_UNACCEPT_TRADE& ClientOpcode::get();
 template<>
-tbc::CMSG_CANCEL_TRADE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CANCEL_TRADE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_CANCEL_TRADE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CANCEL_TRADE& ClientOpcode::get();
 template<>
-tbc::CMSG_SET_TRADE_ITEM* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_TRADE_ITEM* ClientOpcode::get_if();
 template<>
-tbc::CMSG_SET_TRADE_ITEM& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_TRADE_ITEM& ClientOpcode::get();
 template<>
-tbc::CMSG_CLEAR_TRADE_ITEM* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CLEAR_TRADE_ITEM* ClientOpcode::get_if();
 template<>
-tbc::CMSG_CLEAR_TRADE_ITEM& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CLEAR_TRADE_ITEM& ClientOpcode::get();
 template<>
-tbc::CMSG_SET_TRADE_GOLD* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_TRADE_GOLD* ClientOpcode::get_if();
 template<>
-tbc::CMSG_SET_TRADE_GOLD& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_TRADE_GOLD& ClientOpcode::get();
 template<>
-tbc::CMSG_SET_FACTION_ATWAR* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_FACTION_ATWAR* ClientOpcode::get_if();
 template<>
-tbc::CMSG_SET_FACTION_ATWAR& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_FACTION_ATWAR& ClientOpcode::get();
 template<>
-tbc::CMSG_SET_ACTION_BUTTON* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_ACTION_BUTTON* ClientOpcode::get_if();
 template<>
-tbc::CMSG_SET_ACTION_BUTTON& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_ACTION_BUTTON& ClientOpcode::get();
 template<>
-tbc::CMSG_CAST_SPELL* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CAST_SPELL* ClientOpcode::get_if();
 template<>
-tbc::CMSG_CAST_SPELL& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CAST_SPELL& ClientOpcode::get();
 template<>
-tbc::CMSG_CANCEL_CAST* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CANCEL_CAST* ClientOpcode::get_if();
 template<>
-tbc::CMSG_CANCEL_CAST& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CANCEL_CAST& ClientOpcode::get();
 template<>
-tbc::CMSG_CANCEL_AURA* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CANCEL_AURA* ClientOpcode::get_if();
 template<>
-tbc::CMSG_CANCEL_AURA& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CANCEL_AURA& ClientOpcode::get();
 template<>
-tbc::CMSG_CANCEL_CHANNELLING* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CANCEL_CHANNELLING* ClientOpcode::get_if();
 template<>
-tbc::CMSG_CANCEL_CHANNELLING& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CANCEL_CHANNELLING& ClientOpcode::get();
 template<>
-tbc::CMSG_SET_SELECTION* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_SELECTION* ClientOpcode::get_if();
 template<>
-tbc::CMSG_SET_SELECTION& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_SELECTION& ClientOpcode::get();
 template<>
-tbc::CMSG_SET_TARGET_OBSOLETE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_TARGET_OBSOLETE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_SET_TARGET_OBSOLETE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_TARGET_OBSOLETE& ClientOpcode::get();
 template<>
-tbc::CMSG_ATTACKSWING* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_ATTACKSWING* ClientOpcode::get_if();
 template<>
-tbc::CMSG_ATTACKSWING& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_ATTACKSWING& ClientOpcode::get();
 template<>
-tbc::CMSG_ATTACKSTOP* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_ATTACKSTOP* ClientOpcode::get_if();
 template<>
-tbc::CMSG_ATTACKSTOP& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_ATTACKSTOP& ClientOpcode::get();
 template<>
-tbc::CMSG_REPOP_REQUEST* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_REPOP_REQUEST* ClientOpcode::get_if();
 template<>
-tbc::CMSG_REPOP_REQUEST& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_REPOP_REQUEST& ClientOpcode::get();
 template<>
-tbc::CMSG_RESURRECT_RESPONSE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_RESURRECT_RESPONSE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_RESURRECT_RESPONSE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_RESURRECT_RESPONSE& ClientOpcode::get();
 template<>
-tbc::CMSG_LOOT* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_LOOT* ClientOpcode::get_if();
 template<>
-tbc::CMSG_LOOT& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_LOOT& ClientOpcode::get();
 template<>
-tbc::CMSG_LOOT_MONEY* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_LOOT_MONEY* ClientOpcode::get_if();
 template<>
-tbc::CMSG_LOOT_MONEY& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_LOOT_MONEY& ClientOpcode::get();
 template<>
-tbc::CMSG_LOOT_RELEASE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_LOOT_RELEASE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_LOOT_RELEASE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_LOOT_RELEASE& ClientOpcode::get();
 template<>
-tbc::CMSG_DUEL_ACCEPTED* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_DUEL_ACCEPTED* ClientOpcode::get_if();
 template<>
-tbc::CMSG_DUEL_ACCEPTED& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_DUEL_ACCEPTED& ClientOpcode::get();
 template<>
-tbc::CMSG_DUEL_CANCELLED* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_DUEL_CANCELLED* ClientOpcode::get_if();
 template<>
-tbc::CMSG_DUEL_CANCELLED& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_DUEL_CANCELLED& ClientOpcode::get();
 template<>
-tbc::CMSG_MOUNTSPECIAL_ANIM* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MOUNTSPECIAL_ANIM* ClientOpcode::get_if();
 template<>
-tbc::CMSG_MOUNTSPECIAL_ANIM& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MOUNTSPECIAL_ANIM& ClientOpcode::get();
 template<>
-tbc::CMSG_PET_SET_ACTION* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PET_SET_ACTION* ClientOpcode::get_if();
 template<>
-tbc::CMSG_PET_SET_ACTION& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PET_SET_ACTION& ClientOpcode::get();
 template<>
-tbc::CMSG_PET_ACTION* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PET_ACTION* ClientOpcode::get_if();
 template<>
-tbc::CMSG_PET_ACTION& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PET_ACTION& ClientOpcode::get();
 template<>
-tbc::CMSG_PET_ABANDON* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PET_ABANDON* ClientOpcode::get_if();
 template<>
-tbc::CMSG_PET_ABANDON& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PET_ABANDON& ClientOpcode::get();
 template<>
-tbc::CMSG_PET_RENAME* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PET_RENAME* ClientOpcode::get_if();
 template<>
-tbc::CMSG_PET_RENAME& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PET_RENAME& ClientOpcode::get();
 template<>
-tbc::CMSG_GOSSIP_HELLO* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GOSSIP_HELLO* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GOSSIP_HELLO& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GOSSIP_HELLO& ClientOpcode::get();
 template<>
-tbc::CMSG_GOSSIP_SELECT_OPTION* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GOSSIP_SELECT_OPTION* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GOSSIP_SELECT_OPTION& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GOSSIP_SELECT_OPTION& ClientOpcode::get();
 template<>
-tbc::CMSG_NPC_TEXT_QUERY* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_NPC_TEXT_QUERY* ClientOpcode::get_if();
 template<>
-tbc::CMSG_NPC_TEXT_QUERY& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_NPC_TEXT_QUERY& ClientOpcode::get();
 template<>
-tbc::CMSG_QUESTGIVER_STATUS_QUERY* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_QUESTGIVER_STATUS_QUERY* ClientOpcode::get_if();
 template<>
-tbc::CMSG_QUESTGIVER_STATUS_QUERY& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_QUESTGIVER_STATUS_QUERY& ClientOpcode::get();
 template<>
-tbc::CMSG_QUESTGIVER_HELLO* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_QUESTGIVER_HELLO* ClientOpcode::get_if();
 template<>
-tbc::CMSG_QUESTGIVER_HELLO& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_QUESTGIVER_HELLO& ClientOpcode::get();
 template<>
-tbc::CMSG_QUESTGIVER_QUERY_QUEST* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_QUESTGIVER_QUERY_QUEST* ClientOpcode::get_if();
 template<>
-tbc::CMSG_QUESTGIVER_QUERY_QUEST& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_QUESTGIVER_QUERY_QUEST& ClientOpcode::get();
 template<>
-tbc::CMSG_QUESTGIVER_QUEST_AUTOLAUNCH* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_QUESTGIVER_QUEST_AUTOLAUNCH* ClientOpcode::get_if();
 template<>
-tbc::CMSG_QUESTGIVER_QUEST_AUTOLAUNCH& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_QUESTGIVER_QUEST_AUTOLAUNCH& ClientOpcode::get();
 template<>
-tbc::CMSG_QUESTGIVER_ACCEPT_QUEST* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_QUESTGIVER_ACCEPT_QUEST* ClientOpcode::get_if();
 template<>
-tbc::CMSG_QUESTGIVER_ACCEPT_QUEST& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_QUESTGIVER_ACCEPT_QUEST& ClientOpcode::get();
 template<>
-tbc::CMSG_QUESTGIVER_COMPLETE_QUEST* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_QUESTGIVER_COMPLETE_QUEST* ClientOpcode::get_if();
 template<>
-tbc::CMSG_QUESTGIVER_COMPLETE_QUEST& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_QUESTGIVER_COMPLETE_QUEST& ClientOpcode::get();
 template<>
-tbc::CMSG_QUESTGIVER_REQUEST_REWARD* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_QUESTGIVER_REQUEST_REWARD* ClientOpcode::get_if();
 template<>
-tbc::CMSG_QUESTGIVER_REQUEST_REWARD& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_QUESTGIVER_REQUEST_REWARD& ClientOpcode::get();
 template<>
-tbc::CMSG_QUESTGIVER_CHOOSE_REWARD* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_QUESTGIVER_CHOOSE_REWARD* ClientOpcode::get_if();
 template<>
-tbc::CMSG_QUESTGIVER_CHOOSE_REWARD& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_QUESTGIVER_CHOOSE_REWARD& ClientOpcode::get();
 template<>
-tbc::CMSG_QUESTGIVER_CANCEL* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_QUESTGIVER_CANCEL* ClientOpcode::get_if();
 template<>
-tbc::CMSG_QUESTGIVER_CANCEL& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_QUESTGIVER_CANCEL& ClientOpcode::get();
 template<>
-tbc::CMSG_QUESTLOG_SWAP_QUEST* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_QUESTLOG_SWAP_QUEST* ClientOpcode::get_if();
 template<>
-tbc::CMSG_QUESTLOG_SWAP_QUEST& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_QUESTLOG_SWAP_QUEST& ClientOpcode::get();
 template<>
-tbc::CMSG_QUESTLOG_REMOVE_QUEST* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_QUESTLOG_REMOVE_QUEST* ClientOpcode::get_if();
 template<>
-tbc::CMSG_QUESTLOG_REMOVE_QUEST& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_QUESTLOG_REMOVE_QUEST& ClientOpcode::get();
 template<>
-tbc::CMSG_QUEST_CONFIRM_ACCEPT* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_QUEST_CONFIRM_ACCEPT* ClientOpcode::get_if();
 template<>
-tbc::CMSG_QUEST_CONFIRM_ACCEPT& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_QUEST_CONFIRM_ACCEPT& ClientOpcode::get();
 template<>
-tbc::CMSG_PUSHQUESTTOPARTY* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PUSHQUESTTOPARTY* ClientOpcode::get_if();
 template<>
-tbc::CMSG_PUSHQUESTTOPARTY& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PUSHQUESTTOPARTY& ClientOpcode::get();
 template<>
-tbc::CMSG_LIST_INVENTORY* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_LIST_INVENTORY* ClientOpcode::get_if();
 template<>
-tbc::CMSG_LIST_INVENTORY& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_LIST_INVENTORY& ClientOpcode::get();
 template<>
-tbc::CMSG_SELL_ITEM* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SELL_ITEM* ClientOpcode::get_if();
 template<>
-tbc::CMSG_SELL_ITEM& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SELL_ITEM& ClientOpcode::get();
 template<>
-tbc::CMSG_BUY_ITEM* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_BUY_ITEM* ClientOpcode::get_if();
 template<>
-tbc::CMSG_BUY_ITEM& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_BUY_ITEM& ClientOpcode::get();
 template<>
-tbc::CMSG_BUY_ITEM_IN_SLOT* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_BUY_ITEM_IN_SLOT* ClientOpcode::get_if();
 template<>
-tbc::CMSG_BUY_ITEM_IN_SLOT& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_BUY_ITEM_IN_SLOT& ClientOpcode::get();
 template<>
-tbc::CMSG_TAXINODE_STATUS_QUERY* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_TAXINODE_STATUS_QUERY* ClientOpcode::get_if();
 template<>
-tbc::CMSG_TAXINODE_STATUS_QUERY& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_TAXINODE_STATUS_QUERY& ClientOpcode::get();
 template<>
-tbc::CMSG_TAXIQUERYAVAILABLENODES* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_TAXIQUERYAVAILABLENODES* ClientOpcode::get_if();
 template<>
-tbc::CMSG_TAXIQUERYAVAILABLENODES& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_TAXIQUERYAVAILABLENODES& ClientOpcode::get();
 template<>
-tbc::CMSG_ACTIVATETAXI* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_ACTIVATETAXI* ClientOpcode::get_if();
 template<>
-tbc::CMSG_ACTIVATETAXI& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_ACTIVATETAXI& ClientOpcode::get();
 template<>
-tbc::CMSG_TRAINER_LIST* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_TRAINER_LIST* ClientOpcode::get_if();
 template<>
-tbc::CMSG_TRAINER_LIST& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_TRAINER_LIST& ClientOpcode::get();
 template<>
-tbc::CMSG_TRAINER_BUY_SPELL* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_TRAINER_BUY_SPELL* ClientOpcode::get_if();
 template<>
-tbc::CMSG_TRAINER_BUY_SPELL& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_TRAINER_BUY_SPELL& ClientOpcode::get();
 template<>
-tbc::CMSG_BINDER_ACTIVATE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_BINDER_ACTIVATE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_BINDER_ACTIVATE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_BINDER_ACTIVATE& ClientOpcode::get();
 template<>
-tbc::CMSG_BANKER_ACTIVATE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_BANKER_ACTIVATE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_BANKER_ACTIVATE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_BANKER_ACTIVATE& ClientOpcode::get();
 template<>
-tbc::CMSG_BUY_BANK_SLOT* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_BUY_BANK_SLOT* ClientOpcode::get_if();
 template<>
-tbc::CMSG_BUY_BANK_SLOT& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_BUY_BANK_SLOT& ClientOpcode::get();
 template<>
-tbc::CMSG_PETITION_SHOWLIST* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PETITION_SHOWLIST* ClientOpcode::get_if();
 template<>
-tbc::CMSG_PETITION_SHOWLIST& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PETITION_SHOWLIST& ClientOpcode::get();
 template<>
-tbc::CMSG_PETITION_BUY* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PETITION_BUY* ClientOpcode::get_if();
 template<>
-tbc::CMSG_PETITION_BUY& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PETITION_BUY& ClientOpcode::get();
 template<>
-tbc::CMSG_PETITION_SHOW_SIGNATURES* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PETITION_SHOW_SIGNATURES* ClientOpcode::get_if();
 template<>
-tbc::CMSG_PETITION_SHOW_SIGNATURES& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PETITION_SHOW_SIGNATURES& ClientOpcode::get();
 template<>
-tbc::CMSG_PETITION_SIGN* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PETITION_SIGN* ClientOpcode::get_if();
 template<>
-tbc::CMSG_PETITION_SIGN& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PETITION_SIGN& ClientOpcode::get();
 template<>
-tbc::MSG_PETITION_DECLINE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_PETITION_DECLINE* ClientOpcode::get_if();
 template<>
-tbc::MSG_PETITION_DECLINE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_PETITION_DECLINE& ClientOpcode::get();
 template<>
-tbc::CMSG_OFFER_PETITION* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_OFFER_PETITION* ClientOpcode::get_if();
 template<>
-tbc::CMSG_OFFER_PETITION& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_OFFER_PETITION& ClientOpcode::get();
 template<>
-tbc::CMSG_TURN_IN_PETITION* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_TURN_IN_PETITION* ClientOpcode::get_if();
 template<>
-tbc::CMSG_TURN_IN_PETITION& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_TURN_IN_PETITION& ClientOpcode::get();
 template<>
-tbc::CMSG_PETITION_QUERY* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PETITION_QUERY* ClientOpcode::get_if();
 template<>
-tbc::CMSG_PETITION_QUERY& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PETITION_QUERY& ClientOpcode::get();
 template<>
-tbc::CMSG_BUG* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_BUG* ClientOpcode::get_if();
 template<>
-tbc::CMSG_BUG& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_BUG& ClientOpcode::get();
 template<>
-tbc::CMSG_PLAYED_TIME* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PLAYED_TIME* ClientOpcode::get_if();
 template<>
-tbc::CMSG_PLAYED_TIME& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PLAYED_TIME& ClientOpcode::get();
 template<>
-tbc::CMSG_QUERY_TIME* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_QUERY_TIME* ClientOpcode::get_if();
 template<>
-tbc::CMSG_QUERY_TIME& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_QUERY_TIME& ClientOpcode::get();
 template<>
-tbc::CMSG_RECLAIM_CORPSE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_RECLAIM_CORPSE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_RECLAIM_CORPSE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_RECLAIM_CORPSE& ClientOpcode::get();
 template<>
-tbc::CMSG_WRAP_ITEM* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_WRAP_ITEM* ClientOpcode::get_if();
 template<>
-tbc::CMSG_WRAP_ITEM& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_WRAP_ITEM& ClientOpcode::get();
 template<>
-tbc::MSG_MINIMAP_PING_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MINIMAP_PING_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_MINIMAP_PING_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MINIMAP_PING_Client& ClientOpcode::get();
 template<>
-tbc::CMSG_PING* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PING* ClientOpcode::get_if();
 template<>
-tbc::CMSG_PING& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PING& ClientOpcode::get();
 template<>
-tbc::CMSG_SETSHEATHED* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SETSHEATHED* ClientOpcode::get_if();
 template<>
-tbc::CMSG_SETSHEATHED& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SETSHEATHED& ClientOpcode::get();
 template<>
-tbc::CMSG_AUTH_SESSION* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_AUTH_SESSION* ClientOpcode::get_if();
 template<>
-tbc::CMSG_AUTH_SESSION& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_AUTH_SESSION& ClientOpcode::get();
 template<>
-tbc::CMSG_PET_CAST_SPELL* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PET_CAST_SPELL* ClientOpcode::get_if();
 template<>
-tbc::CMSG_PET_CAST_SPELL& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PET_CAST_SPELL& ClientOpcode::get();
 template<>
-tbc::MSG_SAVE_GUILD_EMBLEM_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_SAVE_GUILD_EMBLEM_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_SAVE_GUILD_EMBLEM_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_SAVE_GUILD_EMBLEM_Client& ClientOpcode::get();
 template<>
-tbc::MSG_TABARDVENDOR_ACTIVATE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_TABARDVENDOR_ACTIVATE* ClientOpcode::get_if();
 template<>
-tbc::MSG_TABARDVENDOR_ACTIVATE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_TABARDVENDOR_ACTIVATE& ClientOpcode::get();
 template<>
-tbc::CMSG_ZONEUPDATE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_ZONEUPDATE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_ZONEUPDATE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_ZONEUPDATE& ClientOpcode::get();
 template<>
-tbc::MSG_RANDOM_ROLL_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_RANDOM_ROLL_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_RANDOM_ROLL_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_RANDOM_ROLL_Client& ClientOpcode::get();
 template<>
-tbc::MSG_LOOKING_FOR_GROUP_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_LOOKING_FOR_GROUP_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_LOOKING_FOR_GROUP_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_LOOKING_FOR_GROUP_Client& ClientOpcode::get();
 template<>
-tbc::CMSG_SET_LOOKING_FOR_GROUP* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_LOOKING_FOR_GROUP* ClientOpcode::get_if();
 template<>
-tbc::CMSG_SET_LOOKING_FOR_GROUP& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_LOOKING_FOR_GROUP& ClientOpcode::get();
 template<>
-tbc::CMSG_UNLEARN_SKILL* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_UNLEARN_SKILL* ClientOpcode::get_if();
 template<>
-tbc::CMSG_UNLEARN_SKILL& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_UNLEARN_SKILL& ClientOpcode::get();
 template<>
-tbc::CMSG_GMTICKET_CREATE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GMTICKET_CREATE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GMTICKET_CREATE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GMTICKET_CREATE& ClientOpcode::get();
 template<>
-tbc::CMSG_GMTICKET_UPDATETEXT* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GMTICKET_UPDATETEXT* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GMTICKET_UPDATETEXT& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GMTICKET_UPDATETEXT& ClientOpcode::get();
 template<>
-tbc::CMSG_REQUEST_ACCOUNT_DATA* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_REQUEST_ACCOUNT_DATA* ClientOpcode::get_if();
 template<>
-tbc::CMSG_REQUEST_ACCOUNT_DATA& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_REQUEST_ACCOUNT_DATA& ClientOpcode::get();
 template<>
-tbc::CMSG_UPDATE_ACCOUNT_DATA* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_UPDATE_ACCOUNT_DATA* ClientOpcode::get_if();
 template<>
-tbc::CMSG_UPDATE_ACCOUNT_DATA& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_UPDATE_ACCOUNT_DATA& ClientOpcode::get();
 template<>
-tbc::CMSG_GMTICKET_GETTICKET* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GMTICKET_GETTICKET* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GMTICKET_GETTICKET& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GMTICKET_GETTICKET& ClientOpcode::get();
 template<>
-tbc::CMSG_UNLEARN_TALENTS* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_UNLEARN_TALENTS* ClientOpcode::get_if();
 template<>
-tbc::CMSG_UNLEARN_TALENTS& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_UNLEARN_TALENTS& ClientOpcode::get();
 template<>
-tbc::MSG_CORPSE_QUERY_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_CORPSE_QUERY_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_CORPSE_QUERY_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_CORPSE_QUERY_Client& ClientOpcode::get();
 template<>
-tbc::CMSG_GMTICKET_DELETETICKET* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GMTICKET_DELETETICKET* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GMTICKET_DELETETICKET& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GMTICKET_DELETETICKET& ClientOpcode::get();
 template<>
-tbc::CMSG_GMTICKET_SYSTEMSTATUS* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GMTICKET_SYSTEMSTATUS* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GMTICKET_SYSTEMSTATUS& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GMTICKET_SYSTEMSTATUS& ClientOpcode::get();
 template<>
-tbc::CMSG_SPIRIT_HEALER_ACTIVATE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SPIRIT_HEALER_ACTIVATE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_SPIRIT_HEALER_ACTIVATE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SPIRIT_HEALER_ACTIVATE& ClientOpcode::get();
 template<>
-tbc::CMSG_CHAT_IGNORED* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHAT_IGNORED* ClientOpcode::get_if();
 template<>
-tbc::CMSG_CHAT_IGNORED& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHAT_IGNORED& ClientOpcode::get();
 template<>
-tbc::CMSG_GUILD_RANK* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_RANK* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GUILD_RANK& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_RANK& ClientOpcode::get();
 template<>
-tbc::CMSG_GUILD_ADD_RANK* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_ADD_RANK* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GUILD_ADD_RANK& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_ADD_RANK& ClientOpcode::get();
 template<>
-tbc::CMSG_GUILD_DEL_RANK* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_DEL_RANK* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GUILD_DEL_RANK& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_DEL_RANK& ClientOpcode::get();
 template<>
-tbc::CMSG_GUILD_SET_PUBLIC_NOTE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_SET_PUBLIC_NOTE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GUILD_SET_PUBLIC_NOTE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_SET_PUBLIC_NOTE& ClientOpcode::get();
 template<>
-tbc::CMSG_GUILD_SET_OFFICER_NOTE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_SET_OFFICER_NOTE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GUILD_SET_OFFICER_NOTE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_SET_OFFICER_NOTE& ClientOpcode::get();
 template<>
-tbc::CMSG_SEND_MAIL* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SEND_MAIL* ClientOpcode::get_if();
 template<>
-tbc::CMSG_SEND_MAIL& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SEND_MAIL& ClientOpcode::get();
 template<>
-tbc::CMSG_GET_MAIL_LIST* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GET_MAIL_LIST* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GET_MAIL_LIST& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GET_MAIL_LIST& ClientOpcode::get();
 template<>
-tbc::CMSG_BATTLEFIELD_LIST* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_BATTLEFIELD_LIST* ClientOpcode::get_if();
 template<>
-tbc::CMSG_BATTLEFIELD_LIST& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_BATTLEFIELD_LIST& ClientOpcode::get();
 template<>
-tbc::CMSG_ITEM_TEXT_QUERY* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_ITEM_TEXT_QUERY* ClientOpcode::get_if();
 template<>
-tbc::CMSG_ITEM_TEXT_QUERY& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_ITEM_TEXT_QUERY& ClientOpcode::get();
 template<>
-tbc::CMSG_MAIL_TAKE_MONEY* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MAIL_TAKE_MONEY* ClientOpcode::get_if();
 template<>
-tbc::CMSG_MAIL_TAKE_MONEY& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MAIL_TAKE_MONEY& ClientOpcode::get();
 template<>
-tbc::CMSG_MAIL_TAKE_ITEM* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MAIL_TAKE_ITEM* ClientOpcode::get_if();
 template<>
-tbc::CMSG_MAIL_TAKE_ITEM& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MAIL_TAKE_ITEM& ClientOpcode::get();
 template<>
-tbc::CMSG_MAIL_MARK_AS_READ* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MAIL_MARK_AS_READ* ClientOpcode::get_if();
 template<>
-tbc::CMSG_MAIL_MARK_AS_READ& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MAIL_MARK_AS_READ& ClientOpcode::get();
 template<>
-tbc::CMSG_MAIL_RETURN_TO_SENDER* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MAIL_RETURN_TO_SENDER* ClientOpcode::get_if();
 template<>
-tbc::CMSG_MAIL_RETURN_TO_SENDER& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MAIL_RETURN_TO_SENDER& ClientOpcode::get();
 template<>
-tbc::CMSG_MAIL_DELETE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MAIL_DELETE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_MAIL_DELETE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MAIL_DELETE& ClientOpcode::get();
 template<>
-tbc::CMSG_MAIL_CREATE_TEXT_ITEM* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MAIL_CREATE_TEXT_ITEM* ClientOpcode::get_if();
 template<>
-tbc::CMSG_MAIL_CREATE_TEXT_ITEM& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MAIL_CREATE_TEXT_ITEM& ClientOpcode::get();
 template<>
-tbc::CMSG_LEARN_TALENT* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_LEARN_TALENT* ClientOpcode::get_if();
 template<>
-tbc::CMSG_LEARN_TALENT& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_LEARN_TALENT& ClientOpcode::get();
 template<>
-tbc::CMSG_TOGGLE_PVP* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_TOGGLE_PVP* ClientOpcode::get_if();
 template<>
-tbc::CMSG_TOGGLE_PVP& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_TOGGLE_PVP& ClientOpcode::get();
 template<>
-tbc::MSG_AUCTION_HELLO_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_AUCTION_HELLO_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_AUCTION_HELLO_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_AUCTION_HELLO_Client& ClientOpcode::get();
 template<>
-tbc::CMSG_AUCTION_SELL_ITEM* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_AUCTION_SELL_ITEM* ClientOpcode::get_if();
 template<>
-tbc::CMSG_AUCTION_SELL_ITEM& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_AUCTION_SELL_ITEM& ClientOpcode::get();
 template<>
-tbc::CMSG_AUCTION_REMOVE_ITEM* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_AUCTION_REMOVE_ITEM* ClientOpcode::get_if();
 template<>
-tbc::CMSG_AUCTION_REMOVE_ITEM& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_AUCTION_REMOVE_ITEM& ClientOpcode::get();
 template<>
-tbc::CMSG_AUCTION_LIST_ITEMS* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_AUCTION_LIST_ITEMS* ClientOpcode::get_if();
 template<>
-tbc::CMSG_AUCTION_LIST_ITEMS& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_AUCTION_LIST_ITEMS& ClientOpcode::get();
 template<>
-tbc::CMSG_AUCTION_LIST_OWNER_ITEMS* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_AUCTION_LIST_OWNER_ITEMS* ClientOpcode::get_if();
 template<>
-tbc::CMSG_AUCTION_LIST_OWNER_ITEMS& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_AUCTION_LIST_OWNER_ITEMS& ClientOpcode::get();
 template<>
-tbc::CMSG_AUCTION_PLACE_BID* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_AUCTION_PLACE_BID* ClientOpcode::get_if();
 template<>
-tbc::CMSG_AUCTION_PLACE_BID& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_AUCTION_PLACE_BID& ClientOpcode::get();
 template<>
-tbc::CMSG_AUCTION_LIST_BIDDER_ITEMS* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_AUCTION_LIST_BIDDER_ITEMS* ClientOpcode::get_if();
 template<>
-tbc::CMSG_AUCTION_LIST_BIDDER_ITEMS& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_AUCTION_LIST_BIDDER_ITEMS& ClientOpcode::get();
 template<>
-tbc::CMSG_SET_AMMO* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_AMMO* ClientOpcode::get_if();
 template<>
-tbc::CMSG_SET_AMMO& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_AMMO& ClientOpcode::get();
 template<>
-tbc::CMSG_SET_ACTIVE_MOVER* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_ACTIVE_MOVER* ClientOpcode::get_if();
 template<>
-tbc::CMSG_SET_ACTIVE_MOVER& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_ACTIVE_MOVER& ClientOpcode::get();
 template<>
-tbc::CMSG_PET_CANCEL_AURA* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PET_CANCEL_AURA* ClientOpcode::get_if();
 template<>
-tbc::CMSG_PET_CANCEL_AURA& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PET_CANCEL_AURA& ClientOpcode::get();
 template<>
-tbc::CMSG_CANCEL_AUTO_REPEAT_SPELL* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CANCEL_AUTO_REPEAT_SPELL* ClientOpcode::get_if();
 template<>
-tbc::CMSG_CANCEL_AUTO_REPEAT_SPELL& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CANCEL_AUTO_REPEAT_SPELL& ClientOpcode::get();
 template<>
-tbc::MSG_LIST_STABLED_PETS_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_LIST_STABLED_PETS_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_LIST_STABLED_PETS_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_LIST_STABLED_PETS_Client& ClientOpcode::get();
 template<>
-tbc::CMSG_STABLE_PET* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_STABLE_PET* ClientOpcode::get_if();
 template<>
-tbc::CMSG_STABLE_PET& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_STABLE_PET& ClientOpcode::get();
 template<>
-tbc::CMSG_UNSTABLE_PET* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_UNSTABLE_PET* ClientOpcode::get_if();
 template<>
-tbc::CMSG_UNSTABLE_PET& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_UNSTABLE_PET& ClientOpcode::get();
 template<>
-tbc::CMSG_BUY_STABLE_SLOT* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_BUY_STABLE_SLOT* ClientOpcode::get_if();
 template<>
-tbc::CMSG_BUY_STABLE_SLOT& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_BUY_STABLE_SLOT& ClientOpcode::get();
 template<>
-tbc::CMSG_STABLE_SWAP_PET* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_STABLE_SWAP_PET* ClientOpcode::get_if();
 template<>
-tbc::CMSG_STABLE_SWAP_PET& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_STABLE_SWAP_PET& ClientOpcode::get();
 template<>
-tbc::MSG_QUEST_PUSH_RESULT* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_QUEST_PUSH_RESULT* ClientOpcode::get_if();
 template<>
-tbc::MSG_QUEST_PUSH_RESULT& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_QUEST_PUSH_RESULT& ClientOpcode::get();
 template<>
-tbc::CMSG_REQUEST_PET_INFO* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_REQUEST_PET_INFO* ClientOpcode::get_if();
 template<>
-tbc::CMSG_REQUEST_PET_INFO& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_REQUEST_PET_INFO& ClientOpcode::get();
 template<>
-tbc::CMSG_FAR_SIGHT* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_FAR_SIGHT* ClientOpcode::get_if();
 template<>
-tbc::CMSG_FAR_SIGHT& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_FAR_SIGHT& ClientOpcode::get();
 template<>
-tbc::CMSG_GROUP_CHANGE_SUB_GROUP* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GROUP_CHANGE_SUB_GROUP* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GROUP_CHANGE_SUB_GROUP& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GROUP_CHANGE_SUB_GROUP& ClientOpcode::get();
 template<>
-tbc::CMSG_REQUEST_PARTY_MEMBER_STATS* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_REQUEST_PARTY_MEMBER_STATS* ClientOpcode::get_if();
 template<>
-tbc::CMSG_REQUEST_PARTY_MEMBER_STATS& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_REQUEST_PARTY_MEMBER_STATS& ClientOpcode::get();
 template<>
-tbc::CMSG_GROUP_SWAP_SUB_GROUP* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GROUP_SWAP_SUB_GROUP* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GROUP_SWAP_SUB_GROUP& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GROUP_SWAP_SUB_GROUP& ClientOpcode::get();
 template<>
-tbc::CMSG_AUTOSTORE_BANK_ITEM* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_AUTOSTORE_BANK_ITEM* ClientOpcode::get_if();
 template<>
-tbc::CMSG_AUTOSTORE_BANK_ITEM& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_AUTOSTORE_BANK_ITEM& ClientOpcode::get();
 template<>
-tbc::CMSG_AUTOBANK_ITEM* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_AUTOBANK_ITEM* ClientOpcode::get_if();
 template<>
-tbc::CMSG_AUTOBANK_ITEM& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_AUTOBANK_ITEM& ClientOpcode::get();
 template<>
-tbc::MSG_QUERY_NEXT_MAIL_TIME_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_QUERY_NEXT_MAIL_TIME_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_QUERY_NEXT_MAIL_TIME_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_QUERY_NEXT_MAIL_TIME_Client& ClientOpcode::get();
 template<>
-tbc::CMSG_GROUP_RAID_CONVERT* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GROUP_RAID_CONVERT* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GROUP_RAID_CONVERT& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GROUP_RAID_CONVERT& ClientOpcode::get();
 template<>
-tbc::CMSG_GROUP_ASSISTANT_LEADER* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GROUP_ASSISTANT_LEADER* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GROUP_ASSISTANT_LEADER& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GROUP_ASSISTANT_LEADER& ClientOpcode::get();
 template<>
-tbc::CMSG_BUYBACK_ITEM* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_BUYBACK_ITEM* ClientOpcode::get_if();
 template<>
-tbc::CMSG_BUYBACK_ITEM& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_BUYBACK_ITEM& ClientOpcode::get();
 template<>
-tbc::CMSG_MEETINGSTONE_INFO* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MEETINGSTONE_INFO* ClientOpcode::get_if();
 template<>
-tbc::CMSG_MEETINGSTONE_INFO& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MEETINGSTONE_INFO& ClientOpcode::get();
 template<>
-tbc::CMSG_GMTICKETSYSTEM_TOGGLE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GMTICKETSYSTEM_TOGGLE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GMTICKETSYSTEM_TOGGLE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GMTICKETSYSTEM_TOGGLE& ClientOpcode::get();
 template<>
-tbc::CMSG_CANCEL_GROWTH_AURA* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CANCEL_GROWTH_AURA* ClientOpcode::get_if();
 template<>
-tbc::CMSG_CANCEL_GROWTH_AURA& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CANCEL_GROWTH_AURA& ClientOpcode::get();
 template<>
-tbc::CMSG_LOOT_ROLL* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_LOOT_ROLL* ClientOpcode::get_if();
 template<>
-tbc::CMSG_LOOT_ROLL& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_LOOT_ROLL& ClientOpcode::get();
 template<>
-tbc::CMSG_LOOT_MASTER_GIVE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_LOOT_MASTER_GIVE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_LOOT_MASTER_GIVE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_LOOT_MASTER_GIVE& ClientOpcode::get();
 template<>
-tbc::CMSG_REPAIR_ITEM* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_REPAIR_ITEM* ClientOpcode::get_if();
 template<>
-tbc::CMSG_REPAIR_ITEM& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_REPAIR_ITEM& ClientOpcode::get();
 template<>
-tbc::MSG_TALENT_WIPE_CONFIRM_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_TALENT_WIPE_CONFIRM_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_TALENT_WIPE_CONFIRM_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_TALENT_WIPE_CONFIRM_Client& ClientOpcode::get();
 template<>
-tbc::CMSG_SUMMON_RESPONSE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SUMMON_RESPONSE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_SUMMON_RESPONSE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SUMMON_RESPONSE& ClientOpcode::get();
 template<>
-tbc::MSG_MOVE_WATER_WALK* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_WATER_WALK* ClientOpcode::get_if();
 template<>
-tbc::MSG_MOVE_WATER_WALK& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_WATER_WALK& ClientOpcode::get();
 template<>
-tbc::CMSG_SELF_RES* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SELF_RES* ClientOpcode::get_if();
 template<>
-tbc::CMSG_SELF_RES& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SELF_RES& ClientOpcode::get();
 template<>
-tbc::CMSG_TOGGLE_HELM* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_TOGGLE_HELM* ClientOpcode::get_if();
 template<>
-tbc::CMSG_TOGGLE_HELM& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_TOGGLE_HELM& ClientOpcode::get();
 template<>
-tbc::CMSG_TOGGLE_CLOAK* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_TOGGLE_CLOAK* ClientOpcode::get_if();
 template<>
-tbc::CMSG_TOGGLE_CLOAK& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_TOGGLE_CLOAK& ClientOpcode::get();
 template<>
-tbc::CMSG_SET_ACTIONBAR_TOGGLES* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_ACTIONBAR_TOGGLES* ClientOpcode::get_if();
 template<>
-tbc::CMSG_SET_ACTIONBAR_TOGGLES& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_ACTIONBAR_TOGGLES& ClientOpcode::get();
 template<>
-tbc::MSG_PETITION_RENAME* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_PETITION_RENAME* ClientOpcode::get_if();
 template<>
-tbc::MSG_PETITION_RENAME& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_PETITION_RENAME& ClientOpcode::get();
 template<>
-tbc::CMSG_ITEM_NAME_QUERY* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_ITEM_NAME_QUERY* ClientOpcode::get_if();
 template<>
-tbc::CMSG_ITEM_NAME_QUERY& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_ITEM_NAME_QUERY& ClientOpcode::get();
 template<>
-tbc::CMSG_CHAR_RENAME* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHAR_RENAME* ClientOpcode::get_if();
 template<>
-tbc::CMSG_CHAR_RENAME& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHAR_RENAME& ClientOpcode::get();
 template<>
-tbc::CMSG_MOVE_SPLINE_DONE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MOVE_SPLINE_DONE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_MOVE_SPLINE_DONE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MOVE_SPLINE_DONE& ClientOpcode::get();
 template<>
-tbc::CMSG_MOVE_FALL_RESET* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MOVE_FALL_RESET* ClientOpcode::get_if();
 template<>
-tbc::CMSG_MOVE_FALL_RESET& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MOVE_FALL_RESET& ClientOpcode::get();
 template<>
-tbc::CMSG_REQUEST_RAID_INFO* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_REQUEST_RAID_INFO* ClientOpcode::get_if();
 template<>
-tbc::CMSG_REQUEST_RAID_INFO& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_REQUEST_RAID_INFO& ClientOpcode::get();
 template<>
-tbc::CMSG_MOVE_TIME_SKIPPED* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MOVE_TIME_SKIPPED* ClientOpcode::get_if();
 template<>
-tbc::CMSG_MOVE_TIME_SKIPPED& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MOVE_TIME_SKIPPED& ClientOpcode::get();
 template<>
-tbc::CMSG_MOVE_FEATHER_FALL_ACK* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MOVE_FEATHER_FALL_ACK* ClientOpcode::get_if();
 template<>
-tbc::CMSG_MOVE_FEATHER_FALL_ACK& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MOVE_FEATHER_FALL_ACK& ClientOpcode::get();
 template<>
-tbc::CMSG_MOVE_WATER_WALK_ACK* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MOVE_WATER_WALK_ACK* ClientOpcode::get_if();
 template<>
-tbc::CMSG_MOVE_WATER_WALK_ACK& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MOVE_WATER_WALK_ACK& ClientOpcode::get();
 template<>
-tbc::CMSG_MOVE_NOT_ACTIVE_MOVER* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MOVE_NOT_ACTIVE_MOVER* ClientOpcode::get_if();
 template<>
-tbc::CMSG_MOVE_NOT_ACTIVE_MOVER& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MOVE_NOT_ACTIVE_MOVER& ClientOpcode::get();
 template<>
-tbc::CMSG_BATTLEFIELD_STATUS* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_BATTLEFIELD_STATUS* ClientOpcode::get_if();
 template<>
-tbc::CMSG_BATTLEFIELD_STATUS& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_BATTLEFIELD_STATUS& ClientOpcode::get();
 template<>
-tbc::CMSG_BATTLEFIELD_PORT* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_BATTLEFIELD_PORT* ClientOpcode::get_if();
 template<>
-tbc::CMSG_BATTLEFIELD_PORT& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_BATTLEFIELD_PORT& ClientOpcode::get();
 template<>
-tbc::MSG_INSPECT_HONOR_STATS_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_INSPECT_HONOR_STATS_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_INSPECT_HONOR_STATS_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_INSPECT_HONOR_STATS_Client& ClientOpcode::get();
 template<>
-tbc::CMSG_BATTLEMASTER_HELLO* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_BATTLEMASTER_HELLO* ClientOpcode::get_if();
 template<>
-tbc::CMSG_BATTLEMASTER_HELLO& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_BATTLEMASTER_HELLO& ClientOpcode::get();
 template<>
-tbc::CMSG_FORCE_WALK_SPEED_CHANGE_ACK* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_FORCE_WALK_SPEED_CHANGE_ACK* ClientOpcode::get_if();
 template<>
-tbc::CMSG_FORCE_WALK_SPEED_CHANGE_ACK& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_FORCE_WALK_SPEED_CHANGE_ACK& ClientOpcode::get();
 template<>
-tbc::CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK* ClientOpcode::get_if();
 template<>
-tbc::CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK& ClientOpcode::get();
 template<>
-tbc::CMSG_FORCE_TURN_RATE_CHANGE_ACK* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_FORCE_TURN_RATE_CHANGE_ACK* ClientOpcode::get_if();
 template<>
-tbc::CMSG_FORCE_TURN_RATE_CHANGE_ACK& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_FORCE_TURN_RATE_CHANGE_ACK& ClientOpcode::get();
 template<>
-tbc::MSG_PVP_LOG_DATA_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_PVP_LOG_DATA_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_PVP_LOG_DATA_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_PVP_LOG_DATA_Client& ClientOpcode::get();
 template<>
-tbc::CMSG_LEAVE_BATTLEFIELD* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_LEAVE_BATTLEFIELD* ClientOpcode::get_if();
 template<>
-tbc::CMSG_LEAVE_BATTLEFIELD& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_LEAVE_BATTLEFIELD& ClientOpcode::get();
 template<>
-tbc::CMSG_AREA_SPIRIT_HEALER_QUERY* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_AREA_SPIRIT_HEALER_QUERY* ClientOpcode::get_if();
 template<>
-tbc::CMSG_AREA_SPIRIT_HEALER_QUERY& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_AREA_SPIRIT_HEALER_QUERY& ClientOpcode::get();
 template<>
-tbc::CMSG_AREA_SPIRIT_HEALER_QUEUE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_AREA_SPIRIT_HEALER_QUEUE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_AREA_SPIRIT_HEALER_QUEUE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_AREA_SPIRIT_HEALER_QUEUE& ClientOpcode::get();
 template<>
-tbc::CMSG_WARDEN_DATA* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_WARDEN_DATA* ClientOpcode::get_if();
 template<>
-tbc::CMSG_WARDEN_DATA& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_WARDEN_DATA& ClientOpcode::get();
 template<>
-tbc::MSG_BATTLEGROUND_PLAYER_POSITIONS_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_BATTLEGROUND_PLAYER_POSITIONS_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_BATTLEGROUND_PLAYER_POSITIONS_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_BATTLEGROUND_PLAYER_POSITIONS_Client& ClientOpcode::get();
 template<>
-tbc::CMSG_PET_STOP_ATTACK* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PET_STOP_ATTACK* ClientOpcode::get_if();
 template<>
-tbc::CMSG_PET_STOP_ATTACK& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PET_STOP_ATTACK& ClientOpcode::get();
 template<>
-tbc::CMSG_BATTLEMASTER_JOIN* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_BATTLEMASTER_JOIN* ClientOpcode::get_if();
 template<>
-tbc::CMSG_BATTLEMASTER_JOIN& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_BATTLEMASTER_JOIN& ClientOpcode::get();
 template<>
-tbc::CMSG_PET_UNLEARN* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PET_UNLEARN* ClientOpcode::get_if();
 template<>
-tbc::CMSG_PET_UNLEARN& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PET_UNLEARN& ClientOpcode::get();
 template<>
-tbc::CMSG_PET_SPELL_AUTOCAST* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PET_SPELL_AUTOCAST* ClientOpcode::get_if();
 template<>
-tbc::CMSG_PET_SPELL_AUTOCAST& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_PET_SPELL_AUTOCAST& ClientOpcode::get();
 template<>
-tbc::CMSG_GUILD_INFO_TEXT* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_INFO_TEXT* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GUILD_INFO_TEXT& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_INFO_TEXT& ClientOpcode::get();
 template<>
-tbc::CMSG_ACTIVATETAXIEXPRESS* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_ACTIVATETAXIEXPRESS* ClientOpcode::get_if();
 template<>
-tbc::CMSG_ACTIVATETAXIEXPRESS& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_ACTIVATETAXIEXPRESS& ClientOpcode::get();
 template<>
-tbc::CMSG_SET_FACTION_INACTIVE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_FACTION_INACTIVE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_SET_FACTION_INACTIVE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_FACTION_INACTIVE& ClientOpcode::get();
 template<>
-tbc::CMSG_SET_WATCHED_FACTION* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_WATCHED_FACTION* ClientOpcode::get_if();
 template<>
-tbc::CMSG_SET_WATCHED_FACTION& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_WATCHED_FACTION& ClientOpcode::get();
 template<>
-tbc::CMSG_RESET_INSTANCES* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_RESET_INSTANCES* ClientOpcode::get_if();
 template<>
-tbc::CMSG_RESET_INSTANCES& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_RESET_INSTANCES& ClientOpcode::get();
 template<>
-tbc::MSG_RAID_TARGET_UPDATE_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_RAID_TARGET_UPDATE_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_RAID_TARGET_UPDATE_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_RAID_TARGET_UPDATE_Client& ClientOpcode::get();
 template<>
-tbc::MSG_RAID_READY_CHECK_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_RAID_READY_CHECK_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_RAID_READY_CHECK_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_RAID_READY_CHECK_Client& ClientOpcode::get();
 template<>
-tbc::MSG_SET_DUNGEON_DIFFICULTY_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_SET_DUNGEON_DIFFICULTY_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_SET_DUNGEON_DIFFICULTY_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_SET_DUNGEON_DIFFICULTY_Client& ClientOpcode::get();
 template<>
-tbc::CMSG_GMSURVEY_SUBMIT* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GMSURVEY_SUBMIT* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GMSURVEY_SUBMIT& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GMSURVEY_SUBMIT& ClientOpcode::get();
 template<>
-tbc::CMSG_MOVE_SET_CAN_FLY_ACK* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MOVE_SET_CAN_FLY_ACK* ClientOpcode::get_if();
 template<>
-tbc::CMSG_MOVE_SET_CAN_FLY_ACK& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MOVE_SET_CAN_FLY_ACK& ClientOpcode::get();
 template<>
-tbc::CMSG_MOVE_SET_FLY* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MOVE_SET_FLY* ClientOpcode::get_if();
 template<>
-tbc::CMSG_MOVE_SET_FLY& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MOVE_SET_FLY& ClientOpcode::get();
 template<>
-tbc::CMSG_SOCKET_GEMS* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SOCKET_GEMS* ClientOpcode::get_if();
 template<>
-tbc::CMSG_SOCKET_GEMS& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SOCKET_GEMS& ClientOpcode::get();
 template<>
-tbc::CMSG_ARENA_TEAM_ROSTER* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_ARENA_TEAM_ROSTER* ClientOpcode::get_if();
 template<>
-tbc::CMSG_ARENA_TEAM_ROSTER& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_ARENA_TEAM_ROSTER& ClientOpcode::get();
 template<>
-tbc::CMSG_ARENA_TEAM_INVITE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_ARENA_TEAM_INVITE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_ARENA_TEAM_INVITE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_ARENA_TEAM_INVITE& ClientOpcode::get();
 template<>
-tbc::CMSG_ARENA_TEAM_ACCEPT* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_ARENA_TEAM_ACCEPT* ClientOpcode::get_if();
 template<>
-tbc::CMSG_ARENA_TEAM_ACCEPT& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_ARENA_TEAM_ACCEPT& ClientOpcode::get();
 template<>
-tbc::CMSG_ARENA_TEAM_DECLINE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_ARENA_TEAM_DECLINE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_ARENA_TEAM_DECLINE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_ARENA_TEAM_DECLINE& ClientOpcode::get();
 template<>
-tbc::CMSG_ARENA_TEAM_LEAVE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_ARENA_TEAM_LEAVE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_ARENA_TEAM_LEAVE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_ARENA_TEAM_LEAVE& ClientOpcode::get();
 template<>
-tbc::CMSG_ARENA_TEAM_REMOVE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_ARENA_TEAM_REMOVE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_ARENA_TEAM_REMOVE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_ARENA_TEAM_REMOVE& ClientOpcode::get();
 template<>
-tbc::CMSG_ARENA_TEAM_DISBAND* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_ARENA_TEAM_DISBAND* ClientOpcode::get_if();
 template<>
-tbc::CMSG_ARENA_TEAM_DISBAND& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_ARENA_TEAM_DISBAND& ClientOpcode::get();
 template<>
-tbc::CMSG_ARENA_TEAM_LEADER* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_ARENA_TEAM_LEADER* ClientOpcode::get_if();
 template<>
-tbc::CMSG_ARENA_TEAM_LEADER& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_ARENA_TEAM_LEADER& ClientOpcode::get();
 template<>
-tbc::CMSG_BATTLEMASTER_JOIN_ARENA* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_BATTLEMASTER_JOIN_ARENA* ClientOpcode::get_if();
 template<>
-tbc::CMSG_BATTLEMASTER_JOIN_ARENA& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_BATTLEMASTER_JOIN_ARENA& ClientOpcode::get();
 template<>
-tbc::MSG_MOVE_START_ASCEND_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_ASCEND_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_MOVE_START_ASCEND_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_ASCEND_Client& ClientOpcode::get();
 template<>
-tbc::MSG_MOVE_STOP_ASCEND_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_STOP_ASCEND_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_MOVE_STOP_ASCEND_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_STOP_ASCEND_Client& ClientOpcode::get();
 template<>
-tbc::CMSG_LFG_SET_AUTOJOIN* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_LFG_SET_AUTOJOIN* ClientOpcode::get_if();
 template<>
-tbc::CMSG_LFG_SET_AUTOJOIN& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_LFG_SET_AUTOJOIN& ClientOpcode::get();
 template<>
-tbc::CMSG_LFG_CLEAR_AUTOJOIN* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_LFG_CLEAR_AUTOJOIN* ClientOpcode::get_if();
 template<>
-tbc::CMSG_LFG_CLEAR_AUTOJOIN& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_LFG_CLEAR_AUTOJOIN& ClientOpcode::get();
 template<>
-tbc::CMSG_LFM_SET_AUTOFILL* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_LFM_SET_AUTOFILL* ClientOpcode::get_if();
 template<>
-tbc::CMSG_LFM_SET_AUTOFILL& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_LFM_SET_AUTOFILL& ClientOpcode::get();
 template<>
-tbc::CMSG_LFM_CLEAR_AUTOFILL* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_LFM_CLEAR_AUTOFILL* ClientOpcode::get_if();
 template<>
-tbc::CMSG_LFM_CLEAR_AUTOFILL& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_LFM_CLEAR_AUTOFILL& ClientOpcode::get();
 template<>
-tbc::CMSG_CLEAR_LOOKING_FOR_GROUP* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CLEAR_LOOKING_FOR_GROUP* ClientOpcode::get_if();
 template<>
-tbc::CMSG_CLEAR_LOOKING_FOR_GROUP& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CLEAR_LOOKING_FOR_GROUP& ClientOpcode::get();
 template<>
-tbc::CMSG_CLEAR_LOOKING_FOR_MORE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CLEAR_LOOKING_FOR_MORE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_CLEAR_LOOKING_FOR_MORE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CLEAR_LOOKING_FOR_MORE& ClientOpcode::get();
 template<>
-tbc::CMSG_SET_LOOKING_FOR_MORE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_LOOKING_FOR_MORE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_SET_LOOKING_FOR_MORE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_LOOKING_FOR_MORE& ClientOpcode::get();
 template<>
-tbc::CMSG_SET_LFG_COMMENT* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_LFG_COMMENT* ClientOpcode::get_if();
 template<>
-tbc::CMSG_SET_LFG_COMMENT& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_LFG_COMMENT& ClientOpcode::get();
 template<>
-tbc::CMSG_SET_TITLE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_TITLE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_SET_TITLE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_TITLE& ClientOpcode::get();
 template<>
-tbc::CMSG_CANCEL_MOUNT_AURA* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CANCEL_MOUNT_AURA* ClientOpcode::get_if();
 template<>
-tbc::CMSG_CANCEL_MOUNT_AURA& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CANCEL_MOUNT_AURA& ClientOpcode::get();
 template<>
-tbc::MSG_INSPECT_ARENA_TEAMS_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_INSPECT_ARENA_TEAMS_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_INSPECT_ARENA_TEAMS_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_INSPECT_ARENA_TEAMS_Client& ClientOpcode::get();
 template<>
-tbc::CMSG_CANCEL_TEMP_ENCHANTMENT* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CANCEL_TEMP_ENCHANTMENT* ClientOpcode::get_if();
 template<>
-tbc::CMSG_CANCEL_TEMP_ENCHANTMENT& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CANCEL_TEMP_ENCHANTMENT& ClientOpcode::get();
 template<>
-tbc::MSG_MOVE_SET_FLIGHT_BACK_SPEED* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_SET_FLIGHT_BACK_SPEED* ClientOpcode::get_if();
 template<>
-tbc::MSG_MOVE_SET_FLIGHT_BACK_SPEED& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_SET_FLIGHT_BACK_SPEED& ClientOpcode::get();
 template<>
-tbc::CMSG_FORCE_FLIGHT_SPEED_CHANGE_ACK* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_FORCE_FLIGHT_SPEED_CHANGE_ACK* ClientOpcode::get_if();
 template<>
-tbc::CMSG_FORCE_FLIGHT_SPEED_CHANGE_ACK& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_FORCE_FLIGHT_SPEED_CHANGE_ACK& ClientOpcode::get();
 template<>
-tbc::CMSG_FORCE_FLIGHT_BACK_SPEED_CHANGE_ACK* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_FORCE_FLIGHT_BACK_SPEED_CHANGE_ACK* ClientOpcode::get_if();
 template<>
-tbc::CMSG_FORCE_FLIGHT_BACK_SPEED_CHANGE_ACK& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_FORCE_FLIGHT_BACK_SPEED_CHANGE_ACK& ClientOpcode::get();
 template<>
-tbc::CMSG_SET_TAXI_BENCHMARK_MODE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_TAXI_BENCHMARK_MODE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_SET_TAXI_BENCHMARK_MODE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_TAXI_BENCHMARK_MODE& ClientOpcode::get();
 template<>
-tbc::CMSG_REALM_SPLIT* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_REALM_SPLIT* ClientOpcode::get_if();
 template<>
-tbc::CMSG_REALM_SPLIT& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_REALM_SPLIT& ClientOpcode::get();
 template<>
-tbc::CMSG_MOVE_CHNG_TRANSPORT* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MOVE_CHNG_TRANSPORT* ClientOpcode::get_if();
 template<>
-tbc::CMSG_MOVE_CHNG_TRANSPORT& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_MOVE_CHNG_TRANSPORT& ClientOpcode::get();
 template<>
-tbc::MSG_PARTY_ASSIGNMENT_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_PARTY_ASSIGNMENT_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_PARTY_ASSIGNMENT_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_PARTY_ASSIGNMENT_Client& ClientOpcode::get();
 template<>
-tbc::CMSG_TIME_SYNC_RESP* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_TIME_SYNC_RESP* ClientOpcode::get_if();
 template<>
-tbc::CMSG_TIME_SYNC_RESP& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_TIME_SYNC_RESP& ClientOpcode::get();
 template<>
-tbc::MSG_MOVE_START_DESCEND_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_DESCEND_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_MOVE_START_DESCEND_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_DESCEND_Client& ClientOpcode::get();
 template<>
-tbc::MSG_RAID_READY_CHECK_CONFIRM_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_RAID_READY_CHECK_CONFIRM_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_RAID_READY_CHECK_CONFIRM_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_RAID_READY_CHECK_CONFIRM_Client& ClientOpcode::get();
 template<>
-tbc::CMSG_VOICE_SESSION_ENABLE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_VOICE_SESSION_ENABLE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_VOICE_SESSION_ENABLE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_VOICE_SESSION_ENABLE& ClientOpcode::get();
 template<>
-tbc::CMSG_COMMENTATOR_ENABLE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_COMMENTATOR_ENABLE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_COMMENTATOR_ENABLE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_COMMENTATOR_ENABLE& ClientOpcode::get();
 template<>
-tbc::MSG_RAID_READY_CHECK_FINISHED_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_RAID_READY_CHECK_FINISHED_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_RAID_READY_CHECK_FINISHED_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_RAID_READY_CHECK_FINISHED_Client& ClientOpcode::get();
 template<>
-tbc::CMSG_COMPLAIN* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_COMPLAIN* ClientOpcode::get_if();
 template<>
-tbc::CMSG_COMPLAIN& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_COMPLAIN& ClientOpcode::get();
 template<>
-tbc::CMSG_CHANNEL_DISPLAY_LIST* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHANNEL_DISPLAY_LIST* ClientOpcode::get_if();
 template<>
-tbc::CMSG_CHANNEL_DISPLAY_LIST& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHANNEL_DISPLAY_LIST& ClientOpcode::get();
 template<>
-tbc::CMSG_SET_ACTIVE_VOICE_CHANNEL* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_ACTIVE_VOICE_CHANNEL* ClientOpcode::get_if();
 template<>
-tbc::CMSG_SET_ACTIVE_VOICE_CHANNEL& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_ACTIVE_VOICE_CHANNEL& ClientOpcode::get();
 template<>
-tbc::CMSG_GET_CHANNEL_MEMBER_COUNT* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GET_CHANNEL_MEMBER_COUNT* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GET_CHANNEL_MEMBER_COUNT& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GET_CHANNEL_MEMBER_COUNT& ClientOpcode::get();
 template<>
-tbc::CMSG_CHANNEL_VOICE_ON* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHANNEL_VOICE_ON* ClientOpcode::get_if();
 template<>
-tbc::CMSG_CHANNEL_VOICE_ON& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CHANNEL_VOICE_ON& ClientOpcode::get();
 template<>
-tbc::CMSG_REPORT_PVP_AFK* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_REPORT_PVP_AFK* ClientOpcode::get_if();
 template<>
-tbc::CMSG_REPORT_PVP_AFK& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_REPORT_PVP_AFK& ClientOpcode::get();
 template<>
-tbc::CMSG_GUILD_BANKER_ACTIVATE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_BANKER_ACTIVATE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GUILD_BANKER_ACTIVATE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_BANKER_ACTIVATE& ClientOpcode::get();
 template<>
-tbc::CMSG_GUILD_BANK_QUERY_TAB* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_BANK_QUERY_TAB* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GUILD_BANK_QUERY_TAB& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_BANK_QUERY_TAB& ClientOpcode::get();
 template<>
-tbc::CMSG_GUILD_BANK_SWAP_ITEMS* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_BANK_SWAP_ITEMS* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GUILD_BANK_SWAP_ITEMS& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_BANK_SWAP_ITEMS& ClientOpcode::get();
 template<>
-tbc::CMSG_GUILD_BANK_BUY_TAB* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_BANK_BUY_TAB* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GUILD_BANK_BUY_TAB& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_BANK_BUY_TAB& ClientOpcode::get();
 template<>
-tbc::CMSG_GUILD_BANK_UPDATE_TAB* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_BANK_UPDATE_TAB* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GUILD_BANK_UPDATE_TAB& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_BANK_UPDATE_TAB& ClientOpcode::get();
 template<>
-tbc::CMSG_GUILD_BANK_DEPOSIT_MONEY* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_BANK_DEPOSIT_MONEY* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GUILD_BANK_DEPOSIT_MONEY& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_BANK_DEPOSIT_MONEY& ClientOpcode::get();
 template<>
-tbc::CMSG_GUILD_BANK_WITHDRAW_MONEY* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_BANK_WITHDRAW_MONEY* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GUILD_BANK_WITHDRAW_MONEY& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GUILD_BANK_WITHDRAW_MONEY& ClientOpcode::get();
 template<>
-tbc::MSG_GUILD_BANK_LOG_QUERY_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_GUILD_BANK_LOG_QUERY_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_GUILD_BANK_LOG_QUERY_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_GUILD_BANK_LOG_QUERY_Client& ClientOpcode::get();
 template<>
-tbc::CMSG_SET_CHANNEL_WATCH* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_CHANNEL_WATCH* ClientOpcode::get_if();
 template<>
-tbc::CMSG_SET_CHANNEL_WATCH& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_CHANNEL_WATCH& ClientOpcode::get();
 template<>
-tbc::CMSG_CLEAR_CHANNEL_WATCH* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CLEAR_CHANNEL_WATCH* ClientOpcode::get_if();
 template<>
-tbc::CMSG_CLEAR_CHANNEL_WATCH& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_CLEAR_CHANNEL_WATCH& ClientOpcode::get();
 template<>
-tbc::CMSG_SPELLCLICK* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SPELLCLICK* ClientOpcode::get_if();
 template<>
-tbc::CMSG_SPELLCLICK& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SPELLCLICK& ClientOpcode::get();
 template<>
-tbc::MSG_GUILD_PERMISSIONS_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_GUILD_PERMISSIONS_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_GUILD_PERMISSIONS_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_GUILD_PERMISSIONS_Client& ClientOpcode::get();
 template<>
-tbc::MSG_GUILD_BANK_MONEY_WITHDRAWN_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_GUILD_BANK_MONEY_WITHDRAWN_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_GUILD_BANK_MONEY_WITHDRAWN_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_GUILD_BANK_MONEY_WITHDRAWN_Client& ClientOpcode::get();
 template<>
-tbc::MSG_GUILD_EVENT_LOG_QUERY_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_GUILD_EVENT_LOG_QUERY_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_GUILD_EVENT_LOG_QUERY_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_GUILD_EVENT_LOG_QUERY_Client& ClientOpcode::get();
 template<>
-tbc::CMSG_GET_MIRRORIMAGE_DATA* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GET_MIRRORIMAGE_DATA* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GET_MIRRORIMAGE_DATA& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GET_MIRRORIMAGE_DATA& ClientOpcode::get();
 template<>
-tbc::CMSG_KEEP_ALIVE* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_KEEP_ALIVE* ClientOpcode::get_if();
 template<>
-tbc::CMSG_KEEP_ALIVE& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_KEEP_ALIVE& ClientOpcode::get();
 template<>
-tbc::CMSG_OPT_OUT_OF_LOOT* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_OPT_OUT_OF_LOOT* ClientOpcode::get_if();
 template<>
-tbc::CMSG_OPT_OUT_OF_LOOT& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_OPT_OUT_OF_LOOT& ClientOpcode::get();
 template<>
-tbc::MSG_QUERY_GUILD_BANK_TEXT_Client* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_QUERY_GUILD_BANK_TEXT_Client* ClientOpcode::get_if();
 template<>
-tbc::MSG_QUERY_GUILD_BANK_TEXT_Client& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_QUERY_GUILD_BANK_TEXT_Client& ClientOpcode::get();
 template<>
-tbc::CMSG_SET_GUILD_BANK_TEXT* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_GUILD_BANK_TEXT* ClientOpcode::get_if();
 template<>
-tbc::CMSG_SET_GUILD_BANK_TEXT& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_GUILD_BANK_TEXT& ClientOpcode::get();
 template<>
-tbc::CMSG_GRANT_LEVEL* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GRANT_LEVEL* ClientOpcode::get_if();
 template<>
-tbc::CMSG_GRANT_LEVEL& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_GRANT_LEVEL& ClientOpcode::get();
 template<>
-tbc::CMSG_TOTEM_DESTROYED* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_TOTEM_DESTROYED* ClientOpcode::get_if();
 template<>
-tbc::CMSG_TOTEM_DESTROYED& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_TOTEM_DESTROYED& ClientOpcode::get();
 template<>
-tbc::CMSG_QUESTGIVER_STATUS_MULTIPLE_QUERY* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_QUESTGIVER_STATUS_MULTIPLE_QUERY* ClientOpcode::get_if();
 template<>
-tbc::CMSG_QUESTGIVER_STATUS_MULTIPLE_QUERY& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_QUESTGIVER_STATUS_MULTIPLE_QUERY& ClientOpcode::get();
 template<>
-tbc::CMSG_SET_PLAYER_DECLINED_NAMES* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_PLAYER_DECLINED_NAMES* ClientOpcode::get_if();
 template<>
-tbc::CMSG_SET_PLAYER_DECLINED_NAMES& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_SET_PLAYER_DECLINED_NAMES& ClientOpcode::get();
 template<>
-tbc::CMSG_ACCEPT_LEVEL_GRANT* ClientOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_ACCEPT_LEVEL_GRANT* ClientOpcode::get_if();
 template<>
-tbc::CMSG_ACCEPT_LEVEL_GRANT& ClientOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::CMSG_ACCEPT_LEVEL_GRANT& ClientOpcode::get();
 
 WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const ClientOpcode& opcode);
 
@@ -20935,6 +20967,7 @@ struct ServerOpcode {
         SMSG_BINDER_CONFIRM = 747,
         SMSG_BATTLEGROUND_PLAYER_JOINED = 748,
         SMSG_BATTLEGROUND_PLAYER_LEFT = 749,
+        SMSG_ADDON_INFO = 751,
         SMSG_PET_UNLEARN_CONFIRM = 753,
         SMSG_PARTY_MEMBER_STATS_FULL = 754,
         SMSG_WEATHER = 756,
@@ -21025,6 +21058,7 @@ struct ServerOpcode {
         SMSG_COMPLAIN_RESULT = 967,
         SMSG_FEATURE_SYSTEM_STATUS = 968,
         SMSG_CHANNEL_MEMBER_COUNT = 980,
+        SMSG_GUILD_BANK_LIST = 999,
         MSG_GUILD_BANK_LOG_QUERY = 1005,
         SMSG_USERLIST_ADD = 1007,
         SMSG_USERLIST_REMOVE = 1008,
@@ -21355,6 +21389,7 @@ struct ServerOpcode {
         tbc::SMSG_BINDER_CONFIRM SMSG_BINDER_CONFIRM;
         tbc::SMSG_BATTLEGROUND_PLAYER_JOINED SMSG_BATTLEGROUND_PLAYER_JOINED;
         tbc::SMSG_BATTLEGROUND_PLAYER_LEFT SMSG_BATTLEGROUND_PLAYER_LEFT;
+        tbc::SMSG_ADDON_INFO SMSG_ADDON_INFO;
         tbc::SMSG_PET_UNLEARN_CONFIRM SMSG_PET_UNLEARN_CONFIRM;
         tbc::SMSG_PARTY_MEMBER_STATS_FULL SMSG_PARTY_MEMBER_STATS_FULL;
         tbc::SMSG_WEATHER SMSG_WEATHER;
@@ -21445,6 +21480,7 @@ struct ServerOpcode {
         tbc::SMSG_COMPLAIN_RESULT SMSG_COMPLAIN_RESULT;
         tbc::SMSG_FEATURE_SYSTEM_STATUS SMSG_FEATURE_SYSTEM_STATUS;
         tbc::SMSG_CHANNEL_MEMBER_COUNT SMSG_CHANNEL_MEMBER_COUNT;
+        tbc::SMSG_GUILD_BANK_LIST SMSG_GUILD_BANK_LIST;
         tbc::MSG_GUILD_BANK_LOG_QUERY_Server MSG_GUILD_BANK_LOG_QUERY;
         tbc::SMSG_USERLIST_ADD SMSG_USERLIST_ADD;
         tbc::SMSG_USERLIST_REMOVE SMSG_USERLIST_REMOVE;
@@ -22397,6 +22433,9 @@ struct ServerOpcode {
         if (opcode == Opcode::SMSG_BATTLEGROUND_PLAYER_LEFT) {
             this->SMSG_BATTLEGROUND_PLAYER_LEFT = std::move(other.SMSG_BATTLEGROUND_PLAYER_LEFT);
         }
+        if (opcode == Opcode::SMSG_ADDON_INFO) {
+            this->SMSG_ADDON_INFO = std::move(other.SMSG_ADDON_INFO);
+        }
         if (opcode == Opcode::SMSG_PET_UNLEARN_CONFIRM) {
             this->SMSG_PET_UNLEARN_CONFIRM = std::move(other.SMSG_PET_UNLEARN_CONFIRM);
         }
@@ -22666,6 +22705,9 @@ struct ServerOpcode {
         }
         if (opcode == Opcode::SMSG_CHANNEL_MEMBER_COUNT) {
             this->SMSG_CHANNEL_MEMBER_COUNT = std::move(other.SMSG_CHANNEL_MEMBER_COUNT);
+        }
+        if (opcode == Opcode::SMSG_GUILD_BANK_LIST) {
+            this->SMSG_GUILD_BANK_LIST = std::move(other.SMSG_GUILD_BANK_LIST);
         }
         if (opcode == Opcode::MSG_GUILD_BANK_LOG_QUERY) {
             this->MSG_GUILD_BANK_LOG_QUERY = std::move(other.MSG_GUILD_BANK_LOG_QUERY);
@@ -23651,6 +23693,9 @@ struct ServerOpcode {
         if (opcode == Opcode::SMSG_BATTLEGROUND_PLAYER_LEFT) {
             this->SMSG_BATTLEGROUND_PLAYER_LEFT.~SMSG_BATTLEGROUND_PLAYER_LEFT();
         }
+        if (opcode == Opcode::SMSG_ADDON_INFO) {
+            this->SMSG_ADDON_INFO.~SMSG_ADDON_INFO();
+        }
         if (opcode == Opcode::SMSG_PET_UNLEARN_CONFIRM) {
             this->SMSG_PET_UNLEARN_CONFIRM.~SMSG_PET_UNLEARN_CONFIRM();
         }
@@ -23920,6 +23965,9 @@ struct ServerOpcode {
         }
         if (opcode == Opcode::SMSG_CHANNEL_MEMBER_COUNT) {
             this->SMSG_CHANNEL_MEMBER_COUNT.~SMSG_CHANNEL_MEMBER_COUNT();
+        }
+        if (opcode == Opcode::SMSG_GUILD_BANK_LIST) {
+            this->SMSG_GUILD_BANK_LIST.~SMSG_GUILD_BANK_LIST();
         }
         if (opcode == Opcode::MSG_GUILD_BANK_LOG_QUERY) {
             this->MSG_GUILD_BANK_LOG_QUERY.~MSG_GUILD_BANK_LOG_QUERY_Server();
@@ -25211,6 +25259,10 @@ struct ServerOpcode {
         opcode = Opcode::SMSG_BATTLEGROUND_PLAYER_LEFT;
         new (&this->SMSG_BATTLEGROUND_PLAYER_LEFT) tbc::SMSG_BATTLEGROUND_PLAYER_LEFT (std::move(obj));
     }
+    explicit ServerOpcode(tbc::SMSG_ADDON_INFO&& obj) {
+        opcode = Opcode::SMSG_ADDON_INFO;
+        new (&this->SMSG_ADDON_INFO) tbc::SMSG_ADDON_INFO (std::move(obj));
+    }
     explicit ServerOpcode(tbc::SMSG_PET_UNLEARN_CONFIRM&& obj) {
         opcode = Opcode::SMSG_PET_UNLEARN_CONFIRM;
         new (&this->SMSG_PET_UNLEARN_CONFIRM) tbc::SMSG_PET_UNLEARN_CONFIRM (std::move(obj));
@@ -25571,6 +25623,10 @@ struct ServerOpcode {
         opcode = Opcode::SMSG_CHANNEL_MEMBER_COUNT;
         new (&this->SMSG_CHANNEL_MEMBER_COUNT) tbc::SMSG_CHANNEL_MEMBER_COUNT (std::move(obj));
     }
+    explicit ServerOpcode(tbc::SMSG_GUILD_BANK_LIST&& obj) {
+        opcode = Opcode::SMSG_GUILD_BANK_LIST;
+        new (&this->SMSG_GUILD_BANK_LIST) tbc::SMSG_GUILD_BANK_LIST (std::move(obj));
+    }
     explicit ServerOpcode(tbc::MSG_GUILD_BANK_LOG_QUERY_Server&& obj) {
         opcode = Opcode::MSG_GUILD_BANK_LOG_QUERY;
         new (&this->MSG_GUILD_BANK_LOG_QUERY) tbc::MSG_GUILD_BANK_LOG_QUERY_Server (std::move(obj));
@@ -25654,1681 +25710,1691 @@ struct ServerOpcode {
 
     template<typename T>
     // NOLINTNEXTLINE
-    T& get(); // All possible types have been specialized
+    WOW_WORLD_MESSAGES_CPP_EXPORT T& get(); // All possible types have been specialized
 
     template<typename T>
     // NOLINTNEXTLINE
-    T* get_if(); // All possible types have been specialized
+    WOW_WORLD_MESSAGES_CPP_EXPORT T* get_if(); // All possible types have been specialized
+
+    WOW_WORLD_MESSAGES_CPP_EXPORT const char* to_string() const;
 };
 
 template<>
-tbc::SMSG_CHAR_CREATE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CHAR_CREATE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_CHAR_CREATE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CHAR_CREATE& ServerOpcode::get();
 template<>
-tbc::SMSG_CHAR_ENUM* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CHAR_ENUM* ServerOpcode::get_if();
 template<>
-tbc::SMSG_CHAR_ENUM& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CHAR_ENUM& ServerOpcode::get();
 template<>
-tbc::SMSG_CHAR_DELETE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CHAR_DELETE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_CHAR_DELETE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CHAR_DELETE& ServerOpcode::get();
 template<>
-tbc::SMSG_NEW_WORLD* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_NEW_WORLD* ServerOpcode::get_if();
 template<>
-tbc::SMSG_NEW_WORLD& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_NEW_WORLD& ServerOpcode::get();
 template<>
-tbc::SMSG_TRANSFER_PENDING* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_TRANSFER_PENDING* ServerOpcode::get_if();
 template<>
-tbc::SMSG_TRANSFER_PENDING& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_TRANSFER_PENDING& ServerOpcode::get();
 template<>
-tbc::SMSG_TRANSFER_ABORTED* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_TRANSFER_ABORTED* ServerOpcode::get_if();
 template<>
-tbc::SMSG_TRANSFER_ABORTED& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_TRANSFER_ABORTED& ServerOpcode::get();
 template<>
-tbc::SMSG_CHARACTER_LOGIN_FAILED* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CHARACTER_LOGIN_FAILED* ServerOpcode::get_if();
 template<>
-tbc::SMSG_CHARACTER_LOGIN_FAILED& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CHARACTER_LOGIN_FAILED& ServerOpcode::get();
 template<>
-tbc::SMSG_LOGIN_SETTIMESPEED* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LOGIN_SETTIMESPEED* ServerOpcode::get_if();
 template<>
-tbc::SMSG_LOGIN_SETTIMESPEED& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LOGIN_SETTIMESPEED& ServerOpcode::get();
 template<>
-tbc::SMSG_LOGOUT_RESPONSE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LOGOUT_RESPONSE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_LOGOUT_RESPONSE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LOGOUT_RESPONSE& ServerOpcode::get();
 template<>
-tbc::SMSG_LOGOUT_COMPLETE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LOGOUT_COMPLETE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_LOGOUT_COMPLETE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LOGOUT_COMPLETE& ServerOpcode::get();
 template<>
-tbc::SMSG_LOGOUT_CANCEL_ACK* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LOGOUT_CANCEL_ACK* ServerOpcode::get_if();
 template<>
-tbc::SMSG_LOGOUT_CANCEL_ACK& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LOGOUT_CANCEL_ACK& ServerOpcode::get();
 template<>
-tbc::SMSG_NAME_QUERY_RESPONSE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_NAME_QUERY_RESPONSE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_NAME_QUERY_RESPONSE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_NAME_QUERY_RESPONSE& ServerOpcode::get();
 template<>
-tbc::SMSG_PET_NAME_QUERY_RESPONSE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PET_NAME_QUERY_RESPONSE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_PET_NAME_QUERY_RESPONSE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PET_NAME_QUERY_RESPONSE& ServerOpcode::get();
 template<>
-tbc::SMSG_GUILD_QUERY_RESPONSE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GUILD_QUERY_RESPONSE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_GUILD_QUERY_RESPONSE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GUILD_QUERY_RESPONSE& ServerOpcode::get();
 template<>
-tbc::SMSG_ITEM_QUERY_SINGLE_RESPONSE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ITEM_QUERY_SINGLE_RESPONSE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_ITEM_QUERY_SINGLE_RESPONSE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ITEM_QUERY_SINGLE_RESPONSE& ServerOpcode::get();
 template<>
-tbc::SMSG_PAGE_TEXT_QUERY_RESPONSE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PAGE_TEXT_QUERY_RESPONSE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_PAGE_TEXT_QUERY_RESPONSE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PAGE_TEXT_QUERY_RESPONSE& ServerOpcode::get();
 template<>
-tbc::SMSG_QUEST_QUERY_RESPONSE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_QUEST_QUERY_RESPONSE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_QUEST_QUERY_RESPONSE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_QUEST_QUERY_RESPONSE& ServerOpcode::get();
 template<>
-tbc::SMSG_GAMEOBJECT_QUERY_RESPONSE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GAMEOBJECT_QUERY_RESPONSE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_GAMEOBJECT_QUERY_RESPONSE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GAMEOBJECT_QUERY_RESPONSE& ServerOpcode::get();
 template<>
-tbc::SMSG_CREATURE_QUERY_RESPONSE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CREATURE_QUERY_RESPONSE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_CREATURE_QUERY_RESPONSE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CREATURE_QUERY_RESPONSE& ServerOpcode::get();
 template<>
-tbc::SMSG_WHO* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_WHO* ServerOpcode::get_if();
 template<>
-tbc::SMSG_WHO& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_WHO& ServerOpcode::get();
 template<>
-tbc::SMSG_WHOIS* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_WHOIS* ServerOpcode::get_if();
 template<>
-tbc::SMSG_WHOIS& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_WHOIS& ServerOpcode::get();
 template<>
-tbc::SMSG_CONTACT_LIST* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CONTACT_LIST* ServerOpcode::get_if();
 template<>
-tbc::SMSG_CONTACT_LIST& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CONTACT_LIST& ServerOpcode::get();
 template<>
-tbc::SMSG_FRIEND_STATUS* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_FRIEND_STATUS* ServerOpcode::get_if();
 template<>
-tbc::SMSG_FRIEND_STATUS& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_FRIEND_STATUS& ServerOpcode::get();
 template<>
-tbc::SMSG_GROUP_INVITE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GROUP_INVITE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_GROUP_INVITE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GROUP_INVITE& ServerOpcode::get();
 template<>
-tbc::SMSG_GROUP_DECLINE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GROUP_DECLINE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_GROUP_DECLINE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GROUP_DECLINE& ServerOpcode::get();
 template<>
-tbc::SMSG_GROUP_UNINVITE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GROUP_UNINVITE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_GROUP_UNINVITE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GROUP_UNINVITE& ServerOpcode::get();
 template<>
-tbc::SMSG_GROUP_SET_LEADER* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GROUP_SET_LEADER* ServerOpcode::get_if();
 template<>
-tbc::SMSG_GROUP_SET_LEADER& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GROUP_SET_LEADER& ServerOpcode::get();
 template<>
-tbc::SMSG_GROUP_DESTROYED* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GROUP_DESTROYED* ServerOpcode::get_if();
 template<>
-tbc::SMSG_GROUP_DESTROYED& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GROUP_DESTROYED& ServerOpcode::get();
 template<>
-tbc::SMSG_GROUP_LIST* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GROUP_LIST* ServerOpcode::get_if();
 template<>
-tbc::SMSG_GROUP_LIST& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GROUP_LIST& ServerOpcode::get();
 template<>
-tbc::SMSG_PARTY_MEMBER_STATS* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PARTY_MEMBER_STATS* ServerOpcode::get_if();
 template<>
-tbc::SMSG_PARTY_MEMBER_STATS& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PARTY_MEMBER_STATS& ServerOpcode::get();
 template<>
-tbc::SMSG_PARTY_COMMAND_RESULT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PARTY_COMMAND_RESULT* ServerOpcode::get_if();
 template<>
-tbc::SMSG_PARTY_COMMAND_RESULT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PARTY_COMMAND_RESULT& ServerOpcode::get();
 template<>
-tbc::SMSG_GUILD_INVITE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GUILD_INVITE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_GUILD_INVITE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GUILD_INVITE& ServerOpcode::get();
 template<>
-tbc::SMSG_GUILD_DECLINE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GUILD_DECLINE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_GUILD_DECLINE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GUILD_DECLINE& ServerOpcode::get();
 template<>
-tbc::SMSG_GUILD_INFO* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GUILD_INFO* ServerOpcode::get_if();
 template<>
-tbc::SMSG_GUILD_INFO& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GUILD_INFO& ServerOpcode::get();
 template<>
-tbc::SMSG_GUILD_ROSTER* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GUILD_ROSTER* ServerOpcode::get_if();
 template<>
-tbc::SMSG_GUILD_ROSTER& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GUILD_ROSTER& ServerOpcode::get();
 template<>
-tbc::SMSG_GUILD_EVENT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GUILD_EVENT* ServerOpcode::get_if();
 template<>
-tbc::SMSG_GUILD_EVENT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GUILD_EVENT& ServerOpcode::get();
 template<>
-tbc::SMSG_GUILD_COMMAND_RESULT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GUILD_COMMAND_RESULT* ServerOpcode::get_if();
 template<>
-tbc::SMSG_GUILD_COMMAND_RESULT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GUILD_COMMAND_RESULT& ServerOpcode::get();
 template<>
-tbc::SMSG_MESSAGECHAT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_MESSAGECHAT* ServerOpcode::get_if();
 template<>
-tbc::SMSG_MESSAGECHAT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_MESSAGECHAT& ServerOpcode::get();
 template<>
-tbc::SMSG_CHANNEL_NOTIFY* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CHANNEL_NOTIFY* ServerOpcode::get_if();
 template<>
-tbc::SMSG_CHANNEL_NOTIFY& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CHANNEL_NOTIFY& ServerOpcode::get();
 template<>
-tbc::SMSG_CHANNEL_LIST* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CHANNEL_LIST* ServerOpcode::get_if();
 template<>
-tbc::SMSG_CHANNEL_LIST& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CHANNEL_LIST& ServerOpcode::get();
 template<>
-tbc::SMSG_UPDATE_OBJECT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_UPDATE_OBJECT* ServerOpcode::get_if();
 template<>
-tbc::SMSG_UPDATE_OBJECT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_UPDATE_OBJECT& ServerOpcode::get();
 template<>
-tbc::SMSG_DESTROY_OBJECT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_DESTROY_OBJECT* ServerOpcode::get_if();
 template<>
-tbc::SMSG_DESTROY_OBJECT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_DESTROY_OBJECT& ServerOpcode::get();
 template<>
-tbc::SMSG_READ_ITEM_OK* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_READ_ITEM_OK* ServerOpcode::get_if();
 template<>
-tbc::SMSG_READ_ITEM_OK& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_READ_ITEM_OK& ServerOpcode::get();
 template<>
-tbc::SMSG_READ_ITEM_FAILED* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_READ_ITEM_FAILED* ServerOpcode::get_if();
 template<>
-tbc::SMSG_READ_ITEM_FAILED& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_READ_ITEM_FAILED& ServerOpcode::get();
 template<>
-tbc::SMSG_ITEM_COOLDOWN* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ITEM_COOLDOWN* ServerOpcode::get_if();
 template<>
-tbc::SMSG_ITEM_COOLDOWN& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ITEM_COOLDOWN& ServerOpcode::get();
 template<>
-tbc::SMSG_GAMEOBJECT_CUSTOM_ANIM* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GAMEOBJECT_CUSTOM_ANIM* ServerOpcode::get_if();
 template<>
-tbc::SMSG_GAMEOBJECT_CUSTOM_ANIM& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GAMEOBJECT_CUSTOM_ANIM& ServerOpcode::get();
 template<>
-tbc::MSG_MOVE_START_FORWARD_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_FORWARD_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_MOVE_START_FORWARD_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_FORWARD_Server& ServerOpcode::get();
 template<>
-tbc::MSG_MOVE_START_BACKWARD_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_BACKWARD_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_MOVE_START_BACKWARD_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_BACKWARD_Server& ServerOpcode::get();
 template<>
-tbc::MSG_MOVE_STOP_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_STOP_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_MOVE_STOP_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_STOP_Server& ServerOpcode::get();
 template<>
-tbc::MSG_MOVE_START_STRAFE_LEFT_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_STRAFE_LEFT_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_MOVE_START_STRAFE_LEFT_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_STRAFE_LEFT_Server& ServerOpcode::get();
 template<>
-tbc::MSG_MOVE_START_STRAFE_RIGHT_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_STRAFE_RIGHT_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_MOVE_START_STRAFE_RIGHT_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_STRAFE_RIGHT_Server& ServerOpcode::get();
 template<>
-tbc::MSG_MOVE_STOP_STRAFE_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_STOP_STRAFE_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_MOVE_STOP_STRAFE_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_STOP_STRAFE_Server& ServerOpcode::get();
 template<>
-tbc::MSG_MOVE_JUMP_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_JUMP_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_MOVE_JUMP_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_JUMP_Server& ServerOpcode::get();
 template<>
-tbc::MSG_MOVE_START_TURN_LEFT_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_TURN_LEFT_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_MOVE_START_TURN_LEFT_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_TURN_LEFT_Server& ServerOpcode::get();
 template<>
-tbc::MSG_MOVE_START_TURN_RIGHT_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_TURN_RIGHT_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_MOVE_START_TURN_RIGHT_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_TURN_RIGHT_Server& ServerOpcode::get();
 template<>
-tbc::MSG_MOVE_STOP_TURN_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_STOP_TURN_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_MOVE_STOP_TURN_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_STOP_TURN_Server& ServerOpcode::get();
 template<>
-tbc::MSG_MOVE_START_PITCH_UP_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_PITCH_UP_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_MOVE_START_PITCH_UP_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_PITCH_UP_Server& ServerOpcode::get();
 template<>
-tbc::MSG_MOVE_START_PITCH_DOWN_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_PITCH_DOWN_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_MOVE_START_PITCH_DOWN_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_PITCH_DOWN_Server& ServerOpcode::get();
 template<>
-tbc::MSG_MOVE_STOP_PITCH_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_STOP_PITCH_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_MOVE_STOP_PITCH_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_STOP_PITCH_Server& ServerOpcode::get();
 template<>
-tbc::MSG_MOVE_SET_RUN_MODE_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_SET_RUN_MODE_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_MOVE_SET_RUN_MODE_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_SET_RUN_MODE_Server& ServerOpcode::get();
 template<>
-tbc::MSG_MOVE_SET_WALK_MODE_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_SET_WALK_MODE_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_MOVE_SET_WALK_MODE_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_SET_WALK_MODE_Server& ServerOpcode::get();
 template<>
-tbc::MSG_MOVE_TELEPORT_CHEAT_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_TELEPORT_CHEAT_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_MOVE_TELEPORT_CHEAT_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_TELEPORT_CHEAT_Server& ServerOpcode::get();
 template<>
-tbc::MSG_MOVE_TELEPORT_ACK_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_TELEPORT_ACK_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_MOVE_TELEPORT_ACK_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_TELEPORT_ACK_Server& ServerOpcode::get();
 template<>
-tbc::MSG_MOVE_FALL_LAND_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_FALL_LAND_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_MOVE_FALL_LAND_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_FALL_LAND_Server& ServerOpcode::get();
 template<>
-tbc::MSG_MOVE_START_SWIM_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_SWIM_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_MOVE_START_SWIM_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_SWIM_Server& ServerOpcode::get();
 template<>
-tbc::MSG_MOVE_STOP_SWIM_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_STOP_SWIM_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_MOVE_STOP_SWIM_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_STOP_SWIM_Server& ServerOpcode::get();
 template<>
-tbc::MSG_MOVE_SET_FACING_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_SET_FACING_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_MOVE_SET_FACING_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_SET_FACING_Server& ServerOpcode::get();
 template<>
-tbc::MSG_MOVE_SET_PITCH_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_SET_PITCH_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_MOVE_SET_PITCH_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_SET_PITCH_Server& ServerOpcode::get();
 template<>
-tbc::MSG_MOVE_WORLDPORT_ACK* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_WORLDPORT_ACK* ServerOpcode::get_if();
 template<>
-tbc::MSG_MOVE_WORLDPORT_ACK& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_WORLDPORT_ACK& ServerOpcode::get();
 template<>
-tbc::SMSG_MONSTER_MOVE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_MONSTER_MOVE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_MONSTER_MOVE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_MONSTER_MOVE& ServerOpcode::get();
 template<>
-tbc::SMSG_MOVE_WATER_WALK* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_MOVE_WATER_WALK* ServerOpcode::get_if();
 template<>
-tbc::SMSG_MOVE_WATER_WALK& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_MOVE_WATER_WALK& ServerOpcode::get();
 template<>
-tbc::SMSG_MOVE_LAND_WALK* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_MOVE_LAND_WALK* ServerOpcode::get_if();
 template<>
-tbc::SMSG_MOVE_LAND_WALK& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_MOVE_LAND_WALK& ServerOpcode::get();
 template<>
-tbc::SMSG_FORCE_RUN_SPEED_CHANGE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_FORCE_RUN_SPEED_CHANGE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_FORCE_RUN_SPEED_CHANGE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_FORCE_RUN_SPEED_CHANGE& ServerOpcode::get();
 template<>
-tbc::SMSG_FORCE_RUN_BACK_SPEED_CHANGE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_FORCE_RUN_BACK_SPEED_CHANGE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_FORCE_RUN_BACK_SPEED_CHANGE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_FORCE_RUN_BACK_SPEED_CHANGE& ServerOpcode::get();
 template<>
-tbc::SMSG_FORCE_SWIM_SPEED_CHANGE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_FORCE_SWIM_SPEED_CHANGE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_FORCE_SWIM_SPEED_CHANGE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_FORCE_SWIM_SPEED_CHANGE& ServerOpcode::get();
 template<>
-tbc::SMSG_FORCE_MOVE_ROOT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_FORCE_MOVE_ROOT* ServerOpcode::get_if();
 template<>
-tbc::SMSG_FORCE_MOVE_ROOT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_FORCE_MOVE_ROOT& ServerOpcode::get();
 template<>
-tbc::SMSG_FORCE_MOVE_UNROOT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_FORCE_MOVE_UNROOT* ServerOpcode::get_if();
 template<>
-tbc::SMSG_FORCE_MOVE_UNROOT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_FORCE_MOVE_UNROOT& ServerOpcode::get();
 template<>
-tbc::MSG_MOVE_ROOT_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_ROOT_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_MOVE_ROOT_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_ROOT_Server& ServerOpcode::get();
 template<>
-tbc::MSG_MOVE_UNROOT_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_UNROOT_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_MOVE_UNROOT_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_UNROOT_Server& ServerOpcode::get();
 template<>
-tbc::MSG_MOVE_HEARTBEAT_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_HEARTBEAT_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_MOVE_HEARTBEAT_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_HEARTBEAT_Server& ServerOpcode::get();
 template<>
-tbc::SMSG_MOVE_KNOCK_BACK* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_MOVE_KNOCK_BACK* ServerOpcode::get_if();
 template<>
-tbc::SMSG_MOVE_KNOCK_BACK& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_MOVE_KNOCK_BACK& ServerOpcode::get();
 template<>
-tbc::MSG_MOVE_KNOCK_BACK_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_KNOCK_BACK_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_MOVE_KNOCK_BACK_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_KNOCK_BACK_Server& ServerOpcode::get();
 template<>
-tbc::SMSG_MOVE_FEATHER_FALL* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_MOVE_FEATHER_FALL* ServerOpcode::get_if();
 template<>
-tbc::SMSG_MOVE_FEATHER_FALL& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_MOVE_FEATHER_FALL& ServerOpcode::get();
 template<>
-tbc::SMSG_MOVE_NORMAL_FALL* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_MOVE_NORMAL_FALL* ServerOpcode::get_if();
 template<>
-tbc::SMSG_MOVE_NORMAL_FALL& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_MOVE_NORMAL_FALL& ServerOpcode::get();
 template<>
-tbc::SMSG_MOVE_SET_HOVER* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_MOVE_SET_HOVER* ServerOpcode::get_if();
 template<>
-tbc::SMSG_MOVE_SET_HOVER& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_MOVE_SET_HOVER& ServerOpcode::get();
 template<>
-tbc::SMSG_MOVE_UNSET_HOVER* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_MOVE_UNSET_HOVER* ServerOpcode::get_if();
 template<>
-tbc::SMSG_MOVE_UNSET_HOVER& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_MOVE_UNSET_HOVER& ServerOpcode::get();
 template<>
-tbc::MSG_MOVE_HOVER* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_HOVER* ServerOpcode::get_if();
 template<>
-tbc::MSG_MOVE_HOVER& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_HOVER& ServerOpcode::get();
 template<>
-tbc::SMSG_TRIGGER_CINEMATIC* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_TRIGGER_CINEMATIC* ServerOpcode::get_if();
 template<>
-tbc::SMSG_TRIGGER_CINEMATIC& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_TRIGGER_CINEMATIC& ServerOpcode::get();
 template<>
-tbc::SMSG_TUTORIAL_FLAGS* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_TUTORIAL_FLAGS* ServerOpcode::get_if();
 template<>
-tbc::SMSG_TUTORIAL_FLAGS& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_TUTORIAL_FLAGS& ServerOpcode::get();
 template<>
-tbc::SMSG_EMOTE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_EMOTE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_EMOTE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_EMOTE& ServerOpcode::get();
 template<>
-tbc::SMSG_TEXT_EMOTE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_TEXT_EMOTE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_TEXT_EMOTE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_TEXT_EMOTE& ServerOpcode::get();
 template<>
-tbc::SMSG_INVENTORY_CHANGE_FAILURE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_INVENTORY_CHANGE_FAILURE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_INVENTORY_CHANGE_FAILURE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_INVENTORY_CHANGE_FAILURE& ServerOpcode::get();
 template<>
-tbc::SMSG_TRADE_STATUS* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_TRADE_STATUS* ServerOpcode::get_if();
 template<>
-tbc::SMSG_TRADE_STATUS& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_TRADE_STATUS& ServerOpcode::get();
 template<>
-tbc::SMSG_TRADE_STATUS_EXTENDED* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_TRADE_STATUS_EXTENDED* ServerOpcode::get_if();
 template<>
-tbc::SMSG_TRADE_STATUS_EXTENDED& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_TRADE_STATUS_EXTENDED& ServerOpcode::get();
 template<>
-tbc::SMSG_INITIALIZE_FACTIONS* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_INITIALIZE_FACTIONS* ServerOpcode::get_if();
 template<>
-tbc::SMSG_INITIALIZE_FACTIONS& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_INITIALIZE_FACTIONS& ServerOpcode::get();
 template<>
-tbc::SMSG_SET_FACTION_VISIBLE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SET_FACTION_VISIBLE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SET_FACTION_VISIBLE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SET_FACTION_VISIBLE& ServerOpcode::get();
 template<>
-tbc::SMSG_SET_FACTION_STANDING* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SET_FACTION_STANDING* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SET_FACTION_STANDING& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SET_FACTION_STANDING& ServerOpcode::get();
 template<>
-tbc::SMSG_SET_PROFICIENCY* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SET_PROFICIENCY* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SET_PROFICIENCY& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SET_PROFICIENCY& ServerOpcode::get();
 template<>
-tbc::SMSG_ACTION_BUTTONS* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ACTION_BUTTONS* ServerOpcode::get_if();
 template<>
-tbc::SMSG_ACTION_BUTTONS& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ACTION_BUTTONS& ServerOpcode::get();
 template<>
-tbc::SMSG_INITIAL_SPELLS* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_INITIAL_SPELLS* ServerOpcode::get_if();
 template<>
-tbc::SMSG_INITIAL_SPELLS& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_INITIAL_SPELLS& ServerOpcode::get();
 template<>
-tbc::SMSG_LEARNED_SPELL* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LEARNED_SPELL* ServerOpcode::get_if();
 template<>
-tbc::SMSG_LEARNED_SPELL& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LEARNED_SPELL& ServerOpcode::get();
 template<>
-tbc::SMSG_SUPERCEDED_SPELL* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SUPERCEDED_SPELL* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SUPERCEDED_SPELL& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SUPERCEDED_SPELL& ServerOpcode::get();
 template<>
-tbc::SMSG_CAST_FAILED* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CAST_FAILED* ServerOpcode::get_if();
 template<>
-tbc::SMSG_CAST_FAILED& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CAST_FAILED& ServerOpcode::get();
 template<>
-tbc::SMSG_SPELL_START* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPELL_START* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SPELL_START& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPELL_START& ServerOpcode::get();
 template<>
-tbc::SMSG_SPELL_GO* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPELL_GO* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SPELL_GO& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPELL_GO& ServerOpcode::get();
 template<>
-tbc::SMSG_SPELL_FAILURE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPELL_FAILURE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SPELL_FAILURE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPELL_FAILURE& ServerOpcode::get();
 template<>
-tbc::SMSG_SPELL_COOLDOWN* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPELL_COOLDOWN* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SPELL_COOLDOWN& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPELL_COOLDOWN& ServerOpcode::get();
 template<>
-tbc::SMSG_COOLDOWN_EVENT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_COOLDOWN_EVENT* ServerOpcode::get_if();
 template<>
-tbc::SMSG_COOLDOWN_EVENT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_COOLDOWN_EVENT& ServerOpcode::get();
 template<>
-tbc::SMSG_UPDATE_AURA_DURATION* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_UPDATE_AURA_DURATION* ServerOpcode::get_if();
 template<>
-tbc::SMSG_UPDATE_AURA_DURATION& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_UPDATE_AURA_DURATION& ServerOpcode::get();
 template<>
-tbc::SMSG_PET_CAST_FAILED* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PET_CAST_FAILED* ServerOpcode::get_if();
 template<>
-tbc::SMSG_PET_CAST_FAILED& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PET_CAST_FAILED& ServerOpcode::get();
 template<>
-tbc::MSG_CHANNEL_START_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_CHANNEL_START_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_CHANNEL_START_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_CHANNEL_START_Server& ServerOpcode::get();
 template<>
-tbc::MSG_CHANNEL_UPDATE_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_CHANNEL_UPDATE_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_CHANNEL_UPDATE_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_CHANNEL_UPDATE_Server& ServerOpcode::get();
 template<>
-tbc::SMSG_AI_REACTION* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_AI_REACTION* ServerOpcode::get_if();
 template<>
-tbc::SMSG_AI_REACTION& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_AI_REACTION& ServerOpcode::get();
 template<>
-tbc::SMSG_ATTACKSTART* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ATTACKSTART* ServerOpcode::get_if();
 template<>
-tbc::SMSG_ATTACKSTART& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ATTACKSTART& ServerOpcode::get();
 template<>
-tbc::SMSG_ATTACKSTOP* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ATTACKSTOP* ServerOpcode::get_if();
 template<>
-tbc::SMSG_ATTACKSTOP& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ATTACKSTOP& ServerOpcode::get();
 template<>
-tbc::SMSG_ATTACKSWING_NOTINRANGE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ATTACKSWING_NOTINRANGE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_ATTACKSWING_NOTINRANGE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ATTACKSWING_NOTINRANGE& ServerOpcode::get();
 template<>
-tbc::SMSG_ATTACKSWING_BADFACING* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ATTACKSWING_BADFACING* ServerOpcode::get_if();
 template<>
-tbc::SMSG_ATTACKSWING_BADFACING& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ATTACKSWING_BADFACING& ServerOpcode::get();
 template<>
-tbc::SMSG_ATTACKSWING_NOTSTANDING* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ATTACKSWING_NOTSTANDING* ServerOpcode::get_if();
 template<>
-tbc::SMSG_ATTACKSWING_NOTSTANDING& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ATTACKSWING_NOTSTANDING& ServerOpcode::get();
 template<>
-tbc::SMSG_ATTACKSWING_DEADTARGET* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ATTACKSWING_DEADTARGET* ServerOpcode::get_if();
 template<>
-tbc::SMSG_ATTACKSWING_DEADTARGET& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ATTACKSWING_DEADTARGET& ServerOpcode::get();
 template<>
-tbc::SMSG_ATTACKSWING_CANT_ATTACK* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ATTACKSWING_CANT_ATTACK* ServerOpcode::get_if();
 template<>
-tbc::SMSG_ATTACKSWING_CANT_ATTACK& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ATTACKSWING_CANT_ATTACK& ServerOpcode::get();
 template<>
-tbc::SMSG_ATTACKERSTATEUPDATE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ATTACKERSTATEUPDATE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_ATTACKERSTATEUPDATE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ATTACKERSTATEUPDATE& ServerOpcode::get();
 template<>
-tbc::SMSG_CANCEL_COMBAT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CANCEL_COMBAT* ServerOpcode::get_if();
 template<>
-tbc::SMSG_CANCEL_COMBAT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CANCEL_COMBAT& ServerOpcode::get();
 template<>
-tbc::SMSG_SPELLHEALLOG* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPELLHEALLOG* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SPELLHEALLOG& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPELLHEALLOG& ServerOpcode::get();
 template<>
-tbc::SMSG_SPELLENERGIZELOG* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPELLENERGIZELOG* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SPELLENERGIZELOG& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPELLENERGIZELOG& ServerOpcode::get();
 template<>
-tbc::SMSG_BINDPOINTUPDATE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_BINDPOINTUPDATE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_BINDPOINTUPDATE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_BINDPOINTUPDATE& ServerOpcode::get();
 template<>
-tbc::SMSG_PLAYERBOUND* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PLAYERBOUND* ServerOpcode::get_if();
 template<>
-tbc::SMSG_PLAYERBOUND& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PLAYERBOUND& ServerOpcode::get();
 template<>
-tbc::SMSG_CLIENT_CONTROL_UPDATE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CLIENT_CONTROL_UPDATE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_CLIENT_CONTROL_UPDATE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CLIENT_CONTROL_UPDATE& ServerOpcode::get();
 template<>
-tbc::SMSG_RESURRECT_REQUEST* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_RESURRECT_REQUEST* ServerOpcode::get_if();
 template<>
-tbc::SMSG_RESURRECT_REQUEST& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_RESURRECT_REQUEST& ServerOpcode::get();
 template<>
-tbc::SMSG_LOOT_RESPONSE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LOOT_RESPONSE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_LOOT_RESPONSE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LOOT_RESPONSE& ServerOpcode::get();
 template<>
-tbc::SMSG_LOOT_RELEASE_RESPONSE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LOOT_RELEASE_RESPONSE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_LOOT_RELEASE_RESPONSE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LOOT_RELEASE_RESPONSE& ServerOpcode::get();
 template<>
-tbc::SMSG_LOOT_REMOVED* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LOOT_REMOVED* ServerOpcode::get_if();
 template<>
-tbc::SMSG_LOOT_REMOVED& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LOOT_REMOVED& ServerOpcode::get();
 template<>
-tbc::SMSG_LOOT_MONEY_NOTIFY* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LOOT_MONEY_NOTIFY* ServerOpcode::get_if();
 template<>
-tbc::SMSG_LOOT_MONEY_NOTIFY& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LOOT_MONEY_NOTIFY& ServerOpcode::get();
 template<>
-tbc::SMSG_LOOT_CLEAR_MONEY* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LOOT_CLEAR_MONEY* ServerOpcode::get_if();
 template<>
-tbc::SMSG_LOOT_CLEAR_MONEY& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LOOT_CLEAR_MONEY& ServerOpcode::get();
 template<>
-tbc::SMSG_ITEM_PUSH_RESULT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ITEM_PUSH_RESULT* ServerOpcode::get_if();
 template<>
-tbc::SMSG_ITEM_PUSH_RESULT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ITEM_PUSH_RESULT& ServerOpcode::get();
 template<>
-tbc::SMSG_DUEL_REQUESTED* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_DUEL_REQUESTED* ServerOpcode::get_if();
 template<>
-tbc::SMSG_DUEL_REQUESTED& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_DUEL_REQUESTED& ServerOpcode::get();
 template<>
-tbc::SMSG_DUEL_OUTOFBOUNDS* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_DUEL_OUTOFBOUNDS* ServerOpcode::get_if();
 template<>
-tbc::SMSG_DUEL_OUTOFBOUNDS& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_DUEL_OUTOFBOUNDS& ServerOpcode::get();
 template<>
-tbc::SMSG_DUEL_INBOUNDS* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_DUEL_INBOUNDS* ServerOpcode::get_if();
 template<>
-tbc::SMSG_DUEL_INBOUNDS& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_DUEL_INBOUNDS& ServerOpcode::get();
 template<>
-tbc::SMSG_DUEL_COMPLETE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_DUEL_COMPLETE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_DUEL_COMPLETE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_DUEL_COMPLETE& ServerOpcode::get();
 template<>
-tbc::SMSG_DUEL_WINNER* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_DUEL_WINNER* ServerOpcode::get_if();
 template<>
-tbc::SMSG_DUEL_WINNER& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_DUEL_WINNER& ServerOpcode::get();
 template<>
-tbc::SMSG_MOUNTRESULT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_MOUNTRESULT* ServerOpcode::get_if();
 template<>
-tbc::SMSG_MOUNTRESULT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_MOUNTRESULT& ServerOpcode::get();
 template<>
-tbc::SMSG_MOUNTSPECIAL_ANIM* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_MOUNTSPECIAL_ANIM* ServerOpcode::get_if();
 template<>
-tbc::SMSG_MOUNTSPECIAL_ANIM& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_MOUNTSPECIAL_ANIM& ServerOpcode::get();
 template<>
-tbc::SMSG_PET_TAME_FAILURE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PET_TAME_FAILURE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_PET_TAME_FAILURE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PET_TAME_FAILURE& ServerOpcode::get();
 template<>
-tbc::SMSG_PET_NAME_INVALID* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PET_NAME_INVALID* ServerOpcode::get_if();
 template<>
-tbc::SMSG_PET_NAME_INVALID& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PET_NAME_INVALID& ServerOpcode::get();
 template<>
-tbc::SMSG_PET_SPELLS* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PET_SPELLS* ServerOpcode::get_if();
 template<>
-tbc::SMSG_PET_SPELLS& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PET_SPELLS& ServerOpcode::get();
 template<>
-tbc::SMSG_PET_MODE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PET_MODE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_PET_MODE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PET_MODE& ServerOpcode::get();
 template<>
-tbc::SMSG_GOSSIP_MESSAGE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GOSSIP_MESSAGE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_GOSSIP_MESSAGE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GOSSIP_MESSAGE& ServerOpcode::get();
 template<>
-tbc::SMSG_GOSSIP_COMPLETE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GOSSIP_COMPLETE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_GOSSIP_COMPLETE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GOSSIP_COMPLETE& ServerOpcode::get();
 template<>
-tbc::SMSG_NPC_TEXT_UPDATE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_NPC_TEXT_UPDATE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_NPC_TEXT_UPDATE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_NPC_TEXT_UPDATE& ServerOpcode::get();
 template<>
-tbc::SMSG_QUESTGIVER_STATUS* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_QUESTGIVER_STATUS* ServerOpcode::get_if();
 template<>
-tbc::SMSG_QUESTGIVER_STATUS& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_QUESTGIVER_STATUS& ServerOpcode::get();
 template<>
-tbc::SMSG_QUESTGIVER_QUEST_LIST* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_QUESTGIVER_QUEST_LIST* ServerOpcode::get_if();
 template<>
-tbc::SMSG_QUESTGIVER_QUEST_LIST& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_QUESTGIVER_QUEST_LIST& ServerOpcode::get();
 template<>
-tbc::SMSG_QUESTGIVER_QUEST_DETAILS* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_QUESTGIVER_QUEST_DETAILS* ServerOpcode::get_if();
 template<>
-tbc::SMSG_QUESTGIVER_QUEST_DETAILS& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_QUESTGIVER_QUEST_DETAILS& ServerOpcode::get();
 template<>
-tbc::SMSG_QUESTGIVER_REQUEST_ITEMS* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_QUESTGIVER_REQUEST_ITEMS* ServerOpcode::get_if();
 template<>
-tbc::SMSG_QUESTGIVER_REQUEST_ITEMS& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_QUESTGIVER_REQUEST_ITEMS& ServerOpcode::get();
 template<>
-tbc::SMSG_QUESTGIVER_OFFER_REWARD* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_QUESTGIVER_OFFER_REWARD* ServerOpcode::get_if();
 template<>
-tbc::SMSG_QUESTGIVER_OFFER_REWARD& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_QUESTGIVER_OFFER_REWARD& ServerOpcode::get();
 template<>
-tbc::SMSG_QUESTGIVER_QUEST_INVALID* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_QUESTGIVER_QUEST_INVALID* ServerOpcode::get_if();
 template<>
-tbc::SMSG_QUESTGIVER_QUEST_INVALID& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_QUESTGIVER_QUEST_INVALID& ServerOpcode::get();
 template<>
-tbc::SMSG_QUESTGIVER_QUEST_COMPLETE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_QUESTGIVER_QUEST_COMPLETE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_QUESTGIVER_QUEST_COMPLETE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_QUESTGIVER_QUEST_COMPLETE& ServerOpcode::get();
 template<>
-tbc::SMSG_QUESTGIVER_QUEST_FAILED* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_QUESTGIVER_QUEST_FAILED* ServerOpcode::get_if();
 template<>
-tbc::SMSG_QUESTGIVER_QUEST_FAILED& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_QUESTGIVER_QUEST_FAILED& ServerOpcode::get();
 template<>
-tbc::SMSG_QUESTLOG_FULL* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_QUESTLOG_FULL* ServerOpcode::get_if();
 template<>
-tbc::SMSG_QUESTLOG_FULL& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_QUESTLOG_FULL& ServerOpcode::get();
 template<>
-tbc::SMSG_QUESTUPDATE_FAILED* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_QUESTUPDATE_FAILED* ServerOpcode::get_if();
 template<>
-tbc::SMSG_QUESTUPDATE_FAILED& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_QUESTUPDATE_FAILED& ServerOpcode::get();
 template<>
-tbc::SMSG_QUESTUPDATE_FAILEDTIMER* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_QUESTUPDATE_FAILEDTIMER* ServerOpcode::get_if();
 template<>
-tbc::SMSG_QUESTUPDATE_FAILEDTIMER& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_QUESTUPDATE_FAILEDTIMER& ServerOpcode::get();
 template<>
-tbc::SMSG_QUESTUPDATE_COMPLETE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_QUESTUPDATE_COMPLETE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_QUESTUPDATE_COMPLETE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_QUESTUPDATE_COMPLETE& ServerOpcode::get();
 template<>
-tbc::SMSG_QUESTUPDATE_ADD_KILL* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_QUESTUPDATE_ADD_KILL* ServerOpcode::get_if();
 template<>
-tbc::SMSG_QUESTUPDATE_ADD_KILL& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_QUESTUPDATE_ADD_KILL& ServerOpcode::get();
 template<>
-tbc::SMSG_QUESTUPDATE_ADD_ITEM* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_QUESTUPDATE_ADD_ITEM* ServerOpcode::get_if();
 template<>
-tbc::SMSG_QUESTUPDATE_ADD_ITEM& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_QUESTUPDATE_ADD_ITEM& ServerOpcode::get();
 template<>
-tbc::SMSG_QUEST_CONFIRM_ACCEPT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_QUEST_CONFIRM_ACCEPT* ServerOpcode::get_if();
 template<>
-tbc::SMSG_QUEST_CONFIRM_ACCEPT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_QUEST_CONFIRM_ACCEPT& ServerOpcode::get();
 template<>
-tbc::SMSG_LIST_INVENTORY* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LIST_INVENTORY* ServerOpcode::get_if();
 template<>
-tbc::SMSG_LIST_INVENTORY& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LIST_INVENTORY& ServerOpcode::get();
 template<>
-tbc::SMSG_SELL_ITEM* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SELL_ITEM* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SELL_ITEM& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SELL_ITEM& ServerOpcode::get();
 template<>
-tbc::SMSG_BUY_ITEM* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_BUY_ITEM* ServerOpcode::get_if();
 template<>
-tbc::SMSG_BUY_ITEM& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_BUY_ITEM& ServerOpcode::get();
 template<>
-tbc::SMSG_BUY_FAILED* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_BUY_FAILED* ServerOpcode::get_if();
 template<>
-tbc::SMSG_BUY_FAILED& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_BUY_FAILED& ServerOpcode::get();
 template<>
-tbc::SMSG_SHOWTAXINODES* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SHOWTAXINODES* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SHOWTAXINODES& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SHOWTAXINODES& ServerOpcode::get();
 template<>
-tbc::SMSG_TAXINODE_STATUS* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_TAXINODE_STATUS* ServerOpcode::get_if();
 template<>
-tbc::SMSG_TAXINODE_STATUS& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_TAXINODE_STATUS& ServerOpcode::get();
 template<>
-tbc::SMSG_ACTIVATETAXIREPLY* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ACTIVATETAXIREPLY* ServerOpcode::get_if();
 template<>
-tbc::SMSG_ACTIVATETAXIREPLY& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ACTIVATETAXIREPLY& ServerOpcode::get();
 template<>
-tbc::SMSG_NEW_TAXI_PATH* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_NEW_TAXI_PATH* ServerOpcode::get_if();
 template<>
-tbc::SMSG_NEW_TAXI_PATH& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_NEW_TAXI_PATH& ServerOpcode::get();
 template<>
-tbc::SMSG_TRAINER_LIST* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_TRAINER_LIST* ServerOpcode::get_if();
 template<>
-tbc::SMSG_TRAINER_LIST& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_TRAINER_LIST& ServerOpcode::get();
 template<>
-tbc::SMSG_TRAINER_BUY_SUCCEEDED* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_TRAINER_BUY_SUCCEEDED* ServerOpcode::get_if();
 template<>
-tbc::SMSG_TRAINER_BUY_SUCCEEDED& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_TRAINER_BUY_SUCCEEDED& ServerOpcode::get();
 template<>
-tbc::SMSG_TRAINER_BUY_FAILED* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_TRAINER_BUY_FAILED* ServerOpcode::get_if();
 template<>
-tbc::SMSG_TRAINER_BUY_FAILED& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_TRAINER_BUY_FAILED& ServerOpcode::get();
 template<>
-tbc::SMSG_SHOW_BANK* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SHOW_BANK* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SHOW_BANK& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SHOW_BANK& ServerOpcode::get();
 template<>
-tbc::SMSG_BUY_BANK_SLOT_RESULT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_BUY_BANK_SLOT_RESULT* ServerOpcode::get_if();
 template<>
-tbc::SMSG_BUY_BANK_SLOT_RESULT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_BUY_BANK_SLOT_RESULT& ServerOpcode::get();
 template<>
-tbc::SMSG_PETITION_SHOWLIST* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PETITION_SHOWLIST* ServerOpcode::get_if();
 template<>
-tbc::SMSG_PETITION_SHOWLIST& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PETITION_SHOWLIST& ServerOpcode::get();
 template<>
-tbc::SMSG_PETITION_SHOW_SIGNATURES* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PETITION_SHOW_SIGNATURES* ServerOpcode::get_if();
 template<>
-tbc::SMSG_PETITION_SHOW_SIGNATURES& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PETITION_SHOW_SIGNATURES& ServerOpcode::get();
 template<>
-tbc::SMSG_PETITION_SIGN_RESULTS* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PETITION_SIGN_RESULTS* ServerOpcode::get_if();
 template<>
-tbc::SMSG_PETITION_SIGN_RESULTS& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PETITION_SIGN_RESULTS& ServerOpcode::get();
 template<>
-tbc::MSG_PETITION_DECLINE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_PETITION_DECLINE* ServerOpcode::get_if();
 template<>
-tbc::MSG_PETITION_DECLINE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_PETITION_DECLINE& ServerOpcode::get();
 template<>
-tbc::SMSG_TURN_IN_PETITION_RESULTS* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_TURN_IN_PETITION_RESULTS* ServerOpcode::get_if();
 template<>
-tbc::SMSG_TURN_IN_PETITION_RESULTS& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_TURN_IN_PETITION_RESULTS& ServerOpcode::get();
 template<>
-tbc::SMSG_PETITION_QUERY_RESPONSE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PETITION_QUERY_RESPONSE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_PETITION_QUERY_RESPONSE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PETITION_QUERY_RESPONSE& ServerOpcode::get();
 template<>
-tbc::SMSG_FISH_NOT_HOOKED* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_FISH_NOT_HOOKED* ServerOpcode::get_if();
 template<>
-tbc::SMSG_FISH_NOT_HOOKED& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_FISH_NOT_HOOKED& ServerOpcode::get();
 template<>
-tbc::SMSG_FISH_ESCAPED* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_FISH_ESCAPED* ServerOpcode::get_if();
 template<>
-tbc::SMSG_FISH_ESCAPED& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_FISH_ESCAPED& ServerOpcode::get();
 template<>
-tbc::SMSG_NOTIFICATION* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_NOTIFICATION* ServerOpcode::get_if();
 template<>
-tbc::SMSG_NOTIFICATION& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_NOTIFICATION& ServerOpcode::get();
 template<>
-tbc::SMSG_PLAYED_TIME* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PLAYED_TIME* ServerOpcode::get_if();
 template<>
-tbc::SMSG_PLAYED_TIME& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PLAYED_TIME& ServerOpcode::get();
 template<>
-tbc::SMSG_QUERY_TIME_RESPONSE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_QUERY_TIME_RESPONSE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_QUERY_TIME_RESPONSE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_QUERY_TIME_RESPONSE& ServerOpcode::get();
 template<>
-tbc::SMSG_LOG_XPGAIN* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LOG_XPGAIN* ServerOpcode::get_if();
 template<>
-tbc::SMSG_LOG_XPGAIN& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LOG_XPGAIN& ServerOpcode::get();
 template<>
-tbc::SMSG_LEVELUP_INFO* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LEVELUP_INFO* ServerOpcode::get_if();
 template<>
-tbc::SMSG_LEVELUP_INFO& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LEVELUP_INFO& ServerOpcode::get();
 template<>
-tbc::MSG_MINIMAP_PING_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MINIMAP_PING_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_MINIMAP_PING_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MINIMAP_PING_Server& ServerOpcode::get();
 template<>
-tbc::SMSG_ENCHANTMENTLOG* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ENCHANTMENTLOG* ServerOpcode::get_if();
 template<>
-tbc::SMSG_ENCHANTMENTLOG& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ENCHANTMENTLOG& ServerOpcode::get();
 template<>
-tbc::SMSG_START_MIRROR_TIMER* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_START_MIRROR_TIMER* ServerOpcode::get_if();
 template<>
-tbc::SMSG_START_MIRROR_TIMER& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_START_MIRROR_TIMER& ServerOpcode::get();
 template<>
-tbc::SMSG_PAUSE_MIRROR_TIMER* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PAUSE_MIRROR_TIMER* ServerOpcode::get_if();
 template<>
-tbc::SMSG_PAUSE_MIRROR_TIMER& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PAUSE_MIRROR_TIMER& ServerOpcode::get();
 template<>
-tbc::SMSG_STOP_MIRROR_TIMER* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_STOP_MIRROR_TIMER* ServerOpcode::get_if();
 template<>
-tbc::SMSG_STOP_MIRROR_TIMER& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_STOP_MIRROR_TIMER& ServerOpcode::get();
 template<>
-tbc::SMSG_PONG* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PONG* ServerOpcode::get_if();
 template<>
-tbc::SMSG_PONG& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PONG& ServerOpcode::get();
 template<>
-tbc::SMSG_CLEAR_COOLDOWN* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CLEAR_COOLDOWN* ServerOpcode::get_if();
 template<>
-tbc::SMSG_CLEAR_COOLDOWN& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CLEAR_COOLDOWN& ServerOpcode::get();
 template<>
-tbc::SMSG_GAMEOBJECT_PAGETEXT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GAMEOBJECT_PAGETEXT* ServerOpcode::get_if();
 template<>
-tbc::SMSG_GAMEOBJECT_PAGETEXT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GAMEOBJECT_PAGETEXT& ServerOpcode::get();
 template<>
-tbc::SMSG_SPELL_DELAYED* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPELL_DELAYED* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SPELL_DELAYED& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPELL_DELAYED& ServerOpcode::get();
 template<>
-tbc::SMSG_ITEM_TIME_UPDATE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ITEM_TIME_UPDATE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_ITEM_TIME_UPDATE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ITEM_TIME_UPDATE& ServerOpcode::get();
 template<>
-tbc::SMSG_ITEM_ENCHANT_TIME_UPDATE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ITEM_ENCHANT_TIME_UPDATE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_ITEM_ENCHANT_TIME_UPDATE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ITEM_ENCHANT_TIME_UPDATE& ServerOpcode::get();
 template<>
-tbc::SMSG_AUTH_CHALLENGE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_AUTH_CHALLENGE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_AUTH_CHALLENGE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_AUTH_CHALLENGE& ServerOpcode::get();
 template<>
-tbc::SMSG_AUTH_RESPONSE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_AUTH_RESPONSE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_AUTH_RESPONSE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_AUTH_RESPONSE& ServerOpcode::get();
 template<>
-tbc::MSG_SAVE_GUILD_EMBLEM_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_SAVE_GUILD_EMBLEM_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_SAVE_GUILD_EMBLEM_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_SAVE_GUILD_EMBLEM_Server& ServerOpcode::get();
 template<>
-tbc::MSG_TABARDVENDOR_ACTIVATE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_TABARDVENDOR_ACTIVATE* ServerOpcode::get_if();
 template<>
-tbc::MSG_TABARDVENDOR_ACTIVATE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_TABARDVENDOR_ACTIVATE& ServerOpcode::get();
 template<>
-tbc::SMSG_PLAY_SPELL_VISUAL* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PLAY_SPELL_VISUAL* ServerOpcode::get_if();
 template<>
-tbc::SMSG_PLAY_SPELL_VISUAL& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PLAY_SPELL_VISUAL& ServerOpcode::get();
 template<>
-tbc::SMSG_PARTYKILLLOG* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PARTYKILLLOG* ServerOpcode::get_if();
 template<>
-tbc::SMSG_PARTYKILLLOG& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PARTYKILLLOG& ServerOpcode::get();
 template<>
-tbc::SMSG_COMPRESSED_UPDATE_OBJECT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_COMPRESSED_UPDATE_OBJECT* ServerOpcode::get_if();
 template<>
-tbc::SMSG_COMPRESSED_UPDATE_OBJECT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_COMPRESSED_UPDATE_OBJECT& ServerOpcode::get();
 template<>
-tbc::SMSG_PLAY_SPELL_IMPACT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PLAY_SPELL_IMPACT* ServerOpcode::get_if();
 template<>
-tbc::SMSG_PLAY_SPELL_IMPACT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PLAY_SPELL_IMPACT& ServerOpcode::get();
 template<>
-tbc::SMSG_EXPLORATION_EXPERIENCE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_EXPLORATION_EXPERIENCE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_EXPLORATION_EXPERIENCE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_EXPLORATION_EXPERIENCE& ServerOpcode::get();
 template<>
-tbc::MSG_RANDOM_ROLL_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_RANDOM_ROLL_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_RANDOM_ROLL_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_RANDOM_ROLL_Server& ServerOpcode::get();
 template<>
-tbc::SMSG_ENVIRONMENTAL_DAMAGE_LOG* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ENVIRONMENTAL_DAMAGE_LOG* ServerOpcode::get_if();
 template<>
-tbc::SMSG_ENVIRONMENTAL_DAMAGE_LOG& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ENVIRONMENTAL_DAMAGE_LOG& ServerOpcode::get();
 template<>
-tbc::MSG_LOOKING_FOR_GROUP_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_LOOKING_FOR_GROUP_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_LOOKING_FOR_GROUP_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_LOOKING_FOR_GROUP_Server& ServerOpcode::get();
 template<>
-tbc::SMSG_REMOVED_SPELL* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_REMOVED_SPELL* ServerOpcode::get_if();
 template<>
-tbc::SMSG_REMOVED_SPELL& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_REMOVED_SPELL& ServerOpcode::get();
 template<>
-tbc::SMSG_GMTICKET_CREATE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GMTICKET_CREATE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_GMTICKET_CREATE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GMTICKET_CREATE& ServerOpcode::get();
 template<>
-tbc::SMSG_GMTICKET_UPDATETEXT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GMTICKET_UPDATETEXT* ServerOpcode::get_if();
 template<>
-tbc::SMSG_GMTICKET_UPDATETEXT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GMTICKET_UPDATETEXT& ServerOpcode::get();
 template<>
-tbc::SMSG_ACCOUNT_DATA_TIMES* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ACCOUNT_DATA_TIMES* ServerOpcode::get_if();
 template<>
-tbc::SMSG_ACCOUNT_DATA_TIMES& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ACCOUNT_DATA_TIMES& ServerOpcode::get();
 template<>
-tbc::SMSG_UPDATE_ACCOUNT_DATA* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_UPDATE_ACCOUNT_DATA* ServerOpcode::get_if();
 template<>
-tbc::SMSG_UPDATE_ACCOUNT_DATA& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_UPDATE_ACCOUNT_DATA& ServerOpcode::get();
 template<>
-tbc::SMSG_GMTICKET_GETTICKET* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GMTICKET_GETTICKET* ServerOpcode::get_if();
 template<>
-tbc::SMSG_GMTICKET_GETTICKET& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GMTICKET_GETTICKET& ServerOpcode::get();
 template<>
-tbc::SMSG_GAMEOBJECT_SPAWN_ANIM* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GAMEOBJECT_SPAWN_ANIM* ServerOpcode::get_if();
 template<>
-tbc::SMSG_GAMEOBJECT_SPAWN_ANIM& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GAMEOBJECT_SPAWN_ANIM& ServerOpcode::get();
 template<>
-tbc::SMSG_GAMEOBJECT_DESPAWN_ANIM* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GAMEOBJECT_DESPAWN_ANIM* ServerOpcode::get_if();
 template<>
-tbc::SMSG_GAMEOBJECT_DESPAWN_ANIM& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GAMEOBJECT_DESPAWN_ANIM& ServerOpcode::get();
 template<>
-tbc::MSG_CORPSE_QUERY_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_CORPSE_QUERY_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_CORPSE_QUERY_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_CORPSE_QUERY_Server& ServerOpcode::get();
 template<>
-tbc::SMSG_GMTICKET_DELETETICKET* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GMTICKET_DELETETICKET* ServerOpcode::get_if();
 template<>
-tbc::SMSG_GMTICKET_DELETETICKET& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GMTICKET_DELETETICKET& ServerOpcode::get();
 template<>
-tbc::SMSG_CHAT_WRONG_FACTION* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CHAT_WRONG_FACTION* ServerOpcode::get_if();
 template<>
-tbc::SMSG_CHAT_WRONG_FACTION& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CHAT_WRONG_FACTION& ServerOpcode::get();
 template<>
-tbc::SMSG_GMTICKET_SYSTEMSTATUS* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GMTICKET_SYSTEMSTATUS* ServerOpcode::get_if();
 template<>
-tbc::SMSG_GMTICKET_SYSTEMSTATUS& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GMTICKET_SYSTEMSTATUS& ServerOpcode::get();
 template<>
-tbc::SMSG_SET_REST_START* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SET_REST_START* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SET_REST_START& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SET_REST_START& ServerOpcode::get();
 template<>
-tbc::SMSG_SPIRIT_HEALER_CONFIRM* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPIRIT_HEALER_CONFIRM* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SPIRIT_HEALER_CONFIRM& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPIRIT_HEALER_CONFIRM& ServerOpcode::get();
 template<>
-tbc::SMSG_GOSSIP_POI* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GOSSIP_POI* ServerOpcode::get_if();
 template<>
-tbc::SMSG_GOSSIP_POI& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GOSSIP_POI& ServerOpcode::get();
 template<>
-tbc::SMSG_LOGIN_VERIFY_WORLD* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LOGIN_VERIFY_WORLD* ServerOpcode::get_if();
 template<>
-tbc::SMSG_LOGIN_VERIFY_WORLD& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LOGIN_VERIFY_WORLD& ServerOpcode::get();
 template<>
-tbc::SMSG_SEND_MAIL_RESULT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SEND_MAIL_RESULT* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SEND_MAIL_RESULT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SEND_MAIL_RESULT& ServerOpcode::get();
 template<>
-tbc::SMSG_MAIL_LIST_RESULT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_MAIL_LIST_RESULT* ServerOpcode::get_if();
 template<>
-tbc::SMSG_MAIL_LIST_RESULT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_MAIL_LIST_RESULT& ServerOpcode::get();
 template<>
-tbc::SMSG_BATTLEFIELD_LIST* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_BATTLEFIELD_LIST* ServerOpcode::get_if();
 template<>
-tbc::SMSG_BATTLEFIELD_LIST& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_BATTLEFIELD_LIST& ServerOpcode::get();
 template<>
-tbc::SMSG_ITEM_TEXT_QUERY_RESPONSE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ITEM_TEXT_QUERY_RESPONSE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_ITEM_TEXT_QUERY_RESPONSE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ITEM_TEXT_QUERY_RESPONSE& ServerOpcode::get();
 template<>
-tbc::SMSG_SPELLLOGMISS* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPELLLOGMISS* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SPELLLOGMISS& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPELLLOGMISS& ServerOpcode::get();
 template<>
-tbc::SMSG_SPELLLOGEXECUTE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPELLLOGEXECUTE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SPELLLOGEXECUTE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPELLLOGEXECUTE& ServerOpcode::get();
 template<>
-tbc::SMSG_PERIODICAURALOG* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PERIODICAURALOG* ServerOpcode::get_if();
 template<>
-tbc::SMSG_PERIODICAURALOG& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PERIODICAURALOG& ServerOpcode::get();
 template<>
-tbc::SMSG_SPELLDAMAGESHIELD* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPELLDAMAGESHIELD* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SPELLDAMAGESHIELD& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPELLDAMAGESHIELD& ServerOpcode::get();
 template<>
-tbc::SMSG_SPELLNONMELEEDAMAGELOG* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPELLNONMELEEDAMAGELOG* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SPELLNONMELEEDAMAGELOG& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPELLNONMELEEDAMAGELOG& ServerOpcode::get();
 template<>
-tbc::SMSG_RESURRECT_FAILED* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_RESURRECT_FAILED* ServerOpcode::get_if();
 template<>
-tbc::SMSG_RESURRECT_FAILED& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_RESURRECT_FAILED& ServerOpcode::get();
 template<>
-tbc::SMSG_ZONE_UNDER_ATTACK* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ZONE_UNDER_ATTACK* ServerOpcode::get_if();
 template<>
-tbc::SMSG_ZONE_UNDER_ATTACK& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ZONE_UNDER_ATTACK& ServerOpcode::get();
 template<>
-tbc::MSG_AUCTION_HELLO_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_AUCTION_HELLO_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_AUCTION_HELLO_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_AUCTION_HELLO_Server& ServerOpcode::get();
 template<>
-tbc::SMSG_AUCTION_COMMAND_RESULT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_AUCTION_COMMAND_RESULT* ServerOpcode::get_if();
 template<>
-tbc::SMSG_AUCTION_COMMAND_RESULT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_AUCTION_COMMAND_RESULT& ServerOpcode::get();
 template<>
-tbc::SMSG_AUCTION_LIST_RESULT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_AUCTION_LIST_RESULT* ServerOpcode::get_if();
 template<>
-tbc::SMSG_AUCTION_LIST_RESULT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_AUCTION_LIST_RESULT& ServerOpcode::get();
 template<>
-tbc::SMSG_AUCTION_OWNER_LIST_RESULT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_AUCTION_OWNER_LIST_RESULT* ServerOpcode::get_if();
 template<>
-tbc::SMSG_AUCTION_OWNER_LIST_RESULT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_AUCTION_OWNER_LIST_RESULT& ServerOpcode::get();
 template<>
-tbc::SMSG_AUCTION_BIDDER_NOTIFICATION* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_AUCTION_BIDDER_NOTIFICATION* ServerOpcode::get_if();
 template<>
-tbc::SMSG_AUCTION_BIDDER_NOTIFICATION& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_AUCTION_BIDDER_NOTIFICATION& ServerOpcode::get();
 template<>
-tbc::SMSG_AUCTION_OWNER_NOTIFICATION* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_AUCTION_OWNER_NOTIFICATION* ServerOpcode::get_if();
 template<>
-tbc::SMSG_AUCTION_OWNER_NOTIFICATION& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_AUCTION_OWNER_NOTIFICATION& ServerOpcode::get();
 template<>
-tbc::SMSG_PROCRESIST* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PROCRESIST* ServerOpcode::get_if();
 template<>
-tbc::SMSG_PROCRESIST& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PROCRESIST& ServerOpcode::get();
 template<>
-tbc::SMSG_DISPEL_FAILED* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_DISPEL_FAILED* ServerOpcode::get_if();
 template<>
-tbc::SMSG_DISPEL_FAILED& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_DISPEL_FAILED& ServerOpcode::get();
 template<>
-tbc::SMSG_SPELLORDAMAGE_IMMUNE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPELLORDAMAGE_IMMUNE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SPELLORDAMAGE_IMMUNE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPELLORDAMAGE_IMMUNE& ServerOpcode::get();
 template<>
-tbc::SMSG_AUCTION_BIDDER_LIST_RESULT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_AUCTION_BIDDER_LIST_RESULT* ServerOpcode::get_if();
 template<>
-tbc::SMSG_AUCTION_BIDDER_LIST_RESULT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_AUCTION_BIDDER_LIST_RESULT& ServerOpcode::get();
 template<>
-tbc::SMSG_SET_FLAT_SPELL_MODIFIER* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SET_FLAT_SPELL_MODIFIER* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SET_FLAT_SPELL_MODIFIER& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SET_FLAT_SPELL_MODIFIER& ServerOpcode::get();
 template<>
-tbc::SMSG_SET_PCT_SPELL_MODIFIER* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SET_PCT_SPELL_MODIFIER* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SET_PCT_SPELL_MODIFIER& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SET_PCT_SPELL_MODIFIER& ServerOpcode::get();
 template<>
-tbc::SMSG_CORPSE_RECLAIM_DELAY* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CORPSE_RECLAIM_DELAY* ServerOpcode::get_if();
 template<>
-tbc::SMSG_CORPSE_RECLAIM_DELAY& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CORPSE_RECLAIM_DELAY& ServerOpcode::get();
 template<>
-tbc::MSG_LIST_STABLED_PETS_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_LIST_STABLED_PETS_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_LIST_STABLED_PETS_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_LIST_STABLED_PETS_Server& ServerOpcode::get();
 template<>
-tbc::SMSG_STABLE_RESULT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_STABLE_RESULT* ServerOpcode::get_if();
 template<>
-tbc::SMSG_STABLE_RESULT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_STABLE_RESULT& ServerOpcode::get();
 template<>
-tbc::MSG_QUEST_PUSH_RESULT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_QUEST_PUSH_RESULT* ServerOpcode::get_if();
 template<>
-tbc::MSG_QUEST_PUSH_RESULT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_QUEST_PUSH_RESULT& ServerOpcode::get();
 template<>
-tbc::SMSG_PLAY_MUSIC* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PLAY_MUSIC* ServerOpcode::get_if();
 template<>
-tbc::SMSG_PLAY_MUSIC& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PLAY_MUSIC& ServerOpcode::get();
 template<>
-tbc::SMSG_PLAY_OBJECT_SOUND* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PLAY_OBJECT_SOUND* ServerOpcode::get_if();
 template<>
-tbc::SMSG_PLAY_OBJECT_SOUND& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PLAY_OBJECT_SOUND& ServerOpcode::get();
 template<>
-tbc::SMSG_SPELLDISPELLOG* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPELLDISPELLOG* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SPELLDISPELLOG& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPELLDISPELLOG& ServerOpcode::get();
 template<>
-tbc::MSG_QUERY_NEXT_MAIL_TIME_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_QUERY_NEXT_MAIL_TIME_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_QUERY_NEXT_MAIL_TIME_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_QUERY_NEXT_MAIL_TIME_Server& ServerOpcode::get();
 template<>
-tbc::SMSG_RECEIVED_MAIL* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_RECEIVED_MAIL* ServerOpcode::get_if();
 template<>
-tbc::SMSG_RECEIVED_MAIL& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_RECEIVED_MAIL& ServerOpcode::get();
 template<>
-tbc::SMSG_RAID_GROUP_ONLY* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_RAID_GROUP_ONLY* ServerOpcode::get_if();
 template<>
-tbc::SMSG_RAID_GROUP_ONLY& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_RAID_GROUP_ONLY& ServerOpcode::get();
 template<>
-tbc::SMSG_PVP_CREDIT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PVP_CREDIT* ServerOpcode::get_if();
 template<>
-tbc::SMSG_PVP_CREDIT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PVP_CREDIT& ServerOpcode::get();
 template<>
-tbc::SMSG_AUCTION_REMOVED_NOTIFICATION* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_AUCTION_REMOVED_NOTIFICATION* ServerOpcode::get_if();
 template<>
-tbc::SMSG_AUCTION_REMOVED_NOTIFICATION& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_AUCTION_REMOVED_NOTIFICATION& ServerOpcode::get();
 template<>
-tbc::SMSG_SERVER_MESSAGE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SERVER_MESSAGE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SERVER_MESSAGE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SERVER_MESSAGE& ServerOpcode::get();
 template<>
-tbc::SMSG_MEETINGSTONE_SETQUEUE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_MEETINGSTONE_SETQUEUE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_MEETINGSTONE_SETQUEUE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_MEETINGSTONE_SETQUEUE& ServerOpcode::get();
 template<>
-tbc::SMSG_CANCEL_AUTO_REPEAT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CANCEL_AUTO_REPEAT* ServerOpcode::get_if();
 template<>
-tbc::SMSG_CANCEL_AUTO_REPEAT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CANCEL_AUTO_REPEAT& ServerOpcode::get();
 template<>
-tbc::SMSG_STANDSTATE_UPDATE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_STANDSTATE_UPDATE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_STANDSTATE_UPDATE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_STANDSTATE_UPDATE& ServerOpcode::get();
 template<>
-tbc::SMSG_LOOT_ALL_PASSED* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LOOT_ALL_PASSED* ServerOpcode::get_if();
 template<>
-tbc::SMSG_LOOT_ALL_PASSED& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LOOT_ALL_PASSED& ServerOpcode::get();
 template<>
-tbc::SMSG_LOOT_ROLL_WON* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LOOT_ROLL_WON* ServerOpcode::get_if();
 template<>
-tbc::SMSG_LOOT_ROLL_WON& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LOOT_ROLL_WON& ServerOpcode::get();
 template<>
-tbc::SMSG_LOOT_START_ROLL* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LOOT_START_ROLL* ServerOpcode::get_if();
 template<>
-tbc::SMSG_LOOT_START_ROLL& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LOOT_START_ROLL& ServerOpcode::get();
 template<>
-tbc::SMSG_LOOT_ROLL* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LOOT_ROLL* ServerOpcode::get_if();
 template<>
-tbc::SMSG_LOOT_ROLL& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LOOT_ROLL& ServerOpcode::get();
 template<>
-tbc::SMSG_LOOT_MASTER_LIST* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LOOT_MASTER_LIST* ServerOpcode::get_if();
 template<>
-tbc::SMSG_LOOT_MASTER_LIST& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LOOT_MASTER_LIST& ServerOpcode::get();
 template<>
-tbc::SMSG_SET_FORCED_REACTIONS* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SET_FORCED_REACTIONS* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SET_FORCED_REACTIONS& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SET_FORCED_REACTIONS& ServerOpcode::get();
 template<>
-tbc::SMSG_SPELL_FAILED_OTHER* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPELL_FAILED_OTHER* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SPELL_FAILED_OTHER& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPELL_FAILED_OTHER& ServerOpcode::get();
 template<>
-tbc::SMSG_CHAT_PLAYER_NOT_FOUND* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CHAT_PLAYER_NOT_FOUND* ServerOpcode::get_if();
 template<>
-tbc::SMSG_CHAT_PLAYER_NOT_FOUND& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CHAT_PLAYER_NOT_FOUND& ServerOpcode::get();
 template<>
-tbc::MSG_TALENT_WIPE_CONFIRM_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_TALENT_WIPE_CONFIRM_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_TALENT_WIPE_CONFIRM_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_TALENT_WIPE_CONFIRM_Server& ServerOpcode::get();
 template<>
-tbc::SMSG_SUMMON_REQUEST* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SUMMON_REQUEST* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SUMMON_REQUEST& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SUMMON_REQUEST& ServerOpcode::get();
 template<>
-tbc::SMSG_MONSTER_MOVE_TRANSPORT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_MONSTER_MOVE_TRANSPORT* ServerOpcode::get_if();
 template<>
-tbc::SMSG_MONSTER_MOVE_TRANSPORT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_MONSTER_MOVE_TRANSPORT& ServerOpcode::get();
 template<>
-tbc::SMSG_PET_BROKEN* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PET_BROKEN* ServerOpcode::get_if();
 template<>
-tbc::SMSG_PET_BROKEN& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PET_BROKEN& ServerOpcode::get();
 template<>
-tbc::MSG_MOVE_FEATHER_FALL_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_FEATHER_FALL_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_MOVE_FEATHER_FALL_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_FEATHER_FALL_Server& ServerOpcode::get();
 template<>
-tbc::MSG_MOVE_WATER_WALK* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_WATER_WALK* ServerOpcode::get_if();
 template<>
-tbc::MSG_MOVE_WATER_WALK& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_WATER_WALK& ServerOpcode::get();
 template<>
-tbc::SMSG_FEIGN_DEATH_RESISTED* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_FEIGN_DEATH_RESISTED* ServerOpcode::get_if();
 template<>
-tbc::SMSG_FEIGN_DEATH_RESISTED& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_FEIGN_DEATH_RESISTED& ServerOpcode::get();
 template<>
-tbc::SMSG_DUEL_COUNTDOWN* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_DUEL_COUNTDOWN* ServerOpcode::get_if();
 template<>
-tbc::SMSG_DUEL_COUNTDOWN& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_DUEL_COUNTDOWN& ServerOpcode::get();
 template<>
-tbc::SMSG_AREA_TRIGGER_MESSAGE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_AREA_TRIGGER_MESSAGE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_AREA_TRIGGER_MESSAGE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_AREA_TRIGGER_MESSAGE& ServerOpcode::get();
 template<>
-tbc::SMSG_PLAYER_SKINNED* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PLAYER_SKINNED* ServerOpcode::get_if();
 template<>
-tbc::SMSG_PLAYER_SKINNED& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PLAYER_SKINNED& ServerOpcode::get();
 template<>
-tbc::SMSG_DURABILITY_DAMAGE_DEATH* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_DURABILITY_DAMAGE_DEATH* ServerOpcode::get_if();
 template<>
-tbc::SMSG_DURABILITY_DAMAGE_DEATH& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_DURABILITY_DAMAGE_DEATH& ServerOpcode::get();
 template<>
-tbc::MSG_PETITION_RENAME* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_PETITION_RENAME* ServerOpcode::get_if();
 template<>
-tbc::MSG_PETITION_RENAME& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_PETITION_RENAME& ServerOpcode::get();
 template<>
-tbc::SMSG_INIT_WORLD_STATES* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_INIT_WORLD_STATES* ServerOpcode::get_if();
 template<>
-tbc::SMSG_INIT_WORLD_STATES& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_INIT_WORLD_STATES& ServerOpcode::get();
 template<>
-tbc::SMSG_UPDATE_WORLD_STATE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_UPDATE_WORLD_STATE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_UPDATE_WORLD_STATE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_UPDATE_WORLD_STATE& ServerOpcode::get();
 template<>
-tbc::SMSG_ITEM_NAME_QUERY_RESPONSE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ITEM_NAME_QUERY_RESPONSE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_ITEM_NAME_QUERY_RESPONSE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ITEM_NAME_QUERY_RESPONSE& ServerOpcode::get();
 template<>
-tbc::SMSG_PET_ACTION_FEEDBACK* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PET_ACTION_FEEDBACK* ServerOpcode::get_if();
 template<>
-tbc::SMSG_PET_ACTION_FEEDBACK& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PET_ACTION_FEEDBACK& ServerOpcode::get();
 template<>
-tbc::SMSG_CHAR_RENAME* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CHAR_RENAME* ServerOpcode::get_if();
 template<>
-tbc::SMSG_CHAR_RENAME& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CHAR_RENAME& ServerOpcode::get();
 template<>
-tbc::SMSG_INSTANCE_SAVE_CREATED* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_INSTANCE_SAVE_CREATED* ServerOpcode::get_if();
 template<>
-tbc::SMSG_INSTANCE_SAVE_CREATED& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_INSTANCE_SAVE_CREATED& ServerOpcode::get();
 template<>
-tbc::SMSG_RAID_INSTANCE_INFO* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_RAID_INSTANCE_INFO* ServerOpcode::get_if();
 template<>
-tbc::SMSG_RAID_INSTANCE_INFO& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_RAID_INSTANCE_INFO& ServerOpcode::get();
 template<>
-tbc::SMSG_PLAY_SOUND* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PLAY_SOUND* ServerOpcode::get_if();
 template<>
-tbc::SMSG_PLAY_SOUND& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PLAY_SOUND& ServerOpcode::get();
 template<>
-tbc::SMSG_BATTLEFIELD_STATUS* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_BATTLEFIELD_STATUS* ServerOpcode::get_if();
 template<>
-tbc::SMSG_BATTLEFIELD_STATUS& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_BATTLEFIELD_STATUS& ServerOpcode::get();
 template<>
-tbc::MSG_INSPECT_HONOR_STATS_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_INSPECT_HONOR_STATS_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_INSPECT_HONOR_STATS_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_INSPECT_HONOR_STATS_Server& ServerOpcode::get();
 template<>
-tbc::SMSG_FORCE_WALK_SPEED_CHANGE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_FORCE_WALK_SPEED_CHANGE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_FORCE_WALK_SPEED_CHANGE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_FORCE_WALK_SPEED_CHANGE& ServerOpcode::get();
 template<>
-tbc::SMSG_FORCE_SWIM_BACK_SPEED_CHANGE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_FORCE_SWIM_BACK_SPEED_CHANGE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_FORCE_SWIM_BACK_SPEED_CHANGE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_FORCE_SWIM_BACK_SPEED_CHANGE& ServerOpcode::get();
 template<>
-tbc::SMSG_FORCE_TURN_RATE_CHANGE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_FORCE_TURN_RATE_CHANGE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_FORCE_TURN_RATE_CHANGE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_FORCE_TURN_RATE_CHANGE& ServerOpcode::get();
 template<>
-tbc::SMSG_AREA_SPIRIT_HEALER_TIME* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_AREA_SPIRIT_HEALER_TIME* ServerOpcode::get_if();
 template<>
-tbc::SMSG_AREA_SPIRIT_HEALER_TIME& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_AREA_SPIRIT_HEALER_TIME& ServerOpcode::get();
 template<>
-tbc::SMSG_WARDEN_DATA* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_WARDEN_DATA* ServerOpcode::get_if();
 template<>
-tbc::SMSG_WARDEN_DATA& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_WARDEN_DATA& ServerOpcode::get();
 template<>
-tbc::SMSG_GROUP_JOINED_BATTLEGROUND* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GROUP_JOINED_BATTLEGROUND* ServerOpcode::get_if();
 template<>
-tbc::SMSG_GROUP_JOINED_BATTLEGROUND& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GROUP_JOINED_BATTLEGROUND& ServerOpcode::get();
 template<>
-tbc::MSG_BATTLEGROUND_PLAYER_POSITIONS_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_BATTLEGROUND_PLAYER_POSITIONS_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_BATTLEGROUND_PLAYER_POSITIONS_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_BATTLEGROUND_PLAYER_POSITIONS_Server& ServerOpcode::get();
 template<>
-tbc::SMSG_BINDER_CONFIRM* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_BINDER_CONFIRM* ServerOpcode::get_if();
 template<>
-tbc::SMSG_BINDER_CONFIRM& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_BINDER_CONFIRM& ServerOpcode::get();
 template<>
-tbc::SMSG_BATTLEGROUND_PLAYER_JOINED* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_BATTLEGROUND_PLAYER_JOINED* ServerOpcode::get_if();
 template<>
-tbc::SMSG_BATTLEGROUND_PLAYER_JOINED& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_BATTLEGROUND_PLAYER_JOINED& ServerOpcode::get();
 template<>
-tbc::SMSG_BATTLEGROUND_PLAYER_LEFT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_BATTLEGROUND_PLAYER_LEFT* ServerOpcode::get_if();
 template<>
-tbc::SMSG_BATTLEGROUND_PLAYER_LEFT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_BATTLEGROUND_PLAYER_LEFT& ServerOpcode::get();
 template<>
-tbc::SMSG_PET_UNLEARN_CONFIRM* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ADDON_INFO* ServerOpcode::get_if();
 template<>
-tbc::SMSG_PET_UNLEARN_CONFIRM& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ADDON_INFO& ServerOpcode::get();
 template<>
-tbc::SMSG_PARTY_MEMBER_STATS_FULL* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PET_UNLEARN_CONFIRM* ServerOpcode::get_if();
 template<>
-tbc::SMSG_PARTY_MEMBER_STATS_FULL& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PET_UNLEARN_CONFIRM& ServerOpcode::get();
 template<>
-tbc::SMSG_WEATHER* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PARTY_MEMBER_STATS_FULL* ServerOpcode::get_if();
 template<>
-tbc::SMSG_WEATHER& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PARTY_MEMBER_STATS_FULL& ServerOpcode::get();
 template<>
-tbc::SMSG_RAID_INSTANCE_MESSAGE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_WEATHER* ServerOpcode::get_if();
 template<>
-tbc::SMSG_RAID_INSTANCE_MESSAGE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_WEATHER& ServerOpcode::get();
 template<>
-tbc::SMSG_CHAT_RESTRICTED* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_RAID_INSTANCE_MESSAGE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_CHAT_RESTRICTED& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_RAID_INSTANCE_MESSAGE& ServerOpcode::get();
 template<>
-tbc::SMSG_SPLINE_SET_RUN_SPEED* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CHAT_RESTRICTED* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SPLINE_SET_RUN_SPEED& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CHAT_RESTRICTED& ServerOpcode::get();
 template<>
-tbc::SMSG_SPLINE_SET_RUN_BACK_SPEED* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_SET_RUN_SPEED* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SPLINE_SET_RUN_BACK_SPEED& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_SET_RUN_SPEED& ServerOpcode::get();
 template<>
-tbc::SMSG_SPLINE_SET_SWIM_SPEED* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_SET_RUN_BACK_SPEED* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SPLINE_SET_SWIM_SPEED& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_SET_RUN_BACK_SPEED& ServerOpcode::get();
 template<>
-tbc::SMSG_SPLINE_SET_WALK_SPEED* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_SET_SWIM_SPEED* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SPLINE_SET_WALK_SPEED& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_SET_SWIM_SPEED& ServerOpcode::get();
 template<>
-tbc::SMSG_SPLINE_SET_SWIM_BACK_SPEED* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_SET_WALK_SPEED* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SPLINE_SET_SWIM_BACK_SPEED& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_SET_WALK_SPEED& ServerOpcode::get();
 template<>
-tbc::SMSG_SPLINE_SET_TURN_RATE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_SET_SWIM_BACK_SPEED* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SPLINE_SET_TURN_RATE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_SET_SWIM_BACK_SPEED& ServerOpcode::get();
 template<>
-tbc::SMSG_SPLINE_MOVE_UNROOT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_SET_TURN_RATE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SPLINE_MOVE_UNROOT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_SET_TURN_RATE& ServerOpcode::get();
 template<>
-tbc::SMSG_SPLINE_MOVE_FEATHER_FALL* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_MOVE_UNROOT* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SPLINE_MOVE_FEATHER_FALL& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_MOVE_UNROOT& ServerOpcode::get();
 template<>
-tbc::SMSG_SPLINE_MOVE_NORMAL_FALL* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_MOVE_FEATHER_FALL* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SPLINE_MOVE_NORMAL_FALL& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_MOVE_FEATHER_FALL& ServerOpcode::get();
 template<>
-tbc::SMSG_SPLINE_MOVE_SET_HOVER* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_MOVE_NORMAL_FALL* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SPLINE_MOVE_SET_HOVER& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_MOVE_NORMAL_FALL& ServerOpcode::get();
 template<>
-tbc::SMSG_SPLINE_MOVE_UNSET_HOVER* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_MOVE_SET_HOVER* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SPLINE_MOVE_UNSET_HOVER& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_MOVE_SET_HOVER& ServerOpcode::get();
 template<>
-tbc::SMSG_SPLINE_MOVE_WATER_WALK* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_MOVE_UNSET_HOVER* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SPLINE_MOVE_WATER_WALK& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_MOVE_UNSET_HOVER& ServerOpcode::get();
 template<>
-tbc::SMSG_SPLINE_MOVE_LAND_WALK* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_MOVE_WATER_WALK* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SPLINE_MOVE_LAND_WALK& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_MOVE_WATER_WALK& ServerOpcode::get();
 template<>
-tbc::SMSG_SPLINE_MOVE_START_SWIM* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_MOVE_LAND_WALK* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SPLINE_MOVE_START_SWIM& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_MOVE_LAND_WALK& ServerOpcode::get();
 template<>
-tbc::SMSG_SPLINE_MOVE_STOP_SWIM* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_MOVE_START_SWIM* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SPLINE_MOVE_STOP_SWIM& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_MOVE_START_SWIM& ServerOpcode::get();
 template<>
-tbc::SMSG_SPLINE_MOVE_SET_RUN_MODE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_MOVE_STOP_SWIM* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SPLINE_MOVE_SET_RUN_MODE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_MOVE_STOP_SWIM& ServerOpcode::get();
 template<>
-tbc::SMSG_SPLINE_MOVE_SET_WALK_MODE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_MOVE_SET_RUN_MODE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SPLINE_MOVE_SET_WALK_MODE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_MOVE_SET_RUN_MODE& ServerOpcode::get();
 template<>
-tbc::MSG_MOVE_TIME_SKIPPED_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_MOVE_SET_WALK_MODE* ServerOpcode::get_if();
 template<>
-tbc::MSG_MOVE_TIME_SKIPPED_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_MOVE_SET_WALK_MODE& ServerOpcode::get();
 template<>
-tbc::SMSG_SPLINE_MOVE_ROOT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_TIME_SKIPPED_Server* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SPLINE_MOVE_ROOT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_TIME_SKIPPED_Server& ServerOpcode::get();
 template<>
-tbc::SMSG_INVALIDATE_PLAYER* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_MOVE_ROOT* ServerOpcode::get_if();
 template<>
-tbc::SMSG_INVALIDATE_PLAYER& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_MOVE_ROOT& ServerOpcode::get();
 template<>
-tbc::SMSG_INSTANCE_RESET* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_INVALIDATE_PLAYER* ServerOpcode::get_if();
 template<>
-tbc::SMSG_INSTANCE_RESET& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_INVALIDATE_PLAYER& ServerOpcode::get();
 template<>
-tbc::SMSG_INSTANCE_RESET_FAILED* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_INSTANCE_RESET* ServerOpcode::get_if();
 template<>
-tbc::SMSG_INSTANCE_RESET_FAILED& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_INSTANCE_RESET& ServerOpcode::get();
 template<>
-tbc::SMSG_UPDATE_LAST_INSTANCE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_INSTANCE_RESET_FAILED* ServerOpcode::get_if();
 template<>
-tbc::SMSG_UPDATE_LAST_INSTANCE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_INSTANCE_RESET_FAILED& ServerOpcode::get();
 template<>
-tbc::MSG_RAID_TARGET_UPDATE_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_UPDATE_LAST_INSTANCE* ServerOpcode::get_if();
 template<>
-tbc::MSG_RAID_TARGET_UPDATE_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_UPDATE_LAST_INSTANCE& ServerOpcode::get();
 template<>
-tbc::MSG_RAID_READY_CHECK_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_RAID_TARGET_UPDATE_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_RAID_READY_CHECK_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_RAID_TARGET_UPDATE_Server& ServerOpcode::get();
 template<>
-tbc::SMSG_PET_ACTION_SOUND* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_RAID_READY_CHECK_Server* ServerOpcode::get_if();
 template<>
-tbc::SMSG_PET_ACTION_SOUND& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_RAID_READY_CHECK_Server& ServerOpcode::get();
 template<>
-tbc::SMSG_PET_DISMISS_SOUND* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PET_ACTION_SOUND* ServerOpcode::get_if();
 template<>
-tbc::SMSG_PET_DISMISS_SOUND& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PET_ACTION_SOUND& ServerOpcode::get();
 template<>
-tbc::SMSG_GM_TICKET_STATUS_UPDATE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PET_DISMISS_SOUND* ServerOpcode::get_if();
 template<>
-tbc::SMSG_GM_TICKET_STATUS_UPDATE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PET_DISMISS_SOUND& ServerOpcode::get();
 template<>
-tbc::MSG_SET_DUNGEON_DIFFICULTY_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GM_TICKET_STATUS_UPDATE* ServerOpcode::get_if();
 template<>
-tbc::MSG_SET_DUNGEON_DIFFICULTY_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GM_TICKET_STATUS_UPDATE& ServerOpcode::get();
 template<>
-tbc::SMSG_UPDATE_INSTANCE_OWNERSHIP* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_SET_DUNGEON_DIFFICULTY_Server* ServerOpcode::get_if();
 template<>
-tbc::SMSG_UPDATE_INSTANCE_OWNERSHIP& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_SET_DUNGEON_DIFFICULTY_Server& ServerOpcode::get();
 template<>
-tbc::SMSG_CHAT_PLAYER_AMBIGUOUS* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_UPDATE_INSTANCE_OWNERSHIP* ServerOpcode::get_if();
 template<>
-tbc::SMSG_CHAT_PLAYER_AMBIGUOUS& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_UPDATE_INSTANCE_OWNERSHIP& ServerOpcode::get();
 template<>
-tbc::SMSG_SPELLINSTAKILLLOG* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CHAT_PLAYER_AMBIGUOUS* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SPELLINSTAKILLLOG& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CHAT_PLAYER_AMBIGUOUS& ServerOpcode::get();
 template<>
-tbc::SMSG_SPELL_UPDATE_CHAIN_TARGETS* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPELLINSTAKILLLOG* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SPELL_UPDATE_CHAIN_TARGETS& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPELLINSTAKILLLOG& ServerOpcode::get();
 template<>
-tbc::SMSG_SPELLSTEALLOG* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPELL_UPDATE_CHAIN_TARGETS* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SPELLSTEALLOG& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPELL_UPDATE_CHAIN_TARGETS& ServerOpcode::get();
 template<>
-tbc::SMSG_DEFENSE_MESSAGE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPELLSTEALLOG* ServerOpcode::get_if();
 template<>
-tbc::SMSG_DEFENSE_MESSAGE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPELLSTEALLOG& ServerOpcode::get();
 template<>
-tbc::SMSG_INSTANCE_DIFFICULTY* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_DEFENSE_MESSAGE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_INSTANCE_DIFFICULTY& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_DEFENSE_MESSAGE& ServerOpcode::get();
 template<>
-tbc::SMSG_MOTD* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_INSTANCE_DIFFICULTY* ServerOpcode::get_if();
 template<>
-tbc::SMSG_MOTD& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_INSTANCE_DIFFICULTY& ServerOpcode::get();
 template<>
-tbc::SMSG_MOVE_SET_FLIGHT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_MOTD* ServerOpcode::get_if();
 template<>
-tbc::SMSG_MOVE_SET_FLIGHT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_MOTD& ServerOpcode::get();
 template<>
-tbc::SMSG_MOVE_UNSET_FLIGHT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_MOVE_SET_FLIGHT* ServerOpcode::get_if();
 template<>
-tbc::SMSG_MOVE_UNSET_FLIGHT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_MOVE_SET_FLIGHT& ServerOpcode::get();
 template<>
-tbc::SMSG_MOVE_SET_CAN_FLY* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_MOVE_UNSET_FLIGHT* ServerOpcode::get_if();
 template<>
-tbc::SMSG_MOVE_SET_CAN_FLY& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_MOVE_UNSET_FLIGHT& ServerOpcode::get();
 template<>
-tbc::SMSG_MOVE_UNSET_CAN_FLY* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_MOVE_SET_CAN_FLY* ServerOpcode::get_if();
 template<>
-tbc::SMSG_MOVE_UNSET_CAN_FLY& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_MOVE_SET_CAN_FLY& ServerOpcode::get();
 template<>
-tbc::SMSG_ARENA_TEAM_COMMAND_RESULT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_MOVE_UNSET_CAN_FLY* ServerOpcode::get_if();
 template<>
-tbc::SMSG_ARENA_TEAM_COMMAND_RESULT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_MOVE_UNSET_CAN_FLY& ServerOpcode::get();
 template<>
-tbc::SMSG_ARENA_TEAM_QUERY_RESPONSE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ARENA_TEAM_COMMAND_RESULT* ServerOpcode::get_if();
 template<>
-tbc::SMSG_ARENA_TEAM_QUERY_RESPONSE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ARENA_TEAM_COMMAND_RESULT& ServerOpcode::get();
 template<>
-tbc::SMSG_ARENA_TEAM_ROSTER* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ARENA_TEAM_QUERY_RESPONSE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_ARENA_TEAM_ROSTER& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ARENA_TEAM_QUERY_RESPONSE& ServerOpcode::get();
 template<>
-tbc::SMSG_ARENA_TEAM_INVITE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ARENA_TEAM_ROSTER* ServerOpcode::get_if();
 template<>
-tbc::SMSG_ARENA_TEAM_INVITE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ARENA_TEAM_ROSTER& ServerOpcode::get();
 template<>
-tbc::SMSG_ARENA_TEAM_EVENT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ARENA_TEAM_INVITE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_ARENA_TEAM_EVENT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ARENA_TEAM_INVITE& ServerOpcode::get();
 template<>
-tbc::MSG_MOVE_START_ASCEND_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ARENA_TEAM_EVENT* ServerOpcode::get_if();
 template<>
-tbc::MSG_MOVE_START_ASCEND_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ARENA_TEAM_EVENT& ServerOpcode::get();
 template<>
-tbc::MSG_MOVE_STOP_ASCEND_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_ASCEND_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_MOVE_STOP_ASCEND_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_ASCEND_Server& ServerOpcode::get();
 template<>
-tbc::SMSG_ARENA_TEAM_STATS* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_STOP_ASCEND_Server* ServerOpcode::get_if();
 template<>
-tbc::SMSG_ARENA_TEAM_STATS& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_STOP_ASCEND_Server& ServerOpcode::get();
 template<>
-tbc::SMSG_LFG_LEADER_IS_LFM* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ARENA_TEAM_STATS* ServerOpcode::get_if();
 template<>
-tbc::SMSG_LFG_LEADER_IS_LFM& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ARENA_TEAM_STATS& ServerOpcode::get();
 template<>
-tbc::SMSG_LFG_UPDATE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LFG_LEADER_IS_LFM* ServerOpcode::get_if();
 template<>
-tbc::SMSG_LFG_UPDATE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LFG_LEADER_IS_LFM& ServerOpcode::get();
 template<>
-tbc::SMSG_LFG_UPDATE_LFM* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LFG_UPDATE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_LFG_UPDATE_LFM& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LFG_UPDATE& ServerOpcode::get();
 template<>
-tbc::SMSG_LFG_UPDATE_LFG* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LFG_UPDATE_LFM* ServerOpcode::get_if();
 template<>
-tbc::SMSG_LFG_UPDATE_LFG& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LFG_UPDATE_LFM& ServerOpcode::get();
 template<>
-tbc::SMSG_LFG_UPDATE_QUEUED* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LFG_UPDATE_LFG* ServerOpcode::get_if();
 template<>
-tbc::SMSG_LFG_UPDATE_QUEUED& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LFG_UPDATE_LFG& ServerOpcode::get();
 template<>
-tbc::SMSG_TITLE_EARNED* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LFG_UPDATE_QUEUED* ServerOpcode::get_if();
 template<>
-tbc::SMSG_TITLE_EARNED& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LFG_UPDATE_QUEUED& ServerOpcode::get();
 template<>
-tbc::SMSG_ARENA_ERROR* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_TITLE_EARNED* ServerOpcode::get_if();
 template<>
-tbc::SMSG_ARENA_ERROR& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_TITLE_EARNED& ServerOpcode::get();
 template<>
-tbc::MSG_INSPECT_ARENA_TEAMS_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ARENA_ERROR* ServerOpcode::get_if();
 template<>
-tbc::MSG_INSPECT_ARENA_TEAMS_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_ARENA_ERROR& ServerOpcode::get();
 template<>
-tbc::SMSG_DEATH_RELEASE_LOC* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_INSPECT_ARENA_TEAMS_Server* ServerOpcode::get_if();
 template<>
-tbc::SMSG_DEATH_RELEASE_LOC& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_INSPECT_ARENA_TEAMS_Server& ServerOpcode::get();
 template<>
-tbc::SMSG_FORCED_DEATH_UPDATE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_DEATH_RELEASE_LOC* ServerOpcode::get_if();
 template<>
-tbc::SMSG_FORCED_DEATH_UPDATE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_DEATH_RELEASE_LOC& ServerOpcode::get();
 template<>
-tbc::MSG_MOVE_SET_FLIGHT_SPEED_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_FORCED_DEATH_UPDATE* ServerOpcode::get_if();
 template<>
-tbc::MSG_MOVE_SET_FLIGHT_SPEED_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_FORCED_DEATH_UPDATE& ServerOpcode::get();
 template<>
-tbc::MSG_MOVE_SET_FLIGHT_BACK_SPEED* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_SET_FLIGHT_SPEED_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_MOVE_SET_FLIGHT_BACK_SPEED& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_SET_FLIGHT_SPEED_Server& ServerOpcode::get();
 template<>
-tbc::SMSG_FORCE_FLIGHT_SPEED_CHANGE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_SET_FLIGHT_BACK_SPEED* ServerOpcode::get_if();
 template<>
-tbc::SMSG_FORCE_FLIGHT_SPEED_CHANGE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_SET_FLIGHT_BACK_SPEED& ServerOpcode::get();
 template<>
-tbc::SMSG_FORCE_FLIGHT_BACK_SPEED_CHANGE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_FORCE_FLIGHT_SPEED_CHANGE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_FORCE_FLIGHT_BACK_SPEED_CHANGE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_FORCE_FLIGHT_SPEED_CHANGE& ServerOpcode::get();
 template<>
-tbc::SMSG_SPLINE_SET_FLIGHT_SPEED* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_FORCE_FLIGHT_BACK_SPEED_CHANGE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SPLINE_SET_FLIGHT_SPEED& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_FORCE_FLIGHT_BACK_SPEED_CHANGE& ServerOpcode::get();
 template<>
-tbc::SMSG_SPLINE_SET_FLIGHT_BACK_SPEED* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_SET_FLIGHT_SPEED* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SPLINE_SET_FLIGHT_BACK_SPEED& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_SET_FLIGHT_SPEED& ServerOpcode::get();
 template<>
-tbc::SMSG_FLIGHT_SPLINE_SYNC* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_SET_FLIGHT_BACK_SPEED* ServerOpcode::get_if();
 template<>
-tbc::SMSG_FLIGHT_SPLINE_SYNC& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_SET_FLIGHT_BACK_SPEED& ServerOpcode::get();
 template<>
-tbc::SMSG_REALM_SPLIT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_FLIGHT_SPLINE_SYNC* ServerOpcode::get_if();
 template<>
-tbc::SMSG_REALM_SPLIT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_FLIGHT_SPLINE_SYNC& ServerOpcode::get();
 template<>
-tbc::SMSG_TIME_SYNC_REQ* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_REALM_SPLIT* ServerOpcode::get_if();
 template<>
-tbc::SMSG_TIME_SYNC_REQ& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_REALM_SPLIT& ServerOpcode::get();
 template<>
-tbc::SMSG_RESET_FAILED_NOTIFY* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_TIME_SYNC_REQ* ServerOpcode::get_if();
 template<>
-tbc::SMSG_RESET_FAILED_NOTIFY& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_TIME_SYNC_REQ& ServerOpcode::get();
 template<>
-tbc::SMSG_LFG_DISABLED* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_RESET_FAILED_NOTIFY* ServerOpcode::get_if();
 template<>
-tbc::SMSG_LFG_DISABLED& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_RESET_FAILED_NOTIFY& ServerOpcode::get();
 template<>
-tbc::SMSG_UPDATE_COMBO_POINTS* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LFG_DISABLED* ServerOpcode::get_if();
 template<>
-tbc::SMSG_UPDATE_COMBO_POINTS& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LFG_DISABLED& ServerOpcode::get();
 template<>
-tbc::SMSG_SET_EXTRA_AURA_INFO* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_UPDATE_COMBO_POINTS* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SET_EXTRA_AURA_INFO& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_UPDATE_COMBO_POINTS& ServerOpcode::get();
 template<>
-tbc::SMSG_SET_EXTRA_AURA_INFO_NEED_UPDATE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SET_EXTRA_AURA_INFO* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SET_EXTRA_AURA_INFO_NEED_UPDATE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SET_EXTRA_AURA_INFO& ServerOpcode::get();
 template<>
-tbc::SMSG_CLEAR_EXTRA_AURA_INFO* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SET_EXTRA_AURA_INFO_NEED_UPDATE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_CLEAR_EXTRA_AURA_INFO& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SET_EXTRA_AURA_INFO_NEED_UPDATE& ServerOpcode::get();
 template<>
-tbc::MSG_MOVE_START_DESCEND_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CLEAR_EXTRA_AURA_INFO* ServerOpcode::get_if();
 template<>
-tbc::MSG_MOVE_START_DESCEND_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CLEAR_EXTRA_AURA_INFO& ServerOpcode::get();
 template<>
-tbc::SMSG_DISMOUNT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_DESCEND_Server* ServerOpcode::get_if();
 template<>
-tbc::SMSG_DISMOUNT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_START_DESCEND_Server& ServerOpcode::get();
 template<>
-tbc::MSG_MOVE_UPDATE_CAN_FLY_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_DISMOUNT* ServerOpcode::get_if();
 template<>
-tbc::MSG_MOVE_UPDATE_CAN_FLY_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_DISMOUNT& ServerOpcode::get();
 template<>
-tbc::MSG_RAID_READY_CHECK_CONFIRM_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_UPDATE_CAN_FLY_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_RAID_READY_CHECK_CONFIRM_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_MOVE_UPDATE_CAN_FLY_Server& ServerOpcode::get();
 template<>
-tbc::SMSG_GM_MESSAGECHAT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_RAID_READY_CHECK_CONFIRM_Server* ServerOpcode::get_if();
 template<>
-tbc::SMSG_GM_MESSAGECHAT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_RAID_READY_CHECK_CONFIRM_Server& ServerOpcode::get();
 template<>
-tbc::SMSG_CLEAR_TARGET* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GM_MESSAGECHAT* ServerOpcode::get_if();
 template<>
-tbc::SMSG_CLEAR_TARGET& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GM_MESSAGECHAT& ServerOpcode::get();
 template<>
-tbc::SMSG_CROSSED_INEBRIATION_THRESHOLD* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CLEAR_TARGET* ServerOpcode::get_if();
 template<>
-tbc::SMSG_CROSSED_INEBRIATION_THRESHOLD& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CLEAR_TARGET& ServerOpcode::get();
 template<>
-tbc::SMSG_KICK_REASON* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CROSSED_INEBRIATION_THRESHOLD* ServerOpcode::get_if();
 template<>
-tbc::SMSG_KICK_REASON& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CROSSED_INEBRIATION_THRESHOLD& ServerOpcode::get();
 template<>
-tbc::SMSG_COMPLAIN_RESULT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_KICK_REASON* ServerOpcode::get_if();
 template<>
-tbc::SMSG_COMPLAIN_RESULT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_KICK_REASON& ServerOpcode::get();
 template<>
-tbc::SMSG_FEATURE_SYSTEM_STATUS* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_COMPLAIN_RESULT* ServerOpcode::get_if();
 template<>
-tbc::SMSG_FEATURE_SYSTEM_STATUS& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_COMPLAIN_RESULT& ServerOpcode::get();
 template<>
-tbc::SMSG_CHANNEL_MEMBER_COUNT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_FEATURE_SYSTEM_STATUS* ServerOpcode::get_if();
 template<>
-tbc::SMSG_CHANNEL_MEMBER_COUNT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_FEATURE_SYSTEM_STATUS& ServerOpcode::get();
 template<>
-tbc::MSG_GUILD_BANK_LOG_QUERY_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CHANNEL_MEMBER_COUNT* ServerOpcode::get_if();
 template<>
-tbc::MSG_GUILD_BANK_LOG_QUERY_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_CHANNEL_MEMBER_COUNT& ServerOpcode::get();
 template<>
-tbc::SMSG_USERLIST_ADD* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GUILD_BANK_LIST* ServerOpcode::get_if();
 template<>
-tbc::SMSG_USERLIST_ADD& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_GUILD_BANK_LIST& ServerOpcode::get();
 template<>
-tbc::SMSG_USERLIST_REMOVE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_GUILD_BANK_LOG_QUERY_Server* ServerOpcode::get_if();
 template<>
-tbc::SMSG_USERLIST_REMOVE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_GUILD_BANK_LOG_QUERY_Server& ServerOpcode::get();
 template<>
-tbc::SMSG_USERLIST_UPDATE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_USERLIST_ADD* ServerOpcode::get_if();
 template<>
-tbc::SMSG_USERLIST_UPDATE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_USERLIST_ADD& ServerOpcode::get();
 template<>
-tbc::SMSG_INSPECT_TALENT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_USERLIST_REMOVE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_INSPECT_TALENT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_USERLIST_REMOVE& ServerOpcode::get();
 template<>
-tbc::SMSG_LOOT_LIST* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_USERLIST_UPDATE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_LOOT_LIST& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_USERLIST_UPDATE& ServerOpcode::get();
 template<>
-tbc::MSG_GUILD_PERMISSIONS_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_INSPECT_TALENT* ServerOpcode::get_if();
 template<>
-tbc::MSG_GUILD_PERMISSIONS_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_INSPECT_TALENT& ServerOpcode::get();
 template<>
-tbc::MSG_GUILD_BANK_MONEY_WITHDRAWN_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LOOT_LIST* ServerOpcode::get_if();
 template<>
-tbc::MSG_GUILD_BANK_MONEY_WITHDRAWN_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_LOOT_LIST& ServerOpcode::get();
 template<>
-tbc::MSG_GUILD_EVENT_LOG_QUERY_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_GUILD_PERMISSIONS_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_GUILD_EVENT_LOG_QUERY_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_GUILD_PERMISSIONS_Server& ServerOpcode::get();
 template<>
-tbc::SMSG_MIRRORIMAGE_DATA* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_GUILD_BANK_MONEY_WITHDRAWN_Server* ServerOpcode::get_if();
 template<>
-tbc::SMSG_MIRRORIMAGE_DATA& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_GUILD_BANK_MONEY_WITHDRAWN_Server& ServerOpcode::get();
 template<>
-tbc::MSG_QUERY_GUILD_BANK_TEXT_Server* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_GUILD_EVENT_LOG_QUERY_Server* ServerOpcode::get_if();
 template<>
-tbc::MSG_QUERY_GUILD_BANK_TEXT_Server& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_GUILD_EVENT_LOG_QUERY_Server& ServerOpcode::get();
 template<>
-tbc::SMSG_OVERRIDE_LIGHT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_MIRRORIMAGE_DATA* ServerOpcode::get_if();
 template<>
-tbc::SMSG_OVERRIDE_LIGHT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_MIRRORIMAGE_DATA& ServerOpcode::get();
 template<>
-tbc::SMSG_TOTEM_CREATED* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_QUERY_GUILD_BANK_TEXT_Server* ServerOpcode::get_if();
 template<>
-tbc::SMSG_TOTEM_CREATED& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::MSG_QUERY_GUILD_BANK_TEXT_Server& ServerOpcode::get();
 template<>
-tbc::SMSG_QUESTGIVER_STATUS_MULTIPLE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_OVERRIDE_LIGHT* ServerOpcode::get_if();
 template<>
-tbc::SMSG_QUESTGIVER_STATUS_MULTIPLE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_OVERRIDE_LIGHT& ServerOpcode::get();
 template<>
-tbc::SMSG_SET_PLAYER_DECLINED_NAMES_RESULT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_TOTEM_CREATED* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SET_PLAYER_DECLINED_NAMES_RESULT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_TOTEM_CREATED& ServerOpcode::get();
 template<>
-tbc::SMSG_SEND_UNLEARN_SPELLS* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_QUESTGIVER_STATUS_MULTIPLE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SEND_UNLEARN_SPELLS& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_QUESTGIVER_STATUS_MULTIPLE& ServerOpcode::get();
 template<>
-tbc::SMSG_PROPOSE_LEVEL_GRANT* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SET_PLAYER_DECLINED_NAMES_RESULT* ServerOpcode::get_if();
 template<>
-tbc::SMSG_PROPOSE_LEVEL_GRANT& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SET_PLAYER_DECLINED_NAMES_RESULT& ServerOpcode::get();
 template<>
-tbc::SMSG_REFER_A_FRIEND_FAILURE* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SEND_UNLEARN_SPELLS* ServerOpcode::get_if();
 template<>
-tbc::SMSG_REFER_A_FRIEND_FAILURE& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SEND_UNLEARN_SPELLS& ServerOpcode::get();
 template<>
-tbc::SMSG_SPLINE_MOVE_SET_FLYING* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PROPOSE_LEVEL_GRANT* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SPLINE_MOVE_SET_FLYING& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_PROPOSE_LEVEL_GRANT& ServerOpcode::get();
 template<>
-tbc::SMSG_SPLINE_MOVE_UNSET_FLYING* ServerOpcode::get_if();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_REFER_A_FRIEND_FAILURE* ServerOpcode::get_if();
 template<>
-tbc::SMSG_SPLINE_MOVE_UNSET_FLYING& ServerOpcode::get();
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_REFER_A_FRIEND_FAILURE& ServerOpcode::get();
+template<>
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_MOVE_SET_FLYING* ServerOpcode::get_if();
+template<>
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_MOVE_SET_FLYING& ServerOpcode::get();
+template<>
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_MOVE_UNSET_FLYING* ServerOpcode::get_if();
+template<>
+WOW_WORLD_MESSAGES_CPP_EXPORT tbc::SMSG_SPLINE_MOVE_UNSET_FLYING& ServerOpcode::get();
 
 WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const ServerOpcode& opcode);
 

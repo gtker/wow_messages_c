@@ -63,21 +63,15 @@ def print_individual_test(s: Writer, e: model.Container, test_case: model.TestCa
         s.newline()
 
         s.wln(
-            f"const auto opcode = ::wow_{library_type.lower()}_messages::{function_version}::read_{function_side}_opcode(reader);")
-
-        s.open_curly("if (opcode.is_none())")
-        s.wln(
-            f'printf(__FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i} read invalid opcode");')
-        s.wln("abort();")
-        s.closing_curly()  # if (opcode.is_none())
-        s.newline()
+            f"auto opcode = ::wow_{library_type.lower()}_messages::{function_version}::read_{function_side}_opcode(reader);")
 
         s.open_curly(
-            f"if (opcode.opcode != ::wow_{library_type.lower()}_messages::{function_version}::{function_side.capitalize()}Opcode::Opcode::{opcode_id})")
+            f"if (opcode.get_if<::wow_{library_type.lower()}_messages::{function_version}::{e.name}>() == nullptr)")
         s.wln(
             f'printf(__FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i} read invalid opcode");')
+        s.wln(f"fflush({'nullptr' if is_cpp() else 'NULL'});")
         s.wln("abort();")
-        s.closing_curly()  # if (opcode.opcode)
+        s.closing_curly()  # if (opcode.get_if())
         s.newline()
 
         s.wln(
@@ -94,6 +88,7 @@ def print_individual_test(s: Writer, e: model.Container, test_case: model.TestCa
             s.open_curly("if (opcode2.is_none())")
             s.wln(
                 f'printf(__FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i} read invalid second opcode");')
+            s.wln(f"fflush({'nullptr' if is_cpp() else 'NULL'});")
             s.wln("abort();")
             s.closing_curly()  # if (opcode2.is_none())
             s.newline()
@@ -102,6 +97,7 @@ def print_individual_test(s: Writer, e: model.Container, test_case: model.TestCa
                 f"if (opcode2.opcode != ::wow_{library_type.lower()}_messages::{function_version}::{function_side.capitalize()}Opcode::Opcode::{opcode_id})")
             s.wln(
                 f'printf(__FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i} read invalid second opcode");')
+            s.wln(f"fflush({'nullptr' if is_cpp() else 'NULL'});")
             s.wln("abort();")
             s.closing_curly()  # if (opcode.opcode)
             s.newline()
@@ -126,47 +122,49 @@ def print_individual_test(s: Writer, e: model.Container, test_case: model.TestCa
         s.wln_no_indent("};")
         s.newline()
 
-        s.wln(f"Wow{library_type}Reader reader = {library_prefix}_create_reader(buffer, sizeof(buffer));")
-        s.newline()
-
         s.wln(f"{opcode_type} opcode;")
-        s.wln(f"Wow{library_type}Result result = {function_version}_{function_side}_opcode_read(&reader, &opcode);")
         s.newline()
 
-        s.open_curly(f"if (result != {library_prefix.upper()}_RESULT_SUCCESS)")
-        s.wln(
-            f'printf(__FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i} failed to read: \'%s\'\\n", {library_prefix}_error_code_to_string(result));')
-        s.wln("abort();")
-        s.newline()
-        s.closing_curly()  # if (result != 0)
+        if container_uses_compression(e):
+            s.wln(f"{opcode_type} opcode2;")
+            s.wln(f"unsigned char* write_buffer2;")
+            s.newline()
 
-        s.open_curly(f"if (opcode.opcode != {opcode_id})")
-        s.wln(
-            f'printf(__FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i} read wrong opcode: \'0x%x\' instead of \'0x%x\'\\n", opcode.opcode, {opcode_id});')
-        s.wln("abort();")
+        s.wln(f"reader = {library_prefix}_create_reader(buffer, sizeof(buffer));")
+        s.wln(f"result = {function_version}_{function_side}_opcode_read(&reader, &opcode);")
         s.newline()
-        s.closing_curly()  # if (opcode.opcode != opcode)
 
-        s.open_curly("/* C89 scope to allow variable declarations */")
-        s.wln(f"Wow{library_type}Writer writer = {library_prefix}_create_writer(write_buffer, sizeof(write_buffer));")
+        s.wln(f'check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "{e.name} {i}", "failed to read");')
+        s.wln(f'check_opcode(opcode.opcode, {opcode_id}, __FILE__ ":" STRINGIFY(__LINE__), "{e.name} {i}");')
+
+        s.wln(f"writer = {library_prefix}_create_writer(write_buffer, sizeof(write_buffer));")
         extra_argument = f", &opcode.body.{e.name}" if container_has_c_members(e) else ""
         s.wln(f"result = {function_version}_{e.name}_write(&writer{extra_argument});")
         s.newline()
 
-        s.open_curly(f"if (result != {library_prefix.upper()}_RESULT_SUCCESS)")
-        s.wln(
-            f'printf(__FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i} failed to write: \'%s\'\\n", {library_prefix}_error_code_to_string(result));')
-        s.wln("abort();")
-        s.newline()
-        s.closing_curly()  # if (result != 0)
+        s.wln(f'check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "{e.name} {i}", "failed to write");')
 
         if container_uses_compression(e):
-            s.wln("/* TODO compressed array compare do what? */")
+            s.write_block(f"""
+                reader2 = {library_prefix}_create_reader(write_buffer, sizeof(write_buffer));
+                write_buffer2 = malloc(sizeof(write_buffer));
+
+                result = {function_version}_{function_side}_opcode_read(&reader2, &opcode2);
+                check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "{e.name} {i}", "failed to read second");
+                check_opcode(opcode2.opcode, {opcode_id}, __FILE__ ":" STRINGIFY(__LINE__), "{e.name} {i}");
+
+                writer2 = wwm_create_writer(write_buffer2, sizeof(write_buffer));
+                result = {function_version}_{function_side}_opcode_write(&writer2, &opcode2);
+                check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "{e.name} {i}", "failed to write second");
+
+                wlm_test_compare_buffers(write_buffer, write_buffer2, writer.index, __FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i}");
+                free(write_buffer2);
+            """)
+            if container_has_free(e, function_version):
+                s.wln(f"{function_version}_{function_side}_opcode_free(&opcode2);")
         else:
             s.wln(
                 f'wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i}");')
-
-        s.closing_curly()  # C89 scope
 
         if container_has_free(e, function_version):
             s.wln(f"{function_version}_{function_side}_opcode_free(&opcode);")
@@ -188,41 +186,16 @@ def print_login_test_prefix(tests: Writer, m: model.IntermediateRepresentationSc
         module_name = version_to_module_name(v)
         tests.wln(f"#include \"wow_login_messages{cpp}/{module_name}.h{pp}\"")
 
-    tests.wln("#include \"test_utils.h\"")
-    tests.newline()
+    write_includes(tests)
 
-    if not is_cpp():
-        tests.wln("#include <stdlib.h> /* abort() */")
-        tests.newline()
+    write_check_functions(tests, False)
 
-    if is_cpp():
-        tests.write_block("""
-class ByteReader final : public wow_login_messages::Reader
-{
-public:
-    explicit ByteReader(std::vector<unsigned char> buf) : m_buf(std::move(buf)) { }
+    write_byte_reader(tests, False)
 
-    uint8_t read_u8() override
-    {
-        const uint8_t value = m_buf[m_index];
-        m_index += 1;
-
-        return value;
-    }
-
-    std::vector<unsigned char> m_buf;
-    size_t m_index = 0;
-};
-""")
-
-    if is_cpp():
-        tests.open_curly("int main()")
-    else:
-        tests.wln("unsigned char write_buffer[1 << 16] = {0}; /* uint16_t max */")
-        tests.open_curly("int main(void)")
+    write_int_main(tests, False)
 
 
-def print_login_test_suffix(tests: Writer):
+def print_test_suffix(tests: Writer):
     tests.wln("return 0;")
     tests.closing_curly()
 
@@ -232,6 +205,20 @@ def print_world_tests(s: Writer, messages: typing.List[model.Container], v: mode
     pp = "pp" if is_cpp() else ""
     cpp = "_cpp" if is_cpp() else ""
     s.wln(f"#include \"wow_world_messages{cpp}/{module_name}.h{pp}\"")
+
+    write_includes(s)
+    write_check_functions(s, True)
+    write_byte_reader(s, True)
+    write_int_main(s, True)
+
+    for e in messages:
+        if len(e.tests) != 0:
+            print_tests_for_message(s, e, v)
+
+    print_test_suffix(s)
+
+
+def write_includes(s: Writer):
     s.wln("#include \"test_utils.h\"")
     s.newline()
 
@@ -239,36 +226,69 @@ def print_world_tests(s: Writer, messages: typing.List[model.Container], v: mode
         s.wln("#include <stdlib.h> /* abort() */")
         s.newline()
 
-    if is_cpp():
-        s.write_block("""
-class ByteReader final : public wow_world_messages::Reader
-{
-public:
-    explicit ByteReader(std::vector<unsigned char> buf) : m_buf(std::move(buf)) { }
 
-    uint8_t read_u8() override
-    {
-        const uint8_t value = m_buf[m_index];
-        m_index += 1;
-
-        return value;
-    }
-
-    std::vector<unsigned char> m_buf;
-    size_t m_index = 0;
-};
-    """)
-
+def write_int_main(s: Writer, world: bool):
     if not is_cpp():
         s.wln("unsigned char write_buffer[1 << 16] = {0}; /* uint16_t max */")
 
     extra_void: str = "" if is_cpp() else "void"
-
     s.open_curly(f"int main({extra_void})")
 
-    for e in messages:
-        if len(e.tests) != 0:
-            print_tests_for_message(s, e, v)
+    if not is_cpp():
+        type_prefix = "WowWorld" if world else "WowLogin"
 
-    s.wln("return 0;")
-    s.closing_curly()  # int main(void)
+        s.wln(f"{type_prefix}Reader reader;")
+        s.wln(f"{type_prefix}Writer writer;")
+        s.newline()
+        s.wln(f"{type_prefix}Result result;")
+        s.newline()
+
+        if world:
+            s.wln(f"{type_prefix}Reader reader2;")
+            s.wln(f"{type_prefix}Writer writer2;")
+            s.newline()
+
+
+def write_byte_reader(s: Writer, world: bool):
+    if is_cpp():
+        s.write_block(f"""
+class ByteReader final : public ::wow_{'world' if world else 'login'}_messages::Reader
+{{
+public:
+    explicit ByteReader(std::vector<unsigned char> buf) : m_buf(std::move(buf)) {{ }}
+
+    uint8_t read_u8() override
+    {{
+        const uint8_t value = m_buf[m_index];
+        m_index += 1;
+
+        return value;
+    }}
+
+    std::vector<unsigned char> m_buf;
+    size_t m_index = 0;
+}};
+    """)
+
+
+def write_check_functions(s: Writer, world: bool):
+    result_type = f"Wow{'World' if world else 'Login'}Result"
+    result_prefix = f"W{'W' if world else 'L'}M"
+    if not is_cpp():
+        s.write_block(f"""
+            static void check_result(const {result_type} result, const char* location, const char* object, const char* reason) {{
+                if (result != {result_prefix}_RESULT_SUCCESS) {{
+                    printf("%s: %s %s %s\\n", location, object, reason, {result_prefix.lower()}_error_code_to_string(result));
+                    fflush(NULL);
+                    abort();
+                }}
+            }}
+
+            static void check_opcode(const int opcode, const int expected, const char* location, const char* object) {{
+                if (opcode != expected) {{
+                    printf("%s: %s read wrong opcode: '0x%x' instead of '0x%x'\\n", location, object, opcode, expected);
+                    fflush(NULL);
+                    abort();
+                }}
+            }}
+        """)

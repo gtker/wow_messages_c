@@ -114,12 +114,12 @@ public:
 
         const auto header = read_u8();
 
-        for (int i = 0; i < 8; ++i)
+        for (uint64_t i = 0; i < 8; ++i)
         {
             const bool byte_has_value = (header & (1 << i)) != 0;
             if (byte_has_value)
             {
-                value |= read_u8() << i * 8;
+                value |= static_cast<uint64_t>(read_u8()) << i * 8;
             }
         }
 
@@ -132,8 +132,8 @@ public:
 class NamedGuid
 {
 public:
-    NamedGuid() : m_guid(0), m_name() {}
-    NamedGuid(uint64_t guid, std::string&& name) : m_guid(guid), m_name(name) {}
+    WOW_WORLD_MESSAGES_CPP_EXPORT NamedGuid() : m_guid(0), m_name() {}
+    WOW_WORLD_MESSAGES_CPP_EXPORT NamedGuid(uint64_t guid, std::string&& name) : m_guid(guid), m_name(name) {}
 
     WOW_WORLD_MESSAGES_CPP_EXPORT const std::string* name() const
     {
@@ -149,6 +149,36 @@ public:
 private:
     uint64_t m_guid;
     std::string m_name;
+};
+
+class VariableItemRandomProperty
+{
+public:
+    WOW_WORLD_MESSAGES_CPP_EXPORT VariableItemRandomProperty() : m_item_random_property_id(0), m_item_suffix_factor(0)
+    {
+    }
+
+    WOW_WORLD_MESSAGES_CPP_EXPORT VariableItemRandomProperty(uint32_t item_random_property_id,
+                                                             uint32_t item_suffix_factor) :
+        m_item_random_property_id(item_random_property_id), m_item_suffix_factor(item_suffix_factor)
+    {
+    }
+
+    WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t item_random_property_id() const { return m_item_random_property_id; }
+
+    WOW_WORLD_MESSAGES_CPP_EXPORT const uint32_t* item_suffix_factor() const
+    {
+        if (m_item_random_property_id != 0)
+        {
+            return &m_item_suffix_factor;
+        }
+
+        return nullptr;
+    }
+
+private:
+    uint32_t m_item_random_property_id;
+    uint32_t m_item_suffix_factor;
 };
 
 struct bad_opcode_access final : std::exception

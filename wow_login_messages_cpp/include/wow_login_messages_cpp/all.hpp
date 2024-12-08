@@ -126,21 +126,23 @@ struct ClientOpcode {
 
     template<typename T>
     // NOLINTNEXTLINE
-    T& get(); // All possible types have been specialized
+    WOW_LOGIN_MESSAGES_CPP_EXPORT T& get(); // All possible types have been specialized
 
     template<typename T>
     // NOLINTNEXTLINE
-    T* get_if(); // All possible types have been specialized
+    WOW_LOGIN_MESSAGES_CPP_EXPORT T* get_if(); // All possible types have been specialized
+
+    WOW_LOGIN_MESSAGES_CPP_EXPORT const char* to_string() const;
 };
 
 template<>
-all::CMD_AUTH_LOGON_CHALLENGE_Client* ClientOpcode::get_if();
+WOW_LOGIN_MESSAGES_CPP_EXPORT all::CMD_AUTH_LOGON_CHALLENGE_Client* ClientOpcode::get_if();
 template<>
-all::CMD_AUTH_LOGON_CHALLENGE_Client& ClientOpcode::get();
+WOW_LOGIN_MESSAGES_CPP_EXPORT all::CMD_AUTH_LOGON_CHALLENGE_Client& ClientOpcode::get();
 template<>
-all::CMD_AUTH_RECONNECT_CHALLENGE_Client* ClientOpcode::get_if();
+WOW_LOGIN_MESSAGES_CPP_EXPORT all::CMD_AUTH_RECONNECT_CHALLENGE_Client* ClientOpcode::get_if();
 template<>
-all::CMD_AUTH_RECONNECT_CHALLENGE_Client& ClientOpcode::get();
+WOW_LOGIN_MESSAGES_CPP_EXPORT all::CMD_AUTH_RECONNECT_CHALLENGE_Client& ClientOpcode::get();
 
 WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const ClientOpcode& opcode);
 

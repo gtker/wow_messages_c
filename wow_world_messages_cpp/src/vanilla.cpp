@@ -22371,15 +22371,324 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_DEFENSE_MESSAGE::w
     return writer.m_buf;
 }
 
+WOW_WORLD_MESSAGES_CPP_EXPORT const char* ClientOpcode::to_string() const {
+    if (opcode == Opcode::CMSG_BOOTME) { return "CMSG_BOOTME"; }
+    if (opcode == Opcode::CMSG_DBLOOKUP) { return "CMSG_DBLOOKUP"; }
+    if (opcode == Opcode::CMSG_WORLD_TELEPORT) { return "CMSG_WORLD_TELEPORT"; }
+    if (opcode == Opcode::CMSG_TELEPORT_TO_UNIT) { return "CMSG_TELEPORT_TO_UNIT"; }
+    if (opcode == Opcode::CMSG_CHAR_CREATE) { return "CMSG_CHAR_CREATE"; }
+    if (opcode == Opcode::CMSG_CHAR_ENUM) { return "CMSG_CHAR_ENUM"; }
+    if (opcode == Opcode::CMSG_CHAR_DELETE) { return "CMSG_CHAR_DELETE"; }
+    if (opcode == Opcode::CMSG_PLAYER_LOGIN) { return "CMSG_PLAYER_LOGIN"; }
+    if (opcode == Opcode::CMSG_PLAYER_LOGOUT) { return "CMSG_PLAYER_LOGOUT"; }
+    if (opcode == Opcode::CMSG_LOGOUT_REQUEST) { return "CMSG_LOGOUT_REQUEST"; }
+    if (opcode == Opcode::CMSG_LOGOUT_CANCEL) { return "CMSG_LOGOUT_CANCEL"; }
+    if (opcode == Opcode::CMSG_NAME_QUERY) { return "CMSG_NAME_QUERY"; }
+    if (opcode == Opcode::CMSG_PET_NAME_QUERY) { return "CMSG_PET_NAME_QUERY"; }
+    if (opcode == Opcode::CMSG_GUILD_QUERY) { return "CMSG_GUILD_QUERY"; }
+    if (opcode == Opcode::CMSG_ITEM_QUERY_SINGLE) { return "CMSG_ITEM_QUERY_SINGLE"; }
+    if (opcode == Opcode::CMSG_PAGE_TEXT_QUERY) { return "CMSG_PAGE_TEXT_QUERY"; }
+    if (opcode == Opcode::CMSG_QUEST_QUERY) { return "CMSG_QUEST_QUERY"; }
+    if (opcode == Opcode::CMSG_GAMEOBJECT_QUERY) { return "CMSG_GAMEOBJECT_QUERY"; }
+    if (opcode == Opcode::CMSG_CREATURE_QUERY) { return "CMSG_CREATURE_QUERY"; }
+    if (opcode == Opcode::CMSG_WHO) { return "CMSG_WHO"; }
+    if (opcode == Opcode::CMSG_WHOIS) { return "CMSG_WHOIS"; }
+    if (opcode == Opcode::CMSG_FRIEND_LIST) { return "CMSG_FRIEND_LIST"; }
+    if (opcode == Opcode::CMSG_ADD_FRIEND) { return "CMSG_ADD_FRIEND"; }
+    if (opcode == Opcode::CMSG_DEL_FRIEND) { return "CMSG_DEL_FRIEND"; }
+    if (opcode == Opcode::CMSG_ADD_IGNORE) { return "CMSG_ADD_IGNORE"; }
+    if (opcode == Opcode::CMSG_DEL_IGNORE) { return "CMSG_DEL_IGNORE"; }
+    if (opcode == Opcode::CMSG_GROUP_INVITE) { return "CMSG_GROUP_INVITE"; }
+    if (opcode == Opcode::CMSG_GROUP_ACCEPT) { return "CMSG_GROUP_ACCEPT"; }
+    if (opcode == Opcode::CMSG_GROUP_DECLINE) { return "CMSG_GROUP_DECLINE"; }
+    if (opcode == Opcode::CMSG_GROUP_UNINVITE) { return "CMSG_GROUP_UNINVITE"; }
+    if (opcode == Opcode::CMSG_GROUP_UNINVITE_GUID) { return "CMSG_GROUP_UNINVITE_GUID"; }
+    if (opcode == Opcode::CMSG_GROUP_SET_LEADER) { return "CMSG_GROUP_SET_LEADER"; }
+    if (opcode == Opcode::CMSG_LOOT_METHOD) { return "CMSG_LOOT_METHOD"; }
+    if (opcode == Opcode::CMSG_GROUP_DISBAND) { return "CMSG_GROUP_DISBAND"; }
+    if (opcode == Opcode::CMSG_GUILD_CREATE) { return "CMSG_GUILD_CREATE"; }
+    if (opcode == Opcode::CMSG_GUILD_INVITE) { return "CMSG_GUILD_INVITE"; }
+    if (opcode == Opcode::CMSG_GUILD_ACCEPT) { return "CMSG_GUILD_ACCEPT"; }
+    if (opcode == Opcode::CMSG_GUILD_DECLINE) { return "CMSG_GUILD_DECLINE"; }
+    if (opcode == Opcode::CMSG_GUILD_INFO) { return "CMSG_GUILD_INFO"; }
+    if (opcode == Opcode::CMSG_GUILD_ROSTER) { return "CMSG_GUILD_ROSTER"; }
+    if (opcode == Opcode::CMSG_GUILD_PROMOTE) { return "CMSG_GUILD_PROMOTE"; }
+    if (opcode == Opcode::CMSG_GUILD_DEMOTE) { return "CMSG_GUILD_DEMOTE"; }
+    if (opcode == Opcode::CMSG_GUILD_LEAVE) { return "CMSG_GUILD_LEAVE"; }
+    if (opcode == Opcode::CMSG_GUILD_REMOVE) { return "CMSG_GUILD_REMOVE"; }
+    if (opcode == Opcode::CMSG_GUILD_DISBAND) { return "CMSG_GUILD_DISBAND"; }
+    if (opcode == Opcode::CMSG_GUILD_LEADER) { return "CMSG_GUILD_LEADER"; }
+    if (opcode == Opcode::CMSG_GUILD_MOTD) { return "CMSG_GUILD_MOTD"; }
+    if (opcode == Opcode::CMSG_MESSAGECHAT) { return "CMSG_MESSAGECHAT"; }
+    if (opcode == Opcode::CMSG_JOIN_CHANNEL) { return "CMSG_JOIN_CHANNEL"; }
+    if (opcode == Opcode::CMSG_LEAVE_CHANNEL) { return "CMSG_LEAVE_CHANNEL"; }
+    if (opcode == Opcode::CMSG_CHANNEL_LIST) { return "CMSG_CHANNEL_LIST"; }
+    if (opcode == Opcode::CMSG_CHANNEL_PASSWORD) { return "CMSG_CHANNEL_PASSWORD"; }
+    if (opcode == Opcode::CMSG_CHANNEL_SET_OWNER) { return "CMSG_CHANNEL_SET_OWNER"; }
+    if (opcode == Opcode::CMSG_CHANNEL_OWNER) { return "CMSG_CHANNEL_OWNER"; }
+    if (opcode == Opcode::CMSG_CHANNEL_MODERATOR) { return "CMSG_CHANNEL_MODERATOR"; }
+    if (opcode == Opcode::CMSG_CHANNEL_UNMODERATOR) { return "CMSG_CHANNEL_UNMODERATOR"; }
+    if (opcode == Opcode::CMSG_CHANNEL_MUTE) { return "CMSG_CHANNEL_MUTE"; }
+    if (opcode == Opcode::CMSG_CHANNEL_UNMUTE) { return "CMSG_CHANNEL_UNMUTE"; }
+    if (opcode == Opcode::CMSG_CHANNEL_INVITE) { return "CMSG_CHANNEL_INVITE"; }
+    if (opcode == Opcode::CMSG_CHANNEL_KICK) { return "CMSG_CHANNEL_KICK"; }
+    if (opcode == Opcode::CMSG_CHANNEL_BAN) { return "CMSG_CHANNEL_BAN"; }
+    if (opcode == Opcode::CMSG_CHANNEL_UNBAN) { return "CMSG_CHANNEL_UNBAN"; }
+    if (opcode == Opcode::CMSG_CHANNEL_ANNOUNCEMENTS) { return "CMSG_CHANNEL_ANNOUNCEMENTS"; }
+    if (opcode == Opcode::CMSG_CHANNEL_MODERATE) { return "CMSG_CHANNEL_MODERATE"; }
+    if (opcode == Opcode::CMSG_USE_ITEM) { return "CMSG_USE_ITEM"; }
+    if (opcode == Opcode::CMSG_OPEN_ITEM) { return "CMSG_OPEN_ITEM"; }
+    if (opcode == Opcode::CMSG_READ_ITEM) { return "CMSG_READ_ITEM"; }
+    if (opcode == Opcode::CMSG_GAMEOBJ_USE) { return "CMSG_GAMEOBJ_USE"; }
+    if (opcode == Opcode::CMSG_AREATRIGGER) { return "CMSG_AREATRIGGER"; }
+    if (opcode == Opcode::MSG_MOVE_START_FORWARD) { return "MSG_MOVE_START_FORWARD_Client"; }
+    if (opcode == Opcode::MSG_MOVE_START_BACKWARD) { return "MSG_MOVE_START_BACKWARD_Client"; }
+    if (opcode == Opcode::MSG_MOVE_STOP) { return "MSG_MOVE_STOP_Client"; }
+    if (opcode == Opcode::MSG_MOVE_START_STRAFE_LEFT) { return "MSG_MOVE_START_STRAFE_LEFT_Client"; }
+    if (opcode == Opcode::MSG_MOVE_START_STRAFE_RIGHT) { return "MSG_MOVE_START_STRAFE_RIGHT_Client"; }
+    if (opcode == Opcode::MSG_MOVE_STOP_STRAFE) { return "MSG_MOVE_STOP_STRAFE_Client"; }
+    if (opcode == Opcode::MSG_MOVE_JUMP) { return "MSG_MOVE_JUMP_Client"; }
+    if (opcode == Opcode::MSG_MOVE_START_TURN_LEFT) { return "MSG_MOVE_START_TURN_LEFT_Client"; }
+    if (opcode == Opcode::MSG_MOVE_START_TURN_RIGHT) { return "MSG_MOVE_START_TURN_RIGHT_Client"; }
+    if (opcode == Opcode::MSG_MOVE_STOP_TURN) { return "MSG_MOVE_STOP_TURN_Client"; }
+    if (opcode == Opcode::MSG_MOVE_START_PITCH_UP) { return "MSG_MOVE_START_PITCH_UP_Client"; }
+    if (opcode == Opcode::MSG_MOVE_START_PITCH_DOWN) { return "MSG_MOVE_START_PITCH_DOWN_Client"; }
+    if (opcode == Opcode::MSG_MOVE_STOP_PITCH) { return "MSG_MOVE_STOP_PITCH_Client"; }
+    if (opcode == Opcode::MSG_MOVE_SET_RUN_MODE) { return "MSG_MOVE_SET_RUN_MODE_Client"; }
+    if (opcode == Opcode::MSG_MOVE_SET_WALK_MODE) { return "MSG_MOVE_SET_WALK_MODE_Client"; }
+    if (opcode == Opcode::MSG_MOVE_TELEPORT_ACK) { return "MSG_MOVE_TELEPORT_ACK_Client"; }
+    if (opcode == Opcode::MSG_MOVE_FALL_LAND) { return "MSG_MOVE_FALL_LAND_Client"; }
+    if (opcode == Opcode::MSG_MOVE_START_SWIM) { return "MSG_MOVE_START_SWIM_Client"; }
+    if (opcode == Opcode::MSG_MOVE_STOP_SWIM) { return "MSG_MOVE_STOP_SWIM_Client"; }
+    if (opcode == Opcode::MSG_MOVE_SET_FACING) { return "MSG_MOVE_SET_FACING_Client"; }
+    if (opcode == Opcode::MSG_MOVE_SET_PITCH) { return "MSG_MOVE_SET_PITCH_Client"; }
+    if (opcode == Opcode::MSG_MOVE_WORLDPORT_ACK) { return "MSG_MOVE_WORLDPORT_ACK"; }
+    if (opcode == Opcode::CMSG_MOVE_SET_RAW_POSITION) { return "CMSG_MOVE_SET_RAW_POSITION"; }
+    if (opcode == Opcode::CMSG_FORCE_RUN_SPEED_CHANGE_ACK) { return "CMSG_FORCE_RUN_SPEED_CHANGE_ACK"; }
+    if (opcode == Opcode::CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK) { return "CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK"; }
+    if (opcode == Opcode::CMSG_FORCE_SWIM_SPEED_CHANGE_ACK) { return "CMSG_FORCE_SWIM_SPEED_CHANGE_ACK"; }
+    if (opcode == Opcode::CMSG_FORCE_MOVE_ROOT_ACK) { return "CMSG_FORCE_MOVE_ROOT_ACK"; }
+    if (opcode == Opcode::CMSG_FORCE_MOVE_UNROOT_ACK) { return "CMSG_FORCE_MOVE_UNROOT_ACK"; }
+    if (opcode == Opcode::MSG_MOVE_HEARTBEAT) { return "MSG_MOVE_HEARTBEAT_Client"; }
+    if (opcode == Opcode::CMSG_MOVE_KNOCK_BACK_ACK) { return "CMSG_MOVE_KNOCK_BACK_ACK"; }
+    if (opcode == Opcode::CMSG_MOVE_HOVER_ACK) { return "CMSG_MOVE_HOVER_ACK"; }
+    if (opcode == Opcode::CMSG_NEXT_CINEMATIC_CAMERA) { return "CMSG_NEXT_CINEMATIC_CAMERA"; }
+    if (opcode == Opcode::CMSG_COMPLETE_CINEMATIC) { return "CMSG_COMPLETE_CINEMATIC"; }
+    if (opcode == Opcode::CMSG_TUTORIAL_FLAG) { return "CMSG_TUTORIAL_FLAG"; }
+    if (opcode == Opcode::CMSG_TUTORIAL_CLEAR) { return "CMSG_TUTORIAL_CLEAR"; }
+    if (opcode == Opcode::CMSG_TUTORIAL_RESET) { return "CMSG_TUTORIAL_RESET"; }
+    if (opcode == Opcode::CMSG_STANDSTATECHANGE) { return "CMSG_STANDSTATECHANGE"; }
+    if (opcode == Opcode::CMSG_EMOTE) { return "CMSG_EMOTE"; }
+    if (opcode == Opcode::CMSG_TEXT_EMOTE) { return "CMSG_TEXT_EMOTE"; }
+    if (opcode == Opcode::CMSG_AUTOSTORE_LOOT_ITEM) { return "CMSG_AUTOSTORE_LOOT_ITEM"; }
+    if (opcode == Opcode::CMSG_AUTOEQUIP_ITEM) { return "CMSG_AUTOEQUIP_ITEM"; }
+    if (opcode == Opcode::CMSG_AUTOSTORE_BAG_ITEM) { return "CMSG_AUTOSTORE_BAG_ITEM"; }
+    if (opcode == Opcode::CMSG_SWAP_ITEM) { return "CMSG_SWAP_ITEM"; }
+    if (opcode == Opcode::CMSG_SWAP_INV_ITEM) { return "CMSG_SWAP_INV_ITEM"; }
+    if (opcode == Opcode::CMSG_SPLIT_ITEM) { return "CMSG_SPLIT_ITEM"; }
+    if (opcode == Opcode::CMSG_AUTOEQUIP_ITEM_SLOT) { return "CMSG_AUTOEQUIP_ITEM_SLOT"; }
+    if (opcode == Opcode::CMSG_DESTROYITEM) { return "CMSG_DESTROYITEM"; }
+    if (opcode == Opcode::CMSG_INSPECT) { return "CMSG_INSPECT"; }
+    if (opcode == Opcode::CMSG_INITIATE_TRADE) { return "CMSG_INITIATE_TRADE"; }
+    if (opcode == Opcode::CMSG_BEGIN_TRADE) { return "CMSG_BEGIN_TRADE"; }
+    if (opcode == Opcode::CMSG_BUSY_TRADE) { return "CMSG_BUSY_TRADE"; }
+    if (opcode == Opcode::CMSG_IGNORE_TRADE) { return "CMSG_IGNORE_TRADE"; }
+    if (opcode == Opcode::CMSG_ACCEPT_TRADE) { return "CMSG_ACCEPT_TRADE"; }
+    if (opcode == Opcode::CMSG_UNACCEPT_TRADE) { return "CMSG_UNACCEPT_TRADE"; }
+    if (opcode == Opcode::CMSG_CANCEL_TRADE) { return "CMSG_CANCEL_TRADE"; }
+    if (opcode == Opcode::CMSG_SET_TRADE_ITEM) { return "CMSG_SET_TRADE_ITEM"; }
+    if (opcode == Opcode::CMSG_CLEAR_TRADE_ITEM) { return "CMSG_CLEAR_TRADE_ITEM"; }
+    if (opcode == Opcode::CMSG_SET_TRADE_GOLD) { return "CMSG_SET_TRADE_GOLD"; }
+    if (opcode == Opcode::CMSG_SET_FACTION_ATWAR) { return "CMSG_SET_FACTION_ATWAR"; }
+    if (opcode == Opcode::CMSG_SET_ACTION_BUTTON) { return "CMSG_SET_ACTION_BUTTON"; }
+    if (opcode == Opcode::CMSG_CAST_SPELL) { return "CMSG_CAST_SPELL"; }
+    if (opcode == Opcode::CMSG_CANCEL_CAST) { return "CMSG_CANCEL_CAST"; }
+    if (opcode == Opcode::CMSG_CANCEL_AURA) { return "CMSG_CANCEL_AURA"; }
+    if (opcode == Opcode::CMSG_CANCEL_CHANNELLING) { return "CMSG_CANCEL_CHANNELLING"; }
+    if (opcode == Opcode::CMSG_SET_SELECTION) { return "CMSG_SET_SELECTION"; }
+    if (opcode == Opcode::CMSG_SET_TARGET_OBSOLETE) { return "CMSG_SET_TARGET_OBSOLETE"; }
+    if (opcode == Opcode::CMSG_ATTACKSWING) { return "CMSG_ATTACKSWING"; }
+    if (opcode == Opcode::CMSG_ATTACKSTOP) { return "CMSG_ATTACKSTOP"; }
+    if (opcode == Opcode::CMSG_REPOP_REQUEST) { return "CMSG_REPOP_REQUEST"; }
+    if (opcode == Opcode::CMSG_RESURRECT_RESPONSE) { return "CMSG_RESURRECT_RESPONSE"; }
+    if (opcode == Opcode::CMSG_LOOT) { return "CMSG_LOOT"; }
+    if (opcode == Opcode::CMSG_LOOT_MONEY) { return "CMSG_LOOT_MONEY"; }
+    if (opcode == Opcode::CMSG_LOOT_RELEASE) { return "CMSG_LOOT_RELEASE"; }
+    if (opcode == Opcode::CMSG_DUEL_ACCEPTED) { return "CMSG_DUEL_ACCEPTED"; }
+    if (opcode == Opcode::CMSG_DUEL_CANCELLED) { return "CMSG_DUEL_CANCELLED"; }
+    if (opcode == Opcode::CMSG_MOUNTSPECIAL_ANIM) { return "CMSG_MOUNTSPECIAL_ANIM"; }
+    if (opcode == Opcode::CMSG_PET_SET_ACTION) { return "CMSG_PET_SET_ACTION"; }
+    if (opcode == Opcode::CMSG_PET_ACTION) { return "CMSG_PET_ACTION"; }
+    if (opcode == Opcode::CMSG_PET_ABANDON) { return "CMSG_PET_ABANDON"; }
+    if (opcode == Opcode::CMSG_PET_RENAME) { return "CMSG_PET_RENAME"; }
+    if (opcode == Opcode::CMSG_GOSSIP_HELLO) { return "CMSG_GOSSIP_HELLO"; }
+    if (opcode == Opcode::CMSG_GOSSIP_SELECT_OPTION) { return "CMSG_GOSSIP_SELECT_OPTION"; }
+    if (opcode == Opcode::CMSG_NPC_TEXT_QUERY) { return "CMSG_NPC_TEXT_QUERY"; }
+    if (opcode == Opcode::CMSG_QUESTGIVER_STATUS_QUERY) { return "CMSG_QUESTGIVER_STATUS_QUERY"; }
+    if (opcode == Opcode::CMSG_QUESTGIVER_HELLO) { return "CMSG_QUESTGIVER_HELLO"; }
+    if (opcode == Opcode::CMSG_QUESTGIVER_QUERY_QUEST) { return "CMSG_QUESTGIVER_QUERY_QUEST"; }
+    if (opcode == Opcode::CMSG_QUESTGIVER_QUEST_AUTOLAUNCH) { return "CMSG_QUESTGIVER_QUEST_AUTOLAUNCH"; }
+    if (opcode == Opcode::CMSG_QUESTGIVER_ACCEPT_QUEST) { return "CMSG_QUESTGIVER_ACCEPT_QUEST"; }
+    if (opcode == Opcode::CMSG_QUESTGIVER_COMPLETE_QUEST) { return "CMSG_QUESTGIVER_COMPLETE_QUEST"; }
+    if (opcode == Opcode::CMSG_QUESTGIVER_REQUEST_REWARD) { return "CMSG_QUESTGIVER_REQUEST_REWARD"; }
+    if (opcode == Opcode::CMSG_QUESTGIVER_CHOOSE_REWARD) { return "CMSG_QUESTGIVER_CHOOSE_REWARD"; }
+    if (opcode == Opcode::CMSG_QUESTGIVER_CANCEL) { return "CMSG_QUESTGIVER_CANCEL"; }
+    if (opcode == Opcode::CMSG_QUESTLOG_SWAP_QUEST) { return "CMSG_QUESTLOG_SWAP_QUEST"; }
+    if (opcode == Opcode::CMSG_QUESTLOG_REMOVE_QUEST) { return "CMSG_QUESTLOG_REMOVE_QUEST"; }
+    if (opcode == Opcode::CMSG_QUEST_CONFIRM_ACCEPT) { return "CMSG_QUEST_CONFIRM_ACCEPT"; }
+    if (opcode == Opcode::CMSG_PUSHQUESTTOPARTY) { return "CMSG_PUSHQUESTTOPARTY"; }
+    if (opcode == Opcode::CMSG_LIST_INVENTORY) { return "CMSG_LIST_INVENTORY"; }
+    if (opcode == Opcode::CMSG_SELL_ITEM) { return "CMSG_SELL_ITEM"; }
+    if (opcode == Opcode::CMSG_BUY_ITEM) { return "CMSG_BUY_ITEM"; }
+    if (opcode == Opcode::CMSG_BUY_ITEM_IN_SLOT) { return "CMSG_BUY_ITEM_IN_SLOT"; }
+    if (opcode == Opcode::CMSG_TAXINODE_STATUS_QUERY) { return "CMSG_TAXINODE_STATUS_QUERY"; }
+    if (opcode == Opcode::CMSG_TAXIQUERYAVAILABLENODES) { return "CMSG_TAXIQUERYAVAILABLENODES"; }
+    if (opcode == Opcode::CMSG_ACTIVATETAXI) { return "CMSG_ACTIVATETAXI"; }
+    if (opcode == Opcode::CMSG_TRAINER_LIST) { return "CMSG_TRAINER_LIST"; }
+    if (opcode == Opcode::CMSG_TRAINER_BUY_SPELL) { return "CMSG_TRAINER_BUY_SPELL"; }
+    if (opcode == Opcode::CMSG_BINDER_ACTIVATE) { return "CMSG_BINDER_ACTIVATE"; }
+    if (opcode == Opcode::CMSG_BANKER_ACTIVATE) { return "CMSG_BANKER_ACTIVATE"; }
+    if (opcode == Opcode::CMSG_BUY_BANK_SLOT) { return "CMSG_BUY_BANK_SLOT"; }
+    if (opcode == Opcode::CMSG_PETITION_SHOWLIST) { return "CMSG_PETITION_SHOWLIST"; }
+    if (opcode == Opcode::CMSG_PETITION_BUY) { return "CMSG_PETITION_BUY"; }
+    if (opcode == Opcode::CMSG_PETITION_SHOW_SIGNATURES) { return "CMSG_PETITION_SHOW_SIGNATURES"; }
+    if (opcode == Opcode::CMSG_PETITION_SIGN) { return "CMSG_PETITION_SIGN"; }
+    if (opcode == Opcode::MSG_PETITION_DECLINE) { return "MSG_PETITION_DECLINE"; }
+    if (opcode == Opcode::CMSG_OFFER_PETITION) { return "CMSG_OFFER_PETITION"; }
+    if (opcode == Opcode::CMSG_TURN_IN_PETITION) { return "CMSG_TURN_IN_PETITION"; }
+    if (opcode == Opcode::CMSG_PETITION_QUERY) { return "CMSG_PETITION_QUERY"; }
+    if (opcode == Opcode::CMSG_BUG) { return "CMSG_BUG"; }
+    if (opcode == Opcode::CMSG_PLAYED_TIME) { return "CMSG_PLAYED_TIME"; }
+    if (opcode == Opcode::CMSG_QUERY_TIME) { return "CMSG_QUERY_TIME"; }
+    if (opcode == Opcode::CMSG_RECLAIM_CORPSE) { return "CMSG_RECLAIM_CORPSE"; }
+    if (opcode == Opcode::CMSG_WRAP_ITEM) { return "CMSG_WRAP_ITEM"; }
+    if (opcode == Opcode::MSG_MINIMAP_PING) { return "MSG_MINIMAP_PING_Client"; }
+    if (opcode == Opcode::CMSG_PING) { return "CMSG_PING"; }
+    if (opcode == Opcode::CMSG_SETSHEATHED) { return "CMSG_SETSHEATHED"; }
+    if (opcode == Opcode::CMSG_AUTH_SESSION) { return "CMSG_AUTH_SESSION"; }
+    if (opcode == Opcode::CMSG_PET_CAST_SPELL) { return "CMSG_PET_CAST_SPELL"; }
+    if (opcode == Opcode::MSG_SAVE_GUILD_EMBLEM) { return "MSG_SAVE_GUILD_EMBLEM_Client"; }
+    if (opcode == Opcode::MSG_TABARDVENDOR_ACTIVATE) { return "MSG_TABARDVENDOR_ACTIVATE"; }
+    if (opcode == Opcode::CMSG_ZONEUPDATE) { return "CMSG_ZONEUPDATE"; }
+    if (opcode == Opcode::MSG_RANDOM_ROLL) { return "MSG_RANDOM_ROLL_Client"; }
+    if (opcode == Opcode::MSG_LOOKING_FOR_GROUP) { return "MSG_LOOKING_FOR_GROUP_Client"; }
+    if (opcode == Opcode::CMSG_UNLEARN_SKILL) { return "CMSG_UNLEARN_SKILL"; }
+    if (opcode == Opcode::CMSG_GMTICKET_CREATE) { return "CMSG_GMTICKET_CREATE"; }
+    if (opcode == Opcode::CMSG_GMTICKET_UPDATETEXT) { return "CMSG_GMTICKET_UPDATETEXT"; }
+    if (opcode == Opcode::CMSG_REQUEST_ACCOUNT_DATA) { return "CMSG_REQUEST_ACCOUNT_DATA"; }
+    if (opcode == Opcode::CMSG_UPDATE_ACCOUNT_DATA) { return "CMSG_UPDATE_ACCOUNT_DATA"; }
+    if (opcode == Opcode::CMSG_GMTICKET_GETTICKET) { return "CMSG_GMTICKET_GETTICKET"; }
+    if (opcode == Opcode::MSG_CORPSE_QUERY) { return "MSG_CORPSE_QUERY_Client"; }
+    if (opcode == Opcode::CMSG_GMTICKET_DELETETICKET) { return "CMSG_GMTICKET_DELETETICKET"; }
+    if (opcode == Opcode::CMSG_GMTICKET_SYSTEMSTATUS) { return "CMSG_GMTICKET_SYSTEMSTATUS"; }
+    if (opcode == Opcode::CMSG_SPIRIT_HEALER_ACTIVATE) { return "CMSG_SPIRIT_HEALER_ACTIVATE"; }
+    if (opcode == Opcode::CMSG_CHAT_IGNORED) { return "CMSG_CHAT_IGNORED"; }
+    if (opcode == Opcode::CMSG_GUILD_RANK) { return "CMSG_GUILD_RANK"; }
+    if (opcode == Opcode::CMSG_GUILD_ADD_RANK) { return "CMSG_GUILD_ADD_RANK"; }
+    if (opcode == Opcode::CMSG_GUILD_DEL_RANK) { return "CMSG_GUILD_DEL_RANK"; }
+    if (opcode == Opcode::CMSG_GUILD_SET_PUBLIC_NOTE) { return "CMSG_GUILD_SET_PUBLIC_NOTE"; }
+    if (opcode == Opcode::CMSG_GUILD_SET_OFFICER_NOTE) { return "CMSG_GUILD_SET_OFFICER_NOTE"; }
+    if (opcode == Opcode::CMSG_SEND_MAIL) { return "CMSG_SEND_MAIL"; }
+    if (opcode == Opcode::CMSG_GET_MAIL_LIST) { return "CMSG_GET_MAIL_LIST"; }
+    if (opcode == Opcode::CMSG_BATTLEFIELD_LIST) { return "CMSG_BATTLEFIELD_LIST"; }
+    if (opcode == Opcode::CMSG_BATTLEFIELD_JOIN) { return "CMSG_BATTLEFIELD_JOIN"; }
+    if (opcode == Opcode::CMSG_ITEM_TEXT_QUERY) { return "CMSG_ITEM_TEXT_QUERY"; }
+    if (opcode == Opcode::CMSG_MAIL_TAKE_MONEY) { return "CMSG_MAIL_TAKE_MONEY"; }
+    if (opcode == Opcode::CMSG_MAIL_TAKE_ITEM) { return "CMSG_MAIL_TAKE_ITEM"; }
+    if (opcode == Opcode::CMSG_MAIL_MARK_AS_READ) { return "CMSG_MAIL_MARK_AS_READ"; }
+    if (opcode == Opcode::CMSG_MAIL_RETURN_TO_SENDER) { return "CMSG_MAIL_RETURN_TO_SENDER"; }
+    if (opcode == Opcode::CMSG_MAIL_DELETE) { return "CMSG_MAIL_DELETE"; }
+    if (opcode == Opcode::CMSG_MAIL_CREATE_TEXT_ITEM) { return "CMSG_MAIL_CREATE_TEXT_ITEM"; }
+    if (opcode == Opcode::CMSG_LEARN_TALENT) { return "CMSG_LEARN_TALENT"; }
+    if (opcode == Opcode::CMSG_TOGGLE_PVP) { return "CMSG_TOGGLE_PVP"; }
+    if (opcode == Opcode::MSG_AUCTION_HELLO) { return "MSG_AUCTION_HELLO_Client"; }
+    if (opcode == Opcode::CMSG_AUCTION_SELL_ITEM) { return "CMSG_AUCTION_SELL_ITEM"; }
+    if (opcode == Opcode::CMSG_AUCTION_REMOVE_ITEM) { return "CMSG_AUCTION_REMOVE_ITEM"; }
+    if (opcode == Opcode::CMSG_AUCTION_LIST_ITEMS) { return "CMSG_AUCTION_LIST_ITEMS"; }
+    if (opcode == Opcode::CMSG_AUCTION_LIST_OWNER_ITEMS) { return "CMSG_AUCTION_LIST_OWNER_ITEMS"; }
+    if (opcode == Opcode::CMSG_AUCTION_PLACE_BID) { return "CMSG_AUCTION_PLACE_BID"; }
+    if (opcode == Opcode::CMSG_AUCTION_LIST_BIDDER_ITEMS) { return "CMSG_AUCTION_LIST_BIDDER_ITEMS"; }
+    if (opcode == Opcode::CMSG_SET_AMMO) { return "CMSG_SET_AMMO"; }
+    if (opcode == Opcode::CMSG_SET_ACTIVE_MOVER) { return "CMSG_SET_ACTIVE_MOVER"; }
+    if (opcode == Opcode::CMSG_PET_CANCEL_AURA) { return "CMSG_PET_CANCEL_AURA"; }
+    if (opcode == Opcode::CMSG_CANCEL_AUTO_REPEAT_SPELL) { return "CMSG_CANCEL_AUTO_REPEAT_SPELL"; }
+    if (opcode == Opcode::MSG_LIST_STABLED_PETS) { return "MSG_LIST_STABLED_PETS_Client"; }
+    if (opcode == Opcode::CMSG_STABLE_PET) { return "CMSG_STABLE_PET"; }
+    if (opcode == Opcode::CMSG_UNSTABLE_PET) { return "CMSG_UNSTABLE_PET"; }
+    if (opcode == Opcode::CMSG_BUY_STABLE_SLOT) { return "CMSG_BUY_STABLE_SLOT"; }
+    if (opcode == Opcode::CMSG_STABLE_SWAP_PET) { return "CMSG_STABLE_SWAP_PET"; }
+    if (opcode == Opcode::MSG_QUEST_PUSH_RESULT) { return "MSG_QUEST_PUSH_RESULT"; }
+    if (opcode == Opcode::CMSG_REQUEST_PET_INFO) { return "CMSG_REQUEST_PET_INFO"; }
+    if (opcode == Opcode::CMSG_FAR_SIGHT) { return "CMSG_FAR_SIGHT"; }
+    if (opcode == Opcode::CMSG_GROUP_CHANGE_SUB_GROUP) { return "CMSG_GROUP_CHANGE_SUB_GROUP"; }
+    if (opcode == Opcode::CMSG_REQUEST_PARTY_MEMBER_STATS) { return "CMSG_REQUEST_PARTY_MEMBER_STATS"; }
+    if (opcode == Opcode::CMSG_GROUP_SWAP_SUB_GROUP) { return "CMSG_GROUP_SWAP_SUB_GROUP"; }
+    if (opcode == Opcode::CMSG_AUTOSTORE_BANK_ITEM) { return "CMSG_AUTOSTORE_BANK_ITEM"; }
+    if (opcode == Opcode::CMSG_AUTOBANK_ITEM) { return "CMSG_AUTOBANK_ITEM"; }
+    if (opcode == Opcode::MSG_QUERY_NEXT_MAIL_TIME) { return "MSG_QUERY_NEXT_MAIL_TIME_Client"; }
+    if (opcode == Opcode::CMSG_GROUP_RAID_CONVERT) { return "CMSG_GROUP_RAID_CONVERT"; }
+    if (opcode == Opcode::CMSG_GROUP_ASSISTANT_LEADER) { return "CMSG_GROUP_ASSISTANT_LEADER"; }
+    if (opcode == Opcode::CMSG_BUYBACK_ITEM) { return "CMSG_BUYBACK_ITEM"; }
+    if (opcode == Opcode::CMSG_MEETINGSTONE_JOIN) { return "CMSG_MEETINGSTONE_JOIN"; }
+    if (opcode == Opcode::CMSG_MEETINGSTONE_LEAVE) { return "CMSG_MEETINGSTONE_LEAVE"; }
+    if (opcode == Opcode::CMSG_MEETINGSTONE_INFO) { return "CMSG_MEETINGSTONE_INFO"; }
+    if (opcode == Opcode::CMSG_CANCEL_GROWTH_AURA) { return "CMSG_CANCEL_GROWTH_AURA"; }
+    if (opcode == Opcode::CMSG_LOOT_ROLL) { return "CMSG_LOOT_ROLL"; }
+    if (opcode == Opcode::CMSG_LOOT_MASTER_GIVE) { return "CMSG_LOOT_MASTER_GIVE"; }
+    if (opcode == Opcode::CMSG_REPAIR_ITEM) { return "CMSG_REPAIR_ITEM"; }
+    if (opcode == Opcode::MSG_TALENT_WIPE_CONFIRM) { return "MSG_TALENT_WIPE_CONFIRM_Client"; }
+    if (opcode == Opcode::CMSG_SUMMON_RESPONSE) { return "CMSG_SUMMON_RESPONSE"; }
+    if (opcode == Opcode::MSG_MOVE_WATER_WALK) { return "MSG_MOVE_WATER_WALK"; }
+    if (opcode == Opcode::CMSG_SELF_RES) { return "CMSG_SELF_RES"; }
+    if (opcode == Opcode::CMSG_TOGGLE_HELM) { return "CMSG_TOGGLE_HELM"; }
+    if (opcode == Opcode::CMSG_TOGGLE_CLOAK) { return "CMSG_TOGGLE_CLOAK"; }
+    if (opcode == Opcode::CMSG_SET_ACTIONBAR_TOGGLES) { return "CMSG_SET_ACTIONBAR_TOGGLES"; }
+    if (opcode == Opcode::MSG_PETITION_RENAME) { return "MSG_PETITION_RENAME"; }
+    if (opcode == Opcode::CMSG_ITEM_NAME_QUERY) { return "CMSG_ITEM_NAME_QUERY"; }
+    if (opcode == Opcode::CMSG_CHAR_RENAME) { return "CMSG_CHAR_RENAME"; }
+    if (opcode == Opcode::CMSG_MOVE_SPLINE_DONE) { return "CMSG_MOVE_SPLINE_DONE"; }
+    if (opcode == Opcode::CMSG_MOVE_FALL_RESET) { return "CMSG_MOVE_FALL_RESET"; }
+    if (opcode == Opcode::CMSG_REQUEST_RAID_INFO) { return "CMSG_REQUEST_RAID_INFO"; }
+    if (opcode == Opcode::CMSG_MOVE_TIME_SKIPPED) { return "CMSG_MOVE_TIME_SKIPPED"; }
+    if (opcode == Opcode::CMSG_MOVE_FEATHER_FALL_ACK) { return "CMSG_MOVE_FEATHER_FALL_ACK"; }
+    if (opcode == Opcode::CMSG_MOVE_WATER_WALK_ACK) { return "CMSG_MOVE_WATER_WALK_ACK"; }
+    if (opcode == Opcode::CMSG_MOVE_NOT_ACTIVE_MOVER) { return "CMSG_MOVE_NOT_ACTIVE_MOVER"; }
+    if (opcode == Opcode::CMSG_BATTLEFIELD_STATUS) { return "CMSG_BATTLEFIELD_STATUS"; }
+    if (opcode == Opcode::CMSG_BATTLEFIELD_PORT) { return "CMSG_BATTLEFIELD_PORT"; }
+    if (opcode == Opcode::MSG_INSPECT_HONOR_STATS) { return "MSG_INSPECT_HONOR_STATS_Client"; }
+    if (opcode == Opcode::CMSG_BATTLEMASTER_HELLO) { return "CMSG_BATTLEMASTER_HELLO"; }
+    if (opcode == Opcode::CMSG_FORCE_WALK_SPEED_CHANGE_ACK) { return "CMSG_FORCE_WALK_SPEED_CHANGE_ACK"; }
+    if (opcode == Opcode::CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK) { return "CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK"; }
+    if (opcode == Opcode::CMSG_FORCE_TURN_RATE_CHANGE_ACK) { return "CMSG_FORCE_TURN_RATE_CHANGE_ACK"; }
+    if (opcode == Opcode::MSG_PVP_LOG_DATA) { return "MSG_PVP_LOG_DATA_Client"; }
+    if (opcode == Opcode::CMSG_LEAVE_BATTLEFIELD) { return "CMSG_LEAVE_BATTLEFIELD"; }
+    if (opcode == Opcode::CMSG_AREA_SPIRIT_HEALER_QUERY) { return "CMSG_AREA_SPIRIT_HEALER_QUERY"; }
+    if (opcode == Opcode::CMSG_AREA_SPIRIT_HEALER_QUEUE) { return "CMSG_AREA_SPIRIT_HEALER_QUEUE"; }
+    if (opcode == Opcode::CMSG_WARDEN_DATA) { return "CMSG_WARDEN_DATA"; }
+    if (opcode == Opcode::MSG_BATTLEGROUND_PLAYER_POSITIONS) { return "MSG_BATTLEGROUND_PLAYER_POSITIONS_Client"; }
+    if (opcode == Opcode::CMSG_PET_STOP_ATTACK) { return "CMSG_PET_STOP_ATTACK"; }
+    if (opcode == Opcode::CMSG_BATTLEMASTER_JOIN) { return "CMSG_BATTLEMASTER_JOIN"; }
+    if (opcode == Opcode::CMSG_PET_UNLEARN) { return "CMSG_PET_UNLEARN"; }
+    if (opcode == Opcode::CMSG_PET_SPELL_AUTOCAST) { return "CMSG_PET_SPELL_AUTOCAST"; }
+    if (opcode == Opcode::CMSG_GUILD_INFO_TEXT) { return "CMSG_GUILD_INFO_TEXT"; }
+    if (opcode == Opcode::CMSG_ACTIVATETAXIEXPRESS) { return "CMSG_ACTIVATETAXIEXPRESS"; }
+    if (opcode == Opcode::CMSG_SET_FACTION_INACTIVE) { return "CMSG_SET_FACTION_INACTIVE"; }
+    if (opcode == Opcode::CMSG_SET_WATCHED_FACTION) { return "CMSG_SET_WATCHED_FACTION"; }
+    if (opcode == Opcode::CMSG_RESET_INSTANCES) { return "CMSG_RESET_INSTANCES"; }
+    if (opcode == Opcode::MSG_RAID_TARGET_UPDATE) { return "MSG_RAID_TARGET_UPDATE_Client"; }
+    if (opcode == Opcode::MSG_RAID_READY_CHECK) { return "MSG_RAID_READY_CHECK_Client"; }
+    if (opcode == Opcode::CMSG_GMSURVEY_SUBMIT) { return "CMSG_GMSURVEY_SUBMIT"; }
+    return nullptr;
+}
 template <>
-vanilla::CMSG_BOOTME* ClientOpcode::get_if<CMSG_BOOTME>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_BOOTME* ClientOpcode::get_if<CMSG_BOOTME>() {
     if (opcode == Opcode::CMSG_BOOTME) {
         return &CMSG_BOOTME;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_BOOTME& ClientOpcode::get<CMSG_BOOTME>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_BOOTME& ClientOpcode::get<CMSG_BOOTME>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_BOOTME>();
     if (p) {
         return *p;
@@ -22388,14 +22697,14 @@ vanilla::CMSG_BOOTME& ClientOpcode::get<CMSG_BOOTME>() {
 }
 
 template <>
-vanilla::CMSG_DBLOOKUP* ClientOpcode::get_if<CMSG_DBLOOKUP>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_DBLOOKUP* ClientOpcode::get_if<CMSG_DBLOOKUP>() {
     if (opcode == Opcode::CMSG_DBLOOKUP) {
         return &CMSG_DBLOOKUP;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_DBLOOKUP& ClientOpcode::get<CMSG_DBLOOKUP>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_DBLOOKUP& ClientOpcode::get<CMSG_DBLOOKUP>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_DBLOOKUP>();
     if (p) {
         return *p;
@@ -22404,14 +22713,14 @@ vanilla::CMSG_DBLOOKUP& ClientOpcode::get<CMSG_DBLOOKUP>() {
 }
 
 template <>
-vanilla::CMSG_WORLD_TELEPORT* ClientOpcode::get_if<CMSG_WORLD_TELEPORT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_WORLD_TELEPORT* ClientOpcode::get_if<CMSG_WORLD_TELEPORT>() {
     if (opcode == Opcode::CMSG_WORLD_TELEPORT) {
         return &CMSG_WORLD_TELEPORT;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_WORLD_TELEPORT& ClientOpcode::get<CMSG_WORLD_TELEPORT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_WORLD_TELEPORT& ClientOpcode::get<CMSG_WORLD_TELEPORT>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_WORLD_TELEPORT>();
     if (p) {
         return *p;
@@ -22420,14 +22729,14 @@ vanilla::CMSG_WORLD_TELEPORT& ClientOpcode::get<CMSG_WORLD_TELEPORT>() {
 }
 
 template <>
-vanilla::CMSG_TELEPORT_TO_UNIT* ClientOpcode::get_if<CMSG_TELEPORT_TO_UNIT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_TELEPORT_TO_UNIT* ClientOpcode::get_if<CMSG_TELEPORT_TO_UNIT>() {
     if (opcode == Opcode::CMSG_TELEPORT_TO_UNIT) {
         return &CMSG_TELEPORT_TO_UNIT;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_TELEPORT_TO_UNIT& ClientOpcode::get<CMSG_TELEPORT_TO_UNIT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_TELEPORT_TO_UNIT& ClientOpcode::get<CMSG_TELEPORT_TO_UNIT>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_TELEPORT_TO_UNIT>();
     if (p) {
         return *p;
@@ -22436,14 +22745,14 @@ vanilla::CMSG_TELEPORT_TO_UNIT& ClientOpcode::get<CMSG_TELEPORT_TO_UNIT>() {
 }
 
 template <>
-vanilla::CMSG_CHAR_CREATE* ClientOpcode::get_if<CMSG_CHAR_CREATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CHAR_CREATE* ClientOpcode::get_if<CMSG_CHAR_CREATE>() {
     if (opcode == Opcode::CMSG_CHAR_CREATE) {
         return &CMSG_CHAR_CREATE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_CHAR_CREATE& ClientOpcode::get<CMSG_CHAR_CREATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CHAR_CREATE& ClientOpcode::get<CMSG_CHAR_CREATE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_CHAR_CREATE>();
     if (p) {
         return *p;
@@ -22452,14 +22761,14 @@ vanilla::CMSG_CHAR_CREATE& ClientOpcode::get<CMSG_CHAR_CREATE>() {
 }
 
 template <>
-vanilla::CMSG_CHAR_ENUM* ClientOpcode::get_if<CMSG_CHAR_ENUM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CHAR_ENUM* ClientOpcode::get_if<CMSG_CHAR_ENUM>() {
     if (opcode == Opcode::CMSG_CHAR_ENUM) {
         return &CMSG_CHAR_ENUM;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_CHAR_ENUM& ClientOpcode::get<CMSG_CHAR_ENUM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CHAR_ENUM& ClientOpcode::get<CMSG_CHAR_ENUM>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_CHAR_ENUM>();
     if (p) {
         return *p;
@@ -22468,14 +22777,14 @@ vanilla::CMSG_CHAR_ENUM& ClientOpcode::get<CMSG_CHAR_ENUM>() {
 }
 
 template <>
-vanilla::CMSG_CHAR_DELETE* ClientOpcode::get_if<CMSG_CHAR_DELETE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CHAR_DELETE* ClientOpcode::get_if<CMSG_CHAR_DELETE>() {
     if (opcode == Opcode::CMSG_CHAR_DELETE) {
         return &CMSG_CHAR_DELETE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_CHAR_DELETE& ClientOpcode::get<CMSG_CHAR_DELETE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CHAR_DELETE& ClientOpcode::get<CMSG_CHAR_DELETE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_CHAR_DELETE>();
     if (p) {
         return *p;
@@ -22484,14 +22793,14 @@ vanilla::CMSG_CHAR_DELETE& ClientOpcode::get<CMSG_CHAR_DELETE>() {
 }
 
 template <>
-vanilla::CMSG_PLAYER_LOGIN* ClientOpcode::get_if<CMSG_PLAYER_LOGIN>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PLAYER_LOGIN* ClientOpcode::get_if<CMSG_PLAYER_LOGIN>() {
     if (opcode == Opcode::CMSG_PLAYER_LOGIN) {
         return &CMSG_PLAYER_LOGIN;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_PLAYER_LOGIN& ClientOpcode::get<CMSG_PLAYER_LOGIN>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PLAYER_LOGIN& ClientOpcode::get<CMSG_PLAYER_LOGIN>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_PLAYER_LOGIN>();
     if (p) {
         return *p;
@@ -22500,14 +22809,14 @@ vanilla::CMSG_PLAYER_LOGIN& ClientOpcode::get<CMSG_PLAYER_LOGIN>() {
 }
 
 template <>
-vanilla::CMSG_PLAYER_LOGOUT* ClientOpcode::get_if<CMSG_PLAYER_LOGOUT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PLAYER_LOGOUT* ClientOpcode::get_if<CMSG_PLAYER_LOGOUT>() {
     if (opcode == Opcode::CMSG_PLAYER_LOGOUT) {
         return &CMSG_PLAYER_LOGOUT;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_PLAYER_LOGOUT& ClientOpcode::get<CMSG_PLAYER_LOGOUT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PLAYER_LOGOUT& ClientOpcode::get<CMSG_PLAYER_LOGOUT>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_PLAYER_LOGOUT>();
     if (p) {
         return *p;
@@ -22516,14 +22825,14 @@ vanilla::CMSG_PLAYER_LOGOUT& ClientOpcode::get<CMSG_PLAYER_LOGOUT>() {
 }
 
 template <>
-vanilla::CMSG_LOGOUT_REQUEST* ClientOpcode::get_if<CMSG_LOGOUT_REQUEST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_LOGOUT_REQUEST* ClientOpcode::get_if<CMSG_LOGOUT_REQUEST>() {
     if (opcode == Opcode::CMSG_LOGOUT_REQUEST) {
         return &CMSG_LOGOUT_REQUEST;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_LOGOUT_REQUEST& ClientOpcode::get<CMSG_LOGOUT_REQUEST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_LOGOUT_REQUEST& ClientOpcode::get<CMSG_LOGOUT_REQUEST>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_LOGOUT_REQUEST>();
     if (p) {
         return *p;
@@ -22532,14 +22841,14 @@ vanilla::CMSG_LOGOUT_REQUEST& ClientOpcode::get<CMSG_LOGOUT_REQUEST>() {
 }
 
 template <>
-vanilla::CMSG_LOGOUT_CANCEL* ClientOpcode::get_if<CMSG_LOGOUT_CANCEL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_LOGOUT_CANCEL* ClientOpcode::get_if<CMSG_LOGOUT_CANCEL>() {
     if (opcode == Opcode::CMSG_LOGOUT_CANCEL) {
         return &CMSG_LOGOUT_CANCEL;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_LOGOUT_CANCEL& ClientOpcode::get<CMSG_LOGOUT_CANCEL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_LOGOUT_CANCEL& ClientOpcode::get<CMSG_LOGOUT_CANCEL>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_LOGOUT_CANCEL>();
     if (p) {
         return *p;
@@ -22548,14 +22857,14 @@ vanilla::CMSG_LOGOUT_CANCEL& ClientOpcode::get<CMSG_LOGOUT_CANCEL>() {
 }
 
 template <>
-vanilla::CMSG_NAME_QUERY* ClientOpcode::get_if<CMSG_NAME_QUERY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_NAME_QUERY* ClientOpcode::get_if<CMSG_NAME_QUERY>() {
     if (opcode == Opcode::CMSG_NAME_QUERY) {
         return &CMSG_NAME_QUERY;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_NAME_QUERY& ClientOpcode::get<CMSG_NAME_QUERY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_NAME_QUERY& ClientOpcode::get<CMSG_NAME_QUERY>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_NAME_QUERY>();
     if (p) {
         return *p;
@@ -22564,14 +22873,14 @@ vanilla::CMSG_NAME_QUERY& ClientOpcode::get<CMSG_NAME_QUERY>() {
 }
 
 template <>
-vanilla::CMSG_PET_NAME_QUERY* ClientOpcode::get_if<CMSG_PET_NAME_QUERY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PET_NAME_QUERY* ClientOpcode::get_if<CMSG_PET_NAME_QUERY>() {
     if (opcode == Opcode::CMSG_PET_NAME_QUERY) {
         return &CMSG_PET_NAME_QUERY;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_PET_NAME_QUERY& ClientOpcode::get<CMSG_PET_NAME_QUERY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PET_NAME_QUERY& ClientOpcode::get<CMSG_PET_NAME_QUERY>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_PET_NAME_QUERY>();
     if (p) {
         return *p;
@@ -22580,14 +22889,14 @@ vanilla::CMSG_PET_NAME_QUERY& ClientOpcode::get<CMSG_PET_NAME_QUERY>() {
 }
 
 template <>
-vanilla::CMSG_GUILD_QUERY* ClientOpcode::get_if<CMSG_GUILD_QUERY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GUILD_QUERY* ClientOpcode::get_if<CMSG_GUILD_QUERY>() {
     if (opcode == Opcode::CMSG_GUILD_QUERY) {
         return &CMSG_GUILD_QUERY;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GUILD_QUERY& ClientOpcode::get<CMSG_GUILD_QUERY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GUILD_QUERY& ClientOpcode::get<CMSG_GUILD_QUERY>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GUILD_QUERY>();
     if (p) {
         return *p;
@@ -22596,14 +22905,14 @@ vanilla::CMSG_GUILD_QUERY& ClientOpcode::get<CMSG_GUILD_QUERY>() {
 }
 
 template <>
-vanilla::CMSG_ITEM_QUERY_SINGLE* ClientOpcode::get_if<CMSG_ITEM_QUERY_SINGLE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_ITEM_QUERY_SINGLE* ClientOpcode::get_if<CMSG_ITEM_QUERY_SINGLE>() {
     if (opcode == Opcode::CMSG_ITEM_QUERY_SINGLE) {
         return &CMSG_ITEM_QUERY_SINGLE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_ITEM_QUERY_SINGLE& ClientOpcode::get<CMSG_ITEM_QUERY_SINGLE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_ITEM_QUERY_SINGLE& ClientOpcode::get<CMSG_ITEM_QUERY_SINGLE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_ITEM_QUERY_SINGLE>();
     if (p) {
         return *p;
@@ -22612,14 +22921,14 @@ vanilla::CMSG_ITEM_QUERY_SINGLE& ClientOpcode::get<CMSG_ITEM_QUERY_SINGLE>() {
 }
 
 template <>
-vanilla::CMSG_PAGE_TEXT_QUERY* ClientOpcode::get_if<CMSG_PAGE_TEXT_QUERY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PAGE_TEXT_QUERY* ClientOpcode::get_if<CMSG_PAGE_TEXT_QUERY>() {
     if (opcode == Opcode::CMSG_PAGE_TEXT_QUERY) {
         return &CMSG_PAGE_TEXT_QUERY;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_PAGE_TEXT_QUERY& ClientOpcode::get<CMSG_PAGE_TEXT_QUERY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PAGE_TEXT_QUERY& ClientOpcode::get<CMSG_PAGE_TEXT_QUERY>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_PAGE_TEXT_QUERY>();
     if (p) {
         return *p;
@@ -22628,14 +22937,14 @@ vanilla::CMSG_PAGE_TEXT_QUERY& ClientOpcode::get<CMSG_PAGE_TEXT_QUERY>() {
 }
 
 template <>
-vanilla::CMSG_QUEST_QUERY* ClientOpcode::get_if<CMSG_QUEST_QUERY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_QUEST_QUERY* ClientOpcode::get_if<CMSG_QUEST_QUERY>() {
     if (opcode == Opcode::CMSG_QUEST_QUERY) {
         return &CMSG_QUEST_QUERY;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_QUEST_QUERY& ClientOpcode::get<CMSG_QUEST_QUERY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_QUEST_QUERY& ClientOpcode::get<CMSG_QUEST_QUERY>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_QUEST_QUERY>();
     if (p) {
         return *p;
@@ -22644,14 +22953,14 @@ vanilla::CMSG_QUEST_QUERY& ClientOpcode::get<CMSG_QUEST_QUERY>() {
 }
 
 template <>
-vanilla::CMSG_GAMEOBJECT_QUERY* ClientOpcode::get_if<CMSG_GAMEOBJECT_QUERY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GAMEOBJECT_QUERY* ClientOpcode::get_if<CMSG_GAMEOBJECT_QUERY>() {
     if (opcode == Opcode::CMSG_GAMEOBJECT_QUERY) {
         return &CMSG_GAMEOBJECT_QUERY;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GAMEOBJECT_QUERY& ClientOpcode::get<CMSG_GAMEOBJECT_QUERY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GAMEOBJECT_QUERY& ClientOpcode::get<CMSG_GAMEOBJECT_QUERY>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GAMEOBJECT_QUERY>();
     if (p) {
         return *p;
@@ -22660,14 +22969,14 @@ vanilla::CMSG_GAMEOBJECT_QUERY& ClientOpcode::get<CMSG_GAMEOBJECT_QUERY>() {
 }
 
 template <>
-vanilla::CMSG_CREATURE_QUERY* ClientOpcode::get_if<CMSG_CREATURE_QUERY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CREATURE_QUERY* ClientOpcode::get_if<CMSG_CREATURE_QUERY>() {
     if (opcode == Opcode::CMSG_CREATURE_QUERY) {
         return &CMSG_CREATURE_QUERY;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_CREATURE_QUERY& ClientOpcode::get<CMSG_CREATURE_QUERY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CREATURE_QUERY& ClientOpcode::get<CMSG_CREATURE_QUERY>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_CREATURE_QUERY>();
     if (p) {
         return *p;
@@ -22676,14 +22985,14 @@ vanilla::CMSG_CREATURE_QUERY& ClientOpcode::get<CMSG_CREATURE_QUERY>() {
 }
 
 template <>
-vanilla::CMSG_WHO* ClientOpcode::get_if<CMSG_WHO>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_WHO* ClientOpcode::get_if<CMSG_WHO>() {
     if (opcode == Opcode::CMSG_WHO) {
         return &CMSG_WHO;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_WHO& ClientOpcode::get<CMSG_WHO>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_WHO& ClientOpcode::get<CMSG_WHO>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_WHO>();
     if (p) {
         return *p;
@@ -22692,14 +23001,14 @@ vanilla::CMSG_WHO& ClientOpcode::get<CMSG_WHO>() {
 }
 
 template <>
-vanilla::CMSG_WHOIS* ClientOpcode::get_if<CMSG_WHOIS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_WHOIS* ClientOpcode::get_if<CMSG_WHOIS>() {
     if (opcode == Opcode::CMSG_WHOIS) {
         return &CMSG_WHOIS;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_WHOIS& ClientOpcode::get<CMSG_WHOIS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_WHOIS& ClientOpcode::get<CMSG_WHOIS>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_WHOIS>();
     if (p) {
         return *p;
@@ -22708,14 +23017,14 @@ vanilla::CMSG_WHOIS& ClientOpcode::get<CMSG_WHOIS>() {
 }
 
 template <>
-vanilla::CMSG_FRIEND_LIST* ClientOpcode::get_if<CMSG_FRIEND_LIST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_FRIEND_LIST* ClientOpcode::get_if<CMSG_FRIEND_LIST>() {
     if (opcode == Opcode::CMSG_FRIEND_LIST) {
         return &CMSG_FRIEND_LIST;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_FRIEND_LIST& ClientOpcode::get<CMSG_FRIEND_LIST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_FRIEND_LIST& ClientOpcode::get<CMSG_FRIEND_LIST>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_FRIEND_LIST>();
     if (p) {
         return *p;
@@ -22724,14 +23033,14 @@ vanilla::CMSG_FRIEND_LIST& ClientOpcode::get<CMSG_FRIEND_LIST>() {
 }
 
 template <>
-vanilla::CMSG_ADD_FRIEND* ClientOpcode::get_if<CMSG_ADD_FRIEND>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_ADD_FRIEND* ClientOpcode::get_if<CMSG_ADD_FRIEND>() {
     if (opcode == Opcode::CMSG_ADD_FRIEND) {
         return &CMSG_ADD_FRIEND;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_ADD_FRIEND& ClientOpcode::get<CMSG_ADD_FRIEND>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_ADD_FRIEND& ClientOpcode::get<CMSG_ADD_FRIEND>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_ADD_FRIEND>();
     if (p) {
         return *p;
@@ -22740,14 +23049,14 @@ vanilla::CMSG_ADD_FRIEND& ClientOpcode::get<CMSG_ADD_FRIEND>() {
 }
 
 template <>
-vanilla::CMSG_DEL_FRIEND* ClientOpcode::get_if<CMSG_DEL_FRIEND>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_DEL_FRIEND* ClientOpcode::get_if<CMSG_DEL_FRIEND>() {
     if (opcode == Opcode::CMSG_DEL_FRIEND) {
         return &CMSG_DEL_FRIEND;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_DEL_FRIEND& ClientOpcode::get<CMSG_DEL_FRIEND>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_DEL_FRIEND& ClientOpcode::get<CMSG_DEL_FRIEND>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_DEL_FRIEND>();
     if (p) {
         return *p;
@@ -22756,14 +23065,14 @@ vanilla::CMSG_DEL_FRIEND& ClientOpcode::get<CMSG_DEL_FRIEND>() {
 }
 
 template <>
-vanilla::CMSG_ADD_IGNORE* ClientOpcode::get_if<CMSG_ADD_IGNORE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_ADD_IGNORE* ClientOpcode::get_if<CMSG_ADD_IGNORE>() {
     if (opcode == Opcode::CMSG_ADD_IGNORE) {
         return &CMSG_ADD_IGNORE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_ADD_IGNORE& ClientOpcode::get<CMSG_ADD_IGNORE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_ADD_IGNORE& ClientOpcode::get<CMSG_ADD_IGNORE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_ADD_IGNORE>();
     if (p) {
         return *p;
@@ -22772,14 +23081,14 @@ vanilla::CMSG_ADD_IGNORE& ClientOpcode::get<CMSG_ADD_IGNORE>() {
 }
 
 template <>
-vanilla::CMSG_DEL_IGNORE* ClientOpcode::get_if<CMSG_DEL_IGNORE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_DEL_IGNORE* ClientOpcode::get_if<CMSG_DEL_IGNORE>() {
     if (opcode == Opcode::CMSG_DEL_IGNORE) {
         return &CMSG_DEL_IGNORE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_DEL_IGNORE& ClientOpcode::get<CMSG_DEL_IGNORE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_DEL_IGNORE& ClientOpcode::get<CMSG_DEL_IGNORE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_DEL_IGNORE>();
     if (p) {
         return *p;
@@ -22788,14 +23097,14 @@ vanilla::CMSG_DEL_IGNORE& ClientOpcode::get<CMSG_DEL_IGNORE>() {
 }
 
 template <>
-vanilla::CMSG_GROUP_INVITE* ClientOpcode::get_if<CMSG_GROUP_INVITE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GROUP_INVITE* ClientOpcode::get_if<CMSG_GROUP_INVITE>() {
     if (opcode == Opcode::CMSG_GROUP_INVITE) {
         return &CMSG_GROUP_INVITE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GROUP_INVITE& ClientOpcode::get<CMSG_GROUP_INVITE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GROUP_INVITE& ClientOpcode::get<CMSG_GROUP_INVITE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GROUP_INVITE>();
     if (p) {
         return *p;
@@ -22804,14 +23113,14 @@ vanilla::CMSG_GROUP_INVITE& ClientOpcode::get<CMSG_GROUP_INVITE>() {
 }
 
 template <>
-vanilla::CMSG_GROUP_ACCEPT* ClientOpcode::get_if<CMSG_GROUP_ACCEPT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GROUP_ACCEPT* ClientOpcode::get_if<CMSG_GROUP_ACCEPT>() {
     if (opcode == Opcode::CMSG_GROUP_ACCEPT) {
         return &CMSG_GROUP_ACCEPT;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GROUP_ACCEPT& ClientOpcode::get<CMSG_GROUP_ACCEPT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GROUP_ACCEPT& ClientOpcode::get<CMSG_GROUP_ACCEPT>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GROUP_ACCEPT>();
     if (p) {
         return *p;
@@ -22820,14 +23129,14 @@ vanilla::CMSG_GROUP_ACCEPT& ClientOpcode::get<CMSG_GROUP_ACCEPT>() {
 }
 
 template <>
-vanilla::CMSG_GROUP_DECLINE* ClientOpcode::get_if<CMSG_GROUP_DECLINE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GROUP_DECLINE* ClientOpcode::get_if<CMSG_GROUP_DECLINE>() {
     if (opcode == Opcode::CMSG_GROUP_DECLINE) {
         return &CMSG_GROUP_DECLINE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GROUP_DECLINE& ClientOpcode::get<CMSG_GROUP_DECLINE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GROUP_DECLINE& ClientOpcode::get<CMSG_GROUP_DECLINE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GROUP_DECLINE>();
     if (p) {
         return *p;
@@ -22836,14 +23145,14 @@ vanilla::CMSG_GROUP_DECLINE& ClientOpcode::get<CMSG_GROUP_DECLINE>() {
 }
 
 template <>
-vanilla::CMSG_GROUP_UNINVITE* ClientOpcode::get_if<CMSG_GROUP_UNINVITE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GROUP_UNINVITE* ClientOpcode::get_if<CMSG_GROUP_UNINVITE>() {
     if (opcode == Opcode::CMSG_GROUP_UNINVITE) {
         return &CMSG_GROUP_UNINVITE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GROUP_UNINVITE& ClientOpcode::get<CMSG_GROUP_UNINVITE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GROUP_UNINVITE& ClientOpcode::get<CMSG_GROUP_UNINVITE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GROUP_UNINVITE>();
     if (p) {
         return *p;
@@ -22852,14 +23161,14 @@ vanilla::CMSG_GROUP_UNINVITE& ClientOpcode::get<CMSG_GROUP_UNINVITE>() {
 }
 
 template <>
-vanilla::CMSG_GROUP_UNINVITE_GUID* ClientOpcode::get_if<CMSG_GROUP_UNINVITE_GUID>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GROUP_UNINVITE_GUID* ClientOpcode::get_if<CMSG_GROUP_UNINVITE_GUID>() {
     if (opcode == Opcode::CMSG_GROUP_UNINVITE_GUID) {
         return &CMSG_GROUP_UNINVITE_GUID;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GROUP_UNINVITE_GUID& ClientOpcode::get<CMSG_GROUP_UNINVITE_GUID>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GROUP_UNINVITE_GUID& ClientOpcode::get<CMSG_GROUP_UNINVITE_GUID>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GROUP_UNINVITE_GUID>();
     if (p) {
         return *p;
@@ -22868,14 +23177,14 @@ vanilla::CMSG_GROUP_UNINVITE_GUID& ClientOpcode::get<CMSG_GROUP_UNINVITE_GUID>()
 }
 
 template <>
-vanilla::CMSG_GROUP_SET_LEADER* ClientOpcode::get_if<CMSG_GROUP_SET_LEADER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GROUP_SET_LEADER* ClientOpcode::get_if<CMSG_GROUP_SET_LEADER>() {
     if (opcode == Opcode::CMSG_GROUP_SET_LEADER) {
         return &CMSG_GROUP_SET_LEADER;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GROUP_SET_LEADER& ClientOpcode::get<CMSG_GROUP_SET_LEADER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GROUP_SET_LEADER& ClientOpcode::get<CMSG_GROUP_SET_LEADER>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GROUP_SET_LEADER>();
     if (p) {
         return *p;
@@ -22884,14 +23193,14 @@ vanilla::CMSG_GROUP_SET_LEADER& ClientOpcode::get<CMSG_GROUP_SET_LEADER>() {
 }
 
 template <>
-vanilla::CMSG_LOOT_METHOD* ClientOpcode::get_if<CMSG_LOOT_METHOD>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_LOOT_METHOD* ClientOpcode::get_if<CMSG_LOOT_METHOD>() {
     if (opcode == Opcode::CMSG_LOOT_METHOD) {
         return &CMSG_LOOT_METHOD;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_LOOT_METHOD& ClientOpcode::get<CMSG_LOOT_METHOD>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_LOOT_METHOD& ClientOpcode::get<CMSG_LOOT_METHOD>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_LOOT_METHOD>();
     if (p) {
         return *p;
@@ -22900,14 +23209,14 @@ vanilla::CMSG_LOOT_METHOD& ClientOpcode::get<CMSG_LOOT_METHOD>() {
 }
 
 template <>
-vanilla::CMSG_GROUP_DISBAND* ClientOpcode::get_if<CMSG_GROUP_DISBAND>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GROUP_DISBAND* ClientOpcode::get_if<CMSG_GROUP_DISBAND>() {
     if (opcode == Opcode::CMSG_GROUP_DISBAND) {
         return &CMSG_GROUP_DISBAND;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GROUP_DISBAND& ClientOpcode::get<CMSG_GROUP_DISBAND>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GROUP_DISBAND& ClientOpcode::get<CMSG_GROUP_DISBAND>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GROUP_DISBAND>();
     if (p) {
         return *p;
@@ -22916,14 +23225,14 @@ vanilla::CMSG_GROUP_DISBAND& ClientOpcode::get<CMSG_GROUP_DISBAND>() {
 }
 
 template <>
-vanilla::CMSG_GUILD_CREATE* ClientOpcode::get_if<CMSG_GUILD_CREATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GUILD_CREATE* ClientOpcode::get_if<CMSG_GUILD_CREATE>() {
     if (opcode == Opcode::CMSG_GUILD_CREATE) {
         return &CMSG_GUILD_CREATE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GUILD_CREATE& ClientOpcode::get<CMSG_GUILD_CREATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GUILD_CREATE& ClientOpcode::get<CMSG_GUILD_CREATE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GUILD_CREATE>();
     if (p) {
         return *p;
@@ -22932,14 +23241,14 @@ vanilla::CMSG_GUILD_CREATE& ClientOpcode::get<CMSG_GUILD_CREATE>() {
 }
 
 template <>
-vanilla::CMSG_GUILD_INVITE* ClientOpcode::get_if<CMSG_GUILD_INVITE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GUILD_INVITE* ClientOpcode::get_if<CMSG_GUILD_INVITE>() {
     if (opcode == Opcode::CMSG_GUILD_INVITE) {
         return &CMSG_GUILD_INVITE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GUILD_INVITE& ClientOpcode::get<CMSG_GUILD_INVITE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GUILD_INVITE& ClientOpcode::get<CMSG_GUILD_INVITE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GUILD_INVITE>();
     if (p) {
         return *p;
@@ -22948,14 +23257,14 @@ vanilla::CMSG_GUILD_INVITE& ClientOpcode::get<CMSG_GUILD_INVITE>() {
 }
 
 template <>
-vanilla::CMSG_GUILD_ACCEPT* ClientOpcode::get_if<CMSG_GUILD_ACCEPT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GUILD_ACCEPT* ClientOpcode::get_if<CMSG_GUILD_ACCEPT>() {
     if (opcode == Opcode::CMSG_GUILD_ACCEPT) {
         return &CMSG_GUILD_ACCEPT;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GUILD_ACCEPT& ClientOpcode::get<CMSG_GUILD_ACCEPT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GUILD_ACCEPT& ClientOpcode::get<CMSG_GUILD_ACCEPT>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GUILD_ACCEPT>();
     if (p) {
         return *p;
@@ -22964,14 +23273,14 @@ vanilla::CMSG_GUILD_ACCEPT& ClientOpcode::get<CMSG_GUILD_ACCEPT>() {
 }
 
 template <>
-vanilla::CMSG_GUILD_DECLINE* ClientOpcode::get_if<CMSG_GUILD_DECLINE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GUILD_DECLINE* ClientOpcode::get_if<CMSG_GUILD_DECLINE>() {
     if (opcode == Opcode::CMSG_GUILD_DECLINE) {
         return &CMSG_GUILD_DECLINE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GUILD_DECLINE& ClientOpcode::get<CMSG_GUILD_DECLINE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GUILD_DECLINE& ClientOpcode::get<CMSG_GUILD_DECLINE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GUILD_DECLINE>();
     if (p) {
         return *p;
@@ -22980,14 +23289,14 @@ vanilla::CMSG_GUILD_DECLINE& ClientOpcode::get<CMSG_GUILD_DECLINE>() {
 }
 
 template <>
-vanilla::CMSG_GUILD_INFO* ClientOpcode::get_if<CMSG_GUILD_INFO>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GUILD_INFO* ClientOpcode::get_if<CMSG_GUILD_INFO>() {
     if (opcode == Opcode::CMSG_GUILD_INFO) {
         return &CMSG_GUILD_INFO;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GUILD_INFO& ClientOpcode::get<CMSG_GUILD_INFO>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GUILD_INFO& ClientOpcode::get<CMSG_GUILD_INFO>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GUILD_INFO>();
     if (p) {
         return *p;
@@ -22996,14 +23305,14 @@ vanilla::CMSG_GUILD_INFO& ClientOpcode::get<CMSG_GUILD_INFO>() {
 }
 
 template <>
-vanilla::CMSG_GUILD_ROSTER* ClientOpcode::get_if<CMSG_GUILD_ROSTER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GUILD_ROSTER* ClientOpcode::get_if<CMSG_GUILD_ROSTER>() {
     if (opcode == Opcode::CMSG_GUILD_ROSTER) {
         return &CMSG_GUILD_ROSTER;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GUILD_ROSTER& ClientOpcode::get<CMSG_GUILD_ROSTER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GUILD_ROSTER& ClientOpcode::get<CMSG_GUILD_ROSTER>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GUILD_ROSTER>();
     if (p) {
         return *p;
@@ -23012,14 +23321,14 @@ vanilla::CMSG_GUILD_ROSTER& ClientOpcode::get<CMSG_GUILD_ROSTER>() {
 }
 
 template <>
-vanilla::CMSG_GUILD_PROMOTE* ClientOpcode::get_if<CMSG_GUILD_PROMOTE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GUILD_PROMOTE* ClientOpcode::get_if<CMSG_GUILD_PROMOTE>() {
     if (opcode == Opcode::CMSG_GUILD_PROMOTE) {
         return &CMSG_GUILD_PROMOTE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GUILD_PROMOTE& ClientOpcode::get<CMSG_GUILD_PROMOTE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GUILD_PROMOTE& ClientOpcode::get<CMSG_GUILD_PROMOTE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GUILD_PROMOTE>();
     if (p) {
         return *p;
@@ -23028,14 +23337,14 @@ vanilla::CMSG_GUILD_PROMOTE& ClientOpcode::get<CMSG_GUILD_PROMOTE>() {
 }
 
 template <>
-vanilla::CMSG_GUILD_DEMOTE* ClientOpcode::get_if<CMSG_GUILD_DEMOTE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GUILD_DEMOTE* ClientOpcode::get_if<CMSG_GUILD_DEMOTE>() {
     if (opcode == Opcode::CMSG_GUILD_DEMOTE) {
         return &CMSG_GUILD_DEMOTE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GUILD_DEMOTE& ClientOpcode::get<CMSG_GUILD_DEMOTE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GUILD_DEMOTE& ClientOpcode::get<CMSG_GUILD_DEMOTE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GUILD_DEMOTE>();
     if (p) {
         return *p;
@@ -23044,14 +23353,14 @@ vanilla::CMSG_GUILD_DEMOTE& ClientOpcode::get<CMSG_GUILD_DEMOTE>() {
 }
 
 template <>
-vanilla::CMSG_GUILD_LEAVE* ClientOpcode::get_if<CMSG_GUILD_LEAVE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GUILD_LEAVE* ClientOpcode::get_if<CMSG_GUILD_LEAVE>() {
     if (opcode == Opcode::CMSG_GUILD_LEAVE) {
         return &CMSG_GUILD_LEAVE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GUILD_LEAVE& ClientOpcode::get<CMSG_GUILD_LEAVE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GUILD_LEAVE& ClientOpcode::get<CMSG_GUILD_LEAVE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GUILD_LEAVE>();
     if (p) {
         return *p;
@@ -23060,14 +23369,14 @@ vanilla::CMSG_GUILD_LEAVE& ClientOpcode::get<CMSG_GUILD_LEAVE>() {
 }
 
 template <>
-vanilla::CMSG_GUILD_REMOVE* ClientOpcode::get_if<CMSG_GUILD_REMOVE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GUILD_REMOVE* ClientOpcode::get_if<CMSG_GUILD_REMOVE>() {
     if (opcode == Opcode::CMSG_GUILD_REMOVE) {
         return &CMSG_GUILD_REMOVE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GUILD_REMOVE& ClientOpcode::get<CMSG_GUILD_REMOVE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GUILD_REMOVE& ClientOpcode::get<CMSG_GUILD_REMOVE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GUILD_REMOVE>();
     if (p) {
         return *p;
@@ -23076,14 +23385,14 @@ vanilla::CMSG_GUILD_REMOVE& ClientOpcode::get<CMSG_GUILD_REMOVE>() {
 }
 
 template <>
-vanilla::CMSG_GUILD_DISBAND* ClientOpcode::get_if<CMSG_GUILD_DISBAND>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GUILD_DISBAND* ClientOpcode::get_if<CMSG_GUILD_DISBAND>() {
     if (opcode == Opcode::CMSG_GUILD_DISBAND) {
         return &CMSG_GUILD_DISBAND;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GUILD_DISBAND& ClientOpcode::get<CMSG_GUILD_DISBAND>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GUILD_DISBAND& ClientOpcode::get<CMSG_GUILD_DISBAND>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GUILD_DISBAND>();
     if (p) {
         return *p;
@@ -23092,14 +23401,14 @@ vanilla::CMSG_GUILD_DISBAND& ClientOpcode::get<CMSG_GUILD_DISBAND>() {
 }
 
 template <>
-vanilla::CMSG_GUILD_LEADER* ClientOpcode::get_if<CMSG_GUILD_LEADER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GUILD_LEADER* ClientOpcode::get_if<CMSG_GUILD_LEADER>() {
     if (opcode == Opcode::CMSG_GUILD_LEADER) {
         return &CMSG_GUILD_LEADER;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GUILD_LEADER& ClientOpcode::get<CMSG_GUILD_LEADER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GUILD_LEADER& ClientOpcode::get<CMSG_GUILD_LEADER>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GUILD_LEADER>();
     if (p) {
         return *p;
@@ -23108,14 +23417,14 @@ vanilla::CMSG_GUILD_LEADER& ClientOpcode::get<CMSG_GUILD_LEADER>() {
 }
 
 template <>
-vanilla::CMSG_GUILD_MOTD* ClientOpcode::get_if<CMSG_GUILD_MOTD>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GUILD_MOTD* ClientOpcode::get_if<CMSG_GUILD_MOTD>() {
     if (opcode == Opcode::CMSG_GUILD_MOTD) {
         return &CMSG_GUILD_MOTD;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GUILD_MOTD& ClientOpcode::get<CMSG_GUILD_MOTD>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GUILD_MOTD& ClientOpcode::get<CMSG_GUILD_MOTD>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GUILD_MOTD>();
     if (p) {
         return *p;
@@ -23124,14 +23433,14 @@ vanilla::CMSG_GUILD_MOTD& ClientOpcode::get<CMSG_GUILD_MOTD>() {
 }
 
 template <>
-vanilla::CMSG_MESSAGECHAT* ClientOpcode::get_if<CMSG_MESSAGECHAT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_MESSAGECHAT* ClientOpcode::get_if<CMSG_MESSAGECHAT>() {
     if (opcode == Opcode::CMSG_MESSAGECHAT) {
         return &CMSG_MESSAGECHAT;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_MESSAGECHAT& ClientOpcode::get<CMSG_MESSAGECHAT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_MESSAGECHAT& ClientOpcode::get<CMSG_MESSAGECHAT>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_MESSAGECHAT>();
     if (p) {
         return *p;
@@ -23140,14 +23449,14 @@ vanilla::CMSG_MESSAGECHAT& ClientOpcode::get<CMSG_MESSAGECHAT>() {
 }
 
 template <>
-vanilla::CMSG_JOIN_CHANNEL* ClientOpcode::get_if<CMSG_JOIN_CHANNEL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_JOIN_CHANNEL* ClientOpcode::get_if<CMSG_JOIN_CHANNEL>() {
     if (opcode == Opcode::CMSG_JOIN_CHANNEL) {
         return &CMSG_JOIN_CHANNEL;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_JOIN_CHANNEL& ClientOpcode::get<CMSG_JOIN_CHANNEL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_JOIN_CHANNEL& ClientOpcode::get<CMSG_JOIN_CHANNEL>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_JOIN_CHANNEL>();
     if (p) {
         return *p;
@@ -23156,14 +23465,14 @@ vanilla::CMSG_JOIN_CHANNEL& ClientOpcode::get<CMSG_JOIN_CHANNEL>() {
 }
 
 template <>
-vanilla::CMSG_LEAVE_CHANNEL* ClientOpcode::get_if<CMSG_LEAVE_CHANNEL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_LEAVE_CHANNEL* ClientOpcode::get_if<CMSG_LEAVE_CHANNEL>() {
     if (opcode == Opcode::CMSG_LEAVE_CHANNEL) {
         return &CMSG_LEAVE_CHANNEL;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_LEAVE_CHANNEL& ClientOpcode::get<CMSG_LEAVE_CHANNEL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_LEAVE_CHANNEL& ClientOpcode::get<CMSG_LEAVE_CHANNEL>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_LEAVE_CHANNEL>();
     if (p) {
         return *p;
@@ -23172,14 +23481,14 @@ vanilla::CMSG_LEAVE_CHANNEL& ClientOpcode::get<CMSG_LEAVE_CHANNEL>() {
 }
 
 template <>
-vanilla::CMSG_CHANNEL_LIST* ClientOpcode::get_if<CMSG_CHANNEL_LIST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CHANNEL_LIST* ClientOpcode::get_if<CMSG_CHANNEL_LIST>() {
     if (opcode == Opcode::CMSG_CHANNEL_LIST) {
         return &CMSG_CHANNEL_LIST;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_CHANNEL_LIST& ClientOpcode::get<CMSG_CHANNEL_LIST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CHANNEL_LIST& ClientOpcode::get<CMSG_CHANNEL_LIST>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_CHANNEL_LIST>();
     if (p) {
         return *p;
@@ -23188,14 +23497,14 @@ vanilla::CMSG_CHANNEL_LIST& ClientOpcode::get<CMSG_CHANNEL_LIST>() {
 }
 
 template <>
-vanilla::CMSG_CHANNEL_PASSWORD* ClientOpcode::get_if<CMSG_CHANNEL_PASSWORD>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CHANNEL_PASSWORD* ClientOpcode::get_if<CMSG_CHANNEL_PASSWORD>() {
     if (opcode == Opcode::CMSG_CHANNEL_PASSWORD) {
         return &CMSG_CHANNEL_PASSWORD;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_CHANNEL_PASSWORD& ClientOpcode::get<CMSG_CHANNEL_PASSWORD>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CHANNEL_PASSWORD& ClientOpcode::get<CMSG_CHANNEL_PASSWORD>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_CHANNEL_PASSWORD>();
     if (p) {
         return *p;
@@ -23204,14 +23513,14 @@ vanilla::CMSG_CHANNEL_PASSWORD& ClientOpcode::get<CMSG_CHANNEL_PASSWORD>() {
 }
 
 template <>
-vanilla::CMSG_CHANNEL_SET_OWNER* ClientOpcode::get_if<CMSG_CHANNEL_SET_OWNER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CHANNEL_SET_OWNER* ClientOpcode::get_if<CMSG_CHANNEL_SET_OWNER>() {
     if (opcode == Opcode::CMSG_CHANNEL_SET_OWNER) {
         return &CMSG_CHANNEL_SET_OWNER;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_CHANNEL_SET_OWNER& ClientOpcode::get<CMSG_CHANNEL_SET_OWNER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CHANNEL_SET_OWNER& ClientOpcode::get<CMSG_CHANNEL_SET_OWNER>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_CHANNEL_SET_OWNER>();
     if (p) {
         return *p;
@@ -23220,14 +23529,14 @@ vanilla::CMSG_CHANNEL_SET_OWNER& ClientOpcode::get<CMSG_CHANNEL_SET_OWNER>() {
 }
 
 template <>
-vanilla::CMSG_CHANNEL_OWNER* ClientOpcode::get_if<CMSG_CHANNEL_OWNER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CHANNEL_OWNER* ClientOpcode::get_if<CMSG_CHANNEL_OWNER>() {
     if (opcode == Opcode::CMSG_CHANNEL_OWNER) {
         return &CMSG_CHANNEL_OWNER;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_CHANNEL_OWNER& ClientOpcode::get<CMSG_CHANNEL_OWNER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CHANNEL_OWNER& ClientOpcode::get<CMSG_CHANNEL_OWNER>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_CHANNEL_OWNER>();
     if (p) {
         return *p;
@@ -23236,14 +23545,14 @@ vanilla::CMSG_CHANNEL_OWNER& ClientOpcode::get<CMSG_CHANNEL_OWNER>() {
 }
 
 template <>
-vanilla::CMSG_CHANNEL_MODERATOR* ClientOpcode::get_if<CMSG_CHANNEL_MODERATOR>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CHANNEL_MODERATOR* ClientOpcode::get_if<CMSG_CHANNEL_MODERATOR>() {
     if (opcode == Opcode::CMSG_CHANNEL_MODERATOR) {
         return &CMSG_CHANNEL_MODERATOR;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_CHANNEL_MODERATOR& ClientOpcode::get<CMSG_CHANNEL_MODERATOR>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CHANNEL_MODERATOR& ClientOpcode::get<CMSG_CHANNEL_MODERATOR>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_CHANNEL_MODERATOR>();
     if (p) {
         return *p;
@@ -23252,14 +23561,14 @@ vanilla::CMSG_CHANNEL_MODERATOR& ClientOpcode::get<CMSG_CHANNEL_MODERATOR>() {
 }
 
 template <>
-vanilla::CMSG_CHANNEL_UNMODERATOR* ClientOpcode::get_if<CMSG_CHANNEL_UNMODERATOR>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CHANNEL_UNMODERATOR* ClientOpcode::get_if<CMSG_CHANNEL_UNMODERATOR>() {
     if (opcode == Opcode::CMSG_CHANNEL_UNMODERATOR) {
         return &CMSG_CHANNEL_UNMODERATOR;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_CHANNEL_UNMODERATOR& ClientOpcode::get<CMSG_CHANNEL_UNMODERATOR>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CHANNEL_UNMODERATOR& ClientOpcode::get<CMSG_CHANNEL_UNMODERATOR>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_CHANNEL_UNMODERATOR>();
     if (p) {
         return *p;
@@ -23268,14 +23577,14 @@ vanilla::CMSG_CHANNEL_UNMODERATOR& ClientOpcode::get<CMSG_CHANNEL_UNMODERATOR>()
 }
 
 template <>
-vanilla::CMSG_CHANNEL_MUTE* ClientOpcode::get_if<CMSG_CHANNEL_MUTE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CHANNEL_MUTE* ClientOpcode::get_if<CMSG_CHANNEL_MUTE>() {
     if (opcode == Opcode::CMSG_CHANNEL_MUTE) {
         return &CMSG_CHANNEL_MUTE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_CHANNEL_MUTE& ClientOpcode::get<CMSG_CHANNEL_MUTE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CHANNEL_MUTE& ClientOpcode::get<CMSG_CHANNEL_MUTE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_CHANNEL_MUTE>();
     if (p) {
         return *p;
@@ -23284,14 +23593,14 @@ vanilla::CMSG_CHANNEL_MUTE& ClientOpcode::get<CMSG_CHANNEL_MUTE>() {
 }
 
 template <>
-vanilla::CMSG_CHANNEL_UNMUTE* ClientOpcode::get_if<CMSG_CHANNEL_UNMUTE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CHANNEL_UNMUTE* ClientOpcode::get_if<CMSG_CHANNEL_UNMUTE>() {
     if (opcode == Opcode::CMSG_CHANNEL_UNMUTE) {
         return &CMSG_CHANNEL_UNMUTE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_CHANNEL_UNMUTE& ClientOpcode::get<CMSG_CHANNEL_UNMUTE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CHANNEL_UNMUTE& ClientOpcode::get<CMSG_CHANNEL_UNMUTE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_CHANNEL_UNMUTE>();
     if (p) {
         return *p;
@@ -23300,14 +23609,14 @@ vanilla::CMSG_CHANNEL_UNMUTE& ClientOpcode::get<CMSG_CHANNEL_UNMUTE>() {
 }
 
 template <>
-vanilla::CMSG_CHANNEL_INVITE* ClientOpcode::get_if<CMSG_CHANNEL_INVITE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CHANNEL_INVITE* ClientOpcode::get_if<CMSG_CHANNEL_INVITE>() {
     if (opcode == Opcode::CMSG_CHANNEL_INVITE) {
         return &CMSG_CHANNEL_INVITE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_CHANNEL_INVITE& ClientOpcode::get<CMSG_CHANNEL_INVITE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CHANNEL_INVITE& ClientOpcode::get<CMSG_CHANNEL_INVITE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_CHANNEL_INVITE>();
     if (p) {
         return *p;
@@ -23316,14 +23625,14 @@ vanilla::CMSG_CHANNEL_INVITE& ClientOpcode::get<CMSG_CHANNEL_INVITE>() {
 }
 
 template <>
-vanilla::CMSG_CHANNEL_KICK* ClientOpcode::get_if<CMSG_CHANNEL_KICK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CHANNEL_KICK* ClientOpcode::get_if<CMSG_CHANNEL_KICK>() {
     if (opcode == Opcode::CMSG_CHANNEL_KICK) {
         return &CMSG_CHANNEL_KICK;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_CHANNEL_KICK& ClientOpcode::get<CMSG_CHANNEL_KICK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CHANNEL_KICK& ClientOpcode::get<CMSG_CHANNEL_KICK>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_CHANNEL_KICK>();
     if (p) {
         return *p;
@@ -23332,14 +23641,14 @@ vanilla::CMSG_CHANNEL_KICK& ClientOpcode::get<CMSG_CHANNEL_KICK>() {
 }
 
 template <>
-vanilla::CMSG_CHANNEL_BAN* ClientOpcode::get_if<CMSG_CHANNEL_BAN>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CHANNEL_BAN* ClientOpcode::get_if<CMSG_CHANNEL_BAN>() {
     if (opcode == Opcode::CMSG_CHANNEL_BAN) {
         return &CMSG_CHANNEL_BAN;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_CHANNEL_BAN& ClientOpcode::get<CMSG_CHANNEL_BAN>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CHANNEL_BAN& ClientOpcode::get<CMSG_CHANNEL_BAN>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_CHANNEL_BAN>();
     if (p) {
         return *p;
@@ -23348,14 +23657,14 @@ vanilla::CMSG_CHANNEL_BAN& ClientOpcode::get<CMSG_CHANNEL_BAN>() {
 }
 
 template <>
-vanilla::CMSG_CHANNEL_UNBAN* ClientOpcode::get_if<CMSG_CHANNEL_UNBAN>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CHANNEL_UNBAN* ClientOpcode::get_if<CMSG_CHANNEL_UNBAN>() {
     if (opcode == Opcode::CMSG_CHANNEL_UNBAN) {
         return &CMSG_CHANNEL_UNBAN;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_CHANNEL_UNBAN& ClientOpcode::get<CMSG_CHANNEL_UNBAN>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CHANNEL_UNBAN& ClientOpcode::get<CMSG_CHANNEL_UNBAN>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_CHANNEL_UNBAN>();
     if (p) {
         return *p;
@@ -23364,14 +23673,14 @@ vanilla::CMSG_CHANNEL_UNBAN& ClientOpcode::get<CMSG_CHANNEL_UNBAN>() {
 }
 
 template <>
-vanilla::CMSG_CHANNEL_ANNOUNCEMENTS* ClientOpcode::get_if<CMSG_CHANNEL_ANNOUNCEMENTS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CHANNEL_ANNOUNCEMENTS* ClientOpcode::get_if<CMSG_CHANNEL_ANNOUNCEMENTS>() {
     if (opcode == Opcode::CMSG_CHANNEL_ANNOUNCEMENTS) {
         return &CMSG_CHANNEL_ANNOUNCEMENTS;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_CHANNEL_ANNOUNCEMENTS& ClientOpcode::get<CMSG_CHANNEL_ANNOUNCEMENTS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CHANNEL_ANNOUNCEMENTS& ClientOpcode::get<CMSG_CHANNEL_ANNOUNCEMENTS>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_CHANNEL_ANNOUNCEMENTS>();
     if (p) {
         return *p;
@@ -23380,14 +23689,14 @@ vanilla::CMSG_CHANNEL_ANNOUNCEMENTS& ClientOpcode::get<CMSG_CHANNEL_ANNOUNCEMENT
 }
 
 template <>
-vanilla::CMSG_CHANNEL_MODERATE* ClientOpcode::get_if<CMSG_CHANNEL_MODERATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CHANNEL_MODERATE* ClientOpcode::get_if<CMSG_CHANNEL_MODERATE>() {
     if (opcode == Opcode::CMSG_CHANNEL_MODERATE) {
         return &CMSG_CHANNEL_MODERATE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_CHANNEL_MODERATE& ClientOpcode::get<CMSG_CHANNEL_MODERATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CHANNEL_MODERATE& ClientOpcode::get<CMSG_CHANNEL_MODERATE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_CHANNEL_MODERATE>();
     if (p) {
         return *p;
@@ -23396,14 +23705,14 @@ vanilla::CMSG_CHANNEL_MODERATE& ClientOpcode::get<CMSG_CHANNEL_MODERATE>() {
 }
 
 template <>
-vanilla::CMSG_USE_ITEM* ClientOpcode::get_if<CMSG_USE_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_USE_ITEM* ClientOpcode::get_if<CMSG_USE_ITEM>() {
     if (opcode == Opcode::CMSG_USE_ITEM) {
         return &CMSG_USE_ITEM;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_USE_ITEM& ClientOpcode::get<CMSG_USE_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_USE_ITEM& ClientOpcode::get<CMSG_USE_ITEM>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_USE_ITEM>();
     if (p) {
         return *p;
@@ -23412,14 +23721,14 @@ vanilla::CMSG_USE_ITEM& ClientOpcode::get<CMSG_USE_ITEM>() {
 }
 
 template <>
-vanilla::CMSG_OPEN_ITEM* ClientOpcode::get_if<CMSG_OPEN_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_OPEN_ITEM* ClientOpcode::get_if<CMSG_OPEN_ITEM>() {
     if (opcode == Opcode::CMSG_OPEN_ITEM) {
         return &CMSG_OPEN_ITEM;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_OPEN_ITEM& ClientOpcode::get<CMSG_OPEN_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_OPEN_ITEM& ClientOpcode::get<CMSG_OPEN_ITEM>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_OPEN_ITEM>();
     if (p) {
         return *p;
@@ -23428,14 +23737,14 @@ vanilla::CMSG_OPEN_ITEM& ClientOpcode::get<CMSG_OPEN_ITEM>() {
 }
 
 template <>
-vanilla::CMSG_READ_ITEM* ClientOpcode::get_if<CMSG_READ_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_READ_ITEM* ClientOpcode::get_if<CMSG_READ_ITEM>() {
     if (opcode == Opcode::CMSG_READ_ITEM) {
         return &CMSG_READ_ITEM;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_READ_ITEM& ClientOpcode::get<CMSG_READ_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_READ_ITEM& ClientOpcode::get<CMSG_READ_ITEM>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_READ_ITEM>();
     if (p) {
         return *p;
@@ -23444,14 +23753,14 @@ vanilla::CMSG_READ_ITEM& ClientOpcode::get<CMSG_READ_ITEM>() {
 }
 
 template <>
-vanilla::CMSG_GAMEOBJ_USE* ClientOpcode::get_if<CMSG_GAMEOBJ_USE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GAMEOBJ_USE* ClientOpcode::get_if<CMSG_GAMEOBJ_USE>() {
     if (opcode == Opcode::CMSG_GAMEOBJ_USE) {
         return &CMSG_GAMEOBJ_USE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GAMEOBJ_USE& ClientOpcode::get<CMSG_GAMEOBJ_USE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GAMEOBJ_USE& ClientOpcode::get<CMSG_GAMEOBJ_USE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GAMEOBJ_USE>();
     if (p) {
         return *p;
@@ -23460,14 +23769,14 @@ vanilla::CMSG_GAMEOBJ_USE& ClientOpcode::get<CMSG_GAMEOBJ_USE>() {
 }
 
 template <>
-vanilla::CMSG_AREATRIGGER* ClientOpcode::get_if<CMSG_AREATRIGGER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_AREATRIGGER* ClientOpcode::get_if<CMSG_AREATRIGGER>() {
     if (opcode == Opcode::CMSG_AREATRIGGER) {
         return &CMSG_AREATRIGGER;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_AREATRIGGER& ClientOpcode::get<CMSG_AREATRIGGER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_AREATRIGGER& ClientOpcode::get<CMSG_AREATRIGGER>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_AREATRIGGER>();
     if (p) {
         return *p;
@@ -23476,14 +23785,14 @@ vanilla::CMSG_AREATRIGGER& ClientOpcode::get<CMSG_AREATRIGGER>() {
 }
 
 template <>
-vanilla::MSG_MOVE_START_FORWARD_Client* ClientOpcode::get_if<MSG_MOVE_START_FORWARD_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_START_FORWARD_Client* ClientOpcode::get_if<MSG_MOVE_START_FORWARD_Client>() {
     if (opcode == Opcode::MSG_MOVE_START_FORWARD) {
         return &MSG_MOVE_START_FORWARD;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_START_FORWARD_Client& ClientOpcode::get<MSG_MOVE_START_FORWARD_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_START_FORWARD_Client& ClientOpcode::get<MSG_MOVE_START_FORWARD_Client>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_START_FORWARD_Client>();
     if (p) {
         return *p;
@@ -23492,14 +23801,14 @@ vanilla::MSG_MOVE_START_FORWARD_Client& ClientOpcode::get<MSG_MOVE_START_FORWARD
 }
 
 template <>
-vanilla::MSG_MOVE_START_BACKWARD_Client* ClientOpcode::get_if<MSG_MOVE_START_BACKWARD_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_START_BACKWARD_Client* ClientOpcode::get_if<MSG_MOVE_START_BACKWARD_Client>() {
     if (opcode == Opcode::MSG_MOVE_START_BACKWARD) {
         return &MSG_MOVE_START_BACKWARD;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_START_BACKWARD_Client& ClientOpcode::get<MSG_MOVE_START_BACKWARD_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_START_BACKWARD_Client& ClientOpcode::get<MSG_MOVE_START_BACKWARD_Client>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_START_BACKWARD_Client>();
     if (p) {
         return *p;
@@ -23508,14 +23817,14 @@ vanilla::MSG_MOVE_START_BACKWARD_Client& ClientOpcode::get<MSG_MOVE_START_BACKWA
 }
 
 template <>
-vanilla::MSG_MOVE_STOP_Client* ClientOpcode::get_if<MSG_MOVE_STOP_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_STOP_Client* ClientOpcode::get_if<MSG_MOVE_STOP_Client>() {
     if (opcode == Opcode::MSG_MOVE_STOP) {
         return &MSG_MOVE_STOP;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_STOP_Client& ClientOpcode::get<MSG_MOVE_STOP_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_STOP_Client& ClientOpcode::get<MSG_MOVE_STOP_Client>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_STOP_Client>();
     if (p) {
         return *p;
@@ -23524,14 +23833,14 @@ vanilla::MSG_MOVE_STOP_Client& ClientOpcode::get<MSG_MOVE_STOP_Client>() {
 }
 
 template <>
-vanilla::MSG_MOVE_START_STRAFE_LEFT_Client* ClientOpcode::get_if<MSG_MOVE_START_STRAFE_LEFT_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_START_STRAFE_LEFT_Client* ClientOpcode::get_if<MSG_MOVE_START_STRAFE_LEFT_Client>() {
     if (opcode == Opcode::MSG_MOVE_START_STRAFE_LEFT) {
         return &MSG_MOVE_START_STRAFE_LEFT;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_START_STRAFE_LEFT_Client& ClientOpcode::get<MSG_MOVE_START_STRAFE_LEFT_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_START_STRAFE_LEFT_Client& ClientOpcode::get<MSG_MOVE_START_STRAFE_LEFT_Client>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_START_STRAFE_LEFT_Client>();
     if (p) {
         return *p;
@@ -23540,14 +23849,14 @@ vanilla::MSG_MOVE_START_STRAFE_LEFT_Client& ClientOpcode::get<MSG_MOVE_START_STR
 }
 
 template <>
-vanilla::MSG_MOVE_START_STRAFE_RIGHT_Client* ClientOpcode::get_if<MSG_MOVE_START_STRAFE_RIGHT_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_START_STRAFE_RIGHT_Client* ClientOpcode::get_if<MSG_MOVE_START_STRAFE_RIGHT_Client>() {
     if (opcode == Opcode::MSG_MOVE_START_STRAFE_RIGHT) {
         return &MSG_MOVE_START_STRAFE_RIGHT;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_START_STRAFE_RIGHT_Client& ClientOpcode::get<MSG_MOVE_START_STRAFE_RIGHT_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_START_STRAFE_RIGHT_Client& ClientOpcode::get<MSG_MOVE_START_STRAFE_RIGHT_Client>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_START_STRAFE_RIGHT_Client>();
     if (p) {
         return *p;
@@ -23556,14 +23865,14 @@ vanilla::MSG_MOVE_START_STRAFE_RIGHT_Client& ClientOpcode::get<MSG_MOVE_START_ST
 }
 
 template <>
-vanilla::MSG_MOVE_STOP_STRAFE_Client* ClientOpcode::get_if<MSG_MOVE_STOP_STRAFE_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_STOP_STRAFE_Client* ClientOpcode::get_if<MSG_MOVE_STOP_STRAFE_Client>() {
     if (opcode == Opcode::MSG_MOVE_STOP_STRAFE) {
         return &MSG_MOVE_STOP_STRAFE;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_STOP_STRAFE_Client& ClientOpcode::get<MSG_MOVE_STOP_STRAFE_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_STOP_STRAFE_Client& ClientOpcode::get<MSG_MOVE_STOP_STRAFE_Client>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_STOP_STRAFE_Client>();
     if (p) {
         return *p;
@@ -23572,14 +23881,14 @@ vanilla::MSG_MOVE_STOP_STRAFE_Client& ClientOpcode::get<MSG_MOVE_STOP_STRAFE_Cli
 }
 
 template <>
-vanilla::MSG_MOVE_JUMP_Client* ClientOpcode::get_if<MSG_MOVE_JUMP_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_JUMP_Client* ClientOpcode::get_if<MSG_MOVE_JUMP_Client>() {
     if (opcode == Opcode::MSG_MOVE_JUMP) {
         return &MSG_MOVE_JUMP;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_JUMP_Client& ClientOpcode::get<MSG_MOVE_JUMP_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_JUMP_Client& ClientOpcode::get<MSG_MOVE_JUMP_Client>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_JUMP_Client>();
     if (p) {
         return *p;
@@ -23588,14 +23897,14 @@ vanilla::MSG_MOVE_JUMP_Client& ClientOpcode::get<MSG_MOVE_JUMP_Client>() {
 }
 
 template <>
-vanilla::MSG_MOVE_START_TURN_LEFT_Client* ClientOpcode::get_if<MSG_MOVE_START_TURN_LEFT_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_START_TURN_LEFT_Client* ClientOpcode::get_if<MSG_MOVE_START_TURN_LEFT_Client>() {
     if (opcode == Opcode::MSG_MOVE_START_TURN_LEFT) {
         return &MSG_MOVE_START_TURN_LEFT;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_START_TURN_LEFT_Client& ClientOpcode::get<MSG_MOVE_START_TURN_LEFT_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_START_TURN_LEFT_Client& ClientOpcode::get<MSG_MOVE_START_TURN_LEFT_Client>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_START_TURN_LEFT_Client>();
     if (p) {
         return *p;
@@ -23604,14 +23913,14 @@ vanilla::MSG_MOVE_START_TURN_LEFT_Client& ClientOpcode::get<MSG_MOVE_START_TURN_
 }
 
 template <>
-vanilla::MSG_MOVE_START_TURN_RIGHT_Client* ClientOpcode::get_if<MSG_MOVE_START_TURN_RIGHT_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_START_TURN_RIGHT_Client* ClientOpcode::get_if<MSG_MOVE_START_TURN_RIGHT_Client>() {
     if (opcode == Opcode::MSG_MOVE_START_TURN_RIGHT) {
         return &MSG_MOVE_START_TURN_RIGHT;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_START_TURN_RIGHT_Client& ClientOpcode::get<MSG_MOVE_START_TURN_RIGHT_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_START_TURN_RIGHT_Client& ClientOpcode::get<MSG_MOVE_START_TURN_RIGHT_Client>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_START_TURN_RIGHT_Client>();
     if (p) {
         return *p;
@@ -23620,14 +23929,14 @@ vanilla::MSG_MOVE_START_TURN_RIGHT_Client& ClientOpcode::get<MSG_MOVE_START_TURN
 }
 
 template <>
-vanilla::MSG_MOVE_STOP_TURN_Client* ClientOpcode::get_if<MSG_MOVE_STOP_TURN_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_STOP_TURN_Client* ClientOpcode::get_if<MSG_MOVE_STOP_TURN_Client>() {
     if (opcode == Opcode::MSG_MOVE_STOP_TURN) {
         return &MSG_MOVE_STOP_TURN;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_STOP_TURN_Client& ClientOpcode::get<MSG_MOVE_STOP_TURN_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_STOP_TURN_Client& ClientOpcode::get<MSG_MOVE_STOP_TURN_Client>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_STOP_TURN_Client>();
     if (p) {
         return *p;
@@ -23636,14 +23945,14 @@ vanilla::MSG_MOVE_STOP_TURN_Client& ClientOpcode::get<MSG_MOVE_STOP_TURN_Client>
 }
 
 template <>
-vanilla::MSG_MOVE_START_PITCH_UP_Client* ClientOpcode::get_if<MSG_MOVE_START_PITCH_UP_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_START_PITCH_UP_Client* ClientOpcode::get_if<MSG_MOVE_START_PITCH_UP_Client>() {
     if (opcode == Opcode::MSG_MOVE_START_PITCH_UP) {
         return &MSG_MOVE_START_PITCH_UP;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_START_PITCH_UP_Client& ClientOpcode::get<MSG_MOVE_START_PITCH_UP_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_START_PITCH_UP_Client& ClientOpcode::get<MSG_MOVE_START_PITCH_UP_Client>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_START_PITCH_UP_Client>();
     if (p) {
         return *p;
@@ -23652,14 +23961,14 @@ vanilla::MSG_MOVE_START_PITCH_UP_Client& ClientOpcode::get<MSG_MOVE_START_PITCH_
 }
 
 template <>
-vanilla::MSG_MOVE_START_PITCH_DOWN_Client* ClientOpcode::get_if<MSG_MOVE_START_PITCH_DOWN_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_START_PITCH_DOWN_Client* ClientOpcode::get_if<MSG_MOVE_START_PITCH_DOWN_Client>() {
     if (opcode == Opcode::MSG_MOVE_START_PITCH_DOWN) {
         return &MSG_MOVE_START_PITCH_DOWN;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_START_PITCH_DOWN_Client& ClientOpcode::get<MSG_MOVE_START_PITCH_DOWN_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_START_PITCH_DOWN_Client& ClientOpcode::get<MSG_MOVE_START_PITCH_DOWN_Client>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_START_PITCH_DOWN_Client>();
     if (p) {
         return *p;
@@ -23668,14 +23977,14 @@ vanilla::MSG_MOVE_START_PITCH_DOWN_Client& ClientOpcode::get<MSG_MOVE_START_PITC
 }
 
 template <>
-vanilla::MSG_MOVE_STOP_PITCH_Client* ClientOpcode::get_if<MSG_MOVE_STOP_PITCH_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_STOP_PITCH_Client* ClientOpcode::get_if<MSG_MOVE_STOP_PITCH_Client>() {
     if (opcode == Opcode::MSG_MOVE_STOP_PITCH) {
         return &MSG_MOVE_STOP_PITCH;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_STOP_PITCH_Client& ClientOpcode::get<MSG_MOVE_STOP_PITCH_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_STOP_PITCH_Client& ClientOpcode::get<MSG_MOVE_STOP_PITCH_Client>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_STOP_PITCH_Client>();
     if (p) {
         return *p;
@@ -23684,14 +23993,14 @@ vanilla::MSG_MOVE_STOP_PITCH_Client& ClientOpcode::get<MSG_MOVE_STOP_PITCH_Clien
 }
 
 template <>
-vanilla::MSG_MOVE_SET_RUN_MODE_Client* ClientOpcode::get_if<MSG_MOVE_SET_RUN_MODE_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_SET_RUN_MODE_Client* ClientOpcode::get_if<MSG_MOVE_SET_RUN_MODE_Client>() {
     if (opcode == Opcode::MSG_MOVE_SET_RUN_MODE) {
         return &MSG_MOVE_SET_RUN_MODE;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_SET_RUN_MODE_Client& ClientOpcode::get<MSG_MOVE_SET_RUN_MODE_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_SET_RUN_MODE_Client& ClientOpcode::get<MSG_MOVE_SET_RUN_MODE_Client>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_SET_RUN_MODE_Client>();
     if (p) {
         return *p;
@@ -23700,14 +24009,14 @@ vanilla::MSG_MOVE_SET_RUN_MODE_Client& ClientOpcode::get<MSG_MOVE_SET_RUN_MODE_C
 }
 
 template <>
-vanilla::MSG_MOVE_SET_WALK_MODE_Client* ClientOpcode::get_if<MSG_MOVE_SET_WALK_MODE_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_SET_WALK_MODE_Client* ClientOpcode::get_if<MSG_MOVE_SET_WALK_MODE_Client>() {
     if (opcode == Opcode::MSG_MOVE_SET_WALK_MODE) {
         return &MSG_MOVE_SET_WALK_MODE;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_SET_WALK_MODE_Client& ClientOpcode::get<MSG_MOVE_SET_WALK_MODE_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_SET_WALK_MODE_Client& ClientOpcode::get<MSG_MOVE_SET_WALK_MODE_Client>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_SET_WALK_MODE_Client>();
     if (p) {
         return *p;
@@ -23716,14 +24025,14 @@ vanilla::MSG_MOVE_SET_WALK_MODE_Client& ClientOpcode::get<MSG_MOVE_SET_WALK_MODE
 }
 
 template <>
-vanilla::MSG_MOVE_TELEPORT_ACK_Client* ClientOpcode::get_if<MSG_MOVE_TELEPORT_ACK_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_TELEPORT_ACK_Client* ClientOpcode::get_if<MSG_MOVE_TELEPORT_ACK_Client>() {
     if (opcode == Opcode::MSG_MOVE_TELEPORT_ACK) {
         return &MSG_MOVE_TELEPORT_ACK;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_TELEPORT_ACK_Client& ClientOpcode::get<MSG_MOVE_TELEPORT_ACK_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_TELEPORT_ACK_Client& ClientOpcode::get<MSG_MOVE_TELEPORT_ACK_Client>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_TELEPORT_ACK_Client>();
     if (p) {
         return *p;
@@ -23732,14 +24041,14 @@ vanilla::MSG_MOVE_TELEPORT_ACK_Client& ClientOpcode::get<MSG_MOVE_TELEPORT_ACK_C
 }
 
 template <>
-vanilla::MSG_MOVE_FALL_LAND_Client* ClientOpcode::get_if<MSG_MOVE_FALL_LAND_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_FALL_LAND_Client* ClientOpcode::get_if<MSG_MOVE_FALL_LAND_Client>() {
     if (opcode == Opcode::MSG_MOVE_FALL_LAND) {
         return &MSG_MOVE_FALL_LAND;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_FALL_LAND_Client& ClientOpcode::get<MSG_MOVE_FALL_LAND_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_FALL_LAND_Client& ClientOpcode::get<MSG_MOVE_FALL_LAND_Client>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_FALL_LAND_Client>();
     if (p) {
         return *p;
@@ -23748,14 +24057,14 @@ vanilla::MSG_MOVE_FALL_LAND_Client& ClientOpcode::get<MSG_MOVE_FALL_LAND_Client>
 }
 
 template <>
-vanilla::MSG_MOVE_START_SWIM_Client* ClientOpcode::get_if<MSG_MOVE_START_SWIM_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_START_SWIM_Client* ClientOpcode::get_if<MSG_MOVE_START_SWIM_Client>() {
     if (opcode == Opcode::MSG_MOVE_START_SWIM) {
         return &MSG_MOVE_START_SWIM;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_START_SWIM_Client& ClientOpcode::get<MSG_MOVE_START_SWIM_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_START_SWIM_Client& ClientOpcode::get<MSG_MOVE_START_SWIM_Client>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_START_SWIM_Client>();
     if (p) {
         return *p;
@@ -23764,14 +24073,14 @@ vanilla::MSG_MOVE_START_SWIM_Client& ClientOpcode::get<MSG_MOVE_START_SWIM_Clien
 }
 
 template <>
-vanilla::MSG_MOVE_STOP_SWIM_Client* ClientOpcode::get_if<MSG_MOVE_STOP_SWIM_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_STOP_SWIM_Client* ClientOpcode::get_if<MSG_MOVE_STOP_SWIM_Client>() {
     if (opcode == Opcode::MSG_MOVE_STOP_SWIM) {
         return &MSG_MOVE_STOP_SWIM;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_STOP_SWIM_Client& ClientOpcode::get<MSG_MOVE_STOP_SWIM_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_STOP_SWIM_Client& ClientOpcode::get<MSG_MOVE_STOP_SWIM_Client>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_STOP_SWIM_Client>();
     if (p) {
         return *p;
@@ -23780,14 +24089,14 @@ vanilla::MSG_MOVE_STOP_SWIM_Client& ClientOpcode::get<MSG_MOVE_STOP_SWIM_Client>
 }
 
 template <>
-vanilla::MSG_MOVE_SET_FACING_Client* ClientOpcode::get_if<MSG_MOVE_SET_FACING_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_SET_FACING_Client* ClientOpcode::get_if<MSG_MOVE_SET_FACING_Client>() {
     if (opcode == Opcode::MSG_MOVE_SET_FACING) {
         return &MSG_MOVE_SET_FACING;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_SET_FACING_Client& ClientOpcode::get<MSG_MOVE_SET_FACING_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_SET_FACING_Client& ClientOpcode::get<MSG_MOVE_SET_FACING_Client>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_SET_FACING_Client>();
     if (p) {
         return *p;
@@ -23796,14 +24105,14 @@ vanilla::MSG_MOVE_SET_FACING_Client& ClientOpcode::get<MSG_MOVE_SET_FACING_Clien
 }
 
 template <>
-vanilla::MSG_MOVE_SET_PITCH_Client* ClientOpcode::get_if<MSG_MOVE_SET_PITCH_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_SET_PITCH_Client* ClientOpcode::get_if<MSG_MOVE_SET_PITCH_Client>() {
     if (opcode == Opcode::MSG_MOVE_SET_PITCH) {
         return &MSG_MOVE_SET_PITCH;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_SET_PITCH_Client& ClientOpcode::get<MSG_MOVE_SET_PITCH_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_SET_PITCH_Client& ClientOpcode::get<MSG_MOVE_SET_PITCH_Client>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_SET_PITCH_Client>();
     if (p) {
         return *p;
@@ -23812,14 +24121,14 @@ vanilla::MSG_MOVE_SET_PITCH_Client& ClientOpcode::get<MSG_MOVE_SET_PITCH_Client>
 }
 
 template <>
-vanilla::MSG_MOVE_WORLDPORT_ACK* ClientOpcode::get_if<MSG_MOVE_WORLDPORT_ACK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_WORLDPORT_ACK* ClientOpcode::get_if<MSG_MOVE_WORLDPORT_ACK>() {
     if (opcode == Opcode::MSG_MOVE_WORLDPORT_ACK) {
         return &MSG_MOVE_WORLDPORT_ACK;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_WORLDPORT_ACK& ClientOpcode::get<MSG_MOVE_WORLDPORT_ACK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_WORLDPORT_ACK& ClientOpcode::get<MSG_MOVE_WORLDPORT_ACK>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_WORLDPORT_ACK>();
     if (p) {
         return *p;
@@ -23828,14 +24137,14 @@ vanilla::MSG_MOVE_WORLDPORT_ACK& ClientOpcode::get<MSG_MOVE_WORLDPORT_ACK>() {
 }
 
 template <>
-vanilla::CMSG_MOVE_SET_RAW_POSITION* ClientOpcode::get_if<CMSG_MOVE_SET_RAW_POSITION>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_MOVE_SET_RAW_POSITION* ClientOpcode::get_if<CMSG_MOVE_SET_RAW_POSITION>() {
     if (opcode == Opcode::CMSG_MOVE_SET_RAW_POSITION) {
         return &CMSG_MOVE_SET_RAW_POSITION;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_MOVE_SET_RAW_POSITION& ClientOpcode::get<CMSG_MOVE_SET_RAW_POSITION>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_MOVE_SET_RAW_POSITION& ClientOpcode::get<CMSG_MOVE_SET_RAW_POSITION>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_MOVE_SET_RAW_POSITION>();
     if (p) {
         return *p;
@@ -23844,14 +24153,14 @@ vanilla::CMSG_MOVE_SET_RAW_POSITION& ClientOpcode::get<CMSG_MOVE_SET_RAW_POSITIO
 }
 
 template <>
-vanilla::CMSG_FORCE_RUN_SPEED_CHANGE_ACK* ClientOpcode::get_if<CMSG_FORCE_RUN_SPEED_CHANGE_ACK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_FORCE_RUN_SPEED_CHANGE_ACK* ClientOpcode::get_if<CMSG_FORCE_RUN_SPEED_CHANGE_ACK>() {
     if (opcode == Opcode::CMSG_FORCE_RUN_SPEED_CHANGE_ACK) {
         return &CMSG_FORCE_RUN_SPEED_CHANGE_ACK;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_FORCE_RUN_SPEED_CHANGE_ACK& ClientOpcode::get<CMSG_FORCE_RUN_SPEED_CHANGE_ACK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_FORCE_RUN_SPEED_CHANGE_ACK& ClientOpcode::get<CMSG_FORCE_RUN_SPEED_CHANGE_ACK>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_FORCE_RUN_SPEED_CHANGE_ACK>();
     if (p) {
         return *p;
@@ -23860,14 +24169,14 @@ vanilla::CMSG_FORCE_RUN_SPEED_CHANGE_ACK& ClientOpcode::get<CMSG_FORCE_RUN_SPEED
 }
 
 template <>
-vanilla::CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK* ClientOpcode::get_if<CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK* ClientOpcode::get_if<CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK>() {
     if (opcode == Opcode::CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK) {
         return &CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK& ClientOpcode::get<CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK& ClientOpcode::get<CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK>();
     if (p) {
         return *p;
@@ -23876,14 +24185,14 @@ vanilla::CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK& ClientOpcode::get<CMSG_FORCE_RUN_
 }
 
 template <>
-vanilla::CMSG_FORCE_SWIM_SPEED_CHANGE_ACK* ClientOpcode::get_if<CMSG_FORCE_SWIM_SPEED_CHANGE_ACK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_FORCE_SWIM_SPEED_CHANGE_ACK* ClientOpcode::get_if<CMSG_FORCE_SWIM_SPEED_CHANGE_ACK>() {
     if (opcode == Opcode::CMSG_FORCE_SWIM_SPEED_CHANGE_ACK) {
         return &CMSG_FORCE_SWIM_SPEED_CHANGE_ACK;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_FORCE_SWIM_SPEED_CHANGE_ACK& ClientOpcode::get<CMSG_FORCE_SWIM_SPEED_CHANGE_ACK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_FORCE_SWIM_SPEED_CHANGE_ACK& ClientOpcode::get<CMSG_FORCE_SWIM_SPEED_CHANGE_ACK>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_FORCE_SWIM_SPEED_CHANGE_ACK>();
     if (p) {
         return *p;
@@ -23892,14 +24201,14 @@ vanilla::CMSG_FORCE_SWIM_SPEED_CHANGE_ACK& ClientOpcode::get<CMSG_FORCE_SWIM_SPE
 }
 
 template <>
-vanilla::CMSG_FORCE_MOVE_ROOT_ACK* ClientOpcode::get_if<CMSG_FORCE_MOVE_ROOT_ACK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_FORCE_MOVE_ROOT_ACK* ClientOpcode::get_if<CMSG_FORCE_MOVE_ROOT_ACK>() {
     if (opcode == Opcode::CMSG_FORCE_MOVE_ROOT_ACK) {
         return &CMSG_FORCE_MOVE_ROOT_ACK;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_FORCE_MOVE_ROOT_ACK& ClientOpcode::get<CMSG_FORCE_MOVE_ROOT_ACK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_FORCE_MOVE_ROOT_ACK& ClientOpcode::get<CMSG_FORCE_MOVE_ROOT_ACK>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_FORCE_MOVE_ROOT_ACK>();
     if (p) {
         return *p;
@@ -23908,14 +24217,14 @@ vanilla::CMSG_FORCE_MOVE_ROOT_ACK& ClientOpcode::get<CMSG_FORCE_MOVE_ROOT_ACK>()
 }
 
 template <>
-vanilla::CMSG_FORCE_MOVE_UNROOT_ACK* ClientOpcode::get_if<CMSG_FORCE_MOVE_UNROOT_ACK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_FORCE_MOVE_UNROOT_ACK* ClientOpcode::get_if<CMSG_FORCE_MOVE_UNROOT_ACK>() {
     if (opcode == Opcode::CMSG_FORCE_MOVE_UNROOT_ACK) {
         return &CMSG_FORCE_MOVE_UNROOT_ACK;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_FORCE_MOVE_UNROOT_ACK& ClientOpcode::get<CMSG_FORCE_MOVE_UNROOT_ACK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_FORCE_MOVE_UNROOT_ACK& ClientOpcode::get<CMSG_FORCE_MOVE_UNROOT_ACK>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_FORCE_MOVE_UNROOT_ACK>();
     if (p) {
         return *p;
@@ -23924,14 +24233,14 @@ vanilla::CMSG_FORCE_MOVE_UNROOT_ACK& ClientOpcode::get<CMSG_FORCE_MOVE_UNROOT_AC
 }
 
 template <>
-vanilla::MSG_MOVE_HEARTBEAT_Client* ClientOpcode::get_if<MSG_MOVE_HEARTBEAT_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_HEARTBEAT_Client* ClientOpcode::get_if<MSG_MOVE_HEARTBEAT_Client>() {
     if (opcode == Opcode::MSG_MOVE_HEARTBEAT) {
         return &MSG_MOVE_HEARTBEAT;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_HEARTBEAT_Client& ClientOpcode::get<MSG_MOVE_HEARTBEAT_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_HEARTBEAT_Client& ClientOpcode::get<MSG_MOVE_HEARTBEAT_Client>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_HEARTBEAT_Client>();
     if (p) {
         return *p;
@@ -23940,14 +24249,14 @@ vanilla::MSG_MOVE_HEARTBEAT_Client& ClientOpcode::get<MSG_MOVE_HEARTBEAT_Client>
 }
 
 template <>
-vanilla::CMSG_MOVE_KNOCK_BACK_ACK* ClientOpcode::get_if<CMSG_MOVE_KNOCK_BACK_ACK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_MOVE_KNOCK_BACK_ACK* ClientOpcode::get_if<CMSG_MOVE_KNOCK_BACK_ACK>() {
     if (opcode == Opcode::CMSG_MOVE_KNOCK_BACK_ACK) {
         return &CMSG_MOVE_KNOCK_BACK_ACK;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_MOVE_KNOCK_BACK_ACK& ClientOpcode::get<CMSG_MOVE_KNOCK_BACK_ACK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_MOVE_KNOCK_BACK_ACK& ClientOpcode::get<CMSG_MOVE_KNOCK_BACK_ACK>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_MOVE_KNOCK_BACK_ACK>();
     if (p) {
         return *p;
@@ -23956,14 +24265,14 @@ vanilla::CMSG_MOVE_KNOCK_BACK_ACK& ClientOpcode::get<CMSG_MOVE_KNOCK_BACK_ACK>()
 }
 
 template <>
-vanilla::CMSG_MOVE_HOVER_ACK* ClientOpcode::get_if<CMSG_MOVE_HOVER_ACK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_MOVE_HOVER_ACK* ClientOpcode::get_if<CMSG_MOVE_HOVER_ACK>() {
     if (opcode == Opcode::CMSG_MOVE_HOVER_ACK) {
         return &CMSG_MOVE_HOVER_ACK;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_MOVE_HOVER_ACK& ClientOpcode::get<CMSG_MOVE_HOVER_ACK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_MOVE_HOVER_ACK& ClientOpcode::get<CMSG_MOVE_HOVER_ACK>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_MOVE_HOVER_ACK>();
     if (p) {
         return *p;
@@ -23972,14 +24281,14 @@ vanilla::CMSG_MOVE_HOVER_ACK& ClientOpcode::get<CMSG_MOVE_HOVER_ACK>() {
 }
 
 template <>
-vanilla::CMSG_NEXT_CINEMATIC_CAMERA* ClientOpcode::get_if<CMSG_NEXT_CINEMATIC_CAMERA>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_NEXT_CINEMATIC_CAMERA* ClientOpcode::get_if<CMSG_NEXT_CINEMATIC_CAMERA>() {
     if (opcode == Opcode::CMSG_NEXT_CINEMATIC_CAMERA) {
         return &CMSG_NEXT_CINEMATIC_CAMERA;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_NEXT_CINEMATIC_CAMERA& ClientOpcode::get<CMSG_NEXT_CINEMATIC_CAMERA>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_NEXT_CINEMATIC_CAMERA& ClientOpcode::get<CMSG_NEXT_CINEMATIC_CAMERA>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_NEXT_CINEMATIC_CAMERA>();
     if (p) {
         return *p;
@@ -23988,14 +24297,14 @@ vanilla::CMSG_NEXT_CINEMATIC_CAMERA& ClientOpcode::get<CMSG_NEXT_CINEMATIC_CAMER
 }
 
 template <>
-vanilla::CMSG_COMPLETE_CINEMATIC* ClientOpcode::get_if<CMSG_COMPLETE_CINEMATIC>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_COMPLETE_CINEMATIC* ClientOpcode::get_if<CMSG_COMPLETE_CINEMATIC>() {
     if (opcode == Opcode::CMSG_COMPLETE_CINEMATIC) {
         return &CMSG_COMPLETE_CINEMATIC;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_COMPLETE_CINEMATIC& ClientOpcode::get<CMSG_COMPLETE_CINEMATIC>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_COMPLETE_CINEMATIC& ClientOpcode::get<CMSG_COMPLETE_CINEMATIC>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_COMPLETE_CINEMATIC>();
     if (p) {
         return *p;
@@ -24004,14 +24313,14 @@ vanilla::CMSG_COMPLETE_CINEMATIC& ClientOpcode::get<CMSG_COMPLETE_CINEMATIC>() {
 }
 
 template <>
-vanilla::CMSG_TUTORIAL_FLAG* ClientOpcode::get_if<CMSG_TUTORIAL_FLAG>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_TUTORIAL_FLAG* ClientOpcode::get_if<CMSG_TUTORIAL_FLAG>() {
     if (opcode == Opcode::CMSG_TUTORIAL_FLAG) {
         return &CMSG_TUTORIAL_FLAG;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_TUTORIAL_FLAG& ClientOpcode::get<CMSG_TUTORIAL_FLAG>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_TUTORIAL_FLAG& ClientOpcode::get<CMSG_TUTORIAL_FLAG>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_TUTORIAL_FLAG>();
     if (p) {
         return *p;
@@ -24020,14 +24329,14 @@ vanilla::CMSG_TUTORIAL_FLAG& ClientOpcode::get<CMSG_TUTORIAL_FLAG>() {
 }
 
 template <>
-vanilla::CMSG_TUTORIAL_CLEAR* ClientOpcode::get_if<CMSG_TUTORIAL_CLEAR>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_TUTORIAL_CLEAR* ClientOpcode::get_if<CMSG_TUTORIAL_CLEAR>() {
     if (opcode == Opcode::CMSG_TUTORIAL_CLEAR) {
         return &CMSG_TUTORIAL_CLEAR;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_TUTORIAL_CLEAR& ClientOpcode::get<CMSG_TUTORIAL_CLEAR>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_TUTORIAL_CLEAR& ClientOpcode::get<CMSG_TUTORIAL_CLEAR>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_TUTORIAL_CLEAR>();
     if (p) {
         return *p;
@@ -24036,14 +24345,14 @@ vanilla::CMSG_TUTORIAL_CLEAR& ClientOpcode::get<CMSG_TUTORIAL_CLEAR>() {
 }
 
 template <>
-vanilla::CMSG_TUTORIAL_RESET* ClientOpcode::get_if<CMSG_TUTORIAL_RESET>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_TUTORIAL_RESET* ClientOpcode::get_if<CMSG_TUTORIAL_RESET>() {
     if (opcode == Opcode::CMSG_TUTORIAL_RESET) {
         return &CMSG_TUTORIAL_RESET;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_TUTORIAL_RESET& ClientOpcode::get<CMSG_TUTORIAL_RESET>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_TUTORIAL_RESET& ClientOpcode::get<CMSG_TUTORIAL_RESET>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_TUTORIAL_RESET>();
     if (p) {
         return *p;
@@ -24052,14 +24361,14 @@ vanilla::CMSG_TUTORIAL_RESET& ClientOpcode::get<CMSG_TUTORIAL_RESET>() {
 }
 
 template <>
-vanilla::CMSG_STANDSTATECHANGE* ClientOpcode::get_if<CMSG_STANDSTATECHANGE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_STANDSTATECHANGE* ClientOpcode::get_if<CMSG_STANDSTATECHANGE>() {
     if (opcode == Opcode::CMSG_STANDSTATECHANGE) {
         return &CMSG_STANDSTATECHANGE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_STANDSTATECHANGE& ClientOpcode::get<CMSG_STANDSTATECHANGE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_STANDSTATECHANGE& ClientOpcode::get<CMSG_STANDSTATECHANGE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_STANDSTATECHANGE>();
     if (p) {
         return *p;
@@ -24068,14 +24377,14 @@ vanilla::CMSG_STANDSTATECHANGE& ClientOpcode::get<CMSG_STANDSTATECHANGE>() {
 }
 
 template <>
-vanilla::CMSG_EMOTE* ClientOpcode::get_if<CMSG_EMOTE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_EMOTE* ClientOpcode::get_if<CMSG_EMOTE>() {
     if (opcode == Opcode::CMSG_EMOTE) {
         return &CMSG_EMOTE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_EMOTE& ClientOpcode::get<CMSG_EMOTE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_EMOTE& ClientOpcode::get<CMSG_EMOTE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_EMOTE>();
     if (p) {
         return *p;
@@ -24084,14 +24393,14 @@ vanilla::CMSG_EMOTE& ClientOpcode::get<CMSG_EMOTE>() {
 }
 
 template <>
-vanilla::CMSG_TEXT_EMOTE* ClientOpcode::get_if<CMSG_TEXT_EMOTE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_TEXT_EMOTE* ClientOpcode::get_if<CMSG_TEXT_EMOTE>() {
     if (opcode == Opcode::CMSG_TEXT_EMOTE) {
         return &CMSG_TEXT_EMOTE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_TEXT_EMOTE& ClientOpcode::get<CMSG_TEXT_EMOTE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_TEXT_EMOTE& ClientOpcode::get<CMSG_TEXT_EMOTE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_TEXT_EMOTE>();
     if (p) {
         return *p;
@@ -24100,14 +24409,14 @@ vanilla::CMSG_TEXT_EMOTE& ClientOpcode::get<CMSG_TEXT_EMOTE>() {
 }
 
 template <>
-vanilla::CMSG_AUTOSTORE_LOOT_ITEM* ClientOpcode::get_if<CMSG_AUTOSTORE_LOOT_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_AUTOSTORE_LOOT_ITEM* ClientOpcode::get_if<CMSG_AUTOSTORE_LOOT_ITEM>() {
     if (opcode == Opcode::CMSG_AUTOSTORE_LOOT_ITEM) {
         return &CMSG_AUTOSTORE_LOOT_ITEM;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_AUTOSTORE_LOOT_ITEM& ClientOpcode::get<CMSG_AUTOSTORE_LOOT_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_AUTOSTORE_LOOT_ITEM& ClientOpcode::get<CMSG_AUTOSTORE_LOOT_ITEM>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_AUTOSTORE_LOOT_ITEM>();
     if (p) {
         return *p;
@@ -24116,14 +24425,14 @@ vanilla::CMSG_AUTOSTORE_LOOT_ITEM& ClientOpcode::get<CMSG_AUTOSTORE_LOOT_ITEM>()
 }
 
 template <>
-vanilla::CMSG_AUTOEQUIP_ITEM* ClientOpcode::get_if<CMSG_AUTOEQUIP_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_AUTOEQUIP_ITEM* ClientOpcode::get_if<CMSG_AUTOEQUIP_ITEM>() {
     if (opcode == Opcode::CMSG_AUTOEQUIP_ITEM) {
         return &CMSG_AUTOEQUIP_ITEM;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_AUTOEQUIP_ITEM& ClientOpcode::get<CMSG_AUTOEQUIP_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_AUTOEQUIP_ITEM& ClientOpcode::get<CMSG_AUTOEQUIP_ITEM>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_AUTOEQUIP_ITEM>();
     if (p) {
         return *p;
@@ -24132,14 +24441,14 @@ vanilla::CMSG_AUTOEQUIP_ITEM& ClientOpcode::get<CMSG_AUTOEQUIP_ITEM>() {
 }
 
 template <>
-vanilla::CMSG_AUTOSTORE_BAG_ITEM* ClientOpcode::get_if<CMSG_AUTOSTORE_BAG_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_AUTOSTORE_BAG_ITEM* ClientOpcode::get_if<CMSG_AUTOSTORE_BAG_ITEM>() {
     if (opcode == Opcode::CMSG_AUTOSTORE_BAG_ITEM) {
         return &CMSG_AUTOSTORE_BAG_ITEM;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_AUTOSTORE_BAG_ITEM& ClientOpcode::get<CMSG_AUTOSTORE_BAG_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_AUTOSTORE_BAG_ITEM& ClientOpcode::get<CMSG_AUTOSTORE_BAG_ITEM>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_AUTOSTORE_BAG_ITEM>();
     if (p) {
         return *p;
@@ -24148,14 +24457,14 @@ vanilla::CMSG_AUTOSTORE_BAG_ITEM& ClientOpcode::get<CMSG_AUTOSTORE_BAG_ITEM>() {
 }
 
 template <>
-vanilla::CMSG_SWAP_ITEM* ClientOpcode::get_if<CMSG_SWAP_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_SWAP_ITEM* ClientOpcode::get_if<CMSG_SWAP_ITEM>() {
     if (opcode == Opcode::CMSG_SWAP_ITEM) {
         return &CMSG_SWAP_ITEM;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_SWAP_ITEM& ClientOpcode::get<CMSG_SWAP_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_SWAP_ITEM& ClientOpcode::get<CMSG_SWAP_ITEM>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_SWAP_ITEM>();
     if (p) {
         return *p;
@@ -24164,14 +24473,14 @@ vanilla::CMSG_SWAP_ITEM& ClientOpcode::get<CMSG_SWAP_ITEM>() {
 }
 
 template <>
-vanilla::CMSG_SWAP_INV_ITEM* ClientOpcode::get_if<CMSG_SWAP_INV_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_SWAP_INV_ITEM* ClientOpcode::get_if<CMSG_SWAP_INV_ITEM>() {
     if (opcode == Opcode::CMSG_SWAP_INV_ITEM) {
         return &CMSG_SWAP_INV_ITEM;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_SWAP_INV_ITEM& ClientOpcode::get<CMSG_SWAP_INV_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_SWAP_INV_ITEM& ClientOpcode::get<CMSG_SWAP_INV_ITEM>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_SWAP_INV_ITEM>();
     if (p) {
         return *p;
@@ -24180,14 +24489,14 @@ vanilla::CMSG_SWAP_INV_ITEM& ClientOpcode::get<CMSG_SWAP_INV_ITEM>() {
 }
 
 template <>
-vanilla::CMSG_SPLIT_ITEM* ClientOpcode::get_if<CMSG_SPLIT_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_SPLIT_ITEM* ClientOpcode::get_if<CMSG_SPLIT_ITEM>() {
     if (opcode == Opcode::CMSG_SPLIT_ITEM) {
         return &CMSG_SPLIT_ITEM;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_SPLIT_ITEM& ClientOpcode::get<CMSG_SPLIT_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_SPLIT_ITEM& ClientOpcode::get<CMSG_SPLIT_ITEM>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_SPLIT_ITEM>();
     if (p) {
         return *p;
@@ -24196,14 +24505,14 @@ vanilla::CMSG_SPLIT_ITEM& ClientOpcode::get<CMSG_SPLIT_ITEM>() {
 }
 
 template <>
-vanilla::CMSG_AUTOEQUIP_ITEM_SLOT* ClientOpcode::get_if<CMSG_AUTOEQUIP_ITEM_SLOT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_AUTOEQUIP_ITEM_SLOT* ClientOpcode::get_if<CMSG_AUTOEQUIP_ITEM_SLOT>() {
     if (opcode == Opcode::CMSG_AUTOEQUIP_ITEM_SLOT) {
         return &CMSG_AUTOEQUIP_ITEM_SLOT;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_AUTOEQUIP_ITEM_SLOT& ClientOpcode::get<CMSG_AUTOEQUIP_ITEM_SLOT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_AUTOEQUIP_ITEM_SLOT& ClientOpcode::get<CMSG_AUTOEQUIP_ITEM_SLOT>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_AUTOEQUIP_ITEM_SLOT>();
     if (p) {
         return *p;
@@ -24212,14 +24521,14 @@ vanilla::CMSG_AUTOEQUIP_ITEM_SLOT& ClientOpcode::get<CMSG_AUTOEQUIP_ITEM_SLOT>()
 }
 
 template <>
-vanilla::CMSG_DESTROYITEM* ClientOpcode::get_if<CMSG_DESTROYITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_DESTROYITEM* ClientOpcode::get_if<CMSG_DESTROYITEM>() {
     if (opcode == Opcode::CMSG_DESTROYITEM) {
         return &CMSG_DESTROYITEM;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_DESTROYITEM& ClientOpcode::get<CMSG_DESTROYITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_DESTROYITEM& ClientOpcode::get<CMSG_DESTROYITEM>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_DESTROYITEM>();
     if (p) {
         return *p;
@@ -24228,14 +24537,14 @@ vanilla::CMSG_DESTROYITEM& ClientOpcode::get<CMSG_DESTROYITEM>() {
 }
 
 template <>
-vanilla::CMSG_INSPECT* ClientOpcode::get_if<CMSG_INSPECT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_INSPECT* ClientOpcode::get_if<CMSG_INSPECT>() {
     if (opcode == Opcode::CMSG_INSPECT) {
         return &CMSG_INSPECT;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_INSPECT& ClientOpcode::get<CMSG_INSPECT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_INSPECT& ClientOpcode::get<CMSG_INSPECT>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_INSPECT>();
     if (p) {
         return *p;
@@ -24244,14 +24553,14 @@ vanilla::CMSG_INSPECT& ClientOpcode::get<CMSG_INSPECT>() {
 }
 
 template <>
-vanilla::CMSG_INITIATE_TRADE* ClientOpcode::get_if<CMSG_INITIATE_TRADE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_INITIATE_TRADE* ClientOpcode::get_if<CMSG_INITIATE_TRADE>() {
     if (opcode == Opcode::CMSG_INITIATE_TRADE) {
         return &CMSG_INITIATE_TRADE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_INITIATE_TRADE& ClientOpcode::get<CMSG_INITIATE_TRADE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_INITIATE_TRADE& ClientOpcode::get<CMSG_INITIATE_TRADE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_INITIATE_TRADE>();
     if (p) {
         return *p;
@@ -24260,14 +24569,14 @@ vanilla::CMSG_INITIATE_TRADE& ClientOpcode::get<CMSG_INITIATE_TRADE>() {
 }
 
 template <>
-vanilla::CMSG_BEGIN_TRADE* ClientOpcode::get_if<CMSG_BEGIN_TRADE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_BEGIN_TRADE* ClientOpcode::get_if<CMSG_BEGIN_TRADE>() {
     if (opcode == Opcode::CMSG_BEGIN_TRADE) {
         return &CMSG_BEGIN_TRADE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_BEGIN_TRADE& ClientOpcode::get<CMSG_BEGIN_TRADE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_BEGIN_TRADE& ClientOpcode::get<CMSG_BEGIN_TRADE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_BEGIN_TRADE>();
     if (p) {
         return *p;
@@ -24276,14 +24585,14 @@ vanilla::CMSG_BEGIN_TRADE& ClientOpcode::get<CMSG_BEGIN_TRADE>() {
 }
 
 template <>
-vanilla::CMSG_BUSY_TRADE* ClientOpcode::get_if<CMSG_BUSY_TRADE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_BUSY_TRADE* ClientOpcode::get_if<CMSG_BUSY_TRADE>() {
     if (opcode == Opcode::CMSG_BUSY_TRADE) {
         return &CMSG_BUSY_TRADE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_BUSY_TRADE& ClientOpcode::get<CMSG_BUSY_TRADE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_BUSY_TRADE& ClientOpcode::get<CMSG_BUSY_TRADE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_BUSY_TRADE>();
     if (p) {
         return *p;
@@ -24292,14 +24601,14 @@ vanilla::CMSG_BUSY_TRADE& ClientOpcode::get<CMSG_BUSY_TRADE>() {
 }
 
 template <>
-vanilla::CMSG_IGNORE_TRADE* ClientOpcode::get_if<CMSG_IGNORE_TRADE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_IGNORE_TRADE* ClientOpcode::get_if<CMSG_IGNORE_TRADE>() {
     if (opcode == Opcode::CMSG_IGNORE_TRADE) {
         return &CMSG_IGNORE_TRADE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_IGNORE_TRADE& ClientOpcode::get<CMSG_IGNORE_TRADE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_IGNORE_TRADE& ClientOpcode::get<CMSG_IGNORE_TRADE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_IGNORE_TRADE>();
     if (p) {
         return *p;
@@ -24308,14 +24617,14 @@ vanilla::CMSG_IGNORE_TRADE& ClientOpcode::get<CMSG_IGNORE_TRADE>() {
 }
 
 template <>
-vanilla::CMSG_ACCEPT_TRADE* ClientOpcode::get_if<CMSG_ACCEPT_TRADE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_ACCEPT_TRADE* ClientOpcode::get_if<CMSG_ACCEPT_TRADE>() {
     if (opcode == Opcode::CMSG_ACCEPT_TRADE) {
         return &CMSG_ACCEPT_TRADE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_ACCEPT_TRADE& ClientOpcode::get<CMSG_ACCEPT_TRADE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_ACCEPT_TRADE& ClientOpcode::get<CMSG_ACCEPT_TRADE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_ACCEPT_TRADE>();
     if (p) {
         return *p;
@@ -24324,14 +24633,14 @@ vanilla::CMSG_ACCEPT_TRADE& ClientOpcode::get<CMSG_ACCEPT_TRADE>() {
 }
 
 template <>
-vanilla::CMSG_UNACCEPT_TRADE* ClientOpcode::get_if<CMSG_UNACCEPT_TRADE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_UNACCEPT_TRADE* ClientOpcode::get_if<CMSG_UNACCEPT_TRADE>() {
     if (opcode == Opcode::CMSG_UNACCEPT_TRADE) {
         return &CMSG_UNACCEPT_TRADE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_UNACCEPT_TRADE& ClientOpcode::get<CMSG_UNACCEPT_TRADE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_UNACCEPT_TRADE& ClientOpcode::get<CMSG_UNACCEPT_TRADE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_UNACCEPT_TRADE>();
     if (p) {
         return *p;
@@ -24340,14 +24649,14 @@ vanilla::CMSG_UNACCEPT_TRADE& ClientOpcode::get<CMSG_UNACCEPT_TRADE>() {
 }
 
 template <>
-vanilla::CMSG_CANCEL_TRADE* ClientOpcode::get_if<CMSG_CANCEL_TRADE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CANCEL_TRADE* ClientOpcode::get_if<CMSG_CANCEL_TRADE>() {
     if (opcode == Opcode::CMSG_CANCEL_TRADE) {
         return &CMSG_CANCEL_TRADE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_CANCEL_TRADE& ClientOpcode::get<CMSG_CANCEL_TRADE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CANCEL_TRADE& ClientOpcode::get<CMSG_CANCEL_TRADE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_CANCEL_TRADE>();
     if (p) {
         return *p;
@@ -24356,14 +24665,14 @@ vanilla::CMSG_CANCEL_TRADE& ClientOpcode::get<CMSG_CANCEL_TRADE>() {
 }
 
 template <>
-vanilla::CMSG_SET_TRADE_ITEM* ClientOpcode::get_if<CMSG_SET_TRADE_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_SET_TRADE_ITEM* ClientOpcode::get_if<CMSG_SET_TRADE_ITEM>() {
     if (opcode == Opcode::CMSG_SET_TRADE_ITEM) {
         return &CMSG_SET_TRADE_ITEM;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_SET_TRADE_ITEM& ClientOpcode::get<CMSG_SET_TRADE_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_SET_TRADE_ITEM& ClientOpcode::get<CMSG_SET_TRADE_ITEM>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_SET_TRADE_ITEM>();
     if (p) {
         return *p;
@@ -24372,14 +24681,14 @@ vanilla::CMSG_SET_TRADE_ITEM& ClientOpcode::get<CMSG_SET_TRADE_ITEM>() {
 }
 
 template <>
-vanilla::CMSG_CLEAR_TRADE_ITEM* ClientOpcode::get_if<CMSG_CLEAR_TRADE_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CLEAR_TRADE_ITEM* ClientOpcode::get_if<CMSG_CLEAR_TRADE_ITEM>() {
     if (opcode == Opcode::CMSG_CLEAR_TRADE_ITEM) {
         return &CMSG_CLEAR_TRADE_ITEM;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_CLEAR_TRADE_ITEM& ClientOpcode::get<CMSG_CLEAR_TRADE_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CLEAR_TRADE_ITEM& ClientOpcode::get<CMSG_CLEAR_TRADE_ITEM>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_CLEAR_TRADE_ITEM>();
     if (p) {
         return *p;
@@ -24388,14 +24697,14 @@ vanilla::CMSG_CLEAR_TRADE_ITEM& ClientOpcode::get<CMSG_CLEAR_TRADE_ITEM>() {
 }
 
 template <>
-vanilla::CMSG_SET_TRADE_GOLD* ClientOpcode::get_if<CMSG_SET_TRADE_GOLD>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_SET_TRADE_GOLD* ClientOpcode::get_if<CMSG_SET_TRADE_GOLD>() {
     if (opcode == Opcode::CMSG_SET_TRADE_GOLD) {
         return &CMSG_SET_TRADE_GOLD;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_SET_TRADE_GOLD& ClientOpcode::get<CMSG_SET_TRADE_GOLD>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_SET_TRADE_GOLD& ClientOpcode::get<CMSG_SET_TRADE_GOLD>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_SET_TRADE_GOLD>();
     if (p) {
         return *p;
@@ -24404,14 +24713,14 @@ vanilla::CMSG_SET_TRADE_GOLD& ClientOpcode::get<CMSG_SET_TRADE_GOLD>() {
 }
 
 template <>
-vanilla::CMSG_SET_FACTION_ATWAR* ClientOpcode::get_if<CMSG_SET_FACTION_ATWAR>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_SET_FACTION_ATWAR* ClientOpcode::get_if<CMSG_SET_FACTION_ATWAR>() {
     if (opcode == Opcode::CMSG_SET_FACTION_ATWAR) {
         return &CMSG_SET_FACTION_ATWAR;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_SET_FACTION_ATWAR& ClientOpcode::get<CMSG_SET_FACTION_ATWAR>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_SET_FACTION_ATWAR& ClientOpcode::get<CMSG_SET_FACTION_ATWAR>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_SET_FACTION_ATWAR>();
     if (p) {
         return *p;
@@ -24420,14 +24729,14 @@ vanilla::CMSG_SET_FACTION_ATWAR& ClientOpcode::get<CMSG_SET_FACTION_ATWAR>() {
 }
 
 template <>
-vanilla::CMSG_SET_ACTION_BUTTON* ClientOpcode::get_if<CMSG_SET_ACTION_BUTTON>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_SET_ACTION_BUTTON* ClientOpcode::get_if<CMSG_SET_ACTION_BUTTON>() {
     if (opcode == Opcode::CMSG_SET_ACTION_BUTTON) {
         return &CMSG_SET_ACTION_BUTTON;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_SET_ACTION_BUTTON& ClientOpcode::get<CMSG_SET_ACTION_BUTTON>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_SET_ACTION_BUTTON& ClientOpcode::get<CMSG_SET_ACTION_BUTTON>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_SET_ACTION_BUTTON>();
     if (p) {
         return *p;
@@ -24436,14 +24745,14 @@ vanilla::CMSG_SET_ACTION_BUTTON& ClientOpcode::get<CMSG_SET_ACTION_BUTTON>() {
 }
 
 template <>
-vanilla::CMSG_CAST_SPELL* ClientOpcode::get_if<CMSG_CAST_SPELL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CAST_SPELL* ClientOpcode::get_if<CMSG_CAST_SPELL>() {
     if (opcode == Opcode::CMSG_CAST_SPELL) {
         return &CMSG_CAST_SPELL;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_CAST_SPELL& ClientOpcode::get<CMSG_CAST_SPELL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CAST_SPELL& ClientOpcode::get<CMSG_CAST_SPELL>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_CAST_SPELL>();
     if (p) {
         return *p;
@@ -24452,14 +24761,14 @@ vanilla::CMSG_CAST_SPELL& ClientOpcode::get<CMSG_CAST_SPELL>() {
 }
 
 template <>
-vanilla::CMSG_CANCEL_CAST* ClientOpcode::get_if<CMSG_CANCEL_CAST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CANCEL_CAST* ClientOpcode::get_if<CMSG_CANCEL_CAST>() {
     if (opcode == Opcode::CMSG_CANCEL_CAST) {
         return &CMSG_CANCEL_CAST;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_CANCEL_CAST& ClientOpcode::get<CMSG_CANCEL_CAST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CANCEL_CAST& ClientOpcode::get<CMSG_CANCEL_CAST>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_CANCEL_CAST>();
     if (p) {
         return *p;
@@ -24468,14 +24777,14 @@ vanilla::CMSG_CANCEL_CAST& ClientOpcode::get<CMSG_CANCEL_CAST>() {
 }
 
 template <>
-vanilla::CMSG_CANCEL_AURA* ClientOpcode::get_if<CMSG_CANCEL_AURA>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CANCEL_AURA* ClientOpcode::get_if<CMSG_CANCEL_AURA>() {
     if (opcode == Opcode::CMSG_CANCEL_AURA) {
         return &CMSG_CANCEL_AURA;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_CANCEL_AURA& ClientOpcode::get<CMSG_CANCEL_AURA>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CANCEL_AURA& ClientOpcode::get<CMSG_CANCEL_AURA>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_CANCEL_AURA>();
     if (p) {
         return *p;
@@ -24484,14 +24793,14 @@ vanilla::CMSG_CANCEL_AURA& ClientOpcode::get<CMSG_CANCEL_AURA>() {
 }
 
 template <>
-vanilla::CMSG_CANCEL_CHANNELLING* ClientOpcode::get_if<CMSG_CANCEL_CHANNELLING>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CANCEL_CHANNELLING* ClientOpcode::get_if<CMSG_CANCEL_CHANNELLING>() {
     if (opcode == Opcode::CMSG_CANCEL_CHANNELLING) {
         return &CMSG_CANCEL_CHANNELLING;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_CANCEL_CHANNELLING& ClientOpcode::get<CMSG_CANCEL_CHANNELLING>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CANCEL_CHANNELLING& ClientOpcode::get<CMSG_CANCEL_CHANNELLING>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_CANCEL_CHANNELLING>();
     if (p) {
         return *p;
@@ -24500,14 +24809,14 @@ vanilla::CMSG_CANCEL_CHANNELLING& ClientOpcode::get<CMSG_CANCEL_CHANNELLING>() {
 }
 
 template <>
-vanilla::CMSG_SET_SELECTION* ClientOpcode::get_if<CMSG_SET_SELECTION>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_SET_SELECTION* ClientOpcode::get_if<CMSG_SET_SELECTION>() {
     if (opcode == Opcode::CMSG_SET_SELECTION) {
         return &CMSG_SET_SELECTION;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_SET_SELECTION& ClientOpcode::get<CMSG_SET_SELECTION>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_SET_SELECTION& ClientOpcode::get<CMSG_SET_SELECTION>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_SET_SELECTION>();
     if (p) {
         return *p;
@@ -24516,14 +24825,14 @@ vanilla::CMSG_SET_SELECTION& ClientOpcode::get<CMSG_SET_SELECTION>() {
 }
 
 template <>
-vanilla::CMSG_SET_TARGET_OBSOLETE* ClientOpcode::get_if<CMSG_SET_TARGET_OBSOLETE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_SET_TARGET_OBSOLETE* ClientOpcode::get_if<CMSG_SET_TARGET_OBSOLETE>() {
     if (opcode == Opcode::CMSG_SET_TARGET_OBSOLETE) {
         return &CMSG_SET_TARGET_OBSOLETE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_SET_TARGET_OBSOLETE& ClientOpcode::get<CMSG_SET_TARGET_OBSOLETE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_SET_TARGET_OBSOLETE& ClientOpcode::get<CMSG_SET_TARGET_OBSOLETE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_SET_TARGET_OBSOLETE>();
     if (p) {
         return *p;
@@ -24532,14 +24841,14 @@ vanilla::CMSG_SET_TARGET_OBSOLETE& ClientOpcode::get<CMSG_SET_TARGET_OBSOLETE>()
 }
 
 template <>
-vanilla::CMSG_ATTACKSWING* ClientOpcode::get_if<CMSG_ATTACKSWING>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_ATTACKSWING* ClientOpcode::get_if<CMSG_ATTACKSWING>() {
     if (opcode == Opcode::CMSG_ATTACKSWING) {
         return &CMSG_ATTACKSWING;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_ATTACKSWING& ClientOpcode::get<CMSG_ATTACKSWING>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_ATTACKSWING& ClientOpcode::get<CMSG_ATTACKSWING>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_ATTACKSWING>();
     if (p) {
         return *p;
@@ -24548,14 +24857,14 @@ vanilla::CMSG_ATTACKSWING& ClientOpcode::get<CMSG_ATTACKSWING>() {
 }
 
 template <>
-vanilla::CMSG_ATTACKSTOP* ClientOpcode::get_if<CMSG_ATTACKSTOP>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_ATTACKSTOP* ClientOpcode::get_if<CMSG_ATTACKSTOP>() {
     if (opcode == Opcode::CMSG_ATTACKSTOP) {
         return &CMSG_ATTACKSTOP;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_ATTACKSTOP& ClientOpcode::get<CMSG_ATTACKSTOP>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_ATTACKSTOP& ClientOpcode::get<CMSG_ATTACKSTOP>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_ATTACKSTOP>();
     if (p) {
         return *p;
@@ -24564,14 +24873,14 @@ vanilla::CMSG_ATTACKSTOP& ClientOpcode::get<CMSG_ATTACKSTOP>() {
 }
 
 template <>
-vanilla::CMSG_REPOP_REQUEST* ClientOpcode::get_if<CMSG_REPOP_REQUEST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_REPOP_REQUEST* ClientOpcode::get_if<CMSG_REPOP_REQUEST>() {
     if (opcode == Opcode::CMSG_REPOP_REQUEST) {
         return &CMSG_REPOP_REQUEST;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_REPOP_REQUEST& ClientOpcode::get<CMSG_REPOP_REQUEST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_REPOP_REQUEST& ClientOpcode::get<CMSG_REPOP_REQUEST>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_REPOP_REQUEST>();
     if (p) {
         return *p;
@@ -24580,14 +24889,14 @@ vanilla::CMSG_REPOP_REQUEST& ClientOpcode::get<CMSG_REPOP_REQUEST>() {
 }
 
 template <>
-vanilla::CMSG_RESURRECT_RESPONSE* ClientOpcode::get_if<CMSG_RESURRECT_RESPONSE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_RESURRECT_RESPONSE* ClientOpcode::get_if<CMSG_RESURRECT_RESPONSE>() {
     if (opcode == Opcode::CMSG_RESURRECT_RESPONSE) {
         return &CMSG_RESURRECT_RESPONSE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_RESURRECT_RESPONSE& ClientOpcode::get<CMSG_RESURRECT_RESPONSE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_RESURRECT_RESPONSE& ClientOpcode::get<CMSG_RESURRECT_RESPONSE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_RESURRECT_RESPONSE>();
     if (p) {
         return *p;
@@ -24596,14 +24905,14 @@ vanilla::CMSG_RESURRECT_RESPONSE& ClientOpcode::get<CMSG_RESURRECT_RESPONSE>() {
 }
 
 template <>
-vanilla::CMSG_LOOT* ClientOpcode::get_if<CMSG_LOOT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_LOOT* ClientOpcode::get_if<CMSG_LOOT>() {
     if (opcode == Opcode::CMSG_LOOT) {
         return &CMSG_LOOT;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_LOOT& ClientOpcode::get<CMSG_LOOT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_LOOT& ClientOpcode::get<CMSG_LOOT>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_LOOT>();
     if (p) {
         return *p;
@@ -24612,14 +24921,14 @@ vanilla::CMSG_LOOT& ClientOpcode::get<CMSG_LOOT>() {
 }
 
 template <>
-vanilla::CMSG_LOOT_MONEY* ClientOpcode::get_if<CMSG_LOOT_MONEY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_LOOT_MONEY* ClientOpcode::get_if<CMSG_LOOT_MONEY>() {
     if (opcode == Opcode::CMSG_LOOT_MONEY) {
         return &CMSG_LOOT_MONEY;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_LOOT_MONEY& ClientOpcode::get<CMSG_LOOT_MONEY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_LOOT_MONEY& ClientOpcode::get<CMSG_LOOT_MONEY>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_LOOT_MONEY>();
     if (p) {
         return *p;
@@ -24628,14 +24937,14 @@ vanilla::CMSG_LOOT_MONEY& ClientOpcode::get<CMSG_LOOT_MONEY>() {
 }
 
 template <>
-vanilla::CMSG_LOOT_RELEASE* ClientOpcode::get_if<CMSG_LOOT_RELEASE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_LOOT_RELEASE* ClientOpcode::get_if<CMSG_LOOT_RELEASE>() {
     if (opcode == Opcode::CMSG_LOOT_RELEASE) {
         return &CMSG_LOOT_RELEASE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_LOOT_RELEASE& ClientOpcode::get<CMSG_LOOT_RELEASE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_LOOT_RELEASE& ClientOpcode::get<CMSG_LOOT_RELEASE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_LOOT_RELEASE>();
     if (p) {
         return *p;
@@ -24644,14 +24953,14 @@ vanilla::CMSG_LOOT_RELEASE& ClientOpcode::get<CMSG_LOOT_RELEASE>() {
 }
 
 template <>
-vanilla::CMSG_DUEL_ACCEPTED* ClientOpcode::get_if<CMSG_DUEL_ACCEPTED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_DUEL_ACCEPTED* ClientOpcode::get_if<CMSG_DUEL_ACCEPTED>() {
     if (opcode == Opcode::CMSG_DUEL_ACCEPTED) {
         return &CMSG_DUEL_ACCEPTED;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_DUEL_ACCEPTED& ClientOpcode::get<CMSG_DUEL_ACCEPTED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_DUEL_ACCEPTED& ClientOpcode::get<CMSG_DUEL_ACCEPTED>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_DUEL_ACCEPTED>();
     if (p) {
         return *p;
@@ -24660,14 +24969,14 @@ vanilla::CMSG_DUEL_ACCEPTED& ClientOpcode::get<CMSG_DUEL_ACCEPTED>() {
 }
 
 template <>
-vanilla::CMSG_DUEL_CANCELLED* ClientOpcode::get_if<CMSG_DUEL_CANCELLED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_DUEL_CANCELLED* ClientOpcode::get_if<CMSG_DUEL_CANCELLED>() {
     if (opcode == Opcode::CMSG_DUEL_CANCELLED) {
         return &CMSG_DUEL_CANCELLED;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_DUEL_CANCELLED& ClientOpcode::get<CMSG_DUEL_CANCELLED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_DUEL_CANCELLED& ClientOpcode::get<CMSG_DUEL_CANCELLED>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_DUEL_CANCELLED>();
     if (p) {
         return *p;
@@ -24676,14 +24985,14 @@ vanilla::CMSG_DUEL_CANCELLED& ClientOpcode::get<CMSG_DUEL_CANCELLED>() {
 }
 
 template <>
-vanilla::CMSG_MOUNTSPECIAL_ANIM* ClientOpcode::get_if<CMSG_MOUNTSPECIAL_ANIM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_MOUNTSPECIAL_ANIM* ClientOpcode::get_if<CMSG_MOUNTSPECIAL_ANIM>() {
     if (opcode == Opcode::CMSG_MOUNTSPECIAL_ANIM) {
         return &CMSG_MOUNTSPECIAL_ANIM;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_MOUNTSPECIAL_ANIM& ClientOpcode::get<CMSG_MOUNTSPECIAL_ANIM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_MOUNTSPECIAL_ANIM& ClientOpcode::get<CMSG_MOUNTSPECIAL_ANIM>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_MOUNTSPECIAL_ANIM>();
     if (p) {
         return *p;
@@ -24692,14 +25001,14 @@ vanilla::CMSG_MOUNTSPECIAL_ANIM& ClientOpcode::get<CMSG_MOUNTSPECIAL_ANIM>() {
 }
 
 template <>
-vanilla::CMSG_PET_SET_ACTION* ClientOpcode::get_if<CMSG_PET_SET_ACTION>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PET_SET_ACTION* ClientOpcode::get_if<CMSG_PET_SET_ACTION>() {
     if (opcode == Opcode::CMSG_PET_SET_ACTION) {
         return &CMSG_PET_SET_ACTION;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_PET_SET_ACTION& ClientOpcode::get<CMSG_PET_SET_ACTION>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PET_SET_ACTION& ClientOpcode::get<CMSG_PET_SET_ACTION>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_PET_SET_ACTION>();
     if (p) {
         return *p;
@@ -24708,14 +25017,14 @@ vanilla::CMSG_PET_SET_ACTION& ClientOpcode::get<CMSG_PET_SET_ACTION>() {
 }
 
 template <>
-vanilla::CMSG_PET_ACTION* ClientOpcode::get_if<CMSG_PET_ACTION>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PET_ACTION* ClientOpcode::get_if<CMSG_PET_ACTION>() {
     if (opcode == Opcode::CMSG_PET_ACTION) {
         return &CMSG_PET_ACTION;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_PET_ACTION& ClientOpcode::get<CMSG_PET_ACTION>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PET_ACTION& ClientOpcode::get<CMSG_PET_ACTION>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_PET_ACTION>();
     if (p) {
         return *p;
@@ -24724,14 +25033,14 @@ vanilla::CMSG_PET_ACTION& ClientOpcode::get<CMSG_PET_ACTION>() {
 }
 
 template <>
-vanilla::CMSG_PET_ABANDON* ClientOpcode::get_if<CMSG_PET_ABANDON>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PET_ABANDON* ClientOpcode::get_if<CMSG_PET_ABANDON>() {
     if (opcode == Opcode::CMSG_PET_ABANDON) {
         return &CMSG_PET_ABANDON;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_PET_ABANDON& ClientOpcode::get<CMSG_PET_ABANDON>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PET_ABANDON& ClientOpcode::get<CMSG_PET_ABANDON>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_PET_ABANDON>();
     if (p) {
         return *p;
@@ -24740,14 +25049,14 @@ vanilla::CMSG_PET_ABANDON& ClientOpcode::get<CMSG_PET_ABANDON>() {
 }
 
 template <>
-vanilla::CMSG_PET_RENAME* ClientOpcode::get_if<CMSG_PET_RENAME>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PET_RENAME* ClientOpcode::get_if<CMSG_PET_RENAME>() {
     if (opcode == Opcode::CMSG_PET_RENAME) {
         return &CMSG_PET_RENAME;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_PET_RENAME& ClientOpcode::get<CMSG_PET_RENAME>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PET_RENAME& ClientOpcode::get<CMSG_PET_RENAME>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_PET_RENAME>();
     if (p) {
         return *p;
@@ -24756,14 +25065,14 @@ vanilla::CMSG_PET_RENAME& ClientOpcode::get<CMSG_PET_RENAME>() {
 }
 
 template <>
-vanilla::CMSG_GOSSIP_HELLO* ClientOpcode::get_if<CMSG_GOSSIP_HELLO>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GOSSIP_HELLO* ClientOpcode::get_if<CMSG_GOSSIP_HELLO>() {
     if (opcode == Opcode::CMSG_GOSSIP_HELLO) {
         return &CMSG_GOSSIP_HELLO;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GOSSIP_HELLO& ClientOpcode::get<CMSG_GOSSIP_HELLO>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GOSSIP_HELLO& ClientOpcode::get<CMSG_GOSSIP_HELLO>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GOSSIP_HELLO>();
     if (p) {
         return *p;
@@ -24772,14 +25081,14 @@ vanilla::CMSG_GOSSIP_HELLO& ClientOpcode::get<CMSG_GOSSIP_HELLO>() {
 }
 
 template <>
-vanilla::CMSG_GOSSIP_SELECT_OPTION* ClientOpcode::get_if<CMSG_GOSSIP_SELECT_OPTION>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GOSSIP_SELECT_OPTION* ClientOpcode::get_if<CMSG_GOSSIP_SELECT_OPTION>() {
     if (opcode == Opcode::CMSG_GOSSIP_SELECT_OPTION) {
         return &CMSG_GOSSIP_SELECT_OPTION;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GOSSIP_SELECT_OPTION& ClientOpcode::get<CMSG_GOSSIP_SELECT_OPTION>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GOSSIP_SELECT_OPTION& ClientOpcode::get<CMSG_GOSSIP_SELECT_OPTION>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GOSSIP_SELECT_OPTION>();
     if (p) {
         return *p;
@@ -24788,14 +25097,14 @@ vanilla::CMSG_GOSSIP_SELECT_OPTION& ClientOpcode::get<CMSG_GOSSIP_SELECT_OPTION>
 }
 
 template <>
-vanilla::CMSG_NPC_TEXT_QUERY* ClientOpcode::get_if<CMSG_NPC_TEXT_QUERY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_NPC_TEXT_QUERY* ClientOpcode::get_if<CMSG_NPC_TEXT_QUERY>() {
     if (opcode == Opcode::CMSG_NPC_TEXT_QUERY) {
         return &CMSG_NPC_TEXT_QUERY;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_NPC_TEXT_QUERY& ClientOpcode::get<CMSG_NPC_TEXT_QUERY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_NPC_TEXT_QUERY& ClientOpcode::get<CMSG_NPC_TEXT_QUERY>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_NPC_TEXT_QUERY>();
     if (p) {
         return *p;
@@ -24804,14 +25113,14 @@ vanilla::CMSG_NPC_TEXT_QUERY& ClientOpcode::get<CMSG_NPC_TEXT_QUERY>() {
 }
 
 template <>
-vanilla::CMSG_QUESTGIVER_STATUS_QUERY* ClientOpcode::get_if<CMSG_QUESTGIVER_STATUS_QUERY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_QUESTGIVER_STATUS_QUERY* ClientOpcode::get_if<CMSG_QUESTGIVER_STATUS_QUERY>() {
     if (opcode == Opcode::CMSG_QUESTGIVER_STATUS_QUERY) {
         return &CMSG_QUESTGIVER_STATUS_QUERY;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_QUESTGIVER_STATUS_QUERY& ClientOpcode::get<CMSG_QUESTGIVER_STATUS_QUERY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_QUESTGIVER_STATUS_QUERY& ClientOpcode::get<CMSG_QUESTGIVER_STATUS_QUERY>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_QUESTGIVER_STATUS_QUERY>();
     if (p) {
         return *p;
@@ -24820,14 +25129,14 @@ vanilla::CMSG_QUESTGIVER_STATUS_QUERY& ClientOpcode::get<CMSG_QUESTGIVER_STATUS_
 }
 
 template <>
-vanilla::CMSG_QUESTGIVER_HELLO* ClientOpcode::get_if<CMSG_QUESTGIVER_HELLO>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_QUESTGIVER_HELLO* ClientOpcode::get_if<CMSG_QUESTGIVER_HELLO>() {
     if (opcode == Opcode::CMSG_QUESTGIVER_HELLO) {
         return &CMSG_QUESTGIVER_HELLO;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_QUESTGIVER_HELLO& ClientOpcode::get<CMSG_QUESTGIVER_HELLO>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_QUESTGIVER_HELLO& ClientOpcode::get<CMSG_QUESTGIVER_HELLO>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_QUESTGIVER_HELLO>();
     if (p) {
         return *p;
@@ -24836,14 +25145,14 @@ vanilla::CMSG_QUESTGIVER_HELLO& ClientOpcode::get<CMSG_QUESTGIVER_HELLO>() {
 }
 
 template <>
-vanilla::CMSG_QUESTGIVER_QUERY_QUEST* ClientOpcode::get_if<CMSG_QUESTGIVER_QUERY_QUEST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_QUESTGIVER_QUERY_QUEST* ClientOpcode::get_if<CMSG_QUESTGIVER_QUERY_QUEST>() {
     if (opcode == Opcode::CMSG_QUESTGIVER_QUERY_QUEST) {
         return &CMSG_QUESTGIVER_QUERY_QUEST;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_QUESTGIVER_QUERY_QUEST& ClientOpcode::get<CMSG_QUESTGIVER_QUERY_QUEST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_QUESTGIVER_QUERY_QUEST& ClientOpcode::get<CMSG_QUESTGIVER_QUERY_QUEST>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_QUESTGIVER_QUERY_QUEST>();
     if (p) {
         return *p;
@@ -24852,14 +25161,14 @@ vanilla::CMSG_QUESTGIVER_QUERY_QUEST& ClientOpcode::get<CMSG_QUESTGIVER_QUERY_QU
 }
 
 template <>
-vanilla::CMSG_QUESTGIVER_QUEST_AUTOLAUNCH* ClientOpcode::get_if<CMSG_QUESTGIVER_QUEST_AUTOLAUNCH>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_QUESTGIVER_QUEST_AUTOLAUNCH* ClientOpcode::get_if<CMSG_QUESTGIVER_QUEST_AUTOLAUNCH>() {
     if (opcode == Opcode::CMSG_QUESTGIVER_QUEST_AUTOLAUNCH) {
         return &CMSG_QUESTGIVER_QUEST_AUTOLAUNCH;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_QUESTGIVER_QUEST_AUTOLAUNCH& ClientOpcode::get<CMSG_QUESTGIVER_QUEST_AUTOLAUNCH>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_QUESTGIVER_QUEST_AUTOLAUNCH& ClientOpcode::get<CMSG_QUESTGIVER_QUEST_AUTOLAUNCH>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_QUESTGIVER_QUEST_AUTOLAUNCH>();
     if (p) {
         return *p;
@@ -24868,14 +25177,14 @@ vanilla::CMSG_QUESTGIVER_QUEST_AUTOLAUNCH& ClientOpcode::get<CMSG_QUESTGIVER_QUE
 }
 
 template <>
-vanilla::CMSG_QUESTGIVER_ACCEPT_QUEST* ClientOpcode::get_if<CMSG_QUESTGIVER_ACCEPT_QUEST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_QUESTGIVER_ACCEPT_QUEST* ClientOpcode::get_if<CMSG_QUESTGIVER_ACCEPT_QUEST>() {
     if (opcode == Opcode::CMSG_QUESTGIVER_ACCEPT_QUEST) {
         return &CMSG_QUESTGIVER_ACCEPT_QUEST;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_QUESTGIVER_ACCEPT_QUEST& ClientOpcode::get<CMSG_QUESTGIVER_ACCEPT_QUEST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_QUESTGIVER_ACCEPT_QUEST& ClientOpcode::get<CMSG_QUESTGIVER_ACCEPT_QUEST>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_QUESTGIVER_ACCEPT_QUEST>();
     if (p) {
         return *p;
@@ -24884,14 +25193,14 @@ vanilla::CMSG_QUESTGIVER_ACCEPT_QUEST& ClientOpcode::get<CMSG_QUESTGIVER_ACCEPT_
 }
 
 template <>
-vanilla::CMSG_QUESTGIVER_COMPLETE_QUEST* ClientOpcode::get_if<CMSG_QUESTGIVER_COMPLETE_QUEST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_QUESTGIVER_COMPLETE_QUEST* ClientOpcode::get_if<CMSG_QUESTGIVER_COMPLETE_QUEST>() {
     if (opcode == Opcode::CMSG_QUESTGIVER_COMPLETE_QUEST) {
         return &CMSG_QUESTGIVER_COMPLETE_QUEST;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_QUESTGIVER_COMPLETE_QUEST& ClientOpcode::get<CMSG_QUESTGIVER_COMPLETE_QUEST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_QUESTGIVER_COMPLETE_QUEST& ClientOpcode::get<CMSG_QUESTGIVER_COMPLETE_QUEST>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_QUESTGIVER_COMPLETE_QUEST>();
     if (p) {
         return *p;
@@ -24900,14 +25209,14 @@ vanilla::CMSG_QUESTGIVER_COMPLETE_QUEST& ClientOpcode::get<CMSG_QUESTGIVER_COMPL
 }
 
 template <>
-vanilla::CMSG_QUESTGIVER_REQUEST_REWARD* ClientOpcode::get_if<CMSG_QUESTGIVER_REQUEST_REWARD>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_QUESTGIVER_REQUEST_REWARD* ClientOpcode::get_if<CMSG_QUESTGIVER_REQUEST_REWARD>() {
     if (opcode == Opcode::CMSG_QUESTGIVER_REQUEST_REWARD) {
         return &CMSG_QUESTGIVER_REQUEST_REWARD;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_QUESTGIVER_REQUEST_REWARD& ClientOpcode::get<CMSG_QUESTGIVER_REQUEST_REWARD>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_QUESTGIVER_REQUEST_REWARD& ClientOpcode::get<CMSG_QUESTGIVER_REQUEST_REWARD>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_QUESTGIVER_REQUEST_REWARD>();
     if (p) {
         return *p;
@@ -24916,14 +25225,14 @@ vanilla::CMSG_QUESTGIVER_REQUEST_REWARD& ClientOpcode::get<CMSG_QUESTGIVER_REQUE
 }
 
 template <>
-vanilla::CMSG_QUESTGIVER_CHOOSE_REWARD* ClientOpcode::get_if<CMSG_QUESTGIVER_CHOOSE_REWARD>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_QUESTGIVER_CHOOSE_REWARD* ClientOpcode::get_if<CMSG_QUESTGIVER_CHOOSE_REWARD>() {
     if (opcode == Opcode::CMSG_QUESTGIVER_CHOOSE_REWARD) {
         return &CMSG_QUESTGIVER_CHOOSE_REWARD;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_QUESTGIVER_CHOOSE_REWARD& ClientOpcode::get<CMSG_QUESTGIVER_CHOOSE_REWARD>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_QUESTGIVER_CHOOSE_REWARD& ClientOpcode::get<CMSG_QUESTGIVER_CHOOSE_REWARD>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_QUESTGIVER_CHOOSE_REWARD>();
     if (p) {
         return *p;
@@ -24932,14 +25241,14 @@ vanilla::CMSG_QUESTGIVER_CHOOSE_REWARD& ClientOpcode::get<CMSG_QUESTGIVER_CHOOSE
 }
 
 template <>
-vanilla::CMSG_QUESTGIVER_CANCEL* ClientOpcode::get_if<CMSG_QUESTGIVER_CANCEL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_QUESTGIVER_CANCEL* ClientOpcode::get_if<CMSG_QUESTGIVER_CANCEL>() {
     if (opcode == Opcode::CMSG_QUESTGIVER_CANCEL) {
         return &CMSG_QUESTGIVER_CANCEL;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_QUESTGIVER_CANCEL& ClientOpcode::get<CMSG_QUESTGIVER_CANCEL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_QUESTGIVER_CANCEL& ClientOpcode::get<CMSG_QUESTGIVER_CANCEL>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_QUESTGIVER_CANCEL>();
     if (p) {
         return *p;
@@ -24948,14 +25257,14 @@ vanilla::CMSG_QUESTGIVER_CANCEL& ClientOpcode::get<CMSG_QUESTGIVER_CANCEL>() {
 }
 
 template <>
-vanilla::CMSG_QUESTLOG_SWAP_QUEST* ClientOpcode::get_if<CMSG_QUESTLOG_SWAP_QUEST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_QUESTLOG_SWAP_QUEST* ClientOpcode::get_if<CMSG_QUESTLOG_SWAP_QUEST>() {
     if (opcode == Opcode::CMSG_QUESTLOG_SWAP_QUEST) {
         return &CMSG_QUESTLOG_SWAP_QUEST;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_QUESTLOG_SWAP_QUEST& ClientOpcode::get<CMSG_QUESTLOG_SWAP_QUEST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_QUESTLOG_SWAP_QUEST& ClientOpcode::get<CMSG_QUESTLOG_SWAP_QUEST>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_QUESTLOG_SWAP_QUEST>();
     if (p) {
         return *p;
@@ -24964,14 +25273,14 @@ vanilla::CMSG_QUESTLOG_SWAP_QUEST& ClientOpcode::get<CMSG_QUESTLOG_SWAP_QUEST>()
 }
 
 template <>
-vanilla::CMSG_QUESTLOG_REMOVE_QUEST* ClientOpcode::get_if<CMSG_QUESTLOG_REMOVE_QUEST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_QUESTLOG_REMOVE_QUEST* ClientOpcode::get_if<CMSG_QUESTLOG_REMOVE_QUEST>() {
     if (opcode == Opcode::CMSG_QUESTLOG_REMOVE_QUEST) {
         return &CMSG_QUESTLOG_REMOVE_QUEST;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_QUESTLOG_REMOVE_QUEST& ClientOpcode::get<CMSG_QUESTLOG_REMOVE_QUEST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_QUESTLOG_REMOVE_QUEST& ClientOpcode::get<CMSG_QUESTLOG_REMOVE_QUEST>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_QUESTLOG_REMOVE_QUEST>();
     if (p) {
         return *p;
@@ -24980,14 +25289,14 @@ vanilla::CMSG_QUESTLOG_REMOVE_QUEST& ClientOpcode::get<CMSG_QUESTLOG_REMOVE_QUES
 }
 
 template <>
-vanilla::CMSG_QUEST_CONFIRM_ACCEPT* ClientOpcode::get_if<CMSG_QUEST_CONFIRM_ACCEPT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_QUEST_CONFIRM_ACCEPT* ClientOpcode::get_if<CMSG_QUEST_CONFIRM_ACCEPT>() {
     if (opcode == Opcode::CMSG_QUEST_CONFIRM_ACCEPT) {
         return &CMSG_QUEST_CONFIRM_ACCEPT;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_QUEST_CONFIRM_ACCEPT& ClientOpcode::get<CMSG_QUEST_CONFIRM_ACCEPT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_QUEST_CONFIRM_ACCEPT& ClientOpcode::get<CMSG_QUEST_CONFIRM_ACCEPT>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_QUEST_CONFIRM_ACCEPT>();
     if (p) {
         return *p;
@@ -24996,14 +25305,14 @@ vanilla::CMSG_QUEST_CONFIRM_ACCEPT& ClientOpcode::get<CMSG_QUEST_CONFIRM_ACCEPT>
 }
 
 template <>
-vanilla::CMSG_PUSHQUESTTOPARTY* ClientOpcode::get_if<CMSG_PUSHQUESTTOPARTY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PUSHQUESTTOPARTY* ClientOpcode::get_if<CMSG_PUSHQUESTTOPARTY>() {
     if (opcode == Opcode::CMSG_PUSHQUESTTOPARTY) {
         return &CMSG_PUSHQUESTTOPARTY;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_PUSHQUESTTOPARTY& ClientOpcode::get<CMSG_PUSHQUESTTOPARTY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PUSHQUESTTOPARTY& ClientOpcode::get<CMSG_PUSHQUESTTOPARTY>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_PUSHQUESTTOPARTY>();
     if (p) {
         return *p;
@@ -25012,14 +25321,14 @@ vanilla::CMSG_PUSHQUESTTOPARTY& ClientOpcode::get<CMSG_PUSHQUESTTOPARTY>() {
 }
 
 template <>
-vanilla::CMSG_LIST_INVENTORY* ClientOpcode::get_if<CMSG_LIST_INVENTORY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_LIST_INVENTORY* ClientOpcode::get_if<CMSG_LIST_INVENTORY>() {
     if (opcode == Opcode::CMSG_LIST_INVENTORY) {
         return &CMSG_LIST_INVENTORY;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_LIST_INVENTORY& ClientOpcode::get<CMSG_LIST_INVENTORY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_LIST_INVENTORY& ClientOpcode::get<CMSG_LIST_INVENTORY>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_LIST_INVENTORY>();
     if (p) {
         return *p;
@@ -25028,14 +25337,14 @@ vanilla::CMSG_LIST_INVENTORY& ClientOpcode::get<CMSG_LIST_INVENTORY>() {
 }
 
 template <>
-vanilla::CMSG_SELL_ITEM* ClientOpcode::get_if<CMSG_SELL_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_SELL_ITEM* ClientOpcode::get_if<CMSG_SELL_ITEM>() {
     if (opcode == Opcode::CMSG_SELL_ITEM) {
         return &CMSG_SELL_ITEM;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_SELL_ITEM& ClientOpcode::get<CMSG_SELL_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_SELL_ITEM& ClientOpcode::get<CMSG_SELL_ITEM>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_SELL_ITEM>();
     if (p) {
         return *p;
@@ -25044,14 +25353,14 @@ vanilla::CMSG_SELL_ITEM& ClientOpcode::get<CMSG_SELL_ITEM>() {
 }
 
 template <>
-vanilla::CMSG_BUY_ITEM* ClientOpcode::get_if<CMSG_BUY_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_BUY_ITEM* ClientOpcode::get_if<CMSG_BUY_ITEM>() {
     if (opcode == Opcode::CMSG_BUY_ITEM) {
         return &CMSG_BUY_ITEM;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_BUY_ITEM& ClientOpcode::get<CMSG_BUY_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_BUY_ITEM& ClientOpcode::get<CMSG_BUY_ITEM>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_BUY_ITEM>();
     if (p) {
         return *p;
@@ -25060,14 +25369,14 @@ vanilla::CMSG_BUY_ITEM& ClientOpcode::get<CMSG_BUY_ITEM>() {
 }
 
 template <>
-vanilla::CMSG_BUY_ITEM_IN_SLOT* ClientOpcode::get_if<CMSG_BUY_ITEM_IN_SLOT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_BUY_ITEM_IN_SLOT* ClientOpcode::get_if<CMSG_BUY_ITEM_IN_SLOT>() {
     if (opcode == Opcode::CMSG_BUY_ITEM_IN_SLOT) {
         return &CMSG_BUY_ITEM_IN_SLOT;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_BUY_ITEM_IN_SLOT& ClientOpcode::get<CMSG_BUY_ITEM_IN_SLOT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_BUY_ITEM_IN_SLOT& ClientOpcode::get<CMSG_BUY_ITEM_IN_SLOT>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_BUY_ITEM_IN_SLOT>();
     if (p) {
         return *p;
@@ -25076,14 +25385,14 @@ vanilla::CMSG_BUY_ITEM_IN_SLOT& ClientOpcode::get<CMSG_BUY_ITEM_IN_SLOT>() {
 }
 
 template <>
-vanilla::CMSG_TAXINODE_STATUS_QUERY* ClientOpcode::get_if<CMSG_TAXINODE_STATUS_QUERY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_TAXINODE_STATUS_QUERY* ClientOpcode::get_if<CMSG_TAXINODE_STATUS_QUERY>() {
     if (opcode == Opcode::CMSG_TAXINODE_STATUS_QUERY) {
         return &CMSG_TAXINODE_STATUS_QUERY;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_TAXINODE_STATUS_QUERY& ClientOpcode::get<CMSG_TAXINODE_STATUS_QUERY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_TAXINODE_STATUS_QUERY& ClientOpcode::get<CMSG_TAXINODE_STATUS_QUERY>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_TAXINODE_STATUS_QUERY>();
     if (p) {
         return *p;
@@ -25092,14 +25401,14 @@ vanilla::CMSG_TAXINODE_STATUS_QUERY& ClientOpcode::get<CMSG_TAXINODE_STATUS_QUER
 }
 
 template <>
-vanilla::CMSG_TAXIQUERYAVAILABLENODES* ClientOpcode::get_if<CMSG_TAXIQUERYAVAILABLENODES>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_TAXIQUERYAVAILABLENODES* ClientOpcode::get_if<CMSG_TAXIQUERYAVAILABLENODES>() {
     if (opcode == Opcode::CMSG_TAXIQUERYAVAILABLENODES) {
         return &CMSG_TAXIQUERYAVAILABLENODES;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_TAXIQUERYAVAILABLENODES& ClientOpcode::get<CMSG_TAXIQUERYAVAILABLENODES>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_TAXIQUERYAVAILABLENODES& ClientOpcode::get<CMSG_TAXIQUERYAVAILABLENODES>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_TAXIQUERYAVAILABLENODES>();
     if (p) {
         return *p;
@@ -25108,14 +25417,14 @@ vanilla::CMSG_TAXIQUERYAVAILABLENODES& ClientOpcode::get<CMSG_TAXIQUERYAVAILABLE
 }
 
 template <>
-vanilla::CMSG_ACTIVATETAXI* ClientOpcode::get_if<CMSG_ACTIVATETAXI>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_ACTIVATETAXI* ClientOpcode::get_if<CMSG_ACTIVATETAXI>() {
     if (opcode == Opcode::CMSG_ACTIVATETAXI) {
         return &CMSG_ACTIVATETAXI;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_ACTIVATETAXI& ClientOpcode::get<CMSG_ACTIVATETAXI>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_ACTIVATETAXI& ClientOpcode::get<CMSG_ACTIVATETAXI>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_ACTIVATETAXI>();
     if (p) {
         return *p;
@@ -25124,14 +25433,14 @@ vanilla::CMSG_ACTIVATETAXI& ClientOpcode::get<CMSG_ACTIVATETAXI>() {
 }
 
 template <>
-vanilla::CMSG_TRAINER_LIST* ClientOpcode::get_if<CMSG_TRAINER_LIST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_TRAINER_LIST* ClientOpcode::get_if<CMSG_TRAINER_LIST>() {
     if (opcode == Opcode::CMSG_TRAINER_LIST) {
         return &CMSG_TRAINER_LIST;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_TRAINER_LIST& ClientOpcode::get<CMSG_TRAINER_LIST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_TRAINER_LIST& ClientOpcode::get<CMSG_TRAINER_LIST>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_TRAINER_LIST>();
     if (p) {
         return *p;
@@ -25140,14 +25449,14 @@ vanilla::CMSG_TRAINER_LIST& ClientOpcode::get<CMSG_TRAINER_LIST>() {
 }
 
 template <>
-vanilla::CMSG_TRAINER_BUY_SPELL* ClientOpcode::get_if<CMSG_TRAINER_BUY_SPELL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_TRAINER_BUY_SPELL* ClientOpcode::get_if<CMSG_TRAINER_BUY_SPELL>() {
     if (opcode == Opcode::CMSG_TRAINER_BUY_SPELL) {
         return &CMSG_TRAINER_BUY_SPELL;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_TRAINER_BUY_SPELL& ClientOpcode::get<CMSG_TRAINER_BUY_SPELL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_TRAINER_BUY_SPELL& ClientOpcode::get<CMSG_TRAINER_BUY_SPELL>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_TRAINER_BUY_SPELL>();
     if (p) {
         return *p;
@@ -25156,14 +25465,14 @@ vanilla::CMSG_TRAINER_BUY_SPELL& ClientOpcode::get<CMSG_TRAINER_BUY_SPELL>() {
 }
 
 template <>
-vanilla::CMSG_BINDER_ACTIVATE* ClientOpcode::get_if<CMSG_BINDER_ACTIVATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_BINDER_ACTIVATE* ClientOpcode::get_if<CMSG_BINDER_ACTIVATE>() {
     if (opcode == Opcode::CMSG_BINDER_ACTIVATE) {
         return &CMSG_BINDER_ACTIVATE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_BINDER_ACTIVATE& ClientOpcode::get<CMSG_BINDER_ACTIVATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_BINDER_ACTIVATE& ClientOpcode::get<CMSG_BINDER_ACTIVATE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_BINDER_ACTIVATE>();
     if (p) {
         return *p;
@@ -25172,14 +25481,14 @@ vanilla::CMSG_BINDER_ACTIVATE& ClientOpcode::get<CMSG_BINDER_ACTIVATE>() {
 }
 
 template <>
-vanilla::CMSG_BANKER_ACTIVATE* ClientOpcode::get_if<CMSG_BANKER_ACTIVATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_BANKER_ACTIVATE* ClientOpcode::get_if<CMSG_BANKER_ACTIVATE>() {
     if (opcode == Opcode::CMSG_BANKER_ACTIVATE) {
         return &CMSG_BANKER_ACTIVATE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_BANKER_ACTIVATE& ClientOpcode::get<CMSG_BANKER_ACTIVATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_BANKER_ACTIVATE& ClientOpcode::get<CMSG_BANKER_ACTIVATE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_BANKER_ACTIVATE>();
     if (p) {
         return *p;
@@ -25188,14 +25497,14 @@ vanilla::CMSG_BANKER_ACTIVATE& ClientOpcode::get<CMSG_BANKER_ACTIVATE>() {
 }
 
 template <>
-vanilla::CMSG_BUY_BANK_SLOT* ClientOpcode::get_if<CMSG_BUY_BANK_SLOT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_BUY_BANK_SLOT* ClientOpcode::get_if<CMSG_BUY_BANK_SLOT>() {
     if (opcode == Opcode::CMSG_BUY_BANK_SLOT) {
         return &CMSG_BUY_BANK_SLOT;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_BUY_BANK_SLOT& ClientOpcode::get<CMSG_BUY_BANK_SLOT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_BUY_BANK_SLOT& ClientOpcode::get<CMSG_BUY_BANK_SLOT>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_BUY_BANK_SLOT>();
     if (p) {
         return *p;
@@ -25204,14 +25513,14 @@ vanilla::CMSG_BUY_BANK_SLOT& ClientOpcode::get<CMSG_BUY_BANK_SLOT>() {
 }
 
 template <>
-vanilla::CMSG_PETITION_SHOWLIST* ClientOpcode::get_if<CMSG_PETITION_SHOWLIST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PETITION_SHOWLIST* ClientOpcode::get_if<CMSG_PETITION_SHOWLIST>() {
     if (opcode == Opcode::CMSG_PETITION_SHOWLIST) {
         return &CMSG_PETITION_SHOWLIST;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_PETITION_SHOWLIST& ClientOpcode::get<CMSG_PETITION_SHOWLIST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PETITION_SHOWLIST& ClientOpcode::get<CMSG_PETITION_SHOWLIST>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_PETITION_SHOWLIST>();
     if (p) {
         return *p;
@@ -25220,14 +25529,14 @@ vanilla::CMSG_PETITION_SHOWLIST& ClientOpcode::get<CMSG_PETITION_SHOWLIST>() {
 }
 
 template <>
-vanilla::CMSG_PETITION_BUY* ClientOpcode::get_if<CMSG_PETITION_BUY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PETITION_BUY* ClientOpcode::get_if<CMSG_PETITION_BUY>() {
     if (opcode == Opcode::CMSG_PETITION_BUY) {
         return &CMSG_PETITION_BUY;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_PETITION_BUY& ClientOpcode::get<CMSG_PETITION_BUY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PETITION_BUY& ClientOpcode::get<CMSG_PETITION_BUY>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_PETITION_BUY>();
     if (p) {
         return *p;
@@ -25236,14 +25545,14 @@ vanilla::CMSG_PETITION_BUY& ClientOpcode::get<CMSG_PETITION_BUY>() {
 }
 
 template <>
-vanilla::CMSG_PETITION_SHOW_SIGNATURES* ClientOpcode::get_if<CMSG_PETITION_SHOW_SIGNATURES>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PETITION_SHOW_SIGNATURES* ClientOpcode::get_if<CMSG_PETITION_SHOW_SIGNATURES>() {
     if (opcode == Opcode::CMSG_PETITION_SHOW_SIGNATURES) {
         return &CMSG_PETITION_SHOW_SIGNATURES;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_PETITION_SHOW_SIGNATURES& ClientOpcode::get<CMSG_PETITION_SHOW_SIGNATURES>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PETITION_SHOW_SIGNATURES& ClientOpcode::get<CMSG_PETITION_SHOW_SIGNATURES>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_PETITION_SHOW_SIGNATURES>();
     if (p) {
         return *p;
@@ -25252,14 +25561,14 @@ vanilla::CMSG_PETITION_SHOW_SIGNATURES& ClientOpcode::get<CMSG_PETITION_SHOW_SIG
 }
 
 template <>
-vanilla::CMSG_PETITION_SIGN* ClientOpcode::get_if<CMSG_PETITION_SIGN>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PETITION_SIGN* ClientOpcode::get_if<CMSG_PETITION_SIGN>() {
     if (opcode == Opcode::CMSG_PETITION_SIGN) {
         return &CMSG_PETITION_SIGN;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_PETITION_SIGN& ClientOpcode::get<CMSG_PETITION_SIGN>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PETITION_SIGN& ClientOpcode::get<CMSG_PETITION_SIGN>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_PETITION_SIGN>();
     if (p) {
         return *p;
@@ -25268,14 +25577,14 @@ vanilla::CMSG_PETITION_SIGN& ClientOpcode::get<CMSG_PETITION_SIGN>() {
 }
 
 template <>
-vanilla::MSG_PETITION_DECLINE* ClientOpcode::get_if<MSG_PETITION_DECLINE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_PETITION_DECLINE* ClientOpcode::get_if<MSG_PETITION_DECLINE>() {
     if (opcode == Opcode::MSG_PETITION_DECLINE) {
         return &MSG_PETITION_DECLINE;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_PETITION_DECLINE& ClientOpcode::get<MSG_PETITION_DECLINE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_PETITION_DECLINE& ClientOpcode::get<MSG_PETITION_DECLINE>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_PETITION_DECLINE>();
     if (p) {
         return *p;
@@ -25284,14 +25593,14 @@ vanilla::MSG_PETITION_DECLINE& ClientOpcode::get<MSG_PETITION_DECLINE>() {
 }
 
 template <>
-vanilla::CMSG_OFFER_PETITION* ClientOpcode::get_if<CMSG_OFFER_PETITION>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_OFFER_PETITION* ClientOpcode::get_if<CMSG_OFFER_PETITION>() {
     if (opcode == Opcode::CMSG_OFFER_PETITION) {
         return &CMSG_OFFER_PETITION;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_OFFER_PETITION& ClientOpcode::get<CMSG_OFFER_PETITION>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_OFFER_PETITION& ClientOpcode::get<CMSG_OFFER_PETITION>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_OFFER_PETITION>();
     if (p) {
         return *p;
@@ -25300,14 +25609,14 @@ vanilla::CMSG_OFFER_PETITION& ClientOpcode::get<CMSG_OFFER_PETITION>() {
 }
 
 template <>
-vanilla::CMSG_TURN_IN_PETITION* ClientOpcode::get_if<CMSG_TURN_IN_PETITION>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_TURN_IN_PETITION* ClientOpcode::get_if<CMSG_TURN_IN_PETITION>() {
     if (opcode == Opcode::CMSG_TURN_IN_PETITION) {
         return &CMSG_TURN_IN_PETITION;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_TURN_IN_PETITION& ClientOpcode::get<CMSG_TURN_IN_PETITION>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_TURN_IN_PETITION& ClientOpcode::get<CMSG_TURN_IN_PETITION>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_TURN_IN_PETITION>();
     if (p) {
         return *p;
@@ -25316,14 +25625,14 @@ vanilla::CMSG_TURN_IN_PETITION& ClientOpcode::get<CMSG_TURN_IN_PETITION>() {
 }
 
 template <>
-vanilla::CMSG_PETITION_QUERY* ClientOpcode::get_if<CMSG_PETITION_QUERY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PETITION_QUERY* ClientOpcode::get_if<CMSG_PETITION_QUERY>() {
     if (opcode == Opcode::CMSG_PETITION_QUERY) {
         return &CMSG_PETITION_QUERY;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_PETITION_QUERY& ClientOpcode::get<CMSG_PETITION_QUERY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PETITION_QUERY& ClientOpcode::get<CMSG_PETITION_QUERY>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_PETITION_QUERY>();
     if (p) {
         return *p;
@@ -25332,14 +25641,14 @@ vanilla::CMSG_PETITION_QUERY& ClientOpcode::get<CMSG_PETITION_QUERY>() {
 }
 
 template <>
-vanilla::CMSG_BUG* ClientOpcode::get_if<CMSG_BUG>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_BUG* ClientOpcode::get_if<CMSG_BUG>() {
     if (opcode == Opcode::CMSG_BUG) {
         return &CMSG_BUG;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_BUG& ClientOpcode::get<CMSG_BUG>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_BUG& ClientOpcode::get<CMSG_BUG>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_BUG>();
     if (p) {
         return *p;
@@ -25348,14 +25657,14 @@ vanilla::CMSG_BUG& ClientOpcode::get<CMSG_BUG>() {
 }
 
 template <>
-vanilla::CMSG_PLAYED_TIME* ClientOpcode::get_if<CMSG_PLAYED_TIME>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PLAYED_TIME* ClientOpcode::get_if<CMSG_PLAYED_TIME>() {
     if (opcode == Opcode::CMSG_PLAYED_TIME) {
         return &CMSG_PLAYED_TIME;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_PLAYED_TIME& ClientOpcode::get<CMSG_PLAYED_TIME>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PLAYED_TIME& ClientOpcode::get<CMSG_PLAYED_TIME>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_PLAYED_TIME>();
     if (p) {
         return *p;
@@ -25364,14 +25673,14 @@ vanilla::CMSG_PLAYED_TIME& ClientOpcode::get<CMSG_PLAYED_TIME>() {
 }
 
 template <>
-vanilla::CMSG_QUERY_TIME* ClientOpcode::get_if<CMSG_QUERY_TIME>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_QUERY_TIME* ClientOpcode::get_if<CMSG_QUERY_TIME>() {
     if (opcode == Opcode::CMSG_QUERY_TIME) {
         return &CMSG_QUERY_TIME;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_QUERY_TIME& ClientOpcode::get<CMSG_QUERY_TIME>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_QUERY_TIME& ClientOpcode::get<CMSG_QUERY_TIME>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_QUERY_TIME>();
     if (p) {
         return *p;
@@ -25380,14 +25689,14 @@ vanilla::CMSG_QUERY_TIME& ClientOpcode::get<CMSG_QUERY_TIME>() {
 }
 
 template <>
-vanilla::CMSG_RECLAIM_CORPSE* ClientOpcode::get_if<CMSG_RECLAIM_CORPSE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_RECLAIM_CORPSE* ClientOpcode::get_if<CMSG_RECLAIM_CORPSE>() {
     if (opcode == Opcode::CMSG_RECLAIM_CORPSE) {
         return &CMSG_RECLAIM_CORPSE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_RECLAIM_CORPSE& ClientOpcode::get<CMSG_RECLAIM_CORPSE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_RECLAIM_CORPSE& ClientOpcode::get<CMSG_RECLAIM_CORPSE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_RECLAIM_CORPSE>();
     if (p) {
         return *p;
@@ -25396,14 +25705,14 @@ vanilla::CMSG_RECLAIM_CORPSE& ClientOpcode::get<CMSG_RECLAIM_CORPSE>() {
 }
 
 template <>
-vanilla::CMSG_WRAP_ITEM* ClientOpcode::get_if<CMSG_WRAP_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_WRAP_ITEM* ClientOpcode::get_if<CMSG_WRAP_ITEM>() {
     if (opcode == Opcode::CMSG_WRAP_ITEM) {
         return &CMSG_WRAP_ITEM;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_WRAP_ITEM& ClientOpcode::get<CMSG_WRAP_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_WRAP_ITEM& ClientOpcode::get<CMSG_WRAP_ITEM>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_WRAP_ITEM>();
     if (p) {
         return *p;
@@ -25412,14 +25721,14 @@ vanilla::CMSG_WRAP_ITEM& ClientOpcode::get<CMSG_WRAP_ITEM>() {
 }
 
 template <>
-vanilla::MSG_MINIMAP_PING_Client* ClientOpcode::get_if<MSG_MINIMAP_PING_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MINIMAP_PING_Client* ClientOpcode::get_if<MSG_MINIMAP_PING_Client>() {
     if (opcode == Opcode::MSG_MINIMAP_PING) {
         return &MSG_MINIMAP_PING;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MINIMAP_PING_Client& ClientOpcode::get<MSG_MINIMAP_PING_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MINIMAP_PING_Client& ClientOpcode::get<MSG_MINIMAP_PING_Client>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_MINIMAP_PING_Client>();
     if (p) {
         return *p;
@@ -25428,14 +25737,14 @@ vanilla::MSG_MINIMAP_PING_Client& ClientOpcode::get<MSG_MINIMAP_PING_Client>() {
 }
 
 template <>
-vanilla::CMSG_PING* ClientOpcode::get_if<CMSG_PING>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PING* ClientOpcode::get_if<CMSG_PING>() {
     if (opcode == Opcode::CMSG_PING) {
         return &CMSG_PING;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_PING& ClientOpcode::get<CMSG_PING>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PING& ClientOpcode::get<CMSG_PING>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_PING>();
     if (p) {
         return *p;
@@ -25444,14 +25753,14 @@ vanilla::CMSG_PING& ClientOpcode::get<CMSG_PING>() {
 }
 
 template <>
-vanilla::CMSG_SETSHEATHED* ClientOpcode::get_if<CMSG_SETSHEATHED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_SETSHEATHED* ClientOpcode::get_if<CMSG_SETSHEATHED>() {
     if (opcode == Opcode::CMSG_SETSHEATHED) {
         return &CMSG_SETSHEATHED;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_SETSHEATHED& ClientOpcode::get<CMSG_SETSHEATHED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_SETSHEATHED& ClientOpcode::get<CMSG_SETSHEATHED>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_SETSHEATHED>();
     if (p) {
         return *p;
@@ -25460,14 +25769,14 @@ vanilla::CMSG_SETSHEATHED& ClientOpcode::get<CMSG_SETSHEATHED>() {
 }
 
 template <>
-vanilla::CMSG_AUTH_SESSION* ClientOpcode::get_if<CMSG_AUTH_SESSION>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_AUTH_SESSION* ClientOpcode::get_if<CMSG_AUTH_SESSION>() {
     if (opcode == Opcode::CMSG_AUTH_SESSION) {
         return &CMSG_AUTH_SESSION;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_AUTH_SESSION& ClientOpcode::get<CMSG_AUTH_SESSION>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_AUTH_SESSION& ClientOpcode::get<CMSG_AUTH_SESSION>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_AUTH_SESSION>();
     if (p) {
         return *p;
@@ -25476,14 +25785,14 @@ vanilla::CMSG_AUTH_SESSION& ClientOpcode::get<CMSG_AUTH_SESSION>() {
 }
 
 template <>
-vanilla::CMSG_PET_CAST_SPELL* ClientOpcode::get_if<CMSG_PET_CAST_SPELL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PET_CAST_SPELL* ClientOpcode::get_if<CMSG_PET_CAST_SPELL>() {
     if (opcode == Opcode::CMSG_PET_CAST_SPELL) {
         return &CMSG_PET_CAST_SPELL;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_PET_CAST_SPELL& ClientOpcode::get<CMSG_PET_CAST_SPELL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PET_CAST_SPELL& ClientOpcode::get<CMSG_PET_CAST_SPELL>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_PET_CAST_SPELL>();
     if (p) {
         return *p;
@@ -25492,14 +25801,14 @@ vanilla::CMSG_PET_CAST_SPELL& ClientOpcode::get<CMSG_PET_CAST_SPELL>() {
 }
 
 template <>
-vanilla::MSG_SAVE_GUILD_EMBLEM_Client* ClientOpcode::get_if<MSG_SAVE_GUILD_EMBLEM_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_SAVE_GUILD_EMBLEM_Client* ClientOpcode::get_if<MSG_SAVE_GUILD_EMBLEM_Client>() {
     if (opcode == Opcode::MSG_SAVE_GUILD_EMBLEM) {
         return &MSG_SAVE_GUILD_EMBLEM;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_SAVE_GUILD_EMBLEM_Client& ClientOpcode::get<MSG_SAVE_GUILD_EMBLEM_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_SAVE_GUILD_EMBLEM_Client& ClientOpcode::get<MSG_SAVE_GUILD_EMBLEM_Client>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_SAVE_GUILD_EMBLEM_Client>();
     if (p) {
         return *p;
@@ -25508,14 +25817,14 @@ vanilla::MSG_SAVE_GUILD_EMBLEM_Client& ClientOpcode::get<MSG_SAVE_GUILD_EMBLEM_C
 }
 
 template <>
-vanilla::MSG_TABARDVENDOR_ACTIVATE* ClientOpcode::get_if<MSG_TABARDVENDOR_ACTIVATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_TABARDVENDOR_ACTIVATE* ClientOpcode::get_if<MSG_TABARDVENDOR_ACTIVATE>() {
     if (opcode == Opcode::MSG_TABARDVENDOR_ACTIVATE) {
         return &MSG_TABARDVENDOR_ACTIVATE;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_TABARDVENDOR_ACTIVATE& ClientOpcode::get<MSG_TABARDVENDOR_ACTIVATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_TABARDVENDOR_ACTIVATE& ClientOpcode::get<MSG_TABARDVENDOR_ACTIVATE>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_TABARDVENDOR_ACTIVATE>();
     if (p) {
         return *p;
@@ -25524,14 +25833,14 @@ vanilla::MSG_TABARDVENDOR_ACTIVATE& ClientOpcode::get<MSG_TABARDVENDOR_ACTIVATE>
 }
 
 template <>
-vanilla::CMSG_ZONEUPDATE* ClientOpcode::get_if<CMSG_ZONEUPDATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_ZONEUPDATE* ClientOpcode::get_if<CMSG_ZONEUPDATE>() {
     if (opcode == Opcode::CMSG_ZONEUPDATE) {
         return &CMSG_ZONEUPDATE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_ZONEUPDATE& ClientOpcode::get<CMSG_ZONEUPDATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_ZONEUPDATE& ClientOpcode::get<CMSG_ZONEUPDATE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_ZONEUPDATE>();
     if (p) {
         return *p;
@@ -25540,14 +25849,14 @@ vanilla::CMSG_ZONEUPDATE& ClientOpcode::get<CMSG_ZONEUPDATE>() {
 }
 
 template <>
-vanilla::MSG_RANDOM_ROLL_Client* ClientOpcode::get_if<MSG_RANDOM_ROLL_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_RANDOM_ROLL_Client* ClientOpcode::get_if<MSG_RANDOM_ROLL_Client>() {
     if (opcode == Opcode::MSG_RANDOM_ROLL) {
         return &MSG_RANDOM_ROLL;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_RANDOM_ROLL_Client& ClientOpcode::get<MSG_RANDOM_ROLL_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_RANDOM_ROLL_Client& ClientOpcode::get<MSG_RANDOM_ROLL_Client>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_RANDOM_ROLL_Client>();
     if (p) {
         return *p;
@@ -25556,14 +25865,14 @@ vanilla::MSG_RANDOM_ROLL_Client& ClientOpcode::get<MSG_RANDOM_ROLL_Client>() {
 }
 
 template <>
-vanilla::MSG_LOOKING_FOR_GROUP_Client* ClientOpcode::get_if<MSG_LOOKING_FOR_GROUP_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_LOOKING_FOR_GROUP_Client* ClientOpcode::get_if<MSG_LOOKING_FOR_GROUP_Client>() {
     if (opcode == Opcode::MSG_LOOKING_FOR_GROUP) {
         return &MSG_LOOKING_FOR_GROUP;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_LOOKING_FOR_GROUP_Client& ClientOpcode::get<MSG_LOOKING_FOR_GROUP_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_LOOKING_FOR_GROUP_Client& ClientOpcode::get<MSG_LOOKING_FOR_GROUP_Client>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_LOOKING_FOR_GROUP_Client>();
     if (p) {
         return *p;
@@ -25572,14 +25881,14 @@ vanilla::MSG_LOOKING_FOR_GROUP_Client& ClientOpcode::get<MSG_LOOKING_FOR_GROUP_C
 }
 
 template <>
-vanilla::CMSG_UNLEARN_SKILL* ClientOpcode::get_if<CMSG_UNLEARN_SKILL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_UNLEARN_SKILL* ClientOpcode::get_if<CMSG_UNLEARN_SKILL>() {
     if (opcode == Opcode::CMSG_UNLEARN_SKILL) {
         return &CMSG_UNLEARN_SKILL;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_UNLEARN_SKILL& ClientOpcode::get<CMSG_UNLEARN_SKILL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_UNLEARN_SKILL& ClientOpcode::get<CMSG_UNLEARN_SKILL>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_UNLEARN_SKILL>();
     if (p) {
         return *p;
@@ -25588,14 +25897,14 @@ vanilla::CMSG_UNLEARN_SKILL& ClientOpcode::get<CMSG_UNLEARN_SKILL>() {
 }
 
 template <>
-vanilla::CMSG_GMTICKET_CREATE* ClientOpcode::get_if<CMSG_GMTICKET_CREATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GMTICKET_CREATE* ClientOpcode::get_if<CMSG_GMTICKET_CREATE>() {
     if (opcode == Opcode::CMSG_GMTICKET_CREATE) {
         return &CMSG_GMTICKET_CREATE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GMTICKET_CREATE& ClientOpcode::get<CMSG_GMTICKET_CREATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GMTICKET_CREATE& ClientOpcode::get<CMSG_GMTICKET_CREATE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GMTICKET_CREATE>();
     if (p) {
         return *p;
@@ -25604,14 +25913,14 @@ vanilla::CMSG_GMTICKET_CREATE& ClientOpcode::get<CMSG_GMTICKET_CREATE>() {
 }
 
 template <>
-vanilla::CMSG_GMTICKET_UPDATETEXT* ClientOpcode::get_if<CMSG_GMTICKET_UPDATETEXT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GMTICKET_UPDATETEXT* ClientOpcode::get_if<CMSG_GMTICKET_UPDATETEXT>() {
     if (opcode == Opcode::CMSG_GMTICKET_UPDATETEXT) {
         return &CMSG_GMTICKET_UPDATETEXT;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GMTICKET_UPDATETEXT& ClientOpcode::get<CMSG_GMTICKET_UPDATETEXT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GMTICKET_UPDATETEXT& ClientOpcode::get<CMSG_GMTICKET_UPDATETEXT>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GMTICKET_UPDATETEXT>();
     if (p) {
         return *p;
@@ -25620,14 +25929,14 @@ vanilla::CMSG_GMTICKET_UPDATETEXT& ClientOpcode::get<CMSG_GMTICKET_UPDATETEXT>()
 }
 
 template <>
-vanilla::CMSG_REQUEST_ACCOUNT_DATA* ClientOpcode::get_if<CMSG_REQUEST_ACCOUNT_DATA>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_REQUEST_ACCOUNT_DATA* ClientOpcode::get_if<CMSG_REQUEST_ACCOUNT_DATA>() {
     if (opcode == Opcode::CMSG_REQUEST_ACCOUNT_DATA) {
         return &CMSG_REQUEST_ACCOUNT_DATA;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_REQUEST_ACCOUNT_DATA& ClientOpcode::get<CMSG_REQUEST_ACCOUNT_DATA>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_REQUEST_ACCOUNT_DATA& ClientOpcode::get<CMSG_REQUEST_ACCOUNT_DATA>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_REQUEST_ACCOUNT_DATA>();
     if (p) {
         return *p;
@@ -25636,14 +25945,14 @@ vanilla::CMSG_REQUEST_ACCOUNT_DATA& ClientOpcode::get<CMSG_REQUEST_ACCOUNT_DATA>
 }
 
 template <>
-vanilla::CMSG_UPDATE_ACCOUNT_DATA* ClientOpcode::get_if<CMSG_UPDATE_ACCOUNT_DATA>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_UPDATE_ACCOUNT_DATA* ClientOpcode::get_if<CMSG_UPDATE_ACCOUNT_DATA>() {
     if (opcode == Opcode::CMSG_UPDATE_ACCOUNT_DATA) {
         return &CMSG_UPDATE_ACCOUNT_DATA;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_UPDATE_ACCOUNT_DATA& ClientOpcode::get<CMSG_UPDATE_ACCOUNT_DATA>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_UPDATE_ACCOUNT_DATA& ClientOpcode::get<CMSG_UPDATE_ACCOUNT_DATA>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_UPDATE_ACCOUNT_DATA>();
     if (p) {
         return *p;
@@ -25652,14 +25961,14 @@ vanilla::CMSG_UPDATE_ACCOUNT_DATA& ClientOpcode::get<CMSG_UPDATE_ACCOUNT_DATA>()
 }
 
 template <>
-vanilla::CMSG_GMTICKET_GETTICKET* ClientOpcode::get_if<CMSG_GMTICKET_GETTICKET>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GMTICKET_GETTICKET* ClientOpcode::get_if<CMSG_GMTICKET_GETTICKET>() {
     if (opcode == Opcode::CMSG_GMTICKET_GETTICKET) {
         return &CMSG_GMTICKET_GETTICKET;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GMTICKET_GETTICKET& ClientOpcode::get<CMSG_GMTICKET_GETTICKET>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GMTICKET_GETTICKET& ClientOpcode::get<CMSG_GMTICKET_GETTICKET>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GMTICKET_GETTICKET>();
     if (p) {
         return *p;
@@ -25668,14 +25977,14 @@ vanilla::CMSG_GMTICKET_GETTICKET& ClientOpcode::get<CMSG_GMTICKET_GETTICKET>() {
 }
 
 template <>
-vanilla::MSG_CORPSE_QUERY_Client* ClientOpcode::get_if<MSG_CORPSE_QUERY_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_CORPSE_QUERY_Client* ClientOpcode::get_if<MSG_CORPSE_QUERY_Client>() {
     if (opcode == Opcode::MSG_CORPSE_QUERY) {
         return &MSG_CORPSE_QUERY;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_CORPSE_QUERY_Client& ClientOpcode::get<MSG_CORPSE_QUERY_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_CORPSE_QUERY_Client& ClientOpcode::get<MSG_CORPSE_QUERY_Client>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_CORPSE_QUERY_Client>();
     if (p) {
         return *p;
@@ -25684,14 +25993,14 @@ vanilla::MSG_CORPSE_QUERY_Client& ClientOpcode::get<MSG_CORPSE_QUERY_Client>() {
 }
 
 template <>
-vanilla::CMSG_GMTICKET_DELETETICKET* ClientOpcode::get_if<CMSG_GMTICKET_DELETETICKET>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GMTICKET_DELETETICKET* ClientOpcode::get_if<CMSG_GMTICKET_DELETETICKET>() {
     if (opcode == Opcode::CMSG_GMTICKET_DELETETICKET) {
         return &CMSG_GMTICKET_DELETETICKET;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GMTICKET_DELETETICKET& ClientOpcode::get<CMSG_GMTICKET_DELETETICKET>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GMTICKET_DELETETICKET& ClientOpcode::get<CMSG_GMTICKET_DELETETICKET>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GMTICKET_DELETETICKET>();
     if (p) {
         return *p;
@@ -25700,14 +26009,14 @@ vanilla::CMSG_GMTICKET_DELETETICKET& ClientOpcode::get<CMSG_GMTICKET_DELETETICKE
 }
 
 template <>
-vanilla::CMSG_GMTICKET_SYSTEMSTATUS* ClientOpcode::get_if<CMSG_GMTICKET_SYSTEMSTATUS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GMTICKET_SYSTEMSTATUS* ClientOpcode::get_if<CMSG_GMTICKET_SYSTEMSTATUS>() {
     if (opcode == Opcode::CMSG_GMTICKET_SYSTEMSTATUS) {
         return &CMSG_GMTICKET_SYSTEMSTATUS;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GMTICKET_SYSTEMSTATUS& ClientOpcode::get<CMSG_GMTICKET_SYSTEMSTATUS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GMTICKET_SYSTEMSTATUS& ClientOpcode::get<CMSG_GMTICKET_SYSTEMSTATUS>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GMTICKET_SYSTEMSTATUS>();
     if (p) {
         return *p;
@@ -25716,14 +26025,14 @@ vanilla::CMSG_GMTICKET_SYSTEMSTATUS& ClientOpcode::get<CMSG_GMTICKET_SYSTEMSTATU
 }
 
 template <>
-vanilla::CMSG_SPIRIT_HEALER_ACTIVATE* ClientOpcode::get_if<CMSG_SPIRIT_HEALER_ACTIVATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_SPIRIT_HEALER_ACTIVATE* ClientOpcode::get_if<CMSG_SPIRIT_HEALER_ACTIVATE>() {
     if (opcode == Opcode::CMSG_SPIRIT_HEALER_ACTIVATE) {
         return &CMSG_SPIRIT_HEALER_ACTIVATE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_SPIRIT_HEALER_ACTIVATE& ClientOpcode::get<CMSG_SPIRIT_HEALER_ACTIVATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_SPIRIT_HEALER_ACTIVATE& ClientOpcode::get<CMSG_SPIRIT_HEALER_ACTIVATE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_SPIRIT_HEALER_ACTIVATE>();
     if (p) {
         return *p;
@@ -25732,14 +26041,14 @@ vanilla::CMSG_SPIRIT_HEALER_ACTIVATE& ClientOpcode::get<CMSG_SPIRIT_HEALER_ACTIV
 }
 
 template <>
-vanilla::CMSG_CHAT_IGNORED* ClientOpcode::get_if<CMSG_CHAT_IGNORED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CHAT_IGNORED* ClientOpcode::get_if<CMSG_CHAT_IGNORED>() {
     if (opcode == Opcode::CMSG_CHAT_IGNORED) {
         return &CMSG_CHAT_IGNORED;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_CHAT_IGNORED& ClientOpcode::get<CMSG_CHAT_IGNORED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CHAT_IGNORED& ClientOpcode::get<CMSG_CHAT_IGNORED>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_CHAT_IGNORED>();
     if (p) {
         return *p;
@@ -25748,14 +26057,14 @@ vanilla::CMSG_CHAT_IGNORED& ClientOpcode::get<CMSG_CHAT_IGNORED>() {
 }
 
 template <>
-vanilla::CMSG_GUILD_RANK* ClientOpcode::get_if<CMSG_GUILD_RANK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GUILD_RANK* ClientOpcode::get_if<CMSG_GUILD_RANK>() {
     if (opcode == Opcode::CMSG_GUILD_RANK) {
         return &CMSG_GUILD_RANK;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GUILD_RANK& ClientOpcode::get<CMSG_GUILD_RANK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GUILD_RANK& ClientOpcode::get<CMSG_GUILD_RANK>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GUILD_RANK>();
     if (p) {
         return *p;
@@ -25764,14 +26073,14 @@ vanilla::CMSG_GUILD_RANK& ClientOpcode::get<CMSG_GUILD_RANK>() {
 }
 
 template <>
-vanilla::CMSG_GUILD_ADD_RANK* ClientOpcode::get_if<CMSG_GUILD_ADD_RANK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GUILD_ADD_RANK* ClientOpcode::get_if<CMSG_GUILD_ADD_RANK>() {
     if (opcode == Opcode::CMSG_GUILD_ADD_RANK) {
         return &CMSG_GUILD_ADD_RANK;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GUILD_ADD_RANK& ClientOpcode::get<CMSG_GUILD_ADD_RANK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GUILD_ADD_RANK& ClientOpcode::get<CMSG_GUILD_ADD_RANK>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GUILD_ADD_RANK>();
     if (p) {
         return *p;
@@ -25780,14 +26089,14 @@ vanilla::CMSG_GUILD_ADD_RANK& ClientOpcode::get<CMSG_GUILD_ADD_RANK>() {
 }
 
 template <>
-vanilla::CMSG_GUILD_DEL_RANK* ClientOpcode::get_if<CMSG_GUILD_DEL_RANK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GUILD_DEL_RANK* ClientOpcode::get_if<CMSG_GUILD_DEL_RANK>() {
     if (opcode == Opcode::CMSG_GUILD_DEL_RANK) {
         return &CMSG_GUILD_DEL_RANK;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GUILD_DEL_RANK& ClientOpcode::get<CMSG_GUILD_DEL_RANK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GUILD_DEL_RANK& ClientOpcode::get<CMSG_GUILD_DEL_RANK>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GUILD_DEL_RANK>();
     if (p) {
         return *p;
@@ -25796,14 +26105,14 @@ vanilla::CMSG_GUILD_DEL_RANK& ClientOpcode::get<CMSG_GUILD_DEL_RANK>() {
 }
 
 template <>
-vanilla::CMSG_GUILD_SET_PUBLIC_NOTE* ClientOpcode::get_if<CMSG_GUILD_SET_PUBLIC_NOTE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GUILD_SET_PUBLIC_NOTE* ClientOpcode::get_if<CMSG_GUILD_SET_PUBLIC_NOTE>() {
     if (opcode == Opcode::CMSG_GUILD_SET_PUBLIC_NOTE) {
         return &CMSG_GUILD_SET_PUBLIC_NOTE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GUILD_SET_PUBLIC_NOTE& ClientOpcode::get<CMSG_GUILD_SET_PUBLIC_NOTE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GUILD_SET_PUBLIC_NOTE& ClientOpcode::get<CMSG_GUILD_SET_PUBLIC_NOTE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GUILD_SET_PUBLIC_NOTE>();
     if (p) {
         return *p;
@@ -25812,14 +26121,14 @@ vanilla::CMSG_GUILD_SET_PUBLIC_NOTE& ClientOpcode::get<CMSG_GUILD_SET_PUBLIC_NOT
 }
 
 template <>
-vanilla::CMSG_GUILD_SET_OFFICER_NOTE* ClientOpcode::get_if<CMSG_GUILD_SET_OFFICER_NOTE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GUILD_SET_OFFICER_NOTE* ClientOpcode::get_if<CMSG_GUILD_SET_OFFICER_NOTE>() {
     if (opcode == Opcode::CMSG_GUILD_SET_OFFICER_NOTE) {
         return &CMSG_GUILD_SET_OFFICER_NOTE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GUILD_SET_OFFICER_NOTE& ClientOpcode::get<CMSG_GUILD_SET_OFFICER_NOTE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GUILD_SET_OFFICER_NOTE& ClientOpcode::get<CMSG_GUILD_SET_OFFICER_NOTE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GUILD_SET_OFFICER_NOTE>();
     if (p) {
         return *p;
@@ -25828,14 +26137,14 @@ vanilla::CMSG_GUILD_SET_OFFICER_NOTE& ClientOpcode::get<CMSG_GUILD_SET_OFFICER_N
 }
 
 template <>
-vanilla::CMSG_SEND_MAIL* ClientOpcode::get_if<CMSG_SEND_MAIL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_SEND_MAIL* ClientOpcode::get_if<CMSG_SEND_MAIL>() {
     if (opcode == Opcode::CMSG_SEND_MAIL) {
         return &CMSG_SEND_MAIL;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_SEND_MAIL& ClientOpcode::get<CMSG_SEND_MAIL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_SEND_MAIL& ClientOpcode::get<CMSG_SEND_MAIL>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_SEND_MAIL>();
     if (p) {
         return *p;
@@ -25844,14 +26153,14 @@ vanilla::CMSG_SEND_MAIL& ClientOpcode::get<CMSG_SEND_MAIL>() {
 }
 
 template <>
-vanilla::CMSG_GET_MAIL_LIST* ClientOpcode::get_if<CMSG_GET_MAIL_LIST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GET_MAIL_LIST* ClientOpcode::get_if<CMSG_GET_MAIL_LIST>() {
     if (opcode == Opcode::CMSG_GET_MAIL_LIST) {
         return &CMSG_GET_MAIL_LIST;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GET_MAIL_LIST& ClientOpcode::get<CMSG_GET_MAIL_LIST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GET_MAIL_LIST& ClientOpcode::get<CMSG_GET_MAIL_LIST>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GET_MAIL_LIST>();
     if (p) {
         return *p;
@@ -25860,14 +26169,14 @@ vanilla::CMSG_GET_MAIL_LIST& ClientOpcode::get<CMSG_GET_MAIL_LIST>() {
 }
 
 template <>
-vanilla::CMSG_BATTLEFIELD_LIST* ClientOpcode::get_if<CMSG_BATTLEFIELD_LIST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_BATTLEFIELD_LIST* ClientOpcode::get_if<CMSG_BATTLEFIELD_LIST>() {
     if (opcode == Opcode::CMSG_BATTLEFIELD_LIST) {
         return &CMSG_BATTLEFIELD_LIST;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_BATTLEFIELD_LIST& ClientOpcode::get<CMSG_BATTLEFIELD_LIST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_BATTLEFIELD_LIST& ClientOpcode::get<CMSG_BATTLEFIELD_LIST>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_BATTLEFIELD_LIST>();
     if (p) {
         return *p;
@@ -25876,14 +26185,14 @@ vanilla::CMSG_BATTLEFIELD_LIST& ClientOpcode::get<CMSG_BATTLEFIELD_LIST>() {
 }
 
 template <>
-vanilla::CMSG_BATTLEFIELD_JOIN* ClientOpcode::get_if<CMSG_BATTLEFIELD_JOIN>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_BATTLEFIELD_JOIN* ClientOpcode::get_if<CMSG_BATTLEFIELD_JOIN>() {
     if (opcode == Opcode::CMSG_BATTLEFIELD_JOIN) {
         return &CMSG_BATTLEFIELD_JOIN;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_BATTLEFIELD_JOIN& ClientOpcode::get<CMSG_BATTLEFIELD_JOIN>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_BATTLEFIELD_JOIN& ClientOpcode::get<CMSG_BATTLEFIELD_JOIN>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_BATTLEFIELD_JOIN>();
     if (p) {
         return *p;
@@ -25892,14 +26201,14 @@ vanilla::CMSG_BATTLEFIELD_JOIN& ClientOpcode::get<CMSG_BATTLEFIELD_JOIN>() {
 }
 
 template <>
-vanilla::CMSG_ITEM_TEXT_QUERY* ClientOpcode::get_if<CMSG_ITEM_TEXT_QUERY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_ITEM_TEXT_QUERY* ClientOpcode::get_if<CMSG_ITEM_TEXT_QUERY>() {
     if (opcode == Opcode::CMSG_ITEM_TEXT_QUERY) {
         return &CMSG_ITEM_TEXT_QUERY;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_ITEM_TEXT_QUERY& ClientOpcode::get<CMSG_ITEM_TEXT_QUERY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_ITEM_TEXT_QUERY& ClientOpcode::get<CMSG_ITEM_TEXT_QUERY>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_ITEM_TEXT_QUERY>();
     if (p) {
         return *p;
@@ -25908,14 +26217,14 @@ vanilla::CMSG_ITEM_TEXT_QUERY& ClientOpcode::get<CMSG_ITEM_TEXT_QUERY>() {
 }
 
 template <>
-vanilla::CMSG_MAIL_TAKE_MONEY* ClientOpcode::get_if<CMSG_MAIL_TAKE_MONEY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_MAIL_TAKE_MONEY* ClientOpcode::get_if<CMSG_MAIL_TAKE_MONEY>() {
     if (opcode == Opcode::CMSG_MAIL_TAKE_MONEY) {
         return &CMSG_MAIL_TAKE_MONEY;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_MAIL_TAKE_MONEY& ClientOpcode::get<CMSG_MAIL_TAKE_MONEY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_MAIL_TAKE_MONEY& ClientOpcode::get<CMSG_MAIL_TAKE_MONEY>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_MAIL_TAKE_MONEY>();
     if (p) {
         return *p;
@@ -25924,14 +26233,14 @@ vanilla::CMSG_MAIL_TAKE_MONEY& ClientOpcode::get<CMSG_MAIL_TAKE_MONEY>() {
 }
 
 template <>
-vanilla::CMSG_MAIL_TAKE_ITEM* ClientOpcode::get_if<CMSG_MAIL_TAKE_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_MAIL_TAKE_ITEM* ClientOpcode::get_if<CMSG_MAIL_TAKE_ITEM>() {
     if (opcode == Opcode::CMSG_MAIL_TAKE_ITEM) {
         return &CMSG_MAIL_TAKE_ITEM;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_MAIL_TAKE_ITEM& ClientOpcode::get<CMSG_MAIL_TAKE_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_MAIL_TAKE_ITEM& ClientOpcode::get<CMSG_MAIL_TAKE_ITEM>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_MAIL_TAKE_ITEM>();
     if (p) {
         return *p;
@@ -25940,14 +26249,14 @@ vanilla::CMSG_MAIL_TAKE_ITEM& ClientOpcode::get<CMSG_MAIL_TAKE_ITEM>() {
 }
 
 template <>
-vanilla::CMSG_MAIL_MARK_AS_READ* ClientOpcode::get_if<CMSG_MAIL_MARK_AS_READ>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_MAIL_MARK_AS_READ* ClientOpcode::get_if<CMSG_MAIL_MARK_AS_READ>() {
     if (opcode == Opcode::CMSG_MAIL_MARK_AS_READ) {
         return &CMSG_MAIL_MARK_AS_READ;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_MAIL_MARK_AS_READ& ClientOpcode::get<CMSG_MAIL_MARK_AS_READ>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_MAIL_MARK_AS_READ& ClientOpcode::get<CMSG_MAIL_MARK_AS_READ>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_MAIL_MARK_AS_READ>();
     if (p) {
         return *p;
@@ -25956,14 +26265,14 @@ vanilla::CMSG_MAIL_MARK_AS_READ& ClientOpcode::get<CMSG_MAIL_MARK_AS_READ>() {
 }
 
 template <>
-vanilla::CMSG_MAIL_RETURN_TO_SENDER* ClientOpcode::get_if<CMSG_MAIL_RETURN_TO_SENDER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_MAIL_RETURN_TO_SENDER* ClientOpcode::get_if<CMSG_MAIL_RETURN_TO_SENDER>() {
     if (opcode == Opcode::CMSG_MAIL_RETURN_TO_SENDER) {
         return &CMSG_MAIL_RETURN_TO_SENDER;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_MAIL_RETURN_TO_SENDER& ClientOpcode::get<CMSG_MAIL_RETURN_TO_SENDER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_MAIL_RETURN_TO_SENDER& ClientOpcode::get<CMSG_MAIL_RETURN_TO_SENDER>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_MAIL_RETURN_TO_SENDER>();
     if (p) {
         return *p;
@@ -25972,14 +26281,14 @@ vanilla::CMSG_MAIL_RETURN_TO_SENDER& ClientOpcode::get<CMSG_MAIL_RETURN_TO_SENDE
 }
 
 template <>
-vanilla::CMSG_MAIL_DELETE* ClientOpcode::get_if<CMSG_MAIL_DELETE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_MAIL_DELETE* ClientOpcode::get_if<CMSG_MAIL_DELETE>() {
     if (opcode == Opcode::CMSG_MAIL_DELETE) {
         return &CMSG_MAIL_DELETE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_MAIL_DELETE& ClientOpcode::get<CMSG_MAIL_DELETE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_MAIL_DELETE& ClientOpcode::get<CMSG_MAIL_DELETE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_MAIL_DELETE>();
     if (p) {
         return *p;
@@ -25988,14 +26297,14 @@ vanilla::CMSG_MAIL_DELETE& ClientOpcode::get<CMSG_MAIL_DELETE>() {
 }
 
 template <>
-vanilla::CMSG_MAIL_CREATE_TEXT_ITEM* ClientOpcode::get_if<CMSG_MAIL_CREATE_TEXT_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_MAIL_CREATE_TEXT_ITEM* ClientOpcode::get_if<CMSG_MAIL_CREATE_TEXT_ITEM>() {
     if (opcode == Opcode::CMSG_MAIL_CREATE_TEXT_ITEM) {
         return &CMSG_MAIL_CREATE_TEXT_ITEM;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_MAIL_CREATE_TEXT_ITEM& ClientOpcode::get<CMSG_MAIL_CREATE_TEXT_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_MAIL_CREATE_TEXT_ITEM& ClientOpcode::get<CMSG_MAIL_CREATE_TEXT_ITEM>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_MAIL_CREATE_TEXT_ITEM>();
     if (p) {
         return *p;
@@ -26004,14 +26313,14 @@ vanilla::CMSG_MAIL_CREATE_TEXT_ITEM& ClientOpcode::get<CMSG_MAIL_CREATE_TEXT_ITE
 }
 
 template <>
-vanilla::CMSG_LEARN_TALENT* ClientOpcode::get_if<CMSG_LEARN_TALENT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_LEARN_TALENT* ClientOpcode::get_if<CMSG_LEARN_TALENT>() {
     if (opcode == Opcode::CMSG_LEARN_TALENT) {
         return &CMSG_LEARN_TALENT;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_LEARN_TALENT& ClientOpcode::get<CMSG_LEARN_TALENT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_LEARN_TALENT& ClientOpcode::get<CMSG_LEARN_TALENT>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_LEARN_TALENT>();
     if (p) {
         return *p;
@@ -26020,14 +26329,14 @@ vanilla::CMSG_LEARN_TALENT& ClientOpcode::get<CMSG_LEARN_TALENT>() {
 }
 
 template <>
-vanilla::CMSG_TOGGLE_PVP* ClientOpcode::get_if<CMSG_TOGGLE_PVP>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_TOGGLE_PVP* ClientOpcode::get_if<CMSG_TOGGLE_PVP>() {
     if (opcode == Opcode::CMSG_TOGGLE_PVP) {
         return &CMSG_TOGGLE_PVP;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_TOGGLE_PVP& ClientOpcode::get<CMSG_TOGGLE_PVP>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_TOGGLE_PVP& ClientOpcode::get<CMSG_TOGGLE_PVP>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_TOGGLE_PVP>();
     if (p) {
         return *p;
@@ -26036,14 +26345,14 @@ vanilla::CMSG_TOGGLE_PVP& ClientOpcode::get<CMSG_TOGGLE_PVP>() {
 }
 
 template <>
-vanilla::MSG_AUCTION_HELLO_Client* ClientOpcode::get_if<MSG_AUCTION_HELLO_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_AUCTION_HELLO_Client* ClientOpcode::get_if<MSG_AUCTION_HELLO_Client>() {
     if (opcode == Opcode::MSG_AUCTION_HELLO) {
         return &MSG_AUCTION_HELLO;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_AUCTION_HELLO_Client& ClientOpcode::get<MSG_AUCTION_HELLO_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_AUCTION_HELLO_Client& ClientOpcode::get<MSG_AUCTION_HELLO_Client>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_AUCTION_HELLO_Client>();
     if (p) {
         return *p;
@@ -26052,14 +26361,14 @@ vanilla::MSG_AUCTION_HELLO_Client& ClientOpcode::get<MSG_AUCTION_HELLO_Client>()
 }
 
 template <>
-vanilla::CMSG_AUCTION_SELL_ITEM* ClientOpcode::get_if<CMSG_AUCTION_SELL_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_AUCTION_SELL_ITEM* ClientOpcode::get_if<CMSG_AUCTION_SELL_ITEM>() {
     if (opcode == Opcode::CMSG_AUCTION_SELL_ITEM) {
         return &CMSG_AUCTION_SELL_ITEM;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_AUCTION_SELL_ITEM& ClientOpcode::get<CMSG_AUCTION_SELL_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_AUCTION_SELL_ITEM& ClientOpcode::get<CMSG_AUCTION_SELL_ITEM>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_AUCTION_SELL_ITEM>();
     if (p) {
         return *p;
@@ -26068,14 +26377,14 @@ vanilla::CMSG_AUCTION_SELL_ITEM& ClientOpcode::get<CMSG_AUCTION_SELL_ITEM>() {
 }
 
 template <>
-vanilla::CMSG_AUCTION_REMOVE_ITEM* ClientOpcode::get_if<CMSG_AUCTION_REMOVE_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_AUCTION_REMOVE_ITEM* ClientOpcode::get_if<CMSG_AUCTION_REMOVE_ITEM>() {
     if (opcode == Opcode::CMSG_AUCTION_REMOVE_ITEM) {
         return &CMSG_AUCTION_REMOVE_ITEM;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_AUCTION_REMOVE_ITEM& ClientOpcode::get<CMSG_AUCTION_REMOVE_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_AUCTION_REMOVE_ITEM& ClientOpcode::get<CMSG_AUCTION_REMOVE_ITEM>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_AUCTION_REMOVE_ITEM>();
     if (p) {
         return *p;
@@ -26084,14 +26393,14 @@ vanilla::CMSG_AUCTION_REMOVE_ITEM& ClientOpcode::get<CMSG_AUCTION_REMOVE_ITEM>()
 }
 
 template <>
-vanilla::CMSG_AUCTION_LIST_ITEMS* ClientOpcode::get_if<CMSG_AUCTION_LIST_ITEMS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_AUCTION_LIST_ITEMS* ClientOpcode::get_if<CMSG_AUCTION_LIST_ITEMS>() {
     if (opcode == Opcode::CMSG_AUCTION_LIST_ITEMS) {
         return &CMSG_AUCTION_LIST_ITEMS;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_AUCTION_LIST_ITEMS& ClientOpcode::get<CMSG_AUCTION_LIST_ITEMS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_AUCTION_LIST_ITEMS& ClientOpcode::get<CMSG_AUCTION_LIST_ITEMS>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_AUCTION_LIST_ITEMS>();
     if (p) {
         return *p;
@@ -26100,14 +26409,14 @@ vanilla::CMSG_AUCTION_LIST_ITEMS& ClientOpcode::get<CMSG_AUCTION_LIST_ITEMS>() {
 }
 
 template <>
-vanilla::CMSG_AUCTION_LIST_OWNER_ITEMS* ClientOpcode::get_if<CMSG_AUCTION_LIST_OWNER_ITEMS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_AUCTION_LIST_OWNER_ITEMS* ClientOpcode::get_if<CMSG_AUCTION_LIST_OWNER_ITEMS>() {
     if (opcode == Opcode::CMSG_AUCTION_LIST_OWNER_ITEMS) {
         return &CMSG_AUCTION_LIST_OWNER_ITEMS;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_AUCTION_LIST_OWNER_ITEMS& ClientOpcode::get<CMSG_AUCTION_LIST_OWNER_ITEMS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_AUCTION_LIST_OWNER_ITEMS& ClientOpcode::get<CMSG_AUCTION_LIST_OWNER_ITEMS>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_AUCTION_LIST_OWNER_ITEMS>();
     if (p) {
         return *p;
@@ -26116,14 +26425,14 @@ vanilla::CMSG_AUCTION_LIST_OWNER_ITEMS& ClientOpcode::get<CMSG_AUCTION_LIST_OWNE
 }
 
 template <>
-vanilla::CMSG_AUCTION_PLACE_BID* ClientOpcode::get_if<CMSG_AUCTION_PLACE_BID>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_AUCTION_PLACE_BID* ClientOpcode::get_if<CMSG_AUCTION_PLACE_BID>() {
     if (opcode == Opcode::CMSG_AUCTION_PLACE_BID) {
         return &CMSG_AUCTION_PLACE_BID;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_AUCTION_PLACE_BID& ClientOpcode::get<CMSG_AUCTION_PLACE_BID>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_AUCTION_PLACE_BID& ClientOpcode::get<CMSG_AUCTION_PLACE_BID>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_AUCTION_PLACE_BID>();
     if (p) {
         return *p;
@@ -26132,14 +26441,14 @@ vanilla::CMSG_AUCTION_PLACE_BID& ClientOpcode::get<CMSG_AUCTION_PLACE_BID>() {
 }
 
 template <>
-vanilla::CMSG_AUCTION_LIST_BIDDER_ITEMS* ClientOpcode::get_if<CMSG_AUCTION_LIST_BIDDER_ITEMS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_AUCTION_LIST_BIDDER_ITEMS* ClientOpcode::get_if<CMSG_AUCTION_LIST_BIDDER_ITEMS>() {
     if (opcode == Opcode::CMSG_AUCTION_LIST_BIDDER_ITEMS) {
         return &CMSG_AUCTION_LIST_BIDDER_ITEMS;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_AUCTION_LIST_BIDDER_ITEMS& ClientOpcode::get<CMSG_AUCTION_LIST_BIDDER_ITEMS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_AUCTION_LIST_BIDDER_ITEMS& ClientOpcode::get<CMSG_AUCTION_LIST_BIDDER_ITEMS>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_AUCTION_LIST_BIDDER_ITEMS>();
     if (p) {
         return *p;
@@ -26148,14 +26457,14 @@ vanilla::CMSG_AUCTION_LIST_BIDDER_ITEMS& ClientOpcode::get<CMSG_AUCTION_LIST_BID
 }
 
 template <>
-vanilla::CMSG_SET_AMMO* ClientOpcode::get_if<CMSG_SET_AMMO>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_SET_AMMO* ClientOpcode::get_if<CMSG_SET_AMMO>() {
     if (opcode == Opcode::CMSG_SET_AMMO) {
         return &CMSG_SET_AMMO;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_SET_AMMO& ClientOpcode::get<CMSG_SET_AMMO>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_SET_AMMO& ClientOpcode::get<CMSG_SET_AMMO>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_SET_AMMO>();
     if (p) {
         return *p;
@@ -26164,14 +26473,14 @@ vanilla::CMSG_SET_AMMO& ClientOpcode::get<CMSG_SET_AMMO>() {
 }
 
 template <>
-vanilla::CMSG_SET_ACTIVE_MOVER* ClientOpcode::get_if<CMSG_SET_ACTIVE_MOVER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_SET_ACTIVE_MOVER* ClientOpcode::get_if<CMSG_SET_ACTIVE_MOVER>() {
     if (opcode == Opcode::CMSG_SET_ACTIVE_MOVER) {
         return &CMSG_SET_ACTIVE_MOVER;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_SET_ACTIVE_MOVER& ClientOpcode::get<CMSG_SET_ACTIVE_MOVER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_SET_ACTIVE_MOVER& ClientOpcode::get<CMSG_SET_ACTIVE_MOVER>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_SET_ACTIVE_MOVER>();
     if (p) {
         return *p;
@@ -26180,14 +26489,14 @@ vanilla::CMSG_SET_ACTIVE_MOVER& ClientOpcode::get<CMSG_SET_ACTIVE_MOVER>() {
 }
 
 template <>
-vanilla::CMSG_PET_CANCEL_AURA* ClientOpcode::get_if<CMSG_PET_CANCEL_AURA>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PET_CANCEL_AURA* ClientOpcode::get_if<CMSG_PET_CANCEL_AURA>() {
     if (opcode == Opcode::CMSG_PET_CANCEL_AURA) {
         return &CMSG_PET_CANCEL_AURA;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_PET_CANCEL_AURA& ClientOpcode::get<CMSG_PET_CANCEL_AURA>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PET_CANCEL_AURA& ClientOpcode::get<CMSG_PET_CANCEL_AURA>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_PET_CANCEL_AURA>();
     if (p) {
         return *p;
@@ -26196,14 +26505,14 @@ vanilla::CMSG_PET_CANCEL_AURA& ClientOpcode::get<CMSG_PET_CANCEL_AURA>() {
 }
 
 template <>
-vanilla::CMSG_CANCEL_AUTO_REPEAT_SPELL* ClientOpcode::get_if<CMSG_CANCEL_AUTO_REPEAT_SPELL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CANCEL_AUTO_REPEAT_SPELL* ClientOpcode::get_if<CMSG_CANCEL_AUTO_REPEAT_SPELL>() {
     if (opcode == Opcode::CMSG_CANCEL_AUTO_REPEAT_SPELL) {
         return &CMSG_CANCEL_AUTO_REPEAT_SPELL;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_CANCEL_AUTO_REPEAT_SPELL& ClientOpcode::get<CMSG_CANCEL_AUTO_REPEAT_SPELL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CANCEL_AUTO_REPEAT_SPELL& ClientOpcode::get<CMSG_CANCEL_AUTO_REPEAT_SPELL>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_CANCEL_AUTO_REPEAT_SPELL>();
     if (p) {
         return *p;
@@ -26212,14 +26521,14 @@ vanilla::CMSG_CANCEL_AUTO_REPEAT_SPELL& ClientOpcode::get<CMSG_CANCEL_AUTO_REPEA
 }
 
 template <>
-vanilla::MSG_LIST_STABLED_PETS_Client* ClientOpcode::get_if<MSG_LIST_STABLED_PETS_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_LIST_STABLED_PETS_Client* ClientOpcode::get_if<MSG_LIST_STABLED_PETS_Client>() {
     if (opcode == Opcode::MSG_LIST_STABLED_PETS) {
         return &MSG_LIST_STABLED_PETS;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_LIST_STABLED_PETS_Client& ClientOpcode::get<MSG_LIST_STABLED_PETS_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_LIST_STABLED_PETS_Client& ClientOpcode::get<MSG_LIST_STABLED_PETS_Client>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_LIST_STABLED_PETS_Client>();
     if (p) {
         return *p;
@@ -26228,14 +26537,14 @@ vanilla::MSG_LIST_STABLED_PETS_Client& ClientOpcode::get<MSG_LIST_STABLED_PETS_C
 }
 
 template <>
-vanilla::CMSG_STABLE_PET* ClientOpcode::get_if<CMSG_STABLE_PET>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_STABLE_PET* ClientOpcode::get_if<CMSG_STABLE_PET>() {
     if (opcode == Opcode::CMSG_STABLE_PET) {
         return &CMSG_STABLE_PET;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_STABLE_PET& ClientOpcode::get<CMSG_STABLE_PET>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_STABLE_PET& ClientOpcode::get<CMSG_STABLE_PET>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_STABLE_PET>();
     if (p) {
         return *p;
@@ -26244,14 +26553,14 @@ vanilla::CMSG_STABLE_PET& ClientOpcode::get<CMSG_STABLE_PET>() {
 }
 
 template <>
-vanilla::CMSG_UNSTABLE_PET* ClientOpcode::get_if<CMSG_UNSTABLE_PET>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_UNSTABLE_PET* ClientOpcode::get_if<CMSG_UNSTABLE_PET>() {
     if (opcode == Opcode::CMSG_UNSTABLE_PET) {
         return &CMSG_UNSTABLE_PET;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_UNSTABLE_PET& ClientOpcode::get<CMSG_UNSTABLE_PET>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_UNSTABLE_PET& ClientOpcode::get<CMSG_UNSTABLE_PET>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_UNSTABLE_PET>();
     if (p) {
         return *p;
@@ -26260,14 +26569,14 @@ vanilla::CMSG_UNSTABLE_PET& ClientOpcode::get<CMSG_UNSTABLE_PET>() {
 }
 
 template <>
-vanilla::CMSG_BUY_STABLE_SLOT* ClientOpcode::get_if<CMSG_BUY_STABLE_SLOT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_BUY_STABLE_SLOT* ClientOpcode::get_if<CMSG_BUY_STABLE_SLOT>() {
     if (opcode == Opcode::CMSG_BUY_STABLE_SLOT) {
         return &CMSG_BUY_STABLE_SLOT;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_BUY_STABLE_SLOT& ClientOpcode::get<CMSG_BUY_STABLE_SLOT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_BUY_STABLE_SLOT& ClientOpcode::get<CMSG_BUY_STABLE_SLOT>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_BUY_STABLE_SLOT>();
     if (p) {
         return *p;
@@ -26276,14 +26585,14 @@ vanilla::CMSG_BUY_STABLE_SLOT& ClientOpcode::get<CMSG_BUY_STABLE_SLOT>() {
 }
 
 template <>
-vanilla::CMSG_STABLE_SWAP_PET* ClientOpcode::get_if<CMSG_STABLE_SWAP_PET>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_STABLE_SWAP_PET* ClientOpcode::get_if<CMSG_STABLE_SWAP_PET>() {
     if (opcode == Opcode::CMSG_STABLE_SWAP_PET) {
         return &CMSG_STABLE_SWAP_PET;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_STABLE_SWAP_PET& ClientOpcode::get<CMSG_STABLE_SWAP_PET>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_STABLE_SWAP_PET& ClientOpcode::get<CMSG_STABLE_SWAP_PET>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_STABLE_SWAP_PET>();
     if (p) {
         return *p;
@@ -26292,14 +26601,14 @@ vanilla::CMSG_STABLE_SWAP_PET& ClientOpcode::get<CMSG_STABLE_SWAP_PET>() {
 }
 
 template <>
-vanilla::MSG_QUEST_PUSH_RESULT* ClientOpcode::get_if<MSG_QUEST_PUSH_RESULT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_QUEST_PUSH_RESULT* ClientOpcode::get_if<MSG_QUEST_PUSH_RESULT>() {
     if (opcode == Opcode::MSG_QUEST_PUSH_RESULT) {
         return &MSG_QUEST_PUSH_RESULT;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_QUEST_PUSH_RESULT& ClientOpcode::get<MSG_QUEST_PUSH_RESULT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_QUEST_PUSH_RESULT& ClientOpcode::get<MSG_QUEST_PUSH_RESULT>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_QUEST_PUSH_RESULT>();
     if (p) {
         return *p;
@@ -26308,14 +26617,14 @@ vanilla::MSG_QUEST_PUSH_RESULT& ClientOpcode::get<MSG_QUEST_PUSH_RESULT>() {
 }
 
 template <>
-vanilla::CMSG_REQUEST_PET_INFO* ClientOpcode::get_if<CMSG_REQUEST_PET_INFO>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_REQUEST_PET_INFO* ClientOpcode::get_if<CMSG_REQUEST_PET_INFO>() {
     if (opcode == Opcode::CMSG_REQUEST_PET_INFO) {
         return &CMSG_REQUEST_PET_INFO;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_REQUEST_PET_INFO& ClientOpcode::get<CMSG_REQUEST_PET_INFO>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_REQUEST_PET_INFO& ClientOpcode::get<CMSG_REQUEST_PET_INFO>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_REQUEST_PET_INFO>();
     if (p) {
         return *p;
@@ -26324,14 +26633,14 @@ vanilla::CMSG_REQUEST_PET_INFO& ClientOpcode::get<CMSG_REQUEST_PET_INFO>() {
 }
 
 template <>
-vanilla::CMSG_FAR_SIGHT* ClientOpcode::get_if<CMSG_FAR_SIGHT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_FAR_SIGHT* ClientOpcode::get_if<CMSG_FAR_SIGHT>() {
     if (opcode == Opcode::CMSG_FAR_SIGHT) {
         return &CMSG_FAR_SIGHT;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_FAR_SIGHT& ClientOpcode::get<CMSG_FAR_SIGHT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_FAR_SIGHT& ClientOpcode::get<CMSG_FAR_SIGHT>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_FAR_SIGHT>();
     if (p) {
         return *p;
@@ -26340,14 +26649,14 @@ vanilla::CMSG_FAR_SIGHT& ClientOpcode::get<CMSG_FAR_SIGHT>() {
 }
 
 template <>
-vanilla::CMSG_GROUP_CHANGE_SUB_GROUP* ClientOpcode::get_if<CMSG_GROUP_CHANGE_SUB_GROUP>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GROUP_CHANGE_SUB_GROUP* ClientOpcode::get_if<CMSG_GROUP_CHANGE_SUB_GROUP>() {
     if (opcode == Opcode::CMSG_GROUP_CHANGE_SUB_GROUP) {
         return &CMSG_GROUP_CHANGE_SUB_GROUP;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GROUP_CHANGE_SUB_GROUP& ClientOpcode::get<CMSG_GROUP_CHANGE_SUB_GROUP>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GROUP_CHANGE_SUB_GROUP& ClientOpcode::get<CMSG_GROUP_CHANGE_SUB_GROUP>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GROUP_CHANGE_SUB_GROUP>();
     if (p) {
         return *p;
@@ -26356,14 +26665,14 @@ vanilla::CMSG_GROUP_CHANGE_SUB_GROUP& ClientOpcode::get<CMSG_GROUP_CHANGE_SUB_GR
 }
 
 template <>
-vanilla::CMSG_REQUEST_PARTY_MEMBER_STATS* ClientOpcode::get_if<CMSG_REQUEST_PARTY_MEMBER_STATS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_REQUEST_PARTY_MEMBER_STATS* ClientOpcode::get_if<CMSG_REQUEST_PARTY_MEMBER_STATS>() {
     if (opcode == Opcode::CMSG_REQUEST_PARTY_MEMBER_STATS) {
         return &CMSG_REQUEST_PARTY_MEMBER_STATS;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_REQUEST_PARTY_MEMBER_STATS& ClientOpcode::get<CMSG_REQUEST_PARTY_MEMBER_STATS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_REQUEST_PARTY_MEMBER_STATS& ClientOpcode::get<CMSG_REQUEST_PARTY_MEMBER_STATS>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_REQUEST_PARTY_MEMBER_STATS>();
     if (p) {
         return *p;
@@ -26372,14 +26681,14 @@ vanilla::CMSG_REQUEST_PARTY_MEMBER_STATS& ClientOpcode::get<CMSG_REQUEST_PARTY_M
 }
 
 template <>
-vanilla::CMSG_GROUP_SWAP_SUB_GROUP* ClientOpcode::get_if<CMSG_GROUP_SWAP_SUB_GROUP>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GROUP_SWAP_SUB_GROUP* ClientOpcode::get_if<CMSG_GROUP_SWAP_SUB_GROUP>() {
     if (opcode == Opcode::CMSG_GROUP_SWAP_SUB_GROUP) {
         return &CMSG_GROUP_SWAP_SUB_GROUP;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GROUP_SWAP_SUB_GROUP& ClientOpcode::get<CMSG_GROUP_SWAP_SUB_GROUP>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GROUP_SWAP_SUB_GROUP& ClientOpcode::get<CMSG_GROUP_SWAP_SUB_GROUP>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GROUP_SWAP_SUB_GROUP>();
     if (p) {
         return *p;
@@ -26388,14 +26697,14 @@ vanilla::CMSG_GROUP_SWAP_SUB_GROUP& ClientOpcode::get<CMSG_GROUP_SWAP_SUB_GROUP>
 }
 
 template <>
-vanilla::CMSG_AUTOSTORE_BANK_ITEM* ClientOpcode::get_if<CMSG_AUTOSTORE_BANK_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_AUTOSTORE_BANK_ITEM* ClientOpcode::get_if<CMSG_AUTOSTORE_BANK_ITEM>() {
     if (opcode == Opcode::CMSG_AUTOSTORE_BANK_ITEM) {
         return &CMSG_AUTOSTORE_BANK_ITEM;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_AUTOSTORE_BANK_ITEM& ClientOpcode::get<CMSG_AUTOSTORE_BANK_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_AUTOSTORE_BANK_ITEM& ClientOpcode::get<CMSG_AUTOSTORE_BANK_ITEM>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_AUTOSTORE_BANK_ITEM>();
     if (p) {
         return *p;
@@ -26404,14 +26713,14 @@ vanilla::CMSG_AUTOSTORE_BANK_ITEM& ClientOpcode::get<CMSG_AUTOSTORE_BANK_ITEM>()
 }
 
 template <>
-vanilla::CMSG_AUTOBANK_ITEM* ClientOpcode::get_if<CMSG_AUTOBANK_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_AUTOBANK_ITEM* ClientOpcode::get_if<CMSG_AUTOBANK_ITEM>() {
     if (opcode == Opcode::CMSG_AUTOBANK_ITEM) {
         return &CMSG_AUTOBANK_ITEM;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_AUTOBANK_ITEM& ClientOpcode::get<CMSG_AUTOBANK_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_AUTOBANK_ITEM& ClientOpcode::get<CMSG_AUTOBANK_ITEM>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_AUTOBANK_ITEM>();
     if (p) {
         return *p;
@@ -26420,14 +26729,14 @@ vanilla::CMSG_AUTOBANK_ITEM& ClientOpcode::get<CMSG_AUTOBANK_ITEM>() {
 }
 
 template <>
-vanilla::MSG_QUERY_NEXT_MAIL_TIME_Client* ClientOpcode::get_if<MSG_QUERY_NEXT_MAIL_TIME_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_QUERY_NEXT_MAIL_TIME_Client* ClientOpcode::get_if<MSG_QUERY_NEXT_MAIL_TIME_Client>() {
     if (opcode == Opcode::MSG_QUERY_NEXT_MAIL_TIME) {
         return &MSG_QUERY_NEXT_MAIL_TIME;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_QUERY_NEXT_MAIL_TIME_Client& ClientOpcode::get<MSG_QUERY_NEXT_MAIL_TIME_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_QUERY_NEXT_MAIL_TIME_Client& ClientOpcode::get<MSG_QUERY_NEXT_MAIL_TIME_Client>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_QUERY_NEXT_MAIL_TIME_Client>();
     if (p) {
         return *p;
@@ -26436,14 +26745,14 @@ vanilla::MSG_QUERY_NEXT_MAIL_TIME_Client& ClientOpcode::get<MSG_QUERY_NEXT_MAIL_
 }
 
 template <>
-vanilla::CMSG_GROUP_RAID_CONVERT* ClientOpcode::get_if<CMSG_GROUP_RAID_CONVERT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GROUP_RAID_CONVERT* ClientOpcode::get_if<CMSG_GROUP_RAID_CONVERT>() {
     if (opcode == Opcode::CMSG_GROUP_RAID_CONVERT) {
         return &CMSG_GROUP_RAID_CONVERT;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GROUP_RAID_CONVERT& ClientOpcode::get<CMSG_GROUP_RAID_CONVERT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GROUP_RAID_CONVERT& ClientOpcode::get<CMSG_GROUP_RAID_CONVERT>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GROUP_RAID_CONVERT>();
     if (p) {
         return *p;
@@ -26452,14 +26761,14 @@ vanilla::CMSG_GROUP_RAID_CONVERT& ClientOpcode::get<CMSG_GROUP_RAID_CONVERT>() {
 }
 
 template <>
-vanilla::CMSG_GROUP_ASSISTANT_LEADER* ClientOpcode::get_if<CMSG_GROUP_ASSISTANT_LEADER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GROUP_ASSISTANT_LEADER* ClientOpcode::get_if<CMSG_GROUP_ASSISTANT_LEADER>() {
     if (opcode == Opcode::CMSG_GROUP_ASSISTANT_LEADER) {
         return &CMSG_GROUP_ASSISTANT_LEADER;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GROUP_ASSISTANT_LEADER& ClientOpcode::get<CMSG_GROUP_ASSISTANT_LEADER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GROUP_ASSISTANT_LEADER& ClientOpcode::get<CMSG_GROUP_ASSISTANT_LEADER>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GROUP_ASSISTANT_LEADER>();
     if (p) {
         return *p;
@@ -26468,14 +26777,14 @@ vanilla::CMSG_GROUP_ASSISTANT_LEADER& ClientOpcode::get<CMSG_GROUP_ASSISTANT_LEA
 }
 
 template <>
-vanilla::CMSG_BUYBACK_ITEM* ClientOpcode::get_if<CMSG_BUYBACK_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_BUYBACK_ITEM* ClientOpcode::get_if<CMSG_BUYBACK_ITEM>() {
     if (opcode == Opcode::CMSG_BUYBACK_ITEM) {
         return &CMSG_BUYBACK_ITEM;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_BUYBACK_ITEM& ClientOpcode::get<CMSG_BUYBACK_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_BUYBACK_ITEM& ClientOpcode::get<CMSG_BUYBACK_ITEM>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_BUYBACK_ITEM>();
     if (p) {
         return *p;
@@ -26484,14 +26793,14 @@ vanilla::CMSG_BUYBACK_ITEM& ClientOpcode::get<CMSG_BUYBACK_ITEM>() {
 }
 
 template <>
-vanilla::CMSG_MEETINGSTONE_JOIN* ClientOpcode::get_if<CMSG_MEETINGSTONE_JOIN>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_MEETINGSTONE_JOIN* ClientOpcode::get_if<CMSG_MEETINGSTONE_JOIN>() {
     if (opcode == Opcode::CMSG_MEETINGSTONE_JOIN) {
         return &CMSG_MEETINGSTONE_JOIN;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_MEETINGSTONE_JOIN& ClientOpcode::get<CMSG_MEETINGSTONE_JOIN>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_MEETINGSTONE_JOIN& ClientOpcode::get<CMSG_MEETINGSTONE_JOIN>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_MEETINGSTONE_JOIN>();
     if (p) {
         return *p;
@@ -26500,14 +26809,14 @@ vanilla::CMSG_MEETINGSTONE_JOIN& ClientOpcode::get<CMSG_MEETINGSTONE_JOIN>() {
 }
 
 template <>
-vanilla::CMSG_MEETINGSTONE_LEAVE* ClientOpcode::get_if<CMSG_MEETINGSTONE_LEAVE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_MEETINGSTONE_LEAVE* ClientOpcode::get_if<CMSG_MEETINGSTONE_LEAVE>() {
     if (opcode == Opcode::CMSG_MEETINGSTONE_LEAVE) {
         return &CMSG_MEETINGSTONE_LEAVE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_MEETINGSTONE_LEAVE& ClientOpcode::get<CMSG_MEETINGSTONE_LEAVE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_MEETINGSTONE_LEAVE& ClientOpcode::get<CMSG_MEETINGSTONE_LEAVE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_MEETINGSTONE_LEAVE>();
     if (p) {
         return *p;
@@ -26516,14 +26825,14 @@ vanilla::CMSG_MEETINGSTONE_LEAVE& ClientOpcode::get<CMSG_MEETINGSTONE_LEAVE>() {
 }
 
 template <>
-vanilla::CMSG_MEETINGSTONE_INFO* ClientOpcode::get_if<CMSG_MEETINGSTONE_INFO>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_MEETINGSTONE_INFO* ClientOpcode::get_if<CMSG_MEETINGSTONE_INFO>() {
     if (opcode == Opcode::CMSG_MEETINGSTONE_INFO) {
         return &CMSG_MEETINGSTONE_INFO;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_MEETINGSTONE_INFO& ClientOpcode::get<CMSG_MEETINGSTONE_INFO>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_MEETINGSTONE_INFO& ClientOpcode::get<CMSG_MEETINGSTONE_INFO>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_MEETINGSTONE_INFO>();
     if (p) {
         return *p;
@@ -26532,14 +26841,14 @@ vanilla::CMSG_MEETINGSTONE_INFO& ClientOpcode::get<CMSG_MEETINGSTONE_INFO>() {
 }
 
 template <>
-vanilla::CMSG_CANCEL_GROWTH_AURA* ClientOpcode::get_if<CMSG_CANCEL_GROWTH_AURA>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CANCEL_GROWTH_AURA* ClientOpcode::get_if<CMSG_CANCEL_GROWTH_AURA>() {
     if (opcode == Opcode::CMSG_CANCEL_GROWTH_AURA) {
         return &CMSG_CANCEL_GROWTH_AURA;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_CANCEL_GROWTH_AURA& ClientOpcode::get<CMSG_CANCEL_GROWTH_AURA>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CANCEL_GROWTH_AURA& ClientOpcode::get<CMSG_CANCEL_GROWTH_AURA>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_CANCEL_GROWTH_AURA>();
     if (p) {
         return *p;
@@ -26548,14 +26857,14 @@ vanilla::CMSG_CANCEL_GROWTH_AURA& ClientOpcode::get<CMSG_CANCEL_GROWTH_AURA>() {
 }
 
 template <>
-vanilla::CMSG_LOOT_ROLL* ClientOpcode::get_if<CMSG_LOOT_ROLL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_LOOT_ROLL* ClientOpcode::get_if<CMSG_LOOT_ROLL>() {
     if (opcode == Opcode::CMSG_LOOT_ROLL) {
         return &CMSG_LOOT_ROLL;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_LOOT_ROLL& ClientOpcode::get<CMSG_LOOT_ROLL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_LOOT_ROLL& ClientOpcode::get<CMSG_LOOT_ROLL>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_LOOT_ROLL>();
     if (p) {
         return *p;
@@ -26564,14 +26873,14 @@ vanilla::CMSG_LOOT_ROLL& ClientOpcode::get<CMSG_LOOT_ROLL>() {
 }
 
 template <>
-vanilla::CMSG_LOOT_MASTER_GIVE* ClientOpcode::get_if<CMSG_LOOT_MASTER_GIVE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_LOOT_MASTER_GIVE* ClientOpcode::get_if<CMSG_LOOT_MASTER_GIVE>() {
     if (opcode == Opcode::CMSG_LOOT_MASTER_GIVE) {
         return &CMSG_LOOT_MASTER_GIVE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_LOOT_MASTER_GIVE& ClientOpcode::get<CMSG_LOOT_MASTER_GIVE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_LOOT_MASTER_GIVE& ClientOpcode::get<CMSG_LOOT_MASTER_GIVE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_LOOT_MASTER_GIVE>();
     if (p) {
         return *p;
@@ -26580,14 +26889,14 @@ vanilla::CMSG_LOOT_MASTER_GIVE& ClientOpcode::get<CMSG_LOOT_MASTER_GIVE>() {
 }
 
 template <>
-vanilla::CMSG_REPAIR_ITEM* ClientOpcode::get_if<CMSG_REPAIR_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_REPAIR_ITEM* ClientOpcode::get_if<CMSG_REPAIR_ITEM>() {
     if (opcode == Opcode::CMSG_REPAIR_ITEM) {
         return &CMSG_REPAIR_ITEM;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_REPAIR_ITEM& ClientOpcode::get<CMSG_REPAIR_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_REPAIR_ITEM& ClientOpcode::get<CMSG_REPAIR_ITEM>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_REPAIR_ITEM>();
     if (p) {
         return *p;
@@ -26596,14 +26905,14 @@ vanilla::CMSG_REPAIR_ITEM& ClientOpcode::get<CMSG_REPAIR_ITEM>() {
 }
 
 template <>
-vanilla::MSG_TALENT_WIPE_CONFIRM_Client* ClientOpcode::get_if<MSG_TALENT_WIPE_CONFIRM_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_TALENT_WIPE_CONFIRM_Client* ClientOpcode::get_if<MSG_TALENT_WIPE_CONFIRM_Client>() {
     if (opcode == Opcode::MSG_TALENT_WIPE_CONFIRM) {
         return &MSG_TALENT_WIPE_CONFIRM;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_TALENT_WIPE_CONFIRM_Client& ClientOpcode::get<MSG_TALENT_WIPE_CONFIRM_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_TALENT_WIPE_CONFIRM_Client& ClientOpcode::get<MSG_TALENT_WIPE_CONFIRM_Client>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_TALENT_WIPE_CONFIRM_Client>();
     if (p) {
         return *p;
@@ -26612,14 +26921,14 @@ vanilla::MSG_TALENT_WIPE_CONFIRM_Client& ClientOpcode::get<MSG_TALENT_WIPE_CONFI
 }
 
 template <>
-vanilla::CMSG_SUMMON_RESPONSE* ClientOpcode::get_if<CMSG_SUMMON_RESPONSE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_SUMMON_RESPONSE* ClientOpcode::get_if<CMSG_SUMMON_RESPONSE>() {
     if (opcode == Opcode::CMSG_SUMMON_RESPONSE) {
         return &CMSG_SUMMON_RESPONSE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_SUMMON_RESPONSE& ClientOpcode::get<CMSG_SUMMON_RESPONSE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_SUMMON_RESPONSE& ClientOpcode::get<CMSG_SUMMON_RESPONSE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_SUMMON_RESPONSE>();
     if (p) {
         return *p;
@@ -26628,14 +26937,14 @@ vanilla::CMSG_SUMMON_RESPONSE& ClientOpcode::get<CMSG_SUMMON_RESPONSE>() {
 }
 
 template <>
-vanilla::MSG_MOVE_WATER_WALK* ClientOpcode::get_if<MSG_MOVE_WATER_WALK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_WATER_WALK* ClientOpcode::get_if<MSG_MOVE_WATER_WALK>() {
     if (opcode == Opcode::MSG_MOVE_WATER_WALK) {
         return &MSG_MOVE_WATER_WALK;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_WATER_WALK& ClientOpcode::get<MSG_MOVE_WATER_WALK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_WATER_WALK& ClientOpcode::get<MSG_MOVE_WATER_WALK>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_MOVE_WATER_WALK>();
     if (p) {
         return *p;
@@ -26644,14 +26953,14 @@ vanilla::MSG_MOVE_WATER_WALK& ClientOpcode::get<MSG_MOVE_WATER_WALK>() {
 }
 
 template <>
-vanilla::CMSG_SELF_RES* ClientOpcode::get_if<CMSG_SELF_RES>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_SELF_RES* ClientOpcode::get_if<CMSG_SELF_RES>() {
     if (opcode == Opcode::CMSG_SELF_RES) {
         return &CMSG_SELF_RES;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_SELF_RES& ClientOpcode::get<CMSG_SELF_RES>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_SELF_RES& ClientOpcode::get<CMSG_SELF_RES>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_SELF_RES>();
     if (p) {
         return *p;
@@ -26660,14 +26969,14 @@ vanilla::CMSG_SELF_RES& ClientOpcode::get<CMSG_SELF_RES>() {
 }
 
 template <>
-vanilla::CMSG_TOGGLE_HELM* ClientOpcode::get_if<CMSG_TOGGLE_HELM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_TOGGLE_HELM* ClientOpcode::get_if<CMSG_TOGGLE_HELM>() {
     if (opcode == Opcode::CMSG_TOGGLE_HELM) {
         return &CMSG_TOGGLE_HELM;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_TOGGLE_HELM& ClientOpcode::get<CMSG_TOGGLE_HELM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_TOGGLE_HELM& ClientOpcode::get<CMSG_TOGGLE_HELM>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_TOGGLE_HELM>();
     if (p) {
         return *p;
@@ -26676,14 +26985,14 @@ vanilla::CMSG_TOGGLE_HELM& ClientOpcode::get<CMSG_TOGGLE_HELM>() {
 }
 
 template <>
-vanilla::CMSG_TOGGLE_CLOAK* ClientOpcode::get_if<CMSG_TOGGLE_CLOAK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_TOGGLE_CLOAK* ClientOpcode::get_if<CMSG_TOGGLE_CLOAK>() {
     if (opcode == Opcode::CMSG_TOGGLE_CLOAK) {
         return &CMSG_TOGGLE_CLOAK;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_TOGGLE_CLOAK& ClientOpcode::get<CMSG_TOGGLE_CLOAK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_TOGGLE_CLOAK& ClientOpcode::get<CMSG_TOGGLE_CLOAK>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_TOGGLE_CLOAK>();
     if (p) {
         return *p;
@@ -26692,14 +27001,14 @@ vanilla::CMSG_TOGGLE_CLOAK& ClientOpcode::get<CMSG_TOGGLE_CLOAK>() {
 }
 
 template <>
-vanilla::CMSG_SET_ACTIONBAR_TOGGLES* ClientOpcode::get_if<CMSG_SET_ACTIONBAR_TOGGLES>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_SET_ACTIONBAR_TOGGLES* ClientOpcode::get_if<CMSG_SET_ACTIONBAR_TOGGLES>() {
     if (opcode == Opcode::CMSG_SET_ACTIONBAR_TOGGLES) {
         return &CMSG_SET_ACTIONBAR_TOGGLES;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_SET_ACTIONBAR_TOGGLES& ClientOpcode::get<CMSG_SET_ACTIONBAR_TOGGLES>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_SET_ACTIONBAR_TOGGLES& ClientOpcode::get<CMSG_SET_ACTIONBAR_TOGGLES>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_SET_ACTIONBAR_TOGGLES>();
     if (p) {
         return *p;
@@ -26708,14 +27017,14 @@ vanilla::CMSG_SET_ACTIONBAR_TOGGLES& ClientOpcode::get<CMSG_SET_ACTIONBAR_TOGGLE
 }
 
 template <>
-vanilla::MSG_PETITION_RENAME* ClientOpcode::get_if<MSG_PETITION_RENAME>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_PETITION_RENAME* ClientOpcode::get_if<MSG_PETITION_RENAME>() {
     if (opcode == Opcode::MSG_PETITION_RENAME) {
         return &MSG_PETITION_RENAME;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_PETITION_RENAME& ClientOpcode::get<MSG_PETITION_RENAME>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_PETITION_RENAME& ClientOpcode::get<MSG_PETITION_RENAME>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_PETITION_RENAME>();
     if (p) {
         return *p;
@@ -26724,14 +27033,14 @@ vanilla::MSG_PETITION_RENAME& ClientOpcode::get<MSG_PETITION_RENAME>() {
 }
 
 template <>
-vanilla::CMSG_ITEM_NAME_QUERY* ClientOpcode::get_if<CMSG_ITEM_NAME_QUERY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_ITEM_NAME_QUERY* ClientOpcode::get_if<CMSG_ITEM_NAME_QUERY>() {
     if (opcode == Opcode::CMSG_ITEM_NAME_QUERY) {
         return &CMSG_ITEM_NAME_QUERY;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_ITEM_NAME_QUERY& ClientOpcode::get<CMSG_ITEM_NAME_QUERY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_ITEM_NAME_QUERY& ClientOpcode::get<CMSG_ITEM_NAME_QUERY>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_ITEM_NAME_QUERY>();
     if (p) {
         return *p;
@@ -26740,14 +27049,14 @@ vanilla::CMSG_ITEM_NAME_QUERY& ClientOpcode::get<CMSG_ITEM_NAME_QUERY>() {
 }
 
 template <>
-vanilla::CMSG_CHAR_RENAME* ClientOpcode::get_if<CMSG_CHAR_RENAME>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CHAR_RENAME* ClientOpcode::get_if<CMSG_CHAR_RENAME>() {
     if (opcode == Opcode::CMSG_CHAR_RENAME) {
         return &CMSG_CHAR_RENAME;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_CHAR_RENAME& ClientOpcode::get<CMSG_CHAR_RENAME>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_CHAR_RENAME& ClientOpcode::get<CMSG_CHAR_RENAME>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_CHAR_RENAME>();
     if (p) {
         return *p;
@@ -26756,14 +27065,14 @@ vanilla::CMSG_CHAR_RENAME& ClientOpcode::get<CMSG_CHAR_RENAME>() {
 }
 
 template <>
-vanilla::CMSG_MOVE_SPLINE_DONE* ClientOpcode::get_if<CMSG_MOVE_SPLINE_DONE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_MOVE_SPLINE_DONE* ClientOpcode::get_if<CMSG_MOVE_SPLINE_DONE>() {
     if (opcode == Opcode::CMSG_MOVE_SPLINE_DONE) {
         return &CMSG_MOVE_SPLINE_DONE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_MOVE_SPLINE_DONE& ClientOpcode::get<CMSG_MOVE_SPLINE_DONE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_MOVE_SPLINE_DONE& ClientOpcode::get<CMSG_MOVE_SPLINE_DONE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_MOVE_SPLINE_DONE>();
     if (p) {
         return *p;
@@ -26772,14 +27081,14 @@ vanilla::CMSG_MOVE_SPLINE_DONE& ClientOpcode::get<CMSG_MOVE_SPLINE_DONE>() {
 }
 
 template <>
-vanilla::CMSG_MOVE_FALL_RESET* ClientOpcode::get_if<CMSG_MOVE_FALL_RESET>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_MOVE_FALL_RESET* ClientOpcode::get_if<CMSG_MOVE_FALL_RESET>() {
     if (opcode == Opcode::CMSG_MOVE_FALL_RESET) {
         return &CMSG_MOVE_FALL_RESET;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_MOVE_FALL_RESET& ClientOpcode::get<CMSG_MOVE_FALL_RESET>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_MOVE_FALL_RESET& ClientOpcode::get<CMSG_MOVE_FALL_RESET>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_MOVE_FALL_RESET>();
     if (p) {
         return *p;
@@ -26788,14 +27097,14 @@ vanilla::CMSG_MOVE_FALL_RESET& ClientOpcode::get<CMSG_MOVE_FALL_RESET>() {
 }
 
 template <>
-vanilla::CMSG_REQUEST_RAID_INFO* ClientOpcode::get_if<CMSG_REQUEST_RAID_INFO>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_REQUEST_RAID_INFO* ClientOpcode::get_if<CMSG_REQUEST_RAID_INFO>() {
     if (opcode == Opcode::CMSG_REQUEST_RAID_INFO) {
         return &CMSG_REQUEST_RAID_INFO;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_REQUEST_RAID_INFO& ClientOpcode::get<CMSG_REQUEST_RAID_INFO>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_REQUEST_RAID_INFO& ClientOpcode::get<CMSG_REQUEST_RAID_INFO>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_REQUEST_RAID_INFO>();
     if (p) {
         return *p;
@@ -26804,14 +27113,14 @@ vanilla::CMSG_REQUEST_RAID_INFO& ClientOpcode::get<CMSG_REQUEST_RAID_INFO>() {
 }
 
 template <>
-vanilla::CMSG_MOVE_TIME_SKIPPED* ClientOpcode::get_if<CMSG_MOVE_TIME_SKIPPED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_MOVE_TIME_SKIPPED* ClientOpcode::get_if<CMSG_MOVE_TIME_SKIPPED>() {
     if (opcode == Opcode::CMSG_MOVE_TIME_SKIPPED) {
         return &CMSG_MOVE_TIME_SKIPPED;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_MOVE_TIME_SKIPPED& ClientOpcode::get<CMSG_MOVE_TIME_SKIPPED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_MOVE_TIME_SKIPPED& ClientOpcode::get<CMSG_MOVE_TIME_SKIPPED>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_MOVE_TIME_SKIPPED>();
     if (p) {
         return *p;
@@ -26820,14 +27129,14 @@ vanilla::CMSG_MOVE_TIME_SKIPPED& ClientOpcode::get<CMSG_MOVE_TIME_SKIPPED>() {
 }
 
 template <>
-vanilla::CMSG_MOVE_FEATHER_FALL_ACK* ClientOpcode::get_if<CMSG_MOVE_FEATHER_FALL_ACK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_MOVE_FEATHER_FALL_ACK* ClientOpcode::get_if<CMSG_MOVE_FEATHER_FALL_ACK>() {
     if (opcode == Opcode::CMSG_MOVE_FEATHER_FALL_ACK) {
         return &CMSG_MOVE_FEATHER_FALL_ACK;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_MOVE_FEATHER_FALL_ACK& ClientOpcode::get<CMSG_MOVE_FEATHER_FALL_ACK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_MOVE_FEATHER_FALL_ACK& ClientOpcode::get<CMSG_MOVE_FEATHER_FALL_ACK>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_MOVE_FEATHER_FALL_ACK>();
     if (p) {
         return *p;
@@ -26836,14 +27145,14 @@ vanilla::CMSG_MOVE_FEATHER_FALL_ACK& ClientOpcode::get<CMSG_MOVE_FEATHER_FALL_AC
 }
 
 template <>
-vanilla::CMSG_MOVE_WATER_WALK_ACK* ClientOpcode::get_if<CMSG_MOVE_WATER_WALK_ACK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_MOVE_WATER_WALK_ACK* ClientOpcode::get_if<CMSG_MOVE_WATER_WALK_ACK>() {
     if (opcode == Opcode::CMSG_MOVE_WATER_WALK_ACK) {
         return &CMSG_MOVE_WATER_WALK_ACK;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_MOVE_WATER_WALK_ACK& ClientOpcode::get<CMSG_MOVE_WATER_WALK_ACK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_MOVE_WATER_WALK_ACK& ClientOpcode::get<CMSG_MOVE_WATER_WALK_ACK>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_MOVE_WATER_WALK_ACK>();
     if (p) {
         return *p;
@@ -26852,14 +27161,14 @@ vanilla::CMSG_MOVE_WATER_WALK_ACK& ClientOpcode::get<CMSG_MOVE_WATER_WALK_ACK>()
 }
 
 template <>
-vanilla::CMSG_MOVE_NOT_ACTIVE_MOVER* ClientOpcode::get_if<CMSG_MOVE_NOT_ACTIVE_MOVER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_MOVE_NOT_ACTIVE_MOVER* ClientOpcode::get_if<CMSG_MOVE_NOT_ACTIVE_MOVER>() {
     if (opcode == Opcode::CMSG_MOVE_NOT_ACTIVE_MOVER) {
         return &CMSG_MOVE_NOT_ACTIVE_MOVER;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_MOVE_NOT_ACTIVE_MOVER& ClientOpcode::get<CMSG_MOVE_NOT_ACTIVE_MOVER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_MOVE_NOT_ACTIVE_MOVER& ClientOpcode::get<CMSG_MOVE_NOT_ACTIVE_MOVER>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_MOVE_NOT_ACTIVE_MOVER>();
     if (p) {
         return *p;
@@ -26868,14 +27177,14 @@ vanilla::CMSG_MOVE_NOT_ACTIVE_MOVER& ClientOpcode::get<CMSG_MOVE_NOT_ACTIVE_MOVE
 }
 
 template <>
-vanilla::CMSG_BATTLEFIELD_STATUS* ClientOpcode::get_if<CMSG_BATTLEFIELD_STATUS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_BATTLEFIELD_STATUS* ClientOpcode::get_if<CMSG_BATTLEFIELD_STATUS>() {
     if (opcode == Opcode::CMSG_BATTLEFIELD_STATUS) {
         return &CMSG_BATTLEFIELD_STATUS;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_BATTLEFIELD_STATUS& ClientOpcode::get<CMSG_BATTLEFIELD_STATUS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_BATTLEFIELD_STATUS& ClientOpcode::get<CMSG_BATTLEFIELD_STATUS>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_BATTLEFIELD_STATUS>();
     if (p) {
         return *p;
@@ -26884,14 +27193,14 @@ vanilla::CMSG_BATTLEFIELD_STATUS& ClientOpcode::get<CMSG_BATTLEFIELD_STATUS>() {
 }
 
 template <>
-vanilla::CMSG_BATTLEFIELD_PORT* ClientOpcode::get_if<CMSG_BATTLEFIELD_PORT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_BATTLEFIELD_PORT* ClientOpcode::get_if<CMSG_BATTLEFIELD_PORT>() {
     if (opcode == Opcode::CMSG_BATTLEFIELD_PORT) {
         return &CMSG_BATTLEFIELD_PORT;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_BATTLEFIELD_PORT& ClientOpcode::get<CMSG_BATTLEFIELD_PORT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_BATTLEFIELD_PORT& ClientOpcode::get<CMSG_BATTLEFIELD_PORT>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_BATTLEFIELD_PORT>();
     if (p) {
         return *p;
@@ -26900,14 +27209,14 @@ vanilla::CMSG_BATTLEFIELD_PORT& ClientOpcode::get<CMSG_BATTLEFIELD_PORT>() {
 }
 
 template <>
-vanilla::MSG_INSPECT_HONOR_STATS_Client* ClientOpcode::get_if<MSG_INSPECT_HONOR_STATS_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_INSPECT_HONOR_STATS_Client* ClientOpcode::get_if<MSG_INSPECT_HONOR_STATS_Client>() {
     if (opcode == Opcode::MSG_INSPECT_HONOR_STATS) {
         return &MSG_INSPECT_HONOR_STATS;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_INSPECT_HONOR_STATS_Client& ClientOpcode::get<MSG_INSPECT_HONOR_STATS_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_INSPECT_HONOR_STATS_Client& ClientOpcode::get<MSG_INSPECT_HONOR_STATS_Client>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_INSPECT_HONOR_STATS_Client>();
     if (p) {
         return *p;
@@ -26916,14 +27225,14 @@ vanilla::MSG_INSPECT_HONOR_STATS_Client& ClientOpcode::get<MSG_INSPECT_HONOR_STA
 }
 
 template <>
-vanilla::CMSG_BATTLEMASTER_HELLO* ClientOpcode::get_if<CMSG_BATTLEMASTER_HELLO>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_BATTLEMASTER_HELLO* ClientOpcode::get_if<CMSG_BATTLEMASTER_HELLO>() {
     if (opcode == Opcode::CMSG_BATTLEMASTER_HELLO) {
         return &CMSG_BATTLEMASTER_HELLO;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_BATTLEMASTER_HELLO& ClientOpcode::get<CMSG_BATTLEMASTER_HELLO>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_BATTLEMASTER_HELLO& ClientOpcode::get<CMSG_BATTLEMASTER_HELLO>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_BATTLEMASTER_HELLO>();
     if (p) {
         return *p;
@@ -26932,14 +27241,14 @@ vanilla::CMSG_BATTLEMASTER_HELLO& ClientOpcode::get<CMSG_BATTLEMASTER_HELLO>() {
 }
 
 template <>
-vanilla::CMSG_FORCE_WALK_SPEED_CHANGE_ACK* ClientOpcode::get_if<CMSG_FORCE_WALK_SPEED_CHANGE_ACK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_FORCE_WALK_SPEED_CHANGE_ACK* ClientOpcode::get_if<CMSG_FORCE_WALK_SPEED_CHANGE_ACK>() {
     if (opcode == Opcode::CMSG_FORCE_WALK_SPEED_CHANGE_ACK) {
         return &CMSG_FORCE_WALK_SPEED_CHANGE_ACK;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_FORCE_WALK_SPEED_CHANGE_ACK& ClientOpcode::get<CMSG_FORCE_WALK_SPEED_CHANGE_ACK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_FORCE_WALK_SPEED_CHANGE_ACK& ClientOpcode::get<CMSG_FORCE_WALK_SPEED_CHANGE_ACK>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_FORCE_WALK_SPEED_CHANGE_ACK>();
     if (p) {
         return *p;
@@ -26948,14 +27257,14 @@ vanilla::CMSG_FORCE_WALK_SPEED_CHANGE_ACK& ClientOpcode::get<CMSG_FORCE_WALK_SPE
 }
 
 template <>
-vanilla::CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK* ClientOpcode::get_if<CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK* ClientOpcode::get_if<CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK>() {
     if (opcode == Opcode::CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK) {
         return &CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK& ClientOpcode::get<CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK& ClientOpcode::get<CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK>();
     if (p) {
         return *p;
@@ -26964,14 +27273,14 @@ vanilla::CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK& ClientOpcode::get<CMSG_FORCE_SWI
 }
 
 template <>
-vanilla::CMSG_FORCE_TURN_RATE_CHANGE_ACK* ClientOpcode::get_if<CMSG_FORCE_TURN_RATE_CHANGE_ACK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_FORCE_TURN_RATE_CHANGE_ACK* ClientOpcode::get_if<CMSG_FORCE_TURN_RATE_CHANGE_ACK>() {
     if (opcode == Opcode::CMSG_FORCE_TURN_RATE_CHANGE_ACK) {
         return &CMSG_FORCE_TURN_RATE_CHANGE_ACK;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_FORCE_TURN_RATE_CHANGE_ACK& ClientOpcode::get<CMSG_FORCE_TURN_RATE_CHANGE_ACK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_FORCE_TURN_RATE_CHANGE_ACK& ClientOpcode::get<CMSG_FORCE_TURN_RATE_CHANGE_ACK>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_FORCE_TURN_RATE_CHANGE_ACK>();
     if (p) {
         return *p;
@@ -26980,14 +27289,14 @@ vanilla::CMSG_FORCE_TURN_RATE_CHANGE_ACK& ClientOpcode::get<CMSG_FORCE_TURN_RATE
 }
 
 template <>
-vanilla::MSG_PVP_LOG_DATA_Client* ClientOpcode::get_if<MSG_PVP_LOG_DATA_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_PVP_LOG_DATA_Client* ClientOpcode::get_if<MSG_PVP_LOG_DATA_Client>() {
     if (opcode == Opcode::MSG_PVP_LOG_DATA) {
         return &MSG_PVP_LOG_DATA;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_PVP_LOG_DATA_Client& ClientOpcode::get<MSG_PVP_LOG_DATA_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_PVP_LOG_DATA_Client& ClientOpcode::get<MSG_PVP_LOG_DATA_Client>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_PVP_LOG_DATA_Client>();
     if (p) {
         return *p;
@@ -26996,14 +27305,14 @@ vanilla::MSG_PVP_LOG_DATA_Client& ClientOpcode::get<MSG_PVP_LOG_DATA_Client>() {
 }
 
 template <>
-vanilla::CMSG_LEAVE_BATTLEFIELD* ClientOpcode::get_if<CMSG_LEAVE_BATTLEFIELD>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_LEAVE_BATTLEFIELD* ClientOpcode::get_if<CMSG_LEAVE_BATTLEFIELD>() {
     if (opcode == Opcode::CMSG_LEAVE_BATTLEFIELD) {
         return &CMSG_LEAVE_BATTLEFIELD;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_LEAVE_BATTLEFIELD& ClientOpcode::get<CMSG_LEAVE_BATTLEFIELD>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_LEAVE_BATTLEFIELD& ClientOpcode::get<CMSG_LEAVE_BATTLEFIELD>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_LEAVE_BATTLEFIELD>();
     if (p) {
         return *p;
@@ -27012,14 +27321,14 @@ vanilla::CMSG_LEAVE_BATTLEFIELD& ClientOpcode::get<CMSG_LEAVE_BATTLEFIELD>() {
 }
 
 template <>
-vanilla::CMSG_AREA_SPIRIT_HEALER_QUERY* ClientOpcode::get_if<CMSG_AREA_SPIRIT_HEALER_QUERY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_AREA_SPIRIT_HEALER_QUERY* ClientOpcode::get_if<CMSG_AREA_SPIRIT_HEALER_QUERY>() {
     if (opcode == Opcode::CMSG_AREA_SPIRIT_HEALER_QUERY) {
         return &CMSG_AREA_SPIRIT_HEALER_QUERY;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_AREA_SPIRIT_HEALER_QUERY& ClientOpcode::get<CMSG_AREA_SPIRIT_HEALER_QUERY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_AREA_SPIRIT_HEALER_QUERY& ClientOpcode::get<CMSG_AREA_SPIRIT_HEALER_QUERY>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_AREA_SPIRIT_HEALER_QUERY>();
     if (p) {
         return *p;
@@ -27028,14 +27337,14 @@ vanilla::CMSG_AREA_SPIRIT_HEALER_QUERY& ClientOpcode::get<CMSG_AREA_SPIRIT_HEALE
 }
 
 template <>
-vanilla::CMSG_AREA_SPIRIT_HEALER_QUEUE* ClientOpcode::get_if<CMSG_AREA_SPIRIT_HEALER_QUEUE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_AREA_SPIRIT_HEALER_QUEUE* ClientOpcode::get_if<CMSG_AREA_SPIRIT_HEALER_QUEUE>() {
     if (opcode == Opcode::CMSG_AREA_SPIRIT_HEALER_QUEUE) {
         return &CMSG_AREA_SPIRIT_HEALER_QUEUE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_AREA_SPIRIT_HEALER_QUEUE& ClientOpcode::get<CMSG_AREA_SPIRIT_HEALER_QUEUE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_AREA_SPIRIT_HEALER_QUEUE& ClientOpcode::get<CMSG_AREA_SPIRIT_HEALER_QUEUE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_AREA_SPIRIT_HEALER_QUEUE>();
     if (p) {
         return *p;
@@ -27044,14 +27353,14 @@ vanilla::CMSG_AREA_SPIRIT_HEALER_QUEUE& ClientOpcode::get<CMSG_AREA_SPIRIT_HEALE
 }
 
 template <>
-vanilla::CMSG_WARDEN_DATA* ClientOpcode::get_if<CMSG_WARDEN_DATA>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_WARDEN_DATA* ClientOpcode::get_if<CMSG_WARDEN_DATA>() {
     if (opcode == Opcode::CMSG_WARDEN_DATA) {
         return &CMSG_WARDEN_DATA;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_WARDEN_DATA& ClientOpcode::get<CMSG_WARDEN_DATA>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_WARDEN_DATA& ClientOpcode::get<CMSG_WARDEN_DATA>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_WARDEN_DATA>();
     if (p) {
         return *p;
@@ -27060,14 +27369,14 @@ vanilla::CMSG_WARDEN_DATA& ClientOpcode::get<CMSG_WARDEN_DATA>() {
 }
 
 template <>
-vanilla::MSG_BATTLEGROUND_PLAYER_POSITIONS_Client* ClientOpcode::get_if<MSG_BATTLEGROUND_PLAYER_POSITIONS_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_BATTLEGROUND_PLAYER_POSITIONS_Client* ClientOpcode::get_if<MSG_BATTLEGROUND_PLAYER_POSITIONS_Client>() {
     if (opcode == Opcode::MSG_BATTLEGROUND_PLAYER_POSITIONS) {
         return &MSG_BATTLEGROUND_PLAYER_POSITIONS;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_BATTLEGROUND_PLAYER_POSITIONS_Client& ClientOpcode::get<MSG_BATTLEGROUND_PLAYER_POSITIONS_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_BATTLEGROUND_PLAYER_POSITIONS_Client& ClientOpcode::get<MSG_BATTLEGROUND_PLAYER_POSITIONS_Client>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_BATTLEGROUND_PLAYER_POSITIONS_Client>();
     if (p) {
         return *p;
@@ -27076,14 +27385,14 @@ vanilla::MSG_BATTLEGROUND_PLAYER_POSITIONS_Client& ClientOpcode::get<MSG_BATTLEG
 }
 
 template <>
-vanilla::CMSG_PET_STOP_ATTACK* ClientOpcode::get_if<CMSG_PET_STOP_ATTACK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PET_STOP_ATTACK* ClientOpcode::get_if<CMSG_PET_STOP_ATTACK>() {
     if (opcode == Opcode::CMSG_PET_STOP_ATTACK) {
         return &CMSG_PET_STOP_ATTACK;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_PET_STOP_ATTACK& ClientOpcode::get<CMSG_PET_STOP_ATTACK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PET_STOP_ATTACK& ClientOpcode::get<CMSG_PET_STOP_ATTACK>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_PET_STOP_ATTACK>();
     if (p) {
         return *p;
@@ -27092,14 +27401,14 @@ vanilla::CMSG_PET_STOP_ATTACK& ClientOpcode::get<CMSG_PET_STOP_ATTACK>() {
 }
 
 template <>
-vanilla::CMSG_BATTLEMASTER_JOIN* ClientOpcode::get_if<CMSG_BATTLEMASTER_JOIN>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_BATTLEMASTER_JOIN* ClientOpcode::get_if<CMSG_BATTLEMASTER_JOIN>() {
     if (opcode == Opcode::CMSG_BATTLEMASTER_JOIN) {
         return &CMSG_BATTLEMASTER_JOIN;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_BATTLEMASTER_JOIN& ClientOpcode::get<CMSG_BATTLEMASTER_JOIN>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_BATTLEMASTER_JOIN& ClientOpcode::get<CMSG_BATTLEMASTER_JOIN>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_BATTLEMASTER_JOIN>();
     if (p) {
         return *p;
@@ -27108,14 +27417,14 @@ vanilla::CMSG_BATTLEMASTER_JOIN& ClientOpcode::get<CMSG_BATTLEMASTER_JOIN>() {
 }
 
 template <>
-vanilla::CMSG_PET_UNLEARN* ClientOpcode::get_if<CMSG_PET_UNLEARN>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PET_UNLEARN* ClientOpcode::get_if<CMSG_PET_UNLEARN>() {
     if (opcode == Opcode::CMSG_PET_UNLEARN) {
         return &CMSG_PET_UNLEARN;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_PET_UNLEARN& ClientOpcode::get<CMSG_PET_UNLEARN>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PET_UNLEARN& ClientOpcode::get<CMSG_PET_UNLEARN>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_PET_UNLEARN>();
     if (p) {
         return *p;
@@ -27124,14 +27433,14 @@ vanilla::CMSG_PET_UNLEARN& ClientOpcode::get<CMSG_PET_UNLEARN>() {
 }
 
 template <>
-vanilla::CMSG_PET_SPELL_AUTOCAST* ClientOpcode::get_if<CMSG_PET_SPELL_AUTOCAST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PET_SPELL_AUTOCAST* ClientOpcode::get_if<CMSG_PET_SPELL_AUTOCAST>() {
     if (opcode == Opcode::CMSG_PET_SPELL_AUTOCAST) {
         return &CMSG_PET_SPELL_AUTOCAST;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_PET_SPELL_AUTOCAST& ClientOpcode::get<CMSG_PET_SPELL_AUTOCAST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_PET_SPELL_AUTOCAST& ClientOpcode::get<CMSG_PET_SPELL_AUTOCAST>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_PET_SPELL_AUTOCAST>();
     if (p) {
         return *p;
@@ -27140,14 +27449,14 @@ vanilla::CMSG_PET_SPELL_AUTOCAST& ClientOpcode::get<CMSG_PET_SPELL_AUTOCAST>() {
 }
 
 template <>
-vanilla::CMSG_GUILD_INFO_TEXT* ClientOpcode::get_if<CMSG_GUILD_INFO_TEXT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GUILD_INFO_TEXT* ClientOpcode::get_if<CMSG_GUILD_INFO_TEXT>() {
     if (opcode == Opcode::CMSG_GUILD_INFO_TEXT) {
         return &CMSG_GUILD_INFO_TEXT;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GUILD_INFO_TEXT& ClientOpcode::get<CMSG_GUILD_INFO_TEXT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GUILD_INFO_TEXT& ClientOpcode::get<CMSG_GUILD_INFO_TEXT>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GUILD_INFO_TEXT>();
     if (p) {
         return *p;
@@ -27156,14 +27465,14 @@ vanilla::CMSG_GUILD_INFO_TEXT& ClientOpcode::get<CMSG_GUILD_INFO_TEXT>() {
 }
 
 template <>
-vanilla::CMSG_ACTIVATETAXIEXPRESS* ClientOpcode::get_if<CMSG_ACTIVATETAXIEXPRESS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_ACTIVATETAXIEXPRESS* ClientOpcode::get_if<CMSG_ACTIVATETAXIEXPRESS>() {
     if (opcode == Opcode::CMSG_ACTIVATETAXIEXPRESS) {
         return &CMSG_ACTIVATETAXIEXPRESS;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_ACTIVATETAXIEXPRESS& ClientOpcode::get<CMSG_ACTIVATETAXIEXPRESS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_ACTIVATETAXIEXPRESS& ClientOpcode::get<CMSG_ACTIVATETAXIEXPRESS>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_ACTIVATETAXIEXPRESS>();
     if (p) {
         return *p;
@@ -27172,14 +27481,14 @@ vanilla::CMSG_ACTIVATETAXIEXPRESS& ClientOpcode::get<CMSG_ACTIVATETAXIEXPRESS>()
 }
 
 template <>
-vanilla::CMSG_SET_FACTION_INACTIVE* ClientOpcode::get_if<CMSG_SET_FACTION_INACTIVE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_SET_FACTION_INACTIVE* ClientOpcode::get_if<CMSG_SET_FACTION_INACTIVE>() {
     if (opcode == Opcode::CMSG_SET_FACTION_INACTIVE) {
         return &CMSG_SET_FACTION_INACTIVE;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_SET_FACTION_INACTIVE& ClientOpcode::get<CMSG_SET_FACTION_INACTIVE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_SET_FACTION_INACTIVE& ClientOpcode::get<CMSG_SET_FACTION_INACTIVE>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_SET_FACTION_INACTIVE>();
     if (p) {
         return *p;
@@ -27188,14 +27497,14 @@ vanilla::CMSG_SET_FACTION_INACTIVE& ClientOpcode::get<CMSG_SET_FACTION_INACTIVE>
 }
 
 template <>
-vanilla::CMSG_SET_WATCHED_FACTION* ClientOpcode::get_if<CMSG_SET_WATCHED_FACTION>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_SET_WATCHED_FACTION* ClientOpcode::get_if<CMSG_SET_WATCHED_FACTION>() {
     if (opcode == Opcode::CMSG_SET_WATCHED_FACTION) {
         return &CMSG_SET_WATCHED_FACTION;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_SET_WATCHED_FACTION& ClientOpcode::get<CMSG_SET_WATCHED_FACTION>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_SET_WATCHED_FACTION& ClientOpcode::get<CMSG_SET_WATCHED_FACTION>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_SET_WATCHED_FACTION>();
     if (p) {
         return *p;
@@ -27204,14 +27513,14 @@ vanilla::CMSG_SET_WATCHED_FACTION& ClientOpcode::get<CMSG_SET_WATCHED_FACTION>()
 }
 
 template <>
-vanilla::CMSG_RESET_INSTANCES* ClientOpcode::get_if<CMSG_RESET_INSTANCES>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_RESET_INSTANCES* ClientOpcode::get_if<CMSG_RESET_INSTANCES>() {
     if (opcode == Opcode::CMSG_RESET_INSTANCES) {
         return &CMSG_RESET_INSTANCES;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_RESET_INSTANCES& ClientOpcode::get<CMSG_RESET_INSTANCES>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_RESET_INSTANCES& ClientOpcode::get<CMSG_RESET_INSTANCES>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_RESET_INSTANCES>();
     if (p) {
         return *p;
@@ -27220,14 +27529,14 @@ vanilla::CMSG_RESET_INSTANCES& ClientOpcode::get<CMSG_RESET_INSTANCES>() {
 }
 
 template <>
-vanilla::MSG_RAID_TARGET_UPDATE_Client* ClientOpcode::get_if<MSG_RAID_TARGET_UPDATE_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_RAID_TARGET_UPDATE_Client* ClientOpcode::get_if<MSG_RAID_TARGET_UPDATE_Client>() {
     if (opcode == Opcode::MSG_RAID_TARGET_UPDATE) {
         return &MSG_RAID_TARGET_UPDATE;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_RAID_TARGET_UPDATE_Client& ClientOpcode::get<MSG_RAID_TARGET_UPDATE_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_RAID_TARGET_UPDATE_Client& ClientOpcode::get<MSG_RAID_TARGET_UPDATE_Client>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_RAID_TARGET_UPDATE_Client>();
     if (p) {
         return *p;
@@ -27236,14 +27545,14 @@ vanilla::MSG_RAID_TARGET_UPDATE_Client& ClientOpcode::get<MSG_RAID_TARGET_UPDATE
 }
 
 template <>
-vanilla::MSG_RAID_READY_CHECK_Client* ClientOpcode::get_if<MSG_RAID_READY_CHECK_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_RAID_READY_CHECK_Client* ClientOpcode::get_if<MSG_RAID_READY_CHECK_Client>() {
     if (opcode == Opcode::MSG_RAID_READY_CHECK) {
         return &MSG_RAID_READY_CHECK;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_RAID_READY_CHECK_Client& ClientOpcode::get<MSG_RAID_READY_CHECK_Client>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_RAID_READY_CHECK_Client& ClientOpcode::get<MSG_RAID_READY_CHECK_Client>() {
     auto p = ClientOpcode::get_if<vanilla::MSG_RAID_READY_CHECK_Client>();
     if (p) {
         return *p;
@@ -27252,14 +27561,14 @@ vanilla::MSG_RAID_READY_CHECK_Client& ClientOpcode::get<MSG_RAID_READY_CHECK_Cli
 }
 
 template <>
-vanilla::CMSG_GMSURVEY_SUBMIT* ClientOpcode::get_if<CMSG_GMSURVEY_SUBMIT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GMSURVEY_SUBMIT* ClientOpcode::get_if<CMSG_GMSURVEY_SUBMIT>() {
     if (opcode == Opcode::CMSG_GMSURVEY_SUBMIT) {
         return &CMSG_GMSURVEY_SUBMIT;
     }
     return nullptr;
 }
 template <>
-vanilla::CMSG_GMSURVEY_SUBMIT& ClientOpcode::get<CMSG_GMSURVEY_SUBMIT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::CMSG_GMSURVEY_SUBMIT& ClientOpcode::get<CMSG_GMSURVEY_SUBMIT>() {
     auto p = ClientOpcode::get_if<vanilla::CMSG_GMSURVEY_SUBMIT>();
     if (p) {
         return *p;
@@ -29118,15 +29427,368 @@ WOW_WORLD_MESSAGES_CPP_EXPORT ClientOpcode read_client_opcode(Reader& reader) {
 
     return op;
 }
+WOW_WORLD_MESSAGES_CPP_EXPORT const char* ServerOpcode::to_string() const {
+    if (opcode == Opcode::SMSG_CHAR_CREATE) { return "SMSG_CHAR_CREATE"; }
+    if (opcode == Opcode::SMSG_CHAR_ENUM) { return "SMSG_CHAR_ENUM"; }
+    if (opcode == Opcode::SMSG_CHAR_DELETE) { return "SMSG_CHAR_DELETE"; }
+    if (opcode == Opcode::SMSG_NEW_WORLD) { return "SMSG_NEW_WORLD"; }
+    if (opcode == Opcode::SMSG_TRANSFER_PENDING) { return "SMSG_TRANSFER_PENDING"; }
+    if (opcode == Opcode::SMSG_TRANSFER_ABORTED) { return "SMSG_TRANSFER_ABORTED"; }
+    if (opcode == Opcode::SMSG_CHARACTER_LOGIN_FAILED) { return "SMSG_CHARACTER_LOGIN_FAILED"; }
+    if (opcode == Opcode::SMSG_LOGIN_SETTIMESPEED) { return "SMSG_LOGIN_SETTIMESPEED"; }
+    if (opcode == Opcode::SMSG_LOGOUT_RESPONSE) { return "SMSG_LOGOUT_RESPONSE"; }
+    if (opcode == Opcode::SMSG_LOGOUT_COMPLETE) { return "SMSG_LOGOUT_COMPLETE"; }
+    if (opcode == Opcode::SMSG_LOGOUT_CANCEL_ACK) { return "SMSG_LOGOUT_CANCEL_ACK"; }
+    if (opcode == Opcode::SMSG_NAME_QUERY_RESPONSE) { return "SMSG_NAME_QUERY_RESPONSE"; }
+    if (opcode == Opcode::SMSG_PET_NAME_QUERY_RESPONSE) { return "SMSG_PET_NAME_QUERY_RESPONSE"; }
+    if (opcode == Opcode::SMSG_GUILD_QUERY_RESPONSE) { return "SMSG_GUILD_QUERY_RESPONSE"; }
+    if (opcode == Opcode::SMSG_ITEM_QUERY_SINGLE_RESPONSE) { return "SMSG_ITEM_QUERY_SINGLE_RESPONSE"; }
+    if (opcode == Opcode::SMSG_PAGE_TEXT_QUERY_RESPONSE) { return "SMSG_PAGE_TEXT_QUERY_RESPONSE"; }
+    if (opcode == Opcode::SMSG_QUEST_QUERY_RESPONSE) { return "SMSG_QUEST_QUERY_RESPONSE"; }
+    if (opcode == Opcode::SMSG_GAMEOBJECT_QUERY_RESPONSE) { return "SMSG_GAMEOBJECT_QUERY_RESPONSE"; }
+    if (opcode == Opcode::SMSG_CREATURE_QUERY_RESPONSE) { return "SMSG_CREATURE_QUERY_RESPONSE"; }
+    if (opcode == Opcode::SMSG_WHO) { return "SMSG_WHO"; }
+    if (opcode == Opcode::SMSG_WHOIS) { return "SMSG_WHOIS"; }
+    if (opcode == Opcode::SMSG_FRIEND_LIST) { return "SMSG_FRIEND_LIST"; }
+    if (opcode == Opcode::SMSG_FRIEND_STATUS) { return "SMSG_FRIEND_STATUS"; }
+    if (opcode == Opcode::SMSG_IGNORE_LIST) { return "SMSG_IGNORE_LIST"; }
+    if (opcode == Opcode::SMSG_GROUP_INVITE) { return "SMSG_GROUP_INVITE"; }
+    if (opcode == Opcode::SMSG_GROUP_DECLINE) { return "SMSG_GROUP_DECLINE"; }
+    if (opcode == Opcode::SMSG_GROUP_UNINVITE) { return "SMSG_GROUP_UNINVITE"; }
+    if (opcode == Opcode::SMSG_GROUP_SET_LEADER) { return "SMSG_GROUP_SET_LEADER"; }
+    if (opcode == Opcode::SMSG_GROUP_DESTROYED) { return "SMSG_GROUP_DESTROYED"; }
+    if (opcode == Opcode::SMSG_GROUP_LIST) { return "SMSG_GROUP_LIST"; }
+    if (opcode == Opcode::SMSG_PARTY_MEMBER_STATS) { return "SMSG_PARTY_MEMBER_STATS"; }
+    if (opcode == Opcode::SMSG_PARTY_COMMAND_RESULT) { return "SMSG_PARTY_COMMAND_RESULT"; }
+    if (opcode == Opcode::SMSG_GUILD_INVITE) { return "SMSG_GUILD_INVITE"; }
+    if (opcode == Opcode::SMSG_GUILD_INFO) { return "SMSG_GUILD_INFO"; }
+    if (opcode == Opcode::SMSG_GUILD_ROSTER) { return "SMSG_GUILD_ROSTER"; }
+    if (opcode == Opcode::SMSG_GUILD_EVENT) { return "SMSG_GUILD_EVENT"; }
+    if (opcode == Opcode::SMSG_GUILD_COMMAND_RESULT) { return "SMSG_GUILD_COMMAND_RESULT"; }
+    if (opcode == Opcode::SMSG_MESSAGECHAT) { return "SMSG_MESSAGECHAT"; }
+    if (opcode == Opcode::SMSG_CHANNEL_NOTIFY) { return "SMSG_CHANNEL_NOTIFY"; }
+    if (opcode == Opcode::SMSG_CHANNEL_LIST) { return "SMSG_CHANNEL_LIST"; }
+    if (opcode == Opcode::SMSG_UPDATE_OBJECT) { return "SMSG_UPDATE_OBJECT"; }
+    if (opcode == Opcode::SMSG_DESTROY_OBJECT) { return "SMSG_DESTROY_OBJECT"; }
+    if (opcode == Opcode::SMSG_READ_ITEM_OK) { return "SMSG_READ_ITEM_OK"; }
+    if (opcode == Opcode::SMSG_READ_ITEM_FAILED) { return "SMSG_READ_ITEM_FAILED"; }
+    if (opcode == Opcode::SMSG_ITEM_COOLDOWN) { return "SMSG_ITEM_COOLDOWN"; }
+    if (opcode == Opcode::SMSG_GAMEOBJECT_CUSTOM_ANIM) { return "SMSG_GAMEOBJECT_CUSTOM_ANIM"; }
+    if (opcode == Opcode::MSG_MOVE_START_FORWARD) { return "MSG_MOVE_START_FORWARD_Server"; }
+    if (opcode == Opcode::MSG_MOVE_START_BACKWARD) { return "MSG_MOVE_START_BACKWARD_Server"; }
+    if (opcode == Opcode::MSG_MOVE_STOP) { return "MSG_MOVE_STOP_Server"; }
+    if (opcode == Opcode::MSG_MOVE_START_STRAFE_LEFT) { return "MSG_MOVE_START_STRAFE_LEFT_Server"; }
+    if (opcode == Opcode::MSG_MOVE_START_STRAFE_RIGHT) { return "MSG_MOVE_START_STRAFE_RIGHT_Server"; }
+    if (opcode == Opcode::MSG_MOVE_STOP_STRAFE) { return "MSG_MOVE_STOP_STRAFE_Server"; }
+    if (opcode == Opcode::MSG_MOVE_JUMP) { return "MSG_MOVE_JUMP_Server"; }
+    if (opcode == Opcode::MSG_MOVE_START_TURN_LEFT) { return "MSG_MOVE_START_TURN_LEFT_Server"; }
+    if (opcode == Opcode::MSG_MOVE_START_TURN_RIGHT) { return "MSG_MOVE_START_TURN_RIGHT_Server"; }
+    if (opcode == Opcode::MSG_MOVE_STOP_TURN) { return "MSG_MOVE_STOP_TURN_Server"; }
+    if (opcode == Opcode::MSG_MOVE_START_PITCH_UP) { return "MSG_MOVE_START_PITCH_UP_Server"; }
+    if (opcode == Opcode::MSG_MOVE_START_PITCH_DOWN) { return "MSG_MOVE_START_PITCH_DOWN_Server"; }
+    if (opcode == Opcode::MSG_MOVE_STOP_PITCH) { return "MSG_MOVE_STOP_PITCH_Server"; }
+    if (opcode == Opcode::MSG_MOVE_SET_RUN_MODE) { return "MSG_MOVE_SET_RUN_MODE_Server"; }
+    if (opcode == Opcode::MSG_MOVE_SET_WALK_MODE) { return "MSG_MOVE_SET_WALK_MODE_Server"; }
+    if (opcode == Opcode::MSG_MOVE_TELEPORT_ACK) { return "MSG_MOVE_TELEPORT_ACK_Server"; }
+    if (opcode == Opcode::MSG_MOVE_FALL_LAND) { return "MSG_MOVE_FALL_LAND_Server"; }
+    if (opcode == Opcode::MSG_MOVE_START_SWIM) { return "MSG_MOVE_START_SWIM_Server"; }
+    if (opcode == Opcode::MSG_MOVE_STOP_SWIM) { return "MSG_MOVE_STOP_SWIM_Server"; }
+    if (opcode == Opcode::MSG_MOVE_SET_FACING) { return "MSG_MOVE_SET_FACING_Server"; }
+    if (opcode == Opcode::MSG_MOVE_SET_PITCH) { return "MSG_MOVE_SET_PITCH_Server"; }
+    if (opcode == Opcode::MSG_MOVE_WORLDPORT_ACK) { return "MSG_MOVE_WORLDPORT_ACK"; }
+    if (opcode == Opcode::SMSG_MONSTER_MOVE) { return "SMSG_MONSTER_MOVE"; }
+    if (opcode == Opcode::SMSG_MOVE_WATER_WALK) { return "SMSG_MOVE_WATER_WALK"; }
+    if (opcode == Opcode::SMSG_MOVE_LAND_WALK) { return "SMSG_MOVE_LAND_WALK"; }
+    if (opcode == Opcode::SMSG_FORCE_RUN_SPEED_CHANGE) { return "SMSG_FORCE_RUN_SPEED_CHANGE"; }
+    if (opcode == Opcode::SMSG_FORCE_RUN_BACK_SPEED_CHANGE) { return "SMSG_FORCE_RUN_BACK_SPEED_CHANGE"; }
+    if (opcode == Opcode::SMSG_FORCE_SWIM_SPEED_CHANGE) { return "SMSG_FORCE_SWIM_SPEED_CHANGE"; }
+    if (opcode == Opcode::SMSG_FORCE_MOVE_ROOT) { return "SMSG_FORCE_MOVE_ROOT"; }
+    if (opcode == Opcode::SMSG_FORCE_MOVE_UNROOT) { return "SMSG_FORCE_MOVE_UNROOT"; }
+    if (opcode == Opcode::MSG_MOVE_HEARTBEAT) { return "MSG_MOVE_HEARTBEAT_Server"; }
+    if (opcode == Opcode::SMSG_MOVE_KNOCK_BACK) { return "SMSG_MOVE_KNOCK_BACK"; }
+    if (opcode == Opcode::SMSG_MOVE_FEATHER_FALL) { return "SMSG_MOVE_FEATHER_FALL"; }
+    if (opcode == Opcode::SMSG_MOVE_NORMAL_FALL) { return "SMSG_MOVE_NORMAL_FALL"; }
+    if (opcode == Opcode::SMSG_MOVE_SET_HOVER) { return "SMSG_MOVE_SET_HOVER"; }
+    if (opcode == Opcode::SMSG_MOVE_UNSET_HOVER) { return "SMSG_MOVE_UNSET_HOVER"; }
+    if (opcode == Opcode::SMSG_TRIGGER_CINEMATIC) { return "SMSG_TRIGGER_CINEMATIC"; }
+    if (opcode == Opcode::SMSG_TUTORIAL_FLAGS) { return "SMSG_TUTORIAL_FLAGS"; }
+    if (opcode == Opcode::SMSG_EMOTE) { return "SMSG_EMOTE"; }
+    if (opcode == Opcode::SMSG_TEXT_EMOTE) { return "SMSG_TEXT_EMOTE"; }
+    if (opcode == Opcode::SMSG_INVENTORY_CHANGE_FAILURE) { return "SMSG_INVENTORY_CHANGE_FAILURE"; }
+    if (opcode == Opcode::SMSG_OPEN_CONTAINER) { return "SMSG_OPEN_CONTAINER"; }
+    if (opcode == Opcode::SMSG_INSPECT) { return "SMSG_INSPECT"; }
+    if (opcode == Opcode::SMSG_TRADE_STATUS) { return "SMSG_TRADE_STATUS"; }
+    if (opcode == Opcode::SMSG_TRADE_STATUS_EXTENDED) { return "SMSG_TRADE_STATUS_EXTENDED"; }
+    if (opcode == Opcode::SMSG_INITIALIZE_FACTIONS) { return "SMSG_INITIALIZE_FACTIONS"; }
+    if (opcode == Opcode::SMSG_SET_FACTION_VISIBLE) { return "SMSG_SET_FACTION_VISIBLE"; }
+    if (opcode == Opcode::SMSG_SET_FACTION_STANDING) { return "SMSG_SET_FACTION_STANDING"; }
+    if (opcode == Opcode::SMSG_SET_PROFICIENCY) { return "SMSG_SET_PROFICIENCY"; }
+    if (opcode == Opcode::SMSG_ACTION_BUTTONS) { return "SMSG_ACTION_BUTTONS"; }
+    if (opcode == Opcode::SMSG_INITIAL_SPELLS) { return "SMSG_INITIAL_SPELLS"; }
+    if (opcode == Opcode::SMSG_LEARNED_SPELL) { return "SMSG_LEARNED_SPELL"; }
+    if (opcode == Opcode::SMSG_SUPERCEDED_SPELL) { return "SMSG_SUPERCEDED_SPELL"; }
+    if (opcode == Opcode::SMSG_CAST_RESULT) { return "SMSG_CAST_RESULT"; }
+    if (opcode == Opcode::SMSG_SPELL_START) { return "SMSG_SPELL_START"; }
+    if (opcode == Opcode::SMSG_SPELL_GO) { return "SMSG_SPELL_GO"; }
+    if (opcode == Opcode::SMSG_SPELL_FAILURE) { return "SMSG_SPELL_FAILURE"; }
+    if (opcode == Opcode::SMSG_SPELL_COOLDOWN) { return "SMSG_SPELL_COOLDOWN"; }
+    if (opcode == Opcode::SMSG_COOLDOWN_EVENT) { return "SMSG_COOLDOWN_EVENT"; }
+    if (opcode == Opcode::SMSG_UPDATE_AURA_DURATION) { return "SMSG_UPDATE_AURA_DURATION"; }
+    if (opcode == Opcode::SMSG_PET_CAST_FAILED) { return "SMSG_PET_CAST_FAILED"; }
+    if (opcode == Opcode::MSG_CHANNEL_START) { return "MSG_CHANNEL_START_Server"; }
+    if (opcode == Opcode::MSG_CHANNEL_UPDATE) { return "MSG_CHANNEL_UPDATE_Server"; }
+    if (opcode == Opcode::SMSG_AI_REACTION) { return "SMSG_AI_REACTION"; }
+    if (opcode == Opcode::SMSG_ATTACKSTART) { return "SMSG_ATTACKSTART"; }
+    if (opcode == Opcode::SMSG_ATTACKSTOP) { return "SMSG_ATTACKSTOP"; }
+    if (opcode == Opcode::SMSG_ATTACKSWING_NOTINRANGE) { return "SMSG_ATTACKSWING_NOTINRANGE"; }
+    if (opcode == Opcode::SMSG_ATTACKSWING_BADFACING) { return "SMSG_ATTACKSWING_BADFACING"; }
+    if (opcode == Opcode::SMSG_ATTACKSWING_NOTSTANDING) { return "SMSG_ATTACKSWING_NOTSTANDING"; }
+    if (opcode == Opcode::SMSG_ATTACKSWING_DEADTARGET) { return "SMSG_ATTACKSWING_DEADTARGET"; }
+    if (opcode == Opcode::SMSG_ATTACKSWING_CANT_ATTACK) { return "SMSG_ATTACKSWING_CANT_ATTACK"; }
+    if (opcode == Opcode::SMSG_ATTACKERSTATEUPDATE) { return "SMSG_ATTACKERSTATEUPDATE"; }
+    if (opcode == Opcode::SMSG_CANCEL_COMBAT) { return "SMSG_CANCEL_COMBAT"; }
+    if (opcode == Opcode::SMSG_SPELLHEALLOG) { return "SMSG_SPELLHEALLOG"; }
+    if (opcode == Opcode::SMSG_SPELLENERGIZELOG) { return "SMSG_SPELLENERGIZELOG"; }
+    if (opcode == Opcode::SMSG_BINDPOINTUPDATE) { return "SMSG_BINDPOINTUPDATE"; }
+    if (opcode == Opcode::SMSG_PLAYERBOUND) { return "SMSG_PLAYERBOUND"; }
+    if (opcode == Opcode::SMSG_CLIENT_CONTROL_UPDATE) { return "SMSG_CLIENT_CONTROL_UPDATE"; }
+    if (opcode == Opcode::SMSG_RESURRECT_REQUEST) { return "SMSG_RESURRECT_REQUEST"; }
+    if (opcode == Opcode::SMSG_LOOT_RESPONSE) { return "SMSG_LOOT_RESPONSE"; }
+    if (opcode == Opcode::SMSG_LOOT_RELEASE_RESPONSE) { return "SMSG_LOOT_RELEASE_RESPONSE"; }
+    if (opcode == Opcode::SMSG_LOOT_REMOVED) { return "SMSG_LOOT_REMOVED"; }
+    if (opcode == Opcode::SMSG_LOOT_MONEY_NOTIFY) { return "SMSG_LOOT_MONEY_NOTIFY"; }
+    if (opcode == Opcode::SMSG_LOOT_CLEAR_MONEY) { return "SMSG_LOOT_CLEAR_MONEY"; }
+    if (opcode == Opcode::SMSG_ITEM_PUSH_RESULT) { return "SMSG_ITEM_PUSH_RESULT"; }
+    if (opcode == Opcode::SMSG_DUEL_REQUESTED) { return "SMSG_DUEL_REQUESTED"; }
+    if (opcode == Opcode::SMSG_DUEL_OUTOFBOUNDS) { return "SMSG_DUEL_OUTOFBOUNDS"; }
+    if (opcode == Opcode::SMSG_DUEL_INBOUNDS) { return "SMSG_DUEL_INBOUNDS"; }
+    if (opcode == Opcode::SMSG_DUEL_COMPLETE) { return "SMSG_DUEL_COMPLETE"; }
+    if (opcode == Opcode::SMSG_DUEL_WINNER) { return "SMSG_DUEL_WINNER"; }
+    if (opcode == Opcode::SMSG_MOUNTRESULT) { return "SMSG_MOUNTRESULT"; }
+    if (opcode == Opcode::SMSG_DISMOUNTRESULT) { return "SMSG_DISMOUNTRESULT"; }
+    if (opcode == Opcode::SMSG_MOUNTSPECIAL_ANIM) { return "SMSG_MOUNTSPECIAL_ANIM"; }
+    if (opcode == Opcode::SMSG_PET_TAME_FAILURE) { return "SMSG_PET_TAME_FAILURE"; }
+    if (opcode == Opcode::SMSG_PET_NAME_INVALID) { return "SMSG_PET_NAME_INVALID"; }
+    if (opcode == Opcode::SMSG_PET_SPELLS) { return "SMSG_PET_SPELLS"; }
+    if (opcode == Opcode::SMSG_PET_MODE) { return "SMSG_PET_MODE"; }
+    if (opcode == Opcode::SMSG_GOSSIP_MESSAGE) { return "SMSG_GOSSIP_MESSAGE"; }
+    if (opcode == Opcode::SMSG_GOSSIP_COMPLETE) { return "SMSG_GOSSIP_COMPLETE"; }
+    if (opcode == Opcode::SMSG_NPC_TEXT_UPDATE) { return "SMSG_NPC_TEXT_UPDATE"; }
+    if (opcode == Opcode::SMSG_QUESTGIVER_STATUS) { return "SMSG_QUESTGIVER_STATUS"; }
+    if (opcode == Opcode::SMSG_QUESTGIVER_QUEST_LIST) { return "SMSG_QUESTGIVER_QUEST_LIST"; }
+    if (opcode == Opcode::SMSG_QUESTGIVER_QUEST_DETAILS) { return "SMSG_QUESTGIVER_QUEST_DETAILS"; }
+    if (opcode == Opcode::SMSG_QUESTGIVER_REQUEST_ITEMS) { return "SMSG_QUESTGIVER_REQUEST_ITEMS"; }
+    if (opcode == Opcode::SMSG_QUESTGIVER_OFFER_REWARD) { return "SMSG_QUESTGIVER_OFFER_REWARD"; }
+    if (opcode == Opcode::SMSG_QUESTGIVER_QUEST_INVALID) { return "SMSG_QUESTGIVER_QUEST_INVALID"; }
+    if (opcode == Opcode::SMSG_QUESTGIVER_QUEST_COMPLETE) { return "SMSG_QUESTGIVER_QUEST_COMPLETE"; }
+    if (opcode == Opcode::SMSG_QUESTGIVER_QUEST_FAILED) { return "SMSG_QUESTGIVER_QUEST_FAILED"; }
+    if (opcode == Opcode::SMSG_QUESTLOG_FULL) { return "SMSG_QUESTLOG_FULL"; }
+    if (opcode == Opcode::SMSG_QUESTUPDATE_FAILED) { return "SMSG_QUESTUPDATE_FAILED"; }
+    if (opcode == Opcode::SMSG_QUESTUPDATE_FAILEDTIMER) { return "SMSG_QUESTUPDATE_FAILEDTIMER"; }
+    if (opcode == Opcode::SMSG_QUESTUPDATE_COMPLETE) { return "SMSG_QUESTUPDATE_COMPLETE"; }
+    if (opcode == Opcode::SMSG_QUESTUPDATE_ADD_KILL) { return "SMSG_QUESTUPDATE_ADD_KILL"; }
+    if (opcode == Opcode::SMSG_QUESTUPDATE_ADD_ITEM) { return "SMSG_QUESTUPDATE_ADD_ITEM"; }
+    if (opcode == Opcode::SMSG_QUEST_CONFIRM_ACCEPT) { return "SMSG_QUEST_CONFIRM_ACCEPT"; }
+    if (opcode == Opcode::SMSG_LIST_INVENTORY) { return "SMSG_LIST_INVENTORY"; }
+    if (opcode == Opcode::SMSG_SELL_ITEM) { return "SMSG_SELL_ITEM"; }
+    if (opcode == Opcode::SMSG_BUY_ITEM) { return "SMSG_BUY_ITEM"; }
+    if (opcode == Opcode::SMSG_BUY_FAILED) { return "SMSG_BUY_FAILED"; }
+    if (opcode == Opcode::SMSG_SHOWTAXINODES) { return "SMSG_SHOWTAXINODES"; }
+    if (opcode == Opcode::SMSG_TAXINODE_STATUS) { return "SMSG_TAXINODE_STATUS"; }
+    if (opcode == Opcode::SMSG_ACTIVATETAXIREPLY) { return "SMSG_ACTIVATETAXIREPLY"; }
+    if (opcode == Opcode::SMSG_NEW_TAXI_PATH) { return "SMSG_NEW_TAXI_PATH"; }
+    if (opcode == Opcode::SMSG_TRAINER_LIST) { return "SMSG_TRAINER_LIST"; }
+    if (opcode == Opcode::SMSG_TRAINER_BUY_SUCCEEDED) { return "SMSG_TRAINER_BUY_SUCCEEDED"; }
+    if (opcode == Opcode::SMSG_TRAINER_BUY_FAILED) { return "SMSG_TRAINER_BUY_FAILED"; }
+    if (opcode == Opcode::SMSG_SHOW_BANK) { return "SMSG_SHOW_BANK"; }
+    if (opcode == Opcode::SMSG_BUY_BANK_SLOT_RESULT) { return "SMSG_BUY_BANK_SLOT_RESULT"; }
+    if (opcode == Opcode::SMSG_PETITION_SHOWLIST) { return "SMSG_PETITION_SHOWLIST"; }
+    if (opcode == Opcode::SMSG_PETITION_SHOW_SIGNATURES) { return "SMSG_PETITION_SHOW_SIGNATURES"; }
+    if (opcode == Opcode::SMSG_PETITION_SIGN_RESULTS) { return "SMSG_PETITION_SIGN_RESULTS"; }
+    if (opcode == Opcode::MSG_PETITION_DECLINE) { return "MSG_PETITION_DECLINE"; }
+    if (opcode == Opcode::SMSG_TURN_IN_PETITION_RESULTS) { return "SMSG_TURN_IN_PETITION_RESULTS"; }
+    if (opcode == Opcode::SMSG_PETITION_QUERY_RESPONSE) { return "SMSG_PETITION_QUERY_RESPONSE"; }
+    if (opcode == Opcode::SMSG_FISH_NOT_HOOKED) { return "SMSG_FISH_NOT_HOOKED"; }
+    if (opcode == Opcode::SMSG_FISH_ESCAPED) { return "SMSG_FISH_ESCAPED"; }
+    if (opcode == Opcode::SMSG_NOTIFICATION) { return "SMSG_NOTIFICATION"; }
+    if (opcode == Opcode::SMSG_PLAYED_TIME) { return "SMSG_PLAYED_TIME"; }
+    if (opcode == Opcode::SMSG_QUERY_TIME_RESPONSE) { return "SMSG_QUERY_TIME_RESPONSE"; }
+    if (opcode == Opcode::SMSG_LOG_XPGAIN) { return "SMSG_LOG_XPGAIN"; }
+    if (opcode == Opcode::SMSG_LEVELUP_INFO) { return "SMSG_LEVELUP_INFO"; }
+    if (opcode == Opcode::MSG_MINIMAP_PING) { return "MSG_MINIMAP_PING_Server"; }
+    if (opcode == Opcode::SMSG_RESISTLOG) { return "SMSG_RESISTLOG"; }
+    if (opcode == Opcode::SMSG_ENCHANTMENTLOG) { return "SMSG_ENCHANTMENTLOG"; }
+    if (opcode == Opcode::SMSG_START_MIRROR_TIMER) { return "SMSG_START_MIRROR_TIMER"; }
+    if (opcode == Opcode::SMSG_PAUSE_MIRROR_TIMER) { return "SMSG_PAUSE_MIRROR_TIMER"; }
+    if (opcode == Opcode::SMSG_STOP_MIRROR_TIMER) { return "SMSG_STOP_MIRROR_TIMER"; }
+    if (opcode == Opcode::SMSG_PONG) { return "SMSG_PONG"; }
+    if (opcode == Opcode::SMSG_CLEAR_COOLDOWN) { return "SMSG_CLEAR_COOLDOWN"; }
+    if (opcode == Opcode::SMSG_GAMEOBJECT_PAGETEXT) { return "SMSG_GAMEOBJECT_PAGETEXT"; }
+    if (opcode == Opcode::SMSG_SPELL_DELAYED) { return "SMSG_SPELL_DELAYED"; }
+    if (opcode == Opcode::SMSG_ITEM_TIME_UPDATE) { return "SMSG_ITEM_TIME_UPDATE"; }
+    if (opcode == Opcode::SMSG_ITEM_ENCHANT_TIME_UPDATE) { return "SMSG_ITEM_ENCHANT_TIME_UPDATE"; }
+    if (opcode == Opcode::SMSG_AUTH_CHALLENGE) { return "SMSG_AUTH_CHALLENGE"; }
+    if (opcode == Opcode::SMSG_AUTH_RESPONSE) { return "SMSG_AUTH_RESPONSE"; }
+    if (opcode == Opcode::MSG_SAVE_GUILD_EMBLEM) { return "MSG_SAVE_GUILD_EMBLEM_Server"; }
+    if (opcode == Opcode::MSG_TABARDVENDOR_ACTIVATE) { return "MSG_TABARDVENDOR_ACTIVATE"; }
+    if (opcode == Opcode::SMSG_PLAY_SPELL_VISUAL) { return "SMSG_PLAY_SPELL_VISUAL"; }
+    if (opcode == Opcode::SMSG_PARTYKILLLOG) { return "SMSG_PARTYKILLLOG"; }
+    if (opcode == Opcode::SMSG_COMPRESSED_UPDATE_OBJECT) { return "SMSG_COMPRESSED_UPDATE_OBJECT"; }
+    if (opcode == Opcode::SMSG_PLAY_SPELL_IMPACT) { return "SMSG_PLAY_SPELL_IMPACT"; }
+    if (opcode == Opcode::SMSG_EXPLORATION_EXPERIENCE) { return "SMSG_EXPLORATION_EXPERIENCE"; }
+    if (opcode == Opcode::MSG_RANDOM_ROLL) { return "MSG_RANDOM_ROLL_Server"; }
+    if (opcode == Opcode::SMSG_ENVIRONMENTAL_DAMAGE_LOG) { return "SMSG_ENVIRONMENTAL_DAMAGE_LOG"; }
+    if (opcode == Opcode::MSG_LOOKING_FOR_GROUP) { return "MSG_LOOKING_FOR_GROUP_Server"; }
+    if (opcode == Opcode::SMSG_REMOVED_SPELL) { return "SMSG_REMOVED_SPELL"; }
+    if (opcode == Opcode::SMSG_GMTICKET_CREATE) { return "SMSG_GMTICKET_CREATE"; }
+    if (opcode == Opcode::SMSG_GMTICKET_UPDATETEXT) { return "SMSG_GMTICKET_UPDATETEXT"; }
+    if (opcode == Opcode::SMSG_ACCOUNT_DATA_TIMES) { return "SMSG_ACCOUNT_DATA_TIMES"; }
+    if (opcode == Opcode::SMSG_GMTICKET_GETTICKET) { return "SMSG_GMTICKET_GETTICKET"; }
+    if (opcode == Opcode::SMSG_GAMEOBJECT_SPAWN_ANIM) { return "SMSG_GAMEOBJECT_SPAWN_ANIM"; }
+    if (opcode == Opcode::SMSG_GAMEOBJECT_DESPAWN_ANIM) { return "SMSG_GAMEOBJECT_DESPAWN_ANIM"; }
+    if (opcode == Opcode::MSG_CORPSE_QUERY) { return "MSG_CORPSE_QUERY_Server"; }
+    if (opcode == Opcode::SMSG_GMTICKET_DELETETICKET) { return "SMSG_GMTICKET_DELETETICKET"; }
+    if (opcode == Opcode::SMSG_CHAT_WRONG_FACTION) { return "SMSG_CHAT_WRONG_FACTION"; }
+    if (opcode == Opcode::SMSG_GMTICKET_SYSTEMSTATUS) { return "SMSG_GMTICKET_SYSTEMSTATUS"; }
+    if (opcode == Opcode::SMSG_SET_REST_START) { return "SMSG_SET_REST_START"; }
+    if (opcode == Opcode::SMSG_SPIRIT_HEALER_CONFIRM) { return "SMSG_SPIRIT_HEALER_CONFIRM"; }
+    if (opcode == Opcode::SMSG_GOSSIP_POI) { return "SMSG_GOSSIP_POI"; }
+    if (opcode == Opcode::SMSG_LOGIN_VERIFY_WORLD) { return "SMSG_LOGIN_VERIFY_WORLD"; }
+    if (opcode == Opcode::SMSG_SEND_MAIL_RESULT) { return "SMSG_SEND_MAIL_RESULT"; }
+    if (opcode == Opcode::SMSG_MAIL_LIST_RESULT) { return "SMSG_MAIL_LIST_RESULT"; }
+    if (opcode == Opcode::SMSG_BATTLEFIELD_LIST) { return "SMSG_BATTLEFIELD_LIST"; }
+    if (opcode == Opcode::SMSG_ITEM_TEXT_QUERY_RESPONSE) { return "SMSG_ITEM_TEXT_QUERY_RESPONSE"; }
+    if (opcode == Opcode::SMSG_SPELLLOGMISS) { return "SMSG_SPELLLOGMISS"; }
+    if (opcode == Opcode::SMSG_SPELLLOGEXECUTE) { return "SMSG_SPELLLOGEXECUTE"; }
+    if (opcode == Opcode::SMSG_PERIODICAURALOG) { return "SMSG_PERIODICAURALOG"; }
+    if (opcode == Opcode::SMSG_SPELLDAMAGESHIELD) { return "SMSG_SPELLDAMAGESHIELD"; }
+    if (opcode == Opcode::SMSG_SPELLNONMELEEDAMAGELOG) { return "SMSG_SPELLNONMELEEDAMAGELOG"; }
+    if (opcode == Opcode::SMSG_ZONE_UNDER_ATTACK) { return "SMSG_ZONE_UNDER_ATTACK"; }
+    if (opcode == Opcode::MSG_AUCTION_HELLO) { return "MSG_AUCTION_HELLO_Server"; }
+    if (opcode == Opcode::SMSG_AUCTION_COMMAND_RESULT) { return "SMSG_AUCTION_COMMAND_RESULT"; }
+    if (opcode == Opcode::SMSG_AUCTION_LIST_RESULT) { return "SMSG_AUCTION_LIST_RESULT"; }
+    if (opcode == Opcode::SMSG_AUCTION_OWNER_LIST_RESULT) { return "SMSG_AUCTION_OWNER_LIST_RESULT"; }
+    if (opcode == Opcode::SMSG_AUCTION_BIDDER_NOTIFICATION) { return "SMSG_AUCTION_BIDDER_NOTIFICATION"; }
+    if (opcode == Opcode::SMSG_AUCTION_OWNER_NOTIFICATION) { return "SMSG_AUCTION_OWNER_NOTIFICATION"; }
+    if (opcode == Opcode::SMSG_PROCRESIST) { return "SMSG_PROCRESIST"; }
+    if (opcode == Opcode::SMSG_DISPEL_FAILED) { return "SMSG_DISPEL_FAILED"; }
+    if (opcode == Opcode::SMSG_SPELLORDAMAGE_IMMUNE) { return "SMSG_SPELLORDAMAGE_IMMUNE"; }
+    if (opcode == Opcode::SMSG_AUCTION_BIDDER_LIST_RESULT) { return "SMSG_AUCTION_BIDDER_LIST_RESULT"; }
+    if (opcode == Opcode::SMSG_SET_FLAT_SPELL_MODIFIER) { return "SMSG_SET_FLAT_SPELL_MODIFIER"; }
+    if (opcode == Opcode::SMSG_SET_PCT_SPELL_MODIFIER) { return "SMSG_SET_PCT_SPELL_MODIFIER"; }
+    if (opcode == Opcode::SMSG_CORPSE_RECLAIM_DELAY) { return "SMSG_CORPSE_RECLAIM_DELAY"; }
+    if (opcode == Opcode::MSG_LIST_STABLED_PETS) { return "MSG_LIST_STABLED_PETS_Server"; }
+    if (opcode == Opcode::SMSG_STABLE_RESULT) { return "SMSG_STABLE_RESULT"; }
+    if (opcode == Opcode::MSG_QUEST_PUSH_RESULT) { return "MSG_QUEST_PUSH_RESULT"; }
+    if (opcode == Opcode::SMSG_PLAY_MUSIC) { return "SMSG_PLAY_MUSIC"; }
+    if (opcode == Opcode::SMSG_PLAY_OBJECT_SOUND) { return "SMSG_PLAY_OBJECT_SOUND"; }
+    if (opcode == Opcode::SMSG_SPELLDISPELLOG) { return "SMSG_SPELLDISPELLOG"; }
+    if (opcode == Opcode::MSG_QUERY_NEXT_MAIL_TIME) { return "MSG_QUERY_NEXT_MAIL_TIME_Server"; }
+    if (opcode == Opcode::SMSG_RECEIVED_MAIL) { return "SMSG_RECEIVED_MAIL"; }
+    if (opcode == Opcode::SMSG_RAID_GROUP_ONLY) { return "SMSG_RAID_GROUP_ONLY"; }
+    if (opcode == Opcode::SMSG_PVP_CREDIT) { return "SMSG_PVP_CREDIT"; }
+    if (opcode == Opcode::SMSG_AUCTION_REMOVED_NOTIFICATION) { return "SMSG_AUCTION_REMOVED_NOTIFICATION"; }
+    if (opcode == Opcode::SMSG_SERVER_MESSAGE) { return "SMSG_SERVER_MESSAGE"; }
+    if (opcode == Opcode::SMSG_MEETINGSTONE_SETQUEUE) { return "SMSG_MEETINGSTONE_SETQUEUE"; }
+    if (opcode == Opcode::SMSG_MEETINGSTONE_COMPLETE) { return "SMSG_MEETINGSTONE_COMPLETE"; }
+    if (opcode == Opcode::SMSG_MEETINGSTONE_IN_PROGRESS) { return "SMSG_MEETINGSTONE_IN_PROGRESS"; }
+    if (opcode == Opcode::SMSG_MEETINGSTONE_MEMBER_ADDED) { return "SMSG_MEETINGSTONE_MEMBER_ADDED"; }
+    if (opcode == Opcode::SMSG_CANCEL_AUTO_REPEAT) { return "SMSG_CANCEL_AUTO_REPEAT"; }
+    if (opcode == Opcode::SMSG_STANDSTATE_UPDATE) { return "SMSG_STANDSTATE_UPDATE"; }
+    if (opcode == Opcode::SMSG_LOOT_ALL_PASSED) { return "SMSG_LOOT_ALL_PASSED"; }
+    if (opcode == Opcode::SMSG_LOOT_ROLL_WON) { return "SMSG_LOOT_ROLL_WON"; }
+    if (opcode == Opcode::SMSG_LOOT_START_ROLL) { return "SMSG_LOOT_START_ROLL"; }
+    if (opcode == Opcode::SMSG_LOOT_ROLL) { return "SMSG_LOOT_ROLL"; }
+    if (opcode == Opcode::SMSG_LOOT_MASTER_LIST) { return "SMSG_LOOT_MASTER_LIST"; }
+    if (opcode == Opcode::SMSG_SET_FORCED_REACTIONS) { return "SMSG_SET_FORCED_REACTIONS"; }
+    if (opcode == Opcode::SMSG_SPELL_FAILED_OTHER) { return "SMSG_SPELL_FAILED_OTHER"; }
+    if (opcode == Opcode::SMSG_GAMEOBJECT_RESET_STATE) { return "SMSG_GAMEOBJECT_RESET_STATE"; }
+    if (opcode == Opcode::SMSG_CHAT_PLAYER_NOT_FOUND) { return "SMSG_CHAT_PLAYER_NOT_FOUND"; }
+    if (opcode == Opcode::MSG_TALENT_WIPE_CONFIRM) { return "MSG_TALENT_WIPE_CONFIRM_Server"; }
+    if (opcode == Opcode::SMSG_SUMMON_REQUEST) { return "SMSG_SUMMON_REQUEST"; }
+    if (opcode == Opcode::SMSG_MONSTER_MOVE_TRANSPORT) { return "SMSG_MONSTER_MOVE_TRANSPORT"; }
+    if (opcode == Opcode::SMSG_PET_BROKEN) { return "SMSG_PET_BROKEN"; }
+    if (opcode == Opcode::MSG_MOVE_FEATHER_FALL) { return "MSG_MOVE_FEATHER_FALL_Server"; }
+    if (opcode == Opcode::MSG_MOVE_WATER_WALK) { return "MSG_MOVE_WATER_WALK"; }
+    if (opcode == Opcode::SMSG_FEIGN_DEATH_RESISTED) { return "SMSG_FEIGN_DEATH_RESISTED"; }
+    if (opcode == Opcode::SMSG_DUEL_COUNTDOWN) { return "SMSG_DUEL_COUNTDOWN"; }
+    if (opcode == Opcode::SMSG_AREA_TRIGGER_MESSAGE) { return "SMSG_AREA_TRIGGER_MESSAGE"; }
+    if (opcode == Opcode::SMSG_MEETINGSTONE_JOINFAILED) { return "SMSG_MEETINGSTONE_JOINFAILED"; }
+    if (opcode == Opcode::SMSG_PLAYER_SKINNED) { return "SMSG_PLAYER_SKINNED"; }
+    if (opcode == Opcode::SMSG_DURABILITY_DAMAGE_DEATH) { return "SMSG_DURABILITY_DAMAGE_DEATH"; }
+    if (opcode == Opcode::MSG_PETITION_RENAME) { return "MSG_PETITION_RENAME"; }
+    if (opcode == Opcode::SMSG_INIT_WORLD_STATES) { return "SMSG_INIT_WORLD_STATES"; }
+    if (opcode == Opcode::SMSG_UPDATE_WORLD_STATE) { return "SMSG_UPDATE_WORLD_STATE"; }
+    if (opcode == Opcode::SMSG_ITEM_NAME_QUERY_RESPONSE) { return "SMSG_ITEM_NAME_QUERY_RESPONSE"; }
+    if (opcode == Opcode::SMSG_PET_ACTION_FEEDBACK) { return "SMSG_PET_ACTION_FEEDBACK"; }
+    if (opcode == Opcode::SMSG_CHAR_RENAME) { return "SMSG_CHAR_RENAME"; }
+    if (opcode == Opcode::SMSG_INSTANCE_SAVE_CREATED) { return "SMSG_INSTANCE_SAVE_CREATED"; }
+    if (opcode == Opcode::SMSG_RAID_INSTANCE_INFO) { return "SMSG_RAID_INSTANCE_INFO"; }
+    if (opcode == Opcode::SMSG_PLAY_SOUND) { return "SMSG_PLAY_SOUND"; }
+    if (opcode == Opcode::SMSG_BATTLEFIELD_STATUS) { return "SMSG_BATTLEFIELD_STATUS"; }
+    if (opcode == Opcode::MSG_INSPECT_HONOR_STATS) { return "MSG_INSPECT_HONOR_STATS_Server"; }
+    if (opcode == Opcode::SMSG_FORCE_WALK_SPEED_CHANGE) { return "SMSG_FORCE_WALK_SPEED_CHANGE"; }
+    if (opcode == Opcode::SMSG_FORCE_SWIM_BACK_SPEED_CHANGE) { return "SMSG_FORCE_SWIM_BACK_SPEED_CHANGE"; }
+    if (opcode == Opcode::SMSG_FORCE_TURN_RATE_CHANGE) { return "SMSG_FORCE_TURN_RATE_CHANGE"; }
+    if (opcode == Opcode::MSG_PVP_LOG_DATA) { return "MSG_PVP_LOG_DATA_Server"; }
+    if (opcode == Opcode::SMSG_AREA_SPIRIT_HEALER_TIME) { return "SMSG_AREA_SPIRIT_HEALER_TIME"; }
+    if (opcode == Opcode::SMSG_WARDEN_DATA) { return "SMSG_WARDEN_DATA"; }
+    if (opcode == Opcode::SMSG_GROUP_JOINED_BATTLEGROUND) { return "SMSG_GROUP_JOINED_BATTLEGROUND"; }
+    if (opcode == Opcode::MSG_BATTLEGROUND_PLAYER_POSITIONS) { return "MSG_BATTLEGROUND_PLAYER_POSITIONS_Server"; }
+    if (opcode == Opcode::SMSG_BINDER_CONFIRM) { return "SMSG_BINDER_CONFIRM"; }
+    if (opcode == Opcode::SMSG_BATTLEGROUND_PLAYER_JOINED) { return "SMSG_BATTLEGROUND_PLAYER_JOINED"; }
+    if (opcode == Opcode::SMSG_BATTLEGROUND_PLAYER_LEFT) { return "SMSG_BATTLEGROUND_PLAYER_LEFT"; }
+    if (opcode == Opcode::SMSG_ADDON_INFO) { return "SMSG_ADDON_INFO"; }
+    if (opcode == Opcode::SMSG_PET_UNLEARN_CONFIRM) { return "SMSG_PET_UNLEARN_CONFIRM"; }
+    if (opcode == Opcode::SMSG_PARTY_MEMBER_STATS_FULL) { return "SMSG_PARTY_MEMBER_STATS_FULL"; }
+    if (opcode == Opcode::SMSG_WEATHER) { return "SMSG_WEATHER"; }
+    if (opcode == Opcode::SMSG_RAID_INSTANCE_MESSAGE) { return "SMSG_RAID_INSTANCE_MESSAGE"; }
+    if (opcode == Opcode::SMSG_COMPRESSED_MOVES) { return "SMSG_COMPRESSED_MOVES"; }
+    if (opcode == Opcode::SMSG_CHAT_RESTRICTED) { return "SMSG_CHAT_RESTRICTED"; }
+    if (opcode == Opcode::SMSG_SPLINE_SET_RUN_SPEED) { return "SMSG_SPLINE_SET_RUN_SPEED"; }
+    if (opcode == Opcode::SMSG_SPLINE_SET_RUN_BACK_SPEED) { return "SMSG_SPLINE_SET_RUN_BACK_SPEED"; }
+    if (opcode == Opcode::SMSG_SPLINE_SET_SWIM_SPEED) { return "SMSG_SPLINE_SET_SWIM_SPEED"; }
+    if (opcode == Opcode::SMSG_SPLINE_SET_WALK_SPEED) { return "SMSG_SPLINE_SET_WALK_SPEED"; }
+    if (opcode == Opcode::SMSG_SPLINE_SET_SWIM_BACK_SPEED) { return "SMSG_SPLINE_SET_SWIM_BACK_SPEED"; }
+    if (opcode == Opcode::SMSG_SPLINE_SET_TURN_RATE) { return "SMSG_SPLINE_SET_TURN_RATE"; }
+    if (opcode == Opcode::SMSG_SPLINE_MOVE_UNROOT) { return "SMSG_SPLINE_MOVE_UNROOT"; }
+    if (opcode == Opcode::SMSG_SPLINE_MOVE_FEATHER_FALL) { return "SMSG_SPLINE_MOVE_FEATHER_FALL"; }
+    if (opcode == Opcode::SMSG_SPLINE_MOVE_NORMAL_FALL) { return "SMSG_SPLINE_MOVE_NORMAL_FALL"; }
+    if (opcode == Opcode::SMSG_SPLINE_MOVE_SET_HOVER) { return "SMSG_SPLINE_MOVE_SET_HOVER"; }
+    if (opcode == Opcode::SMSG_SPLINE_MOVE_UNSET_HOVER) { return "SMSG_SPLINE_MOVE_UNSET_HOVER"; }
+    if (opcode == Opcode::SMSG_SPLINE_MOVE_WATER_WALK) { return "SMSG_SPLINE_MOVE_WATER_WALK"; }
+    if (opcode == Opcode::SMSG_SPLINE_MOVE_LAND_WALK) { return "SMSG_SPLINE_MOVE_LAND_WALK"; }
+    if (opcode == Opcode::SMSG_SPLINE_MOVE_START_SWIM) { return "SMSG_SPLINE_MOVE_START_SWIM"; }
+    if (opcode == Opcode::SMSG_SPLINE_MOVE_STOP_SWIM) { return "SMSG_SPLINE_MOVE_STOP_SWIM"; }
+    if (opcode == Opcode::SMSG_SPLINE_MOVE_SET_RUN_MODE) { return "SMSG_SPLINE_MOVE_SET_RUN_MODE"; }
+    if (opcode == Opcode::SMSG_SPLINE_MOVE_SET_WALK_MODE) { return "SMSG_SPLINE_MOVE_SET_WALK_MODE"; }
+    if (opcode == Opcode::MSG_MOVE_TIME_SKIPPED) { return "MSG_MOVE_TIME_SKIPPED_Server"; }
+    if (opcode == Opcode::SMSG_SPLINE_MOVE_ROOT) { return "SMSG_SPLINE_MOVE_ROOT"; }
+    if (opcode == Opcode::SMSG_INVALIDATE_PLAYER) { return "SMSG_INVALIDATE_PLAYER"; }
+    if (opcode == Opcode::SMSG_INSTANCE_RESET) { return "SMSG_INSTANCE_RESET"; }
+    if (opcode == Opcode::SMSG_INSTANCE_RESET_FAILED) { return "SMSG_INSTANCE_RESET_FAILED"; }
+    if (opcode == Opcode::SMSG_UPDATE_LAST_INSTANCE) { return "SMSG_UPDATE_LAST_INSTANCE"; }
+    if (opcode == Opcode::MSG_RAID_TARGET_UPDATE) { return "MSG_RAID_TARGET_UPDATE_Server"; }
+    if (opcode == Opcode::MSG_RAID_READY_CHECK) { return "MSG_RAID_READY_CHECK_Server"; }
+    if (opcode == Opcode::SMSG_PET_ACTION_SOUND) { return "SMSG_PET_ACTION_SOUND"; }
+    if (opcode == Opcode::SMSG_PET_DISMISS_SOUND) { return "SMSG_PET_DISMISS_SOUND"; }
+    if (opcode == Opcode::SMSG_GM_TICKET_STATUS_UPDATE) { return "SMSG_GM_TICKET_STATUS_UPDATE"; }
+    if (opcode == Opcode::SMSG_UPDATE_INSTANCE_OWNERSHIP) { return "SMSG_UPDATE_INSTANCE_OWNERSHIP"; }
+    if (opcode == Opcode::SMSG_SPELLINSTAKILLLOG) { return "SMSG_SPELLINSTAKILLLOG"; }
+    if (opcode == Opcode::SMSG_SPELL_UPDATE_CHAIN_TARGETS) { return "SMSG_SPELL_UPDATE_CHAIN_TARGETS"; }
+    if (opcode == Opcode::SMSG_EXPECTED_SPAM_RECORDS) { return "SMSG_EXPECTED_SPAM_RECORDS"; }
+    if (opcode == Opcode::SMSG_DEFENSE_MESSAGE) { return "SMSG_DEFENSE_MESSAGE"; }
+    return nullptr;
+}
 template <>
-vanilla::SMSG_CHAR_CREATE* ServerOpcode::get_if<SMSG_CHAR_CREATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_CHAR_CREATE* ServerOpcode::get_if<SMSG_CHAR_CREATE>() {
     if (opcode == Opcode::SMSG_CHAR_CREATE) {
         return &SMSG_CHAR_CREATE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_CHAR_CREATE& ServerOpcode::get<SMSG_CHAR_CREATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_CHAR_CREATE& ServerOpcode::get<SMSG_CHAR_CREATE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_CHAR_CREATE>();
     if (p) {
         return *p;
@@ -29135,14 +29797,14 @@ vanilla::SMSG_CHAR_CREATE& ServerOpcode::get<SMSG_CHAR_CREATE>() {
 }
 
 template <>
-vanilla::SMSG_CHAR_ENUM* ServerOpcode::get_if<SMSG_CHAR_ENUM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_CHAR_ENUM* ServerOpcode::get_if<SMSG_CHAR_ENUM>() {
     if (opcode == Opcode::SMSG_CHAR_ENUM) {
         return &SMSG_CHAR_ENUM;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_CHAR_ENUM& ServerOpcode::get<SMSG_CHAR_ENUM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_CHAR_ENUM& ServerOpcode::get<SMSG_CHAR_ENUM>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_CHAR_ENUM>();
     if (p) {
         return *p;
@@ -29151,14 +29813,14 @@ vanilla::SMSG_CHAR_ENUM& ServerOpcode::get<SMSG_CHAR_ENUM>() {
 }
 
 template <>
-vanilla::SMSG_CHAR_DELETE* ServerOpcode::get_if<SMSG_CHAR_DELETE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_CHAR_DELETE* ServerOpcode::get_if<SMSG_CHAR_DELETE>() {
     if (opcode == Opcode::SMSG_CHAR_DELETE) {
         return &SMSG_CHAR_DELETE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_CHAR_DELETE& ServerOpcode::get<SMSG_CHAR_DELETE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_CHAR_DELETE& ServerOpcode::get<SMSG_CHAR_DELETE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_CHAR_DELETE>();
     if (p) {
         return *p;
@@ -29167,14 +29829,14 @@ vanilla::SMSG_CHAR_DELETE& ServerOpcode::get<SMSG_CHAR_DELETE>() {
 }
 
 template <>
-vanilla::SMSG_NEW_WORLD* ServerOpcode::get_if<SMSG_NEW_WORLD>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_NEW_WORLD* ServerOpcode::get_if<SMSG_NEW_WORLD>() {
     if (opcode == Opcode::SMSG_NEW_WORLD) {
         return &SMSG_NEW_WORLD;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_NEW_WORLD& ServerOpcode::get<SMSG_NEW_WORLD>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_NEW_WORLD& ServerOpcode::get<SMSG_NEW_WORLD>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_NEW_WORLD>();
     if (p) {
         return *p;
@@ -29183,14 +29845,14 @@ vanilla::SMSG_NEW_WORLD& ServerOpcode::get<SMSG_NEW_WORLD>() {
 }
 
 template <>
-vanilla::SMSG_TRANSFER_PENDING* ServerOpcode::get_if<SMSG_TRANSFER_PENDING>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_TRANSFER_PENDING* ServerOpcode::get_if<SMSG_TRANSFER_PENDING>() {
     if (opcode == Opcode::SMSG_TRANSFER_PENDING) {
         return &SMSG_TRANSFER_PENDING;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_TRANSFER_PENDING& ServerOpcode::get<SMSG_TRANSFER_PENDING>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_TRANSFER_PENDING& ServerOpcode::get<SMSG_TRANSFER_PENDING>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_TRANSFER_PENDING>();
     if (p) {
         return *p;
@@ -29199,14 +29861,14 @@ vanilla::SMSG_TRANSFER_PENDING& ServerOpcode::get<SMSG_TRANSFER_PENDING>() {
 }
 
 template <>
-vanilla::SMSG_TRANSFER_ABORTED* ServerOpcode::get_if<SMSG_TRANSFER_ABORTED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_TRANSFER_ABORTED* ServerOpcode::get_if<SMSG_TRANSFER_ABORTED>() {
     if (opcode == Opcode::SMSG_TRANSFER_ABORTED) {
         return &SMSG_TRANSFER_ABORTED;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_TRANSFER_ABORTED& ServerOpcode::get<SMSG_TRANSFER_ABORTED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_TRANSFER_ABORTED& ServerOpcode::get<SMSG_TRANSFER_ABORTED>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_TRANSFER_ABORTED>();
     if (p) {
         return *p;
@@ -29215,14 +29877,14 @@ vanilla::SMSG_TRANSFER_ABORTED& ServerOpcode::get<SMSG_TRANSFER_ABORTED>() {
 }
 
 template <>
-vanilla::SMSG_CHARACTER_LOGIN_FAILED* ServerOpcode::get_if<SMSG_CHARACTER_LOGIN_FAILED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_CHARACTER_LOGIN_FAILED* ServerOpcode::get_if<SMSG_CHARACTER_LOGIN_FAILED>() {
     if (opcode == Opcode::SMSG_CHARACTER_LOGIN_FAILED) {
         return &SMSG_CHARACTER_LOGIN_FAILED;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_CHARACTER_LOGIN_FAILED& ServerOpcode::get<SMSG_CHARACTER_LOGIN_FAILED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_CHARACTER_LOGIN_FAILED& ServerOpcode::get<SMSG_CHARACTER_LOGIN_FAILED>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_CHARACTER_LOGIN_FAILED>();
     if (p) {
         return *p;
@@ -29231,14 +29893,14 @@ vanilla::SMSG_CHARACTER_LOGIN_FAILED& ServerOpcode::get<SMSG_CHARACTER_LOGIN_FAI
 }
 
 template <>
-vanilla::SMSG_LOGIN_SETTIMESPEED* ServerOpcode::get_if<SMSG_LOGIN_SETTIMESPEED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_LOGIN_SETTIMESPEED* ServerOpcode::get_if<SMSG_LOGIN_SETTIMESPEED>() {
     if (opcode == Opcode::SMSG_LOGIN_SETTIMESPEED) {
         return &SMSG_LOGIN_SETTIMESPEED;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_LOGIN_SETTIMESPEED& ServerOpcode::get<SMSG_LOGIN_SETTIMESPEED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_LOGIN_SETTIMESPEED& ServerOpcode::get<SMSG_LOGIN_SETTIMESPEED>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_LOGIN_SETTIMESPEED>();
     if (p) {
         return *p;
@@ -29247,14 +29909,14 @@ vanilla::SMSG_LOGIN_SETTIMESPEED& ServerOpcode::get<SMSG_LOGIN_SETTIMESPEED>() {
 }
 
 template <>
-vanilla::SMSG_LOGOUT_RESPONSE* ServerOpcode::get_if<SMSG_LOGOUT_RESPONSE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_LOGOUT_RESPONSE* ServerOpcode::get_if<SMSG_LOGOUT_RESPONSE>() {
     if (opcode == Opcode::SMSG_LOGOUT_RESPONSE) {
         return &SMSG_LOGOUT_RESPONSE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_LOGOUT_RESPONSE& ServerOpcode::get<SMSG_LOGOUT_RESPONSE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_LOGOUT_RESPONSE& ServerOpcode::get<SMSG_LOGOUT_RESPONSE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_LOGOUT_RESPONSE>();
     if (p) {
         return *p;
@@ -29263,14 +29925,14 @@ vanilla::SMSG_LOGOUT_RESPONSE& ServerOpcode::get<SMSG_LOGOUT_RESPONSE>() {
 }
 
 template <>
-vanilla::SMSG_LOGOUT_COMPLETE* ServerOpcode::get_if<SMSG_LOGOUT_COMPLETE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_LOGOUT_COMPLETE* ServerOpcode::get_if<SMSG_LOGOUT_COMPLETE>() {
     if (opcode == Opcode::SMSG_LOGOUT_COMPLETE) {
         return &SMSG_LOGOUT_COMPLETE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_LOGOUT_COMPLETE& ServerOpcode::get<SMSG_LOGOUT_COMPLETE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_LOGOUT_COMPLETE& ServerOpcode::get<SMSG_LOGOUT_COMPLETE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_LOGOUT_COMPLETE>();
     if (p) {
         return *p;
@@ -29279,14 +29941,14 @@ vanilla::SMSG_LOGOUT_COMPLETE& ServerOpcode::get<SMSG_LOGOUT_COMPLETE>() {
 }
 
 template <>
-vanilla::SMSG_LOGOUT_CANCEL_ACK* ServerOpcode::get_if<SMSG_LOGOUT_CANCEL_ACK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_LOGOUT_CANCEL_ACK* ServerOpcode::get_if<SMSG_LOGOUT_CANCEL_ACK>() {
     if (opcode == Opcode::SMSG_LOGOUT_CANCEL_ACK) {
         return &SMSG_LOGOUT_CANCEL_ACK;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_LOGOUT_CANCEL_ACK& ServerOpcode::get<SMSG_LOGOUT_CANCEL_ACK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_LOGOUT_CANCEL_ACK& ServerOpcode::get<SMSG_LOGOUT_CANCEL_ACK>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_LOGOUT_CANCEL_ACK>();
     if (p) {
         return *p;
@@ -29295,14 +29957,14 @@ vanilla::SMSG_LOGOUT_CANCEL_ACK& ServerOpcode::get<SMSG_LOGOUT_CANCEL_ACK>() {
 }
 
 template <>
-vanilla::SMSG_NAME_QUERY_RESPONSE* ServerOpcode::get_if<SMSG_NAME_QUERY_RESPONSE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_NAME_QUERY_RESPONSE* ServerOpcode::get_if<SMSG_NAME_QUERY_RESPONSE>() {
     if (opcode == Opcode::SMSG_NAME_QUERY_RESPONSE) {
         return &SMSG_NAME_QUERY_RESPONSE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_NAME_QUERY_RESPONSE& ServerOpcode::get<SMSG_NAME_QUERY_RESPONSE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_NAME_QUERY_RESPONSE& ServerOpcode::get<SMSG_NAME_QUERY_RESPONSE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_NAME_QUERY_RESPONSE>();
     if (p) {
         return *p;
@@ -29311,14 +29973,14 @@ vanilla::SMSG_NAME_QUERY_RESPONSE& ServerOpcode::get<SMSG_NAME_QUERY_RESPONSE>()
 }
 
 template <>
-vanilla::SMSG_PET_NAME_QUERY_RESPONSE* ServerOpcode::get_if<SMSG_PET_NAME_QUERY_RESPONSE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PET_NAME_QUERY_RESPONSE* ServerOpcode::get_if<SMSG_PET_NAME_QUERY_RESPONSE>() {
     if (opcode == Opcode::SMSG_PET_NAME_QUERY_RESPONSE) {
         return &SMSG_PET_NAME_QUERY_RESPONSE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_PET_NAME_QUERY_RESPONSE& ServerOpcode::get<SMSG_PET_NAME_QUERY_RESPONSE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PET_NAME_QUERY_RESPONSE& ServerOpcode::get<SMSG_PET_NAME_QUERY_RESPONSE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_PET_NAME_QUERY_RESPONSE>();
     if (p) {
         return *p;
@@ -29327,14 +29989,14 @@ vanilla::SMSG_PET_NAME_QUERY_RESPONSE& ServerOpcode::get<SMSG_PET_NAME_QUERY_RES
 }
 
 template <>
-vanilla::SMSG_GUILD_QUERY_RESPONSE* ServerOpcode::get_if<SMSG_GUILD_QUERY_RESPONSE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GUILD_QUERY_RESPONSE* ServerOpcode::get_if<SMSG_GUILD_QUERY_RESPONSE>() {
     if (opcode == Opcode::SMSG_GUILD_QUERY_RESPONSE) {
         return &SMSG_GUILD_QUERY_RESPONSE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_GUILD_QUERY_RESPONSE& ServerOpcode::get<SMSG_GUILD_QUERY_RESPONSE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GUILD_QUERY_RESPONSE& ServerOpcode::get<SMSG_GUILD_QUERY_RESPONSE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_GUILD_QUERY_RESPONSE>();
     if (p) {
         return *p;
@@ -29343,14 +30005,14 @@ vanilla::SMSG_GUILD_QUERY_RESPONSE& ServerOpcode::get<SMSG_GUILD_QUERY_RESPONSE>
 }
 
 template <>
-vanilla::SMSG_ITEM_QUERY_SINGLE_RESPONSE* ServerOpcode::get_if<SMSG_ITEM_QUERY_SINGLE_RESPONSE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ITEM_QUERY_SINGLE_RESPONSE* ServerOpcode::get_if<SMSG_ITEM_QUERY_SINGLE_RESPONSE>() {
     if (opcode == Opcode::SMSG_ITEM_QUERY_SINGLE_RESPONSE) {
         return &SMSG_ITEM_QUERY_SINGLE_RESPONSE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_ITEM_QUERY_SINGLE_RESPONSE& ServerOpcode::get<SMSG_ITEM_QUERY_SINGLE_RESPONSE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ITEM_QUERY_SINGLE_RESPONSE& ServerOpcode::get<SMSG_ITEM_QUERY_SINGLE_RESPONSE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_ITEM_QUERY_SINGLE_RESPONSE>();
     if (p) {
         return *p;
@@ -29359,14 +30021,14 @@ vanilla::SMSG_ITEM_QUERY_SINGLE_RESPONSE& ServerOpcode::get<SMSG_ITEM_QUERY_SING
 }
 
 template <>
-vanilla::SMSG_PAGE_TEXT_QUERY_RESPONSE* ServerOpcode::get_if<SMSG_PAGE_TEXT_QUERY_RESPONSE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PAGE_TEXT_QUERY_RESPONSE* ServerOpcode::get_if<SMSG_PAGE_TEXT_QUERY_RESPONSE>() {
     if (opcode == Opcode::SMSG_PAGE_TEXT_QUERY_RESPONSE) {
         return &SMSG_PAGE_TEXT_QUERY_RESPONSE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_PAGE_TEXT_QUERY_RESPONSE& ServerOpcode::get<SMSG_PAGE_TEXT_QUERY_RESPONSE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PAGE_TEXT_QUERY_RESPONSE& ServerOpcode::get<SMSG_PAGE_TEXT_QUERY_RESPONSE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_PAGE_TEXT_QUERY_RESPONSE>();
     if (p) {
         return *p;
@@ -29375,14 +30037,14 @@ vanilla::SMSG_PAGE_TEXT_QUERY_RESPONSE& ServerOpcode::get<SMSG_PAGE_TEXT_QUERY_R
 }
 
 template <>
-vanilla::SMSG_QUEST_QUERY_RESPONSE* ServerOpcode::get_if<SMSG_QUEST_QUERY_RESPONSE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_QUEST_QUERY_RESPONSE* ServerOpcode::get_if<SMSG_QUEST_QUERY_RESPONSE>() {
     if (opcode == Opcode::SMSG_QUEST_QUERY_RESPONSE) {
         return &SMSG_QUEST_QUERY_RESPONSE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_QUEST_QUERY_RESPONSE& ServerOpcode::get<SMSG_QUEST_QUERY_RESPONSE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_QUEST_QUERY_RESPONSE& ServerOpcode::get<SMSG_QUEST_QUERY_RESPONSE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_QUEST_QUERY_RESPONSE>();
     if (p) {
         return *p;
@@ -29391,14 +30053,14 @@ vanilla::SMSG_QUEST_QUERY_RESPONSE& ServerOpcode::get<SMSG_QUEST_QUERY_RESPONSE>
 }
 
 template <>
-vanilla::SMSG_GAMEOBJECT_QUERY_RESPONSE* ServerOpcode::get_if<SMSG_GAMEOBJECT_QUERY_RESPONSE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GAMEOBJECT_QUERY_RESPONSE* ServerOpcode::get_if<SMSG_GAMEOBJECT_QUERY_RESPONSE>() {
     if (opcode == Opcode::SMSG_GAMEOBJECT_QUERY_RESPONSE) {
         return &SMSG_GAMEOBJECT_QUERY_RESPONSE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_GAMEOBJECT_QUERY_RESPONSE& ServerOpcode::get<SMSG_GAMEOBJECT_QUERY_RESPONSE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GAMEOBJECT_QUERY_RESPONSE& ServerOpcode::get<SMSG_GAMEOBJECT_QUERY_RESPONSE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_GAMEOBJECT_QUERY_RESPONSE>();
     if (p) {
         return *p;
@@ -29407,14 +30069,14 @@ vanilla::SMSG_GAMEOBJECT_QUERY_RESPONSE& ServerOpcode::get<SMSG_GAMEOBJECT_QUERY
 }
 
 template <>
-vanilla::SMSG_CREATURE_QUERY_RESPONSE* ServerOpcode::get_if<SMSG_CREATURE_QUERY_RESPONSE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_CREATURE_QUERY_RESPONSE* ServerOpcode::get_if<SMSG_CREATURE_QUERY_RESPONSE>() {
     if (opcode == Opcode::SMSG_CREATURE_QUERY_RESPONSE) {
         return &SMSG_CREATURE_QUERY_RESPONSE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_CREATURE_QUERY_RESPONSE& ServerOpcode::get<SMSG_CREATURE_QUERY_RESPONSE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_CREATURE_QUERY_RESPONSE& ServerOpcode::get<SMSG_CREATURE_QUERY_RESPONSE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_CREATURE_QUERY_RESPONSE>();
     if (p) {
         return *p;
@@ -29423,14 +30085,14 @@ vanilla::SMSG_CREATURE_QUERY_RESPONSE& ServerOpcode::get<SMSG_CREATURE_QUERY_RES
 }
 
 template <>
-vanilla::SMSG_WHO* ServerOpcode::get_if<SMSG_WHO>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_WHO* ServerOpcode::get_if<SMSG_WHO>() {
     if (opcode == Opcode::SMSG_WHO) {
         return &SMSG_WHO;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_WHO& ServerOpcode::get<SMSG_WHO>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_WHO& ServerOpcode::get<SMSG_WHO>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_WHO>();
     if (p) {
         return *p;
@@ -29439,14 +30101,14 @@ vanilla::SMSG_WHO& ServerOpcode::get<SMSG_WHO>() {
 }
 
 template <>
-vanilla::SMSG_WHOIS* ServerOpcode::get_if<SMSG_WHOIS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_WHOIS* ServerOpcode::get_if<SMSG_WHOIS>() {
     if (opcode == Opcode::SMSG_WHOIS) {
         return &SMSG_WHOIS;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_WHOIS& ServerOpcode::get<SMSG_WHOIS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_WHOIS& ServerOpcode::get<SMSG_WHOIS>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_WHOIS>();
     if (p) {
         return *p;
@@ -29455,14 +30117,14 @@ vanilla::SMSG_WHOIS& ServerOpcode::get<SMSG_WHOIS>() {
 }
 
 template <>
-vanilla::SMSG_FRIEND_LIST* ServerOpcode::get_if<SMSG_FRIEND_LIST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_FRIEND_LIST* ServerOpcode::get_if<SMSG_FRIEND_LIST>() {
     if (opcode == Opcode::SMSG_FRIEND_LIST) {
         return &SMSG_FRIEND_LIST;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_FRIEND_LIST& ServerOpcode::get<SMSG_FRIEND_LIST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_FRIEND_LIST& ServerOpcode::get<SMSG_FRIEND_LIST>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_FRIEND_LIST>();
     if (p) {
         return *p;
@@ -29471,14 +30133,14 @@ vanilla::SMSG_FRIEND_LIST& ServerOpcode::get<SMSG_FRIEND_LIST>() {
 }
 
 template <>
-vanilla::SMSG_FRIEND_STATUS* ServerOpcode::get_if<SMSG_FRIEND_STATUS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_FRIEND_STATUS* ServerOpcode::get_if<SMSG_FRIEND_STATUS>() {
     if (opcode == Opcode::SMSG_FRIEND_STATUS) {
         return &SMSG_FRIEND_STATUS;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_FRIEND_STATUS& ServerOpcode::get<SMSG_FRIEND_STATUS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_FRIEND_STATUS& ServerOpcode::get<SMSG_FRIEND_STATUS>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_FRIEND_STATUS>();
     if (p) {
         return *p;
@@ -29487,14 +30149,14 @@ vanilla::SMSG_FRIEND_STATUS& ServerOpcode::get<SMSG_FRIEND_STATUS>() {
 }
 
 template <>
-vanilla::SMSG_IGNORE_LIST* ServerOpcode::get_if<SMSG_IGNORE_LIST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_IGNORE_LIST* ServerOpcode::get_if<SMSG_IGNORE_LIST>() {
     if (opcode == Opcode::SMSG_IGNORE_LIST) {
         return &SMSG_IGNORE_LIST;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_IGNORE_LIST& ServerOpcode::get<SMSG_IGNORE_LIST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_IGNORE_LIST& ServerOpcode::get<SMSG_IGNORE_LIST>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_IGNORE_LIST>();
     if (p) {
         return *p;
@@ -29503,14 +30165,14 @@ vanilla::SMSG_IGNORE_LIST& ServerOpcode::get<SMSG_IGNORE_LIST>() {
 }
 
 template <>
-vanilla::SMSG_GROUP_INVITE* ServerOpcode::get_if<SMSG_GROUP_INVITE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GROUP_INVITE* ServerOpcode::get_if<SMSG_GROUP_INVITE>() {
     if (opcode == Opcode::SMSG_GROUP_INVITE) {
         return &SMSG_GROUP_INVITE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_GROUP_INVITE& ServerOpcode::get<SMSG_GROUP_INVITE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GROUP_INVITE& ServerOpcode::get<SMSG_GROUP_INVITE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_GROUP_INVITE>();
     if (p) {
         return *p;
@@ -29519,14 +30181,14 @@ vanilla::SMSG_GROUP_INVITE& ServerOpcode::get<SMSG_GROUP_INVITE>() {
 }
 
 template <>
-vanilla::SMSG_GROUP_DECLINE* ServerOpcode::get_if<SMSG_GROUP_DECLINE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GROUP_DECLINE* ServerOpcode::get_if<SMSG_GROUP_DECLINE>() {
     if (opcode == Opcode::SMSG_GROUP_DECLINE) {
         return &SMSG_GROUP_DECLINE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_GROUP_DECLINE& ServerOpcode::get<SMSG_GROUP_DECLINE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GROUP_DECLINE& ServerOpcode::get<SMSG_GROUP_DECLINE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_GROUP_DECLINE>();
     if (p) {
         return *p;
@@ -29535,14 +30197,14 @@ vanilla::SMSG_GROUP_DECLINE& ServerOpcode::get<SMSG_GROUP_DECLINE>() {
 }
 
 template <>
-vanilla::SMSG_GROUP_UNINVITE* ServerOpcode::get_if<SMSG_GROUP_UNINVITE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GROUP_UNINVITE* ServerOpcode::get_if<SMSG_GROUP_UNINVITE>() {
     if (opcode == Opcode::SMSG_GROUP_UNINVITE) {
         return &SMSG_GROUP_UNINVITE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_GROUP_UNINVITE& ServerOpcode::get<SMSG_GROUP_UNINVITE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GROUP_UNINVITE& ServerOpcode::get<SMSG_GROUP_UNINVITE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_GROUP_UNINVITE>();
     if (p) {
         return *p;
@@ -29551,14 +30213,14 @@ vanilla::SMSG_GROUP_UNINVITE& ServerOpcode::get<SMSG_GROUP_UNINVITE>() {
 }
 
 template <>
-vanilla::SMSG_GROUP_SET_LEADER* ServerOpcode::get_if<SMSG_GROUP_SET_LEADER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GROUP_SET_LEADER* ServerOpcode::get_if<SMSG_GROUP_SET_LEADER>() {
     if (opcode == Opcode::SMSG_GROUP_SET_LEADER) {
         return &SMSG_GROUP_SET_LEADER;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_GROUP_SET_LEADER& ServerOpcode::get<SMSG_GROUP_SET_LEADER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GROUP_SET_LEADER& ServerOpcode::get<SMSG_GROUP_SET_LEADER>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_GROUP_SET_LEADER>();
     if (p) {
         return *p;
@@ -29567,14 +30229,14 @@ vanilla::SMSG_GROUP_SET_LEADER& ServerOpcode::get<SMSG_GROUP_SET_LEADER>() {
 }
 
 template <>
-vanilla::SMSG_GROUP_DESTROYED* ServerOpcode::get_if<SMSG_GROUP_DESTROYED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GROUP_DESTROYED* ServerOpcode::get_if<SMSG_GROUP_DESTROYED>() {
     if (opcode == Opcode::SMSG_GROUP_DESTROYED) {
         return &SMSG_GROUP_DESTROYED;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_GROUP_DESTROYED& ServerOpcode::get<SMSG_GROUP_DESTROYED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GROUP_DESTROYED& ServerOpcode::get<SMSG_GROUP_DESTROYED>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_GROUP_DESTROYED>();
     if (p) {
         return *p;
@@ -29583,14 +30245,14 @@ vanilla::SMSG_GROUP_DESTROYED& ServerOpcode::get<SMSG_GROUP_DESTROYED>() {
 }
 
 template <>
-vanilla::SMSG_GROUP_LIST* ServerOpcode::get_if<SMSG_GROUP_LIST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GROUP_LIST* ServerOpcode::get_if<SMSG_GROUP_LIST>() {
     if (opcode == Opcode::SMSG_GROUP_LIST) {
         return &SMSG_GROUP_LIST;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_GROUP_LIST& ServerOpcode::get<SMSG_GROUP_LIST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GROUP_LIST& ServerOpcode::get<SMSG_GROUP_LIST>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_GROUP_LIST>();
     if (p) {
         return *p;
@@ -29599,14 +30261,14 @@ vanilla::SMSG_GROUP_LIST& ServerOpcode::get<SMSG_GROUP_LIST>() {
 }
 
 template <>
-vanilla::SMSG_PARTY_MEMBER_STATS* ServerOpcode::get_if<SMSG_PARTY_MEMBER_STATS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PARTY_MEMBER_STATS* ServerOpcode::get_if<SMSG_PARTY_MEMBER_STATS>() {
     if (opcode == Opcode::SMSG_PARTY_MEMBER_STATS) {
         return &SMSG_PARTY_MEMBER_STATS;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_PARTY_MEMBER_STATS& ServerOpcode::get<SMSG_PARTY_MEMBER_STATS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PARTY_MEMBER_STATS& ServerOpcode::get<SMSG_PARTY_MEMBER_STATS>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_PARTY_MEMBER_STATS>();
     if (p) {
         return *p;
@@ -29615,14 +30277,14 @@ vanilla::SMSG_PARTY_MEMBER_STATS& ServerOpcode::get<SMSG_PARTY_MEMBER_STATS>() {
 }
 
 template <>
-vanilla::SMSG_PARTY_COMMAND_RESULT* ServerOpcode::get_if<SMSG_PARTY_COMMAND_RESULT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PARTY_COMMAND_RESULT* ServerOpcode::get_if<SMSG_PARTY_COMMAND_RESULT>() {
     if (opcode == Opcode::SMSG_PARTY_COMMAND_RESULT) {
         return &SMSG_PARTY_COMMAND_RESULT;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_PARTY_COMMAND_RESULT& ServerOpcode::get<SMSG_PARTY_COMMAND_RESULT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PARTY_COMMAND_RESULT& ServerOpcode::get<SMSG_PARTY_COMMAND_RESULT>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_PARTY_COMMAND_RESULT>();
     if (p) {
         return *p;
@@ -29631,14 +30293,14 @@ vanilla::SMSG_PARTY_COMMAND_RESULT& ServerOpcode::get<SMSG_PARTY_COMMAND_RESULT>
 }
 
 template <>
-vanilla::SMSG_GUILD_INVITE* ServerOpcode::get_if<SMSG_GUILD_INVITE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GUILD_INVITE* ServerOpcode::get_if<SMSG_GUILD_INVITE>() {
     if (opcode == Opcode::SMSG_GUILD_INVITE) {
         return &SMSG_GUILD_INVITE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_GUILD_INVITE& ServerOpcode::get<SMSG_GUILD_INVITE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GUILD_INVITE& ServerOpcode::get<SMSG_GUILD_INVITE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_GUILD_INVITE>();
     if (p) {
         return *p;
@@ -29647,14 +30309,14 @@ vanilla::SMSG_GUILD_INVITE& ServerOpcode::get<SMSG_GUILD_INVITE>() {
 }
 
 template <>
-vanilla::SMSG_GUILD_INFO* ServerOpcode::get_if<SMSG_GUILD_INFO>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GUILD_INFO* ServerOpcode::get_if<SMSG_GUILD_INFO>() {
     if (opcode == Opcode::SMSG_GUILD_INFO) {
         return &SMSG_GUILD_INFO;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_GUILD_INFO& ServerOpcode::get<SMSG_GUILD_INFO>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GUILD_INFO& ServerOpcode::get<SMSG_GUILD_INFO>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_GUILD_INFO>();
     if (p) {
         return *p;
@@ -29663,14 +30325,14 @@ vanilla::SMSG_GUILD_INFO& ServerOpcode::get<SMSG_GUILD_INFO>() {
 }
 
 template <>
-vanilla::SMSG_GUILD_ROSTER* ServerOpcode::get_if<SMSG_GUILD_ROSTER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GUILD_ROSTER* ServerOpcode::get_if<SMSG_GUILD_ROSTER>() {
     if (opcode == Opcode::SMSG_GUILD_ROSTER) {
         return &SMSG_GUILD_ROSTER;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_GUILD_ROSTER& ServerOpcode::get<SMSG_GUILD_ROSTER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GUILD_ROSTER& ServerOpcode::get<SMSG_GUILD_ROSTER>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_GUILD_ROSTER>();
     if (p) {
         return *p;
@@ -29679,14 +30341,14 @@ vanilla::SMSG_GUILD_ROSTER& ServerOpcode::get<SMSG_GUILD_ROSTER>() {
 }
 
 template <>
-vanilla::SMSG_GUILD_EVENT* ServerOpcode::get_if<SMSG_GUILD_EVENT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GUILD_EVENT* ServerOpcode::get_if<SMSG_GUILD_EVENT>() {
     if (opcode == Opcode::SMSG_GUILD_EVENT) {
         return &SMSG_GUILD_EVENT;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_GUILD_EVENT& ServerOpcode::get<SMSG_GUILD_EVENT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GUILD_EVENT& ServerOpcode::get<SMSG_GUILD_EVENT>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_GUILD_EVENT>();
     if (p) {
         return *p;
@@ -29695,14 +30357,14 @@ vanilla::SMSG_GUILD_EVENT& ServerOpcode::get<SMSG_GUILD_EVENT>() {
 }
 
 template <>
-vanilla::SMSG_GUILD_COMMAND_RESULT* ServerOpcode::get_if<SMSG_GUILD_COMMAND_RESULT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GUILD_COMMAND_RESULT* ServerOpcode::get_if<SMSG_GUILD_COMMAND_RESULT>() {
     if (opcode == Opcode::SMSG_GUILD_COMMAND_RESULT) {
         return &SMSG_GUILD_COMMAND_RESULT;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_GUILD_COMMAND_RESULT& ServerOpcode::get<SMSG_GUILD_COMMAND_RESULT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GUILD_COMMAND_RESULT& ServerOpcode::get<SMSG_GUILD_COMMAND_RESULT>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_GUILD_COMMAND_RESULT>();
     if (p) {
         return *p;
@@ -29711,14 +30373,14 @@ vanilla::SMSG_GUILD_COMMAND_RESULT& ServerOpcode::get<SMSG_GUILD_COMMAND_RESULT>
 }
 
 template <>
-vanilla::SMSG_MESSAGECHAT* ServerOpcode::get_if<SMSG_MESSAGECHAT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_MESSAGECHAT* ServerOpcode::get_if<SMSG_MESSAGECHAT>() {
     if (opcode == Opcode::SMSG_MESSAGECHAT) {
         return &SMSG_MESSAGECHAT;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_MESSAGECHAT& ServerOpcode::get<SMSG_MESSAGECHAT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_MESSAGECHAT& ServerOpcode::get<SMSG_MESSAGECHAT>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_MESSAGECHAT>();
     if (p) {
         return *p;
@@ -29727,14 +30389,14 @@ vanilla::SMSG_MESSAGECHAT& ServerOpcode::get<SMSG_MESSAGECHAT>() {
 }
 
 template <>
-vanilla::SMSG_CHANNEL_NOTIFY* ServerOpcode::get_if<SMSG_CHANNEL_NOTIFY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_CHANNEL_NOTIFY* ServerOpcode::get_if<SMSG_CHANNEL_NOTIFY>() {
     if (opcode == Opcode::SMSG_CHANNEL_NOTIFY) {
         return &SMSG_CHANNEL_NOTIFY;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_CHANNEL_NOTIFY& ServerOpcode::get<SMSG_CHANNEL_NOTIFY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_CHANNEL_NOTIFY& ServerOpcode::get<SMSG_CHANNEL_NOTIFY>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_CHANNEL_NOTIFY>();
     if (p) {
         return *p;
@@ -29743,14 +30405,14 @@ vanilla::SMSG_CHANNEL_NOTIFY& ServerOpcode::get<SMSG_CHANNEL_NOTIFY>() {
 }
 
 template <>
-vanilla::SMSG_CHANNEL_LIST* ServerOpcode::get_if<SMSG_CHANNEL_LIST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_CHANNEL_LIST* ServerOpcode::get_if<SMSG_CHANNEL_LIST>() {
     if (opcode == Opcode::SMSG_CHANNEL_LIST) {
         return &SMSG_CHANNEL_LIST;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_CHANNEL_LIST& ServerOpcode::get<SMSG_CHANNEL_LIST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_CHANNEL_LIST& ServerOpcode::get<SMSG_CHANNEL_LIST>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_CHANNEL_LIST>();
     if (p) {
         return *p;
@@ -29759,14 +30421,14 @@ vanilla::SMSG_CHANNEL_LIST& ServerOpcode::get<SMSG_CHANNEL_LIST>() {
 }
 
 template <>
-vanilla::SMSG_UPDATE_OBJECT* ServerOpcode::get_if<SMSG_UPDATE_OBJECT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_UPDATE_OBJECT* ServerOpcode::get_if<SMSG_UPDATE_OBJECT>() {
     if (opcode == Opcode::SMSG_UPDATE_OBJECT) {
         return &SMSG_UPDATE_OBJECT;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_UPDATE_OBJECT& ServerOpcode::get<SMSG_UPDATE_OBJECT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_UPDATE_OBJECT& ServerOpcode::get<SMSG_UPDATE_OBJECT>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_UPDATE_OBJECT>();
     if (p) {
         return *p;
@@ -29775,14 +30437,14 @@ vanilla::SMSG_UPDATE_OBJECT& ServerOpcode::get<SMSG_UPDATE_OBJECT>() {
 }
 
 template <>
-vanilla::SMSG_DESTROY_OBJECT* ServerOpcode::get_if<SMSG_DESTROY_OBJECT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_DESTROY_OBJECT* ServerOpcode::get_if<SMSG_DESTROY_OBJECT>() {
     if (opcode == Opcode::SMSG_DESTROY_OBJECT) {
         return &SMSG_DESTROY_OBJECT;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_DESTROY_OBJECT& ServerOpcode::get<SMSG_DESTROY_OBJECT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_DESTROY_OBJECT& ServerOpcode::get<SMSG_DESTROY_OBJECT>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_DESTROY_OBJECT>();
     if (p) {
         return *p;
@@ -29791,14 +30453,14 @@ vanilla::SMSG_DESTROY_OBJECT& ServerOpcode::get<SMSG_DESTROY_OBJECT>() {
 }
 
 template <>
-vanilla::SMSG_READ_ITEM_OK* ServerOpcode::get_if<SMSG_READ_ITEM_OK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_READ_ITEM_OK* ServerOpcode::get_if<SMSG_READ_ITEM_OK>() {
     if (opcode == Opcode::SMSG_READ_ITEM_OK) {
         return &SMSG_READ_ITEM_OK;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_READ_ITEM_OK& ServerOpcode::get<SMSG_READ_ITEM_OK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_READ_ITEM_OK& ServerOpcode::get<SMSG_READ_ITEM_OK>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_READ_ITEM_OK>();
     if (p) {
         return *p;
@@ -29807,14 +30469,14 @@ vanilla::SMSG_READ_ITEM_OK& ServerOpcode::get<SMSG_READ_ITEM_OK>() {
 }
 
 template <>
-vanilla::SMSG_READ_ITEM_FAILED* ServerOpcode::get_if<SMSG_READ_ITEM_FAILED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_READ_ITEM_FAILED* ServerOpcode::get_if<SMSG_READ_ITEM_FAILED>() {
     if (opcode == Opcode::SMSG_READ_ITEM_FAILED) {
         return &SMSG_READ_ITEM_FAILED;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_READ_ITEM_FAILED& ServerOpcode::get<SMSG_READ_ITEM_FAILED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_READ_ITEM_FAILED& ServerOpcode::get<SMSG_READ_ITEM_FAILED>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_READ_ITEM_FAILED>();
     if (p) {
         return *p;
@@ -29823,14 +30485,14 @@ vanilla::SMSG_READ_ITEM_FAILED& ServerOpcode::get<SMSG_READ_ITEM_FAILED>() {
 }
 
 template <>
-vanilla::SMSG_ITEM_COOLDOWN* ServerOpcode::get_if<SMSG_ITEM_COOLDOWN>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ITEM_COOLDOWN* ServerOpcode::get_if<SMSG_ITEM_COOLDOWN>() {
     if (opcode == Opcode::SMSG_ITEM_COOLDOWN) {
         return &SMSG_ITEM_COOLDOWN;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_ITEM_COOLDOWN& ServerOpcode::get<SMSG_ITEM_COOLDOWN>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ITEM_COOLDOWN& ServerOpcode::get<SMSG_ITEM_COOLDOWN>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_ITEM_COOLDOWN>();
     if (p) {
         return *p;
@@ -29839,14 +30501,14 @@ vanilla::SMSG_ITEM_COOLDOWN& ServerOpcode::get<SMSG_ITEM_COOLDOWN>() {
 }
 
 template <>
-vanilla::SMSG_GAMEOBJECT_CUSTOM_ANIM* ServerOpcode::get_if<SMSG_GAMEOBJECT_CUSTOM_ANIM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GAMEOBJECT_CUSTOM_ANIM* ServerOpcode::get_if<SMSG_GAMEOBJECT_CUSTOM_ANIM>() {
     if (opcode == Opcode::SMSG_GAMEOBJECT_CUSTOM_ANIM) {
         return &SMSG_GAMEOBJECT_CUSTOM_ANIM;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_GAMEOBJECT_CUSTOM_ANIM& ServerOpcode::get<SMSG_GAMEOBJECT_CUSTOM_ANIM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GAMEOBJECT_CUSTOM_ANIM& ServerOpcode::get<SMSG_GAMEOBJECT_CUSTOM_ANIM>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_GAMEOBJECT_CUSTOM_ANIM>();
     if (p) {
         return *p;
@@ -29855,14 +30517,14 @@ vanilla::SMSG_GAMEOBJECT_CUSTOM_ANIM& ServerOpcode::get<SMSG_GAMEOBJECT_CUSTOM_A
 }
 
 template <>
-vanilla::MSG_MOVE_START_FORWARD_Server* ServerOpcode::get_if<MSG_MOVE_START_FORWARD_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_START_FORWARD_Server* ServerOpcode::get_if<MSG_MOVE_START_FORWARD_Server>() {
     if (opcode == Opcode::MSG_MOVE_START_FORWARD) {
         return &MSG_MOVE_START_FORWARD;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_START_FORWARD_Server& ServerOpcode::get<MSG_MOVE_START_FORWARD_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_START_FORWARD_Server& ServerOpcode::get<MSG_MOVE_START_FORWARD_Server>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_START_FORWARD_Server>();
     if (p) {
         return *p;
@@ -29871,14 +30533,14 @@ vanilla::MSG_MOVE_START_FORWARD_Server& ServerOpcode::get<MSG_MOVE_START_FORWARD
 }
 
 template <>
-vanilla::MSG_MOVE_START_BACKWARD_Server* ServerOpcode::get_if<MSG_MOVE_START_BACKWARD_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_START_BACKWARD_Server* ServerOpcode::get_if<MSG_MOVE_START_BACKWARD_Server>() {
     if (opcode == Opcode::MSG_MOVE_START_BACKWARD) {
         return &MSG_MOVE_START_BACKWARD;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_START_BACKWARD_Server& ServerOpcode::get<MSG_MOVE_START_BACKWARD_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_START_BACKWARD_Server& ServerOpcode::get<MSG_MOVE_START_BACKWARD_Server>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_START_BACKWARD_Server>();
     if (p) {
         return *p;
@@ -29887,14 +30549,14 @@ vanilla::MSG_MOVE_START_BACKWARD_Server& ServerOpcode::get<MSG_MOVE_START_BACKWA
 }
 
 template <>
-vanilla::MSG_MOVE_STOP_Server* ServerOpcode::get_if<MSG_MOVE_STOP_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_STOP_Server* ServerOpcode::get_if<MSG_MOVE_STOP_Server>() {
     if (opcode == Opcode::MSG_MOVE_STOP) {
         return &MSG_MOVE_STOP;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_STOP_Server& ServerOpcode::get<MSG_MOVE_STOP_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_STOP_Server& ServerOpcode::get<MSG_MOVE_STOP_Server>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_STOP_Server>();
     if (p) {
         return *p;
@@ -29903,14 +30565,14 @@ vanilla::MSG_MOVE_STOP_Server& ServerOpcode::get<MSG_MOVE_STOP_Server>() {
 }
 
 template <>
-vanilla::MSG_MOVE_START_STRAFE_LEFT_Server* ServerOpcode::get_if<MSG_MOVE_START_STRAFE_LEFT_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_START_STRAFE_LEFT_Server* ServerOpcode::get_if<MSG_MOVE_START_STRAFE_LEFT_Server>() {
     if (opcode == Opcode::MSG_MOVE_START_STRAFE_LEFT) {
         return &MSG_MOVE_START_STRAFE_LEFT;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_START_STRAFE_LEFT_Server& ServerOpcode::get<MSG_MOVE_START_STRAFE_LEFT_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_START_STRAFE_LEFT_Server& ServerOpcode::get<MSG_MOVE_START_STRAFE_LEFT_Server>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_START_STRAFE_LEFT_Server>();
     if (p) {
         return *p;
@@ -29919,14 +30581,14 @@ vanilla::MSG_MOVE_START_STRAFE_LEFT_Server& ServerOpcode::get<MSG_MOVE_START_STR
 }
 
 template <>
-vanilla::MSG_MOVE_START_STRAFE_RIGHT_Server* ServerOpcode::get_if<MSG_MOVE_START_STRAFE_RIGHT_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_START_STRAFE_RIGHT_Server* ServerOpcode::get_if<MSG_MOVE_START_STRAFE_RIGHT_Server>() {
     if (opcode == Opcode::MSG_MOVE_START_STRAFE_RIGHT) {
         return &MSG_MOVE_START_STRAFE_RIGHT;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_START_STRAFE_RIGHT_Server& ServerOpcode::get<MSG_MOVE_START_STRAFE_RIGHT_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_START_STRAFE_RIGHT_Server& ServerOpcode::get<MSG_MOVE_START_STRAFE_RIGHT_Server>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_START_STRAFE_RIGHT_Server>();
     if (p) {
         return *p;
@@ -29935,14 +30597,14 @@ vanilla::MSG_MOVE_START_STRAFE_RIGHT_Server& ServerOpcode::get<MSG_MOVE_START_ST
 }
 
 template <>
-vanilla::MSG_MOVE_STOP_STRAFE_Server* ServerOpcode::get_if<MSG_MOVE_STOP_STRAFE_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_STOP_STRAFE_Server* ServerOpcode::get_if<MSG_MOVE_STOP_STRAFE_Server>() {
     if (opcode == Opcode::MSG_MOVE_STOP_STRAFE) {
         return &MSG_MOVE_STOP_STRAFE;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_STOP_STRAFE_Server& ServerOpcode::get<MSG_MOVE_STOP_STRAFE_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_STOP_STRAFE_Server& ServerOpcode::get<MSG_MOVE_STOP_STRAFE_Server>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_STOP_STRAFE_Server>();
     if (p) {
         return *p;
@@ -29951,14 +30613,14 @@ vanilla::MSG_MOVE_STOP_STRAFE_Server& ServerOpcode::get<MSG_MOVE_STOP_STRAFE_Ser
 }
 
 template <>
-vanilla::MSG_MOVE_JUMP_Server* ServerOpcode::get_if<MSG_MOVE_JUMP_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_JUMP_Server* ServerOpcode::get_if<MSG_MOVE_JUMP_Server>() {
     if (opcode == Opcode::MSG_MOVE_JUMP) {
         return &MSG_MOVE_JUMP;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_JUMP_Server& ServerOpcode::get<MSG_MOVE_JUMP_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_JUMP_Server& ServerOpcode::get<MSG_MOVE_JUMP_Server>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_JUMP_Server>();
     if (p) {
         return *p;
@@ -29967,14 +30629,14 @@ vanilla::MSG_MOVE_JUMP_Server& ServerOpcode::get<MSG_MOVE_JUMP_Server>() {
 }
 
 template <>
-vanilla::MSG_MOVE_START_TURN_LEFT_Server* ServerOpcode::get_if<MSG_MOVE_START_TURN_LEFT_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_START_TURN_LEFT_Server* ServerOpcode::get_if<MSG_MOVE_START_TURN_LEFT_Server>() {
     if (opcode == Opcode::MSG_MOVE_START_TURN_LEFT) {
         return &MSG_MOVE_START_TURN_LEFT;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_START_TURN_LEFT_Server& ServerOpcode::get<MSG_MOVE_START_TURN_LEFT_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_START_TURN_LEFT_Server& ServerOpcode::get<MSG_MOVE_START_TURN_LEFT_Server>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_START_TURN_LEFT_Server>();
     if (p) {
         return *p;
@@ -29983,14 +30645,14 @@ vanilla::MSG_MOVE_START_TURN_LEFT_Server& ServerOpcode::get<MSG_MOVE_START_TURN_
 }
 
 template <>
-vanilla::MSG_MOVE_START_TURN_RIGHT_Server* ServerOpcode::get_if<MSG_MOVE_START_TURN_RIGHT_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_START_TURN_RIGHT_Server* ServerOpcode::get_if<MSG_MOVE_START_TURN_RIGHT_Server>() {
     if (opcode == Opcode::MSG_MOVE_START_TURN_RIGHT) {
         return &MSG_MOVE_START_TURN_RIGHT;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_START_TURN_RIGHT_Server& ServerOpcode::get<MSG_MOVE_START_TURN_RIGHT_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_START_TURN_RIGHT_Server& ServerOpcode::get<MSG_MOVE_START_TURN_RIGHT_Server>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_START_TURN_RIGHT_Server>();
     if (p) {
         return *p;
@@ -29999,14 +30661,14 @@ vanilla::MSG_MOVE_START_TURN_RIGHT_Server& ServerOpcode::get<MSG_MOVE_START_TURN
 }
 
 template <>
-vanilla::MSG_MOVE_STOP_TURN_Server* ServerOpcode::get_if<MSG_MOVE_STOP_TURN_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_STOP_TURN_Server* ServerOpcode::get_if<MSG_MOVE_STOP_TURN_Server>() {
     if (opcode == Opcode::MSG_MOVE_STOP_TURN) {
         return &MSG_MOVE_STOP_TURN;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_STOP_TURN_Server& ServerOpcode::get<MSG_MOVE_STOP_TURN_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_STOP_TURN_Server& ServerOpcode::get<MSG_MOVE_STOP_TURN_Server>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_STOP_TURN_Server>();
     if (p) {
         return *p;
@@ -30015,14 +30677,14 @@ vanilla::MSG_MOVE_STOP_TURN_Server& ServerOpcode::get<MSG_MOVE_STOP_TURN_Server>
 }
 
 template <>
-vanilla::MSG_MOVE_START_PITCH_UP_Server* ServerOpcode::get_if<MSG_MOVE_START_PITCH_UP_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_START_PITCH_UP_Server* ServerOpcode::get_if<MSG_MOVE_START_PITCH_UP_Server>() {
     if (opcode == Opcode::MSG_MOVE_START_PITCH_UP) {
         return &MSG_MOVE_START_PITCH_UP;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_START_PITCH_UP_Server& ServerOpcode::get<MSG_MOVE_START_PITCH_UP_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_START_PITCH_UP_Server& ServerOpcode::get<MSG_MOVE_START_PITCH_UP_Server>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_START_PITCH_UP_Server>();
     if (p) {
         return *p;
@@ -30031,14 +30693,14 @@ vanilla::MSG_MOVE_START_PITCH_UP_Server& ServerOpcode::get<MSG_MOVE_START_PITCH_
 }
 
 template <>
-vanilla::MSG_MOVE_START_PITCH_DOWN_Server* ServerOpcode::get_if<MSG_MOVE_START_PITCH_DOWN_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_START_PITCH_DOWN_Server* ServerOpcode::get_if<MSG_MOVE_START_PITCH_DOWN_Server>() {
     if (opcode == Opcode::MSG_MOVE_START_PITCH_DOWN) {
         return &MSG_MOVE_START_PITCH_DOWN;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_START_PITCH_DOWN_Server& ServerOpcode::get<MSG_MOVE_START_PITCH_DOWN_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_START_PITCH_DOWN_Server& ServerOpcode::get<MSG_MOVE_START_PITCH_DOWN_Server>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_START_PITCH_DOWN_Server>();
     if (p) {
         return *p;
@@ -30047,14 +30709,14 @@ vanilla::MSG_MOVE_START_PITCH_DOWN_Server& ServerOpcode::get<MSG_MOVE_START_PITC
 }
 
 template <>
-vanilla::MSG_MOVE_STOP_PITCH_Server* ServerOpcode::get_if<MSG_MOVE_STOP_PITCH_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_STOP_PITCH_Server* ServerOpcode::get_if<MSG_MOVE_STOP_PITCH_Server>() {
     if (opcode == Opcode::MSG_MOVE_STOP_PITCH) {
         return &MSG_MOVE_STOP_PITCH;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_STOP_PITCH_Server& ServerOpcode::get<MSG_MOVE_STOP_PITCH_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_STOP_PITCH_Server& ServerOpcode::get<MSG_MOVE_STOP_PITCH_Server>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_STOP_PITCH_Server>();
     if (p) {
         return *p;
@@ -30063,14 +30725,14 @@ vanilla::MSG_MOVE_STOP_PITCH_Server& ServerOpcode::get<MSG_MOVE_STOP_PITCH_Serve
 }
 
 template <>
-vanilla::MSG_MOVE_SET_RUN_MODE_Server* ServerOpcode::get_if<MSG_MOVE_SET_RUN_MODE_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_SET_RUN_MODE_Server* ServerOpcode::get_if<MSG_MOVE_SET_RUN_MODE_Server>() {
     if (opcode == Opcode::MSG_MOVE_SET_RUN_MODE) {
         return &MSG_MOVE_SET_RUN_MODE;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_SET_RUN_MODE_Server& ServerOpcode::get<MSG_MOVE_SET_RUN_MODE_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_SET_RUN_MODE_Server& ServerOpcode::get<MSG_MOVE_SET_RUN_MODE_Server>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_SET_RUN_MODE_Server>();
     if (p) {
         return *p;
@@ -30079,14 +30741,14 @@ vanilla::MSG_MOVE_SET_RUN_MODE_Server& ServerOpcode::get<MSG_MOVE_SET_RUN_MODE_S
 }
 
 template <>
-vanilla::MSG_MOVE_SET_WALK_MODE_Server* ServerOpcode::get_if<MSG_MOVE_SET_WALK_MODE_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_SET_WALK_MODE_Server* ServerOpcode::get_if<MSG_MOVE_SET_WALK_MODE_Server>() {
     if (opcode == Opcode::MSG_MOVE_SET_WALK_MODE) {
         return &MSG_MOVE_SET_WALK_MODE;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_SET_WALK_MODE_Server& ServerOpcode::get<MSG_MOVE_SET_WALK_MODE_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_SET_WALK_MODE_Server& ServerOpcode::get<MSG_MOVE_SET_WALK_MODE_Server>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_SET_WALK_MODE_Server>();
     if (p) {
         return *p;
@@ -30095,14 +30757,14 @@ vanilla::MSG_MOVE_SET_WALK_MODE_Server& ServerOpcode::get<MSG_MOVE_SET_WALK_MODE
 }
 
 template <>
-vanilla::MSG_MOVE_TELEPORT_ACK_Server* ServerOpcode::get_if<MSG_MOVE_TELEPORT_ACK_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_TELEPORT_ACK_Server* ServerOpcode::get_if<MSG_MOVE_TELEPORT_ACK_Server>() {
     if (opcode == Opcode::MSG_MOVE_TELEPORT_ACK) {
         return &MSG_MOVE_TELEPORT_ACK;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_TELEPORT_ACK_Server& ServerOpcode::get<MSG_MOVE_TELEPORT_ACK_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_TELEPORT_ACK_Server& ServerOpcode::get<MSG_MOVE_TELEPORT_ACK_Server>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_TELEPORT_ACK_Server>();
     if (p) {
         return *p;
@@ -30111,14 +30773,14 @@ vanilla::MSG_MOVE_TELEPORT_ACK_Server& ServerOpcode::get<MSG_MOVE_TELEPORT_ACK_S
 }
 
 template <>
-vanilla::MSG_MOVE_FALL_LAND_Server* ServerOpcode::get_if<MSG_MOVE_FALL_LAND_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_FALL_LAND_Server* ServerOpcode::get_if<MSG_MOVE_FALL_LAND_Server>() {
     if (opcode == Opcode::MSG_MOVE_FALL_LAND) {
         return &MSG_MOVE_FALL_LAND;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_FALL_LAND_Server& ServerOpcode::get<MSG_MOVE_FALL_LAND_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_FALL_LAND_Server& ServerOpcode::get<MSG_MOVE_FALL_LAND_Server>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_FALL_LAND_Server>();
     if (p) {
         return *p;
@@ -30127,14 +30789,14 @@ vanilla::MSG_MOVE_FALL_LAND_Server& ServerOpcode::get<MSG_MOVE_FALL_LAND_Server>
 }
 
 template <>
-vanilla::MSG_MOVE_START_SWIM_Server* ServerOpcode::get_if<MSG_MOVE_START_SWIM_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_START_SWIM_Server* ServerOpcode::get_if<MSG_MOVE_START_SWIM_Server>() {
     if (opcode == Opcode::MSG_MOVE_START_SWIM) {
         return &MSG_MOVE_START_SWIM;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_START_SWIM_Server& ServerOpcode::get<MSG_MOVE_START_SWIM_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_START_SWIM_Server& ServerOpcode::get<MSG_MOVE_START_SWIM_Server>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_START_SWIM_Server>();
     if (p) {
         return *p;
@@ -30143,14 +30805,14 @@ vanilla::MSG_MOVE_START_SWIM_Server& ServerOpcode::get<MSG_MOVE_START_SWIM_Serve
 }
 
 template <>
-vanilla::MSG_MOVE_STOP_SWIM_Server* ServerOpcode::get_if<MSG_MOVE_STOP_SWIM_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_STOP_SWIM_Server* ServerOpcode::get_if<MSG_MOVE_STOP_SWIM_Server>() {
     if (opcode == Opcode::MSG_MOVE_STOP_SWIM) {
         return &MSG_MOVE_STOP_SWIM;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_STOP_SWIM_Server& ServerOpcode::get<MSG_MOVE_STOP_SWIM_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_STOP_SWIM_Server& ServerOpcode::get<MSG_MOVE_STOP_SWIM_Server>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_STOP_SWIM_Server>();
     if (p) {
         return *p;
@@ -30159,14 +30821,14 @@ vanilla::MSG_MOVE_STOP_SWIM_Server& ServerOpcode::get<MSG_MOVE_STOP_SWIM_Server>
 }
 
 template <>
-vanilla::MSG_MOVE_SET_FACING_Server* ServerOpcode::get_if<MSG_MOVE_SET_FACING_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_SET_FACING_Server* ServerOpcode::get_if<MSG_MOVE_SET_FACING_Server>() {
     if (opcode == Opcode::MSG_MOVE_SET_FACING) {
         return &MSG_MOVE_SET_FACING;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_SET_FACING_Server& ServerOpcode::get<MSG_MOVE_SET_FACING_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_SET_FACING_Server& ServerOpcode::get<MSG_MOVE_SET_FACING_Server>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_SET_FACING_Server>();
     if (p) {
         return *p;
@@ -30175,14 +30837,14 @@ vanilla::MSG_MOVE_SET_FACING_Server& ServerOpcode::get<MSG_MOVE_SET_FACING_Serve
 }
 
 template <>
-vanilla::MSG_MOVE_SET_PITCH_Server* ServerOpcode::get_if<MSG_MOVE_SET_PITCH_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_SET_PITCH_Server* ServerOpcode::get_if<MSG_MOVE_SET_PITCH_Server>() {
     if (opcode == Opcode::MSG_MOVE_SET_PITCH) {
         return &MSG_MOVE_SET_PITCH;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_SET_PITCH_Server& ServerOpcode::get<MSG_MOVE_SET_PITCH_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_SET_PITCH_Server& ServerOpcode::get<MSG_MOVE_SET_PITCH_Server>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_SET_PITCH_Server>();
     if (p) {
         return *p;
@@ -30191,14 +30853,14 @@ vanilla::MSG_MOVE_SET_PITCH_Server& ServerOpcode::get<MSG_MOVE_SET_PITCH_Server>
 }
 
 template <>
-vanilla::MSG_MOVE_WORLDPORT_ACK* ServerOpcode::get_if<MSG_MOVE_WORLDPORT_ACK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_WORLDPORT_ACK* ServerOpcode::get_if<MSG_MOVE_WORLDPORT_ACK>() {
     if (opcode == Opcode::MSG_MOVE_WORLDPORT_ACK) {
         return &MSG_MOVE_WORLDPORT_ACK;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_WORLDPORT_ACK& ServerOpcode::get<MSG_MOVE_WORLDPORT_ACK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_WORLDPORT_ACK& ServerOpcode::get<MSG_MOVE_WORLDPORT_ACK>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_WORLDPORT_ACK>();
     if (p) {
         return *p;
@@ -30207,14 +30869,14 @@ vanilla::MSG_MOVE_WORLDPORT_ACK& ServerOpcode::get<MSG_MOVE_WORLDPORT_ACK>() {
 }
 
 template <>
-vanilla::SMSG_MONSTER_MOVE* ServerOpcode::get_if<SMSG_MONSTER_MOVE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_MONSTER_MOVE* ServerOpcode::get_if<SMSG_MONSTER_MOVE>() {
     if (opcode == Opcode::SMSG_MONSTER_MOVE) {
         return &SMSG_MONSTER_MOVE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_MONSTER_MOVE& ServerOpcode::get<SMSG_MONSTER_MOVE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_MONSTER_MOVE& ServerOpcode::get<SMSG_MONSTER_MOVE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_MONSTER_MOVE>();
     if (p) {
         return *p;
@@ -30223,14 +30885,14 @@ vanilla::SMSG_MONSTER_MOVE& ServerOpcode::get<SMSG_MONSTER_MOVE>() {
 }
 
 template <>
-vanilla::SMSG_MOVE_WATER_WALK* ServerOpcode::get_if<SMSG_MOVE_WATER_WALK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_MOVE_WATER_WALK* ServerOpcode::get_if<SMSG_MOVE_WATER_WALK>() {
     if (opcode == Opcode::SMSG_MOVE_WATER_WALK) {
         return &SMSG_MOVE_WATER_WALK;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_MOVE_WATER_WALK& ServerOpcode::get<SMSG_MOVE_WATER_WALK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_MOVE_WATER_WALK& ServerOpcode::get<SMSG_MOVE_WATER_WALK>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_MOVE_WATER_WALK>();
     if (p) {
         return *p;
@@ -30239,14 +30901,14 @@ vanilla::SMSG_MOVE_WATER_WALK& ServerOpcode::get<SMSG_MOVE_WATER_WALK>() {
 }
 
 template <>
-vanilla::SMSG_MOVE_LAND_WALK* ServerOpcode::get_if<SMSG_MOVE_LAND_WALK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_MOVE_LAND_WALK* ServerOpcode::get_if<SMSG_MOVE_LAND_WALK>() {
     if (opcode == Opcode::SMSG_MOVE_LAND_WALK) {
         return &SMSG_MOVE_LAND_WALK;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_MOVE_LAND_WALK& ServerOpcode::get<SMSG_MOVE_LAND_WALK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_MOVE_LAND_WALK& ServerOpcode::get<SMSG_MOVE_LAND_WALK>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_MOVE_LAND_WALK>();
     if (p) {
         return *p;
@@ -30255,14 +30917,14 @@ vanilla::SMSG_MOVE_LAND_WALK& ServerOpcode::get<SMSG_MOVE_LAND_WALK>() {
 }
 
 template <>
-vanilla::SMSG_FORCE_RUN_SPEED_CHANGE* ServerOpcode::get_if<SMSG_FORCE_RUN_SPEED_CHANGE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_FORCE_RUN_SPEED_CHANGE* ServerOpcode::get_if<SMSG_FORCE_RUN_SPEED_CHANGE>() {
     if (opcode == Opcode::SMSG_FORCE_RUN_SPEED_CHANGE) {
         return &SMSG_FORCE_RUN_SPEED_CHANGE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_FORCE_RUN_SPEED_CHANGE& ServerOpcode::get<SMSG_FORCE_RUN_SPEED_CHANGE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_FORCE_RUN_SPEED_CHANGE& ServerOpcode::get<SMSG_FORCE_RUN_SPEED_CHANGE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_FORCE_RUN_SPEED_CHANGE>();
     if (p) {
         return *p;
@@ -30271,14 +30933,14 @@ vanilla::SMSG_FORCE_RUN_SPEED_CHANGE& ServerOpcode::get<SMSG_FORCE_RUN_SPEED_CHA
 }
 
 template <>
-vanilla::SMSG_FORCE_RUN_BACK_SPEED_CHANGE* ServerOpcode::get_if<SMSG_FORCE_RUN_BACK_SPEED_CHANGE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_FORCE_RUN_BACK_SPEED_CHANGE* ServerOpcode::get_if<SMSG_FORCE_RUN_BACK_SPEED_CHANGE>() {
     if (opcode == Opcode::SMSG_FORCE_RUN_BACK_SPEED_CHANGE) {
         return &SMSG_FORCE_RUN_BACK_SPEED_CHANGE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_FORCE_RUN_BACK_SPEED_CHANGE& ServerOpcode::get<SMSG_FORCE_RUN_BACK_SPEED_CHANGE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_FORCE_RUN_BACK_SPEED_CHANGE& ServerOpcode::get<SMSG_FORCE_RUN_BACK_SPEED_CHANGE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_FORCE_RUN_BACK_SPEED_CHANGE>();
     if (p) {
         return *p;
@@ -30287,14 +30949,14 @@ vanilla::SMSG_FORCE_RUN_BACK_SPEED_CHANGE& ServerOpcode::get<SMSG_FORCE_RUN_BACK
 }
 
 template <>
-vanilla::SMSG_FORCE_SWIM_SPEED_CHANGE* ServerOpcode::get_if<SMSG_FORCE_SWIM_SPEED_CHANGE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_FORCE_SWIM_SPEED_CHANGE* ServerOpcode::get_if<SMSG_FORCE_SWIM_SPEED_CHANGE>() {
     if (opcode == Opcode::SMSG_FORCE_SWIM_SPEED_CHANGE) {
         return &SMSG_FORCE_SWIM_SPEED_CHANGE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_FORCE_SWIM_SPEED_CHANGE& ServerOpcode::get<SMSG_FORCE_SWIM_SPEED_CHANGE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_FORCE_SWIM_SPEED_CHANGE& ServerOpcode::get<SMSG_FORCE_SWIM_SPEED_CHANGE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_FORCE_SWIM_SPEED_CHANGE>();
     if (p) {
         return *p;
@@ -30303,14 +30965,14 @@ vanilla::SMSG_FORCE_SWIM_SPEED_CHANGE& ServerOpcode::get<SMSG_FORCE_SWIM_SPEED_C
 }
 
 template <>
-vanilla::SMSG_FORCE_MOVE_ROOT* ServerOpcode::get_if<SMSG_FORCE_MOVE_ROOT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_FORCE_MOVE_ROOT* ServerOpcode::get_if<SMSG_FORCE_MOVE_ROOT>() {
     if (opcode == Opcode::SMSG_FORCE_MOVE_ROOT) {
         return &SMSG_FORCE_MOVE_ROOT;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_FORCE_MOVE_ROOT& ServerOpcode::get<SMSG_FORCE_MOVE_ROOT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_FORCE_MOVE_ROOT& ServerOpcode::get<SMSG_FORCE_MOVE_ROOT>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_FORCE_MOVE_ROOT>();
     if (p) {
         return *p;
@@ -30319,14 +30981,14 @@ vanilla::SMSG_FORCE_MOVE_ROOT& ServerOpcode::get<SMSG_FORCE_MOVE_ROOT>() {
 }
 
 template <>
-vanilla::SMSG_FORCE_MOVE_UNROOT* ServerOpcode::get_if<SMSG_FORCE_MOVE_UNROOT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_FORCE_MOVE_UNROOT* ServerOpcode::get_if<SMSG_FORCE_MOVE_UNROOT>() {
     if (opcode == Opcode::SMSG_FORCE_MOVE_UNROOT) {
         return &SMSG_FORCE_MOVE_UNROOT;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_FORCE_MOVE_UNROOT& ServerOpcode::get<SMSG_FORCE_MOVE_UNROOT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_FORCE_MOVE_UNROOT& ServerOpcode::get<SMSG_FORCE_MOVE_UNROOT>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_FORCE_MOVE_UNROOT>();
     if (p) {
         return *p;
@@ -30335,14 +30997,14 @@ vanilla::SMSG_FORCE_MOVE_UNROOT& ServerOpcode::get<SMSG_FORCE_MOVE_UNROOT>() {
 }
 
 template <>
-vanilla::MSG_MOVE_HEARTBEAT_Server* ServerOpcode::get_if<MSG_MOVE_HEARTBEAT_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_HEARTBEAT_Server* ServerOpcode::get_if<MSG_MOVE_HEARTBEAT_Server>() {
     if (opcode == Opcode::MSG_MOVE_HEARTBEAT) {
         return &MSG_MOVE_HEARTBEAT;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_HEARTBEAT_Server& ServerOpcode::get<MSG_MOVE_HEARTBEAT_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_HEARTBEAT_Server& ServerOpcode::get<MSG_MOVE_HEARTBEAT_Server>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_HEARTBEAT_Server>();
     if (p) {
         return *p;
@@ -30351,14 +31013,14 @@ vanilla::MSG_MOVE_HEARTBEAT_Server& ServerOpcode::get<MSG_MOVE_HEARTBEAT_Server>
 }
 
 template <>
-vanilla::SMSG_MOVE_KNOCK_BACK* ServerOpcode::get_if<SMSG_MOVE_KNOCK_BACK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_MOVE_KNOCK_BACK* ServerOpcode::get_if<SMSG_MOVE_KNOCK_BACK>() {
     if (opcode == Opcode::SMSG_MOVE_KNOCK_BACK) {
         return &SMSG_MOVE_KNOCK_BACK;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_MOVE_KNOCK_BACK& ServerOpcode::get<SMSG_MOVE_KNOCK_BACK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_MOVE_KNOCK_BACK& ServerOpcode::get<SMSG_MOVE_KNOCK_BACK>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_MOVE_KNOCK_BACK>();
     if (p) {
         return *p;
@@ -30367,14 +31029,14 @@ vanilla::SMSG_MOVE_KNOCK_BACK& ServerOpcode::get<SMSG_MOVE_KNOCK_BACK>() {
 }
 
 template <>
-vanilla::SMSG_MOVE_FEATHER_FALL* ServerOpcode::get_if<SMSG_MOVE_FEATHER_FALL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_MOVE_FEATHER_FALL* ServerOpcode::get_if<SMSG_MOVE_FEATHER_FALL>() {
     if (opcode == Opcode::SMSG_MOVE_FEATHER_FALL) {
         return &SMSG_MOVE_FEATHER_FALL;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_MOVE_FEATHER_FALL& ServerOpcode::get<SMSG_MOVE_FEATHER_FALL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_MOVE_FEATHER_FALL& ServerOpcode::get<SMSG_MOVE_FEATHER_FALL>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_MOVE_FEATHER_FALL>();
     if (p) {
         return *p;
@@ -30383,14 +31045,14 @@ vanilla::SMSG_MOVE_FEATHER_FALL& ServerOpcode::get<SMSG_MOVE_FEATHER_FALL>() {
 }
 
 template <>
-vanilla::SMSG_MOVE_NORMAL_FALL* ServerOpcode::get_if<SMSG_MOVE_NORMAL_FALL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_MOVE_NORMAL_FALL* ServerOpcode::get_if<SMSG_MOVE_NORMAL_FALL>() {
     if (opcode == Opcode::SMSG_MOVE_NORMAL_FALL) {
         return &SMSG_MOVE_NORMAL_FALL;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_MOVE_NORMAL_FALL& ServerOpcode::get<SMSG_MOVE_NORMAL_FALL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_MOVE_NORMAL_FALL& ServerOpcode::get<SMSG_MOVE_NORMAL_FALL>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_MOVE_NORMAL_FALL>();
     if (p) {
         return *p;
@@ -30399,14 +31061,14 @@ vanilla::SMSG_MOVE_NORMAL_FALL& ServerOpcode::get<SMSG_MOVE_NORMAL_FALL>() {
 }
 
 template <>
-vanilla::SMSG_MOVE_SET_HOVER* ServerOpcode::get_if<SMSG_MOVE_SET_HOVER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_MOVE_SET_HOVER* ServerOpcode::get_if<SMSG_MOVE_SET_HOVER>() {
     if (opcode == Opcode::SMSG_MOVE_SET_HOVER) {
         return &SMSG_MOVE_SET_HOVER;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_MOVE_SET_HOVER& ServerOpcode::get<SMSG_MOVE_SET_HOVER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_MOVE_SET_HOVER& ServerOpcode::get<SMSG_MOVE_SET_HOVER>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_MOVE_SET_HOVER>();
     if (p) {
         return *p;
@@ -30415,14 +31077,14 @@ vanilla::SMSG_MOVE_SET_HOVER& ServerOpcode::get<SMSG_MOVE_SET_HOVER>() {
 }
 
 template <>
-vanilla::SMSG_MOVE_UNSET_HOVER* ServerOpcode::get_if<SMSG_MOVE_UNSET_HOVER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_MOVE_UNSET_HOVER* ServerOpcode::get_if<SMSG_MOVE_UNSET_HOVER>() {
     if (opcode == Opcode::SMSG_MOVE_UNSET_HOVER) {
         return &SMSG_MOVE_UNSET_HOVER;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_MOVE_UNSET_HOVER& ServerOpcode::get<SMSG_MOVE_UNSET_HOVER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_MOVE_UNSET_HOVER& ServerOpcode::get<SMSG_MOVE_UNSET_HOVER>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_MOVE_UNSET_HOVER>();
     if (p) {
         return *p;
@@ -30431,14 +31093,14 @@ vanilla::SMSG_MOVE_UNSET_HOVER& ServerOpcode::get<SMSG_MOVE_UNSET_HOVER>() {
 }
 
 template <>
-vanilla::SMSG_TRIGGER_CINEMATIC* ServerOpcode::get_if<SMSG_TRIGGER_CINEMATIC>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_TRIGGER_CINEMATIC* ServerOpcode::get_if<SMSG_TRIGGER_CINEMATIC>() {
     if (opcode == Opcode::SMSG_TRIGGER_CINEMATIC) {
         return &SMSG_TRIGGER_CINEMATIC;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_TRIGGER_CINEMATIC& ServerOpcode::get<SMSG_TRIGGER_CINEMATIC>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_TRIGGER_CINEMATIC& ServerOpcode::get<SMSG_TRIGGER_CINEMATIC>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_TRIGGER_CINEMATIC>();
     if (p) {
         return *p;
@@ -30447,14 +31109,14 @@ vanilla::SMSG_TRIGGER_CINEMATIC& ServerOpcode::get<SMSG_TRIGGER_CINEMATIC>() {
 }
 
 template <>
-vanilla::SMSG_TUTORIAL_FLAGS* ServerOpcode::get_if<SMSG_TUTORIAL_FLAGS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_TUTORIAL_FLAGS* ServerOpcode::get_if<SMSG_TUTORIAL_FLAGS>() {
     if (opcode == Opcode::SMSG_TUTORIAL_FLAGS) {
         return &SMSG_TUTORIAL_FLAGS;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_TUTORIAL_FLAGS& ServerOpcode::get<SMSG_TUTORIAL_FLAGS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_TUTORIAL_FLAGS& ServerOpcode::get<SMSG_TUTORIAL_FLAGS>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_TUTORIAL_FLAGS>();
     if (p) {
         return *p;
@@ -30463,14 +31125,14 @@ vanilla::SMSG_TUTORIAL_FLAGS& ServerOpcode::get<SMSG_TUTORIAL_FLAGS>() {
 }
 
 template <>
-vanilla::SMSG_EMOTE* ServerOpcode::get_if<SMSG_EMOTE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_EMOTE* ServerOpcode::get_if<SMSG_EMOTE>() {
     if (opcode == Opcode::SMSG_EMOTE) {
         return &SMSG_EMOTE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_EMOTE& ServerOpcode::get<SMSG_EMOTE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_EMOTE& ServerOpcode::get<SMSG_EMOTE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_EMOTE>();
     if (p) {
         return *p;
@@ -30479,14 +31141,14 @@ vanilla::SMSG_EMOTE& ServerOpcode::get<SMSG_EMOTE>() {
 }
 
 template <>
-vanilla::SMSG_TEXT_EMOTE* ServerOpcode::get_if<SMSG_TEXT_EMOTE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_TEXT_EMOTE* ServerOpcode::get_if<SMSG_TEXT_EMOTE>() {
     if (opcode == Opcode::SMSG_TEXT_EMOTE) {
         return &SMSG_TEXT_EMOTE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_TEXT_EMOTE& ServerOpcode::get<SMSG_TEXT_EMOTE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_TEXT_EMOTE& ServerOpcode::get<SMSG_TEXT_EMOTE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_TEXT_EMOTE>();
     if (p) {
         return *p;
@@ -30495,14 +31157,14 @@ vanilla::SMSG_TEXT_EMOTE& ServerOpcode::get<SMSG_TEXT_EMOTE>() {
 }
 
 template <>
-vanilla::SMSG_INVENTORY_CHANGE_FAILURE* ServerOpcode::get_if<SMSG_INVENTORY_CHANGE_FAILURE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_INVENTORY_CHANGE_FAILURE* ServerOpcode::get_if<SMSG_INVENTORY_CHANGE_FAILURE>() {
     if (opcode == Opcode::SMSG_INVENTORY_CHANGE_FAILURE) {
         return &SMSG_INVENTORY_CHANGE_FAILURE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_INVENTORY_CHANGE_FAILURE& ServerOpcode::get<SMSG_INVENTORY_CHANGE_FAILURE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_INVENTORY_CHANGE_FAILURE& ServerOpcode::get<SMSG_INVENTORY_CHANGE_FAILURE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_INVENTORY_CHANGE_FAILURE>();
     if (p) {
         return *p;
@@ -30511,14 +31173,14 @@ vanilla::SMSG_INVENTORY_CHANGE_FAILURE& ServerOpcode::get<SMSG_INVENTORY_CHANGE_
 }
 
 template <>
-vanilla::SMSG_OPEN_CONTAINER* ServerOpcode::get_if<SMSG_OPEN_CONTAINER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_OPEN_CONTAINER* ServerOpcode::get_if<SMSG_OPEN_CONTAINER>() {
     if (opcode == Opcode::SMSG_OPEN_CONTAINER) {
         return &SMSG_OPEN_CONTAINER;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_OPEN_CONTAINER& ServerOpcode::get<SMSG_OPEN_CONTAINER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_OPEN_CONTAINER& ServerOpcode::get<SMSG_OPEN_CONTAINER>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_OPEN_CONTAINER>();
     if (p) {
         return *p;
@@ -30527,14 +31189,14 @@ vanilla::SMSG_OPEN_CONTAINER& ServerOpcode::get<SMSG_OPEN_CONTAINER>() {
 }
 
 template <>
-vanilla::SMSG_INSPECT* ServerOpcode::get_if<SMSG_INSPECT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_INSPECT* ServerOpcode::get_if<SMSG_INSPECT>() {
     if (opcode == Opcode::SMSG_INSPECT) {
         return &SMSG_INSPECT;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_INSPECT& ServerOpcode::get<SMSG_INSPECT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_INSPECT& ServerOpcode::get<SMSG_INSPECT>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_INSPECT>();
     if (p) {
         return *p;
@@ -30543,14 +31205,14 @@ vanilla::SMSG_INSPECT& ServerOpcode::get<SMSG_INSPECT>() {
 }
 
 template <>
-vanilla::SMSG_TRADE_STATUS* ServerOpcode::get_if<SMSG_TRADE_STATUS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_TRADE_STATUS* ServerOpcode::get_if<SMSG_TRADE_STATUS>() {
     if (opcode == Opcode::SMSG_TRADE_STATUS) {
         return &SMSG_TRADE_STATUS;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_TRADE_STATUS& ServerOpcode::get<SMSG_TRADE_STATUS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_TRADE_STATUS& ServerOpcode::get<SMSG_TRADE_STATUS>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_TRADE_STATUS>();
     if (p) {
         return *p;
@@ -30559,14 +31221,14 @@ vanilla::SMSG_TRADE_STATUS& ServerOpcode::get<SMSG_TRADE_STATUS>() {
 }
 
 template <>
-vanilla::SMSG_TRADE_STATUS_EXTENDED* ServerOpcode::get_if<SMSG_TRADE_STATUS_EXTENDED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_TRADE_STATUS_EXTENDED* ServerOpcode::get_if<SMSG_TRADE_STATUS_EXTENDED>() {
     if (opcode == Opcode::SMSG_TRADE_STATUS_EXTENDED) {
         return &SMSG_TRADE_STATUS_EXTENDED;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_TRADE_STATUS_EXTENDED& ServerOpcode::get<SMSG_TRADE_STATUS_EXTENDED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_TRADE_STATUS_EXTENDED& ServerOpcode::get<SMSG_TRADE_STATUS_EXTENDED>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_TRADE_STATUS_EXTENDED>();
     if (p) {
         return *p;
@@ -30575,14 +31237,14 @@ vanilla::SMSG_TRADE_STATUS_EXTENDED& ServerOpcode::get<SMSG_TRADE_STATUS_EXTENDE
 }
 
 template <>
-vanilla::SMSG_INITIALIZE_FACTIONS* ServerOpcode::get_if<SMSG_INITIALIZE_FACTIONS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_INITIALIZE_FACTIONS* ServerOpcode::get_if<SMSG_INITIALIZE_FACTIONS>() {
     if (opcode == Opcode::SMSG_INITIALIZE_FACTIONS) {
         return &SMSG_INITIALIZE_FACTIONS;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_INITIALIZE_FACTIONS& ServerOpcode::get<SMSG_INITIALIZE_FACTIONS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_INITIALIZE_FACTIONS& ServerOpcode::get<SMSG_INITIALIZE_FACTIONS>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_INITIALIZE_FACTIONS>();
     if (p) {
         return *p;
@@ -30591,14 +31253,14 @@ vanilla::SMSG_INITIALIZE_FACTIONS& ServerOpcode::get<SMSG_INITIALIZE_FACTIONS>()
 }
 
 template <>
-vanilla::SMSG_SET_FACTION_VISIBLE* ServerOpcode::get_if<SMSG_SET_FACTION_VISIBLE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SET_FACTION_VISIBLE* ServerOpcode::get_if<SMSG_SET_FACTION_VISIBLE>() {
     if (opcode == Opcode::SMSG_SET_FACTION_VISIBLE) {
         return &SMSG_SET_FACTION_VISIBLE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SET_FACTION_VISIBLE& ServerOpcode::get<SMSG_SET_FACTION_VISIBLE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SET_FACTION_VISIBLE& ServerOpcode::get<SMSG_SET_FACTION_VISIBLE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SET_FACTION_VISIBLE>();
     if (p) {
         return *p;
@@ -30607,14 +31269,14 @@ vanilla::SMSG_SET_FACTION_VISIBLE& ServerOpcode::get<SMSG_SET_FACTION_VISIBLE>()
 }
 
 template <>
-vanilla::SMSG_SET_FACTION_STANDING* ServerOpcode::get_if<SMSG_SET_FACTION_STANDING>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SET_FACTION_STANDING* ServerOpcode::get_if<SMSG_SET_FACTION_STANDING>() {
     if (opcode == Opcode::SMSG_SET_FACTION_STANDING) {
         return &SMSG_SET_FACTION_STANDING;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SET_FACTION_STANDING& ServerOpcode::get<SMSG_SET_FACTION_STANDING>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SET_FACTION_STANDING& ServerOpcode::get<SMSG_SET_FACTION_STANDING>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SET_FACTION_STANDING>();
     if (p) {
         return *p;
@@ -30623,14 +31285,14 @@ vanilla::SMSG_SET_FACTION_STANDING& ServerOpcode::get<SMSG_SET_FACTION_STANDING>
 }
 
 template <>
-vanilla::SMSG_SET_PROFICIENCY* ServerOpcode::get_if<SMSG_SET_PROFICIENCY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SET_PROFICIENCY* ServerOpcode::get_if<SMSG_SET_PROFICIENCY>() {
     if (opcode == Opcode::SMSG_SET_PROFICIENCY) {
         return &SMSG_SET_PROFICIENCY;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SET_PROFICIENCY& ServerOpcode::get<SMSG_SET_PROFICIENCY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SET_PROFICIENCY& ServerOpcode::get<SMSG_SET_PROFICIENCY>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SET_PROFICIENCY>();
     if (p) {
         return *p;
@@ -30639,14 +31301,14 @@ vanilla::SMSG_SET_PROFICIENCY& ServerOpcode::get<SMSG_SET_PROFICIENCY>() {
 }
 
 template <>
-vanilla::SMSG_ACTION_BUTTONS* ServerOpcode::get_if<SMSG_ACTION_BUTTONS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ACTION_BUTTONS* ServerOpcode::get_if<SMSG_ACTION_BUTTONS>() {
     if (opcode == Opcode::SMSG_ACTION_BUTTONS) {
         return &SMSG_ACTION_BUTTONS;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_ACTION_BUTTONS& ServerOpcode::get<SMSG_ACTION_BUTTONS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ACTION_BUTTONS& ServerOpcode::get<SMSG_ACTION_BUTTONS>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_ACTION_BUTTONS>();
     if (p) {
         return *p;
@@ -30655,14 +31317,14 @@ vanilla::SMSG_ACTION_BUTTONS& ServerOpcode::get<SMSG_ACTION_BUTTONS>() {
 }
 
 template <>
-vanilla::SMSG_INITIAL_SPELLS* ServerOpcode::get_if<SMSG_INITIAL_SPELLS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_INITIAL_SPELLS* ServerOpcode::get_if<SMSG_INITIAL_SPELLS>() {
     if (opcode == Opcode::SMSG_INITIAL_SPELLS) {
         return &SMSG_INITIAL_SPELLS;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_INITIAL_SPELLS& ServerOpcode::get<SMSG_INITIAL_SPELLS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_INITIAL_SPELLS& ServerOpcode::get<SMSG_INITIAL_SPELLS>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_INITIAL_SPELLS>();
     if (p) {
         return *p;
@@ -30671,14 +31333,14 @@ vanilla::SMSG_INITIAL_SPELLS& ServerOpcode::get<SMSG_INITIAL_SPELLS>() {
 }
 
 template <>
-vanilla::SMSG_LEARNED_SPELL* ServerOpcode::get_if<SMSG_LEARNED_SPELL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_LEARNED_SPELL* ServerOpcode::get_if<SMSG_LEARNED_SPELL>() {
     if (opcode == Opcode::SMSG_LEARNED_SPELL) {
         return &SMSG_LEARNED_SPELL;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_LEARNED_SPELL& ServerOpcode::get<SMSG_LEARNED_SPELL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_LEARNED_SPELL& ServerOpcode::get<SMSG_LEARNED_SPELL>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_LEARNED_SPELL>();
     if (p) {
         return *p;
@@ -30687,14 +31349,14 @@ vanilla::SMSG_LEARNED_SPELL& ServerOpcode::get<SMSG_LEARNED_SPELL>() {
 }
 
 template <>
-vanilla::SMSG_SUPERCEDED_SPELL* ServerOpcode::get_if<SMSG_SUPERCEDED_SPELL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SUPERCEDED_SPELL* ServerOpcode::get_if<SMSG_SUPERCEDED_SPELL>() {
     if (opcode == Opcode::SMSG_SUPERCEDED_SPELL) {
         return &SMSG_SUPERCEDED_SPELL;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SUPERCEDED_SPELL& ServerOpcode::get<SMSG_SUPERCEDED_SPELL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SUPERCEDED_SPELL& ServerOpcode::get<SMSG_SUPERCEDED_SPELL>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SUPERCEDED_SPELL>();
     if (p) {
         return *p;
@@ -30703,14 +31365,14 @@ vanilla::SMSG_SUPERCEDED_SPELL& ServerOpcode::get<SMSG_SUPERCEDED_SPELL>() {
 }
 
 template <>
-vanilla::SMSG_CAST_RESULT* ServerOpcode::get_if<SMSG_CAST_RESULT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_CAST_RESULT* ServerOpcode::get_if<SMSG_CAST_RESULT>() {
     if (opcode == Opcode::SMSG_CAST_RESULT) {
         return &SMSG_CAST_RESULT;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_CAST_RESULT& ServerOpcode::get<SMSG_CAST_RESULT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_CAST_RESULT& ServerOpcode::get<SMSG_CAST_RESULT>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_CAST_RESULT>();
     if (p) {
         return *p;
@@ -30719,14 +31381,14 @@ vanilla::SMSG_CAST_RESULT& ServerOpcode::get<SMSG_CAST_RESULT>() {
 }
 
 template <>
-vanilla::SMSG_SPELL_START* ServerOpcode::get_if<SMSG_SPELL_START>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPELL_START* ServerOpcode::get_if<SMSG_SPELL_START>() {
     if (opcode == Opcode::SMSG_SPELL_START) {
         return &SMSG_SPELL_START;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SPELL_START& ServerOpcode::get<SMSG_SPELL_START>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPELL_START& ServerOpcode::get<SMSG_SPELL_START>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SPELL_START>();
     if (p) {
         return *p;
@@ -30735,14 +31397,14 @@ vanilla::SMSG_SPELL_START& ServerOpcode::get<SMSG_SPELL_START>() {
 }
 
 template <>
-vanilla::SMSG_SPELL_GO* ServerOpcode::get_if<SMSG_SPELL_GO>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPELL_GO* ServerOpcode::get_if<SMSG_SPELL_GO>() {
     if (opcode == Opcode::SMSG_SPELL_GO) {
         return &SMSG_SPELL_GO;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SPELL_GO& ServerOpcode::get<SMSG_SPELL_GO>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPELL_GO& ServerOpcode::get<SMSG_SPELL_GO>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SPELL_GO>();
     if (p) {
         return *p;
@@ -30751,14 +31413,14 @@ vanilla::SMSG_SPELL_GO& ServerOpcode::get<SMSG_SPELL_GO>() {
 }
 
 template <>
-vanilla::SMSG_SPELL_FAILURE* ServerOpcode::get_if<SMSG_SPELL_FAILURE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPELL_FAILURE* ServerOpcode::get_if<SMSG_SPELL_FAILURE>() {
     if (opcode == Opcode::SMSG_SPELL_FAILURE) {
         return &SMSG_SPELL_FAILURE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SPELL_FAILURE& ServerOpcode::get<SMSG_SPELL_FAILURE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPELL_FAILURE& ServerOpcode::get<SMSG_SPELL_FAILURE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SPELL_FAILURE>();
     if (p) {
         return *p;
@@ -30767,14 +31429,14 @@ vanilla::SMSG_SPELL_FAILURE& ServerOpcode::get<SMSG_SPELL_FAILURE>() {
 }
 
 template <>
-vanilla::SMSG_SPELL_COOLDOWN* ServerOpcode::get_if<SMSG_SPELL_COOLDOWN>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPELL_COOLDOWN* ServerOpcode::get_if<SMSG_SPELL_COOLDOWN>() {
     if (opcode == Opcode::SMSG_SPELL_COOLDOWN) {
         return &SMSG_SPELL_COOLDOWN;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SPELL_COOLDOWN& ServerOpcode::get<SMSG_SPELL_COOLDOWN>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPELL_COOLDOWN& ServerOpcode::get<SMSG_SPELL_COOLDOWN>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SPELL_COOLDOWN>();
     if (p) {
         return *p;
@@ -30783,14 +31445,14 @@ vanilla::SMSG_SPELL_COOLDOWN& ServerOpcode::get<SMSG_SPELL_COOLDOWN>() {
 }
 
 template <>
-vanilla::SMSG_COOLDOWN_EVENT* ServerOpcode::get_if<SMSG_COOLDOWN_EVENT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_COOLDOWN_EVENT* ServerOpcode::get_if<SMSG_COOLDOWN_EVENT>() {
     if (opcode == Opcode::SMSG_COOLDOWN_EVENT) {
         return &SMSG_COOLDOWN_EVENT;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_COOLDOWN_EVENT& ServerOpcode::get<SMSG_COOLDOWN_EVENT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_COOLDOWN_EVENT& ServerOpcode::get<SMSG_COOLDOWN_EVENT>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_COOLDOWN_EVENT>();
     if (p) {
         return *p;
@@ -30799,14 +31461,14 @@ vanilla::SMSG_COOLDOWN_EVENT& ServerOpcode::get<SMSG_COOLDOWN_EVENT>() {
 }
 
 template <>
-vanilla::SMSG_UPDATE_AURA_DURATION* ServerOpcode::get_if<SMSG_UPDATE_AURA_DURATION>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_UPDATE_AURA_DURATION* ServerOpcode::get_if<SMSG_UPDATE_AURA_DURATION>() {
     if (opcode == Opcode::SMSG_UPDATE_AURA_DURATION) {
         return &SMSG_UPDATE_AURA_DURATION;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_UPDATE_AURA_DURATION& ServerOpcode::get<SMSG_UPDATE_AURA_DURATION>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_UPDATE_AURA_DURATION& ServerOpcode::get<SMSG_UPDATE_AURA_DURATION>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_UPDATE_AURA_DURATION>();
     if (p) {
         return *p;
@@ -30815,14 +31477,14 @@ vanilla::SMSG_UPDATE_AURA_DURATION& ServerOpcode::get<SMSG_UPDATE_AURA_DURATION>
 }
 
 template <>
-vanilla::SMSG_PET_CAST_FAILED* ServerOpcode::get_if<SMSG_PET_CAST_FAILED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PET_CAST_FAILED* ServerOpcode::get_if<SMSG_PET_CAST_FAILED>() {
     if (opcode == Opcode::SMSG_PET_CAST_FAILED) {
         return &SMSG_PET_CAST_FAILED;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_PET_CAST_FAILED& ServerOpcode::get<SMSG_PET_CAST_FAILED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PET_CAST_FAILED& ServerOpcode::get<SMSG_PET_CAST_FAILED>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_PET_CAST_FAILED>();
     if (p) {
         return *p;
@@ -30831,14 +31493,14 @@ vanilla::SMSG_PET_CAST_FAILED& ServerOpcode::get<SMSG_PET_CAST_FAILED>() {
 }
 
 template <>
-vanilla::MSG_CHANNEL_START_Server* ServerOpcode::get_if<MSG_CHANNEL_START_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_CHANNEL_START_Server* ServerOpcode::get_if<MSG_CHANNEL_START_Server>() {
     if (opcode == Opcode::MSG_CHANNEL_START) {
         return &MSG_CHANNEL_START;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_CHANNEL_START_Server& ServerOpcode::get<MSG_CHANNEL_START_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_CHANNEL_START_Server& ServerOpcode::get<MSG_CHANNEL_START_Server>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_CHANNEL_START_Server>();
     if (p) {
         return *p;
@@ -30847,14 +31509,14 @@ vanilla::MSG_CHANNEL_START_Server& ServerOpcode::get<MSG_CHANNEL_START_Server>()
 }
 
 template <>
-vanilla::MSG_CHANNEL_UPDATE_Server* ServerOpcode::get_if<MSG_CHANNEL_UPDATE_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_CHANNEL_UPDATE_Server* ServerOpcode::get_if<MSG_CHANNEL_UPDATE_Server>() {
     if (opcode == Opcode::MSG_CHANNEL_UPDATE) {
         return &MSG_CHANNEL_UPDATE;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_CHANNEL_UPDATE_Server& ServerOpcode::get<MSG_CHANNEL_UPDATE_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_CHANNEL_UPDATE_Server& ServerOpcode::get<MSG_CHANNEL_UPDATE_Server>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_CHANNEL_UPDATE_Server>();
     if (p) {
         return *p;
@@ -30863,14 +31525,14 @@ vanilla::MSG_CHANNEL_UPDATE_Server& ServerOpcode::get<MSG_CHANNEL_UPDATE_Server>
 }
 
 template <>
-vanilla::SMSG_AI_REACTION* ServerOpcode::get_if<SMSG_AI_REACTION>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_AI_REACTION* ServerOpcode::get_if<SMSG_AI_REACTION>() {
     if (opcode == Opcode::SMSG_AI_REACTION) {
         return &SMSG_AI_REACTION;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_AI_REACTION& ServerOpcode::get<SMSG_AI_REACTION>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_AI_REACTION& ServerOpcode::get<SMSG_AI_REACTION>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_AI_REACTION>();
     if (p) {
         return *p;
@@ -30879,14 +31541,14 @@ vanilla::SMSG_AI_REACTION& ServerOpcode::get<SMSG_AI_REACTION>() {
 }
 
 template <>
-vanilla::SMSG_ATTACKSTART* ServerOpcode::get_if<SMSG_ATTACKSTART>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ATTACKSTART* ServerOpcode::get_if<SMSG_ATTACKSTART>() {
     if (opcode == Opcode::SMSG_ATTACKSTART) {
         return &SMSG_ATTACKSTART;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_ATTACKSTART& ServerOpcode::get<SMSG_ATTACKSTART>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ATTACKSTART& ServerOpcode::get<SMSG_ATTACKSTART>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_ATTACKSTART>();
     if (p) {
         return *p;
@@ -30895,14 +31557,14 @@ vanilla::SMSG_ATTACKSTART& ServerOpcode::get<SMSG_ATTACKSTART>() {
 }
 
 template <>
-vanilla::SMSG_ATTACKSTOP* ServerOpcode::get_if<SMSG_ATTACKSTOP>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ATTACKSTOP* ServerOpcode::get_if<SMSG_ATTACKSTOP>() {
     if (opcode == Opcode::SMSG_ATTACKSTOP) {
         return &SMSG_ATTACKSTOP;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_ATTACKSTOP& ServerOpcode::get<SMSG_ATTACKSTOP>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ATTACKSTOP& ServerOpcode::get<SMSG_ATTACKSTOP>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_ATTACKSTOP>();
     if (p) {
         return *p;
@@ -30911,14 +31573,14 @@ vanilla::SMSG_ATTACKSTOP& ServerOpcode::get<SMSG_ATTACKSTOP>() {
 }
 
 template <>
-vanilla::SMSG_ATTACKSWING_NOTINRANGE* ServerOpcode::get_if<SMSG_ATTACKSWING_NOTINRANGE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ATTACKSWING_NOTINRANGE* ServerOpcode::get_if<SMSG_ATTACKSWING_NOTINRANGE>() {
     if (opcode == Opcode::SMSG_ATTACKSWING_NOTINRANGE) {
         return &SMSG_ATTACKSWING_NOTINRANGE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_ATTACKSWING_NOTINRANGE& ServerOpcode::get<SMSG_ATTACKSWING_NOTINRANGE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ATTACKSWING_NOTINRANGE& ServerOpcode::get<SMSG_ATTACKSWING_NOTINRANGE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_ATTACKSWING_NOTINRANGE>();
     if (p) {
         return *p;
@@ -30927,14 +31589,14 @@ vanilla::SMSG_ATTACKSWING_NOTINRANGE& ServerOpcode::get<SMSG_ATTACKSWING_NOTINRA
 }
 
 template <>
-vanilla::SMSG_ATTACKSWING_BADFACING* ServerOpcode::get_if<SMSG_ATTACKSWING_BADFACING>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ATTACKSWING_BADFACING* ServerOpcode::get_if<SMSG_ATTACKSWING_BADFACING>() {
     if (opcode == Opcode::SMSG_ATTACKSWING_BADFACING) {
         return &SMSG_ATTACKSWING_BADFACING;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_ATTACKSWING_BADFACING& ServerOpcode::get<SMSG_ATTACKSWING_BADFACING>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ATTACKSWING_BADFACING& ServerOpcode::get<SMSG_ATTACKSWING_BADFACING>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_ATTACKSWING_BADFACING>();
     if (p) {
         return *p;
@@ -30943,14 +31605,14 @@ vanilla::SMSG_ATTACKSWING_BADFACING& ServerOpcode::get<SMSG_ATTACKSWING_BADFACIN
 }
 
 template <>
-vanilla::SMSG_ATTACKSWING_NOTSTANDING* ServerOpcode::get_if<SMSG_ATTACKSWING_NOTSTANDING>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ATTACKSWING_NOTSTANDING* ServerOpcode::get_if<SMSG_ATTACKSWING_NOTSTANDING>() {
     if (opcode == Opcode::SMSG_ATTACKSWING_NOTSTANDING) {
         return &SMSG_ATTACKSWING_NOTSTANDING;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_ATTACKSWING_NOTSTANDING& ServerOpcode::get<SMSG_ATTACKSWING_NOTSTANDING>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ATTACKSWING_NOTSTANDING& ServerOpcode::get<SMSG_ATTACKSWING_NOTSTANDING>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_ATTACKSWING_NOTSTANDING>();
     if (p) {
         return *p;
@@ -30959,14 +31621,14 @@ vanilla::SMSG_ATTACKSWING_NOTSTANDING& ServerOpcode::get<SMSG_ATTACKSWING_NOTSTA
 }
 
 template <>
-vanilla::SMSG_ATTACKSWING_DEADTARGET* ServerOpcode::get_if<SMSG_ATTACKSWING_DEADTARGET>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ATTACKSWING_DEADTARGET* ServerOpcode::get_if<SMSG_ATTACKSWING_DEADTARGET>() {
     if (opcode == Opcode::SMSG_ATTACKSWING_DEADTARGET) {
         return &SMSG_ATTACKSWING_DEADTARGET;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_ATTACKSWING_DEADTARGET& ServerOpcode::get<SMSG_ATTACKSWING_DEADTARGET>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ATTACKSWING_DEADTARGET& ServerOpcode::get<SMSG_ATTACKSWING_DEADTARGET>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_ATTACKSWING_DEADTARGET>();
     if (p) {
         return *p;
@@ -30975,14 +31637,14 @@ vanilla::SMSG_ATTACKSWING_DEADTARGET& ServerOpcode::get<SMSG_ATTACKSWING_DEADTAR
 }
 
 template <>
-vanilla::SMSG_ATTACKSWING_CANT_ATTACK* ServerOpcode::get_if<SMSG_ATTACKSWING_CANT_ATTACK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ATTACKSWING_CANT_ATTACK* ServerOpcode::get_if<SMSG_ATTACKSWING_CANT_ATTACK>() {
     if (opcode == Opcode::SMSG_ATTACKSWING_CANT_ATTACK) {
         return &SMSG_ATTACKSWING_CANT_ATTACK;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_ATTACKSWING_CANT_ATTACK& ServerOpcode::get<SMSG_ATTACKSWING_CANT_ATTACK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ATTACKSWING_CANT_ATTACK& ServerOpcode::get<SMSG_ATTACKSWING_CANT_ATTACK>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_ATTACKSWING_CANT_ATTACK>();
     if (p) {
         return *p;
@@ -30991,14 +31653,14 @@ vanilla::SMSG_ATTACKSWING_CANT_ATTACK& ServerOpcode::get<SMSG_ATTACKSWING_CANT_A
 }
 
 template <>
-vanilla::SMSG_ATTACKERSTATEUPDATE* ServerOpcode::get_if<SMSG_ATTACKERSTATEUPDATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ATTACKERSTATEUPDATE* ServerOpcode::get_if<SMSG_ATTACKERSTATEUPDATE>() {
     if (opcode == Opcode::SMSG_ATTACKERSTATEUPDATE) {
         return &SMSG_ATTACKERSTATEUPDATE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_ATTACKERSTATEUPDATE& ServerOpcode::get<SMSG_ATTACKERSTATEUPDATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ATTACKERSTATEUPDATE& ServerOpcode::get<SMSG_ATTACKERSTATEUPDATE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_ATTACKERSTATEUPDATE>();
     if (p) {
         return *p;
@@ -31007,14 +31669,14 @@ vanilla::SMSG_ATTACKERSTATEUPDATE& ServerOpcode::get<SMSG_ATTACKERSTATEUPDATE>()
 }
 
 template <>
-vanilla::SMSG_CANCEL_COMBAT* ServerOpcode::get_if<SMSG_CANCEL_COMBAT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_CANCEL_COMBAT* ServerOpcode::get_if<SMSG_CANCEL_COMBAT>() {
     if (opcode == Opcode::SMSG_CANCEL_COMBAT) {
         return &SMSG_CANCEL_COMBAT;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_CANCEL_COMBAT& ServerOpcode::get<SMSG_CANCEL_COMBAT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_CANCEL_COMBAT& ServerOpcode::get<SMSG_CANCEL_COMBAT>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_CANCEL_COMBAT>();
     if (p) {
         return *p;
@@ -31023,14 +31685,14 @@ vanilla::SMSG_CANCEL_COMBAT& ServerOpcode::get<SMSG_CANCEL_COMBAT>() {
 }
 
 template <>
-vanilla::SMSG_SPELLHEALLOG* ServerOpcode::get_if<SMSG_SPELLHEALLOG>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPELLHEALLOG* ServerOpcode::get_if<SMSG_SPELLHEALLOG>() {
     if (opcode == Opcode::SMSG_SPELLHEALLOG) {
         return &SMSG_SPELLHEALLOG;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SPELLHEALLOG& ServerOpcode::get<SMSG_SPELLHEALLOG>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPELLHEALLOG& ServerOpcode::get<SMSG_SPELLHEALLOG>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SPELLHEALLOG>();
     if (p) {
         return *p;
@@ -31039,14 +31701,14 @@ vanilla::SMSG_SPELLHEALLOG& ServerOpcode::get<SMSG_SPELLHEALLOG>() {
 }
 
 template <>
-vanilla::SMSG_SPELLENERGIZELOG* ServerOpcode::get_if<SMSG_SPELLENERGIZELOG>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPELLENERGIZELOG* ServerOpcode::get_if<SMSG_SPELLENERGIZELOG>() {
     if (opcode == Opcode::SMSG_SPELLENERGIZELOG) {
         return &SMSG_SPELLENERGIZELOG;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SPELLENERGIZELOG& ServerOpcode::get<SMSG_SPELLENERGIZELOG>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPELLENERGIZELOG& ServerOpcode::get<SMSG_SPELLENERGIZELOG>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SPELLENERGIZELOG>();
     if (p) {
         return *p;
@@ -31055,14 +31717,14 @@ vanilla::SMSG_SPELLENERGIZELOG& ServerOpcode::get<SMSG_SPELLENERGIZELOG>() {
 }
 
 template <>
-vanilla::SMSG_BINDPOINTUPDATE* ServerOpcode::get_if<SMSG_BINDPOINTUPDATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_BINDPOINTUPDATE* ServerOpcode::get_if<SMSG_BINDPOINTUPDATE>() {
     if (opcode == Opcode::SMSG_BINDPOINTUPDATE) {
         return &SMSG_BINDPOINTUPDATE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_BINDPOINTUPDATE& ServerOpcode::get<SMSG_BINDPOINTUPDATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_BINDPOINTUPDATE& ServerOpcode::get<SMSG_BINDPOINTUPDATE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_BINDPOINTUPDATE>();
     if (p) {
         return *p;
@@ -31071,14 +31733,14 @@ vanilla::SMSG_BINDPOINTUPDATE& ServerOpcode::get<SMSG_BINDPOINTUPDATE>() {
 }
 
 template <>
-vanilla::SMSG_PLAYERBOUND* ServerOpcode::get_if<SMSG_PLAYERBOUND>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PLAYERBOUND* ServerOpcode::get_if<SMSG_PLAYERBOUND>() {
     if (opcode == Opcode::SMSG_PLAYERBOUND) {
         return &SMSG_PLAYERBOUND;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_PLAYERBOUND& ServerOpcode::get<SMSG_PLAYERBOUND>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PLAYERBOUND& ServerOpcode::get<SMSG_PLAYERBOUND>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_PLAYERBOUND>();
     if (p) {
         return *p;
@@ -31087,14 +31749,14 @@ vanilla::SMSG_PLAYERBOUND& ServerOpcode::get<SMSG_PLAYERBOUND>() {
 }
 
 template <>
-vanilla::SMSG_CLIENT_CONTROL_UPDATE* ServerOpcode::get_if<SMSG_CLIENT_CONTROL_UPDATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_CLIENT_CONTROL_UPDATE* ServerOpcode::get_if<SMSG_CLIENT_CONTROL_UPDATE>() {
     if (opcode == Opcode::SMSG_CLIENT_CONTROL_UPDATE) {
         return &SMSG_CLIENT_CONTROL_UPDATE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_CLIENT_CONTROL_UPDATE& ServerOpcode::get<SMSG_CLIENT_CONTROL_UPDATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_CLIENT_CONTROL_UPDATE& ServerOpcode::get<SMSG_CLIENT_CONTROL_UPDATE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_CLIENT_CONTROL_UPDATE>();
     if (p) {
         return *p;
@@ -31103,14 +31765,14 @@ vanilla::SMSG_CLIENT_CONTROL_UPDATE& ServerOpcode::get<SMSG_CLIENT_CONTROL_UPDAT
 }
 
 template <>
-vanilla::SMSG_RESURRECT_REQUEST* ServerOpcode::get_if<SMSG_RESURRECT_REQUEST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_RESURRECT_REQUEST* ServerOpcode::get_if<SMSG_RESURRECT_REQUEST>() {
     if (opcode == Opcode::SMSG_RESURRECT_REQUEST) {
         return &SMSG_RESURRECT_REQUEST;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_RESURRECT_REQUEST& ServerOpcode::get<SMSG_RESURRECT_REQUEST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_RESURRECT_REQUEST& ServerOpcode::get<SMSG_RESURRECT_REQUEST>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_RESURRECT_REQUEST>();
     if (p) {
         return *p;
@@ -31119,14 +31781,14 @@ vanilla::SMSG_RESURRECT_REQUEST& ServerOpcode::get<SMSG_RESURRECT_REQUEST>() {
 }
 
 template <>
-vanilla::SMSG_LOOT_RESPONSE* ServerOpcode::get_if<SMSG_LOOT_RESPONSE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_LOOT_RESPONSE* ServerOpcode::get_if<SMSG_LOOT_RESPONSE>() {
     if (opcode == Opcode::SMSG_LOOT_RESPONSE) {
         return &SMSG_LOOT_RESPONSE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_LOOT_RESPONSE& ServerOpcode::get<SMSG_LOOT_RESPONSE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_LOOT_RESPONSE& ServerOpcode::get<SMSG_LOOT_RESPONSE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_LOOT_RESPONSE>();
     if (p) {
         return *p;
@@ -31135,14 +31797,14 @@ vanilla::SMSG_LOOT_RESPONSE& ServerOpcode::get<SMSG_LOOT_RESPONSE>() {
 }
 
 template <>
-vanilla::SMSG_LOOT_RELEASE_RESPONSE* ServerOpcode::get_if<SMSG_LOOT_RELEASE_RESPONSE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_LOOT_RELEASE_RESPONSE* ServerOpcode::get_if<SMSG_LOOT_RELEASE_RESPONSE>() {
     if (opcode == Opcode::SMSG_LOOT_RELEASE_RESPONSE) {
         return &SMSG_LOOT_RELEASE_RESPONSE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_LOOT_RELEASE_RESPONSE& ServerOpcode::get<SMSG_LOOT_RELEASE_RESPONSE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_LOOT_RELEASE_RESPONSE& ServerOpcode::get<SMSG_LOOT_RELEASE_RESPONSE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_LOOT_RELEASE_RESPONSE>();
     if (p) {
         return *p;
@@ -31151,14 +31813,14 @@ vanilla::SMSG_LOOT_RELEASE_RESPONSE& ServerOpcode::get<SMSG_LOOT_RELEASE_RESPONS
 }
 
 template <>
-vanilla::SMSG_LOOT_REMOVED* ServerOpcode::get_if<SMSG_LOOT_REMOVED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_LOOT_REMOVED* ServerOpcode::get_if<SMSG_LOOT_REMOVED>() {
     if (opcode == Opcode::SMSG_LOOT_REMOVED) {
         return &SMSG_LOOT_REMOVED;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_LOOT_REMOVED& ServerOpcode::get<SMSG_LOOT_REMOVED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_LOOT_REMOVED& ServerOpcode::get<SMSG_LOOT_REMOVED>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_LOOT_REMOVED>();
     if (p) {
         return *p;
@@ -31167,14 +31829,14 @@ vanilla::SMSG_LOOT_REMOVED& ServerOpcode::get<SMSG_LOOT_REMOVED>() {
 }
 
 template <>
-vanilla::SMSG_LOOT_MONEY_NOTIFY* ServerOpcode::get_if<SMSG_LOOT_MONEY_NOTIFY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_LOOT_MONEY_NOTIFY* ServerOpcode::get_if<SMSG_LOOT_MONEY_NOTIFY>() {
     if (opcode == Opcode::SMSG_LOOT_MONEY_NOTIFY) {
         return &SMSG_LOOT_MONEY_NOTIFY;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_LOOT_MONEY_NOTIFY& ServerOpcode::get<SMSG_LOOT_MONEY_NOTIFY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_LOOT_MONEY_NOTIFY& ServerOpcode::get<SMSG_LOOT_MONEY_NOTIFY>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_LOOT_MONEY_NOTIFY>();
     if (p) {
         return *p;
@@ -31183,14 +31845,14 @@ vanilla::SMSG_LOOT_MONEY_NOTIFY& ServerOpcode::get<SMSG_LOOT_MONEY_NOTIFY>() {
 }
 
 template <>
-vanilla::SMSG_LOOT_CLEAR_MONEY* ServerOpcode::get_if<SMSG_LOOT_CLEAR_MONEY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_LOOT_CLEAR_MONEY* ServerOpcode::get_if<SMSG_LOOT_CLEAR_MONEY>() {
     if (opcode == Opcode::SMSG_LOOT_CLEAR_MONEY) {
         return &SMSG_LOOT_CLEAR_MONEY;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_LOOT_CLEAR_MONEY& ServerOpcode::get<SMSG_LOOT_CLEAR_MONEY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_LOOT_CLEAR_MONEY& ServerOpcode::get<SMSG_LOOT_CLEAR_MONEY>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_LOOT_CLEAR_MONEY>();
     if (p) {
         return *p;
@@ -31199,14 +31861,14 @@ vanilla::SMSG_LOOT_CLEAR_MONEY& ServerOpcode::get<SMSG_LOOT_CLEAR_MONEY>() {
 }
 
 template <>
-vanilla::SMSG_ITEM_PUSH_RESULT* ServerOpcode::get_if<SMSG_ITEM_PUSH_RESULT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ITEM_PUSH_RESULT* ServerOpcode::get_if<SMSG_ITEM_PUSH_RESULT>() {
     if (opcode == Opcode::SMSG_ITEM_PUSH_RESULT) {
         return &SMSG_ITEM_PUSH_RESULT;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_ITEM_PUSH_RESULT& ServerOpcode::get<SMSG_ITEM_PUSH_RESULT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ITEM_PUSH_RESULT& ServerOpcode::get<SMSG_ITEM_PUSH_RESULT>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_ITEM_PUSH_RESULT>();
     if (p) {
         return *p;
@@ -31215,14 +31877,14 @@ vanilla::SMSG_ITEM_PUSH_RESULT& ServerOpcode::get<SMSG_ITEM_PUSH_RESULT>() {
 }
 
 template <>
-vanilla::SMSG_DUEL_REQUESTED* ServerOpcode::get_if<SMSG_DUEL_REQUESTED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_DUEL_REQUESTED* ServerOpcode::get_if<SMSG_DUEL_REQUESTED>() {
     if (opcode == Opcode::SMSG_DUEL_REQUESTED) {
         return &SMSG_DUEL_REQUESTED;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_DUEL_REQUESTED& ServerOpcode::get<SMSG_DUEL_REQUESTED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_DUEL_REQUESTED& ServerOpcode::get<SMSG_DUEL_REQUESTED>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_DUEL_REQUESTED>();
     if (p) {
         return *p;
@@ -31231,14 +31893,14 @@ vanilla::SMSG_DUEL_REQUESTED& ServerOpcode::get<SMSG_DUEL_REQUESTED>() {
 }
 
 template <>
-vanilla::SMSG_DUEL_OUTOFBOUNDS* ServerOpcode::get_if<SMSG_DUEL_OUTOFBOUNDS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_DUEL_OUTOFBOUNDS* ServerOpcode::get_if<SMSG_DUEL_OUTOFBOUNDS>() {
     if (opcode == Opcode::SMSG_DUEL_OUTOFBOUNDS) {
         return &SMSG_DUEL_OUTOFBOUNDS;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_DUEL_OUTOFBOUNDS& ServerOpcode::get<SMSG_DUEL_OUTOFBOUNDS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_DUEL_OUTOFBOUNDS& ServerOpcode::get<SMSG_DUEL_OUTOFBOUNDS>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_DUEL_OUTOFBOUNDS>();
     if (p) {
         return *p;
@@ -31247,14 +31909,14 @@ vanilla::SMSG_DUEL_OUTOFBOUNDS& ServerOpcode::get<SMSG_DUEL_OUTOFBOUNDS>() {
 }
 
 template <>
-vanilla::SMSG_DUEL_INBOUNDS* ServerOpcode::get_if<SMSG_DUEL_INBOUNDS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_DUEL_INBOUNDS* ServerOpcode::get_if<SMSG_DUEL_INBOUNDS>() {
     if (opcode == Opcode::SMSG_DUEL_INBOUNDS) {
         return &SMSG_DUEL_INBOUNDS;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_DUEL_INBOUNDS& ServerOpcode::get<SMSG_DUEL_INBOUNDS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_DUEL_INBOUNDS& ServerOpcode::get<SMSG_DUEL_INBOUNDS>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_DUEL_INBOUNDS>();
     if (p) {
         return *p;
@@ -31263,14 +31925,14 @@ vanilla::SMSG_DUEL_INBOUNDS& ServerOpcode::get<SMSG_DUEL_INBOUNDS>() {
 }
 
 template <>
-vanilla::SMSG_DUEL_COMPLETE* ServerOpcode::get_if<SMSG_DUEL_COMPLETE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_DUEL_COMPLETE* ServerOpcode::get_if<SMSG_DUEL_COMPLETE>() {
     if (opcode == Opcode::SMSG_DUEL_COMPLETE) {
         return &SMSG_DUEL_COMPLETE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_DUEL_COMPLETE& ServerOpcode::get<SMSG_DUEL_COMPLETE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_DUEL_COMPLETE& ServerOpcode::get<SMSG_DUEL_COMPLETE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_DUEL_COMPLETE>();
     if (p) {
         return *p;
@@ -31279,14 +31941,14 @@ vanilla::SMSG_DUEL_COMPLETE& ServerOpcode::get<SMSG_DUEL_COMPLETE>() {
 }
 
 template <>
-vanilla::SMSG_DUEL_WINNER* ServerOpcode::get_if<SMSG_DUEL_WINNER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_DUEL_WINNER* ServerOpcode::get_if<SMSG_DUEL_WINNER>() {
     if (opcode == Opcode::SMSG_DUEL_WINNER) {
         return &SMSG_DUEL_WINNER;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_DUEL_WINNER& ServerOpcode::get<SMSG_DUEL_WINNER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_DUEL_WINNER& ServerOpcode::get<SMSG_DUEL_WINNER>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_DUEL_WINNER>();
     if (p) {
         return *p;
@@ -31295,14 +31957,14 @@ vanilla::SMSG_DUEL_WINNER& ServerOpcode::get<SMSG_DUEL_WINNER>() {
 }
 
 template <>
-vanilla::SMSG_MOUNTRESULT* ServerOpcode::get_if<SMSG_MOUNTRESULT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_MOUNTRESULT* ServerOpcode::get_if<SMSG_MOUNTRESULT>() {
     if (opcode == Opcode::SMSG_MOUNTRESULT) {
         return &SMSG_MOUNTRESULT;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_MOUNTRESULT& ServerOpcode::get<SMSG_MOUNTRESULT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_MOUNTRESULT& ServerOpcode::get<SMSG_MOUNTRESULT>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_MOUNTRESULT>();
     if (p) {
         return *p;
@@ -31311,14 +31973,14 @@ vanilla::SMSG_MOUNTRESULT& ServerOpcode::get<SMSG_MOUNTRESULT>() {
 }
 
 template <>
-vanilla::SMSG_DISMOUNTRESULT* ServerOpcode::get_if<SMSG_DISMOUNTRESULT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_DISMOUNTRESULT* ServerOpcode::get_if<SMSG_DISMOUNTRESULT>() {
     if (opcode == Opcode::SMSG_DISMOUNTRESULT) {
         return &SMSG_DISMOUNTRESULT;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_DISMOUNTRESULT& ServerOpcode::get<SMSG_DISMOUNTRESULT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_DISMOUNTRESULT& ServerOpcode::get<SMSG_DISMOUNTRESULT>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_DISMOUNTRESULT>();
     if (p) {
         return *p;
@@ -31327,14 +31989,14 @@ vanilla::SMSG_DISMOUNTRESULT& ServerOpcode::get<SMSG_DISMOUNTRESULT>() {
 }
 
 template <>
-vanilla::SMSG_MOUNTSPECIAL_ANIM* ServerOpcode::get_if<SMSG_MOUNTSPECIAL_ANIM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_MOUNTSPECIAL_ANIM* ServerOpcode::get_if<SMSG_MOUNTSPECIAL_ANIM>() {
     if (opcode == Opcode::SMSG_MOUNTSPECIAL_ANIM) {
         return &SMSG_MOUNTSPECIAL_ANIM;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_MOUNTSPECIAL_ANIM& ServerOpcode::get<SMSG_MOUNTSPECIAL_ANIM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_MOUNTSPECIAL_ANIM& ServerOpcode::get<SMSG_MOUNTSPECIAL_ANIM>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_MOUNTSPECIAL_ANIM>();
     if (p) {
         return *p;
@@ -31343,14 +32005,14 @@ vanilla::SMSG_MOUNTSPECIAL_ANIM& ServerOpcode::get<SMSG_MOUNTSPECIAL_ANIM>() {
 }
 
 template <>
-vanilla::SMSG_PET_TAME_FAILURE* ServerOpcode::get_if<SMSG_PET_TAME_FAILURE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PET_TAME_FAILURE* ServerOpcode::get_if<SMSG_PET_TAME_FAILURE>() {
     if (opcode == Opcode::SMSG_PET_TAME_FAILURE) {
         return &SMSG_PET_TAME_FAILURE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_PET_TAME_FAILURE& ServerOpcode::get<SMSG_PET_TAME_FAILURE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PET_TAME_FAILURE& ServerOpcode::get<SMSG_PET_TAME_FAILURE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_PET_TAME_FAILURE>();
     if (p) {
         return *p;
@@ -31359,14 +32021,14 @@ vanilla::SMSG_PET_TAME_FAILURE& ServerOpcode::get<SMSG_PET_TAME_FAILURE>() {
 }
 
 template <>
-vanilla::SMSG_PET_NAME_INVALID* ServerOpcode::get_if<SMSG_PET_NAME_INVALID>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PET_NAME_INVALID* ServerOpcode::get_if<SMSG_PET_NAME_INVALID>() {
     if (opcode == Opcode::SMSG_PET_NAME_INVALID) {
         return &SMSG_PET_NAME_INVALID;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_PET_NAME_INVALID& ServerOpcode::get<SMSG_PET_NAME_INVALID>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PET_NAME_INVALID& ServerOpcode::get<SMSG_PET_NAME_INVALID>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_PET_NAME_INVALID>();
     if (p) {
         return *p;
@@ -31375,14 +32037,14 @@ vanilla::SMSG_PET_NAME_INVALID& ServerOpcode::get<SMSG_PET_NAME_INVALID>() {
 }
 
 template <>
-vanilla::SMSG_PET_SPELLS* ServerOpcode::get_if<SMSG_PET_SPELLS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PET_SPELLS* ServerOpcode::get_if<SMSG_PET_SPELLS>() {
     if (opcode == Opcode::SMSG_PET_SPELLS) {
         return &SMSG_PET_SPELLS;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_PET_SPELLS& ServerOpcode::get<SMSG_PET_SPELLS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PET_SPELLS& ServerOpcode::get<SMSG_PET_SPELLS>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_PET_SPELLS>();
     if (p) {
         return *p;
@@ -31391,14 +32053,14 @@ vanilla::SMSG_PET_SPELLS& ServerOpcode::get<SMSG_PET_SPELLS>() {
 }
 
 template <>
-vanilla::SMSG_PET_MODE* ServerOpcode::get_if<SMSG_PET_MODE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PET_MODE* ServerOpcode::get_if<SMSG_PET_MODE>() {
     if (opcode == Opcode::SMSG_PET_MODE) {
         return &SMSG_PET_MODE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_PET_MODE& ServerOpcode::get<SMSG_PET_MODE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PET_MODE& ServerOpcode::get<SMSG_PET_MODE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_PET_MODE>();
     if (p) {
         return *p;
@@ -31407,14 +32069,14 @@ vanilla::SMSG_PET_MODE& ServerOpcode::get<SMSG_PET_MODE>() {
 }
 
 template <>
-vanilla::SMSG_GOSSIP_MESSAGE* ServerOpcode::get_if<SMSG_GOSSIP_MESSAGE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GOSSIP_MESSAGE* ServerOpcode::get_if<SMSG_GOSSIP_MESSAGE>() {
     if (opcode == Opcode::SMSG_GOSSIP_MESSAGE) {
         return &SMSG_GOSSIP_MESSAGE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_GOSSIP_MESSAGE& ServerOpcode::get<SMSG_GOSSIP_MESSAGE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GOSSIP_MESSAGE& ServerOpcode::get<SMSG_GOSSIP_MESSAGE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_GOSSIP_MESSAGE>();
     if (p) {
         return *p;
@@ -31423,14 +32085,14 @@ vanilla::SMSG_GOSSIP_MESSAGE& ServerOpcode::get<SMSG_GOSSIP_MESSAGE>() {
 }
 
 template <>
-vanilla::SMSG_GOSSIP_COMPLETE* ServerOpcode::get_if<SMSG_GOSSIP_COMPLETE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GOSSIP_COMPLETE* ServerOpcode::get_if<SMSG_GOSSIP_COMPLETE>() {
     if (opcode == Opcode::SMSG_GOSSIP_COMPLETE) {
         return &SMSG_GOSSIP_COMPLETE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_GOSSIP_COMPLETE& ServerOpcode::get<SMSG_GOSSIP_COMPLETE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GOSSIP_COMPLETE& ServerOpcode::get<SMSG_GOSSIP_COMPLETE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_GOSSIP_COMPLETE>();
     if (p) {
         return *p;
@@ -31439,14 +32101,14 @@ vanilla::SMSG_GOSSIP_COMPLETE& ServerOpcode::get<SMSG_GOSSIP_COMPLETE>() {
 }
 
 template <>
-vanilla::SMSG_NPC_TEXT_UPDATE* ServerOpcode::get_if<SMSG_NPC_TEXT_UPDATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_NPC_TEXT_UPDATE* ServerOpcode::get_if<SMSG_NPC_TEXT_UPDATE>() {
     if (opcode == Opcode::SMSG_NPC_TEXT_UPDATE) {
         return &SMSG_NPC_TEXT_UPDATE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_NPC_TEXT_UPDATE& ServerOpcode::get<SMSG_NPC_TEXT_UPDATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_NPC_TEXT_UPDATE& ServerOpcode::get<SMSG_NPC_TEXT_UPDATE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_NPC_TEXT_UPDATE>();
     if (p) {
         return *p;
@@ -31455,14 +32117,14 @@ vanilla::SMSG_NPC_TEXT_UPDATE& ServerOpcode::get<SMSG_NPC_TEXT_UPDATE>() {
 }
 
 template <>
-vanilla::SMSG_QUESTGIVER_STATUS* ServerOpcode::get_if<SMSG_QUESTGIVER_STATUS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_QUESTGIVER_STATUS* ServerOpcode::get_if<SMSG_QUESTGIVER_STATUS>() {
     if (opcode == Opcode::SMSG_QUESTGIVER_STATUS) {
         return &SMSG_QUESTGIVER_STATUS;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_QUESTGIVER_STATUS& ServerOpcode::get<SMSG_QUESTGIVER_STATUS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_QUESTGIVER_STATUS& ServerOpcode::get<SMSG_QUESTGIVER_STATUS>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_QUESTGIVER_STATUS>();
     if (p) {
         return *p;
@@ -31471,14 +32133,14 @@ vanilla::SMSG_QUESTGIVER_STATUS& ServerOpcode::get<SMSG_QUESTGIVER_STATUS>() {
 }
 
 template <>
-vanilla::SMSG_QUESTGIVER_QUEST_LIST* ServerOpcode::get_if<SMSG_QUESTGIVER_QUEST_LIST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_QUESTGIVER_QUEST_LIST* ServerOpcode::get_if<SMSG_QUESTGIVER_QUEST_LIST>() {
     if (opcode == Opcode::SMSG_QUESTGIVER_QUEST_LIST) {
         return &SMSG_QUESTGIVER_QUEST_LIST;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_QUESTGIVER_QUEST_LIST& ServerOpcode::get<SMSG_QUESTGIVER_QUEST_LIST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_QUESTGIVER_QUEST_LIST& ServerOpcode::get<SMSG_QUESTGIVER_QUEST_LIST>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_QUESTGIVER_QUEST_LIST>();
     if (p) {
         return *p;
@@ -31487,14 +32149,14 @@ vanilla::SMSG_QUESTGIVER_QUEST_LIST& ServerOpcode::get<SMSG_QUESTGIVER_QUEST_LIS
 }
 
 template <>
-vanilla::SMSG_QUESTGIVER_QUEST_DETAILS* ServerOpcode::get_if<SMSG_QUESTGIVER_QUEST_DETAILS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_QUESTGIVER_QUEST_DETAILS* ServerOpcode::get_if<SMSG_QUESTGIVER_QUEST_DETAILS>() {
     if (opcode == Opcode::SMSG_QUESTGIVER_QUEST_DETAILS) {
         return &SMSG_QUESTGIVER_QUEST_DETAILS;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_QUESTGIVER_QUEST_DETAILS& ServerOpcode::get<SMSG_QUESTGIVER_QUEST_DETAILS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_QUESTGIVER_QUEST_DETAILS& ServerOpcode::get<SMSG_QUESTGIVER_QUEST_DETAILS>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_QUESTGIVER_QUEST_DETAILS>();
     if (p) {
         return *p;
@@ -31503,14 +32165,14 @@ vanilla::SMSG_QUESTGIVER_QUEST_DETAILS& ServerOpcode::get<SMSG_QUESTGIVER_QUEST_
 }
 
 template <>
-vanilla::SMSG_QUESTGIVER_REQUEST_ITEMS* ServerOpcode::get_if<SMSG_QUESTGIVER_REQUEST_ITEMS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_QUESTGIVER_REQUEST_ITEMS* ServerOpcode::get_if<SMSG_QUESTGIVER_REQUEST_ITEMS>() {
     if (opcode == Opcode::SMSG_QUESTGIVER_REQUEST_ITEMS) {
         return &SMSG_QUESTGIVER_REQUEST_ITEMS;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_QUESTGIVER_REQUEST_ITEMS& ServerOpcode::get<SMSG_QUESTGIVER_REQUEST_ITEMS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_QUESTGIVER_REQUEST_ITEMS& ServerOpcode::get<SMSG_QUESTGIVER_REQUEST_ITEMS>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_QUESTGIVER_REQUEST_ITEMS>();
     if (p) {
         return *p;
@@ -31519,14 +32181,14 @@ vanilla::SMSG_QUESTGIVER_REQUEST_ITEMS& ServerOpcode::get<SMSG_QUESTGIVER_REQUES
 }
 
 template <>
-vanilla::SMSG_QUESTGIVER_OFFER_REWARD* ServerOpcode::get_if<SMSG_QUESTGIVER_OFFER_REWARD>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_QUESTGIVER_OFFER_REWARD* ServerOpcode::get_if<SMSG_QUESTGIVER_OFFER_REWARD>() {
     if (opcode == Opcode::SMSG_QUESTGIVER_OFFER_REWARD) {
         return &SMSG_QUESTGIVER_OFFER_REWARD;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_QUESTGIVER_OFFER_REWARD& ServerOpcode::get<SMSG_QUESTGIVER_OFFER_REWARD>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_QUESTGIVER_OFFER_REWARD& ServerOpcode::get<SMSG_QUESTGIVER_OFFER_REWARD>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_QUESTGIVER_OFFER_REWARD>();
     if (p) {
         return *p;
@@ -31535,14 +32197,14 @@ vanilla::SMSG_QUESTGIVER_OFFER_REWARD& ServerOpcode::get<SMSG_QUESTGIVER_OFFER_R
 }
 
 template <>
-vanilla::SMSG_QUESTGIVER_QUEST_INVALID* ServerOpcode::get_if<SMSG_QUESTGIVER_QUEST_INVALID>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_QUESTGIVER_QUEST_INVALID* ServerOpcode::get_if<SMSG_QUESTGIVER_QUEST_INVALID>() {
     if (opcode == Opcode::SMSG_QUESTGIVER_QUEST_INVALID) {
         return &SMSG_QUESTGIVER_QUEST_INVALID;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_QUESTGIVER_QUEST_INVALID& ServerOpcode::get<SMSG_QUESTGIVER_QUEST_INVALID>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_QUESTGIVER_QUEST_INVALID& ServerOpcode::get<SMSG_QUESTGIVER_QUEST_INVALID>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_QUESTGIVER_QUEST_INVALID>();
     if (p) {
         return *p;
@@ -31551,14 +32213,14 @@ vanilla::SMSG_QUESTGIVER_QUEST_INVALID& ServerOpcode::get<SMSG_QUESTGIVER_QUEST_
 }
 
 template <>
-vanilla::SMSG_QUESTGIVER_QUEST_COMPLETE* ServerOpcode::get_if<SMSG_QUESTGIVER_QUEST_COMPLETE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_QUESTGIVER_QUEST_COMPLETE* ServerOpcode::get_if<SMSG_QUESTGIVER_QUEST_COMPLETE>() {
     if (opcode == Opcode::SMSG_QUESTGIVER_QUEST_COMPLETE) {
         return &SMSG_QUESTGIVER_QUEST_COMPLETE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_QUESTGIVER_QUEST_COMPLETE& ServerOpcode::get<SMSG_QUESTGIVER_QUEST_COMPLETE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_QUESTGIVER_QUEST_COMPLETE& ServerOpcode::get<SMSG_QUESTGIVER_QUEST_COMPLETE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_QUESTGIVER_QUEST_COMPLETE>();
     if (p) {
         return *p;
@@ -31567,14 +32229,14 @@ vanilla::SMSG_QUESTGIVER_QUEST_COMPLETE& ServerOpcode::get<SMSG_QUESTGIVER_QUEST
 }
 
 template <>
-vanilla::SMSG_QUESTGIVER_QUEST_FAILED* ServerOpcode::get_if<SMSG_QUESTGIVER_QUEST_FAILED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_QUESTGIVER_QUEST_FAILED* ServerOpcode::get_if<SMSG_QUESTGIVER_QUEST_FAILED>() {
     if (opcode == Opcode::SMSG_QUESTGIVER_QUEST_FAILED) {
         return &SMSG_QUESTGIVER_QUEST_FAILED;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_QUESTGIVER_QUEST_FAILED& ServerOpcode::get<SMSG_QUESTGIVER_QUEST_FAILED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_QUESTGIVER_QUEST_FAILED& ServerOpcode::get<SMSG_QUESTGIVER_QUEST_FAILED>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_QUESTGIVER_QUEST_FAILED>();
     if (p) {
         return *p;
@@ -31583,14 +32245,14 @@ vanilla::SMSG_QUESTGIVER_QUEST_FAILED& ServerOpcode::get<SMSG_QUESTGIVER_QUEST_F
 }
 
 template <>
-vanilla::SMSG_QUESTLOG_FULL* ServerOpcode::get_if<SMSG_QUESTLOG_FULL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_QUESTLOG_FULL* ServerOpcode::get_if<SMSG_QUESTLOG_FULL>() {
     if (opcode == Opcode::SMSG_QUESTLOG_FULL) {
         return &SMSG_QUESTLOG_FULL;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_QUESTLOG_FULL& ServerOpcode::get<SMSG_QUESTLOG_FULL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_QUESTLOG_FULL& ServerOpcode::get<SMSG_QUESTLOG_FULL>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_QUESTLOG_FULL>();
     if (p) {
         return *p;
@@ -31599,14 +32261,14 @@ vanilla::SMSG_QUESTLOG_FULL& ServerOpcode::get<SMSG_QUESTLOG_FULL>() {
 }
 
 template <>
-vanilla::SMSG_QUESTUPDATE_FAILED* ServerOpcode::get_if<SMSG_QUESTUPDATE_FAILED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_QUESTUPDATE_FAILED* ServerOpcode::get_if<SMSG_QUESTUPDATE_FAILED>() {
     if (opcode == Opcode::SMSG_QUESTUPDATE_FAILED) {
         return &SMSG_QUESTUPDATE_FAILED;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_QUESTUPDATE_FAILED& ServerOpcode::get<SMSG_QUESTUPDATE_FAILED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_QUESTUPDATE_FAILED& ServerOpcode::get<SMSG_QUESTUPDATE_FAILED>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_QUESTUPDATE_FAILED>();
     if (p) {
         return *p;
@@ -31615,14 +32277,14 @@ vanilla::SMSG_QUESTUPDATE_FAILED& ServerOpcode::get<SMSG_QUESTUPDATE_FAILED>() {
 }
 
 template <>
-vanilla::SMSG_QUESTUPDATE_FAILEDTIMER* ServerOpcode::get_if<SMSG_QUESTUPDATE_FAILEDTIMER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_QUESTUPDATE_FAILEDTIMER* ServerOpcode::get_if<SMSG_QUESTUPDATE_FAILEDTIMER>() {
     if (opcode == Opcode::SMSG_QUESTUPDATE_FAILEDTIMER) {
         return &SMSG_QUESTUPDATE_FAILEDTIMER;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_QUESTUPDATE_FAILEDTIMER& ServerOpcode::get<SMSG_QUESTUPDATE_FAILEDTIMER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_QUESTUPDATE_FAILEDTIMER& ServerOpcode::get<SMSG_QUESTUPDATE_FAILEDTIMER>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_QUESTUPDATE_FAILEDTIMER>();
     if (p) {
         return *p;
@@ -31631,14 +32293,14 @@ vanilla::SMSG_QUESTUPDATE_FAILEDTIMER& ServerOpcode::get<SMSG_QUESTUPDATE_FAILED
 }
 
 template <>
-vanilla::SMSG_QUESTUPDATE_COMPLETE* ServerOpcode::get_if<SMSG_QUESTUPDATE_COMPLETE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_QUESTUPDATE_COMPLETE* ServerOpcode::get_if<SMSG_QUESTUPDATE_COMPLETE>() {
     if (opcode == Opcode::SMSG_QUESTUPDATE_COMPLETE) {
         return &SMSG_QUESTUPDATE_COMPLETE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_QUESTUPDATE_COMPLETE& ServerOpcode::get<SMSG_QUESTUPDATE_COMPLETE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_QUESTUPDATE_COMPLETE& ServerOpcode::get<SMSG_QUESTUPDATE_COMPLETE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_QUESTUPDATE_COMPLETE>();
     if (p) {
         return *p;
@@ -31647,14 +32309,14 @@ vanilla::SMSG_QUESTUPDATE_COMPLETE& ServerOpcode::get<SMSG_QUESTUPDATE_COMPLETE>
 }
 
 template <>
-vanilla::SMSG_QUESTUPDATE_ADD_KILL* ServerOpcode::get_if<SMSG_QUESTUPDATE_ADD_KILL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_QUESTUPDATE_ADD_KILL* ServerOpcode::get_if<SMSG_QUESTUPDATE_ADD_KILL>() {
     if (opcode == Opcode::SMSG_QUESTUPDATE_ADD_KILL) {
         return &SMSG_QUESTUPDATE_ADD_KILL;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_QUESTUPDATE_ADD_KILL& ServerOpcode::get<SMSG_QUESTUPDATE_ADD_KILL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_QUESTUPDATE_ADD_KILL& ServerOpcode::get<SMSG_QUESTUPDATE_ADD_KILL>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_QUESTUPDATE_ADD_KILL>();
     if (p) {
         return *p;
@@ -31663,14 +32325,14 @@ vanilla::SMSG_QUESTUPDATE_ADD_KILL& ServerOpcode::get<SMSG_QUESTUPDATE_ADD_KILL>
 }
 
 template <>
-vanilla::SMSG_QUESTUPDATE_ADD_ITEM* ServerOpcode::get_if<SMSG_QUESTUPDATE_ADD_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_QUESTUPDATE_ADD_ITEM* ServerOpcode::get_if<SMSG_QUESTUPDATE_ADD_ITEM>() {
     if (opcode == Opcode::SMSG_QUESTUPDATE_ADD_ITEM) {
         return &SMSG_QUESTUPDATE_ADD_ITEM;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_QUESTUPDATE_ADD_ITEM& ServerOpcode::get<SMSG_QUESTUPDATE_ADD_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_QUESTUPDATE_ADD_ITEM& ServerOpcode::get<SMSG_QUESTUPDATE_ADD_ITEM>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_QUESTUPDATE_ADD_ITEM>();
     if (p) {
         return *p;
@@ -31679,14 +32341,14 @@ vanilla::SMSG_QUESTUPDATE_ADD_ITEM& ServerOpcode::get<SMSG_QUESTUPDATE_ADD_ITEM>
 }
 
 template <>
-vanilla::SMSG_QUEST_CONFIRM_ACCEPT* ServerOpcode::get_if<SMSG_QUEST_CONFIRM_ACCEPT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_QUEST_CONFIRM_ACCEPT* ServerOpcode::get_if<SMSG_QUEST_CONFIRM_ACCEPT>() {
     if (opcode == Opcode::SMSG_QUEST_CONFIRM_ACCEPT) {
         return &SMSG_QUEST_CONFIRM_ACCEPT;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_QUEST_CONFIRM_ACCEPT& ServerOpcode::get<SMSG_QUEST_CONFIRM_ACCEPT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_QUEST_CONFIRM_ACCEPT& ServerOpcode::get<SMSG_QUEST_CONFIRM_ACCEPT>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_QUEST_CONFIRM_ACCEPT>();
     if (p) {
         return *p;
@@ -31695,14 +32357,14 @@ vanilla::SMSG_QUEST_CONFIRM_ACCEPT& ServerOpcode::get<SMSG_QUEST_CONFIRM_ACCEPT>
 }
 
 template <>
-vanilla::SMSG_LIST_INVENTORY* ServerOpcode::get_if<SMSG_LIST_INVENTORY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_LIST_INVENTORY* ServerOpcode::get_if<SMSG_LIST_INVENTORY>() {
     if (opcode == Opcode::SMSG_LIST_INVENTORY) {
         return &SMSG_LIST_INVENTORY;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_LIST_INVENTORY& ServerOpcode::get<SMSG_LIST_INVENTORY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_LIST_INVENTORY& ServerOpcode::get<SMSG_LIST_INVENTORY>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_LIST_INVENTORY>();
     if (p) {
         return *p;
@@ -31711,14 +32373,14 @@ vanilla::SMSG_LIST_INVENTORY& ServerOpcode::get<SMSG_LIST_INVENTORY>() {
 }
 
 template <>
-vanilla::SMSG_SELL_ITEM* ServerOpcode::get_if<SMSG_SELL_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SELL_ITEM* ServerOpcode::get_if<SMSG_SELL_ITEM>() {
     if (opcode == Opcode::SMSG_SELL_ITEM) {
         return &SMSG_SELL_ITEM;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SELL_ITEM& ServerOpcode::get<SMSG_SELL_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SELL_ITEM& ServerOpcode::get<SMSG_SELL_ITEM>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SELL_ITEM>();
     if (p) {
         return *p;
@@ -31727,14 +32389,14 @@ vanilla::SMSG_SELL_ITEM& ServerOpcode::get<SMSG_SELL_ITEM>() {
 }
 
 template <>
-vanilla::SMSG_BUY_ITEM* ServerOpcode::get_if<SMSG_BUY_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_BUY_ITEM* ServerOpcode::get_if<SMSG_BUY_ITEM>() {
     if (opcode == Opcode::SMSG_BUY_ITEM) {
         return &SMSG_BUY_ITEM;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_BUY_ITEM& ServerOpcode::get<SMSG_BUY_ITEM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_BUY_ITEM& ServerOpcode::get<SMSG_BUY_ITEM>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_BUY_ITEM>();
     if (p) {
         return *p;
@@ -31743,14 +32405,14 @@ vanilla::SMSG_BUY_ITEM& ServerOpcode::get<SMSG_BUY_ITEM>() {
 }
 
 template <>
-vanilla::SMSG_BUY_FAILED* ServerOpcode::get_if<SMSG_BUY_FAILED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_BUY_FAILED* ServerOpcode::get_if<SMSG_BUY_FAILED>() {
     if (opcode == Opcode::SMSG_BUY_FAILED) {
         return &SMSG_BUY_FAILED;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_BUY_FAILED& ServerOpcode::get<SMSG_BUY_FAILED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_BUY_FAILED& ServerOpcode::get<SMSG_BUY_FAILED>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_BUY_FAILED>();
     if (p) {
         return *p;
@@ -31759,14 +32421,14 @@ vanilla::SMSG_BUY_FAILED& ServerOpcode::get<SMSG_BUY_FAILED>() {
 }
 
 template <>
-vanilla::SMSG_SHOWTAXINODES* ServerOpcode::get_if<SMSG_SHOWTAXINODES>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SHOWTAXINODES* ServerOpcode::get_if<SMSG_SHOWTAXINODES>() {
     if (opcode == Opcode::SMSG_SHOWTAXINODES) {
         return &SMSG_SHOWTAXINODES;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SHOWTAXINODES& ServerOpcode::get<SMSG_SHOWTAXINODES>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SHOWTAXINODES& ServerOpcode::get<SMSG_SHOWTAXINODES>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SHOWTAXINODES>();
     if (p) {
         return *p;
@@ -31775,14 +32437,14 @@ vanilla::SMSG_SHOWTAXINODES& ServerOpcode::get<SMSG_SHOWTAXINODES>() {
 }
 
 template <>
-vanilla::SMSG_TAXINODE_STATUS* ServerOpcode::get_if<SMSG_TAXINODE_STATUS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_TAXINODE_STATUS* ServerOpcode::get_if<SMSG_TAXINODE_STATUS>() {
     if (opcode == Opcode::SMSG_TAXINODE_STATUS) {
         return &SMSG_TAXINODE_STATUS;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_TAXINODE_STATUS& ServerOpcode::get<SMSG_TAXINODE_STATUS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_TAXINODE_STATUS& ServerOpcode::get<SMSG_TAXINODE_STATUS>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_TAXINODE_STATUS>();
     if (p) {
         return *p;
@@ -31791,14 +32453,14 @@ vanilla::SMSG_TAXINODE_STATUS& ServerOpcode::get<SMSG_TAXINODE_STATUS>() {
 }
 
 template <>
-vanilla::SMSG_ACTIVATETAXIREPLY* ServerOpcode::get_if<SMSG_ACTIVATETAXIREPLY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ACTIVATETAXIREPLY* ServerOpcode::get_if<SMSG_ACTIVATETAXIREPLY>() {
     if (opcode == Opcode::SMSG_ACTIVATETAXIREPLY) {
         return &SMSG_ACTIVATETAXIREPLY;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_ACTIVATETAXIREPLY& ServerOpcode::get<SMSG_ACTIVATETAXIREPLY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ACTIVATETAXIREPLY& ServerOpcode::get<SMSG_ACTIVATETAXIREPLY>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_ACTIVATETAXIREPLY>();
     if (p) {
         return *p;
@@ -31807,14 +32469,14 @@ vanilla::SMSG_ACTIVATETAXIREPLY& ServerOpcode::get<SMSG_ACTIVATETAXIREPLY>() {
 }
 
 template <>
-vanilla::SMSG_NEW_TAXI_PATH* ServerOpcode::get_if<SMSG_NEW_TAXI_PATH>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_NEW_TAXI_PATH* ServerOpcode::get_if<SMSG_NEW_TAXI_PATH>() {
     if (opcode == Opcode::SMSG_NEW_TAXI_PATH) {
         return &SMSG_NEW_TAXI_PATH;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_NEW_TAXI_PATH& ServerOpcode::get<SMSG_NEW_TAXI_PATH>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_NEW_TAXI_PATH& ServerOpcode::get<SMSG_NEW_TAXI_PATH>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_NEW_TAXI_PATH>();
     if (p) {
         return *p;
@@ -31823,14 +32485,14 @@ vanilla::SMSG_NEW_TAXI_PATH& ServerOpcode::get<SMSG_NEW_TAXI_PATH>() {
 }
 
 template <>
-vanilla::SMSG_TRAINER_LIST* ServerOpcode::get_if<SMSG_TRAINER_LIST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_TRAINER_LIST* ServerOpcode::get_if<SMSG_TRAINER_LIST>() {
     if (opcode == Opcode::SMSG_TRAINER_LIST) {
         return &SMSG_TRAINER_LIST;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_TRAINER_LIST& ServerOpcode::get<SMSG_TRAINER_LIST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_TRAINER_LIST& ServerOpcode::get<SMSG_TRAINER_LIST>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_TRAINER_LIST>();
     if (p) {
         return *p;
@@ -31839,14 +32501,14 @@ vanilla::SMSG_TRAINER_LIST& ServerOpcode::get<SMSG_TRAINER_LIST>() {
 }
 
 template <>
-vanilla::SMSG_TRAINER_BUY_SUCCEEDED* ServerOpcode::get_if<SMSG_TRAINER_BUY_SUCCEEDED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_TRAINER_BUY_SUCCEEDED* ServerOpcode::get_if<SMSG_TRAINER_BUY_SUCCEEDED>() {
     if (opcode == Opcode::SMSG_TRAINER_BUY_SUCCEEDED) {
         return &SMSG_TRAINER_BUY_SUCCEEDED;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_TRAINER_BUY_SUCCEEDED& ServerOpcode::get<SMSG_TRAINER_BUY_SUCCEEDED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_TRAINER_BUY_SUCCEEDED& ServerOpcode::get<SMSG_TRAINER_BUY_SUCCEEDED>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_TRAINER_BUY_SUCCEEDED>();
     if (p) {
         return *p;
@@ -31855,14 +32517,14 @@ vanilla::SMSG_TRAINER_BUY_SUCCEEDED& ServerOpcode::get<SMSG_TRAINER_BUY_SUCCEEDE
 }
 
 template <>
-vanilla::SMSG_TRAINER_BUY_FAILED* ServerOpcode::get_if<SMSG_TRAINER_BUY_FAILED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_TRAINER_BUY_FAILED* ServerOpcode::get_if<SMSG_TRAINER_BUY_FAILED>() {
     if (opcode == Opcode::SMSG_TRAINER_BUY_FAILED) {
         return &SMSG_TRAINER_BUY_FAILED;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_TRAINER_BUY_FAILED& ServerOpcode::get<SMSG_TRAINER_BUY_FAILED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_TRAINER_BUY_FAILED& ServerOpcode::get<SMSG_TRAINER_BUY_FAILED>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_TRAINER_BUY_FAILED>();
     if (p) {
         return *p;
@@ -31871,14 +32533,14 @@ vanilla::SMSG_TRAINER_BUY_FAILED& ServerOpcode::get<SMSG_TRAINER_BUY_FAILED>() {
 }
 
 template <>
-vanilla::SMSG_SHOW_BANK* ServerOpcode::get_if<SMSG_SHOW_BANK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SHOW_BANK* ServerOpcode::get_if<SMSG_SHOW_BANK>() {
     if (opcode == Opcode::SMSG_SHOW_BANK) {
         return &SMSG_SHOW_BANK;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SHOW_BANK& ServerOpcode::get<SMSG_SHOW_BANK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SHOW_BANK& ServerOpcode::get<SMSG_SHOW_BANK>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SHOW_BANK>();
     if (p) {
         return *p;
@@ -31887,14 +32549,14 @@ vanilla::SMSG_SHOW_BANK& ServerOpcode::get<SMSG_SHOW_BANK>() {
 }
 
 template <>
-vanilla::SMSG_BUY_BANK_SLOT_RESULT* ServerOpcode::get_if<SMSG_BUY_BANK_SLOT_RESULT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_BUY_BANK_SLOT_RESULT* ServerOpcode::get_if<SMSG_BUY_BANK_SLOT_RESULT>() {
     if (opcode == Opcode::SMSG_BUY_BANK_SLOT_RESULT) {
         return &SMSG_BUY_BANK_SLOT_RESULT;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_BUY_BANK_SLOT_RESULT& ServerOpcode::get<SMSG_BUY_BANK_SLOT_RESULT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_BUY_BANK_SLOT_RESULT& ServerOpcode::get<SMSG_BUY_BANK_SLOT_RESULT>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_BUY_BANK_SLOT_RESULT>();
     if (p) {
         return *p;
@@ -31903,14 +32565,14 @@ vanilla::SMSG_BUY_BANK_SLOT_RESULT& ServerOpcode::get<SMSG_BUY_BANK_SLOT_RESULT>
 }
 
 template <>
-vanilla::SMSG_PETITION_SHOWLIST* ServerOpcode::get_if<SMSG_PETITION_SHOWLIST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PETITION_SHOWLIST* ServerOpcode::get_if<SMSG_PETITION_SHOWLIST>() {
     if (opcode == Opcode::SMSG_PETITION_SHOWLIST) {
         return &SMSG_PETITION_SHOWLIST;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_PETITION_SHOWLIST& ServerOpcode::get<SMSG_PETITION_SHOWLIST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PETITION_SHOWLIST& ServerOpcode::get<SMSG_PETITION_SHOWLIST>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_PETITION_SHOWLIST>();
     if (p) {
         return *p;
@@ -31919,14 +32581,14 @@ vanilla::SMSG_PETITION_SHOWLIST& ServerOpcode::get<SMSG_PETITION_SHOWLIST>() {
 }
 
 template <>
-vanilla::SMSG_PETITION_SHOW_SIGNATURES* ServerOpcode::get_if<SMSG_PETITION_SHOW_SIGNATURES>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PETITION_SHOW_SIGNATURES* ServerOpcode::get_if<SMSG_PETITION_SHOW_SIGNATURES>() {
     if (opcode == Opcode::SMSG_PETITION_SHOW_SIGNATURES) {
         return &SMSG_PETITION_SHOW_SIGNATURES;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_PETITION_SHOW_SIGNATURES& ServerOpcode::get<SMSG_PETITION_SHOW_SIGNATURES>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PETITION_SHOW_SIGNATURES& ServerOpcode::get<SMSG_PETITION_SHOW_SIGNATURES>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_PETITION_SHOW_SIGNATURES>();
     if (p) {
         return *p;
@@ -31935,14 +32597,14 @@ vanilla::SMSG_PETITION_SHOW_SIGNATURES& ServerOpcode::get<SMSG_PETITION_SHOW_SIG
 }
 
 template <>
-vanilla::SMSG_PETITION_SIGN_RESULTS* ServerOpcode::get_if<SMSG_PETITION_SIGN_RESULTS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PETITION_SIGN_RESULTS* ServerOpcode::get_if<SMSG_PETITION_SIGN_RESULTS>() {
     if (opcode == Opcode::SMSG_PETITION_SIGN_RESULTS) {
         return &SMSG_PETITION_SIGN_RESULTS;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_PETITION_SIGN_RESULTS& ServerOpcode::get<SMSG_PETITION_SIGN_RESULTS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PETITION_SIGN_RESULTS& ServerOpcode::get<SMSG_PETITION_SIGN_RESULTS>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_PETITION_SIGN_RESULTS>();
     if (p) {
         return *p;
@@ -31951,14 +32613,14 @@ vanilla::SMSG_PETITION_SIGN_RESULTS& ServerOpcode::get<SMSG_PETITION_SIGN_RESULT
 }
 
 template <>
-vanilla::MSG_PETITION_DECLINE* ServerOpcode::get_if<MSG_PETITION_DECLINE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_PETITION_DECLINE* ServerOpcode::get_if<MSG_PETITION_DECLINE>() {
     if (opcode == Opcode::MSG_PETITION_DECLINE) {
         return &MSG_PETITION_DECLINE;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_PETITION_DECLINE& ServerOpcode::get<MSG_PETITION_DECLINE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_PETITION_DECLINE& ServerOpcode::get<MSG_PETITION_DECLINE>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_PETITION_DECLINE>();
     if (p) {
         return *p;
@@ -31967,14 +32629,14 @@ vanilla::MSG_PETITION_DECLINE& ServerOpcode::get<MSG_PETITION_DECLINE>() {
 }
 
 template <>
-vanilla::SMSG_TURN_IN_PETITION_RESULTS* ServerOpcode::get_if<SMSG_TURN_IN_PETITION_RESULTS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_TURN_IN_PETITION_RESULTS* ServerOpcode::get_if<SMSG_TURN_IN_PETITION_RESULTS>() {
     if (opcode == Opcode::SMSG_TURN_IN_PETITION_RESULTS) {
         return &SMSG_TURN_IN_PETITION_RESULTS;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_TURN_IN_PETITION_RESULTS& ServerOpcode::get<SMSG_TURN_IN_PETITION_RESULTS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_TURN_IN_PETITION_RESULTS& ServerOpcode::get<SMSG_TURN_IN_PETITION_RESULTS>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_TURN_IN_PETITION_RESULTS>();
     if (p) {
         return *p;
@@ -31983,14 +32645,14 @@ vanilla::SMSG_TURN_IN_PETITION_RESULTS& ServerOpcode::get<SMSG_TURN_IN_PETITION_
 }
 
 template <>
-vanilla::SMSG_PETITION_QUERY_RESPONSE* ServerOpcode::get_if<SMSG_PETITION_QUERY_RESPONSE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PETITION_QUERY_RESPONSE* ServerOpcode::get_if<SMSG_PETITION_QUERY_RESPONSE>() {
     if (opcode == Opcode::SMSG_PETITION_QUERY_RESPONSE) {
         return &SMSG_PETITION_QUERY_RESPONSE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_PETITION_QUERY_RESPONSE& ServerOpcode::get<SMSG_PETITION_QUERY_RESPONSE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PETITION_QUERY_RESPONSE& ServerOpcode::get<SMSG_PETITION_QUERY_RESPONSE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_PETITION_QUERY_RESPONSE>();
     if (p) {
         return *p;
@@ -31999,14 +32661,14 @@ vanilla::SMSG_PETITION_QUERY_RESPONSE& ServerOpcode::get<SMSG_PETITION_QUERY_RES
 }
 
 template <>
-vanilla::SMSG_FISH_NOT_HOOKED* ServerOpcode::get_if<SMSG_FISH_NOT_HOOKED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_FISH_NOT_HOOKED* ServerOpcode::get_if<SMSG_FISH_NOT_HOOKED>() {
     if (opcode == Opcode::SMSG_FISH_NOT_HOOKED) {
         return &SMSG_FISH_NOT_HOOKED;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_FISH_NOT_HOOKED& ServerOpcode::get<SMSG_FISH_NOT_HOOKED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_FISH_NOT_HOOKED& ServerOpcode::get<SMSG_FISH_NOT_HOOKED>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_FISH_NOT_HOOKED>();
     if (p) {
         return *p;
@@ -32015,14 +32677,14 @@ vanilla::SMSG_FISH_NOT_HOOKED& ServerOpcode::get<SMSG_FISH_NOT_HOOKED>() {
 }
 
 template <>
-vanilla::SMSG_FISH_ESCAPED* ServerOpcode::get_if<SMSG_FISH_ESCAPED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_FISH_ESCAPED* ServerOpcode::get_if<SMSG_FISH_ESCAPED>() {
     if (opcode == Opcode::SMSG_FISH_ESCAPED) {
         return &SMSG_FISH_ESCAPED;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_FISH_ESCAPED& ServerOpcode::get<SMSG_FISH_ESCAPED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_FISH_ESCAPED& ServerOpcode::get<SMSG_FISH_ESCAPED>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_FISH_ESCAPED>();
     if (p) {
         return *p;
@@ -32031,14 +32693,14 @@ vanilla::SMSG_FISH_ESCAPED& ServerOpcode::get<SMSG_FISH_ESCAPED>() {
 }
 
 template <>
-vanilla::SMSG_NOTIFICATION* ServerOpcode::get_if<SMSG_NOTIFICATION>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_NOTIFICATION* ServerOpcode::get_if<SMSG_NOTIFICATION>() {
     if (opcode == Opcode::SMSG_NOTIFICATION) {
         return &SMSG_NOTIFICATION;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_NOTIFICATION& ServerOpcode::get<SMSG_NOTIFICATION>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_NOTIFICATION& ServerOpcode::get<SMSG_NOTIFICATION>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_NOTIFICATION>();
     if (p) {
         return *p;
@@ -32047,14 +32709,14 @@ vanilla::SMSG_NOTIFICATION& ServerOpcode::get<SMSG_NOTIFICATION>() {
 }
 
 template <>
-vanilla::SMSG_PLAYED_TIME* ServerOpcode::get_if<SMSG_PLAYED_TIME>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PLAYED_TIME* ServerOpcode::get_if<SMSG_PLAYED_TIME>() {
     if (opcode == Opcode::SMSG_PLAYED_TIME) {
         return &SMSG_PLAYED_TIME;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_PLAYED_TIME& ServerOpcode::get<SMSG_PLAYED_TIME>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PLAYED_TIME& ServerOpcode::get<SMSG_PLAYED_TIME>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_PLAYED_TIME>();
     if (p) {
         return *p;
@@ -32063,14 +32725,14 @@ vanilla::SMSG_PLAYED_TIME& ServerOpcode::get<SMSG_PLAYED_TIME>() {
 }
 
 template <>
-vanilla::SMSG_QUERY_TIME_RESPONSE* ServerOpcode::get_if<SMSG_QUERY_TIME_RESPONSE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_QUERY_TIME_RESPONSE* ServerOpcode::get_if<SMSG_QUERY_TIME_RESPONSE>() {
     if (opcode == Opcode::SMSG_QUERY_TIME_RESPONSE) {
         return &SMSG_QUERY_TIME_RESPONSE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_QUERY_TIME_RESPONSE& ServerOpcode::get<SMSG_QUERY_TIME_RESPONSE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_QUERY_TIME_RESPONSE& ServerOpcode::get<SMSG_QUERY_TIME_RESPONSE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_QUERY_TIME_RESPONSE>();
     if (p) {
         return *p;
@@ -32079,14 +32741,14 @@ vanilla::SMSG_QUERY_TIME_RESPONSE& ServerOpcode::get<SMSG_QUERY_TIME_RESPONSE>()
 }
 
 template <>
-vanilla::SMSG_LOG_XPGAIN* ServerOpcode::get_if<SMSG_LOG_XPGAIN>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_LOG_XPGAIN* ServerOpcode::get_if<SMSG_LOG_XPGAIN>() {
     if (opcode == Opcode::SMSG_LOG_XPGAIN) {
         return &SMSG_LOG_XPGAIN;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_LOG_XPGAIN& ServerOpcode::get<SMSG_LOG_XPGAIN>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_LOG_XPGAIN& ServerOpcode::get<SMSG_LOG_XPGAIN>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_LOG_XPGAIN>();
     if (p) {
         return *p;
@@ -32095,14 +32757,14 @@ vanilla::SMSG_LOG_XPGAIN& ServerOpcode::get<SMSG_LOG_XPGAIN>() {
 }
 
 template <>
-vanilla::SMSG_LEVELUP_INFO* ServerOpcode::get_if<SMSG_LEVELUP_INFO>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_LEVELUP_INFO* ServerOpcode::get_if<SMSG_LEVELUP_INFO>() {
     if (opcode == Opcode::SMSG_LEVELUP_INFO) {
         return &SMSG_LEVELUP_INFO;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_LEVELUP_INFO& ServerOpcode::get<SMSG_LEVELUP_INFO>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_LEVELUP_INFO& ServerOpcode::get<SMSG_LEVELUP_INFO>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_LEVELUP_INFO>();
     if (p) {
         return *p;
@@ -32111,14 +32773,14 @@ vanilla::SMSG_LEVELUP_INFO& ServerOpcode::get<SMSG_LEVELUP_INFO>() {
 }
 
 template <>
-vanilla::MSG_MINIMAP_PING_Server* ServerOpcode::get_if<MSG_MINIMAP_PING_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MINIMAP_PING_Server* ServerOpcode::get_if<MSG_MINIMAP_PING_Server>() {
     if (opcode == Opcode::MSG_MINIMAP_PING) {
         return &MSG_MINIMAP_PING;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MINIMAP_PING_Server& ServerOpcode::get<MSG_MINIMAP_PING_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MINIMAP_PING_Server& ServerOpcode::get<MSG_MINIMAP_PING_Server>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_MINIMAP_PING_Server>();
     if (p) {
         return *p;
@@ -32127,14 +32789,14 @@ vanilla::MSG_MINIMAP_PING_Server& ServerOpcode::get<MSG_MINIMAP_PING_Server>() {
 }
 
 template <>
-vanilla::SMSG_RESISTLOG* ServerOpcode::get_if<SMSG_RESISTLOG>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_RESISTLOG* ServerOpcode::get_if<SMSG_RESISTLOG>() {
     if (opcode == Opcode::SMSG_RESISTLOG) {
         return &SMSG_RESISTLOG;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_RESISTLOG& ServerOpcode::get<SMSG_RESISTLOG>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_RESISTLOG& ServerOpcode::get<SMSG_RESISTLOG>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_RESISTLOG>();
     if (p) {
         return *p;
@@ -32143,14 +32805,14 @@ vanilla::SMSG_RESISTLOG& ServerOpcode::get<SMSG_RESISTLOG>() {
 }
 
 template <>
-vanilla::SMSG_ENCHANTMENTLOG* ServerOpcode::get_if<SMSG_ENCHANTMENTLOG>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ENCHANTMENTLOG* ServerOpcode::get_if<SMSG_ENCHANTMENTLOG>() {
     if (opcode == Opcode::SMSG_ENCHANTMENTLOG) {
         return &SMSG_ENCHANTMENTLOG;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_ENCHANTMENTLOG& ServerOpcode::get<SMSG_ENCHANTMENTLOG>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ENCHANTMENTLOG& ServerOpcode::get<SMSG_ENCHANTMENTLOG>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_ENCHANTMENTLOG>();
     if (p) {
         return *p;
@@ -32159,14 +32821,14 @@ vanilla::SMSG_ENCHANTMENTLOG& ServerOpcode::get<SMSG_ENCHANTMENTLOG>() {
 }
 
 template <>
-vanilla::SMSG_START_MIRROR_TIMER* ServerOpcode::get_if<SMSG_START_MIRROR_TIMER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_START_MIRROR_TIMER* ServerOpcode::get_if<SMSG_START_MIRROR_TIMER>() {
     if (opcode == Opcode::SMSG_START_MIRROR_TIMER) {
         return &SMSG_START_MIRROR_TIMER;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_START_MIRROR_TIMER& ServerOpcode::get<SMSG_START_MIRROR_TIMER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_START_MIRROR_TIMER& ServerOpcode::get<SMSG_START_MIRROR_TIMER>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_START_MIRROR_TIMER>();
     if (p) {
         return *p;
@@ -32175,14 +32837,14 @@ vanilla::SMSG_START_MIRROR_TIMER& ServerOpcode::get<SMSG_START_MIRROR_TIMER>() {
 }
 
 template <>
-vanilla::SMSG_PAUSE_MIRROR_TIMER* ServerOpcode::get_if<SMSG_PAUSE_MIRROR_TIMER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PAUSE_MIRROR_TIMER* ServerOpcode::get_if<SMSG_PAUSE_MIRROR_TIMER>() {
     if (opcode == Opcode::SMSG_PAUSE_MIRROR_TIMER) {
         return &SMSG_PAUSE_MIRROR_TIMER;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_PAUSE_MIRROR_TIMER& ServerOpcode::get<SMSG_PAUSE_MIRROR_TIMER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PAUSE_MIRROR_TIMER& ServerOpcode::get<SMSG_PAUSE_MIRROR_TIMER>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_PAUSE_MIRROR_TIMER>();
     if (p) {
         return *p;
@@ -32191,14 +32853,14 @@ vanilla::SMSG_PAUSE_MIRROR_TIMER& ServerOpcode::get<SMSG_PAUSE_MIRROR_TIMER>() {
 }
 
 template <>
-vanilla::SMSG_STOP_MIRROR_TIMER* ServerOpcode::get_if<SMSG_STOP_MIRROR_TIMER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_STOP_MIRROR_TIMER* ServerOpcode::get_if<SMSG_STOP_MIRROR_TIMER>() {
     if (opcode == Opcode::SMSG_STOP_MIRROR_TIMER) {
         return &SMSG_STOP_MIRROR_TIMER;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_STOP_MIRROR_TIMER& ServerOpcode::get<SMSG_STOP_MIRROR_TIMER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_STOP_MIRROR_TIMER& ServerOpcode::get<SMSG_STOP_MIRROR_TIMER>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_STOP_MIRROR_TIMER>();
     if (p) {
         return *p;
@@ -32207,14 +32869,14 @@ vanilla::SMSG_STOP_MIRROR_TIMER& ServerOpcode::get<SMSG_STOP_MIRROR_TIMER>() {
 }
 
 template <>
-vanilla::SMSG_PONG* ServerOpcode::get_if<SMSG_PONG>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PONG* ServerOpcode::get_if<SMSG_PONG>() {
     if (opcode == Opcode::SMSG_PONG) {
         return &SMSG_PONG;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_PONG& ServerOpcode::get<SMSG_PONG>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PONG& ServerOpcode::get<SMSG_PONG>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_PONG>();
     if (p) {
         return *p;
@@ -32223,14 +32885,14 @@ vanilla::SMSG_PONG& ServerOpcode::get<SMSG_PONG>() {
 }
 
 template <>
-vanilla::SMSG_CLEAR_COOLDOWN* ServerOpcode::get_if<SMSG_CLEAR_COOLDOWN>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_CLEAR_COOLDOWN* ServerOpcode::get_if<SMSG_CLEAR_COOLDOWN>() {
     if (opcode == Opcode::SMSG_CLEAR_COOLDOWN) {
         return &SMSG_CLEAR_COOLDOWN;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_CLEAR_COOLDOWN& ServerOpcode::get<SMSG_CLEAR_COOLDOWN>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_CLEAR_COOLDOWN& ServerOpcode::get<SMSG_CLEAR_COOLDOWN>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_CLEAR_COOLDOWN>();
     if (p) {
         return *p;
@@ -32239,14 +32901,14 @@ vanilla::SMSG_CLEAR_COOLDOWN& ServerOpcode::get<SMSG_CLEAR_COOLDOWN>() {
 }
 
 template <>
-vanilla::SMSG_GAMEOBJECT_PAGETEXT* ServerOpcode::get_if<SMSG_GAMEOBJECT_PAGETEXT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GAMEOBJECT_PAGETEXT* ServerOpcode::get_if<SMSG_GAMEOBJECT_PAGETEXT>() {
     if (opcode == Opcode::SMSG_GAMEOBJECT_PAGETEXT) {
         return &SMSG_GAMEOBJECT_PAGETEXT;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_GAMEOBJECT_PAGETEXT& ServerOpcode::get<SMSG_GAMEOBJECT_PAGETEXT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GAMEOBJECT_PAGETEXT& ServerOpcode::get<SMSG_GAMEOBJECT_PAGETEXT>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_GAMEOBJECT_PAGETEXT>();
     if (p) {
         return *p;
@@ -32255,14 +32917,14 @@ vanilla::SMSG_GAMEOBJECT_PAGETEXT& ServerOpcode::get<SMSG_GAMEOBJECT_PAGETEXT>()
 }
 
 template <>
-vanilla::SMSG_SPELL_DELAYED* ServerOpcode::get_if<SMSG_SPELL_DELAYED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPELL_DELAYED* ServerOpcode::get_if<SMSG_SPELL_DELAYED>() {
     if (opcode == Opcode::SMSG_SPELL_DELAYED) {
         return &SMSG_SPELL_DELAYED;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SPELL_DELAYED& ServerOpcode::get<SMSG_SPELL_DELAYED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPELL_DELAYED& ServerOpcode::get<SMSG_SPELL_DELAYED>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SPELL_DELAYED>();
     if (p) {
         return *p;
@@ -32271,14 +32933,14 @@ vanilla::SMSG_SPELL_DELAYED& ServerOpcode::get<SMSG_SPELL_DELAYED>() {
 }
 
 template <>
-vanilla::SMSG_ITEM_TIME_UPDATE* ServerOpcode::get_if<SMSG_ITEM_TIME_UPDATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ITEM_TIME_UPDATE* ServerOpcode::get_if<SMSG_ITEM_TIME_UPDATE>() {
     if (opcode == Opcode::SMSG_ITEM_TIME_UPDATE) {
         return &SMSG_ITEM_TIME_UPDATE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_ITEM_TIME_UPDATE& ServerOpcode::get<SMSG_ITEM_TIME_UPDATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ITEM_TIME_UPDATE& ServerOpcode::get<SMSG_ITEM_TIME_UPDATE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_ITEM_TIME_UPDATE>();
     if (p) {
         return *p;
@@ -32287,14 +32949,14 @@ vanilla::SMSG_ITEM_TIME_UPDATE& ServerOpcode::get<SMSG_ITEM_TIME_UPDATE>() {
 }
 
 template <>
-vanilla::SMSG_ITEM_ENCHANT_TIME_UPDATE* ServerOpcode::get_if<SMSG_ITEM_ENCHANT_TIME_UPDATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ITEM_ENCHANT_TIME_UPDATE* ServerOpcode::get_if<SMSG_ITEM_ENCHANT_TIME_UPDATE>() {
     if (opcode == Opcode::SMSG_ITEM_ENCHANT_TIME_UPDATE) {
         return &SMSG_ITEM_ENCHANT_TIME_UPDATE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_ITEM_ENCHANT_TIME_UPDATE& ServerOpcode::get<SMSG_ITEM_ENCHANT_TIME_UPDATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ITEM_ENCHANT_TIME_UPDATE& ServerOpcode::get<SMSG_ITEM_ENCHANT_TIME_UPDATE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_ITEM_ENCHANT_TIME_UPDATE>();
     if (p) {
         return *p;
@@ -32303,14 +32965,14 @@ vanilla::SMSG_ITEM_ENCHANT_TIME_UPDATE& ServerOpcode::get<SMSG_ITEM_ENCHANT_TIME
 }
 
 template <>
-vanilla::SMSG_AUTH_CHALLENGE* ServerOpcode::get_if<SMSG_AUTH_CHALLENGE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_AUTH_CHALLENGE* ServerOpcode::get_if<SMSG_AUTH_CHALLENGE>() {
     if (opcode == Opcode::SMSG_AUTH_CHALLENGE) {
         return &SMSG_AUTH_CHALLENGE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_AUTH_CHALLENGE& ServerOpcode::get<SMSG_AUTH_CHALLENGE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_AUTH_CHALLENGE& ServerOpcode::get<SMSG_AUTH_CHALLENGE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_AUTH_CHALLENGE>();
     if (p) {
         return *p;
@@ -32319,14 +32981,14 @@ vanilla::SMSG_AUTH_CHALLENGE& ServerOpcode::get<SMSG_AUTH_CHALLENGE>() {
 }
 
 template <>
-vanilla::SMSG_AUTH_RESPONSE* ServerOpcode::get_if<SMSG_AUTH_RESPONSE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_AUTH_RESPONSE* ServerOpcode::get_if<SMSG_AUTH_RESPONSE>() {
     if (opcode == Opcode::SMSG_AUTH_RESPONSE) {
         return &SMSG_AUTH_RESPONSE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_AUTH_RESPONSE& ServerOpcode::get<SMSG_AUTH_RESPONSE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_AUTH_RESPONSE& ServerOpcode::get<SMSG_AUTH_RESPONSE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_AUTH_RESPONSE>();
     if (p) {
         return *p;
@@ -32335,14 +32997,14 @@ vanilla::SMSG_AUTH_RESPONSE& ServerOpcode::get<SMSG_AUTH_RESPONSE>() {
 }
 
 template <>
-vanilla::MSG_SAVE_GUILD_EMBLEM_Server* ServerOpcode::get_if<MSG_SAVE_GUILD_EMBLEM_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_SAVE_GUILD_EMBLEM_Server* ServerOpcode::get_if<MSG_SAVE_GUILD_EMBLEM_Server>() {
     if (opcode == Opcode::MSG_SAVE_GUILD_EMBLEM) {
         return &MSG_SAVE_GUILD_EMBLEM;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_SAVE_GUILD_EMBLEM_Server& ServerOpcode::get<MSG_SAVE_GUILD_EMBLEM_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_SAVE_GUILD_EMBLEM_Server& ServerOpcode::get<MSG_SAVE_GUILD_EMBLEM_Server>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_SAVE_GUILD_EMBLEM_Server>();
     if (p) {
         return *p;
@@ -32351,14 +33013,14 @@ vanilla::MSG_SAVE_GUILD_EMBLEM_Server& ServerOpcode::get<MSG_SAVE_GUILD_EMBLEM_S
 }
 
 template <>
-vanilla::MSG_TABARDVENDOR_ACTIVATE* ServerOpcode::get_if<MSG_TABARDVENDOR_ACTIVATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_TABARDVENDOR_ACTIVATE* ServerOpcode::get_if<MSG_TABARDVENDOR_ACTIVATE>() {
     if (opcode == Opcode::MSG_TABARDVENDOR_ACTIVATE) {
         return &MSG_TABARDVENDOR_ACTIVATE;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_TABARDVENDOR_ACTIVATE& ServerOpcode::get<MSG_TABARDVENDOR_ACTIVATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_TABARDVENDOR_ACTIVATE& ServerOpcode::get<MSG_TABARDVENDOR_ACTIVATE>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_TABARDVENDOR_ACTIVATE>();
     if (p) {
         return *p;
@@ -32367,14 +33029,14 @@ vanilla::MSG_TABARDVENDOR_ACTIVATE& ServerOpcode::get<MSG_TABARDVENDOR_ACTIVATE>
 }
 
 template <>
-vanilla::SMSG_PLAY_SPELL_VISUAL* ServerOpcode::get_if<SMSG_PLAY_SPELL_VISUAL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PLAY_SPELL_VISUAL* ServerOpcode::get_if<SMSG_PLAY_SPELL_VISUAL>() {
     if (opcode == Opcode::SMSG_PLAY_SPELL_VISUAL) {
         return &SMSG_PLAY_SPELL_VISUAL;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_PLAY_SPELL_VISUAL& ServerOpcode::get<SMSG_PLAY_SPELL_VISUAL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PLAY_SPELL_VISUAL& ServerOpcode::get<SMSG_PLAY_SPELL_VISUAL>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_PLAY_SPELL_VISUAL>();
     if (p) {
         return *p;
@@ -32383,14 +33045,14 @@ vanilla::SMSG_PLAY_SPELL_VISUAL& ServerOpcode::get<SMSG_PLAY_SPELL_VISUAL>() {
 }
 
 template <>
-vanilla::SMSG_PARTYKILLLOG* ServerOpcode::get_if<SMSG_PARTYKILLLOG>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PARTYKILLLOG* ServerOpcode::get_if<SMSG_PARTYKILLLOG>() {
     if (opcode == Opcode::SMSG_PARTYKILLLOG) {
         return &SMSG_PARTYKILLLOG;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_PARTYKILLLOG& ServerOpcode::get<SMSG_PARTYKILLLOG>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PARTYKILLLOG& ServerOpcode::get<SMSG_PARTYKILLLOG>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_PARTYKILLLOG>();
     if (p) {
         return *p;
@@ -32399,14 +33061,14 @@ vanilla::SMSG_PARTYKILLLOG& ServerOpcode::get<SMSG_PARTYKILLLOG>() {
 }
 
 template <>
-vanilla::SMSG_COMPRESSED_UPDATE_OBJECT* ServerOpcode::get_if<SMSG_COMPRESSED_UPDATE_OBJECT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_COMPRESSED_UPDATE_OBJECT* ServerOpcode::get_if<SMSG_COMPRESSED_UPDATE_OBJECT>() {
     if (opcode == Opcode::SMSG_COMPRESSED_UPDATE_OBJECT) {
         return &SMSG_COMPRESSED_UPDATE_OBJECT;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_COMPRESSED_UPDATE_OBJECT& ServerOpcode::get<SMSG_COMPRESSED_UPDATE_OBJECT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_COMPRESSED_UPDATE_OBJECT& ServerOpcode::get<SMSG_COMPRESSED_UPDATE_OBJECT>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_COMPRESSED_UPDATE_OBJECT>();
     if (p) {
         return *p;
@@ -32415,14 +33077,14 @@ vanilla::SMSG_COMPRESSED_UPDATE_OBJECT& ServerOpcode::get<SMSG_COMPRESSED_UPDATE
 }
 
 template <>
-vanilla::SMSG_PLAY_SPELL_IMPACT* ServerOpcode::get_if<SMSG_PLAY_SPELL_IMPACT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PLAY_SPELL_IMPACT* ServerOpcode::get_if<SMSG_PLAY_SPELL_IMPACT>() {
     if (opcode == Opcode::SMSG_PLAY_SPELL_IMPACT) {
         return &SMSG_PLAY_SPELL_IMPACT;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_PLAY_SPELL_IMPACT& ServerOpcode::get<SMSG_PLAY_SPELL_IMPACT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PLAY_SPELL_IMPACT& ServerOpcode::get<SMSG_PLAY_SPELL_IMPACT>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_PLAY_SPELL_IMPACT>();
     if (p) {
         return *p;
@@ -32431,14 +33093,14 @@ vanilla::SMSG_PLAY_SPELL_IMPACT& ServerOpcode::get<SMSG_PLAY_SPELL_IMPACT>() {
 }
 
 template <>
-vanilla::SMSG_EXPLORATION_EXPERIENCE* ServerOpcode::get_if<SMSG_EXPLORATION_EXPERIENCE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_EXPLORATION_EXPERIENCE* ServerOpcode::get_if<SMSG_EXPLORATION_EXPERIENCE>() {
     if (opcode == Opcode::SMSG_EXPLORATION_EXPERIENCE) {
         return &SMSG_EXPLORATION_EXPERIENCE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_EXPLORATION_EXPERIENCE& ServerOpcode::get<SMSG_EXPLORATION_EXPERIENCE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_EXPLORATION_EXPERIENCE& ServerOpcode::get<SMSG_EXPLORATION_EXPERIENCE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_EXPLORATION_EXPERIENCE>();
     if (p) {
         return *p;
@@ -32447,14 +33109,14 @@ vanilla::SMSG_EXPLORATION_EXPERIENCE& ServerOpcode::get<SMSG_EXPLORATION_EXPERIE
 }
 
 template <>
-vanilla::MSG_RANDOM_ROLL_Server* ServerOpcode::get_if<MSG_RANDOM_ROLL_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_RANDOM_ROLL_Server* ServerOpcode::get_if<MSG_RANDOM_ROLL_Server>() {
     if (opcode == Opcode::MSG_RANDOM_ROLL) {
         return &MSG_RANDOM_ROLL;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_RANDOM_ROLL_Server& ServerOpcode::get<MSG_RANDOM_ROLL_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_RANDOM_ROLL_Server& ServerOpcode::get<MSG_RANDOM_ROLL_Server>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_RANDOM_ROLL_Server>();
     if (p) {
         return *p;
@@ -32463,14 +33125,14 @@ vanilla::MSG_RANDOM_ROLL_Server& ServerOpcode::get<MSG_RANDOM_ROLL_Server>() {
 }
 
 template <>
-vanilla::SMSG_ENVIRONMENTAL_DAMAGE_LOG* ServerOpcode::get_if<SMSG_ENVIRONMENTAL_DAMAGE_LOG>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ENVIRONMENTAL_DAMAGE_LOG* ServerOpcode::get_if<SMSG_ENVIRONMENTAL_DAMAGE_LOG>() {
     if (opcode == Opcode::SMSG_ENVIRONMENTAL_DAMAGE_LOG) {
         return &SMSG_ENVIRONMENTAL_DAMAGE_LOG;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_ENVIRONMENTAL_DAMAGE_LOG& ServerOpcode::get<SMSG_ENVIRONMENTAL_DAMAGE_LOG>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ENVIRONMENTAL_DAMAGE_LOG& ServerOpcode::get<SMSG_ENVIRONMENTAL_DAMAGE_LOG>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_ENVIRONMENTAL_DAMAGE_LOG>();
     if (p) {
         return *p;
@@ -32479,14 +33141,14 @@ vanilla::SMSG_ENVIRONMENTAL_DAMAGE_LOG& ServerOpcode::get<SMSG_ENVIRONMENTAL_DAM
 }
 
 template <>
-vanilla::MSG_LOOKING_FOR_GROUP_Server* ServerOpcode::get_if<MSG_LOOKING_FOR_GROUP_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_LOOKING_FOR_GROUP_Server* ServerOpcode::get_if<MSG_LOOKING_FOR_GROUP_Server>() {
     if (opcode == Opcode::MSG_LOOKING_FOR_GROUP) {
         return &MSG_LOOKING_FOR_GROUP;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_LOOKING_FOR_GROUP_Server& ServerOpcode::get<MSG_LOOKING_FOR_GROUP_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_LOOKING_FOR_GROUP_Server& ServerOpcode::get<MSG_LOOKING_FOR_GROUP_Server>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_LOOKING_FOR_GROUP_Server>();
     if (p) {
         return *p;
@@ -32495,14 +33157,14 @@ vanilla::MSG_LOOKING_FOR_GROUP_Server& ServerOpcode::get<MSG_LOOKING_FOR_GROUP_S
 }
 
 template <>
-vanilla::SMSG_REMOVED_SPELL* ServerOpcode::get_if<SMSG_REMOVED_SPELL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_REMOVED_SPELL* ServerOpcode::get_if<SMSG_REMOVED_SPELL>() {
     if (opcode == Opcode::SMSG_REMOVED_SPELL) {
         return &SMSG_REMOVED_SPELL;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_REMOVED_SPELL& ServerOpcode::get<SMSG_REMOVED_SPELL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_REMOVED_SPELL& ServerOpcode::get<SMSG_REMOVED_SPELL>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_REMOVED_SPELL>();
     if (p) {
         return *p;
@@ -32511,14 +33173,14 @@ vanilla::SMSG_REMOVED_SPELL& ServerOpcode::get<SMSG_REMOVED_SPELL>() {
 }
 
 template <>
-vanilla::SMSG_GMTICKET_CREATE* ServerOpcode::get_if<SMSG_GMTICKET_CREATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GMTICKET_CREATE* ServerOpcode::get_if<SMSG_GMTICKET_CREATE>() {
     if (opcode == Opcode::SMSG_GMTICKET_CREATE) {
         return &SMSG_GMTICKET_CREATE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_GMTICKET_CREATE& ServerOpcode::get<SMSG_GMTICKET_CREATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GMTICKET_CREATE& ServerOpcode::get<SMSG_GMTICKET_CREATE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_GMTICKET_CREATE>();
     if (p) {
         return *p;
@@ -32527,14 +33189,14 @@ vanilla::SMSG_GMTICKET_CREATE& ServerOpcode::get<SMSG_GMTICKET_CREATE>() {
 }
 
 template <>
-vanilla::SMSG_GMTICKET_UPDATETEXT* ServerOpcode::get_if<SMSG_GMTICKET_UPDATETEXT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GMTICKET_UPDATETEXT* ServerOpcode::get_if<SMSG_GMTICKET_UPDATETEXT>() {
     if (opcode == Opcode::SMSG_GMTICKET_UPDATETEXT) {
         return &SMSG_GMTICKET_UPDATETEXT;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_GMTICKET_UPDATETEXT& ServerOpcode::get<SMSG_GMTICKET_UPDATETEXT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GMTICKET_UPDATETEXT& ServerOpcode::get<SMSG_GMTICKET_UPDATETEXT>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_GMTICKET_UPDATETEXT>();
     if (p) {
         return *p;
@@ -32543,14 +33205,14 @@ vanilla::SMSG_GMTICKET_UPDATETEXT& ServerOpcode::get<SMSG_GMTICKET_UPDATETEXT>()
 }
 
 template <>
-vanilla::SMSG_ACCOUNT_DATA_TIMES* ServerOpcode::get_if<SMSG_ACCOUNT_DATA_TIMES>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ACCOUNT_DATA_TIMES* ServerOpcode::get_if<SMSG_ACCOUNT_DATA_TIMES>() {
     if (opcode == Opcode::SMSG_ACCOUNT_DATA_TIMES) {
         return &SMSG_ACCOUNT_DATA_TIMES;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_ACCOUNT_DATA_TIMES& ServerOpcode::get<SMSG_ACCOUNT_DATA_TIMES>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ACCOUNT_DATA_TIMES& ServerOpcode::get<SMSG_ACCOUNT_DATA_TIMES>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_ACCOUNT_DATA_TIMES>();
     if (p) {
         return *p;
@@ -32559,14 +33221,14 @@ vanilla::SMSG_ACCOUNT_DATA_TIMES& ServerOpcode::get<SMSG_ACCOUNT_DATA_TIMES>() {
 }
 
 template <>
-vanilla::SMSG_GMTICKET_GETTICKET* ServerOpcode::get_if<SMSG_GMTICKET_GETTICKET>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GMTICKET_GETTICKET* ServerOpcode::get_if<SMSG_GMTICKET_GETTICKET>() {
     if (opcode == Opcode::SMSG_GMTICKET_GETTICKET) {
         return &SMSG_GMTICKET_GETTICKET;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_GMTICKET_GETTICKET& ServerOpcode::get<SMSG_GMTICKET_GETTICKET>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GMTICKET_GETTICKET& ServerOpcode::get<SMSG_GMTICKET_GETTICKET>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_GMTICKET_GETTICKET>();
     if (p) {
         return *p;
@@ -32575,14 +33237,14 @@ vanilla::SMSG_GMTICKET_GETTICKET& ServerOpcode::get<SMSG_GMTICKET_GETTICKET>() {
 }
 
 template <>
-vanilla::SMSG_GAMEOBJECT_SPAWN_ANIM* ServerOpcode::get_if<SMSG_GAMEOBJECT_SPAWN_ANIM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GAMEOBJECT_SPAWN_ANIM* ServerOpcode::get_if<SMSG_GAMEOBJECT_SPAWN_ANIM>() {
     if (opcode == Opcode::SMSG_GAMEOBJECT_SPAWN_ANIM) {
         return &SMSG_GAMEOBJECT_SPAWN_ANIM;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_GAMEOBJECT_SPAWN_ANIM& ServerOpcode::get<SMSG_GAMEOBJECT_SPAWN_ANIM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GAMEOBJECT_SPAWN_ANIM& ServerOpcode::get<SMSG_GAMEOBJECT_SPAWN_ANIM>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_GAMEOBJECT_SPAWN_ANIM>();
     if (p) {
         return *p;
@@ -32591,14 +33253,14 @@ vanilla::SMSG_GAMEOBJECT_SPAWN_ANIM& ServerOpcode::get<SMSG_GAMEOBJECT_SPAWN_ANI
 }
 
 template <>
-vanilla::SMSG_GAMEOBJECT_DESPAWN_ANIM* ServerOpcode::get_if<SMSG_GAMEOBJECT_DESPAWN_ANIM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GAMEOBJECT_DESPAWN_ANIM* ServerOpcode::get_if<SMSG_GAMEOBJECT_DESPAWN_ANIM>() {
     if (opcode == Opcode::SMSG_GAMEOBJECT_DESPAWN_ANIM) {
         return &SMSG_GAMEOBJECT_DESPAWN_ANIM;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_GAMEOBJECT_DESPAWN_ANIM& ServerOpcode::get<SMSG_GAMEOBJECT_DESPAWN_ANIM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GAMEOBJECT_DESPAWN_ANIM& ServerOpcode::get<SMSG_GAMEOBJECT_DESPAWN_ANIM>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_GAMEOBJECT_DESPAWN_ANIM>();
     if (p) {
         return *p;
@@ -32607,14 +33269,14 @@ vanilla::SMSG_GAMEOBJECT_DESPAWN_ANIM& ServerOpcode::get<SMSG_GAMEOBJECT_DESPAWN
 }
 
 template <>
-vanilla::MSG_CORPSE_QUERY_Server* ServerOpcode::get_if<MSG_CORPSE_QUERY_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_CORPSE_QUERY_Server* ServerOpcode::get_if<MSG_CORPSE_QUERY_Server>() {
     if (opcode == Opcode::MSG_CORPSE_QUERY) {
         return &MSG_CORPSE_QUERY;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_CORPSE_QUERY_Server& ServerOpcode::get<MSG_CORPSE_QUERY_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_CORPSE_QUERY_Server& ServerOpcode::get<MSG_CORPSE_QUERY_Server>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_CORPSE_QUERY_Server>();
     if (p) {
         return *p;
@@ -32623,14 +33285,14 @@ vanilla::MSG_CORPSE_QUERY_Server& ServerOpcode::get<MSG_CORPSE_QUERY_Server>() {
 }
 
 template <>
-vanilla::SMSG_GMTICKET_DELETETICKET* ServerOpcode::get_if<SMSG_GMTICKET_DELETETICKET>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GMTICKET_DELETETICKET* ServerOpcode::get_if<SMSG_GMTICKET_DELETETICKET>() {
     if (opcode == Opcode::SMSG_GMTICKET_DELETETICKET) {
         return &SMSG_GMTICKET_DELETETICKET;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_GMTICKET_DELETETICKET& ServerOpcode::get<SMSG_GMTICKET_DELETETICKET>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GMTICKET_DELETETICKET& ServerOpcode::get<SMSG_GMTICKET_DELETETICKET>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_GMTICKET_DELETETICKET>();
     if (p) {
         return *p;
@@ -32639,14 +33301,14 @@ vanilla::SMSG_GMTICKET_DELETETICKET& ServerOpcode::get<SMSG_GMTICKET_DELETETICKE
 }
 
 template <>
-vanilla::SMSG_CHAT_WRONG_FACTION* ServerOpcode::get_if<SMSG_CHAT_WRONG_FACTION>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_CHAT_WRONG_FACTION* ServerOpcode::get_if<SMSG_CHAT_WRONG_FACTION>() {
     if (opcode == Opcode::SMSG_CHAT_WRONG_FACTION) {
         return &SMSG_CHAT_WRONG_FACTION;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_CHAT_WRONG_FACTION& ServerOpcode::get<SMSG_CHAT_WRONG_FACTION>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_CHAT_WRONG_FACTION& ServerOpcode::get<SMSG_CHAT_WRONG_FACTION>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_CHAT_WRONG_FACTION>();
     if (p) {
         return *p;
@@ -32655,14 +33317,14 @@ vanilla::SMSG_CHAT_WRONG_FACTION& ServerOpcode::get<SMSG_CHAT_WRONG_FACTION>() {
 }
 
 template <>
-vanilla::SMSG_GMTICKET_SYSTEMSTATUS* ServerOpcode::get_if<SMSG_GMTICKET_SYSTEMSTATUS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GMTICKET_SYSTEMSTATUS* ServerOpcode::get_if<SMSG_GMTICKET_SYSTEMSTATUS>() {
     if (opcode == Opcode::SMSG_GMTICKET_SYSTEMSTATUS) {
         return &SMSG_GMTICKET_SYSTEMSTATUS;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_GMTICKET_SYSTEMSTATUS& ServerOpcode::get<SMSG_GMTICKET_SYSTEMSTATUS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GMTICKET_SYSTEMSTATUS& ServerOpcode::get<SMSG_GMTICKET_SYSTEMSTATUS>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_GMTICKET_SYSTEMSTATUS>();
     if (p) {
         return *p;
@@ -32671,14 +33333,14 @@ vanilla::SMSG_GMTICKET_SYSTEMSTATUS& ServerOpcode::get<SMSG_GMTICKET_SYSTEMSTATU
 }
 
 template <>
-vanilla::SMSG_SET_REST_START* ServerOpcode::get_if<SMSG_SET_REST_START>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SET_REST_START* ServerOpcode::get_if<SMSG_SET_REST_START>() {
     if (opcode == Opcode::SMSG_SET_REST_START) {
         return &SMSG_SET_REST_START;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SET_REST_START& ServerOpcode::get<SMSG_SET_REST_START>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SET_REST_START& ServerOpcode::get<SMSG_SET_REST_START>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SET_REST_START>();
     if (p) {
         return *p;
@@ -32687,14 +33349,14 @@ vanilla::SMSG_SET_REST_START& ServerOpcode::get<SMSG_SET_REST_START>() {
 }
 
 template <>
-vanilla::SMSG_SPIRIT_HEALER_CONFIRM* ServerOpcode::get_if<SMSG_SPIRIT_HEALER_CONFIRM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPIRIT_HEALER_CONFIRM* ServerOpcode::get_if<SMSG_SPIRIT_HEALER_CONFIRM>() {
     if (opcode == Opcode::SMSG_SPIRIT_HEALER_CONFIRM) {
         return &SMSG_SPIRIT_HEALER_CONFIRM;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SPIRIT_HEALER_CONFIRM& ServerOpcode::get<SMSG_SPIRIT_HEALER_CONFIRM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPIRIT_HEALER_CONFIRM& ServerOpcode::get<SMSG_SPIRIT_HEALER_CONFIRM>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SPIRIT_HEALER_CONFIRM>();
     if (p) {
         return *p;
@@ -32703,14 +33365,14 @@ vanilla::SMSG_SPIRIT_HEALER_CONFIRM& ServerOpcode::get<SMSG_SPIRIT_HEALER_CONFIR
 }
 
 template <>
-vanilla::SMSG_GOSSIP_POI* ServerOpcode::get_if<SMSG_GOSSIP_POI>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GOSSIP_POI* ServerOpcode::get_if<SMSG_GOSSIP_POI>() {
     if (opcode == Opcode::SMSG_GOSSIP_POI) {
         return &SMSG_GOSSIP_POI;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_GOSSIP_POI& ServerOpcode::get<SMSG_GOSSIP_POI>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GOSSIP_POI& ServerOpcode::get<SMSG_GOSSIP_POI>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_GOSSIP_POI>();
     if (p) {
         return *p;
@@ -32719,14 +33381,14 @@ vanilla::SMSG_GOSSIP_POI& ServerOpcode::get<SMSG_GOSSIP_POI>() {
 }
 
 template <>
-vanilla::SMSG_LOGIN_VERIFY_WORLD* ServerOpcode::get_if<SMSG_LOGIN_VERIFY_WORLD>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_LOGIN_VERIFY_WORLD* ServerOpcode::get_if<SMSG_LOGIN_VERIFY_WORLD>() {
     if (opcode == Opcode::SMSG_LOGIN_VERIFY_WORLD) {
         return &SMSG_LOGIN_VERIFY_WORLD;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_LOGIN_VERIFY_WORLD& ServerOpcode::get<SMSG_LOGIN_VERIFY_WORLD>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_LOGIN_VERIFY_WORLD& ServerOpcode::get<SMSG_LOGIN_VERIFY_WORLD>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_LOGIN_VERIFY_WORLD>();
     if (p) {
         return *p;
@@ -32735,14 +33397,14 @@ vanilla::SMSG_LOGIN_VERIFY_WORLD& ServerOpcode::get<SMSG_LOGIN_VERIFY_WORLD>() {
 }
 
 template <>
-vanilla::SMSG_SEND_MAIL_RESULT* ServerOpcode::get_if<SMSG_SEND_MAIL_RESULT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SEND_MAIL_RESULT* ServerOpcode::get_if<SMSG_SEND_MAIL_RESULT>() {
     if (opcode == Opcode::SMSG_SEND_MAIL_RESULT) {
         return &SMSG_SEND_MAIL_RESULT;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SEND_MAIL_RESULT& ServerOpcode::get<SMSG_SEND_MAIL_RESULT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SEND_MAIL_RESULT& ServerOpcode::get<SMSG_SEND_MAIL_RESULT>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SEND_MAIL_RESULT>();
     if (p) {
         return *p;
@@ -32751,14 +33413,14 @@ vanilla::SMSG_SEND_MAIL_RESULT& ServerOpcode::get<SMSG_SEND_MAIL_RESULT>() {
 }
 
 template <>
-vanilla::SMSG_MAIL_LIST_RESULT* ServerOpcode::get_if<SMSG_MAIL_LIST_RESULT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_MAIL_LIST_RESULT* ServerOpcode::get_if<SMSG_MAIL_LIST_RESULT>() {
     if (opcode == Opcode::SMSG_MAIL_LIST_RESULT) {
         return &SMSG_MAIL_LIST_RESULT;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_MAIL_LIST_RESULT& ServerOpcode::get<SMSG_MAIL_LIST_RESULT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_MAIL_LIST_RESULT& ServerOpcode::get<SMSG_MAIL_LIST_RESULT>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_MAIL_LIST_RESULT>();
     if (p) {
         return *p;
@@ -32767,14 +33429,14 @@ vanilla::SMSG_MAIL_LIST_RESULT& ServerOpcode::get<SMSG_MAIL_LIST_RESULT>() {
 }
 
 template <>
-vanilla::SMSG_BATTLEFIELD_LIST* ServerOpcode::get_if<SMSG_BATTLEFIELD_LIST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_BATTLEFIELD_LIST* ServerOpcode::get_if<SMSG_BATTLEFIELD_LIST>() {
     if (opcode == Opcode::SMSG_BATTLEFIELD_LIST) {
         return &SMSG_BATTLEFIELD_LIST;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_BATTLEFIELD_LIST& ServerOpcode::get<SMSG_BATTLEFIELD_LIST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_BATTLEFIELD_LIST& ServerOpcode::get<SMSG_BATTLEFIELD_LIST>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_BATTLEFIELD_LIST>();
     if (p) {
         return *p;
@@ -32783,14 +33445,14 @@ vanilla::SMSG_BATTLEFIELD_LIST& ServerOpcode::get<SMSG_BATTLEFIELD_LIST>() {
 }
 
 template <>
-vanilla::SMSG_ITEM_TEXT_QUERY_RESPONSE* ServerOpcode::get_if<SMSG_ITEM_TEXT_QUERY_RESPONSE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ITEM_TEXT_QUERY_RESPONSE* ServerOpcode::get_if<SMSG_ITEM_TEXT_QUERY_RESPONSE>() {
     if (opcode == Opcode::SMSG_ITEM_TEXT_QUERY_RESPONSE) {
         return &SMSG_ITEM_TEXT_QUERY_RESPONSE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_ITEM_TEXT_QUERY_RESPONSE& ServerOpcode::get<SMSG_ITEM_TEXT_QUERY_RESPONSE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ITEM_TEXT_QUERY_RESPONSE& ServerOpcode::get<SMSG_ITEM_TEXT_QUERY_RESPONSE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_ITEM_TEXT_QUERY_RESPONSE>();
     if (p) {
         return *p;
@@ -32799,14 +33461,14 @@ vanilla::SMSG_ITEM_TEXT_QUERY_RESPONSE& ServerOpcode::get<SMSG_ITEM_TEXT_QUERY_R
 }
 
 template <>
-vanilla::SMSG_SPELLLOGMISS* ServerOpcode::get_if<SMSG_SPELLLOGMISS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPELLLOGMISS* ServerOpcode::get_if<SMSG_SPELLLOGMISS>() {
     if (opcode == Opcode::SMSG_SPELLLOGMISS) {
         return &SMSG_SPELLLOGMISS;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SPELLLOGMISS& ServerOpcode::get<SMSG_SPELLLOGMISS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPELLLOGMISS& ServerOpcode::get<SMSG_SPELLLOGMISS>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SPELLLOGMISS>();
     if (p) {
         return *p;
@@ -32815,14 +33477,14 @@ vanilla::SMSG_SPELLLOGMISS& ServerOpcode::get<SMSG_SPELLLOGMISS>() {
 }
 
 template <>
-vanilla::SMSG_SPELLLOGEXECUTE* ServerOpcode::get_if<SMSG_SPELLLOGEXECUTE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPELLLOGEXECUTE* ServerOpcode::get_if<SMSG_SPELLLOGEXECUTE>() {
     if (opcode == Opcode::SMSG_SPELLLOGEXECUTE) {
         return &SMSG_SPELLLOGEXECUTE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SPELLLOGEXECUTE& ServerOpcode::get<SMSG_SPELLLOGEXECUTE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPELLLOGEXECUTE& ServerOpcode::get<SMSG_SPELLLOGEXECUTE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SPELLLOGEXECUTE>();
     if (p) {
         return *p;
@@ -32831,14 +33493,14 @@ vanilla::SMSG_SPELLLOGEXECUTE& ServerOpcode::get<SMSG_SPELLLOGEXECUTE>() {
 }
 
 template <>
-vanilla::SMSG_PERIODICAURALOG* ServerOpcode::get_if<SMSG_PERIODICAURALOG>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PERIODICAURALOG* ServerOpcode::get_if<SMSG_PERIODICAURALOG>() {
     if (opcode == Opcode::SMSG_PERIODICAURALOG) {
         return &SMSG_PERIODICAURALOG;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_PERIODICAURALOG& ServerOpcode::get<SMSG_PERIODICAURALOG>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PERIODICAURALOG& ServerOpcode::get<SMSG_PERIODICAURALOG>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_PERIODICAURALOG>();
     if (p) {
         return *p;
@@ -32847,14 +33509,14 @@ vanilla::SMSG_PERIODICAURALOG& ServerOpcode::get<SMSG_PERIODICAURALOG>() {
 }
 
 template <>
-vanilla::SMSG_SPELLDAMAGESHIELD* ServerOpcode::get_if<SMSG_SPELLDAMAGESHIELD>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPELLDAMAGESHIELD* ServerOpcode::get_if<SMSG_SPELLDAMAGESHIELD>() {
     if (opcode == Opcode::SMSG_SPELLDAMAGESHIELD) {
         return &SMSG_SPELLDAMAGESHIELD;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SPELLDAMAGESHIELD& ServerOpcode::get<SMSG_SPELLDAMAGESHIELD>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPELLDAMAGESHIELD& ServerOpcode::get<SMSG_SPELLDAMAGESHIELD>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SPELLDAMAGESHIELD>();
     if (p) {
         return *p;
@@ -32863,14 +33525,14 @@ vanilla::SMSG_SPELLDAMAGESHIELD& ServerOpcode::get<SMSG_SPELLDAMAGESHIELD>() {
 }
 
 template <>
-vanilla::SMSG_SPELLNONMELEEDAMAGELOG* ServerOpcode::get_if<SMSG_SPELLNONMELEEDAMAGELOG>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPELLNONMELEEDAMAGELOG* ServerOpcode::get_if<SMSG_SPELLNONMELEEDAMAGELOG>() {
     if (opcode == Opcode::SMSG_SPELLNONMELEEDAMAGELOG) {
         return &SMSG_SPELLNONMELEEDAMAGELOG;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SPELLNONMELEEDAMAGELOG& ServerOpcode::get<SMSG_SPELLNONMELEEDAMAGELOG>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPELLNONMELEEDAMAGELOG& ServerOpcode::get<SMSG_SPELLNONMELEEDAMAGELOG>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SPELLNONMELEEDAMAGELOG>();
     if (p) {
         return *p;
@@ -32879,14 +33541,14 @@ vanilla::SMSG_SPELLNONMELEEDAMAGELOG& ServerOpcode::get<SMSG_SPELLNONMELEEDAMAGE
 }
 
 template <>
-vanilla::SMSG_ZONE_UNDER_ATTACK* ServerOpcode::get_if<SMSG_ZONE_UNDER_ATTACK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ZONE_UNDER_ATTACK* ServerOpcode::get_if<SMSG_ZONE_UNDER_ATTACK>() {
     if (opcode == Opcode::SMSG_ZONE_UNDER_ATTACK) {
         return &SMSG_ZONE_UNDER_ATTACK;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_ZONE_UNDER_ATTACK& ServerOpcode::get<SMSG_ZONE_UNDER_ATTACK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ZONE_UNDER_ATTACK& ServerOpcode::get<SMSG_ZONE_UNDER_ATTACK>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_ZONE_UNDER_ATTACK>();
     if (p) {
         return *p;
@@ -32895,14 +33557,14 @@ vanilla::SMSG_ZONE_UNDER_ATTACK& ServerOpcode::get<SMSG_ZONE_UNDER_ATTACK>() {
 }
 
 template <>
-vanilla::MSG_AUCTION_HELLO_Server* ServerOpcode::get_if<MSG_AUCTION_HELLO_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_AUCTION_HELLO_Server* ServerOpcode::get_if<MSG_AUCTION_HELLO_Server>() {
     if (opcode == Opcode::MSG_AUCTION_HELLO) {
         return &MSG_AUCTION_HELLO;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_AUCTION_HELLO_Server& ServerOpcode::get<MSG_AUCTION_HELLO_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_AUCTION_HELLO_Server& ServerOpcode::get<MSG_AUCTION_HELLO_Server>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_AUCTION_HELLO_Server>();
     if (p) {
         return *p;
@@ -32911,14 +33573,14 @@ vanilla::MSG_AUCTION_HELLO_Server& ServerOpcode::get<MSG_AUCTION_HELLO_Server>()
 }
 
 template <>
-vanilla::SMSG_AUCTION_COMMAND_RESULT* ServerOpcode::get_if<SMSG_AUCTION_COMMAND_RESULT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_AUCTION_COMMAND_RESULT* ServerOpcode::get_if<SMSG_AUCTION_COMMAND_RESULT>() {
     if (opcode == Opcode::SMSG_AUCTION_COMMAND_RESULT) {
         return &SMSG_AUCTION_COMMAND_RESULT;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_AUCTION_COMMAND_RESULT& ServerOpcode::get<SMSG_AUCTION_COMMAND_RESULT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_AUCTION_COMMAND_RESULT& ServerOpcode::get<SMSG_AUCTION_COMMAND_RESULT>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_AUCTION_COMMAND_RESULT>();
     if (p) {
         return *p;
@@ -32927,14 +33589,14 @@ vanilla::SMSG_AUCTION_COMMAND_RESULT& ServerOpcode::get<SMSG_AUCTION_COMMAND_RES
 }
 
 template <>
-vanilla::SMSG_AUCTION_LIST_RESULT* ServerOpcode::get_if<SMSG_AUCTION_LIST_RESULT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_AUCTION_LIST_RESULT* ServerOpcode::get_if<SMSG_AUCTION_LIST_RESULT>() {
     if (opcode == Opcode::SMSG_AUCTION_LIST_RESULT) {
         return &SMSG_AUCTION_LIST_RESULT;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_AUCTION_LIST_RESULT& ServerOpcode::get<SMSG_AUCTION_LIST_RESULT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_AUCTION_LIST_RESULT& ServerOpcode::get<SMSG_AUCTION_LIST_RESULT>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_AUCTION_LIST_RESULT>();
     if (p) {
         return *p;
@@ -32943,14 +33605,14 @@ vanilla::SMSG_AUCTION_LIST_RESULT& ServerOpcode::get<SMSG_AUCTION_LIST_RESULT>()
 }
 
 template <>
-vanilla::SMSG_AUCTION_OWNER_LIST_RESULT* ServerOpcode::get_if<SMSG_AUCTION_OWNER_LIST_RESULT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_AUCTION_OWNER_LIST_RESULT* ServerOpcode::get_if<SMSG_AUCTION_OWNER_LIST_RESULT>() {
     if (opcode == Opcode::SMSG_AUCTION_OWNER_LIST_RESULT) {
         return &SMSG_AUCTION_OWNER_LIST_RESULT;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_AUCTION_OWNER_LIST_RESULT& ServerOpcode::get<SMSG_AUCTION_OWNER_LIST_RESULT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_AUCTION_OWNER_LIST_RESULT& ServerOpcode::get<SMSG_AUCTION_OWNER_LIST_RESULT>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_AUCTION_OWNER_LIST_RESULT>();
     if (p) {
         return *p;
@@ -32959,14 +33621,14 @@ vanilla::SMSG_AUCTION_OWNER_LIST_RESULT& ServerOpcode::get<SMSG_AUCTION_OWNER_LI
 }
 
 template <>
-vanilla::SMSG_AUCTION_BIDDER_NOTIFICATION* ServerOpcode::get_if<SMSG_AUCTION_BIDDER_NOTIFICATION>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_AUCTION_BIDDER_NOTIFICATION* ServerOpcode::get_if<SMSG_AUCTION_BIDDER_NOTIFICATION>() {
     if (opcode == Opcode::SMSG_AUCTION_BIDDER_NOTIFICATION) {
         return &SMSG_AUCTION_BIDDER_NOTIFICATION;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_AUCTION_BIDDER_NOTIFICATION& ServerOpcode::get<SMSG_AUCTION_BIDDER_NOTIFICATION>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_AUCTION_BIDDER_NOTIFICATION& ServerOpcode::get<SMSG_AUCTION_BIDDER_NOTIFICATION>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_AUCTION_BIDDER_NOTIFICATION>();
     if (p) {
         return *p;
@@ -32975,14 +33637,14 @@ vanilla::SMSG_AUCTION_BIDDER_NOTIFICATION& ServerOpcode::get<SMSG_AUCTION_BIDDER
 }
 
 template <>
-vanilla::SMSG_AUCTION_OWNER_NOTIFICATION* ServerOpcode::get_if<SMSG_AUCTION_OWNER_NOTIFICATION>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_AUCTION_OWNER_NOTIFICATION* ServerOpcode::get_if<SMSG_AUCTION_OWNER_NOTIFICATION>() {
     if (opcode == Opcode::SMSG_AUCTION_OWNER_NOTIFICATION) {
         return &SMSG_AUCTION_OWNER_NOTIFICATION;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_AUCTION_OWNER_NOTIFICATION& ServerOpcode::get<SMSG_AUCTION_OWNER_NOTIFICATION>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_AUCTION_OWNER_NOTIFICATION& ServerOpcode::get<SMSG_AUCTION_OWNER_NOTIFICATION>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_AUCTION_OWNER_NOTIFICATION>();
     if (p) {
         return *p;
@@ -32991,14 +33653,14 @@ vanilla::SMSG_AUCTION_OWNER_NOTIFICATION& ServerOpcode::get<SMSG_AUCTION_OWNER_N
 }
 
 template <>
-vanilla::SMSG_PROCRESIST* ServerOpcode::get_if<SMSG_PROCRESIST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PROCRESIST* ServerOpcode::get_if<SMSG_PROCRESIST>() {
     if (opcode == Opcode::SMSG_PROCRESIST) {
         return &SMSG_PROCRESIST;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_PROCRESIST& ServerOpcode::get<SMSG_PROCRESIST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PROCRESIST& ServerOpcode::get<SMSG_PROCRESIST>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_PROCRESIST>();
     if (p) {
         return *p;
@@ -33007,14 +33669,14 @@ vanilla::SMSG_PROCRESIST& ServerOpcode::get<SMSG_PROCRESIST>() {
 }
 
 template <>
-vanilla::SMSG_DISPEL_FAILED* ServerOpcode::get_if<SMSG_DISPEL_FAILED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_DISPEL_FAILED* ServerOpcode::get_if<SMSG_DISPEL_FAILED>() {
     if (opcode == Opcode::SMSG_DISPEL_FAILED) {
         return &SMSG_DISPEL_FAILED;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_DISPEL_FAILED& ServerOpcode::get<SMSG_DISPEL_FAILED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_DISPEL_FAILED& ServerOpcode::get<SMSG_DISPEL_FAILED>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_DISPEL_FAILED>();
     if (p) {
         return *p;
@@ -33023,14 +33685,14 @@ vanilla::SMSG_DISPEL_FAILED& ServerOpcode::get<SMSG_DISPEL_FAILED>() {
 }
 
 template <>
-vanilla::SMSG_SPELLORDAMAGE_IMMUNE* ServerOpcode::get_if<SMSG_SPELLORDAMAGE_IMMUNE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPELLORDAMAGE_IMMUNE* ServerOpcode::get_if<SMSG_SPELLORDAMAGE_IMMUNE>() {
     if (opcode == Opcode::SMSG_SPELLORDAMAGE_IMMUNE) {
         return &SMSG_SPELLORDAMAGE_IMMUNE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SPELLORDAMAGE_IMMUNE& ServerOpcode::get<SMSG_SPELLORDAMAGE_IMMUNE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPELLORDAMAGE_IMMUNE& ServerOpcode::get<SMSG_SPELLORDAMAGE_IMMUNE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SPELLORDAMAGE_IMMUNE>();
     if (p) {
         return *p;
@@ -33039,14 +33701,14 @@ vanilla::SMSG_SPELLORDAMAGE_IMMUNE& ServerOpcode::get<SMSG_SPELLORDAMAGE_IMMUNE>
 }
 
 template <>
-vanilla::SMSG_AUCTION_BIDDER_LIST_RESULT* ServerOpcode::get_if<SMSG_AUCTION_BIDDER_LIST_RESULT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_AUCTION_BIDDER_LIST_RESULT* ServerOpcode::get_if<SMSG_AUCTION_BIDDER_LIST_RESULT>() {
     if (opcode == Opcode::SMSG_AUCTION_BIDDER_LIST_RESULT) {
         return &SMSG_AUCTION_BIDDER_LIST_RESULT;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_AUCTION_BIDDER_LIST_RESULT& ServerOpcode::get<SMSG_AUCTION_BIDDER_LIST_RESULT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_AUCTION_BIDDER_LIST_RESULT& ServerOpcode::get<SMSG_AUCTION_BIDDER_LIST_RESULT>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_AUCTION_BIDDER_LIST_RESULT>();
     if (p) {
         return *p;
@@ -33055,14 +33717,14 @@ vanilla::SMSG_AUCTION_BIDDER_LIST_RESULT& ServerOpcode::get<SMSG_AUCTION_BIDDER_
 }
 
 template <>
-vanilla::SMSG_SET_FLAT_SPELL_MODIFIER* ServerOpcode::get_if<SMSG_SET_FLAT_SPELL_MODIFIER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SET_FLAT_SPELL_MODIFIER* ServerOpcode::get_if<SMSG_SET_FLAT_SPELL_MODIFIER>() {
     if (opcode == Opcode::SMSG_SET_FLAT_SPELL_MODIFIER) {
         return &SMSG_SET_FLAT_SPELL_MODIFIER;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SET_FLAT_SPELL_MODIFIER& ServerOpcode::get<SMSG_SET_FLAT_SPELL_MODIFIER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SET_FLAT_SPELL_MODIFIER& ServerOpcode::get<SMSG_SET_FLAT_SPELL_MODIFIER>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SET_FLAT_SPELL_MODIFIER>();
     if (p) {
         return *p;
@@ -33071,14 +33733,14 @@ vanilla::SMSG_SET_FLAT_SPELL_MODIFIER& ServerOpcode::get<SMSG_SET_FLAT_SPELL_MOD
 }
 
 template <>
-vanilla::SMSG_SET_PCT_SPELL_MODIFIER* ServerOpcode::get_if<SMSG_SET_PCT_SPELL_MODIFIER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SET_PCT_SPELL_MODIFIER* ServerOpcode::get_if<SMSG_SET_PCT_SPELL_MODIFIER>() {
     if (opcode == Opcode::SMSG_SET_PCT_SPELL_MODIFIER) {
         return &SMSG_SET_PCT_SPELL_MODIFIER;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SET_PCT_SPELL_MODIFIER& ServerOpcode::get<SMSG_SET_PCT_SPELL_MODIFIER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SET_PCT_SPELL_MODIFIER& ServerOpcode::get<SMSG_SET_PCT_SPELL_MODIFIER>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SET_PCT_SPELL_MODIFIER>();
     if (p) {
         return *p;
@@ -33087,14 +33749,14 @@ vanilla::SMSG_SET_PCT_SPELL_MODIFIER& ServerOpcode::get<SMSG_SET_PCT_SPELL_MODIF
 }
 
 template <>
-vanilla::SMSG_CORPSE_RECLAIM_DELAY* ServerOpcode::get_if<SMSG_CORPSE_RECLAIM_DELAY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_CORPSE_RECLAIM_DELAY* ServerOpcode::get_if<SMSG_CORPSE_RECLAIM_DELAY>() {
     if (opcode == Opcode::SMSG_CORPSE_RECLAIM_DELAY) {
         return &SMSG_CORPSE_RECLAIM_DELAY;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_CORPSE_RECLAIM_DELAY& ServerOpcode::get<SMSG_CORPSE_RECLAIM_DELAY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_CORPSE_RECLAIM_DELAY& ServerOpcode::get<SMSG_CORPSE_RECLAIM_DELAY>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_CORPSE_RECLAIM_DELAY>();
     if (p) {
         return *p;
@@ -33103,14 +33765,14 @@ vanilla::SMSG_CORPSE_RECLAIM_DELAY& ServerOpcode::get<SMSG_CORPSE_RECLAIM_DELAY>
 }
 
 template <>
-vanilla::MSG_LIST_STABLED_PETS_Server* ServerOpcode::get_if<MSG_LIST_STABLED_PETS_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_LIST_STABLED_PETS_Server* ServerOpcode::get_if<MSG_LIST_STABLED_PETS_Server>() {
     if (opcode == Opcode::MSG_LIST_STABLED_PETS) {
         return &MSG_LIST_STABLED_PETS;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_LIST_STABLED_PETS_Server& ServerOpcode::get<MSG_LIST_STABLED_PETS_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_LIST_STABLED_PETS_Server& ServerOpcode::get<MSG_LIST_STABLED_PETS_Server>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_LIST_STABLED_PETS_Server>();
     if (p) {
         return *p;
@@ -33119,14 +33781,14 @@ vanilla::MSG_LIST_STABLED_PETS_Server& ServerOpcode::get<MSG_LIST_STABLED_PETS_S
 }
 
 template <>
-vanilla::SMSG_STABLE_RESULT* ServerOpcode::get_if<SMSG_STABLE_RESULT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_STABLE_RESULT* ServerOpcode::get_if<SMSG_STABLE_RESULT>() {
     if (opcode == Opcode::SMSG_STABLE_RESULT) {
         return &SMSG_STABLE_RESULT;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_STABLE_RESULT& ServerOpcode::get<SMSG_STABLE_RESULT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_STABLE_RESULT& ServerOpcode::get<SMSG_STABLE_RESULT>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_STABLE_RESULT>();
     if (p) {
         return *p;
@@ -33135,14 +33797,14 @@ vanilla::SMSG_STABLE_RESULT& ServerOpcode::get<SMSG_STABLE_RESULT>() {
 }
 
 template <>
-vanilla::MSG_QUEST_PUSH_RESULT* ServerOpcode::get_if<MSG_QUEST_PUSH_RESULT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_QUEST_PUSH_RESULT* ServerOpcode::get_if<MSG_QUEST_PUSH_RESULT>() {
     if (opcode == Opcode::MSG_QUEST_PUSH_RESULT) {
         return &MSG_QUEST_PUSH_RESULT;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_QUEST_PUSH_RESULT& ServerOpcode::get<MSG_QUEST_PUSH_RESULT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_QUEST_PUSH_RESULT& ServerOpcode::get<MSG_QUEST_PUSH_RESULT>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_QUEST_PUSH_RESULT>();
     if (p) {
         return *p;
@@ -33151,14 +33813,14 @@ vanilla::MSG_QUEST_PUSH_RESULT& ServerOpcode::get<MSG_QUEST_PUSH_RESULT>() {
 }
 
 template <>
-vanilla::SMSG_PLAY_MUSIC* ServerOpcode::get_if<SMSG_PLAY_MUSIC>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PLAY_MUSIC* ServerOpcode::get_if<SMSG_PLAY_MUSIC>() {
     if (opcode == Opcode::SMSG_PLAY_MUSIC) {
         return &SMSG_PLAY_MUSIC;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_PLAY_MUSIC& ServerOpcode::get<SMSG_PLAY_MUSIC>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PLAY_MUSIC& ServerOpcode::get<SMSG_PLAY_MUSIC>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_PLAY_MUSIC>();
     if (p) {
         return *p;
@@ -33167,14 +33829,14 @@ vanilla::SMSG_PLAY_MUSIC& ServerOpcode::get<SMSG_PLAY_MUSIC>() {
 }
 
 template <>
-vanilla::SMSG_PLAY_OBJECT_SOUND* ServerOpcode::get_if<SMSG_PLAY_OBJECT_SOUND>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PLAY_OBJECT_SOUND* ServerOpcode::get_if<SMSG_PLAY_OBJECT_SOUND>() {
     if (opcode == Opcode::SMSG_PLAY_OBJECT_SOUND) {
         return &SMSG_PLAY_OBJECT_SOUND;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_PLAY_OBJECT_SOUND& ServerOpcode::get<SMSG_PLAY_OBJECT_SOUND>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PLAY_OBJECT_SOUND& ServerOpcode::get<SMSG_PLAY_OBJECT_SOUND>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_PLAY_OBJECT_SOUND>();
     if (p) {
         return *p;
@@ -33183,14 +33845,14 @@ vanilla::SMSG_PLAY_OBJECT_SOUND& ServerOpcode::get<SMSG_PLAY_OBJECT_SOUND>() {
 }
 
 template <>
-vanilla::SMSG_SPELLDISPELLOG* ServerOpcode::get_if<SMSG_SPELLDISPELLOG>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPELLDISPELLOG* ServerOpcode::get_if<SMSG_SPELLDISPELLOG>() {
     if (opcode == Opcode::SMSG_SPELLDISPELLOG) {
         return &SMSG_SPELLDISPELLOG;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SPELLDISPELLOG& ServerOpcode::get<SMSG_SPELLDISPELLOG>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPELLDISPELLOG& ServerOpcode::get<SMSG_SPELLDISPELLOG>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SPELLDISPELLOG>();
     if (p) {
         return *p;
@@ -33199,14 +33861,14 @@ vanilla::SMSG_SPELLDISPELLOG& ServerOpcode::get<SMSG_SPELLDISPELLOG>() {
 }
 
 template <>
-vanilla::MSG_QUERY_NEXT_MAIL_TIME_Server* ServerOpcode::get_if<MSG_QUERY_NEXT_MAIL_TIME_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_QUERY_NEXT_MAIL_TIME_Server* ServerOpcode::get_if<MSG_QUERY_NEXT_MAIL_TIME_Server>() {
     if (opcode == Opcode::MSG_QUERY_NEXT_MAIL_TIME) {
         return &MSG_QUERY_NEXT_MAIL_TIME;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_QUERY_NEXT_MAIL_TIME_Server& ServerOpcode::get<MSG_QUERY_NEXT_MAIL_TIME_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_QUERY_NEXT_MAIL_TIME_Server& ServerOpcode::get<MSG_QUERY_NEXT_MAIL_TIME_Server>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_QUERY_NEXT_MAIL_TIME_Server>();
     if (p) {
         return *p;
@@ -33215,14 +33877,14 @@ vanilla::MSG_QUERY_NEXT_MAIL_TIME_Server& ServerOpcode::get<MSG_QUERY_NEXT_MAIL_
 }
 
 template <>
-vanilla::SMSG_RECEIVED_MAIL* ServerOpcode::get_if<SMSG_RECEIVED_MAIL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_RECEIVED_MAIL* ServerOpcode::get_if<SMSG_RECEIVED_MAIL>() {
     if (opcode == Opcode::SMSG_RECEIVED_MAIL) {
         return &SMSG_RECEIVED_MAIL;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_RECEIVED_MAIL& ServerOpcode::get<SMSG_RECEIVED_MAIL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_RECEIVED_MAIL& ServerOpcode::get<SMSG_RECEIVED_MAIL>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_RECEIVED_MAIL>();
     if (p) {
         return *p;
@@ -33231,14 +33893,14 @@ vanilla::SMSG_RECEIVED_MAIL& ServerOpcode::get<SMSG_RECEIVED_MAIL>() {
 }
 
 template <>
-vanilla::SMSG_RAID_GROUP_ONLY* ServerOpcode::get_if<SMSG_RAID_GROUP_ONLY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_RAID_GROUP_ONLY* ServerOpcode::get_if<SMSG_RAID_GROUP_ONLY>() {
     if (opcode == Opcode::SMSG_RAID_GROUP_ONLY) {
         return &SMSG_RAID_GROUP_ONLY;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_RAID_GROUP_ONLY& ServerOpcode::get<SMSG_RAID_GROUP_ONLY>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_RAID_GROUP_ONLY& ServerOpcode::get<SMSG_RAID_GROUP_ONLY>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_RAID_GROUP_ONLY>();
     if (p) {
         return *p;
@@ -33247,14 +33909,14 @@ vanilla::SMSG_RAID_GROUP_ONLY& ServerOpcode::get<SMSG_RAID_GROUP_ONLY>() {
 }
 
 template <>
-vanilla::SMSG_PVP_CREDIT* ServerOpcode::get_if<SMSG_PVP_CREDIT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PVP_CREDIT* ServerOpcode::get_if<SMSG_PVP_CREDIT>() {
     if (opcode == Opcode::SMSG_PVP_CREDIT) {
         return &SMSG_PVP_CREDIT;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_PVP_CREDIT& ServerOpcode::get<SMSG_PVP_CREDIT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PVP_CREDIT& ServerOpcode::get<SMSG_PVP_CREDIT>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_PVP_CREDIT>();
     if (p) {
         return *p;
@@ -33263,14 +33925,14 @@ vanilla::SMSG_PVP_CREDIT& ServerOpcode::get<SMSG_PVP_CREDIT>() {
 }
 
 template <>
-vanilla::SMSG_AUCTION_REMOVED_NOTIFICATION* ServerOpcode::get_if<SMSG_AUCTION_REMOVED_NOTIFICATION>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_AUCTION_REMOVED_NOTIFICATION* ServerOpcode::get_if<SMSG_AUCTION_REMOVED_NOTIFICATION>() {
     if (opcode == Opcode::SMSG_AUCTION_REMOVED_NOTIFICATION) {
         return &SMSG_AUCTION_REMOVED_NOTIFICATION;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_AUCTION_REMOVED_NOTIFICATION& ServerOpcode::get<SMSG_AUCTION_REMOVED_NOTIFICATION>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_AUCTION_REMOVED_NOTIFICATION& ServerOpcode::get<SMSG_AUCTION_REMOVED_NOTIFICATION>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_AUCTION_REMOVED_NOTIFICATION>();
     if (p) {
         return *p;
@@ -33279,14 +33941,14 @@ vanilla::SMSG_AUCTION_REMOVED_NOTIFICATION& ServerOpcode::get<SMSG_AUCTION_REMOV
 }
 
 template <>
-vanilla::SMSG_SERVER_MESSAGE* ServerOpcode::get_if<SMSG_SERVER_MESSAGE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SERVER_MESSAGE* ServerOpcode::get_if<SMSG_SERVER_MESSAGE>() {
     if (opcode == Opcode::SMSG_SERVER_MESSAGE) {
         return &SMSG_SERVER_MESSAGE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SERVER_MESSAGE& ServerOpcode::get<SMSG_SERVER_MESSAGE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SERVER_MESSAGE& ServerOpcode::get<SMSG_SERVER_MESSAGE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SERVER_MESSAGE>();
     if (p) {
         return *p;
@@ -33295,14 +33957,14 @@ vanilla::SMSG_SERVER_MESSAGE& ServerOpcode::get<SMSG_SERVER_MESSAGE>() {
 }
 
 template <>
-vanilla::SMSG_MEETINGSTONE_SETQUEUE* ServerOpcode::get_if<SMSG_MEETINGSTONE_SETQUEUE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_MEETINGSTONE_SETQUEUE* ServerOpcode::get_if<SMSG_MEETINGSTONE_SETQUEUE>() {
     if (opcode == Opcode::SMSG_MEETINGSTONE_SETQUEUE) {
         return &SMSG_MEETINGSTONE_SETQUEUE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_MEETINGSTONE_SETQUEUE& ServerOpcode::get<SMSG_MEETINGSTONE_SETQUEUE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_MEETINGSTONE_SETQUEUE& ServerOpcode::get<SMSG_MEETINGSTONE_SETQUEUE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_MEETINGSTONE_SETQUEUE>();
     if (p) {
         return *p;
@@ -33311,14 +33973,14 @@ vanilla::SMSG_MEETINGSTONE_SETQUEUE& ServerOpcode::get<SMSG_MEETINGSTONE_SETQUEU
 }
 
 template <>
-vanilla::SMSG_MEETINGSTONE_COMPLETE* ServerOpcode::get_if<SMSG_MEETINGSTONE_COMPLETE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_MEETINGSTONE_COMPLETE* ServerOpcode::get_if<SMSG_MEETINGSTONE_COMPLETE>() {
     if (opcode == Opcode::SMSG_MEETINGSTONE_COMPLETE) {
         return &SMSG_MEETINGSTONE_COMPLETE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_MEETINGSTONE_COMPLETE& ServerOpcode::get<SMSG_MEETINGSTONE_COMPLETE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_MEETINGSTONE_COMPLETE& ServerOpcode::get<SMSG_MEETINGSTONE_COMPLETE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_MEETINGSTONE_COMPLETE>();
     if (p) {
         return *p;
@@ -33327,14 +33989,14 @@ vanilla::SMSG_MEETINGSTONE_COMPLETE& ServerOpcode::get<SMSG_MEETINGSTONE_COMPLET
 }
 
 template <>
-vanilla::SMSG_MEETINGSTONE_IN_PROGRESS* ServerOpcode::get_if<SMSG_MEETINGSTONE_IN_PROGRESS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_MEETINGSTONE_IN_PROGRESS* ServerOpcode::get_if<SMSG_MEETINGSTONE_IN_PROGRESS>() {
     if (opcode == Opcode::SMSG_MEETINGSTONE_IN_PROGRESS) {
         return &SMSG_MEETINGSTONE_IN_PROGRESS;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_MEETINGSTONE_IN_PROGRESS& ServerOpcode::get<SMSG_MEETINGSTONE_IN_PROGRESS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_MEETINGSTONE_IN_PROGRESS& ServerOpcode::get<SMSG_MEETINGSTONE_IN_PROGRESS>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_MEETINGSTONE_IN_PROGRESS>();
     if (p) {
         return *p;
@@ -33343,14 +34005,14 @@ vanilla::SMSG_MEETINGSTONE_IN_PROGRESS& ServerOpcode::get<SMSG_MEETINGSTONE_IN_P
 }
 
 template <>
-vanilla::SMSG_MEETINGSTONE_MEMBER_ADDED* ServerOpcode::get_if<SMSG_MEETINGSTONE_MEMBER_ADDED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_MEETINGSTONE_MEMBER_ADDED* ServerOpcode::get_if<SMSG_MEETINGSTONE_MEMBER_ADDED>() {
     if (opcode == Opcode::SMSG_MEETINGSTONE_MEMBER_ADDED) {
         return &SMSG_MEETINGSTONE_MEMBER_ADDED;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_MEETINGSTONE_MEMBER_ADDED& ServerOpcode::get<SMSG_MEETINGSTONE_MEMBER_ADDED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_MEETINGSTONE_MEMBER_ADDED& ServerOpcode::get<SMSG_MEETINGSTONE_MEMBER_ADDED>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_MEETINGSTONE_MEMBER_ADDED>();
     if (p) {
         return *p;
@@ -33359,14 +34021,14 @@ vanilla::SMSG_MEETINGSTONE_MEMBER_ADDED& ServerOpcode::get<SMSG_MEETINGSTONE_MEM
 }
 
 template <>
-vanilla::SMSG_CANCEL_AUTO_REPEAT* ServerOpcode::get_if<SMSG_CANCEL_AUTO_REPEAT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_CANCEL_AUTO_REPEAT* ServerOpcode::get_if<SMSG_CANCEL_AUTO_REPEAT>() {
     if (opcode == Opcode::SMSG_CANCEL_AUTO_REPEAT) {
         return &SMSG_CANCEL_AUTO_REPEAT;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_CANCEL_AUTO_REPEAT& ServerOpcode::get<SMSG_CANCEL_AUTO_REPEAT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_CANCEL_AUTO_REPEAT& ServerOpcode::get<SMSG_CANCEL_AUTO_REPEAT>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_CANCEL_AUTO_REPEAT>();
     if (p) {
         return *p;
@@ -33375,14 +34037,14 @@ vanilla::SMSG_CANCEL_AUTO_REPEAT& ServerOpcode::get<SMSG_CANCEL_AUTO_REPEAT>() {
 }
 
 template <>
-vanilla::SMSG_STANDSTATE_UPDATE* ServerOpcode::get_if<SMSG_STANDSTATE_UPDATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_STANDSTATE_UPDATE* ServerOpcode::get_if<SMSG_STANDSTATE_UPDATE>() {
     if (opcode == Opcode::SMSG_STANDSTATE_UPDATE) {
         return &SMSG_STANDSTATE_UPDATE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_STANDSTATE_UPDATE& ServerOpcode::get<SMSG_STANDSTATE_UPDATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_STANDSTATE_UPDATE& ServerOpcode::get<SMSG_STANDSTATE_UPDATE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_STANDSTATE_UPDATE>();
     if (p) {
         return *p;
@@ -33391,14 +34053,14 @@ vanilla::SMSG_STANDSTATE_UPDATE& ServerOpcode::get<SMSG_STANDSTATE_UPDATE>() {
 }
 
 template <>
-vanilla::SMSG_LOOT_ALL_PASSED* ServerOpcode::get_if<SMSG_LOOT_ALL_PASSED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_LOOT_ALL_PASSED* ServerOpcode::get_if<SMSG_LOOT_ALL_PASSED>() {
     if (opcode == Opcode::SMSG_LOOT_ALL_PASSED) {
         return &SMSG_LOOT_ALL_PASSED;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_LOOT_ALL_PASSED& ServerOpcode::get<SMSG_LOOT_ALL_PASSED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_LOOT_ALL_PASSED& ServerOpcode::get<SMSG_LOOT_ALL_PASSED>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_LOOT_ALL_PASSED>();
     if (p) {
         return *p;
@@ -33407,14 +34069,14 @@ vanilla::SMSG_LOOT_ALL_PASSED& ServerOpcode::get<SMSG_LOOT_ALL_PASSED>() {
 }
 
 template <>
-vanilla::SMSG_LOOT_ROLL_WON* ServerOpcode::get_if<SMSG_LOOT_ROLL_WON>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_LOOT_ROLL_WON* ServerOpcode::get_if<SMSG_LOOT_ROLL_WON>() {
     if (opcode == Opcode::SMSG_LOOT_ROLL_WON) {
         return &SMSG_LOOT_ROLL_WON;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_LOOT_ROLL_WON& ServerOpcode::get<SMSG_LOOT_ROLL_WON>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_LOOT_ROLL_WON& ServerOpcode::get<SMSG_LOOT_ROLL_WON>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_LOOT_ROLL_WON>();
     if (p) {
         return *p;
@@ -33423,14 +34085,14 @@ vanilla::SMSG_LOOT_ROLL_WON& ServerOpcode::get<SMSG_LOOT_ROLL_WON>() {
 }
 
 template <>
-vanilla::SMSG_LOOT_START_ROLL* ServerOpcode::get_if<SMSG_LOOT_START_ROLL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_LOOT_START_ROLL* ServerOpcode::get_if<SMSG_LOOT_START_ROLL>() {
     if (opcode == Opcode::SMSG_LOOT_START_ROLL) {
         return &SMSG_LOOT_START_ROLL;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_LOOT_START_ROLL& ServerOpcode::get<SMSG_LOOT_START_ROLL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_LOOT_START_ROLL& ServerOpcode::get<SMSG_LOOT_START_ROLL>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_LOOT_START_ROLL>();
     if (p) {
         return *p;
@@ -33439,14 +34101,14 @@ vanilla::SMSG_LOOT_START_ROLL& ServerOpcode::get<SMSG_LOOT_START_ROLL>() {
 }
 
 template <>
-vanilla::SMSG_LOOT_ROLL* ServerOpcode::get_if<SMSG_LOOT_ROLL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_LOOT_ROLL* ServerOpcode::get_if<SMSG_LOOT_ROLL>() {
     if (opcode == Opcode::SMSG_LOOT_ROLL) {
         return &SMSG_LOOT_ROLL;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_LOOT_ROLL& ServerOpcode::get<SMSG_LOOT_ROLL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_LOOT_ROLL& ServerOpcode::get<SMSG_LOOT_ROLL>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_LOOT_ROLL>();
     if (p) {
         return *p;
@@ -33455,14 +34117,14 @@ vanilla::SMSG_LOOT_ROLL& ServerOpcode::get<SMSG_LOOT_ROLL>() {
 }
 
 template <>
-vanilla::SMSG_LOOT_MASTER_LIST* ServerOpcode::get_if<SMSG_LOOT_MASTER_LIST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_LOOT_MASTER_LIST* ServerOpcode::get_if<SMSG_LOOT_MASTER_LIST>() {
     if (opcode == Opcode::SMSG_LOOT_MASTER_LIST) {
         return &SMSG_LOOT_MASTER_LIST;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_LOOT_MASTER_LIST& ServerOpcode::get<SMSG_LOOT_MASTER_LIST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_LOOT_MASTER_LIST& ServerOpcode::get<SMSG_LOOT_MASTER_LIST>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_LOOT_MASTER_LIST>();
     if (p) {
         return *p;
@@ -33471,14 +34133,14 @@ vanilla::SMSG_LOOT_MASTER_LIST& ServerOpcode::get<SMSG_LOOT_MASTER_LIST>() {
 }
 
 template <>
-vanilla::SMSG_SET_FORCED_REACTIONS* ServerOpcode::get_if<SMSG_SET_FORCED_REACTIONS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SET_FORCED_REACTIONS* ServerOpcode::get_if<SMSG_SET_FORCED_REACTIONS>() {
     if (opcode == Opcode::SMSG_SET_FORCED_REACTIONS) {
         return &SMSG_SET_FORCED_REACTIONS;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SET_FORCED_REACTIONS& ServerOpcode::get<SMSG_SET_FORCED_REACTIONS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SET_FORCED_REACTIONS& ServerOpcode::get<SMSG_SET_FORCED_REACTIONS>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SET_FORCED_REACTIONS>();
     if (p) {
         return *p;
@@ -33487,14 +34149,14 @@ vanilla::SMSG_SET_FORCED_REACTIONS& ServerOpcode::get<SMSG_SET_FORCED_REACTIONS>
 }
 
 template <>
-vanilla::SMSG_SPELL_FAILED_OTHER* ServerOpcode::get_if<SMSG_SPELL_FAILED_OTHER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPELL_FAILED_OTHER* ServerOpcode::get_if<SMSG_SPELL_FAILED_OTHER>() {
     if (opcode == Opcode::SMSG_SPELL_FAILED_OTHER) {
         return &SMSG_SPELL_FAILED_OTHER;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SPELL_FAILED_OTHER& ServerOpcode::get<SMSG_SPELL_FAILED_OTHER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPELL_FAILED_OTHER& ServerOpcode::get<SMSG_SPELL_FAILED_OTHER>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SPELL_FAILED_OTHER>();
     if (p) {
         return *p;
@@ -33503,14 +34165,14 @@ vanilla::SMSG_SPELL_FAILED_OTHER& ServerOpcode::get<SMSG_SPELL_FAILED_OTHER>() {
 }
 
 template <>
-vanilla::SMSG_GAMEOBJECT_RESET_STATE* ServerOpcode::get_if<SMSG_GAMEOBJECT_RESET_STATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GAMEOBJECT_RESET_STATE* ServerOpcode::get_if<SMSG_GAMEOBJECT_RESET_STATE>() {
     if (opcode == Opcode::SMSG_GAMEOBJECT_RESET_STATE) {
         return &SMSG_GAMEOBJECT_RESET_STATE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_GAMEOBJECT_RESET_STATE& ServerOpcode::get<SMSG_GAMEOBJECT_RESET_STATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GAMEOBJECT_RESET_STATE& ServerOpcode::get<SMSG_GAMEOBJECT_RESET_STATE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_GAMEOBJECT_RESET_STATE>();
     if (p) {
         return *p;
@@ -33519,14 +34181,14 @@ vanilla::SMSG_GAMEOBJECT_RESET_STATE& ServerOpcode::get<SMSG_GAMEOBJECT_RESET_ST
 }
 
 template <>
-vanilla::SMSG_CHAT_PLAYER_NOT_FOUND* ServerOpcode::get_if<SMSG_CHAT_PLAYER_NOT_FOUND>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_CHAT_PLAYER_NOT_FOUND* ServerOpcode::get_if<SMSG_CHAT_PLAYER_NOT_FOUND>() {
     if (opcode == Opcode::SMSG_CHAT_PLAYER_NOT_FOUND) {
         return &SMSG_CHAT_PLAYER_NOT_FOUND;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_CHAT_PLAYER_NOT_FOUND& ServerOpcode::get<SMSG_CHAT_PLAYER_NOT_FOUND>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_CHAT_PLAYER_NOT_FOUND& ServerOpcode::get<SMSG_CHAT_PLAYER_NOT_FOUND>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_CHAT_PLAYER_NOT_FOUND>();
     if (p) {
         return *p;
@@ -33535,14 +34197,14 @@ vanilla::SMSG_CHAT_PLAYER_NOT_FOUND& ServerOpcode::get<SMSG_CHAT_PLAYER_NOT_FOUN
 }
 
 template <>
-vanilla::MSG_TALENT_WIPE_CONFIRM_Server* ServerOpcode::get_if<MSG_TALENT_WIPE_CONFIRM_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_TALENT_WIPE_CONFIRM_Server* ServerOpcode::get_if<MSG_TALENT_WIPE_CONFIRM_Server>() {
     if (opcode == Opcode::MSG_TALENT_WIPE_CONFIRM) {
         return &MSG_TALENT_WIPE_CONFIRM;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_TALENT_WIPE_CONFIRM_Server& ServerOpcode::get<MSG_TALENT_WIPE_CONFIRM_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_TALENT_WIPE_CONFIRM_Server& ServerOpcode::get<MSG_TALENT_WIPE_CONFIRM_Server>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_TALENT_WIPE_CONFIRM_Server>();
     if (p) {
         return *p;
@@ -33551,14 +34213,14 @@ vanilla::MSG_TALENT_WIPE_CONFIRM_Server& ServerOpcode::get<MSG_TALENT_WIPE_CONFI
 }
 
 template <>
-vanilla::SMSG_SUMMON_REQUEST* ServerOpcode::get_if<SMSG_SUMMON_REQUEST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SUMMON_REQUEST* ServerOpcode::get_if<SMSG_SUMMON_REQUEST>() {
     if (opcode == Opcode::SMSG_SUMMON_REQUEST) {
         return &SMSG_SUMMON_REQUEST;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SUMMON_REQUEST& ServerOpcode::get<SMSG_SUMMON_REQUEST>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SUMMON_REQUEST& ServerOpcode::get<SMSG_SUMMON_REQUEST>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SUMMON_REQUEST>();
     if (p) {
         return *p;
@@ -33567,14 +34229,14 @@ vanilla::SMSG_SUMMON_REQUEST& ServerOpcode::get<SMSG_SUMMON_REQUEST>() {
 }
 
 template <>
-vanilla::SMSG_MONSTER_MOVE_TRANSPORT* ServerOpcode::get_if<SMSG_MONSTER_MOVE_TRANSPORT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_MONSTER_MOVE_TRANSPORT* ServerOpcode::get_if<SMSG_MONSTER_MOVE_TRANSPORT>() {
     if (opcode == Opcode::SMSG_MONSTER_MOVE_TRANSPORT) {
         return &SMSG_MONSTER_MOVE_TRANSPORT;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_MONSTER_MOVE_TRANSPORT& ServerOpcode::get<SMSG_MONSTER_MOVE_TRANSPORT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_MONSTER_MOVE_TRANSPORT& ServerOpcode::get<SMSG_MONSTER_MOVE_TRANSPORT>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_MONSTER_MOVE_TRANSPORT>();
     if (p) {
         return *p;
@@ -33583,14 +34245,14 @@ vanilla::SMSG_MONSTER_MOVE_TRANSPORT& ServerOpcode::get<SMSG_MONSTER_MOVE_TRANSP
 }
 
 template <>
-vanilla::SMSG_PET_BROKEN* ServerOpcode::get_if<SMSG_PET_BROKEN>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PET_BROKEN* ServerOpcode::get_if<SMSG_PET_BROKEN>() {
     if (opcode == Opcode::SMSG_PET_BROKEN) {
         return &SMSG_PET_BROKEN;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_PET_BROKEN& ServerOpcode::get<SMSG_PET_BROKEN>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PET_BROKEN& ServerOpcode::get<SMSG_PET_BROKEN>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_PET_BROKEN>();
     if (p) {
         return *p;
@@ -33599,14 +34261,14 @@ vanilla::SMSG_PET_BROKEN& ServerOpcode::get<SMSG_PET_BROKEN>() {
 }
 
 template <>
-vanilla::MSG_MOVE_FEATHER_FALL_Server* ServerOpcode::get_if<MSG_MOVE_FEATHER_FALL_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_FEATHER_FALL_Server* ServerOpcode::get_if<MSG_MOVE_FEATHER_FALL_Server>() {
     if (opcode == Opcode::MSG_MOVE_FEATHER_FALL) {
         return &MSG_MOVE_FEATHER_FALL;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_FEATHER_FALL_Server& ServerOpcode::get<MSG_MOVE_FEATHER_FALL_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_FEATHER_FALL_Server& ServerOpcode::get<MSG_MOVE_FEATHER_FALL_Server>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_FEATHER_FALL_Server>();
     if (p) {
         return *p;
@@ -33615,14 +34277,14 @@ vanilla::MSG_MOVE_FEATHER_FALL_Server& ServerOpcode::get<MSG_MOVE_FEATHER_FALL_S
 }
 
 template <>
-vanilla::MSG_MOVE_WATER_WALK* ServerOpcode::get_if<MSG_MOVE_WATER_WALK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_WATER_WALK* ServerOpcode::get_if<MSG_MOVE_WATER_WALK>() {
     if (opcode == Opcode::MSG_MOVE_WATER_WALK) {
         return &MSG_MOVE_WATER_WALK;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_WATER_WALK& ServerOpcode::get<MSG_MOVE_WATER_WALK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_WATER_WALK& ServerOpcode::get<MSG_MOVE_WATER_WALK>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_WATER_WALK>();
     if (p) {
         return *p;
@@ -33631,14 +34293,14 @@ vanilla::MSG_MOVE_WATER_WALK& ServerOpcode::get<MSG_MOVE_WATER_WALK>() {
 }
 
 template <>
-vanilla::SMSG_FEIGN_DEATH_RESISTED* ServerOpcode::get_if<SMSG_FEIGN_DEATH_RESISTED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_FEIGN_DEATH_RESISTED* ServerOpcode::get_if<SMSG_FEIGN_DEATH_RESISTED>() {
     if (opcode == Opcode::SMSG_FEIGN_DEATH_RESISTED) {
         return &SMSG_FEIGN_DEATH_RESISTED;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_FEIGN_DEATH_RESISTED& ServerOpcode::get<SMSG_FEIGN_DEATH_RESISTED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_FEIGN_DEATH_RESISTED& ServerOpcode::get<SMSG_FEIGN_DEATH_RESISTED>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_FEIGN_DEATH_RESISTED>();
     if (p) {
         return *p;
@@ -33647,14 +34309,14 @@ vanilla::SMSG_FEIGN_DEATH_RESISTED& ServerOpcode::get<SMSG_FEIGN_DEATH_RESISTED>
 }
 
 template <>
-vanilla::SMSG_DUEL_COUNTDOWN* ServerOpcode::get_if<SMSG_DUEL_COUNTDOWN>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_DUEL_COUNTDOWN* ServerOpcode::get_if<SMSG_DUEL_COUNTDOWN>() {
     if (opcode == Opcode::SMSG_DUEL_COUNTDOWN) {
         return &SMSG_DUEL_COUNTDOWN;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_DUEL_COUNTDOWN& ServerOpcode::get<SMSG_DUEL_COUNTDOWN>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_DUEL_COUNTDOWN& ServerOpcode::get<SMSG_DUEL_COUNTDOWN>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_DUEL_COUNTDOWN>();
     if (p) {
         return *p;
@@ -33663,14 +34325,14 @@ vanilla::SMSG_DUEL_COUNTDOWN& ServerOpcode::get<SMSG_DUEL_COUNTDOWN>() {
 }
 
 template <>
-vanilla::SMSG_AREA_TRIGGER_MESSAGE* ServerOpcode::get_if<SMSG_AREA_TRIGGER_MESSAGE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_AREA_TRIGGER_MESSAGE* ServerOpcode::get_if<SMSG_AREA_TRIGGER_MESSAGE>() {
     if (opcode == Opcode::SMSG_AREA_TRIGGER_MESSAGE) {
         return &SMSG_AREA_TRIGGER_MESSAGE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_AREA_TRIGGER_MESSAGE& ServerOpcode::get<SMSG_AREA_TRIGGER_MESSAGE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_AREA_TRIGGER_MESSAGE& ServerOpcode::get<SMSG_AREA_TRIGGER_MESSAGE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_AREA_TRIGGER_MESSAGE>();
     if (p) {
         return *p;
@@ -33679,14 +34341,14 @@ vanilla::SMSG_AREA_TRIGGER_MESSAGE& ServerOpcode::get<SMSG_AREA_TRIGGER_MESSAGE>
 }
 
 template <>
-vanilla::SMSG_MEETINGSTONE_JOINFAILED* ServerOpcode::get_if<SMSG_MEETINGSTONE_JOINFAILED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_MEETINGSTONE_JOINFAILED* ServerOpcode::get_if<SMSG_MEETINGSTONE_JOINFAILED>() {
     if (opcode == Opcode::SMSG_MEETINGSTONE_JOINFAILED) {
         return &SMSG_MEETINGSTONE_JOINFAILED;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_MEETINGSTONE_JOINFAILED& ServerOpcode::get<SMSG_MEETINGSTONE_JOINFAILED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_MEETINGSTONE_JOINFAILED& ServerOpcode::get<SMSG_MEETINGSTONE_JOINFAILED>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_MEETINGSTONE_JOINFAILED>();
     if (p) {
         return *p;
@@ -33695,14 +34357,14 @@ vanilla::SMSG_MEETINGSTONE_JOINFAILED& ServerOpcode::get<SMSG_MEETINGSTONE_JOINF
 }
 
 template <>
-vanilla::SMSG_PLAYER_SKINNED* ServerOpcode::get_if<SMSG_PLAYER_SKINNED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PLAYER_SKINNED* ServerOpcode::get_if<SMSG_PLAYER_SKINNED>() {
     if (opcode == Opcode::SMSG_PLAYER_SKINNED) {
         return &SMSG_PLAYER_SKINNED;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_PLAYER_SKINNED& ServerOpcode::get<SMSG_PLAYER_SKINNED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PLAYER_SKINNED& ServerOpcode::get<SMSG_PLAYER_SKINNED>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_PLAYER_SKINNED>();
     if (p) {
         return *p;
@@ -33711,14 +34373,14 @@ vanilla::SMSG_PLAYER_SKINNED& ServerOpcode::get<SMSG_PLAYER_SKINNED>() {
 }
 
 template <>
-vanilla::SMSG_DURABILITY_DAMAGE_DEATH* ServerOpcode::get_if<SMSG_DURABILITY_DAMAGE_DEATH>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_DURABILITY_DAMAGE_DEATH* ServerOpcode::get_if<SMSG_DURABILITY_DAMAGE_DEATH>() {
     if (opcode == Opcode::SMSG_DURABILITY_DAMAGE_DEATH) {
         return &SMSG_DURABILITY_DAMAGE_DEATH;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_DURABILITY_DAMAGE_DEATH& ServerOpcode::get<SMSG_DURABILITY_DAMAGE_DEATH>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_DURABILITY_DAMAGE_DEATH& ServerOpcode::get<SMSG_DURABILITY_DAMAGE_DEATH>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_DURABILITY_DAMAGE_DEATH>();
     if (p) {
         return *p;
@@ -33727,14 +34389,14 @@ vanilla::SMSG_DURABILITY_DAMAGE_DEATH& ServerOpcode::get<SMSG_DURABILITY_DAMAGE_
 }
 
 template <>
-vanilla::MSG_PETITION_RENAME* ServerOpcode::get_if<MSG_PETITION_RENAME>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_PETITION_RENAME* ServerOpcode::get_if<MSG_PETITION_RENAME>() {
     if (opcode == Opcode::MSG_PETITION_RENAME) {
         return &MSG_PETITION_RENAME;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_PETITION_RENAME& ServerOpcode::get<MSG_PETITION_RENAME>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_PETITION_RENAME& ServerOpcode::get<MSG_PETITION_RENAME>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_PETITION_RENAME>();
     if (p) {
         return *p;
@@ -33743,14 +34405,14 @@ vanilla::MSG_PETITION_RENAME& ServerOpcode::get<MSG_PETITION_RENAME>() {
 }
 
 template <>
-vanilla::SMSG_INIT_WORLD_STATES* ServerOpcode::get_if<SMSG_INIT_WORLD_STATES>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_INIT_WORLD_STATES* ServerOpcode::get_if<SMSG_INIT_WORLD_STATES>() {
     if (opcode == Opcode::SMSG_INIT_WORLD_STATES) {
         return &SMSG_INIT_WORLD_STATES;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_INIT_WORLD_STATES& ServerOpcode::get<SMSG_INIT_WORLD_STATES>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_INIT_WORLD_STATES& ServerOpcode::get<SMSG_INIT_WORLD_STATES>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_INIT_WORLD_STATES>();
     if (p) {
         return *p;
@@ -33759,14 +34421,14 @@ vanilla::SMSG_INIT_WORLD_STATES& ServerOpcode::get<SMSG_INIT_WORLD_STATES>() {
 }
 
 template <>
-vanilla::SMSG_UPDATE_WORLD_STATE* ServerOpcode::get_if<SMSG_UPDATE_WORLD_STATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_UPDATE_WORLD_STATE* ServerOpcode::get_if<SMSG_UPDATE_WORLD_STATE>() {
     if (opcode == Opcode::SMSG_UPDATE_WORLD_STATE) {
         return &SMSG_UPDATE_WORLD_STATE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_UPDATE_WORLD_STATE& ServerOpcode::get<SMSG_UPDATE_WORLD_STATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_UPDATE_WORLD_STATE& ServerOpcode::get<SMSG_UPDATE_WORLD_STATE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_UPDATE_WORLD_STATE>();
     if (p) {
         return *p;
@@ -33775,14 +34437,14 @@ vanilla::SMSG_UPDATE_WORLD_STATE& ServerOpcode::get<SMSG_UPDATE_WORLD_STATE>() {
 }
 
 template <>
-vanilla::SMSG_ITEM_NAME_QUERY_RESPONSE* ServerOpcode::get_if<SMSG_ITEM_NAME_QUERY_RESPONSE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ITEM_NAME_QUERY_RESPONSE* ServerOpcode::get_if<SMSG_ITEM_NAME_QUERY_RESPONSE>() {
     if (opcode == Opcode::SMSG_ITEM_NAME_QUERY_RESPONSE) {
         return &SMSG_ITEM_NAME_QUERY_RESPONSE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_ITEM_NAME_QUERY_RESPONSE& ServerOpcode::get<SMSG_ITEM_NAME_QUERY_RESPONSE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ITEM_NAME_QUERY_RESPONSE& ServerOpcode::get<SMSG_ITEM_NAME_QUERY_RESPONSE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_ITEM_NAME_QUERY_RESPONSE>();
     if (p) {
         return *p;
@@ -33791,14 +34453,14 @@ vanilla::SMSG_ITEM_NAME_QUERY_RESPONSE& ServerOpcode::get<SMSG_ITEM_NAME_QUERY_R
 }
 
 template <>
-vanilla::SMSG_PET_ACTION_FEEDBACK* ServerOpcode::get_if<SMSG_PET_ACTION_FEEDBACK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PET_ACTION_FEEDBACK* ServerOpcode::get_if<SMSG_PET_ACTION_FEEDBACK>() {
     if (opcode == Opcode::SMSG_PET_ACTION_FEEDBACK) {
         return &SMSG_PET_ACTION_FEEDBACK;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_PET_ACTION_FEEDBACK& ServerOpcode::get<SMSG_PET_ACTION_FEEDBACK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PET_ACTION_FEEDBACK& ServerOpcode::get<SMSG_PET_ACTION_FEEDBACK>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_PET_ACTION_FEEDBACK>();
     if (p) {
         return *p;
@@ -33807,14 +34469,14 @@ vanilla::SMSG_PET_ACTION_FEEDBACK& ServerOpcode::get<SMSG_PET_ACTION_FEEDBACK>()
 }
 
 template <>
-vanilla::SMSG_CHAR_RENAME* ServerOpcode::get_if<SMSG_CHAR_RENAME>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_CHAR_RENAME* ServerOpcode::get_if<SMSG_CHAR_RENAME>() {
     if (opcode == Opcode::SMSG_CHAR_RENAME) {
         return &SMSG_CHAR_RENAME;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_CHAR_RENAME& ServerOpcode::get<SMSG_CHAR_RENAME>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_CHAR_RENAME& ServerOpcode::get<SMSG_CHAR_RENAME>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_CHAR_RENAME>();
     if (p) {
         return *p;
@@ -33823,14 +34485,14 @@ vanilla::SMSG_CHAR_RENAME& ServerOpcode::get<SMSG_CHAR_RENAME>() {
 }
 
 template <>
-vanilla::SMSG_INSTANCE_SAVE_CREATED* ServerOpcode::get_if<SMSG_INSTANCE_SAVE_CREATED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_INSTANCE_SAVE_CREATED* ServerOpcode::get_if<SMSG_INSTANCE_SAVE_CREATED>() {
     if (opcode == Opcode::SMSG_INSTANCE_SAVE_CREATED) {
         return &SMSG_INSTANCE_SAVE_CREATED;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_INSTANCE_SAVE_CREATED& ServerOpcode::get<SMSG_INSTANCE_SAVE_CREATED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_INSTANCE_SAVE_CREATED& ServerOpcode::get<SMSG_INSTANCE_SAVE_CREATED>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_INSTANCE_SAVE_CREATED>();
     if (p) {
         return *p;
@@ -33839,14 +34501,14 @@ vanilla::SMSG_INSTANCE_SAVE_CREATED& ServerOpcode::get<SMSG_INSTANCE_SAVE_CREATE
 }
 
 template <>
-vanilla::SMSG_RAID_INSTANCE_INFO* ServerOpcode::get_if<SMSG_RAID_INSTANCE_INFO>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_RAID_INSTANCE_INFO* ServerOpcode::get_if<SMSG_RAID_INSTANCE_INFO>() {
     if (opcode == Opcode::SMSG_RAID_INSTANCE_INFO) {
         return &SMSG_RAID_INSTANCE_INFO;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_RAID_INSTANCE_INFO& ServerOpcode::get<SMSG_RAID_INSTANCE_INFO>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_RAID_INSTANCE_INFO& ServerOpcode::get<SMSG_RAID_INSTANCE_INFO>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_RAID_INSTANCE_INFO>();
     if (p) {
         return *p;
@@ -33855,14 +34517,14 @@ vanilla::SMSG_RAID_INSTANCE_INFO& ServerOpcode::get<SMSG_RAID_INSTANCE_INFO>() {
 }
 
 template <>
-vanilla::SMSG_PLAY_SOUND* ServerOpcode::get_if<SMSG_PLAY_SOUND>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PLAY_SOUND* ServerOpcode::get_if<SMSG_PLAY_SOUND>() {
     if (opcode == Opcode::SMSG_PLAY_SOUND) {
         return &SMSG_PLAY_SOUND;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_PLAY_SOUND& ServerOpcode::get<SMSG_PLAY_SOUND>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PLAY_SOUND& ServerOpcode::get<SMSG_PLAY_SOUND>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_PLAY_SOUND>();
     if (p) {
         return *p;
@@ -33871,14 +34533,14 @@ vanilla::SMSG_PLAY_SOUND& ServerOpcode::get<SMSG_PLAY_SOUND>() {
 }
 
 template <>
-vanilla::SMSG_BATTLEFIELD_STATUS* ServerOpcode::get_if<SMSG_BATTLEFIELD_STATUS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_BATTLEFIELD_STATUS* ServerOpcode::get_if<SMSG_BATTLEFIELD_STATUS>() {
     if (opcode == Opcode::SMSG_BATTLEFIELD_STATUS) {
         return &SMSG_BATTLEFIELD_STATUS;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_BATTLEFIELD_STATUS& ServerOpcode::get<SMSG_BATTLEFIELD_STATUS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_BATTLEFIELD_STATUS& ServerOpcode::get<SMSG_BATTLEFIELD_STATUS>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_BATTLEFIELD_STATUS>();
     if (p) {
         return *p;
@@ -33887,14 +34549,14 @@ vanilla::SMSG_BATTLEFIELD_STATUS& ServerOpcode::get<SMSG_BATTLEFIELD_STATUS>() {
 }
 
 template <>
-vanilla::MSG_INSPECT_HONOR_STATS_Server* ServerOpcode::get_if<MSG_INSPECT_HONOR_STATS_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_INSPECT_HONOR_STATS_Server* ServerOpcode::get_if<MSG_INSPECT_HONOR_STATS_Server>() {
     if (opcode == Opcode::MSG_INSPECT_HONOR_STATS) {
         return &MSG_INSPECT_HONOR_STATS;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_INSPECT_HONOR_STATS_Server& ServerOpcode::get<MSG_INSPECT_HONOR_STATS_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_INSPECT_HONOR_STATS_Server& ServerOpcode::get<MSG_INSPECT_HONOR_STATS_Server>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_INSPECT_HONOR_STATS_Server>();
     if (p) {
         return *p;
@@ -33903,14 +34565,14 @@ vanilla::MSG_INSPECT_HONOR_STATS_Server& ServerOpcode::get<MSG_INSPECT_HONOR_STA
 }
 
 template <>
-vanilla::SMSG_FORCE_WALK_SPEED_CHANGE* ServerOpcode::get_if<SMSG_FORCE_WALK_SPEED_CHANGE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_FORCE_WALK_SPEED_CHANGE* ServerOpcode::get_if<SMSG_FORCE_WALK_SPEED_CHANGE>() {
     if (opcode == Opcode::SMSG_FORCE_WALK_SPEED_CHANGE) {
         return &SMSG_FORCE_WALK_SPEED_CHANGE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_FORCE_WALK_SPEED_CHANGE& ServerOpcode::get<SMSG_FORCE_WALK_SPEED_CHANGE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_FORCE_WALK_SPEED_CHANGE& ServerOpcode::get<SMSG_FORCE_WALK_SPEED_CHANGE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_FORCE_WALK_SPEED_CHANGE>();
     if (p) {
         return *p;
@@ -33919,14 +34581,14 @@ vanilla::SMSG_FORCE_WALK_SPEED_CHANGE& ServerOpcode::get<SMSG_FORCE_WALK_SPEED_C
 }
 
 template <>
-vanilla::SMSG_FORCE_SWIM_BACK_SPEED_CHANGE* ServerOpcode::get_if<SMSG_FORCE_SWIM_BACK_SPEED_CHANGE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_FORCE_SWIM_BACK_SPEED_CHANGE* ServerOpcode::get_if<SMSG_FORCE_SWIM_BACK_SPEED_CHANGE>() {
     if (opcode == Opcode::SMSG_FORCE_SWIM_BACK_SPEED_CHANGE) {
         return &SMSG_FORCE_SWIM_BACK_SPEED_CHANGE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_FORCE_SWIM_BACK_SPEED_CHANGE& ServerOpcode::get<SMSG_FORCE_SWIM_BACK_SPEED_CHANGE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_FORCE_SWIM_BACK_SPEED_CHANGE& ServerOpcode::get<SMSG_FORCE_SWIM_BACK_SPEED_CHANGE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_FORCE_SWIM_BACK_SPEED_CHANGE>();
     if (p) {
         return *p;
@@ -33935,14 +34597,14 @@ vanilla::SMSG_FORCE_SWIM_BACK_SPEED_CHANGE& ServerOpcode::get<SMSG_FORCE_SWIM_BA
 }
 
 template <>
-vanilla::SMSG_FORCE_TURN_RATE_CHANGE* ServerOpcode::get_if<SMSG_FORCE_TURN_RATE_CHANGE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_FORCE_TURN_RATE_CHANGE* ServerOpcode::get_if<SMSG_FORCE_TURN_RATE_CHANGE>() {
     if (opcode == Opcode::SMSG_FORCE_TURN_RATE_CHANGE) {
         return &SMSG_FORCE_TURN_RATE_CHANGE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_FORCE_TURN_RATE_CHANGE& ServerOpcode::get<SMSG_FORCE_TURN_RATE_CHANGE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_FORCE_TURN_RATE_CHANGE& ServerOpcode::get<SMSG_FORCE_TURN_RATE_CHANGE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_FORCE_TURN_RATE_CHANGE>();
     if (p) {
         return *p;
@@ -33951,14 +34613,14 @@ vanilla::SMSG_FORCE_TURN_RATE_CHANGE& ServerOpcode::get<SMSG_FORCE_TURN_RATE_CHA
 }
 
 template <>
-vanilla::MSG_PVP_LOG_DATA_Server* ServerOpcode::get_if<MSG_PVP_LOG_DATA_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_PVP_LOG_DATA_Server* ServerOpcode::get_if<MSG_PVP_LOG_DATA_Server>() {
     if (opcode == Opcode::MSG_PVP_LOG_DATA) {
         return &MSG_PVP_LOG_DATA;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_PVP_LOG_DATA_Server& ServerOpcode::get<MSG_PVP_LOG_DATA_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_PVP_LOG_DATA_Server& ServerOpcode::get<MSG_PVP_LOG_DATA_Server>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_PVP_LOG_DATA_Server>();
     if (p) {
         return *p;
@@ -33967,14 +34629,14 @@ vanilla::MSG_PVP_LOG_DATA_Server& ServerOpcode::get<MSG_PVP_LOG_DATA_Server>() {
 }
 
 template <>
-vanilla::SMSG_AREA_SPIRIT_HEALER_TIME* ServerOpcode::get_if<SMSG_AREA_SPIRIT_HEALER_TIME>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_AREA_SPIRIT_HEALER_TIME* ServerOpcode::get_if<SMSG_AREA_SPIRIT_HEALER_TIME>() {
     if (opcode == Opcode::SMSG_AREA_SPIRIT_HEALER_TIME) {
         return &SMSG_AREA_SPIRIT_HEALER_TIME;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_AREA_SPIRIT_HEALER_TIME& ServerOpcode::get<SMSG_AREA_SPIRIT_HEALER_TIME>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_AREA_SPIRIT_HEALER_TIME& ServerOpcode::get<SMSG_AREA_SPIRIT_HEALER_TIME>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_AREA_SPIRIT_HEALER_TIME>();
     if (p) {
         return *p;
@@ -33983,14 +34645,14 @@ vanilla::SMSG_AREA_SPIRIT_HEALER_TIME& ServerOpcode::get<SMSG_AREA_SPIRIT_HEALER
 }
 
 template <>
-vanilla::SMSG_WARDEN_DATA* ServerOpcode::get_if<SMSG_WARDEN_DATA>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_WARDEN_DATA* ServerOpcode::get_if<SMSG_WARDEN_DATA>() {
     if (opcode == Opcode::SMSG_WARDEN_DATA) {
         return &SMSG_WARDEN_DATA;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_WARDEN_DATA& ServerOpcode::get<SMSG_WARDEN_DATA>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_WARDEN_DATA& ServerOpcode::get<SMSG_WARDEN_DATA>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_WARDEN_DATA>();
     if (p) {
         return *p;
@@ -33999,14 +34661,14 @@ vanilla::SMSG_WARDEN_DATA& ServerOpcode::get<SMSG_WARDEN_DATA>() {
 }
 
 template <>
-vanilla::SMSG_GROUP_JOINED_BATTLEGROUND* ServerOpcode::get_if<SMSG_GROUP_JOINED_BATTLEGROUND>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GROUP_JOINED_BATTLEGROUND* ServerOpcode::get_if<SMSG_GROUP_JOINED_BATTLEGROUND>() {
     if (opcode == Opcode::SMSG_GROUP_JOINED_BATTLEGROUND) {
         return &SMSG_GROUP_JOINED_BATTLEGROUND;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_GROUP_JOINED_BATTLEGROUND& ServerOpcode::get<SMSG_GROUP_JOINED_BATTLEGROUND>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GROUP_JOINED_BATTLEGROUND& ServerOpcode::get<SMSG_GROUP_JOINED_BATTLEGROUND>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_GROUP_JOINED_BATTLEGROUND>();
     if (p) {
         return *p;
@@ -34015,14 +34677,14 @@ vanilla::SMSG_GROUP_JOINED_BATTLEGROUND& ServerOpcode::get<SMSG_GROUP_JOINED_BAT
 }
 
 template <>
-vanilla::MSG_BATTLEGROUND_PLAYER_POSITIONS_Server* ServerOpcode::get_if<MSG_BATTLEGROUND_PLAYER_POSITIONS_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_BATTLEGROUND_PLAYER_POSITIONS_Server* ServerOpcode::get_if<MSG_BATTLEGROUND_PLAYER_POSITIONS_Server>() {
     if (opcode == Opcode::MSG_BATTLEGROUND_PLAYER_POSITIONS) {
         return &MSG_BATTLEGROUND_PLAYER_POSITIONS;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_BATTLEGROUND_PLAYER_POSITIONS_Server& ServerOpcode::get<MSG_BATTLEGROUND_PLAYER_POSITIONS_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_BATTLEGROUND_PLAYER_POSITIONS_Server& ServerOpcode::get<MSG_BATTLEGROUND_PLAYER_POSITIONS_Server>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_BATTLEGROUND_PLAYER_POSITIONS_Server>();
     if (p) {
         return *p;
@@ -34031,14 +34693,14 @@ vanilla::MSG_BATTLEGROUND_PLAYER_POSITIONS_Server& ServerOpcode::get<MSG_BATTLEG
 }
 
 template <>
-vanilla::SMSG_BINDER_CONFIRM* ServerOpcode::get_if<SMSG_BINDER_CONFIRM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_BINDER_CONFIRM* ServerOpcode::get_if<SMSG_BINDER_CONFIRM>() {
     if (opcode == Opcode::SMSG_BINDER_CONFIRM) {
         return &SMSG_BINDER_CONFIRM;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_BINDER_CONFIRM& ServerOpcode::get<SMSG_BINDER_CONFIRM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_BINDER_CONFIRM& ServerOpcode::get<SMSG_BINDER_CONFIRM>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_BINDER_CONFIRM>();
     if (p) {
         return *p;
@@ -34047,14 +34709,14 @@ vanilla::SMSG_BINDER_CONFIRM& ServerOpcode::get<SMSG_BINDER_CONFIRM>() {
 }
 
 template <>
-vanilla::SMSG_BATTLEGROUND_PLAYER_JOINED* ServerOpcode::get_if<SMSG_BATTLEGROUND_PLAYER_JOINED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_BATTLEGROUND_PLAYER_JOINED* ServerOpcode::get_if<SMSG_BATTLEGROUND_PLAYER_JOINED>() {
     if (opcode == Opcode::SMSG_BATTLEGROUND_PLAYER_JOINED) {
         return &SMSG_BATTLEGROUND_PLAYER_JOINED;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_BATTLEGROUND_PLAYER_JOINED& ServerOpcode::get<SMSG_BATTLEGROUND_PLAYER_JOINED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_BATTLEGROUND_PLAYER_JOINED& ServerOpcode::get<SMSG_BATTLEGROUND_PLAYER_JOINED>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_BATTLEGROUND_PLAYER_JOINED>();
     if (p) {
         return *p;
@@ -34063,14 +34725,14 @@ vanilla::SMSG_BATTLEGROUND_PLAYER_JOINED& ServerOpcode::get<SMSG_BATTLEGROUND_PL
 }
 
 template <>
-vanilla::SMSG_BATTLEGROUND_PLAYER_LEFT* ServerOpcode::get_if<SMSG_BATTLEGROUND_PLAYER_LEFT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_BATTLEGROUND_PLAYER_LEFT* ServerOpcode::get_if<SMSG_BATTLEGROUND_PLAYER_LEFT>() {
     if (opcode == Opcode::SMSG_BATTLEGROUND_PLAYER_LEFT) {
         return &SMSG_BATTLEGROUND_PLAYER_LEFT;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_BATTLEGROUND_PLAYER_LEFT& ServerOpcode::get<SMSG_BATTLEGROUND_PLAYER_LEFT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_BATTLEGROUND_PLAYER_LEFT& ServerOpcode::get<SMSG_BATTLEGROUND_PLAYER_LEFT>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_BATTLEGROUND_PLAYER_LEFT>();
     if (p) {
         return *p;
@@ -34079,14 +34741,14 @@ vanilla::SMSG_BATTLEGROUND_PLAYER_LEFT& ServerOpcode::get<SMSG_BATTLEGROUND_PLAY
 }
 
 template <>
-vanilla::SMSG_ADDON_INFO* ServerOpcode::get_if<SMSG_ADDON_INFO>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ADDON_INFO* ServerOpcode::get_if<SMSG_ADDON_INFO>() {
     if (opcode == Opcode::SMSG_ADDON_INFO) {
         return &SMSG_ADDON_INFO;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_ADDON_INFO& ServerOpcode::get<SMSG_ADDON_INFO>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_ADDON_INFO& ServerOpcode::get<SMSG_ADDON_INFO>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_ADDON_INFO>();
     if (p) {
         return *p;
@@ -34095,14 +34757,14 @@ vanilla::SMSG_ADDON_INFO& ServerOpcode::get<SMSG_ADDON_INFO>() {
 }
 
 template <>
-vanilla::SMSG_PET_UNLEARN_CONFIRM* ServerOpcode::get_if<SMSG_PET_UNLEARN_CONFIRM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PET_UNLEARN_CONFIRM* ServerOpcode::get_if<SMSG_PET_UNLEARN_CONFIRM>() {
     if (opcode == Opcode::SMSG_PET_UNLEARN_CONFIRM) {
         return &SMSG_PET_UNLEARN_CONFIRM;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_PET_UNLEARN_CONFIRM& ServerOpcode::get<SMSG_PET_UNLEARN_CONFIRM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PET_UNLEARN_CONFIRM& ServerOpcode::get<SMSG_PET_UNLEARN_CONFIRM>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_PET_UNLEARN_CONFIRM>();
     if (p) {
         return *p;
@@ -34111,14 +34773,14 @@ vanilla::SMSG_PET_UNLEARN_CONFIRM& ServerOpcode::get<SMSG_PET_UNLEARN_CONFIRM>()
 }
 
 template <>
-vanilla::SMSG_PARTY_MEMBER_STATS_FULL* ServerOpcode::get_if<SMSG_PARTY_MEMBER_STATS_FULL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PARTY_MEMBER_STATS_FULL* ServerOpcode::get_if<SMSG_PARTY_MEMBER_STATS_FULL>() {
     if (opcode == Opcode::SMSG_PARTY_MEMBER_STATS_FULL) {
         return &SMSG_PARTY_MEMBER_STATS_FULL;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_PARTY_MEMBER_STATS_FULL& ServerOpcode::get<SMSG_PARTY_MEMBER_STATS_FULL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PARTY_MEMBER_STATS_FULL& ServerOpcode::get<SMSG_PARTY_MEMBER_STATS_FULL>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_PARTY_MEMBER_STATS_FULL>();
     if (p) {
         return *p;
@@ -34127,14 +34789,14 @@ vanilla::SMSG_PARTY_MEMBER_STATS_FULL& ServerOpcode::get<SMSG_PARTY_MEMBER_STATS
 }
 
 template <>
-vanilla::SMSG_WEATHER* ServerOpcode::get_if<SMSG_WEATHER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_WEATHER* ServerOpcode::get_if<SMSG_WEATHER>() {
     if (opcode == Opcode::SMSG_WEATHER) {
         return &SMSG_WEATHER;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_WEATHER& ServerOpcode::get<SMSG_WEATHER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_WEATHER& ServerOpcode::get<SMSG_WEATHER>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_WEATHER>();
     if (p) {
         return *p;
@@ -34143,14 +34805,14 @@ vanilla::SMSG_WEATHER& ServerOpcode::get<SMSG_WEATHER>() {
 }
 
 template <>
-vanilla::SMSG_RAID_INSTANCE_MESSAGE* ServerOpcode::get_if<SMSG_RAID_INSTANCE_MESSAGE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_RAID_INSTANCE_MESSAGE* ServerOpcode::get_if<SMSG_RAID_INSTANCE_MESSAGE>() {
     if (opcode == Opcode::SMSG_RAID_INSTANCE_MESSAGE) {
         return &SMSG_RAID_INSTANCE_MESSAGE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_RAID_INSTANCE_MESSAGE& ServerOpcode::get<SMSG_RAID_INSTANCE_MESSAGE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_RAID_INSTANCE_MESSAGE& ServerOpcode::get<SMSG_RAID_INSTANCE_MESSAGE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_RAID_INSTANCE_MESSAGE>();
     if (p) {
         return *p;
@@ -34159,14 +34821,14 @@ vanilla::SMSG_RAID_INSTANCE_MESSAGE& ServerOpcode::get<SMSG_RAID_INSTANCE_MESSAG
 }
 
 template <>
-vanilla::SMSG_COMPRESSED_MOVES* ServerOpcode::get_if<SMSG_COMPRESSED_MOVES>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_COMPRESSED_MOVES* ServerOpcode::get_if<SMSG_COMPRESSED_MOVES>() {
     if (opcode == Opcode::SMSG_COMPRESSED_MOVES) {
         return &SMSG_COMPRESSED_MOVES;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_COMPRESSED_MOVES& ServerOpcode::get<SMSG_COMPRESSED_MOVES>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_COMPRESSED_MOVES& ServerOpcode::get<SMSG_COMPRESSED_MOVES>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_COMPRESSED_MOVES>();
     if (p) {
         return *p;
@@ -34175,14 +34837,14 @@ vanilla::SMSG_COMPRESSED_MOVES& ServerOpcode::get<SMSG_COMPRESSED_MOVES>() {
 }
 
 template <>
-vanilla::SMSG_CHAT_RESTRICTED* ServerOpcode::get_if<SMSG_CHAT_RESTRICTED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_CHAT_RESTRICTED* ServerOpcode::get_if<SMSG_CHAT_RESTRICTED>() {
     if (opcode == Opcode::SMSG_CHAT_RESTRICTED) {
         return &SMSG_CHAT_RESTRICTED;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_CHAT_RESTRICTED& ServerOpcode::get<SMSG_CHAT_RESTRICTED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_CHAT_RESTRICTED& ServerOpcode::get<SMSG_CHAT_RESTRICTED>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_CHAT_RESTRICTED>();
     if (p) {
         return *p;
@@ -34191,14 +34853,14 @@ vanilla::SMSG_CHAT_RESTRICTED& ServerOpcode::get<SMSG_CHAT_RESTRICTED>() {
 }
 
 template <>
-vanilla::SMSG_SPLINE_SET_RUN_SPEED* ServerOpcode::get_if<SMSG_SPLINE_SET_RUN_SPEED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPLINE_SET_RUN_SPEED* ServerOpcode::get_if<SMSG_SPLINE_SET_RUN_SPEED>() {
     if (opcode == Opcode::SMSG_SPLINE_SET_RUN_SPEED) {
         return &SMSG_SPLINE_SET_RUN_SPEED;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SPLINE_SET_RUN_SPEED& ServerOpcode::get<SMSG_SPLINE_SET_RUN_SPEED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPLINE_SET_RUN_SPEED& ServerOpcode::get<SMSG_SPLINE_SET_RUN_SPEED>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SPLINE_SET_RUN_SPEED>();
     if (p) {
         return *p;
@@ -34207,14 +34869,14 @@ vanilla::SMSG_SPLINE_SET_RUN_SPEED& ServerOpcode::get<SMSG_SPLINE_SET_RUN_SPEED>
 }
 
 template <>
-vanilla::SMSG_SPLINE_SET_RUN_BACK_SPEED* ServerOpcode::get_if<SMSG_SPLINE_SET_RUN_BACK_SPEED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPLINE_SET_RUN_BACK_SPEED* ServerOpcode::get_if<SMSG_SPLINE_SET_RUN_BACK_SPEED>() {
     if (opcode == Opcode::SMSG_SPLINE_SET_RUN_BACK_SPEED) {
         return &SMSG_SPLINE_SET_RUN_BACK_SPEED;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SPLINE_SET_RUN_BACK_SPEED& ServerOpcode::get<SMSG_SPLINE_SET_RUN_BACK_SPEED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPLINE_SET_RUN_BACK_SPEED& ServerOpcode::get<SMSG_SPLINE_SET_RUN_BACK_SPEED>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SPLINE_SET_RUN_BACK_SPEED>();
     if (p) {
         return *p;
@@ -34223,14 +34885,14 @@ vanilla::SMSG_SPLINE_SET_RUN_BACK_SPEED& ServerOpcode::get<SMSG_SPLINE_SET_RUN_B
 }
 
 template <>
-vanilla::SMSG_SPLINE_SET_SWIM_SPEED* ServerOpcode::get_if<SMSG_SPLINE_SET_SWIM_SPEED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPLINE_SET_SWIM_SPEED* ServerOpcode::get_if<SMSG_SPLINE_SET_SWIM_SPEED>() {
     if (opcode == Opcode::SMSG_SPLINE_SET_SWIM_SPEED) {
         return &SMSG_SPLINE_SET_SWIM_SPEED;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SPLINE_SET_SWIM_SPEED& ServerOpcode::get<SMSG_SPLINE_SET_SWIM_SPEED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPLINE_SET_SWIM_SPEED& ServerOpcode::get<SMSG_SPLINE_SET_SWIM_SPEED>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SPLINE_SET_SWIM_SPEED>();
     if (p) {
         return *p;
@@ -34239,14 +34901,14 @@ vanilla::SMSG_SPLINE_SET_SWIM_SPEED& ServerOpcode::get<SMSG_SPLINE_SET_SWIM_SPEE
 }
 
 template <>
-vanilla::SMSG_SPLINE_SET_WALK_SPEED* ServerOpcode::get_if<SMSG_SPLINE_SET_WALK_SPEED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPLINE_SET_WALK_SPEED* ServerOpcode::get_if<SMSG_SPLINE_SET_WALK_SPEED>() {
     if (opcode == Opcode::SMSG_SPLINE_SET_WALK_SPEED) {
         return &SMSG_SPLINE_SET_WALK_SPEED;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SPLINE_SET_WALK_SPEED& ServerOpcode::get<SMSG_SPLINE_SET_WALK_SPEED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPLINE_SET_WALK_SPEED& ServerOpcode::get<SMSG_SPLINE_SET_WALK_SPEED>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SPLINE_SET_WALK_SPEED>();
     if (p) {
         return *p;
@@ -34255,14 +34917,14 @@ vanilla::SMSG_SPLINE_SET_WALK_SPEED& ServerOpcode::get<SMSG_SPLINE_SET_WALK_SPEE
 }
 
 template <>
-vanilla::SMSG_SPLINE_SET_SWIM_BACK_SPEED* ServerOpcode::get_if<SMSG_SPLINE_SET_SWIM_BACK_SPEED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPLINE_SET_SWIM_BACK_SPEED* ServerOpcode::get_if<SMSG_SPLINE_SET_SWIM_BACK_SPEED>() {
     if (opcode == Opcode::SMSG_SPLINE_SET_SWIM_BACK_SPEED) {
         return &SMSG_SPLINE_SET_SWIM_BACK_SPEED;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SPLINE_SET_SWIM_BACK_SPEED& ServerOpcode::get<SMSG_SPLINE_SET_SWIM_BACK_SPEED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPLINE_SET_SWIM_BACK_SPEED& ServerOpcode::get<SMSG_SPLINE_SET_SWIM_BACK_SPEED>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SPLINE_SET_SWIM_BACK_SPEED>();
     if (p) {
         return *p;
@@ -34271,14 +34933,14 @@ vanilla::SMSG_SPLINE_SET_SWIM_BACK_SPEED& ServerOpcode::get<SMSG_SPLINE_SET_SWIM
 }
 
 template <>
-vanilla::SMSG_SPLINE_SET_TURN_RATE* ServerOpcode::get_if<SMSG_SPLINE_SET_TURN_RATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPLINE_SET_TURN_RATE* ServerOpcode::get_if<SMSG_SPLINE_SET_TURN_RATE>() {
     if (opcode == Opcode::SMSG_SPLINE_SET_TURN_RATE) {
         return &SMSG_SPLINE_SET_TURN_RATE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SPLINE_SET_TURN_RATE& ServerOpcode::get<SMSG_SPLINE_SET_TURN_RATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPLINE_SET_TURN_RATE& ServerOpcode::get<SMSG_SPLINE_SET_TURN_RATE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SPLINE_SET_TURN_RATE>();
     if (p) {
         return *p;
@@ -34287,14 +34949,14 @@ vanilla::SMSG_SPLINE_SET_TURN_RATE& ServerOpcode::get<SMSG_SPLINE_SET_TURN_RATE>
 }
 
 template <>
-vanilla::SMSG_SPLINE_MOVE_UNROOT* ServerOpcode::get_if<SMSG_SPLINE_MOVE_UNROOT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPLINE_MOVE_UNROOT* ServerOpcode::get_if<SMSG_SPLINE_MOVE_UNROOT>() {
     if (opcode == Opcode::SMSG_SPLINE_MOVE_UNROOT) {
         return &SMSG_SPLINE_MOVE_UNROOT;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SPLINE_MOVE_UNROOT& ServerOpcode::get<SMSG_SPLINE_MOVE_UNROOT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPLINE_MOVE_UNROOT& ServerOpcode::get<SMSG_SPLINE_MOVE_UNROOT>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SPLINE_MOVE_UNROOT>();
     if (p) {
         return *p;
@@ -34303,14 +34965,14 @@ vanilla::SMSG_SPLINE_MOVE_UNROOT& ServerOpcode::get<SMSG_SPLINE_MOVE_UNROOT>() {
 }
 
 template <>
-vanilla::SMSG_SPLINE_MOVE_FEATHER_FALL* ServerOpcode::get_if<SMSG_SPLINE_MOVE_FEATHER_FALL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPLINE_MOVE_FEATHER_FALL* ServerOpcode::get_if<SMSG_SPLINE_MOVE_FEATHER_FALL>() {
     if (opcode == Opcode::SMSG_SPLINE_MOVE_FEATHER_FALL) {
         return &SMSG_SPLINE_MOVE_FEATHER_FALL;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SPLINE_MOVE_FEATHER_FALL& ServerOpcode::get<SMSG_SPLINE_MOVE_FEATHER_FALL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPLINE_MOVE_FEATHER_FALL& ServerOpcode::get<SMSG_SPLINE_MOVE_FEATHER_FALL>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SPLINE_MOVE_FEATHER_FALL>();
     if (p) {
         return *p;
@@ -34319,14 +34981,14 @@ vanilla::SMSG_SPLINE_MOVE_FEATHER_FALL& ServerOpcode::get<SMSG_SPLINE_MOVE_FEATH
 }
 
 template <>
-vanilla::SMSG_SPLINE_MOVE_NORMAL_FALL* ServerOpcode::get_if<SMSG_SPLINE_MOVE_NORMAL_FALL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPLINE_MOVE_NORMAL_FALL* ServerOpcode::get_if<SMSG_SPLINE_MOVE_NORMAL_FALL>() {
     if (opcode == Opcode::SMSG_SPLINE_MOVE_NORMAL_FALL) {
         return &SMSG_SPLINE_MOVE_NORMAL_FALL;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SPLINE_MOVE_NORMAL_FALL& ServerOpcode::get<SMSG_SPLINE_MOVE_NORMAL_FALL>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPLINE_MOVE_NORMAL_FALL& ServerOpcode::get<SMSG_SPLINE_MOVE_NORMAL_FALL>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SPLINE_MOVE_NORMAL_FALL>();
     if (p) {
         return *p;
@@ -34335,14 +34997,14 @@ vanilla::SMSG_SPLINE_MOVE_NORMAL_FALL& ServerOpcode::get<SMSG_SPLINE_MOVE_NORMAL
 }
 
 template <>
-vanilla::SMSG_SPLINE_MOVE_SET_HOVER* ServerOpcode::get_if<SMSG_SPLINE_MOVE_SET_HOVER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPLINE_MOVE_SET_HOVER* ServerOpcode::get_if<SMSG_SPLINE_MOVE_SET_HOVER>() {
     if (opcode == Opcode::SMSG_SPLINE_MOVE_SET_HOVER) {
         return &SMSG_SPLINE_MOVE_SET_HOVER;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SPLINE_MOVE_SET_HOVER& ServerOpcode::get<SMSG_SPLINE_MOVE_SET_HOVER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPLINE_MOVE_SET_HOVER& ServerOpcode::get<SMSG_SPLINE_MOVE_SET_HOVER>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SPLINE_MOVE_SET_HOVER>();
     if (p) {
         return *p;
@@ -34351,14 +35013,14 @@ vanilla::SMSG_SPLINE_MOVE_SET_HOVER& ServerOpcode::get<SMSG_SPLINE_MOVE_SET_HOVE
 }
 
 template <>
-vanilla::SMSG_SPLINE_MOVE_UNSET_HOVER* ServerOpcode::get_if<SMSG_SPLINE_MOVE_UNSET_HOVER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPLINE_MOVE_UNSET_HOVER* ServerOpcode::get_if<SMSG_SPLINE_MOVE_UNSET_HOVER>() {
     if (opcode == Opcode::SMSG_SPLINE_MOVE_UNSET_HOVER) {
         return &SMSG_SPLINE_MOVE_UNSET_HOVER;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SPLINE_MOVE_UNSET_HOVER& ServerOpcode::get<SMSG_SPLINE_MOVE_UNSET_HOVER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPLINE_MOVE_UNSET_HOVER& ServerOpcode::get<SMSG_SPLINE_MOVE_UNSET_HOVER>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SPLINE_MOVE_UNSET_HOVER>();
     if (p) {
         return *p;
@@ -34367,14 +35029,14 @@ vanilla::SMSG_SPLINE_MOVE_UNSET_HOVER& ServerOpcode::get<SMSG_SPLINE_MOVE_UNSET_
 }
 
 template <>
-vanilla::SMSG_SPLINE_MOVE_WATER_WALK* ServerOpcode::get_if<SMSG_SPLINE_MOVE_WATER_WALK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPLINE_MOVE_WATER_WALK* ServerOpcode::get_if<SMSG_SPLINE_MOVE_WATER_WALK>() {
     if (opcode == Opcode::SMSG_SPLINE_MOVE_WATER_WALK) {
         return &SMSG_SPLINE_MOVE_WATER_WALK;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SPLINE_MOVE_WATER_WALK& ServerOpcode::get<SMSG_SPLINE_MOVE_WATER_WALK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPLINE_MOVE_WATER_WALK& ServerOpcode::get<SMSG_SPLINE_MOVE_WATER_WALK>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SPLINE_MOVE_WATER_WALK>();
     if (p) {
         return *p;
@@ -34383,14 +35045,14 @@ vanilla::SMSG_SPLINE_MOVE_WATER_WALK& ServerOpcode::get<SMSG_SPLINE_MOVE_WATER_W
 }
 
 template <>
-vanilla::SMSG_SPLINE_MOVE_LAND_WALK* ServerOpcode::get_if<SMSG_SPLINE_MOVE_LAND_WALK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPLINE_MOVE_LAND_WALK* ServerOpcode::get_if<SMSG_SPLINE_MOVE_LAND_WALK>() {
     if (opcode == Opcode::SMSG_SPLINE_MOVE_LAND_WALK) {
         return &SMSG_SPLINE_MOVE_LAND_WALK;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SPLINE_MOVE_LAND_WALK& ServerOpcode::get<SMSG_SPLINE_MOVE_LAND_WALK>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPLINE_MOVE_LAND_WALK& ServerOpcode::get<SMSG_SPLINE_MOVE_LAND_WALK>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SPLINE_MOVE_LAND_WALK>();
     if (p) {
         return *p;
@@ -34399,14 +35061,14 @@ vanilla::SMSG_SPLINE_MOVE_LAND_WALK& ServerOpcode::get<SMSG_SPLINE_MOVE_LAND_WAL
 }
 
 template <>
-vanilla::SMSG_SPLINE_MOVE_START_SWIM* ServerOpcode::get_if<SMSG_SPLINE_MOVE_START_SWIM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPLINE_MOVE_START_SWIM* ServerOpcode::get_if<SMSG_SPLINE_MOVE_START_SWIM>() {
     if (opcode == Opcode::SMSG_SPLINE_MOVE_START_SWIM) {
         return &SMSG_SPLINE_MOVE_START_SWIM;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SPLINE_MOVE_START_SWIM& ServerOpcode::get<SMSG_SPLINE_MOVE_START_SWIM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPLINE_MOVE_START_SWIM& ServerOpcode::get<SMSG_SPLINE_MOVE_START_SWIM>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SPLINE_MOVE_START_SWIM>();
     if (p) {
         return *p;
@@ -34415,14 +35077,14 @@ vanilla::SMSG_SPLINE_MOVE_START_SWIM& ServerOpcode::get<SMSG_SPLINE_MOVE_START_S
 }
 
 template <>
-vanilla::SMSG_SPLINE_MOVE_STOP_SWIM* ServerOpcode::get_if<SMSG_SPLINE_MOVE_STOP_SWIM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPLINE_MOVE_STOP_SWIM* ServerOpcode::get_if<SMSG_SPLINE_MOVE_STOP_SWIM>() {
     if (opcode == Opcode::SMSG_SPLINE_MOVE_STOP_SWIM) {
         return &SMSG_SPLINE_MOVE_STOP_SWIM;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SPLINE_MOVE_STOP_SWIM& ServerOpcode::get<SMSG_SPLINE_MOVE_STOP_SWIM>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPLINE_MOVE_STOP_SWIM& ServerOpcode::get<SMSG_SPLINE_MOVE_STOP_SWIM>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SPLINE_MOVE_STOP_SWIM>();
     if (p) {
         return *p;
@@ -34431,14 +35093,14 @@ vanilla::SMSG_SPLINE_MOVE_STOP_SWIM& ServerOpcode::get<SMSG_SPLINE_MOVE_STOP_SWI
 }
 
 template <>
-vanilla::SMSG_SPLINE_MOVE_SET_RUN_MODE* ServerOpcode::get_if<SMSG_SPLINE_MOVE_SET_RUN_MODE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPLINE_MOVE_SET_RUN_MODE* ServerOpcode::get_if<SMSG_SPLINE_MOVE_SET_RUN_MODE>() {
     if (opcode == Opcode::SMSG_SPLINE_MOVE_SET_RUN_MODE) {
         return &SMSG_SPLINE_MOVE_SET_RUN_MODE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SPLINE_MOVE_SET_RUN_MODE& ServerOpcode::get<SMSG_SPLINE_MOVE_SET_RUN_MODE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPLINE_MOVE_SET_RUN_MODE& ServerOpcode::get<SMSG_SPLINE_MOVE_SET_RUN_MODE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SPLINE_MOVE_SET_RUN_MODE>();
     if (p) {
         return *p;
@@ -34447,14 +35109,14 @@ vanilla::SMSG_SPLINE_MOVE_SET_RUN_MODE& ServerOpcode::get<SMSG_SPLINE_MOVE_SET_R
 }
 
 template <>
-vanilla::SMSG_SPLINE_MOVE_SET_WALK_MODE* ServerOpcode::get_if<SMSG_SPLINE_MOVE_SET_WALK_MODE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPLINE_MOVE_SET_WALK_MODE* ServerOpcode::get_if<SMSG_SPLINE_MOVE_SET_WALK_MODE>() {
     if (opcode == Opcode::SMSG_SPLINE_MOVE_SET_WALK_MODE) {
         return &SMSG_SPLINE_MOVE_SET_WALK_MODE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SPLINE_MOVE_SET_WALK_MODE& ServerOpcode::get<SMSG_SPLINE_MOVE_SET_WALK_MODE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPLINE_MOVE_SET_WALK_MODE& ServerOpcode::get<SMSG_SPLINE_MOVE_SET_WALK_MODE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SPLINE_MOVE_SET_WALK_MODE>();
     if (p) {
         return *p;
@@ -34463,14 +35125,14 @@ vanilla::SMSG_SPLINE_MOVE_SET_WALK_MODE& ServerOpcode::get<SMSG_SPLINE_MOVE_SET_
 }
 
 template <>
-vanilla::MSG_MOVE_TIME_SKIPPED_Server* ServerOpcode::get_if<MSG_MOVE_TIME_SKIPPED_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_TIME_SKIPPED_Server* ServerOpcode::get_if<MSG_MOVE_TIME_SKIPPED_Server>() {
     if (opcode == Opcode::MSG_MOVE_TIME_SKIPPED) {
         return &MSG_MOVE_TIME_SKIPPED;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_MOVE_TIME_SKIPPED_Server& ServerOpcode::get<MSG_MOVE_TIME_SKIPPED_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_MOVE_TIME_SKIPPED_Server& ServerOpcode::get<MSG_MOVE_TIME_SKIPPED_Server>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_MOVE_TIME_SKIPPED_Server>();
     if (p) {
         return *p;
@@ -34479,14 +35141,14 @@ vanilla::MSG_MOVE_TIME_SKIPPED_Server& ServerOpcode::get<MSG_MOVE_TIME_SKIPPED_S
 }
 
 template <>
-vanilla::SMSG_SPLINE_MOVE_ROOT* ServerOpcode::get_if<SMSG_SPLINE_MOVE_ROOT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPLINE_MOVE_ROOT* ServerOpcode::get_if<SMSG_SPLINE_MOVE_ROOT>() {
     if (opcode == Opcode::SMSG_SPLINE_MOVE_ROOT) {
         return &SMSG_SPLINE_MOVE_ROOT;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SPLINE_MOVE_ROOT& ServerOpcode::get<SMSG_SPLINE_MOVE_ROOT>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPLINE_MOVE_ROOT& ServerOpcode::get<SMSG_SPLINE_MOVE_ROOT>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SPLINE_MOVE_ROOT>();
     if (p) {
         return *p;
@@ -34495,14 +35157,14 @@ vanilla::SMSG_SPLINE_MOVE_ROOT& ServerOpcode::get<SMSG_SPLINE_MOVE_ROOT>() {
 }
 
 template <>
-vanilla::SMSG_INVALIDATE_PLAYER* ServerOpcode::get_if<SMSG_INVALIDATE_PLAYER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_INVALIDATE_PLAYER* ServerOpcode::get_if<SMSG_INVALIDATE_PLAYER>() {
     if (opcode == Opcode::SMSG_INVALIDATE_PLAYER) {
         return &SMSG_INVALIDATE_PLAYER;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_INVALIDATE_PLAYER& ServerOpcode::get<SMSG_INVALIDATE_PLAYER>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_INVALIDATE_PLAYER& ServerOpcode::get<SMSG_INVALIDATE_PLAYER>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_INVALIDATE_PLAYER>();
     if (p) {
         return *p;
@@ -34511,14 +35173,14 @@ vanilla::SMSG_INVALIDATE_PLAYER& ServerOpcode::get<SMSG_INVALIDATE_PLAYER>() {
 }
 
 template <>
-vanilla::SMSG_INSTANCE_RESET* ServerOpcode::get_if<SMSG_INSTANCE_RESET>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_INSTANCE_RESET* ServerOpcode::get_if<SMSG_INSTANCE_RESET>() {
     if (opcode == Opcode::SMSG_INSTANCE_RESET) {
         return &SMSG_INSTANCE_RESET;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_INSTANCE_RESET& ServerOpcode::get<SMSG_INSTANCE_RESET>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_INSTANCE_RESET& ServerOpcode::get<SMSG_INSTANCE_RESET>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_INSTANCE_RESET>();
     if (p) {
         return *p;
@@ -34527,14 +35189,14 @@ vanilla::SMSG_INSTANCE_RESET& ServerOpcode::get<SMSG_INSTANCE_RESET>() {
 }
 
 template <>
-vanilla::SMSG_INSTANCE_RESET_FAILED* ServerOpcode::get_if<SMSG_INSTANCE_RESET_FAILED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_INSTANCE_RESET_FAILED* ServerOpcode::get_if<SMSG_INSTANCE_RESET_FAILED>() {
     if (opcode == Opcode::SMSG_INSTANCE_RESET_FAILED) {
         return &SMSG_INSTANCE_RESET_FAILED;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_INSTANCE_RESET_FAILED& ServerOpcode::get<SMSG_INSTANCE_RESET_FAILED>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_INSTANCE_RESET_FAILED& ServerOpcode::get<SMSG_INSTANCE_RESET_FAILED>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_INSTANCE_RESET_FAILED>();
     if (p) {
         return *p;
@@ -34543,14 +35205,14 @@ vanilla::SMSG_INSTANCE_RESET_FAILED& ServerOpcode::get<SMSG_INSTANCE_RESET_FAILE
 }
 
 template <>
-vanilla::SMSG_UPDATE_LAST_INSTANCE* ServerOpcode::get_if<SMSG_UPDATE_LAST_INSTANCE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_UPDATE_LAST_INSTANCE* ServerOpcode::get_if<SMSG_UPDATE_LAST_INSTANCE>() {
     if (opcode == Opcode::SMSG_UPDATE_LAST_INSTANCE) {
         return &SMSG_UPDATE_LAST_INSTANCE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_UPDATE_LAST_INSTANCE& ServerOpcode::get<SMSG_UPDATE_LAST_INSTANCE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_UPDATE_LAST_INSTANCE& ServerOpcode::get<SMSG_UPDATE_LAST_INSTANCE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_UPDATE_LAST_INSTANCE>();
     if (p) {
         return *p;
@@ -34559,14 +35221,14 @@ vanilla::SMSG_UPDATE_LAST_INSTANCE& ServerOpcode::get<SMSG_UPDATE_LAST_INSTANCE>
 }
 
 template <>
-vanilla::MSG_RAID_TARGET_UPDATE_Server* ServerOpcode::get_if<MSG_RAID_TARGET_UPDATE_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_RAID_TARGET_UPDATE_Server* ServerOpcode::get_if<MSG_RAID_TARGET_UPDATE_Server>() {
     if (opcode == Opcode::MSG_RAID_TARGET_UPDATE) {
         return &MSG_RAID_TARGET_UPDATE;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_RAID_TARGET_UPDATE_Server& ServerOpcode::get<MSG_RAID_TARGET_UPDATE_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_RAID_TARGET_UPDATE_Server& ServerOpcode::get<MSG_RAID_TARGET_UPDATE_Server>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_RAID_TARGET_UPDATE_Server>();
     if (p) {
         return *p;
@@ -34575,14 +35237,14 @@ vanilla::MSG_RAID_TARGET_UPDATE_Server& ServerOpcode::get<MSG_RAID_TARGET_UPDATE
 }
 
 template <>
-vanilla::MSG_RAID_READY_CHECK_Server* ServerOpcode::get_if<MSG_RAID_READY_CHECK_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_RAID_READY_CHECK_Server* ServerOpcode::get_if<MSG_RAID_READY_CHECK_Server>() {
     if (opcode == Opcode::MSG_RAID_READY_CHECK) {
         return &MSG_RAID_READY_CHECK;
     }
     return nullptr;
 }
 template <>
-vanilla::MSG_RAID_READY_CHECK_Server& ServerOpcode::get<MSG_RAID_READY_CHECK_Server>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::MSG_RAID_READY_CHECK_Server& ServerOpcode::get<MSG_RAID_READY_CHECK_Server>() {
     auto p = ServerOpcode::get_if<vanilla::MSG_RAID_READY_CHECK_Server>();
     if (p) {
         return *p;
@@ -34591,14 +35253,14 @@ vanilla::MSG_RAID_READY_CHECK_Server& ServerOpcode::get<MSG_RAID_READY_CHECK_Ser
 }
 
 template <>
-vanilla::SMSG_PET_ACTION_SOUND* ServerOpcode::get_if<SMSG_PET_ACTION_SOUND>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PET_ACTION_SOUND* ServerOpcode::get_if<SMSG_PET_ACTION_SOUND>() {
     if (opcode == Opcode::SMSG_PET_ACTION_SOUND) {
         return &SMSG_PET_ACTION_SOUND;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_PET_ACTION_SOUND& ServerOpcode::get<SMSG_PET_ACTION_SOUND>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PET_ACTION_SOUND& ServerOpcode::get<SMSG_PET_ACTION_SOUND>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_PET_ACTION_SOUND>();
     if (p) {
         return *p;
@@ -34607,14 +35269,14 @@ vanilla::SMSG_PET_ACTION_SOUND& ServerOpcode::get<SMSG_PET_ACTION_SOUND>() {
 }
 
 template <>
-vanilla::SMSG_PET_DISMISS_SOUND* ServerOpcode::get_if<SMSG_PET_DISMISS_SOUND>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PET_DISMISS_SOUND* ServerOpcode::get_if<SMSG_PET_DISMISS_SOUND>() {
     if (opcode == Opcode::SMSG_PET_DISMISS_SOUND) {
         return &SMSG_PET_DISMISS_SOUND;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_PET_DISMISS_SOUND& ServerOpcode::get<SMSG_PET_DISMISS_SOUND>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_PET_DISMISS_SOUND& ServerOpcode::get<SMSG_PET_DISMISS_SOUND>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_PET_DISMISS_SOUND>();
     if (p) {
         return *p;
@@ -34623,14 +35285,14 @@ vanilla::SMSG_PET_DISMISS_SOUND& ServerOpcode::get<SMSG_PET_DISMISS_SOUND>() {
 }
 
 template <>
-vanilla::SMSG_GM_TICKET_STATUS_UPDATE* ServerOpcode::get_if<SMSG_GM_TICKET_STATUS_UPDATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GM_TICKET_STATUS_UPDATE* ServerOpcode::get_if<SMSG_GM_TICKET_STATUS_UPDATE>() {
     if (opcode == Opcode::SMSG_GM_TICKET_STATUS_UPDATE) {
         return &SMSG_GM_TICKET_STATUS_UPDATE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_GM_TICKET_STATUS_UPDATE& ServerOpcode::get<SMSG_GM_TICKET_STATUS_UPDATE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_GM_TICKET_STATUS_UPDATE& ServerOpcode::get<SMSG_GM_TICKET_STATUS_UPDATE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_GM_TICKET_STATUS_UPDATE>();
     if (p) {
         return *p;
@@ -34639,14 +35301,14 @@ vanilla::SMSG_GM_TICKET_STATUS_UPDATE& ServerOpcode::get<SMSG_GM_TICKET_STATUS_U
 }
 
 template <>
-vanilla::SMSG_UPDATE_INSTANCE_OWNERSHIP* ServerOpcode::get_if<SMSG_UPDATE_INSTANCE_OWNERSHIP>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_UPDATE_INSTANCE_OWNERSHIP* ServerOpcode::get_if<SMSG_UPDATE_INSTANCE_OWNERSHIP>() {
     if (opcode == Opcode::SMSG_UPDATE_INSTANCE_OWNERSHIP) {
         return &SMSG_UPDATE_INSTANCE_OWNERSHIP;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_UPDATE_INSTANCE_OWNERSHIP& ServerOpcode::get<SMSG_UPDATE_INSTANCE_OWNERSHIP>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_UPDATE_INSTANCE_OWNERSHIP& ServerOpcode::get<SMSG_UPDATE_INSTANCE_OWNERSHIP>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_UPDATE_INSTANCE_OWNERSHIP>();
     if (p) {
         return *p;
@@ -34655,14 +35317,14 @@ vanilla::SMSG_UPDATE_INSTANCE_OWNERSHIP& ServerOpcode::get<SMSG_UPDATE_INSTANCE_
 }
 
 template <>
-vanilla::SMSG_SPELLINSTAKILLLOG* ServerOpcode::get_if<SMSG_SPELLINSTAKILLLOG>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPELLINSTAKILLLOG* ServerOpcode::get_if<SMSG_SPELLINSTAKILLLOG>() {
     if (opcode == Opcode::SMSG_SPELLINSTAKILLLOG) {
         return &SMSG_SPELLINSTAKILLLOG;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SPELLINSTAKILLLOG& ServerOpcode::get<SMSG_SPELLINSTAKILLLOG>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPELLINSTAKILLLOG& ServerOpcode::get<SMSG_SPELLINSTAKILLLOG>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SPELLINSTAKILLLOG>();
     if (p) {
         return *p;
@@ -34671,14 +35333,14 @@ vanilla::SMSG_SPELLINSTAKILLLOG& ServerOpcode::get<SMSG_SPELLINSTAKILLLOG>() {
 }
 
 template <>
-vanilla::SMSG_SPELL_UPDATE_CHAIN_TARGETS* ServerOpcode::get_if<SMSG_SPELL_UPDATE_CHAIN_TARGETS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPELL_UPDATE_CHAIN_TARGETS* ServerOpcode::get_if<SMSG_SPELL_UPDATE_CHAIN_TARGETS>() {
     if (opcode == Opcode::SMSG_SPELL_UPDATE_CHAIN_TARGETS) {
         return &SMSG_SPELL_UPDATE_CHAIN_TARGETS;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_SPELL_UPDATE_CHAIN_TARGETS& ServerOpcode::get<SMSG_SPELL_UPDATE_CHAIN_TARGETS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_SPELL_UPDATE_CHAIN_TARGETS& ServerOpcode::get<SMSG_SPELL_UPDATE_CHAIN_TARGETS>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_SPELL_UPDATE_CHAIN_TARGETS>();
     if (p) {
         return *p;
@@ -34687,14 +35349,14 @@ vanilla::SMSG_SPELL_UPDATE_CHAIN_TARGETS& ServerOpcode::get<SMSG_SPELL_UPDATE_CH
 }
 
 template <>
-vanilla::SMSG_EXPECTED_SPAM_RECORDS* ServerOpcode::get_if<SMSG_EXPECTED_SPAM_RECORDS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_EXPECTED_SPAM_RECORDS* ServerOpcode::get_if<SMSG_EXPECTED_SPAM_RECORDS>() {
     if (opcode == Opcode::SMSG_EXPECTED_SPAM_RECORDS) {
         return &SMSG_EXPECTED_SPAM_RECORDS;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_EXPECTED_SPAM_RECORDS& ServerOpcode::get<SMSG_EXPECTED_SPAM_RECORDS>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_EXPECTED_SPAM_RECORDS& ServerOpcode::get<SMSG_EXPECTED_SPAM_RECORDS>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_EXPECTED_SPAM_RECORDS>();
     if (p) {
         return *p;
@@ -34703,14 +35365,14 @@ vanilla::SMSG_EXPECTED_SPAM_RECORDS& ServerOpcode::get<SMSG_EXPECTED_SPAM_RECORD
 }
 
 template <>
-vanilla::SMSG_DEFENSE_MESSAGE* ServerOpcode::get_if<SMSG_DEFENSE_MESSAGE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_DEFENSE_MESSAGE* ServerOpcode::get_if<SMSG_DEFENSE_MESSAGE>() {
     if (opcode == Opcode::SMSG_DEFENSE_MESSAGE) {
         return &SMSG_DEFENSE_MESSAGE;
     }
     return nullptr;
 }
 template <>
-vanilla::SMSG_DEFENSE_MESSAGE& ServerOpcode::get<SMSG_DEFENSE_MESSAGE>() {
+WOW_WORLD_MESSAGES_CPP_EXPORT vanilla::SMSG_DEFENSE_MESSAGE& ServerOpcode::get<SMSG_DEFENSE_MESSAGE>() {
     auto p = ServerOpcode::get_if<vanilla::SMSG_DEFENSE_MESSAGE>();
     if (p) {
         return *p;

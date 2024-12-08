@@ -7819,6 +7819,11 @@ typedef struct {
 } tbc_Addon;
 
 typedef struct {
+    uint32_t amount_of_addons;
+    tbc_Addon* addons;
+} tbc_AddonArray;
+
+typedef struct {
     WowWorldString addon_name;
     uint8_t addon_has_signature;
     uint32_t addon_crc;
@@ -8023,6 +8028,18 @@ typedef struct {
     uint32_t gem;
 
 } tbc_GuildBankSocket;
+
+typedef struct {
+    uint8_t slot;
+    uint32_t item;
+    VariableItemRandomProperty item_random_property_id;
+    uint8_t amount_of_items;
+    uint32_t enchant;
+    uint8_t charges;
+    uint8_t amount_of_sockets;
+    tbc_GuildBankSocket* sockets;
+
+} tbc_GuildBankSlot;
 
 typedef struct {
     WowWorldString tab_name;
@@ -13177,6 +13194,13 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult tbc_CMSG_BATTLEMASTER_JOIN_write(WowWorldWriter* writer, const tbc_CMSG_BATTLEMASTER_JOIN* object);
 
 typedef struct {
+    tbc_AddonArray addons;
+
+} tbc_SMSG_ADDON_INFO;
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult tbc_SMSG_ADDON_INFO_write(WowWorldWriter* writer, const tbc_SMSG_ADDON_INFO* object);
+WOW_WORLD_MESSAGES_C_EXPORT void tbc_SMSG_ADDON_INFO_free(tbc_SMSG_ADDON_INFO* object);
+
+typedef struct {
     uint64_t pet;
 
 } tbc_CMSG_PET_UNLEARN;
@@ -14265,6 +14289,20 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult tbc_CMSG_GUILD_BANK_QUERY_TAB_write(WowWorldWriter* writer, const tbc_CMSG_GUILD_BANK_QUERY_TAB* object);
 
 typedef struct {
+    uint64_t bank_balance;
+    uint8_t tab_id;
+    uint32_t amount_of_allowed_item_withdraws;
+    tbc_GuildBankTabResult tab_result;
+    uint8_t amount_of_bank_tabs;
+    tbc_GuildBankTab* tabs;
+    uint8_t amount_of_slot_updates;
+    tbc_GuildBankSlot* slot_updates;
+
+} tbc_SMSG_GUILD_BANK_LIST;
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult tbc_SMSG_GUILD_BANK_LIST_write(WowWorldWriter* writer, const tbc_SMSG_GUILD_BANK_LIST* object);
+WOW_WORLD_MESSAGES_C_EXPORT void tbc_SMSG_GUILD_BANK_LIST_free(tbc_SMSG_GUILD_BANK_LIST* object);
+
+typedef struct {
     uint64_t bank;
     tbc_BankSwapSource source;
     uint8_t bank_destination_tab;
@@ -15156,6 +15194,7 @@ typedef enum {
     SMSG_BATTLEGROUND_PLAYER_JOINED = 748,
     SMSG_BATTLEGROUND_PLAYER_LEFT = 749,
     CMSG_BATTLEMASTER_JOIN = 750,
+    SMSG_ADDON_INFO = 751,
     CMSG_PET_UNLEARN = 752,
     SMSG_PET_UNLEARN_CONFIRM = 753,
     SMSG_PARTY_MEMBER_STATS_FULL = 754,
@@ -15295,6 +15334,7 @@ typedef enum {
     CMSG_REPORT_PVP_AFK = 995,
     CMSG_GUILD_BANKER_ACTIVATE = 997,
     CMSG_GUILD_BANK_QUERY_TAB = 998,
+    SMSG_GUILD_BANK_LIST = 999,
     CMSG_GUILD_BANK_SWAP_ITEMS = 1000,
     CMSG_GUILD_BANK_BUY_TAB = 1001,
     CMSG_GUILD_BANK_UPDATE_TAB = 1002,
@@ -15651,12 +15691,13 @@ typedef struct {
     } body;
 } TbcClientOpcodeContainer;
 
-WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult tbc_client_write_opcode(WowWorldWriter* writer, const TbcClientOpcodeContainer* opcodes);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult tbc_client_opcode_write(WowWorldWriter* writer, const TbcClientOpcodeContainer* opcodes);
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult tbc_client_opcode_read(WowWorldReader* reader, TbcClientOpcodeContainer* opcodes);
 
 WOW_WORLD_MESSAGES_C_EXPORT void tbc_client_opcode_free(TbcClientOpcodeContainer* opcodes);
 
+WOW_WORLD_MESSAGES_C_EXPORT char* tbc_client_opcode_to_str(TbcClientOpcodeContainer* opcodes);
 typedef struct {
     WowTbcWorldOpcode opcode;
 
@@ -15944,6 +15985,7 @@ typedef struct {
         tbc_SMSG_BINDER_CONFIRM SMSG_BINDER_CONFIRM;
         tbc_SMSG_BATTLEGROUND_PLAYER_JOINED SMSG_BATTLEGROUND_PLAYER_JOINED;
         tbc_SMSG_BATTLEGROUND_PLAYER_LEFT SMSG_BATTLEGROUND_PLAYER_LEFT;
+        tbc_SMSG_ADDON_INFO SMSG_ADDON_INFO;
         tbc_SMSG_PET_UNLEARN_CONFIRM SMSG_PET_UNLEARN_CONFIRM;
         tbc_SMSG_PARTY_MEMBER_STATS_FULL SMSG_PARTY_MEMBER_STATS_FULL;
         tbc_SMSG_WEATHER SMSG_WEATHER;
@@ -16031,6 +16073,7 @@ typedef struct {
         tbc_SMSG_COMPLAIN_RESULT SMSG_COMPLAIN_RESULT;
         tbc_SMSG_FEATURE_SYSTEM_STATUS SMSG_FEATURE_SYSTEM_STATUS;
         tbc_SMSG_CHANNEL_MEMBER_COUNT SMSG_CHANNEL_MEMBER_COUNT;
+        tbc_SMSG_GUILD_BANK_LIST SMSG_GUILD_BANK_LIST;
         tbc_MSG_GUILD_BANK_LOG_QUERY_Server MSG_GUILD_BANK_LOG_QUERY_Server;
         tbc_SMSG_USERLIST_ADD SMSG_USERLIST_ADD;
         tbc_SMSG_USERLIST_REMOVE SMSG_USERLIST_REMOVE;
@@ -16054,12 +16097,13 @@ typedef struct {
     } body;
 } TbcServerOpcodeContainer;
 
-WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult tbc_server_write_opcode(WowWorldWriter* writer, const TbcServerOpcodeContainer* opcodes);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult tbc_server_opcode_write(WowWorldWriter* writer, const TbcServerOpcodeContainer* opcodes);
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult tbc_server_opcode_read(WowWorldReader* reader, TbcServerOpcodeContainer* opcodes);
 
 WOW_WORLD_MESSAGES_C_EXPORT void tbc_server_opcode_free(TbcServerOpcodeContainer* opcodes);
 
+WOW_WORLD_MESSAGES_C_EXPORT char* tbc_server_opcode_to_str(TbcServerOpcodeContainer* opcodes);
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

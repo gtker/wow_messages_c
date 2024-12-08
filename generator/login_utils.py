@@ -47,12 +47,13 @@ def print_login_utils_side(s: Writer, h: Writer, messages: list[model.Container]
 
     module_name = version_to_module_name(v)
     module_name_pascal = module_name.capitalize()
+    export_define = get_export_define(messages[0].tags)
 
     if is_cpp():
         h.open_curly(f"struct {side.capitalize()}Opcode")
         h.open_curly("enum class Opcode")
 
-        if is_world(e.tags):
+        if is_world(messages[0].tags):
             h.wln("NONE = 0xFFFF,")
         else:
             h.wln("NONE = 0xFF,")
@@ -124,12 +125,24 @@ def print_login_utils_side(s: Writer, h: Writer, messages: list[model.Container]
 
         h.wln("template<typename T>")
         h.wln("// NOLINTNEXTLINE")
-        h.wln("T& get(); // All possible types have been specialized")
+        h.wln(f"{export_define} T& get(); // All possible types have been specialized")
         h.newline()
 
         h.wln("template<typename T>")
         h.wln("// NOLINTNEXTLINE")
-        h.wln("T* get_if(); // All possible types have been specialized")
+        h.wln(f"{export_define} T* get_if(); // All possible types have been specialized")
+
+        h.newline()
+        function_declaration = f""
+        h.wln(f"{export_define} const char* to_string() const;")
+        s.open_curly(f"{export_define} const char* {side.capitalize()}Opcode::to_string() const")
+        for e in filter(matches, messages):
+            ty = e.name.replace("_Client", "").replace("_Server", "")
+            s.wln(f'if (opcode == Opcode::{ty}) {{ return "{e.name}"; }}')
+
+        s.wln("return nullptr;")
+
+        s.closing_curly()
 
         h.closing_curly(";")  # struct sideOpcode
         h.newline()
@@ -138,27 +151,27 @@ def print_login_utils_side(s: Writer, h: Writer, messages: list[model.Container]
             ty = e.name.replace("_Client", "").replace("_Server", "")
 
             h.wln("template<>")
-            h.wln(f"{module_name}::{e.name}* {side.capitalize()}Opcode::get_if();")
+            h.wln(f"{export_define} {module_name}::{e.name}* {side.capitalize()}Opcode::get_if();")
 
             s.wln("template <>")
-            s.open_curly(f"{module_name}::{e.name}* {side.capitalize()}Opcode::get_if<{e.name}>()")
+            s.open_curly(f"{export_define} {module_name}::{e.name}* {side.capitalize()}Opcode::get_if<{e.name}>()")
             s.open_curly(f"if (opcode == Opcode::{ty})")
             s.wln(f"return &{ty};")
-            s.closing_curly() # if opcode ==
+            s.closing_curly()  # if opcode ==
             s.wln("return nullptr;")
-            s.closing_curly() # get_if()
+            s.closing_curly()  # get_if()
 
             h.wln("template<>")
-            h.wln(f"{module_name}::{e.name}& {side.capitalize()}Opcode::get();")
+            h.wln(f"{export_define} {module_name}::{e.name}& {side.capitalize()}Opcode::get();")
             s.wln("template <>")
-            s.open_curly(f"{module_name}::{e.name}& {side.capitalize()}Opcode::get<{e.name}>()")
+            s.open_curly(f"{export_define} {module_name}::{e.name}& {side.capitalize()}Opcode::get<{e.name}>()")
             s.wln(f"auto p = {side.capitalize()}Opcode::get_if<{module_name}::{e.name}>();")
             s.open_curly("if (p)")
             s.wln("return *p;")
-            s.closing_curly() # if p
+            s.closing_curly()  # if p
             s.wln("throw bad_opcode_access{};")
 
-            s.closing_curly() # get()
+            s.closing_curly()  # get()
 
             s.newline()
         s.newline()
@@ -197,6 +210,41 @@ def print_login_utils_side(s: Writer, h: Writer, messages: list[model.Container]
     if not is_cpp():
         write_opcode_free(s, h, messages, v, side, module_name, module_name_pascal, side_pascal)
 
+        write_opcode_to_string(s, h, messages, v, side, module_name, module_name_pascal, side_pascal)
+
+
+def write_opcode_to_string(s: Writer, h: Writer, messages: list[model.Container],
+                           v: typing.Union[int | model.WorldVersion],
+                           side: str, module_name: str,
+                           module_name_pascal: str, side_pascal: str):
+    if not is_cpp():
+        function_declaration = f"{get_export_define(messages[0].tags)} char* {module_name}_{side}_opcode_to_str({module_name_pascal}{side_pascal}OpcodeContainer* opcodes)"
+        h.wln(f"{function_declaration};")
+        s.open_curly(function_declaration)
+
+        s.open_curly("switch (opcodes->opcode)")
+        for e in messages:
+            if not version_matches(e.tags, v) \
+                    or side_matches(e, side) == INVALID_OPCODE \
+                    or (first_version_as_module(e.tags) == "all" and version_to_module_name(v) != "all"):
+                continue
+            if not container_has_c_members(e):
+                continue
+
+            s.wln(f"case {e.name.replace('_Client', '').replace('_Server', '')}: return \"{e.name}\";")
+
+        s.wln("default:")
+        s.inc_indent()
+        s.wln("break;")
+        s.dec_indent()
+
+        s.closing_curly()  # switch
+        s.newline()
+        s.wln(f"return NULL;")
+
+        s.closing_curly()
+    s.newline()
+
 
 def write_opcode_write(s: Writer, h: Writer, messages: list[model.Container], v: typing.Union[int | model.WorldVersion],
                        side: str, module_name: str,
@@ -205,7 +253,7 @@ def write_opcode_write(s: Writer, h: Writer, messages: list[model.Container], v:
     function_declaration = f"{export} std::vector<unsigned char> write_opcode(const {side.capitalize()}Opcode& opcode)"
     if not is_cpp():
         result_type = get_type_prefix(messages[0].tags)
-        function_declaration =  f"{export} {result_type}Result {module_name}_{side}_write_opcode({result_type}Writer* writer, const {module_name_pascal}{side.capitalize()}OpcodeContainer* opcodes)"
+        function_declaration = f"{export} {result_type}Result {module_name}_{side}_opcode_write({result_type}Writer* writer, const {module_name_pascal}{side.capitalize()}OpcodeContainer* opcodes)"
     h.wln(f"{function_declaration};")
     h.newline()
 
@@ -246,7 +294,8 @@ def write_opcode_write(s: Writer, h: Writer, messages: list[model.Container], v:
 
             version = container_module_prefix(e.tags, module_name)
             extra_msg = "" if not type(e.object_type) is model.ObjectTypeMsg else f"_{side[0]}msg"
-            s.wln(f"{wlm_prefix}_CHECK_RETURN_CODE({version}_{e.name}{extra_msg}_write(writer, &opcodes->body.{e.name}));")
+            s.wln(
+                f"{wlm_prefix}_CHECK_RETURN_CODE({version}_{e.name}{extra_msg}_write(writer, &opcodes->body.{e.name}));")
 
             s.wln("break;")
             s.dec_indent()

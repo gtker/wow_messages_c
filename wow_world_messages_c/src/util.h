@@ -171,6 +171,12 @@ WowWorldResult wwm_write_named_guid(WowWorldWriter* stream, const NamedGuid* val
 size_t wwm_named_guid_size(const NamedGuid* value);
 void wwm_named_guid_free(NamedGuid* value);
 
+WowWorldResult wwm_read_variable_item_random_property(WowWorldReader* reader, VariableItemRandomProperty* value);
+#define READ_VARIABLE_ITEM_RANDOM_PROPERTY(variable) WWM_CHECK_RETURN_CODE(wwm_read_variable_item_random_property(reader, &variable))
+WowWorldResult wwm_write_variable_item_random_property(WowWorldWriter* writer, const VariableItemRandomProperty* value);
+#define WRITE_VARIABLE_ITEM_RANDOM_PROPERTY(variable) WWM_CHECK_RETURN_CODE(wwm_write_variable_item_random_property(writer, &variable))
+size_t wwm_variable_item_random_property_size(const VariableItemRandomProperty* value);
+
 #define READ_ARRAY_ALLOCATE(variable, arrayLength, elementSize) \
     do                                                          \
     {                                                           \

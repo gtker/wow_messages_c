@@ -17,10 +17,9 @@ from print_cache_mask import print_cache_mask
 from print_enum import print_enum
 from print_struct import print_struct, container_has_c_members, struct_util
 from print_struct.print_tests import print_login_tests, print_world_tests, print_login_test_prefix, \
-    print_login_test_suffix
+    print_test_suffix
 from print_struct.struct_util import all_members_from_container
 from print_update_mask import print_update_mask
-from print_variable_item_random_property import print_variable_item_random_property
 from util import (
     world_version_matches,
     should_print_container,
@@ -77,7 +76,7 @@ def main():
         file_path = f"{source_dir}/login.c{pp}"
         write_file_if_not_same(s, file_path)
 
-        print_login_test_suffix(tests)
+        print_test_suffix(tests)
 
         file_path = f"{source_dir}/all.test.c{pp}"
         write_file_if_not_same(tests, file_path)
@@ -153,6 +152,8 @@ def print_includes(s: Writer, h: Writer, world: bool, version_name: str,
 
     if world and version_name != "all" and not is_cpp():
         s.wln("#include <string.h> /* memset */")
+        if version_name != "vanilla":
+            s.wln("#include <stdlib.h> /* abort for AddonArray read */")
         s.newline()
 
     if world and not world_version_is_all(v):
@@ -236,6 +237,8 @@ def print_world(m: model.Objects, update_mask: list[model.UpdateMask], v: model.
 
     for e in filter(should_print, m.structs):
         print_struct(s, h, e, module_name)
+        if e.name == "Addon":
+            print_addon_array(s, h, v)
 
     print_aura_mask(s, h, v)
 

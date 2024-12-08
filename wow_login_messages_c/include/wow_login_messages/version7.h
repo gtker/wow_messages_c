@@ -77,12 +77,13 @@ typedef struct {
     } body;
 } Version7ClientOpcodeContainer;
 
-WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version7_client_write_opcode(WowLoginWriter* writer, const Version7ClientOpcodeContainer* opcodes);
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version7_client_opcode_write(WowLoginWriter* writer, const Version7ClientOpcodeContainer* opcodes);
 
 WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version7_client_opcode_read(WowLoginReader* reader, Version7ClientOpcodeContainer* opcodes);
 
 WOW_LOGIN_MESSAGES_C_EXPORT void version7_client_opcode_free(Version7ClientOpcodeContainer* opcodes);
 
+WOW_LOGIN_MESSAGES_C_EXPORT char* version7_client_opcode_to_str(Version7ClientOpcodeContainer* opcodes);
 typedef struct {
     WowLoginOpcode opcode;
 
@@ -97,12 +98,13 @@ typedef struct {
     } body;
 } Version7ServerOpcodeContainer;
 
-WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version7_server_write_opcode(WowLoginWriter* writer, const Version7ServerOpcodeContainer* opcodes);
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version7_server_opcode_write(WowLoginWriter* writer, const Version7ServerOpcodeContainer* opcodes);
 
 WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version7_server_opcode_read(WowLoginReader* reader, Version7ServerOpcodeContainer* opcodes);
 
 WOW_LOGIN_MESSAGES_C_EXPORT void version7_server_opcode_free(Version7ServerOpcodeContainer* opcodes);
 
+WOW_LOGIN_MESSAGES_C_EXPORT char* version7_server_opcode_to_str(Version7ServerOpcodeContainer* opcodes);
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

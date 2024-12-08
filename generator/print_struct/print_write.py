@@ -148,13 +148,19 @@ def print_write_struct_member(s: Writer, d: model.Definition, module_name: str, 
             s.wln(f"WRITE_INSPECT_TALENT_GEAR_MASK({variable_name});")
 
         case model.DataTypeVariableItemRandomProperty():
-            s.wln(f"WRITE_VARIABLE_ITEM_RANDOM_PROPERTY({variable_name});")
+            if is_cpp():
+                s.wln(f"::wow_world_messages::util::wwm_write_variable_item_random_property(writer, {variable_name});")
+            else:
+                s.wln(f"WRITE_VARIABLE_ITEM_RANDOM_PROPERTY({variable_name});")
 
         case model.DataTypeCacheMask():
             s.wln(f"WRITE_CACHE_MASK_{module_name}({variable_name});")
 
         case model.DataTypeAddonArray():
-            s.wln(f"WRITE_ADDON_ARRAY({variable_name});")
+            if is_cpp():
+                s.wln(f"{module_name}::addon_array_write(writer, {variable_name});")
+            else:
+                s.wln(f"{module_name}_addon_array_write(writer, &{variable_name});")
 
         case model.DataTypeAchievementDoneArray():
             s.wln(f"WRITE_ACHIEVEMENT_DONE_ARRAY({variable_name});")
@@ -213,6 +219,7 @@ def print_write_struct_member(s: Writer, d: model.Definition, module_name: str, 
                     s.closing_curly()  # for
 
                     s.open_curly("if (_size)")
+                    s.wln(f"size_t {d.name}_compressed_data_size;")
 
                     s.wln("WRITE_U32((uint32_t)_size);")
                     s.newline()
@@ -229,8 +236,12 @@ def print_write_struct_member(s: Writer, d: model.Definition, module_name: str, 
 
                 if compressed:
                     s.newline()
-                    s.wln(
-                        f"wwm_compress_data({d.name}_uncompressed_data, _size, old_writer->destination, old_writer->length - old_writer->index);")
+                    s.wln(f"{d.name}_compressed_data_size = wwm_compress_data({d.name}_uncompressed_data, _size, &old_writer->destination[old_writer->index], old_writer->length - old_writer->index);")
+                    s.open_curly(
+                        f"if ({d.name}_compressed_data_size == 0)")
+                    s.wln("return WWM_RESULT_COMPRESSION_ERROR;")
+                    s.closing_curly()
+                    s.wln(f"old_writer->index += {d.name}_compressed_data_size;")
                     s.wln(f"free({d.name}_uncompressed_data);")
 
                     s.closing_curly()  # if (_size)

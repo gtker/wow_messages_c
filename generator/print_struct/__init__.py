@@ -219,6 +219,9 @@ def print_free_struct_member(s: Writer, d: model.Definition, module_name: str, e
         case model.DataTypeAuraMask():
             pass
 
+        case model.DataTypeVariableItemRandomProperty():
+            pass
+
         case model.DataTypeMonsterMoveSpline():
             s.wln(f"wwm_monster_move_spline_free(&{variable_name});")
             s.newline()
@@ -230,18 +233,14 @@ def print_free_struct_member(s: Writer, d: model.Definition, module_name: str, e
         case model.DataTypeEnchantMask():
             s.wln(f"{d.name} = await EnchantMask.read(reader)")
 
-
         case model.DataTypeInspectTalentGearMask():
             s.wln(f"{d.name} = await InspectTalentGearMask.read(reader)")
-
-        case model.DataTypeVariableItemRandomProperty():
-            s.wln(f"{d.name} = await VariableItemRandomProperty.read(reader)")
 
         case model.DataTypeCacheMask():
             s.wln(f"{d.name} = await CacheMask.read(reader)")
 
         case model.DataTypeAddonArray():
-            s.wln(f"{d.name} = await CacheMask.read(reader)")
+            s.wln(f"free({variable_name}.addons);")
 
         case model.DataTypeAchievementDoneArray():
             s.wln(f"{d.name} = await CacheMask.read(reader)")

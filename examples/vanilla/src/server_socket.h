@@ -79,12 +79,12 @@ ServerSocket initialize_socket(const char* const port)
         abort();
     }
 
-    puts("Binding to 3724");
+    printf("Binding to %s\n", port);
 
     sock.server_fd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
     if (sock.server_fd == -1)
     {
-        printf("socket failed: %s\n", strerror(sock.server_fd));
+        puts("socket failed");
         abort();
     }
 
@@ -105,20 +105,22 @@ ServerSocket initialize_socket(const char* const port)
         abort();
     }
 
-    sock.client_fd = accept(sock.server_fd, (struct sockaddr*)&sock.storage, &sock.socklen);
-    if (sock.client_fd == -1)
+    return sock;
+}
+
+void server_accept(ServerSocket* sock)
+{
+    sock->client_fd = accept(sock->server_fd, (struct sockaddr*)&sock->storage, &sock->socklen);
+    if (sock->client_fd == -1)
     {
         puts("accept failed");
         abort();
     }
-
-
-    return sock;
 }
 
 size_t server_recv(ServerSocket* sock, unsigned char* buf, size_t n)
 {
-    ssize_t bytes = recv(sock->client_fd, (char*)buf, n, 0);
+    ssize_t bytes = recv(sock->client_fd, (char*)buf, WINDOWS_INT_CAST n, 0);
     if (bytes < 0)
     {
         puts("recv failed");

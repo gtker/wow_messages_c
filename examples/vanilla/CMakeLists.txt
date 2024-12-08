@@ -1,5 +1,9 @@
 add_executable(wow_messages_vanilla src/vanilla.main.c)
-target_link_libraries(wow_messages_vanilla PRIVATE wow_login_messages_c::wow_login_messages_c)
+target_link_libraries(wow_messages_vanilla
+        PRIVATE
+        wow_login_messages_c::wow_login_messages_c
+        wow_world_messages_c::wow_world_messages_c
+)
 set_target_properties(wow_messages_vanilla
         PROPERTIES
         C_EXTENSIONS ON

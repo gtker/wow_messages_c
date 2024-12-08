@@ -136,7 +136,7 @@ public:
         return value;
     }
 
-    bool is_at_end() const { return m_index < m_buf.size(); }
+    bool is_at_end() const { return m_index >= m_buf.size(); }
 
     std::vector<unsigned char> m_buf;
     size_t m_index = 0;
@@ -151,6 +151,10 @@ std::vector<all::Vector3d> wwm_read_monster_move_spline(Reader& reader);
 size_t wwm_named_guid_size(const NamedGuid& guid);
 void wwm_write_named_guid(Writer& writer, const NamedGuid& guid);
 NamedGuid wwm_read_named_guid(Reader& reader);
+
+size_t wwm_variable_item_random_property_size(const VariableItemRandomProperty& property);
+void wwm_write_variable_item_random_property(Writer& writer, const VariableItemRandomProperty& property);
+VariableItemRandomProperty wwm_read_variable_item_random_property(Reader& reader);
 
 std::vector<unsigned char> compress_data(const std::vector<unsigned char>& buffer);
 std::vector<unsigned char> decompress_data(const std::vector<unsigned char>& buffer);

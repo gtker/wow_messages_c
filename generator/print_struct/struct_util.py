@@ -59,16 +59,8 @@ def container_should_print(container: model.Container) -> bool:
                 print_skip(container, f"has inspect talent gear mask")
                 return False
 
-            case model.DataTypeVariableItemRandomProperty():
-                print_skip(container, f"has variable item random property")
-                return False
-
             case model.DataTypeCacheMask():
                 print_skip(container, f"has cache mask")
-                return False
-
-            case model.DataTypeAddonArray():
-                print_skip(container, f"has addon array")
                 return False
 
             case model.DataTypeAchievementDoneArray():
@@ -197,9 +189,9 @@ def type_to_c_str(ty: model.DataType, module_name: str) -> str:
         case model.DataTypeArray(size=size, inner_type=inner_type):
             match size:
                 case model.ArraySizeFixed():
-                    return f"{array_type_to_c_str(inner_type, module_name, is_world)}"
+                    return f"{array_type_to_c_str(inner_type, module_name)}"
 
-            return f"std::vector<{array_type_to_c_str(inner_type, module_name, is_world)}>" if is_cpp() else f"{array_type_to_c_str(inner_type, module_name, is_world)}*"
+            return f"std::vector<{array_type_to_c_str(inner_type, module_name)}>" if is_cpp() else f"{array_type_to_c_str(inner_type, module_name)}*"
 
         case model.DataTypeLevel():
             return "uint8_t"
@@ -227,7 +219,7 @@ def type_to_c_str(ty: model.DataType, module_name: str) -> str:
         case model.DataTypeAchievementInProgressArray():
             return "AchievementInProgressArray"
         case model.DataTypeAddonArray():
-            return "AddonArray"
+            return "std::vector<Addon>" if is_cpp() else f"{module_name}_AddonArray"
         case model.DataTypeAuraMask():
             return "AuraMask" if is_cpp() else f"{module_name}_AuraMask"
 
@@ -247,7 +239,7 @@ def type_to_c_str(ty: model.DataType, module_name: str) -> str:
             raise Exception(f"{v}")
 
 
-def array_type_to_c_str(ty: model.ArrayType, module_name: str, is_world: bool):
+def array_type_to_c_str(ty: model.ArrayType, module_name: str):
     match ty:
         case model.ArrayTypeCstring():
             return "std::string" if is_cpp() else "WowWorldString"

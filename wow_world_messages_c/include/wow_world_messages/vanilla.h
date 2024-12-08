@@ -12935,12 +12935,13 @@ typedef struct {
     } body;
 } VanillaClientOpcodeContainer;
 
-WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_client_write_opcode(WowWorldWriter* writer, const VanillaClientOpcodeContainer* opcodes);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_client_opcode_write(WowWorldWriter* writer, const VanillaClientOpcodeContainer* opcodes);
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_client_opcode_read(WowWorldReader* reader, VanillaClientOpcodeContainer* opcodes);
 
 WOW_WORLD_MESSAGES_C_EXPORT void vanilla_client_opcode_free(VanillaClientOpcodeContainer* opcodes);
 
+WOW_WORLD_MESSAGES_C_EXPORT char* vanilla_client_opcode_to_str(VanillaClientOpcodeContainer* opcodes);
 typedef struct {
     WowVanillaWorldOpcode opcode;
 
@@ -13270,12 +13271,13 @@ typedef struct {
     } body;
 } VanillaServerOpcodeContainer;
 
-WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_server_write_opcode(WowWorldWriter* writer, const VanillaServerOpcodeContainer* opcodes);
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_server_opcode_write(WowWorldWriter* writer, const VanillaServerOpcodeContainer* opcodes);
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_server_opcode_read(WowWorldReader* reader, VanillaServerOpcodeContainer* opcodes);
 
 WOW_WORLD_MESSAGES_C_EXPORT void vanilla_server_opcode_free(VanillaServerOpcodeContainer* opcodes);
 
+WOW_WORLD_MESSAGES_C_EXPORT char* vanilla_server_opcode_to_str(VanillaServerOpcodeContainer* opcodes);
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

@@ -123,11 +123,14 @@ def addable_size_value(
         case model.DataTypePackedGUID():
             return 0, f"{namespace}wwm_packed_guid_size({variable_name})"
         case model.DataTypeAchievementDoneArray() | model.DataTypeAchievementInProgressArray() \
-             | model.DataTypeAddonArray() | model.DataTypeCacheMask() \
-             | model.DataTypeVariableItemRandomProperty() \
+             | model.DataTypeCacheMask() \
              | model.DataTypeInspectTalentGearMask() \
              | model.DataTypeEnchantMask():
             return 0, f"{extra_indirection}{name}.size()"
+        case model.DataTypeAddonArray():
+            return 0, f"{variable_name}.size() * 8" if is_cpp() else f"{module_name}_addon_array_size(&{variable_name})"
+        case model.DataTypeVariableItemRandomProperty():
+            return 0, f"{namespace}wwm_variable_item_random_property_size({variable_name})" if is_cpp() else f"wwm_variable_item_random_property_size(&{variable_name})"
         case model.DataTypeNamedGUID():
             return 0, f"{namespace}wwm_named_guid_size({variable_name})" if is_cpp() else f"wwm_named_guid_size(&{variable_name})"
         case model.DataTypeUpdateMask():

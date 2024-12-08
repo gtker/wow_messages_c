@@ -5,6 +5,7 @@
 #include "wow_world_messages/tbc.h"
 
 #include <string.h> /* memset */
+#include <stdlib.h> /* abort for AddonArray read */
 
 /* forward declare all struct read/write */
 WowWorldResult all_Vector3d_read(WowWorldReader* reader, all_Vector3d* object);
@@ -136,6 +137,26 @@ static WowWorldResult tbc_Addon_write(WowWorldWriter* writer, const tbc_Addon* o
 
     WRITE_U8(object->unknown2);
 
+
+    return WWM_RESULT_SUCCESS;
+}
+
+static size_t tbc_addon_array_size(const tbc_AddonArray* array) {
+    return array->amount_of_addons * 8;
+}
+
+static WowWorldResult tbc_addon_array_read(const WowWorldReader* reader, tbc_AddonArray* array) {
+    (void)reader;
+    (void)array;
+    /* Read for addon array is not implemented. If this is relevant for you create an issue on github. */
+    abort();
+}
+
+static WowWorldResult tbc_addon_array_write(WowWorldWriter* writer, const tbc_AddonArray* array) {
+    uint32_t i;
+    for (i = 0; i < array->amount_of_addons; ++i) {
+        WWM_CHECK_RETURN_CODE(tbc_Addon_write(writer, &array->addons[i]));
+    }
 
     return WWM_RESULT_SUCCESS;
 }
@@ -927,6 +948,57 @@ static WowWorldResult tbc_GuildBankSocket_write(WowWorldWriter* writer, const tb
 
 
     return WWM_RESULT_SUCCESS;
+}
+
+static size_t tbc_GuildBankSlot_size(const tbc_GuildBankSlot* object) {
+    return 12 + wwm_variable_item_random_property_size(&object->item_random_property_id) + 5 * object->amount_of_sockets;
+}
+
+static WowWorldResult tbc_GuildBankSlot_read(WowWorldReader* reader, tbc_GuildBankSlot* object) {
+    READ_U8(object->slot);
+
+    READ_U32(object->item);
+
+    READ_VARIABLE_ITEM_RANDOM_PROPERTY(object->item_random_property_id);
+
+    READ_U8(object->amount_of_items);
+
+    READ_U32(object->enchant);
+
+    READ_U8(object->charges);
+
+    READ_U8(object->amount_of_sockets);
+
+    READ_ARRAY_ALLOCATE(object->sockets, object->amount_of_sockets, sizeof(tbc_GuildBankSocket));
+    READ_ARRAY(object->sockets, object->amount_of_sockets, WWM_CHECK_RETURN_CODE(tbc_GuildBankSocket_read(reader, &object->sockets[i])));
+
+    return WWM_RESULT_SUCCESS;
+}
+
+static WowWorldResult tbc_GuildBankSlot_write(WowWorldWriter* writer, const tbc_GuildBankSlot* object) {
+    WRITE_U8(object->slot);
+
+    WRITE_U32(object->item);
+
+    WRITE_VARIABLE_ITEM_RANDOM_PROPERTY(object->item_random_property_id);
+
+    WRITE_U8(object->amount_of_items);
+
+    WRITE_U32(object->enchant);
+
+    WRITE_U8(object->charges);
+
+    WRITE_U8(object->amount_of_sockets);
+
+    WRITE_ARRAY(object->sockets, object->amount_of_sockets, WWM_CHECK_RETURN_CODE(tbc_GuildBankSocket_write(writer, &object->sockets[i])));
+
+
+    return WWM_RESULT_SUCCESS;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void tbc_GuildBankSlot_free(tbc_GuildBankSlot* object) {
+    free(object->sockets);
+    object->sockets = NULL;
 }
 
 static size_t tbc_GuildBankTab_size(const tbc_GuildBankTab* object) {
@@ -15575,14 +15647,18 @@ static WowWorldResult tbc_CMSG_AUTH_SESSION_read(WowWorldReader* reader, tbc_CMS
     _size += 4;
 
     object->addon_info = NULL;
+    object->amount_of_addon_info = 0;
     if(addon_info_decompressed_size) {
+        const size_t addon_info_compressed_data_size = body_size - _size;
+        if (addon_info_compressed_data_size > reader->length - reader->index) {
+            return WWM_RESULT_NOT_ENOUGH_BYTES;
+        }
         addon_info_decompressed_data = malloc(addon_info_decompressed_size);
 
-        addon_info_compressed_data = malloc(body_size - _size);
-
-        memcpy(addon_info_compressed_data, &reader->source[reader->index], reader->length - reader->index);
-
-        wwm_decompress_data(addon_info_compressed_data, body_size - _size, addon_info_decompressed_data, addon_info_decompressed_size);
+        addon_info_decompressed_size = (uint32_t)wwm_decompress_data(&reader->source[reader->index], addon_info_compressed_data_size, addon_info_decompressed_data, addon_info_decompressed_size);
+        if (addon_info_decompressed_size == 0) {
+            return WWM_RESULT_COMPRESSION_ERROR;
+        }
         new_reader = wwm_create_reader(addon_info_decompressed_data, addon_info_decompressed_size);
         reader = &new_reader;
 
@@ -15592,7 +15668,7 @@ static WowWorldResult tbc_CMSG_AUTH_SESSION_read(WowWorldReader* reader, tbc_CMS
             size_t _current_size = 8 * sizeof(*object->addon_info);
 
             object->addon_info = malloc(_current_size);
-            while ((reader->index + 1) < reader->length) {
+            while (reader->index < reader->length) {
                 WWM_CHECK_RETURN_CODE(tbc_AddonInfo_read(reader, &object->addon_info[i]));
                 ++i;
 
@@ -15639,6 +15715,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult tbc_CMSG_AUTH_SESSION_write(WowWorldW
             _size += tbc_AddonInfo_size(&object->addon_info[compressed_i]);
         }
         if (_size) {
+            size_t addon_info_compressed_data_size;
             WRITE_U32((uint32_t)_size);
 
             addon_info_uncompressed_data = malloc(_size);
@@ -15646,7 +15723,11 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult tbc_CMSG_AUTH_SESSION_write(WowWorldW
             writer = &new_writer;
             WRITE_ARRAY(object->addon_info, object->amount_of_addon_info, WWM_CHECK_RETURN_CODE(tbc_AddonInfo_write(writer, &object->addon_info[i])));
 
-            wwm_compress_data(addon_info_uncompressed_data, _size, old_writer->destination, old_writer->length - old_writer->index);
+            addon_info_compressed_data_size = wwm_compress_data(addon_info_uncompressed_data, _size, &old_writer->destination[old_writer->index], old_writer->length - old_writer->index);
+            if (addon_info_compressed_data_size == 0) {
+                return WWM_RESULT_COMPRESSION_ERROR;
+            }
+            old_writer->index += addon_info_compressed_data_size;
             free(addon_info_uncompressed_data);
         }
     }
@@ -16356,14 +16437,18 @@ static WowWorldResult tbc_CMSG_GMTICKET_CREATE_read(WowWorldReader* reader, tbc_
         _size += 4;
 
         object->compressed_chat_data = NULL;
+        object->amount_of_compressed_chat_data = 0;
         if(compressed_chat_data_decompressed_size) {
+            const size_t compressed_chat_data_compressed_data_size = body_size - _size;
+            if (compressed_chat_data_compressed_data_size > reader->length - reader->index) {
+                return WWM_RESULT_NOT_ENOUGH_BYTES;
+            }
             compressed_chat_data_decompressed_data = malloc(compressed_chat_data_decompressed_size);
 
-            compressed_chat_data_compressed_data = malloc(body_size - _size);
-
-            memcpy(compressed_chat_data_compressed_data, &reader->source[reader->index], reader->length - reader->index);
-
-            wwm_decompress_data(compressed_chat_data_compressed_data, body_size - _size, compressed_chat_data_decompressed_data, compressed_chat_data_decompressed_size);
+            compressed_chat_data_decompressed_size = (uint32_t)wwm_decompress_data(&reader->source[reader->index], compressed_chat_data_compressed_data_size, compressed_chat_data_decompressed_data, compressed_chat_data_decompressed_size);
+            if (compressed_chat_data_decompressed_size == 0) {
+                return WWM_RESULT_COMPRESSION_ERROR;
+            }
             new_reader = wwm_create_reader(compressed_chat_data_decompressed_data, compressed_chat_data_decompressed_size);
             reader = &new_reader;
 
@@ -16373,7 +16458,7 @@ static WowWorldResult tbc_CMSG_GMTICKET_CREATE_read(WowWorldReader* reader, tbc_
                 size_t _current_size = 8 * sizeof(*object->compressed_chat_data);
 
                 object->compressed_chat_data = malloc(_current_size);
-                while ((reader->index + 1) < reader->length) {
+                while (reader->index < reader->length) {
                     READ_U8(object->compressed_chat_data[i]);
                     ++i;
 
@@ -16424,6 +16509,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult tbc_CMSG_GMTICKET_CREATE_write(WowWor
                 _size += 1;
             }
             if (_size) {
+                size_t compressed_chat_data_compressed_data_size;
                 WRITE_U32((uint32_t)_size);
 
                 compressed_chat_data_uncompressed_data = malloc(_size);
@@ -16431,7 +16517,11 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult tbc_CMSG_GMTICKET_CREATE_write(WowWor
                 writer = &new_writer;
                 WRITE_ARRAY(object->compressed_chat_data, object->amount_of_compressed_chat_data, WRITE_U8(object->compressed_chat_data[i]));
 
-                wwm_compress_data(compressed_chat_data_uncompressed_data, _size, old_writer->destination, old_writer->length - old_writer->index);
+                compressed_chat_data_compressed_data_size = wwm_compress_data(compressed_chat_data_uncompressed_data, _size, &old_writer->destination[old_writer->index], old_writer->length - old_writer->index);
+                if (compressed_chat_data_compressed_data_size == 0) {
+                    return WWM_RESULT_COMPRESSION_ERROR;
+                }
+                old_writer->index += compressed_chat_data_compressed_data_size;
                 free(compressed_chat_data_uncompressed_data);
             }
         }
@@ -16609,14 +16699,18 @@ static WowWorldResult tbc_CMSG_UPDATE_ACCOUNT_DATA_read(WowWorldReader* reader, 
     _size += 4;
 
     object->compressed_data = NULL;
+    object->amount_of_compressed_data = 0;
     if(compressed_data_decompressed_size) {
+        const size_t compressed_data_compressed_data_size = body_size - _size;
+        if (compressed_data_compressed_data_size > reader->length - reader->index) {
+            return WWM_RESULT_NOT_ENOUGH_BYTES;
+        }
         compressed_data_decompressed_data = malloc(compressed_data_decompressed_size);
 
-        compressed_data_compressed_data = malloc(body_size - _size);
-
-        memcpy(compressed_data_compressed_data, &reader->source[reader->index], reader->length - reader->index);
-
-        wwm_decompress_data(compressed_data_compressed_data, body_size - _size, compressed_data_decompressed_data, compressed_data_decompressed_size);
+        compressed_data_decompressed_size = (uint32_t)wwm_decompress_data(&reader->source[reader->index], compressed_data_compressed_data_size, compressed_data_decompressed_data, compressed_data_decompressed_size);
+        if (compressed_data_decompressed_size == 0) {
+            return WWM_RESULT_COMPRESSION_ERROR;
+        }
         new_reader = wwm_create_reader(compressed_data_decompressed_data, compressed_data_decompressed_size);
         reader = &new_reader;
 
@@ -16626,7 +16720,7 @@ static WowWorldResult tbc_CMSG_UPDATE_ACCOUNT_DATA_read(WowWorldReader* reader, 
             size_t _current_size = 8 * sizeof(*object->compressed_data);
 
             object->compressed_data = malloc(_current_size);
-            while ((reader->index + 1) < reader->length) {
+            while (reader->index < reader->length) {
                 READ_U8(object->compressed_data[i]);
                 ++i;
 
@@ -16665,6 +16759,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult tbc_CMSG_UPDATE_ACCOUNT_DATA_write(Wo
             _size += 1;
         }
         if (_size) {
+            size_t compressed_data_compressed_data_size;
             WRITE_U32((uint32_t)_size);
 
             compressed_data_uncompressed_data = malloc(_size);
@@ -16672,7 +16767,11 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult tbc_CMSG_UPDATE_ACCOUNT_DATA_write(Wo
             writer = &new_writer;
             WRITE_ARRAY(object->compressed_data, object->amount_of_compressed_data, WRITE_U8(object->compressed_data[i]));
 
-            wwm_compress_data(compressed_data_uncompressed_data, _size, old_writer->destination, old_writer->length - old_writer->index);
+            compressed_data_compressed_data_size = wwm_compress_data(compressed_data_uncompressed_data, _size, &old_writer->destination[old_writer->index], old_writer->length - old_writer->index);
+            if (compressed_data_compressed_data_size == 0) {
+                return WWM_RESULT_COMPRESSION_ERROR;
+            }
+            old_writer->index += compressed_data_compressed_data_size;
             free(compressed_data_uncompressed_data);
         }
     }
@@ -21714,6 +21813,35 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult tbc_CMSG_BATTLEMASTER_JOIN_write(WowW
     return WWM_RESULT_SUCCESS;
 }
 
+static size_t tbc_SMSG_ADDON_INFO_size(const tbc_SMSG_ADDON_INFO* object) {
+    return 4 + tbc_addon_array_size(&object->addons);
+}
+
+static WowWorldResult tbc_SMSG_ADDON_INFO_read(WowWorldReader* reader, tbc_SMSG_ADDON_INFO* object) {
+    WWM_CHECK_RETURN_CODE(tbc_addon_array_read(reader, &object->addons));
+
+    SKIP_FORWARD_BYTES(4);
+
+    return WWM_RESULT_SUCCESS;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult tbc_SMSG_ADDON_INFO_write(WowWorldWriter* writer, const tbc_SMSG_ADDON_INFO* object) {
+    WRITE_U16_BE((uint16_t)tbc_SMSG_ADDON_INFO_size(object) + 2); /* size */
+
+    WRITE_U16(0x000002ef); /* opcode */
+
+    tbc_addon_array_write(writer, &object->addons);
+
+    WRITE_U32(0);
+
+
+    return WWM_RESULT_SUCCESS;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void tbc_SMSG_ADDON_INFO_free(tbc_SMSG_ADDON_INFO* object) {
+    free(object->addons.addons);
+}
+
 static WowWorldResult tbc_CMSG_PET_UNLEARN_read(WowWorldReader* reader, tbc_CMSG_PET_UNLEARN* object) {
     READ_U64(object->pet);
 
@@ -26005,6 +26133,100 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult tbc_CMSG_GUILD_BANK_QUERY_TAB_write(W
     return WWM_RESULT_SUCCESS;
 }
 
+static size_t tbc_SMSG_GUILD_BANK_LIST_size(const tbc_SMSG_GUILD_BANK_LIST* object) {
+    size_t _size = 15;
+
+    if (object->tab_result == TBC_GUILD_BANK_TAB_RESULT_PRESENT) {
+        _size += 1;
+
+        /* C89 scope to allow variable declarations */ {
+            int i;
+            for(i = 0; i < (int)object->amount_of_bank_tabs; ++i) {
+                _size += tbc_GuildBankTab_size(&object->tabs[i]);
+            }
+        }
+
+    }
+
+    /* C89 scope to allow variable declarations */ {
+        int i;
+        for(i = 0; i < (int)object->amount_of_slot_updates; ++i) {
+            _size += tbc_GuildBankSlot_size(&object->slot_updates[i]);
+        }
+    }
+
+    return _size;
+}
+
+static WowWorldResult tbc_SMSG_GUILD_BANK_LIST_read(WowWorldReader* reader, tbc_SMSG_GUILD_BANK_LIST* object) {
+    READ_U64(object->bank_balance);
+
+    READ_U8(object->tab_id);
+
+    READ_U32(object->amount_of_allowed_item_withdraws);
+
+    object->tab_result = 0;
+    READ_U8(object->tab_result);
+
+    if (object->tab_result == TBC_GUILD_BANK_TAB_RESULT_PRESENT) {
+        READ_U8(object->amount_of_bank_tabs);
+
+        READ_ARRAY_ALLOCATE(object->tabs, object->amount_of_bank_tabs, sizeof(tbc_GuildBankTab));
+        READ_ARRAY(object->tabs, object->amount_of_bank_tabs, WWM_CHECK_RETURN_CODE(tbc_GuildBankTab_read(reader, &object->tabs[i])));
+
+    }
+    READ_U8(object->amount_of_slot_updates);
+
+    READ_ARRAY_ALLOCATE(object->slot_updates, object->amount_of_slot_updates, sizeof(tbc_GuildBankSlot));
+    READ_ARRAY(object->slot_updates, object->amount_of_slot_updates, WWM_CHECK_RETURN_CODE(tbc_GuildBankSlot_read(reader, &object->slot_updates[i])));
+
+    return WWM_RESULT_SUCCESS;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult tbc_SMSG_GUILD_BANK_LIST_write(WowWorldWriter* writer, const tbc_SMSG_GUILD_BANK_LIST* object) {
+    WRITE_U16_BE((uint16_t)tbc_SMSG_GUILD_BANK_LIST_size(object) + 2); /* size */
+
+    WRITE_U16(0x000003e7); /* opcode */
+
+    WRITE_U64(object->bank_balance);
+
+    WRITE_U8(object->tab_id);
+
+    WRITE_U32(object->amount_of_allowed_item_withdraws);
+
+    WRITE_U8(object->tab_result);
+
+    if (object->tab_result == TBC_GUILD_BANK_TAB_RESULT_PRESENT) {
+        WRITE_U8(object->amount_of_bank_tabs);
+
+        WRITE_ARRAY(object->tabs, object->amount_of_bank_tabs, WWM_CHECK_RETURN_CODE(tbc_GuildBankTab_write(writer, &object->tabs[i])));
+
+    }
+    WRITE_U8(object->amount_of_slot_updates);
+
+    WRITE_ARRAY(object->slot_updates, object->amount_of_slot_updates, WWM_CHECK_RETURN_CODE(tbc_GuildBankSlot_write(writer, &object->slot_updates[i])));
+
+
+    return WWM_RESULT_SUCCESS;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void tbc_SMSG_GUILD_BANK_LIST_free(tbc_SMSG_GUILD_BANK_LIST* object) {
+    size_t i;
+
+    if (object->tab_result == TBC_GUILD_BANK_TAB_RESULT_PRESENT) {
+        for (i = 0; i < object->amount_of_bank_tabs; ++i) {
+            tbc_GuildBankTab_free(&((object->tabs)[i]));
+        }
+        free(object->tabs);
+        object->tabs = NULL;
+    }
+    for (i = 0; i < object->amount_of_slot_updates; ++i) {
+        tbc_GuildBankSlot_free(&((object->slot_updates)[i]));
+    }
+    free(object->slot_updates);
+    object->slot_updates = NULL;
+}
+
 static size_t tbc_CMSG_GUILD_BANK_SWAP_ITEMS_size(const tbc_CMSG_GUILD_BANK_SWAP_ITEMS* object) {
     size_t _size = 9 + 1 * object->amount_of_unknown5;
 
@@ -27304,7 +27526,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult tbc_SMSG_SPLINE_MOVE_UNSET_FLYING_wri
     return WWM_RESULT_SUCCESS;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult tbc_client_write_opcode(WowWorldWriter* writer, const TbcClientOpcodeContainer* opcodes) {
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult tbc_client_opcode_write(WowWorldWriter* writer, const TbcClientOpcodeContainer* opcodes) {
     switch (opcodes->opcode) {
         case CMSG_DBLOOKUP:
             WWM_CHECK_RETURN_CODE(tbc_CMSG_DBLOOKUP_write(writer, &opcodes->body.CMSG_DBLOOKUP));
@@ -29579,7 +29801,326 @@ WOW_WORLD_MESSAGES_C_EXPORT void tbc_client_opcode_free(TbcClientOpcodeContainer
     }
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult tbc_server_write_opcode(WowWorldWriter* writer, const TbcServerOpcodeContainer* opcodes) {
+WOW_WORLD_MESSAGES_C_EXPORT char* tbc_client_opcode_to_str(TbcClientOpcodeContainer* opcodes) {
+    switch (opcodes->opcode) {
+        case CMSG_DBLOOKUP: return "CMSG_DBLOOKUP";
+        case CMSG_WORLD_TELEPORT: return "CMSG_WORLD_TELEPORT";
+        case CMSG_TELEPORT_TO_UNIT: return "CMSG_TELEPORT_TO_UNIT";
+        case CMSG_CHAR_CREATE: return "CMSG_CHAR_CREATE";
+        case CMSG_CHAR_DELETE: return "CMSG_CHAR_DELETE";
+        case CMSG_PLAYER_LOGIN: return "CMSG_PLAYER_LOGIN";
+        case CMSG_NAME_QUERY: return "CMSG_NAME_QUERY";
+        case CMSG_PET_NAME_QUERY: return "CMSG_PET_NAME_QUERY";
+        case CMSG_GUILD_QUERY: return "CMSG_GUILD_QUERY";
+        case CMSG_ITEM_QUERY_SINGLE: return "CMSG_ITEM_QUERY_SINGLE";
+        case CMSG_PAGE_TEXT_QUERY: return "CMSG_PAGE_TEXT_QUERY";
+        case CMSG_QUEST_QUERY: return "CMSG_QUEST_QUERY";
+        case CMSG_GAMEOBJECT_QUERY: return "CMSG_GAMEOBJECT_QUERY";
+        case CMSG_CREATURE_QUERY: return "CMSG_CREATURE_QUERY";
+        case CMSG_WHO: return "CMSG_WHO";
+        case CMSG_WHOIS: return "CMSG_WHOIS";
+        case CMSG_CONTACT_LIST: return "CMSG_CONTACT_LIST";
+        case CMSG_ADD_FRIEND: return "CMSG_ADD_FRIEND";
+        case CMSG_DEL_FRIEND: return "CMSG_DEL_FRIEND";
+        case CMSG_SET_CONTACT_NOTES: return "CMSG_SET_CONTACT_NOTES";
+        case CMSG_ADD_IGNORE: return "CMSG_ADD_IGNORE";
+        case CMSG_DEL_IGNORE: return "CMSG_DEL_IGNORE";
+        case CMSG_GROUP_INVITE: return "CMSG_GROUP_INVITE";
+        case CMSG_GROUP_UNINVITE: return "CMSG_GROUP_UNINVITE";
+        case CMSG_GROUP_UNINVITE_GUID: return "CMSG_GROUP_UNINVITE_GUID";
+        case CMSG_GROUP_SET_LEADER: return "CMSG_GROUP_SET_LEADER";
+        case CMSG_LOOT_METHOD: return "CMSG_LOOT_METHOD";
+        case CMSG_GUILD_CREATE: return "CMSG_GUILD_CREATE";
+        case CMSG_GUILD_INVITE: return "CMSG_GUILD_INVITE";
+        case CMSG_GUILD_PROMOTE: return "CMSG_GUILD_PROMOTE";
+        case CMSG_GUILD_DEMOTE: return "CMSG_GUILD_DEMOTE";
+        case CMSG_GUILD_REMOVE: return "CMSG_GUILD_REMOVE";
+        case CMSG_GUILD_LEADER: return "CMSG_GUILD_LEADER";
+        case CMSG_GUILD_MOTD: return "CMSG_GUILD_MOTD";
+        case CMSG_MESSAGECHAT: return "CMSG_MESSAGECHAT";
+        case CMSG_JOIN_CHANNEL: return "CMSG_JOIN_CHANNEL";
+        case CMSG_LEAVE_CHANNEL: return "CMSG_LEAVE_CHANNEL";
+        case CMSG_CHANNEL_LIST: return "CMSG_CHANNEL_LIST";
+        case CMSG_CHANNEL_PASSWORD: return "CMSG_CHANNEL_PASSWORD";
+        case CMSG_CHANNEL_SET_OWNER: return "CMSG_CHANNEL_SET_OWNER";
+        case CMSG_CHANNEL_OWNER: return "CMSG_CHANNEL_OWNER";
+        case CMSG_CHANNEL_MODERATOR: return "CMSG_CHANNEL_MODERATOR";
+        case CMSG_CHANNEL_UNMODERATOR: return "CMSG_CHANNEL_UNMODERATOR";
+        case CMSG_CHANNEL_MUTE: return "CMSG_CHANNEL_MUTE";
+        case CMSG_CHANNEL_UNMUTE: return "CMSG_CHANNEL_UNMUTE";
+        case CMSG_CHANNEL_INVITE: return "CMSG_CHANNEL_INVITE";
+        case CMSG_CHANNEL_KICK: return "CMSG_CHANNEL_KICK";
+        case CMSG_CHANNEL_BAN: return "CMSG_CHANNEL_BAN";
+        case CMSG_CHANNEL_UNBAN: return "CMSG_CHANNEL_UNBAN";
+        case CMSG_CHANNEL_ANNOUNCEMENTS: return "CMSG_CHANNEL_ANNOUNCEMENTS";
+        case CMSG_CHANNEL_MODERATE: return "CMSG_CHANNEL_MODERATE";
+        case CMSG_USE_ITEM: return "CMSG_USE_ITEM";
+        case CMSG_OPEN_ITEM: return "CMSG_OPEN_ITEM";
+        case CMSG_READ_ITEM: return "CMSG_READ_ITEM";
+        case CMSG_GAMEOBJ_USE: return "CMSG_GAMEOBJ_USE";
+        case CMSG_AREATRIGGER: return "CMSG_AREATRIGGER";
+        case MSG_MOVE_START_FORWARD: return "MSG_MOVE_START_FORWARD_Client";
+        case MSG_MOVE_START_BACKWARD: return "MSG_MOVE_START_BACKWARD_Client";
+        case MSG_MOVE_STOP: return "MSG_MOVE_STOP_Client";
+        case MSG_MOVE_START_STRAFE_LEFT: return "MSG_MOVE_START_STRAFE_LEFT_Client";
+        case MSG_MOVE_START_STRAFE_RIGHT: return "MSG_MOVE_START_STRAFE_RIGHT_Client";
+        case MSG_MOVE_STOP_STRAFE: return "MSG_MOVE_STOP_STRAFE_Client";
+        case MSG_MOVE_JUMP: return "MSG_MOVE_JUMP_Client";
+        case MSG_MOVE_START_TURN_LEFT: return "MSG_MOVE_START_TURN_LEFT_Client";
+        case MSG_MOVE_START_TURN_RIGHT: return "MSG_MOVE_START_TURN_RIGHT_Client";
+        case MSG_MOVE_STOP_TURN: return "MSG_MOVE_STOP_TURN_Client";
+        case MSG_MOVE_START_PITCH_UP: return "MSG_MOVE_START_PITCH_UP_Client";
+        case MSG_MOVE_START_PITCH_DOWN: return "MSG_MOVE_START_PITCH_DOWN_Client";
+        case MSG_MOVE_STOP_PITCH: return "MSG_MOVE_STOP_PITCH_Client";
+        case MSG_MOVE_SET_RUN_MODE: return "MSG_MOVE_SET_RUN_MODE_Client";
+        case MSG_MOVE_SET_WALK_MODE: return "MSG_MOVE_SET_WALK_MODE_Client";
+        case MSG_MOVE_TELEPORT: return "MSG_MOVE_TELEPORT_Server";
+        case MSG_MOVE_TELEPORT_ACK: return "MSG_MOVE_TELEPORT_ACK_Client";
+        case MSG_MOVE_FALL_LAND: return "MSG_MOVE_FALL_LAND_Client";
+        case MSG_MOVE_START_SWIM: return "MSG_MOVE_START_SWIM_Client";
+        case MSG_MOVE_STOP_SWIM: return "MSG_MOVE_STOP_SWIM_Client";
+        case MSG_MOVE_SET_FACING: return "MSG_MOVE_SET_FACING_Client";
+        case MSG_MOVE_SET_PITCH: return "MSG_MOVE_SET_PITCH_Client";
+        case CMSG_MOVE_SET_RAW_POSITION: return "CMSG_MOVE_SET_RAW_POSITION";
+        case CMSG_FORCE_RUN_SPEED_CHANGE_ACK: return "CMSG_FORCE_RUN_SPEED_CHANGE_ACK";
+        case CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK: return "CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK";
+        case CMSG_FORCE_SWIM_SPEED_CHANGE_ACK: return "CMSG_FORCE_SWIM_SPEED_CHANGE_ACK";
+        case CMSG_FORCE_MOVE_ROOT_ACK: return "CMSG_FORCE_MOVE_ROOT_ACK";
+        case CMSG_FORCE_MOVE_UNROOT_ACK: return "CMSG_FORCE_MOVE_UNROOT_ACK";
+        case MSG_MOVE_HEARTBEAT: return "MSG_MOVE_HEARTBEAT_Client";
+        case CMSG_MOVE_KNOCK_BACK_ACK: return "CMSG_MOVE_KNOCK_BACK_ACK";
+        case CMSG_MOVE_HOVER_ACK: return "CMSG_MOVE_HOVER_ACK";
+        case MSG_MOVE_HOVER: return "MSG_MOVE_HOVER";
+        case CMSG_TUTORIAL_FLAG: return "CMSG_TUTORIAL_FLAG";
+        case CMSG_STANDSTATECHANGE: return "CMSG_STANDSTATECHANGE";
+        case CMSG_EMOTE: return "CMSG_EMOTE";
+        case CMSG_TEXT_EMOTE: return "CMSG_TEXT_EMOTE";
+        case CMSG_AUTOSTORE_LOOT_ITEM: return "CMSG_AUTOSTORE_LOOT_ITEM";
+        case CMSG_AUTOEQUIP_ITEM: return "CMSG_AUTOEQUIP_ITEM";
+        case CMSG_AUTOSTORE_BAG_ITEM: return "CMSG_AUTOSTORE_BAG_ITEM";
+        case CMSG_SWAP_ITEM: return "CMSG_SWAP_ITEM";
+        case CMSG_SWAP_INV_ITEM: return "CMSG_SWAP_INV_ITEM";
+        case CMSG_SPLIT_ITEM: return "CMSG_SPLIT_ITEM";
+        case CMSG_AUTOEQUIP_ITEM_SLOT: return "CMSG_AUTOEQUIP_ITEM_SLOT";
+        case CMSG_DESTROYITEM: return "CMSG_DESTROYITEM";
+        case CMSG_INSPECT: return "CMSG_INSPECT";
+        case CMSG_INITIATE_TRADE: return "CMSG_INITIATE_TRADE";
+        case CMSG_ACCEPT_TRADE: return "CMSG_ACCEPT_TRADE";
+        case CMSG_SET_TRADE_ITEM: return "CMSG_SET_TRADE_ITEM";
+        case CMSG_CLEAR_TRADE_ITEM: return "CMSG_CLEAR_TRADE_ITEM";
+        case CMSG_SET_TRADE_GOLD: return "CMSG_SET_TRADE_GOLD";
+        case CMSG_SET_FACTION_ATWAR: return "CMSG_SET_FACTION_ATWAR";
+        case CMSG_SET_ACTION_BUTTON: return "CMSG_SET_ACTION_BUTTON";
+        case CMSG_CAST_SPELL: return "CMSG_CAST_SPELL";
+        case CMSG_CANCEL_CAST: return "CMSG_CANCEL_CAST";
+        case CMSG_CANCEL_AURA: return "CMSG_CANCEL_AURA";
+        case CMSG_CANCEL_CHANNELLING: return "CMSG_CANCEL_CHANNELLING";
+        case CMSG_SET_SELECTION: return "CMSG_SET_SELECTION";
+        case CMSG_SET_TARGET_OBSOLETE: return "CMSG_SET_TARGET_OBSOLETE";
+        case CMSG_ATTACKSWING: return "CMSG_ATTACKSWING";
+        case CMSG_RESURRECT_RESPONSE: return "CMSG_RESURRECT_RESPONSE";
+        case CMSG_LOOT: return "CMSG_LOOT";
+        case CMSG_LOOT_RELEASE: return "CMSG_LOOT_RELEASE";
+        case CMSG_DUEL_ACCEPTED: return "CMSG_DUEL_ACCEPTED";
+        case CMSG_DUEL_CANCELLED: return "CMSG_DUEL_CANCELLED";
+        case CMSG_PET_SET_ACTION: return "CMSG_PET_SET_ACTION";
+        case CMSG_PET_ACTION: return "CMSG_PET_ACTION";
+        case CMSG_PET_ABANDON: return "CMSG_PET_ABANDON";
+        case CMSG_PET_RENAME: return "CMSG_PET_RENAME";
+        case CMSG_GOSSIP_HELLO: return "CMSG_GOSSIP_HELLO";
+        case CMSG_GOSSIP_SELECT_OPTION: return "CMSG_GOSSIP_SELECT_OPTION";
+        case CMSG_NPC_TEXT_QUERY: return "CMSG_NPC_TEXT_QUERY";
+        case CMSG_QUESTGIVER_STATUS_QUERY: return "CMSG_QUESTGIVER_STATUS_QUERY";
+        case CMSG_QUESTGIVER_HELLO: return "CMSG_QUESTGIVER_HELLO";
+        case CMSG_QUESTGIVER_QUERY_QUEST: return "CMSG_QUESTGIVER_QUERY_QUEST";
+        case CMSG_QUESTGIVER_ACCEPT_QUEST: return "CMSG_QUESTGIVER_ACCEPT_QUEST";
+        case CMSG_QUESTGIVER_COMPLETE_QUEST: return "CMSG_QUESTGIVER_COMPLETE_QUEST";
+        case CMSG_QUESTGIVER_REQUEST_REWARD: return "CMSG_QUESTGIVER_REQUEST_REWARD";
+        case CMSG_QUESTGIVER_CHOOSE_REWARD: return "CMSG_QUESTGIVER_CHOOSE_REWARD";
+        case CMSG_QUESTLOG_SWAP_QUEST: return "CMSG_QUESTLOG_SWAP_QUEST";
+        case CMSG_QUESTLOG_REMOVE_QUEST: return "CMSG_QUESTLOG_REMOVE_QUEST";
+        case CMSG_QUEST_CONFIRM_ACCEPT: return "CMSG_QUEST_CONFIRM_ACCEPT";
+        case CMSG_PUSHQUESTTOPARTY: return "CMSG_PUSHQUESTTOPARTY";
+        case CMSG_LIST_INVENTORY: return "CMSG_LIST_INVENTORY";
+        case CMSG_SELL_ITEM: return "CMSG_SELL_ITEM";
+        case CMSG_BUY_ITEM: return "CMSG_BUY_ITEM";
+        case CMSG_BUY_ITEM_IN_SLOT: return "CMSG_BUY_ITEM_IN_SLOT";
+        case CMSG_TAXINODE_STATUS_QUERY: return "CMSG_TAXINODE_STATUS_QUERY";
+        case CMSG_TAXIQUERYAVAILABLENODES: return "CMSG_TAXIQUERYAVAILABLENODES";
+        case CMSG_ACTIVATETAXI: return "CMSG_ACTIVATETAXI";
+        case CMSG_TRAINER_LIST: return "CMSG_TRAINER_LIST";
+        case CMSG_TRAINER_BUY_SPELL: return "CMSG_TRAINER_BUY_SPELL";
+        case CMSG_BINDER_ACTIVATE: return "CMSG_BINDER_ACTIVATE";
+        case CMSG_BANKER_ACTIVATE: return "CMSG_BANKER_ACTIVATE";
+        case CMSG_BUY_BANK_SLOT: return "CMSG_BUY_BANK_SLOT";
+        case CMSG_PETITION_SHOWLIST: return "CMSG_PETITION_SHOWLIST";
+        case CMSG_PETITION_BUY: return "CMSG_PETITION_BUY";
+        case CMSG_PETITION_SHOW_SIGNATURES: return "CMSG_PETITION_SHOW_SIGNATURES";
+        case CMSG_PETITION_SIGN: return "CMSG_PETITION_SIGN";
+        case MSG_PETITION_DECLINE: return "MSG_PETITION_DECLINE";
+        case CMSG_OFFER_PETITION: return "CMSG_OFFER_PETITION";
+        case CMSG_TURN_IN_PETITION: return "CMSG_TURN_IN_PETITION";
+        case CMSG_PETITION_QUERY: return "CMSG_PETITION_QUERY";
+        case CMSG_BUG: return "CMSG_BUG";
+        case CMSG_RECLAIM_CORPSE: return "CMSG_RECLAIM_CORPSE";
+        case CMSG_WRAP_ITEM: return "CMSG_WRAP_ITEM";
+        case MSG_MINIMAP_PING: return "MSG_MINIMAP_PING_Client";
+        case CMSG_PING: return "CMSG_PING";
+        case CMSG_SETSHEATHED: return "CMSG_SETSHEATHED";
+        case CMSG_AUTH_SESSION: return "CMSG_AUTH_SESSION";
+        case CMSG_PET_CAST_SPELL: return "CMSG_PET_CAST_SPELL";
+        case MSG_SAVE_GUILD_EMBLEM: return "MSG_SAVE_GUILD_EMBLEM_Client";
+        case MSG_TABARDVENDOR_ACTIVATE: return "MSG_TABARDVENDOR_ACTIVATE";
+        case CMSG_ZONEUPDATE: return "CMSG_ZONEUPDATE";
+        case MSG_RANDOM_ROLL: return "MSG_RANDOM_ROLL_Client";
+        case MSG_LOOKING_FOR_GROUP: return "MSG_LOOKING_FOR_GROUP_Client";
+        case CMSG_SET_LOOKING_FOR_GROUP: return "CMSG_SET_LOOKING_FOR_GROUP";
+        case CMSG_UNLEARN_SKILL: return "CMSG_UNLEARN_SKILL";
+        case CMSG_GMTICKET_CREATE: return "CMSG_GMTICKET_CREATE";
+        case CMSG_GMTICKET_UPDATETEXT: return "CMSG_GMTICKET_UPDATETEXT";
+        case CMSG_REQUEST_ACCOUNT_DATA: return "CMSG_REQUEST_ACCOUNT_DATA";
+        case CMSG_UPDATE_ACCOUNT_DATA: return "CMSG_UPDATE_ACCOUNT_DATA";
+        case CMSG_SPIRIT_HEALER_ACTIVATE: return "CMSG_SPIRIT_HEALER_ACTIVATE";
+        case CMSG_CHAT_IGNORED: return "CMSG_CHAT_IGNORED";
+        case CMSG_GUILD_RANK: return "CMSG_GUILD_RANK";
+        case CMSG_GUILD_ADD_RANK: return "CMSG_GUILD_ADD_RANK";
+        case CMSG_GUILD_SET_PUBLIC_NOTE: return "CMSG_GUILD_SET_PUBLIC_NOTE";
+        case CMSG_GUILD_SET_OFFICER_NOTE: return "CMSG_GUILD_SET_OFFICER_NOTE";
+        case CMSG_SEND_MAIL: return "CMSG_SEND_MAIL";
+        case CMSG_GET_MAIL_LIST: return "CMSG_GET_MAIL_LIST";
+        case CMSG_BATTLEFIELD_LIST: return "CMSG_BATTLEFIELD_LIST";
+        case CMSG_ITEM_TEXT_QUERY: return "CMSG_ITEM_TEXT_QUERY";
+        case CMSG_MAIL_TAKE_MONEY: return "CMSG_MAIL_TAKE_MONEY";
+        case CMSG_MAIL_TAKE_ITEM: return "CMSG_MAIL_TAKE_ITEM";
+        case CMSG_MAIL_MARK_AS_READ: return "CMSG_MAIL_MARK_AS_READ";
+        case CMSG_MAIL_RETURN_TO_SENDER: return "CMSG_MAIL_RETURN_TO_SENDER";
+        case CMSG_MAIL_DELETE: return "CMSG_MAIL_DELETE";
+        case CMSG_MAIL_CREATE_TEXT_ITEM: return "CMSG_MAIL_CREATE_TEXT_ITEM";
+        case CMSG_LEARN_TALENT: return "CMSG_LEARN_TALENT";
+        case CMSG_TOGGLE_PVP: return "CMSG_TOGGLE_PVP";
+        case MSG_AUCTION_HELLO: return "MSG_AUCTION_HELLO_Client";
+        case CMSG_AUCTION_SELL_ITEM: return "CMSG_AUCTION_SELL_ITEM";
+        case CMSG_AUCTION_REMOVE_ITEM: return "CMSG_AUCTION_REMOVE_ITEM";
+        case CMSG_AUCTION_LIST_ITEMS: return "CMSG_AUCTION_LIST_ITEMS";
+        case CMSG_AUCTION_LIST_OWNER_ITEMS: return "CMSG_AUCTION_LIST_OWNER_ITEMS";
+        case CMSG_AUCTION_PLACE_BID: return "CMSG_AUCTION_PLACE_BID";
+        case CMSG_AUCTION_LIST_BIDDER_ITEMS: return "CMSG_AUCTION_LIST_BIDDER_ITEMS";
+        case CMSG_SET_AMMO: return "CMSG_SET_AMMO";
+        case CMSG_SET_ACTIVE_MOVER: return "CMSG_SET_ACTIVE_MOVER";
+        case CMSG_PET_CANCEL_AURA: return "CMSG_PET_CANCEL_AURA";
+        case MSG_LIST_STABLED_PETS: return "MSG_LIST_STABLED_PETS_Client";
+        case CMSG_STABLE_PET: return "CMSG_STABLE_PET";
+        case CMSG_UNSTABLE_PET: return "CMSG_UNSTABLE_PET";
+        case CMSG_BUY_STABLE_SLOT: return "CMSG_BUY_STABLE_SLOT";
+        case CMSG_STABLE_SWAP_PET: return "CMSG_STABLE_SWAP_PET";
+        case MSG_QUEST_PUSH_RESULT: return "MSG_QUEST_PUSH_RESULT";
+        case CMSG_FAR_SIGHT: return "CMSG_FAR_SIGHT";
+        case CMSG_GROUP_CHANGE_SUB_GROUP: return "CMSG_GROUP_CHANGE_SUB_GROUP";
+        case CMSG_REQUEST_PARTY_MEMBER_STATS: return "CMSG_REQUEST_PARTY_MEMBER_STATS";
+        case CMSG_GROUP_SWAP_SUB_GROUP: return "CMSG_GROUP_SWAP_SUB_GROUP";
+        case CMSG_AUTOSTORE_BANK_ITEM: return "CMSG_AUTOSTORE_BANK_ITEM";
+        case CMSG_AUTOBANK_ITEM: return "CMSG_AUTOBANK_ITEM";
+        case CMSG_GROUP_ASSISTANT_LEADER: return "CMSG_GROUP_ASSISTANT_LEADER";
+        case CMSG_BUYBACK_ITEM: return "CMSG_BUYBACK_ITEM";
+        case CMSG_LOOT_ROLL: return "CMSG_LOOT_ROLL";
+        case CMSG_LOOT_MASTER_GIVE: return "CMSG_LOOT_MASTER_GIVE";
+        case CMSG_REPAIR_ITEM: return "CMSG_REPAIR_ITEM";
+        case MSG_TALENT_WIPE_CONFIRM: return "MSG_TALENT_WIPE_CONFIRM_Client";
+        case CMSG_SUMMON_RESPONSE: return "CMSG_SUMMON_RESPONSE";
+        case MSG_MOVE_WATER_WALK: return "MSG_MOVE_WATER_WALK";
+        case CMSG_SET_ACTIONBAR_TOGGLES: return "CMSG_SET_ACTIONBAR_TOGGLES";
+        case MSG_PETITION_RENAME: return "MSG_PETITION_RENAME";
+        case CMSG_ITEM_NAME_QUERY: return "CMSG_ITEM_NAME_QUERY";
+        case CMSG_CHAR_RENAME: return "CMSG_CHAR_RENAME";
+        case CMSG_MOVE_SPLINE_DONE: return "CMSG_MOVE_SPLINE_DONE";
+        case CMSG_MOVE_FALL_RESET: return "CMSG_MOVE_FALL_RESET";
+        case CMSG_MOVE_TIME_SKIPPED: return "CMSG_MOVE_TIME_SKIPPED";
+        case CMSG_MOVE_FEATHER_FALL_ACK: return "CMSG_MOVE_FEATHER_FALL_ACK";
+        case CMSG_MOVE_WATER_WALK_ACK: return "CMSG_MOVE_WATER_WALK_ACK";
+        case CMSG_MOVE_NOT_ACTIVE_MOVER: return "CMSG_MOVE_NOT_ACTIVE_MOVER";
+        case CMSG_BATTLEFIELD_PORT: return "CMSG_BATTLEFIELD_PORT";
+        case MSG_INSPECT_HONOR_STATS: return "MSG_INSPECT_HONOR_STATS_Client";
+        case CMSG_BATTLEMASTER_HELLO: return "CMSG_BATTLEMASTER_HELLO";
+        case CMSG_FORCE_WALK_SPEED_CHANGE_ACK: return "CMSG_FORCE_WALK_SPEED_CHANGE_ACK";
+        case CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK: return "CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK";
+        case CMSG_FORCE_TURN_RATE_CHANGE_ACK: return "CMSG_FORCE_TURN_RATE_CHANGE_ACK";
+        case CMSG_LEAVE_BATTLEFIELD: return "CMSG_LEAVE_BATTLEFIELD";
+        case CMSG_AREA_SPIRIT_HEALER_QUERY: return "CMSG_AREA_SPIRIT_HEALER_QUERY";
+        case CMSG_AREA_SPIRIT_HEALER_QUEUE: return "CMSG_AREA_SPIRIT_HEALER_QUEUE";
+        case CMSG_WARDEN_DATA: return "CMSG_WARDEN_DATA";
+        case CMSG_PET_STOP_ATTACK: return "CMSG_PET_STOP_ATTACK";
+        case CMSG_BATTLEMASTER_JOIN: return "CMSG_BATTLEMASTER_JOIN";
+        case CMSG_PET_UNLEARN: return "CMSG_PET_UNLEARN";
+        case CMSG_PET_SPELL_AUTOCAST: return "CMSG_PET_SPELL_AUTOCAST";
+        case CMSG_GUILD_INFO_TEXT: return "CMSG_GUILD_INFO_TEXT";
+        case CMSG_ACTIVATETAXIEXPRESS: return "CMSG_ACTIVATETAXIEXPRESS";
+        case CMSG_SET_FACTION_INACTIVE: return "CMSG_SET_FACTION_INACTIVE";
+        case CMSG_SET_WATCHED_FACTION: return "CMSG_SET_WATCHED_FACTION";
+        case MSG_RAID_TARGET_UPDATE: return "MSG_RAID_TARGET_UPDATE_Client";
+        case MSG_RAID_READY_CHECK: return "MSG_RAID_READY_CHECK_Client";
+        case MSG_SET_DUNGEON_DIFFICULTY: return "MSG_SET_DUNGEON_DIFFICULTY_Client";
+        case CMSG_GMSURVEY_SUBMIT: return "CMSG_GMSURVEY_SUBMIT";
+        case CMSG_MOVE_SET_CAN_FLY_ACK: return "CMSG_MOVE_SET_CAN_FLY_ACK";
+        case CMSG_MOVE_SET_FLY: return "CMSG_MOVE_SET_FLY";
+        case CMSG_SOCKET_GEMS: return "CMSG_SOCKET_GEMS";
+        case CMSG_ARENA_TEAM_ROSTER: return "CMSG_ARENA_TEAM_ROSTER";
+        case CMSG_ARENA_TEAM_INVITE: return "CMSG_ARENA_TEAM_INVITE";
+        case CMSG_ARENA_TEAM_LEAVE: return "CMSG_ARENA_TEAM_LEAVE";
+        case CMSG_ARENA_TEAM_REMOVE: return "CMSG_ARENA_TEAM_REMOVE";
+        case CMSG_ARENA_TEAM_DISBAND: return "CMSG_ARENA_TEAM_DISBAND";
+        case CMSG_ARENA_TEAM_LEADER: return "CMSG_ARENA_TEAM_LEADER";
+        case CMSG_BATTLEMASTER_JOIN_ARENA: return "CMSG_BATTLEMASTER_JOIN_ARENA";
+        case MSG_MOVE_START_ASCEND: return "MSG_MOVE_START_ASCEND_Client";
+        case MSG_MOVE_STOP_ASCEND: return "MSG_MOVE_STOP_ASCEND_Client";
+        case CMSG_SET_LOOKING_FOR_MORE: return "CMSG_SET_LOOKING_FOR_MORE";
+        case CMSG_SET_LFG_COMMENT: return "CMSG_SET_LFG_COMMENT";
+        case CMSG_SET_TITLE: return "CMSG_SET_TITLE";
+        case MSG_INSPECT_ARENA_TEAMS: return "MSG_INSPECT_ARENA_TEAMS_Client";
+        case CMSG_CANCEL_TEMP_ENCHANTMENT: return "CMSG_CANCEL_TEMP_ENCHANTMENT";
+        case MSG_MOVE_SET_FLIGHT_BACK_SPEED: return "MSG_MOVE_SET_FLIGHT_BACK_SPEED";
+        case CMSG_FORCE_FLIGHT_SPEED_CHANGE_ACK: return "CMSG_FORCE_FLIGHT_SPEED_CHANGE_ACK";
+        case CMSG_FORCE_FLIGHT_BACK_SPEED_CHANGE_ACK: return "CMSG_FORCE_FLIGHT_BACK_SPEED_CHANGE_ACK";
+        case CMSG_SET_TAXI_BENCHMARK_MODE: return "CMSG_SET_TAXI_BENCHMARK_MODE";
+        case CMSG_REALM_SPLIT: return "CMSG_REALM_SPLIT";
+        case CMSG_MOVE_CHNG_TRANSPORT: return "CMSG_MOVE_CHNG_TRANSPORT";
+        case MSG_PARTY_ASSIGNMENT: return "MSG_PARTY_ASSIGNMENT_Client";
+        case CMSG_TIME_SYNC_RESP: return "CMSG_TIME_SYNC_RESP";
+        case MSG_MOVE_START_DESCEND: return "MSG_MOVE_START_DESCEND_Client";
+        case MSG_RAID_READY_CHECK_CONFIRM: return "MSG_RAID_READY_CHECK_CONFIRM_Client";
+        case CMSG_VOICE_SESSION_ENABLE: return "CMSG_VOICE_SESSION_ENABLE";
+        case CMSG_COMMENTATOR_ENABLE: return "CMSG_COMMENTATOR_ENABLE";
+        case CMSG_COMPLAIN: return "CMSG_COMPLAIN";
+        case CMSG_CHANNEL_DISPLAY_LIST: return "CMSG_CHANNEL_DISPLAY_LIST";
+        case CMSG_SET_ACTIVE_VOICE_CHANNEL: return "CMSG_SET_ACTIVE_VOICE_CHANNEL";
+        case CMSG_GET_CHANNEL_MEMBER_COUNT: return "CMSG_GET_CHANNEL_MEMBER_COUNT";
+        case CMSG_REPORT_PVP_AFK: return "CMSG_REPORT_PVP_AFK";
+        case CMSG_GUILD_BANKER_ACTIVATE: return "CMSG_GUILD_BANKER_ACTIVATE";
+        case CMSG_GUILD_BANK_QUERY_TAB: return "CMSG_GUILD_BANK_QUERY_TAB";
+        case CMSG_GUILD_BANK_SWAP_ITEMS: return "CMSG_GUILD_BANK_SWAP_ITEMS";
+        case CMSG_GUILD_BANK_BUY_TAB: return "CMSG_GUILD_BANK_BUY_TAB";
+        case CMSG_GUILD_BANK_UPDATE_TAB: return "CMSG_GUILD_BANK_UPDATE_TAB";
+        case CMSG_GUILD_BANK_DEPOSIT_MONEY: return "CMSG_GUILD_BANK_DEPOSIT_MONEY";
+        case CMSG_GUILD_BANK_WITHDRAW_MONEY: return "CMSG_GUILD_BANK_WITHDRAW_MONEY";
+        case MSG_GUILD_BANK_LOG_QUERY: return "MSG_GUILD_BANK_LOG_QUERY_Client";
+        case CMSG_SET_CHANNEL_WATCH: return "CMSG_SET_CHANNEL_WATCH";
+        case CMSG_CLEAR_CHANNEL_WATCH: return "CMSG_CLEAR_CHANNEL_WATCH";
+        case CMSG_SPELLCLICK: return "CMSG_SPELLCLICK";
+        case CMSG_GET_MIRRORIMAGE_DATA: return "CMSG_GET_MIRRORIMAGE_DATA";
+        case CMSG_OPT_OUT_OF_LOOT: return "CMSG_OPT_OUT_OF_LOOT";
+        case MSG_QUERY_GUILD_BANK_TEXT: return "MSG_QUERY_GUILD_BANK_TEXT_Client";
+        case CMSG_SET_GUILD_BANK_TEXT: return "CMSG_SET_GUILD_BANK_TEXT";
+        case CMSG_GRANT_LEVEL: return "CMSG_GRANT_LEVEL";
+        case CMSG_TOTEM_DESTROYED: return "CMSG_TOTEM_DESTROYED";
+        case CMSG_SET_PLAYER_DECLINED_NAMES: return "CMSG_SET_PLAYER_DECLINED_NAMES";
+        case CMSG_ACCEPT_LEVEL_GRANT: return "CMSG_ACCEPT_LEVEL_GRANT";
+        default:
+            break;
+    }
+
+    return NULL;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult tbc_server_opcode_write(WowWorldWriter* writer, const TbcServerOpcodeContainer* opcodes) {
     switch (opcodes->opcode) {
         case SMSG_CHAR_CREATE:
             WWM_CHECK_RETURN_CODE(tbc_SMSG_CHAR_CREATE_write(writer, &opcodes->body.SMSG_CHAR_CREATE));
@@ -30430,6 +30971,9 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult tbc_server_write_opcode(WowWorldWrite
         case SMSG_BATTLEGROUND_PLAYER_LEFT:
             WWM_CHECK_RETURN_CODE(tbc_SMSG_BATTLEGROUND_PLAYER_LEFT_write(writer, &opcodes->body.SMSG_BATTLEGROUND_PLAYER_LEFT));
             break;
+        case SMSG_ADDON_INFO:
+            WWM_CHECK_RETURN_CODE(tbc_SMSG_ADDON_INFO_write(writer, &opcodes->body.SMSG_ADDON_INFO));
+            break;
         case SMSG_PET_UNLEARN_CONFIRM:
             WWM_CHECK_RETURN_CODE(tbc_SMSG_PET_UNLEARN_CONFIRM_write(writer, &opcodes->body.SMSG_PET_UNLEARN_CONFIRM));
             break;
@@ -30690,6 +31234,9 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult tbc_server_write_opcode(WowWorldWrite
             break;
         case SMSG_CHANNEL_MEMBER_COUNT:
             WWM_CHECK_RETURN_CODE(tbc_SMSG_CHANNEL_MEMBER_COUNT_write(writer, &opcodes->body.SMSG_CHANNEL_MEMBER_COUNT));
+            break;
+        case SMSG_GUILD_BANK_LIST:
+            WWM_CHECK_RETURN_CODE(tbc_SMSG_GUILD_BANK_LIST_write(writer, &opcodes->body.SMSG_GUILD_BANK_LIST));
             break;
         case MSG_GUILD_BANK_LOG_QUERY:
             WWM_CHECK_RETURN_CODE(tbc_MSG_GUILD_BANK_LOG_QUERY_Server_write(writer, &opcodes->body.MSG_GUILD_BANK_LOG_QUERY_Server));
@@ -31615,6 +32162,9 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult tbc_server_opcode_read(WowWorldReader
         case SMSG_BATTLEGROUND_PLAYER_LEFT:
             WWM_CHECK_RETURN_CODE(tbc_SMSG_BATTLEGROUND_PLAYER_LEFT_read(reader, &opcodes->body.SMSG_BATTLEGROUND_PLAYER_LEFT));
             break;
+        case SMSG_ADDON_INFO:
+            WWM_CHECK_RETURN_CODE(tbc_SMSG_ADDON_INFO_read(reader, &opcodes->body.SMSG_ADDON_INFO));
+            break;
         case SMSG_PET_UNLEARN_CONFIRM:
             WWM_CHECK_RETURN_CODE(tbc_SMSG_PET_UNLEARN_CONFIRM_read(reader, &opcodes->body.SMSG_PET_UNLEARN_CONFIRM));
             break;
@@ -31875,6 +32425,9 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult tbc_server_opcode_read(WowWorldReader
             break;
         case SMSG_CHANNEL_MEMBER_COUNT:
             WWM_CHECK_RETURN_CODE(tbc_SMSG_CHANNEL_MEMBER_COUNT_read(reader, &opcodes->body.SMSG_CHANNEL_MEMBER_COUNT));
+            break;
+        case SMSG_GUILD_BANK_LIST:
+            WWM_CHECK_RETURN_CODE(tbc_SMSG_GUILD_BANK_LIST_read(reader, &opcodes->body.SMSG_GUILD_BANK_LIST));
             break;
         case MSG_GUILD_BANK_LOG_QUERY:
             WWM_CHECK_RETURN_CODE(tbc_MSG_GUILD_BANK_LOG_QUERY_Server_read(reader, &opcodes->body.MSG_GUILD_BANK_LOG_QUERY_Server));
@@ -32341,6 +32894,9 @@ WOW_WORLD_MESSAGES_C_EXPORT void tbc_server_opcode_free(TbcServerOpcodeContainer
         case MSG_BATTLEGROUND_PLAYER_POSITIONS:
             tbc_MSG_BATTLEGROUND_PLAYER_POSITIONS_Server_free(&opcodes->body.MSG_BATTLEGROUND_PLAYER_POSITIONS_Server);
             break;
+        case SMSG_ADDON_INFO:
+            tbc_SMSG_ADDON_INFO_free(&opcodes->body.SMSG_ADDON_INFO);
+            break;
         case SMSG_PARTY_MEMBER_STATS_FULL:
             tbc_SMSG_PARTY_MEMBER_STATS_FULL_free(&opcodes->body.SMSG_PARTY_MEMBER_STATS_FULL);
             break;
@@ -32422,6 +32978,9 @@ WOW_WORLD_MESSAGES_C_EXPORT void tbc_server_opcode_free(TbcServerOpcodeContainer
         case SMSG_CHANNEL_MEMBER_COUNT:
             tbc_SMSG_CHANNEL_MEMBER_COUNT_free(&opcodes->body.SMSG_CHANNEL_MEMBER_COUNT);
             break;
+        case SMSG_GUILD_BANK_LIST:
+            tbc_SMSG_GUILD_BANK_LIST_free(&opcodes->body.SMSG_GUILD_BANK_LIST);
+            break;
         case MSG_GUILD_BANK_LOG_QUERY:
             tbc_MSG_GUILD_BANK_LOG_QUERY_Server_free(&opcodes->body.MSG_GUILD_BANK_LOG_QUERY_Server);
             break;
@@ -32461,5 +33020,406 @@ WOW_WORLD_MESSAGES_C_EXPORT void tbc_server_opcode_free(TbcServerOpcodeContainer
         default:
             break;
     }
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT char* tbc_server_opcode_to_str(TbcServerOpcodeContainer* opcodes) {
+    switch (opcodes->opcode) {
+        case SMSG_CHAR_CREATE: return "SMSG_CHAR_CREATE";
+        case SMSG_CHAR_ENUM: return "SMSG_CHAR_ENUM";
+        case SMSG_CHAR_DELETE: return "SMSG_CHAR_DELETE";
+        case SMSG_NEW_WORLD: return "SMSG_NEW_WORLD";
+        case SMSG_TRANSFER_PENDING: return "SMSG_TRANSFER_PENDING";
+        case SMSG_TRANSFER_ABORTED: return "SMSG_TRANSFER_ABORTED";
+        case SMSG_CHARACTER_LOGIN_FAILED: return "SMSG_CHARACTER_LOGIN_FAILED";
+        case SMSG_LOGIN_SETTIMESPEED: return "SMSG_LOGIN_SETTIMESPEED";
+        case SMSG_LOGOUT_RESPONSE: return "SMSG_LOGOUT_RESPONSE";
+        case SMSG_NAME_QUERY_RESPONSE: return "SMSG_NAME_QUERY_RESPONSE";
+        case SMSG_PET_NAME_QUERY_RESPONSE: return "SMSG_PET_NAME_QUERY_RESPONSE";
+        case SMSG_GUILD_QUERY_RESPONSE: return "SMSG_GUILD_QUERY_RESPONSE";
+        case SMSG_ITEM_QUERY_SINGLE_RESPONSE: return "SMSG_ITEM_QUERY_SINGLE_RESPONSE";
+        case SMSG_PAGE_TEXT_QUERY_RESPONSE: return "SMSG_PAGE_TEXT_QUERY_RESPONSE";
+        case SMSG_QUEST_QUERY_RESPONSE: return "SMSG_QUEST_QUERY_RESPONSE";
+        case SMSG_GAMEOBJECT_QUERY_RESPONSE: return "SMSG_GAMEOBJECT_QUERY_RESPONSE";
+        case SMSG_CREATURE_QUERY_RESPONSE: return "SMSG_CREATURE_QUERY_RESPONSE";
+        case SMSG_WHO: return "SMSG_WHO";
+        case SMSG_WHOIS: return "SMSG_WHOIS";
+        case SMSG_CONTACT_LIST: return "SMSG_CONTACT_LIST";
+        case SMSG_FRIEND_STATUS: return "SMSG_FRIEND_STATUS";
+        case SMSG_GROUP_INVITE: return "SMSG_GROUP_INVITE";
+        case SMSG_GROUP_DECLINE: return "SMSG_GROUP_DECLINE";
+        case SMSG_GROUP_SET_LEADER: return "SMSG_GROUP_SET_LEADER";
+        case SMSG_GROUP_LIST: return "SMSG_GROUP_LIST";
+        case SMSG_PARTY_MEMBER_STATS: return "SMSG_PARTY_MEMBER_STATS";
+        case SMSG_PARTY_COMMAND_RESULT: return "SMSG_PARTY_COMMAND_RESULT";
+        case SMSG_GUILD_INVITE: return "SMSG_GUILD_INVITE";
+        case SMSG_GUILD_DECLINE: return "SMSG_GUILD_DECLINE";
+        case SMSG_GUILD_INFO: return "SMSG_GUILD_INFO";
+        case SMSG_GUILD_ROSTER: return "SMSG_GUILD_ROSTER";
+        case SMSG_GUILD_EVENT: return "SMSG_GUILD_EVENT";
+        case SMSG_GUILD_COMMAND_RESULT: return "SMSG_GUILD_COMMAND_RESULT";
+        case SMSG_MESSAGECHAT: return "SMSG_MESSAGECHAT";
+        case SMSG_CHANNEL_NOTIFY: return "SMSG_CHANNEL_NOTIFY";
+        case SMSG_CHANNEL_LIST: return "SMSG_CHANNEL_LIST";
+        case SMSG_UPDATE_OBJECT: return "SMSG_UPDATE_OBJECT";
+        case SMSG_DESTROY_OBJECT: return "SMSG_DESTROY_OBJECT";
+        case SMSG_READ_ITEM_OK: return "SMSG_READ_ITEM_OK";
+        case SMSG_READ_ITEM_FAILED: return "SMSG_READ_ITEM_FAILED";
+        case SMSG_ITEM_COOLDOWN: return "SMSG_ITEM_COOLDOWN";
+        case SMSG_GAMEOBJECT_CUSTOM_ANIM: return "SMSG_GAMEOBJECT_CUSTOM_ANIM";
+        case MSG_MOVE_START_FORWARD: return "MSG_MOVE_START_FORWARD_Server";
+        case MSG_MOVE_START_BACKWARD: return "MSG_MOVE_START_BACKWARD_Server";
+        case MSG_MOVE_STOP: return "MSG_MOVE_STOP_Server";
+        case MSG_MOVE_START_STRAFE_LEFT: return "MSG_MOVE_START_STRAFE_LEFT_Server";
+        case MSG_MOVE_START_STRAFE_RIGHT: return "MSG_MOVE_START_STRAFE_RIGHT_Server";
+        case MSG_MOVE_STOP_STRAFE: return "MSG_MOVE_STOP_STRAFE_Server";
+        case MSG_MOVE_JUMP: return "MSG_MOVE_JUMP_Server";
+        case MSG_MOVE_START_TURN_LEFT: return "MSG_MOVE_START_TURN_LEFT_Server";
+        case MSG_MOVE_START_TURN_RIGHT: return "MSG_MOVE_START_TURN_RIGHT_Server";
+        case MSG_MOVE_STOP_TURN: return "MSG_MOVE_STOP_TURN_Server";
+        case MSG_MOVE_START_PITCH_UP: return "MSG_MOVE_START_PITCH_UP_Server";
+        case MSG_MOVE_START_PITCH_DOWN: return "MSG_MOVE_START_PITCH_DOWN_Server";
+        case MSG_MOVE_STOP_PITCH: return "MSG_MOVE_STOP_PITCH_Server";
+        case MSG_MOVE_SET_RUN_MODE: return "MSG_MOVE_SET_RUN_MODE_Server";
+        case MSG_MOVE_SET_WALK_MODE: return "MSG_MOVE_SET_WALK_MODE_Server";
+        case MSG_MOVE_TELEPORT_CHEAT: return "MSG_MOVE_TELEPORT_CHEAT_Server";
+        case MSG_MOVE_TELEPORT_ACK: return "MSG_MOVE_TELEPORT_ACK_Server";
+        case MSG_MOVE_FALL_LAND: return "MSG_MOVE_FALL_LAND_Server";
+        case MSG_MOVE_START_SWIM: return "MSG_MOVE_START_SWIM_Server";
+        case MSG_MOVE_STOP_SWIM: return "MSG_MOVE_STOP_SWIM_Server";
+        case MSG_MOVE_SET_FACING: return "MSG_MOVE_SET_FACING_Server";
+        case MSG_MOVE_SET_PITCH: return "MSG_MOVE_SET_PITCH_Server";
+        case SMSG_MONSTER_MOVE: return "SMSG_MONSTER_MOVE";
+        case SMSG_MOVE_WATER_WALK: return "SMSG_MOVE_WATER_WALK";
+        case SMSG_MOVE_LAND_WALK: return "SMSG_MOVE_LAND_WALK";
+        case SMSG_FORCE_RUN_SPEED_CHANGE: return "SMSG_FORCE_RUN_SPEED_CHANGE";
+        case SMSG_FORCE_RUN_BACK_SPEED_CHANGE: return "SMSG_FORCE_RUN_BACK_SPEED_CHANGE";
+        case SMSG_FORCE_SWIM_SPEED_CHANGE: return "SMSG_FORCE_SWIM_SPEED_CHANGE";
+        case SMSG_FORCE_MOVE_ROOT: return "SMSG_FORCE_MOVE_ROOT";
+        case SMSG_FORCE_MOVE_UNROOT: return "SMSG_FORCE_MOVE_UNROOT";
+        case MSG_MOVE_ROOT: return "MSG_MOVE_ROOT_Server";
+        case MSG_MOVE_UNROOT: return "MSG_MOVE_UNROOT_Server";
+        case MSG_MOVE_HEARTBEAT: return "MSG_MOVE_HEARTBEAT_Server";
+        case SMSG_MOVE_KNOCK_BACK: return "SMSG_MOVE_KNOCK_BACK";
+        case MSG_MOVE_KNOCK_BACK: return "MSG_MOVE_KNOCK_BACK_Server";
+        case SMSG_MOVE_FEATHER_FALL: return "SMSG_MOVE_FEATHER_FALL";
+        case SMSG_MOVE_NORMAL_FALL: return "SMSG_MOVE_NORMAL_FALL";
+        case SMSG_MOVE_SET_HOVER: return "SMSG_MOVE_SET_HOVER";
+        case SMSG_MOVE_UNSET_HOVER: return "SMSG_MOVE_UNSET_HOVER";
+        case MSG_MOVE_HOVER: return "MSG_MOVE_HOVER";
+        case SMSG_TRIGGER_CINEMATIC: return "SMSG_TRIGGER_CINEMATIC";
+        case SMSG_TUTORIAL_FLAGS: return "SMSG_TUTORIAL_FLAGS";
+        case SMSG_EMOTE: return "SMSG_EMOTE";
+        case SMSG_TEXT_EMOTE: return "SMSG_TEXT_EMOTE";
+        case SMSG_INVENTORY_CHANGE_FAILURE: return "SMSG_INVENTORY_CHANGE_FAILURE";
+        case SMSG_TRADE_STATUS: return "SMSG_TRADE_STATUS";
+        case SMSG_TRADE_STATUS_EXTENDED: return "SMSG_TRADE_STATUS_EXTENDED";
+        case SMSG_INITIALIZE_FACTIONS: return "SMSG_INITIALIZE_FACTIONS";
+        case SMSG_SET_FACTION_VISIBLE: return "SMSG_SET_FACTION_VISIBLE";
+        case SMSG_SET_FACTION_STANDING: return "SMSG_SET_FACTION_STANDING";
+        case SMSG_SET_PROFICIENCY: return "SMSG_SET_PROFICIENCY";
+        case SMSG_ACTION_BUTTONS: return "SMSG_ACTION_BUTTONS";
+        case SMSG_INITIAL_SPELLS: return "SMSG_INITIAL_SPELLS";
+        case SMSG_LEARNED_SPELL: return "SMSG_LEARNED_SPELL";
+        case SMSG_SUPERCEDED_SPELL: return "SMSG_SUPERCEDED_SPELL";
+        case SMSG_CAST_FAILED: return "SMSG_CAST_FAILED";
+        case SMSG_SPELL_START: return "SMSG_SPELL_START";
+        case SMSG_SPELL_GO: return "SMSG_SPELL_GO";
+        case SMSG_SPELL_FAILURE: return "SMSG_SPELL_FAILURE";
+        case SMSG_SPELL_COOLDOWN: return "SMSG_SPELL_COOLDOWN";
+        case SMSG_COOLDOWN_EVENT: return "SMSG_COOLDOWN_EVENT";
+        case SMSG_UPDATE_AURA_DURATION: return "SMSG_UPDATE_AURA_DURATION";
+        case SMSG_PET_CAST_FAILED: return "SMSG_PET_CAST_FAILED";
+        case MSG_CHANNEL_START: return "MSG_CHANNEL_START_Server";
+        case MSG_CHANNEL_UPDATE: return "MSG_CHANNEL_UPDATE_Server";
+        case SMSG_AI_REACTION: return "SMSG_AI_REACTION";
+        case SMSG_ATTACKSTART: return "SMSG_ATTACKSTART";
+        case SMSG_ATTACKSTOP: return "SMSG_ATTACKSTOP";
+        case SMSG_ATTACKERSTATEUPDATE: return "SMSG_ATTACKERSTATEUPDATE";
+        case SMSG_SPELLHEALLOG: return "SMSG_SPELLHEALLOG";
+        case SMSG_SPELLENERGIZELOG: return "SMSG_SPELLENERGIZELOG";
+        case SMSG_BINDPOINTUPDATE: return "SMSG_BINDPOINTUPDATE";
+        case SMSG_PLAYERBOUND: return "SMSG_PLAYERBOUND";
+        case SMSG_CLIENT_CONTROL_UPDATE: return "SMSG_CLIENT_CONTROL_UPDATE";
+        case SMSG_RESURRECT_REQUEST: return "SMSG_RESURRECT_REQUEST";
+        case SMSG_LOOT_RESPONSE: return "SMSG_LOOT_RESPONSE";
+        case SMSG_LOOT_RELEASE_RESPONSE: return "SMSG_LOOT_RELEASE_RESPONSE";
+        case SMSG_LOOT_REMOVED: return "SMSG_LOOT_REMOVED";
+        case SMSG_LOOT_MONEY_NOTIFY: return "SMSG_LOOT_MONEY_NOTIFY";
+        case SMSG_ITEM_PUSH_RESULT: return "SMSG_ITEM_PUSH_RESULT";
+        case SMSG_DUEL_REQUESTED: return "SMSG_DUEL_REQUESTED";
+        case SMSG_DUEL_COMPLETE: return "SMSG_DUEL_COMPLETE";
+        case SMSG_DUEL_WINNER: return "SMSG_DUEL_WINNER";
+        case SMSG_MOUNTRESULT: return "SMSG_MOUNTRESULT";
+        case SMSG_MOUNTSPECIAL_ANIM: return "SMSG_MOUNTSPECIAL_ANIM";
+        case SMSG_PET_TAME_FAILURE: return "SMSG_PET_TAME_FAILURE";
+        case SMSG_PET_NAME_INVALID: return "SMSG_PET_NAME_INVALID";
+        case SMSG_PET_SPELLS: return "SMSG_PET_SPELLS";
+        case SMSG_PET_MODE: return "SMSG_PET_MODE";
+        case SMSG_GOSSIP_MESSAGE: return "SMSG_GOSSIP_MESSAGE";
+        case SMSG_NPC_TEXT_UPDATE: return "SMSG_NPC_TEXT_UPDATE";
+        case SMSG_QUESTGIVER_STATUS: return "SMSG_QUESTGIVER_STATUS";
+        case SMSG_QUESTGIVER_QUEST_LIST: return "SMSG_QUESTGIVER_QUEST_LIST";
+        case SMSG_QUESTGIVER_QUEST_DETAILS: return "SMSG_QUESTGIVER_QUEST_DETAILS";
+        case SMSG_QUESTGIVER_REQUEST_ITEMS: return "SMSG_QUESTGIVER_REQUEST_ITEMS";
+        case SMSG_QUESTGIVER_OFFER_REWARD: return "SMSG_QUESTGIVER_OFFER_REWARD";
+        case SMSG_QUESTGIVER_QUEST_INVALID: return "SMSG_QUESTGIVER_QUEST_INVALID";
+        case SMSG_QUESTGIVER_QUEST_COMPLETE: return "SMSG_QUESTGIVER_QUEST_COMPLETE";
+        case SMSG_QUESTGIVER_QUEST_FAILED: return "SMSG_QUESTGIVER_QUEST_FAILED";
+        case SMSG_QUESTUPDATE_FAILED: return "SMSG_QUESTUPDATE_FAILED";
+        case SMSG_QUESTUPDATE_FAILEDTIMER: return "SMSG_QUESTUPDATE_FAILEDTIMER";
+        case SMSG_QUESTUPDATE_COMPLETE: return "SMSG_QUESTUPDATE_COMPLETE";
+        case SMSG_QUESTUPDATE_ADD_KILL: return "SMSG_QUESTUPDATE_ADD_KILL";
+        case SMSG_QUESTUPDATE_ADD_ITEM: return "SMSG_QUESTUPDATE_ADD_ITEM";
+        case SMSG_QUEST_CONFIRM_ACCEPT: return "SMSG_QUEST_CONFIRM_ACCEPT";
+        case SMSG_LIST_INVENTORY: return "SMSG_LIST_INVENTORY";
+        case SMSG_SELL_ITEM: return "SMSG_SELL_ITEM";
+        case SMSG_BUY_ITEM: return "SMSG_BUY_ITEM";
+        case SMSG_BUY_FAILED: return "SMSG_BUY_FAILED";
+        case SMSG_SHOWTAXINODES: return "SMSG_SHOWTAXINODES";
+        case SMSG_TAXINODE_STATUS: return "SMSG_TAXINODE_STATUS";
+        case SMSG_ACTIVATETAXIREPLY: return "SMSG_ACTIVATETAXIREPLY";
+        case SMSG_TRAINER_LIST: return "SMSG_TRAINER_LIST";
+        case SMSG_TRAINER_BUY_SUCCEEDED: return "SMSG_TRAINER_BUY_SUCCEEDED";
+        case SMSG_TRAINER_BUY_FAILED: return "SMSG_TRAINER_BUY_FAILED";
+        case SMSG_SHOW_BANK: return "SMSG_SHOW_BANK";
+        case SMSG_BUY_BANK_SLOT_RESULT: return "SMSG_BUY_BANK_SLOT_RESULT";
+        case SMSG_PETITION_SHOWLIST: return "SMSG_PETITION_SHOWLIST";
+        case SMSG_PETITION_SHOW_SIGNATURES: return "SMSG_PETITION_SHOW_SIGNATURES";
+        case SMSG_PETITION_SIGN_RESULTS: return "SMSG_PETITION_SIGN_RESULTS";
+        case MSG_PETITION_DECLINE: return "MSG_PETITION_DECLINE";
+        case SMSG_TURN_IN_PETITION_RESULTS: return "SMSG_TURN_IN_PETITION_RESULTS";
+        case SMSG_PETITION_QUERY_RESPONSE: return "SMSG_PETITION_QUERY_RESPONSE";
+        case SMSG_NOTIFICATION: return "SMSG_NOTIFICATION";
+        case SMSG_PLAYED_TIME: return "SMSG_PLAYED_TIME";
+        case SMSG_QUERY_TIME_RESPONSE: return "SMSG_QUERY_TIME_RESPONSE";
+        case SMSG_LOG_XPGAIN: return "SMSG_LOG_XPGAIN";
+        case SMSG_LEVELUP_INFO: return "SMSG_LEVELUP_INFO";
+        case MSG_MINIMAP_PING: return "MSG_MINIMAP_PING_Server";
+        case SMSG_ENCHANTMENTLOG: return "SMSG_ENCHANTMENTLOG";
+        case SMSG_START_MIRROR_TIMER: return "SMSG_START_MIRROR_TIMER";
+        case SMSG_PAUSE_MIRROR_TIMER: return "SMSG_PAUSE_MIRROR_TIMER";
+        case SMSG_STOP_MIRROR_TIMER: return "SMSG_STOP_MIRROR_TIMER";
+        case SMSG_PONG: return "SMSG_PONG";
+        case SMSG_CLEAR_COOLDOWN: return "SMSG_CLEAR_COOLDOWN";
+        case SMSG_GAMEOBJECT_PAGETEXT: return "SMSG_GAMEOBJECT_PAGETEXT";
+        case SMSG_SPELL_DELAYED: return "SMSG_SPELL_DELAYED";
+        case SMSG_ITEM_TIME_UPDATE: return "SMSG_ITEM_TIME_UPDATE";
+        case SMSG_ITEM_ENCHANT_TIME_UPDATE: return "SMSG_ITEM_ENCHANT_TIME_UPDATE";
+        case SMSG_AUTH_CHALLENGE: return "SMSG_AUTH_CHALLENGE";
+        case SMSG_AUTH_RESPONSE: return "SMSG_AUTH_RESPONSE";
+        case MSG_SAVE_GUILD_EMBLEM: return "MSG_SAVE_GUILD_EMBLEM_Server";
+        case MSG_TABARDVENDOR_ACTIVATE: return "MSG_TABARDVENDOR_ACTIVATE";
+        case SMSG_PLAY_SPELL_VISUAL: return "SMSG_PLAY_SPELL_VISUAL";
+        case SMSG_PARTYKILLLOG: return "SMSG_PARTYKILLLOG";
+        case SMSG_COMPRESSED_UPDATE_OBJECT: return "SMSG_COMPRESSED_UPDATE_OBJECT";
+        case SMSG_PLAY_SPELL_IMPACT: return "SMSG_PLAY_SPELL_IMPACT";
+        case SMSG_EXPLORATION_EXPERIENCE: return "SMSG_EXPLORATION_EXPERIENCE";
+        case MSG_RANDOM_ROLL: return "MSG_RANDOM_ROLL_Server";
+        case SMSG_ENVIRONMENTAL_DAMAGE_LOG: return "SMSG_ENVIRONMENTAL_DAMAGE_LOG";
+        case MSG_LOOKING_FOR_GROUP: return "MSG_LOOKING_FOR_GROUP_Server";
+        case SMSG_REMOVED_SPELL: return "SMSG_REMOVED_SPELL";
+        case SMSG_GMTICKET_CREATE: return "SMSG_GMTICKET_CREATE";
+        case SMSG_GMTICKET_UPDATETEXT: return "SMSG_GMTICKET_UPDATETEXT";
+        case SMSG_ACCOUNT_DATA_TIMES: return "SMSG_ACCOUNT_DATA_TIMES";
+        case SMSG_UPDATE_ACCOUNT_DATA: return "SMSG_UPDATE_ACCOUNT_DATA";
+        case SMSG_GMTICKET_GETTICKET: return "SMSG_GMTICKET_GETTICKET";
+        case SMSG_GAMEOBJECT_SPAWN_ANIM: return "SMSG_GAMEOBJECT_SPAWN_ANIM";
+        case SMSG_GAMEOBJECT_DESPAWN_ANIM: return "SMSG_GAMEOBJECT_DESPAWN_ANIM";
+        case MSG_CORPSE_QUERY: return "MSG_CORPSE_QUERY_Server";
+        case SMSG_GMTICKET_DELETETICKET: return "SMSG_GMTICKET_DELETETICKET";
+        case SMSG_GMTICKET_SYSTEMSTATUS: return "SMSG_GMTICKET_SYSTEMSTATUS";
+        case SMSG_SET_REST_START: return "SMSG_SET_REST_START";
+        case SMSG_SPIRIT_HEALER_CONFIRM: return "SMSG_SPIRIT_HEALER_CONFIRM";
+        case SMSG_GOSSIP_POI: return "SMSG_GOSSIP_POI";
+        case SMSG_LOGIN_VERIFY_WORLD: return "SMSG_LOGIN_VERIFY_WORLD";
+        case SMSG_SEND_MAIL_RESULT: return "SMSG_SEND_MAIL_RESULT";
+        case SMSG_MAIL_LIST_RESULT: return "SMSG_MAIL_LIST_RESULT";
+        case SMSG_BATTLEFIELD_LIST: return "SMSG_BATTLEFIELD_LIST";
+        case SMSG_ITEM_TEXT_QUERY_RESPONSE: return "SMSG_ITEM_TEXT_QUERY_RESPONSE";
+        case SMSG_SPELLLOGMISS: return "SMSG_SPELLLOGMISS";
+        case SMSG_SPELLLOGEXECUTE: return "SMSG_SPELLLOGEXECUTE";
+        case SMSG_PERIODICAURALOG: return "SMSG_PERIODICAURALOG";
+        case SMSG_SPELLDAMAGESHIELD: return "SMSG_SPELLDAMAGESHIELD";
+        case SMSG_SPELLNONMELEEDAMAGELOG: return "SMSG_SPELLNONMELEEDAMAGELOG";
+        case SMSG_RESURRECT_FAILED: return "SMSG_RESURRECT_FAILED";
+        case SMSG_ZONE_UNDER_ATTACK: return "SMSG_ZONE_UNDER_ATTACK";
+        case MSG_AUCTION_HELLO: return "MSG_AUCTION_HELLO_Server";
+        case SMSG_AUCTION_COMMAND_RESULT: return "SMSG_AUCTION_COMMAND_RESULT";
+        case SMSG_AUCTION_LIST_RESULT: return "SMSG_AUCTION_LIST_RESULT";
+        case SMSG_AUCTION_OWNER_LIST_RESULT: return "SMSG_AUCTION_OWNER_LIST_RESULT";
+        case SMSG_AUCTION_BIDDER_NOTIFICATION: return "SMSG_AUCTION_BIDDER_NOTIFICATION";
+        case SMSG_AUCTION_OWNER_NOTIFICATION: return "SMSG_AUCTION_OWNER_NOTIFICATION";
+        case SMSG_PROCRESIST: return "SMSG_PROCRESIST";
+        case SMSG_DISPEL_FAILED: return "SMSG_DISPEL_FAILED";
+        case SMSG_SPELLORDAMAGE_IMMUNE: return "SMSG_SPELLORDAMAGE_IMMUNE";
+        case SMSG_AUCTION_BIDDER_LIST_RESULT: return "SMSG_AUCTION_BIDDER_LIST_RESULT";
+        case SMSG_SET_FLAT_SPELL_MODIFIER: return "SMSG_SET_FLAT_SPELL_MODIFIER";
+        case SMSG_SET_PCT_SPELL_MODIFIER: return "SMSG_SET_PCT_SPELL_MODIFIER";
+        case SMSG_CORPSE_RECLAIM_DELAY: return "SMSG_CORPSE_RECLAIM_DELAY";
+        case MSG_LIST_STABLED_PETS: return "MSG_LIST_STABLED_PETS_Server";
+        case SMSG_STABLE_RESULT: return "SMSG_STABLE_RESULT";
+        case MSG_QUEST_PUSH_RESULT: return "MSG_QUEST_PUSH_RESULT";
+        case SMSG_PLAY_MUSIC: return "SMSG_PLAY_MUSIC";
+        case SMSG_PLAY_OBJECT_SOUND: return "SMSG_PLAY_OBJECT_SOUND";
+        case SMSG_SPELLDISPELLOG: return "SMSG_SPELLDISPELLOG";
+        case MSG_QUERY_NEXT_MAIL_TIME: return "MSG_QUERY_NEXT_MAIL_TIME_Server";
+        case SMSG_RECEIVED_MAIL: return "SMSG_RECEIVED_MAIL";
+        case SMSG_RAID_GROUP_ONLY: return "SMSG_RAID_GROUP_ONLY";
+        case SMSG_PVP_CREDIT: return "SMSG_PVP_CREDIT";
+        case SMSG_AUCTION_REMOVED_NOTIFICATION: return "SMSG_AUCTION_REMOVED_NOTIFICATION";
+        case SMSG_SERVER_MESSAGE: return "SMSG_SERVER_MESSAGE";
+        case SMSG_MEETINGSTONE_SETQUEUE: return "SMSG_MEETINGSTONE_SETQUEUE";
+        case SMSG_STANDSTATE_UPDATE: return "SMSG_STANDSTATE_UPDATE";
+        case SMSG_LOOT_ALL_PASSED: return "SMSG_LOOT_ALL_PASSED";
+        case SMSG_LOOT_ROLL_WON: return "SMSG_LOOT_ROLL_WON";
+        case SMSG_LOOT_START_ROLL: return "SMSG_LOOT_START_ROLL";
+        case SMSG_LOOT_ROLL: return "SMSG_LOOT_ROLL";
+        case SMSG_LOOT_MASTER_LIST: return "SMSG_LOOT_MASTER_LIST";
+        case SMSG_SET_FORCED_REACTIONS: return "SMSG_SET_FORCED_REACTIONS";
+        case SMSG_SPELL_FAILED_OTHER: return "SMSG_SPELL_FAILED_OTHER";
+        case SMSG_CHAT_PLAYER_NOT_FOUND: return "SMSG_CHAT_PLAYER_NOT_FOUND";
+        case MSG_TALENT_WIPE_CONFIRM: return "MSG_TALENT_WIPE_CONFIRM_Server";
+        case SMSG_SUMMON_REQUEST: return "SMSG_SUMMON_REQUEST";
+        case SMSG_MONSTER_MOVE_TRANSPORT: return "SMSG_MONSTER_MOVE_TRANSPORT";
+        case MSG_MOVE_FEATHER_FALL: return "MSG_MOVE_FEATHER_FALL_Server";
+        case MSG_MOVE_WATER_WALK: return "MSG_MOVE_WATER_WALK";
+        case SMSG_DUEL_COUNTDOWN: return "SMSG_DUEL_COUNTDOWN";
+        case SMSG_AREA_TRIGGER_MESSAGE: return "SMSG_AREA_TRIGGER_MESSAGE";
+        case SMSG_PLAYER_SKINNED: return "SMSG_PLAYER_SKINNED";
+        case MSG_PETITION_RENAME: return "MSG_PETITION_RENAME";
+        case SMSG_INIT_WORLD_STATES: return "SMSG_INIT_WORLD_STATES";
+        case SMSG_UPDATE_WORLD_STATE: return "SMSG_UPDATE_WORLD_STATE";
+        case SMSG_ITEM_NAME_QUERY_RESPONSE: return "SMSG_ITEM_NAME_QUERY_RESPONSE";
+        case SMSG_PET_ACTION_FEEDBACK: return "SMSG_PET_ACTION_FEEDBACK";
+        case SMSG_CHAR_RENAME: return "SMSG_CHAR_RENAME";
+        case SMSG_INSTANCE_SAVE_CREATED: return "SMSG_INSTANCE_SAVE_CREATED";
+        case SMSG_RAID_INSTANCE_INFO: return "SMSG_RAID_INSTANCE_INFO";
+        case SMSG_PLAY_SOUND: return "SMSG_PLAY_SOUND";
+        case SMSG_BATTLEFIELD_STATUS: return "SMSG_BATTLEFIELD_STATUS";
+        case MSG_INSPECT_HONOR_STATS: return "MSG_INSPECT_HONOR_STATS_Server";
+        case SMSG_FORCE_WALK_SPEED_CHANGE: return "SMSG_FORCE_WALK_SPEED_CHANGE";
+        case SMSG_FORCE_SWIM_BACK_SPEED_CHANGE: return "SMSG_FORCE_SWIM_BACK_SPEED_CHANGE";
+        case SMSG_FORCE_TURN_RATE_CHANGE: return "SMSG_FORCE_TURN_RATE_CHANGE";
+        case SMSG_AREA_SPIRIT_HEALER_TIME: return "SMSG_AREA_SPIRIT_HEALER_TIME";
+        case SMSG_WARDEN_DATA: return "SMSG_WARDEN_DATA";
+        case SMSG_GROUP_JOINED_BATTLEGROUND: return "SMSG_GROUP_JOINED_BATTLEGROUND";
+        case MSG_BATTLEGROUND_PLAYER_POSITIONS: return "MSG_BATTLEGROUND_PLAYER_POSITIONS_Server";
+        case SMSG_BINDER_CONFIRM: return "SMSG_BINDER_CONFIRM";
+        case SMSG_BATTLEGROUND_PLAYER_JOINED: return "SMSG_BATTLEGROUND_PLAYER_JOINED";
+        case SMSG_BATTLEGROUND_PLAYER_LEFT: return "SMSG_BATTLEGROUND_PLAYER_LEFT";
+        case SMSG_ADDON_INFO: return "SMSG_ADDON_INFO";
+        case SMSG_PET_UNLEARN_CONFIRM: return "SMSG_PET_UNLEARN_CONFIRM";
+        case SMSG_PARTY_MEMBER_STATS_FULL: return "SMSG_PARTY_MEMBER_STATS_FULL";
+        case SMSG_WEATHER: return "SMSG_WEATHER";
+        case SMSG_RAID_INSTANCE_MESSAGE: return "SMSG_RAID_INSTANCE_MESSAGE";
+        case SMSG_CHAT_RESTRICTED: return "SMSG_CHAT_RESTRICTED";
+        case SMSG_SPLINE_SET_RUN_SPEED: return "SMSG_SPLINE_SET_RUN_SPEED";
+        case SMSG_SPLINE_SET_RUN_BACK_SPEED: return "SMSG_SPLINE_SET_RUN_BACK_SPEED";
+        case SMSG_SPLINE_SET_SWIM_SPEED: return "SMSG_SPLINE_SET_SWIM_SPEED";
+        case SMSG_SPLINE_SET_WALK_SPEED: return "SMSG_SPLINE_SET_WALK_SPEED";
+        case SMSG_SPLINE_SET_SWIM_BACK_SPEED: return "SMSG_SPLINE_SET_SWIM_BACK_SPEED";
+        case SMSG_SPLINE_SET_TURN_RATE: return "SMSG_SPLINE_SET_TURN_RATE";
+        case SMSG_SPLINE_MOVE_UNROOT: return "SMSG_SPLINE_MOVE_UNROOT";
+        case SMSG_SPLINE_MOVE_FEATHER_FALL: return "SMSG_SPLINE_MOVE_FEATHER_FALL";
+        case SMSG_SPLINE_MOVE_NORMAL_FALL: return "SMSG_SPLINE_MOVE_NORMAL_FALL";
+        case SMSG_SPLINE_MOVE_SET_HOVER: return "SMSG_SPLINE_MOVE_SET_HOVER";
+        case SMSG_SPLINE_MOVE_UNSET_HOVER: return "SMSG_SPLINE_MOVE_UNSET_HOVER";
+        case SMSG_SPLINE_MOVE_WATER_WALK: return "SMSG_SPLINE_MOVE_WATER_WALK";
+        case SMSG_SPLINE_MOVE_LAND_WALK: return "SMSG_SPLINE_MOVE_LAND_WALK";
+        case SMSG_SPLINE_MOVE_START_SWIM: return "SMSG_SPLINE_MOVE_START_SWIM";
+        case SMSG_SPLINE_MOVE_STOP_SWIM: return "SMSG_SPLINE_MOVE_STOP_SWIM";
+        case SMSG_SPLINE_MOVE_SET_RUN_MODE: return "SMSG_SPLINE_MOVE_SET_RUN_MODE";
+        case SMSG_SPLINE_MOVE_SET_WALK_MODE: return "SMSG_SPLINE_MOVE_SET_WALK_MODE";
+        case MSG_MOVE_TIME_SKIPPED: return "MSG_MOVE_TIME_SKIPPED_Server";
+        case SMSG_SPLINE_MOVE_ROOT: return "SMSG_SPLINE_MOVE_ROOT";
+        case SMSG_INVALIDATE_PLAYER: return "SMSG_INVALIDATE_PLAYER";
+        case SMSG_INSTANCE_RESET: return "SMSG_INSTANCE_RESET";
+        case SMSG_INSTANCE_RESET_FAILED: return "SMSG_INSTANCE_RESET_FAILED";
+        case SMSG_UPDATE_LAST_INSTANCE: return "SMSG_UPDATE_LAST_INSTANCE";
+        case MSG_RAID_TARGET_UPDATE: return "MSG_RAID_TARGET_UPDATE_Server";
+        case MSG_RAID_READY_CHECK: return "MSG_RAID_READY_CHECK_Server";
+        case SMSG_PET_ACTION_SOUND: return "SMSG_PET_ACTION_SOUND";
+        case SMSG_PET_DISMISS_SOUND: return "SMSG_PET_DISMISS_SOUND";
+        case SMSG_GM_TICKET_STATUS_UPDATE: return "SMSG_GM_TICKET_STATUS_UPDATE";
+        case MSG_SET_DUNGEON_DIFFICULTY: return "MSG_SET_DUNGEON_DIFFICULTY_Server";
+        case SMSG_UPDATE_INSTANCE_OWNERSHIP: return "SMSG_UPDATE_INSTANCE_OWNERSHIP";
+        case SMSG_CHAT_PLAYER_AMBIGUOUS: return "SMSG_CHAT_PLAYER_AMBIGUOUS";
+        case SMSG_SPELLINSTAKILLLOG: return "SMSG_SPELLINSTAKILLLOG";
+        case SMSG_SPELL_UPDATE_CHAIN_TARGETS: return "SMSG_SPELL_UPDATE_CHAIN_TARGETS";
+        case SMSG_SPELLSTEALLOG: return "SMSG_SPELLSTEALLOG";
+        case SMSG_DEFENSE_MESSAGE: return "SMSG_DEFENSE_MESSAGE";
+        case SMSG_INSTANCE_DIFFICULTY: return "SMSG_INSTANCE_DIFFICULTY";
+        case SMSG_MOTD: return "SMSG_MOTD";
+        case SMSG_MOVE_SET_FLIGHT: return "SMSG_MOVE_SET_FLIGHT";
+        case SMSG_MOVE_UNSET_FLIGHT: return "SMSG_MOVE_UNSET_FLIGHT";
+        case SMSG_MOVE_SET_CAN_FLY: return "SMSG_MOVE_SET_CAN_FLY";
+        case SMSG_MOVE_UNSET_CAN_FLY: return "SMSG_MOVE_UNSET_CAN_FLY";
+        case SMSG_ARENA_TEAM_COMMAND_RESULT: return "SMSG_ARENA_TEAM_COMMAND_RESULT";
+        case SMSG_ARENA_TEAM_QUERY_RESPONSE: return "SMSG_ARENA_TEAM_QUERY_RESPONSE";
+        case SMSG_ARENA_TEAM_ROSTER: return "SMSG_ARENA_TEAM_ROSTER";
+        case SMSG_ARENA_TEAM_INVITE: return "SMSG_ARENA_TEAM_INVITE";
+        case SMSG_ARENA_TEAM_EVENT: return "SMSG_ARENA_TEAM_EVENT";
+        case MSG_MOVE_START_ASCEND: return "MSG_MOVE_START_ASCEND_Server";
+        case MSG_MOVE_STOP_ASCEND: return "MSG_MOVE_STOP_ASCEND_Server";
+        case SMSG_ARENA_TEAM_STATS: return "SMSG_ARENA_TEAM_STATS";
+        case SMSG_LFG_UPDATE: return "SMSG_LFG_UPDATE";
+        case SMSG_LFG_UPDATE_LFM: return "SMSG_LFG_UPDATE_LFM";
+        case SMSG_LFG_UPDATE_LFG: return "SMSG_LFG_UPDATE_LFG";
+        case SMSG_LFG_UPDATE_QUEUED: return "SMSG_LFG_UPDATE_QUEUED";
+        case SMSG_TITLE_EARNED: return "SMSG_TITLE_EARNED";
+        case SMSG_ARENA_ERROR: return "SMSG_ARENA_ERROR";
+        case MSG_INSPECT_ARENA_TEAMS: return "MSG_INSPECT_ARENA_TEAMS_Server";
+        case SMSG_DEATH_RELEASE_LOC: return "SMSG_DEATH_RELEASE_LOC";
+        case MSG_MOVE_SET_FLIGHT_SPEED: return "MSG_MOVE_SET_FLIGHT_SPEED_Server";
+        case MSG_MOVE_SET_FLIGHT_BACK_SPEED: return "MSG_MOVE_SET_FLIGHT_BACK_SPEED";
+        case SMSG_FORCE_FLIGHT_SPEED_CHANGE: return "SMSG_FORCE_FLIGHT_SPEED_CHANGE";
+        case SMSG_FORCE_FLIGHT_BACK_SPEED_CHANGE: return "SMSG_FORCE_FLIGHT_BACK_SPEED_CHANGE";
+        case SMSG_SPLINE_SET_FLIGHT_SPEED: return "SMSG_SPLINE_SET_FLIGHT_SPEED";
+        case SMSG_SPLINE_SET_FLIGHT_BACK_SPEED: return "SMSG_SPLINE_SET_FLIGHT_BACK_SPEED";
+        case SMSG_FLIGHT_SPLINE_SYNC: return "SMSG_FLIGHT_SPLINE_SYNC";
+        case SMSG_REALM_SPLIT: return "SMSG_REALM_SPLIT";
+        case SMSG_TIME_SYNC_REQ: return "SMSG_TIME_SYNC_REQ";
+        case SMSG_RESET_FAILED_NOTIFY: return "SMSG_RESET_FAILED_NOTIFY";
+        case SMSG_UPDATE_COMBO_POINTS: return "SMSG_UPDATE_COMBO_POINTS";
+        case SMSG_SET_EXTRA_AURA_INFO: return "SMSG_SET_EXTRA_AURA_INFO";
+        case SMSG_SET_EXTRA_AURA_INFO_NEED_UPDATE: return "SMSG_SET_EXTRA_AURA_INFO_NEED_UPDATE";
+        case SMSG_CLEAR_EXTRA_AURA_INFO: return "SMSG_CLEAR_EXTRA_AURA_INFO";
+        case MSG_MOVE_START_DESCEND: return "MSG_MOVE_START_DESCEND_Server";
+        case SMSG_DISMOUNT: return "SMSG_DISMOUNT";
+        case MSG_MOVE_UPDATE_CAN_FLY: return "MSG_MOVE_UPDATE_CAN_FLY_Server";
+        case MSG_RAID_READY_CHECK_CONFIRM: return "MSG_RAID_READY_CHECK_CONFIRM_Server";
+        case SMSG_GM_MESSAGECHAT: return "SMSG_GM_MESSAGECHAT";
+        case SMSG_CLEAR_TARGET: return "SMSG_CLEAR_TARGET";
+        case SMSG_CROSSED_INEBRIATION_THRESHOLD: return "SMSG_CROSSED_INEBRIATION_THRESHOLD";
+        case SMSG_KICK_REASON: return "SMSG_KICK_REASON";
+        case SMSG_COMPLAIN_RESULT: return "SMSG_COMPLAIN_RESULT";
+        case SMSG_FEATURE_SYSTEM_STATUS: return "SMSG_FEATURE_SYSTEM_STATUS";
+        case SMSG_CHANNEL_MEMBER_COUNT: return "SMSG_CHANNEL_MEMBER_COUNT";
+        case SMSG_GUILD_BANK_LIST: return "SMSG_GUILD_BANK_LIST";
+        case MSG_GUILD_BANK_LOG_QUERY: return "MSG_GUILD_BANK_LOG_QUERY_Server";
+        case SMSG_USERLIST_ADD: return "SMSG_USERLIST_ADD";
+        case SMSG_USERLIST_REMOVE: return "SMSG_USERLIST_REMOVE";
+        case SMSG_USERLIST_UPDATE: return "SMSG_USERLIST_UPDATE";
+        case SMSG_INSPECT_TALENT: return "SMSG_INSPECT_TALENT";
+        case SMSG_LOOT_LIST: return "SMSG_LOOT_LIST";
+        case MSG_GUILD_PERMISSIONS: return "MSG_GUILD_PERMISSIONS_Server";
+        case MSG_GUILD_BANK_MONEY_WITHDRAWN: return "MSG_GUILD_BANK_MONEY_WITHDRAWN_Server";
+        case MSG_GUILD_EVENT_LOG_QUERY: return "MSG_GUILD_EVENT_LOG_QUERY_Server";
+        case SMSG_MIRRORIMAGE_DATA: return "SMSG_MIRRORIMAGE_DATA";
+        case MSG_QUERY_GUILD_BANK_TEXT: return "MSG_QUERY_GUILD_BANK_TEXT_Server";
+        case SMSG_OVERRIDE_LIGHT: return "SMSG_OVERRIDE_LIGHT";
+        case SMSG_TOTEM_CREATED: return "SMSG_TOTEM_CREATED";
+        case SMSG_QUESTGIVER_STATUS_MULTIPLE: return "SMSG_QUESTGIVER_STATUS_MULTIPLE";
+        case SMSG_SET_PLAYER_DECLINED_NAMES_RESULT: return "SMSG_SET_PLAYER_DECLINED_NAMES_RESULT";
+        case SMSG_SEND_UNLEARN_SPELLS: return "SMSG_SEND_UNLEARN_SPELLS";
+        case SMSG_PROPOSE_LEVEL_GRANT: return "SMSG_PROPOSE_LEVEL_GRANT";
+        case SMSG_REFER_A_FRIEND_FAILURE: return "SMSG_REFER_A_FRIEND_FAILURE";
+        case SMSG_SPLINE_MOVE_SET_FLYING: return "SMSG_SPLINE_MOVE_SET_FLYING";
+        case SMSG_SPLINE_MOVE_UNSET_FLYING: return "SMSG_SPLINE_MOVE_UNSET_FLYING";
+        default:
+            break;
+    }
+
+    return NULL;
 }
 

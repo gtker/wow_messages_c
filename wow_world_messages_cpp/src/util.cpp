@@ -135,6 +135,35 @@ NamedGuid wwm_read_named_guid(Reader& reader)
     return {};
 }
 
+size_t wwm_variable_item_random_property_size(const VariableItemRandomProperty& property)
+{
+    return property.item_suffix_factor() == nullptr ? 4 : 8;
+}
+
+void wwm_write_variable_item_random_property(Writer& writer, const VariableItemRandomProperty& property)
+{
+    writer.write_u32(property.item_random_property_id());
+
+    const auto suffix = property.item_suffix_factor();
+    if (suffix)
+    {
+        writer.write_u32(*suffix);
+    }
+}
+
+VariableItemRandomProperty wwm_read_variable_item_random_property(Reader& reader)
+{
+    auto item_random_property_id = reader.read_u32();
+
+    if (item_random_property_id != 0)
+    {
+        auto item_suffix_factor = reader.read_u32();
+        return {item_random_property_id, item_suffix_factor};
+    }
+
+        return {};
+}
+
 static uint32_t wwm_adler32(const unsigned char* data, const size_t len)
 {
     uint32_t a = 1, b = 0;

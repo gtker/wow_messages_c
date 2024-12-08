@@ -199,37 +199,39 @@ struct ClientOpcode {
 
     template<typename T>
     // NOLINTNEXTLINE
-    T& get(); // All possible types have been specialized
+    WOW_LOGIN_MESSAGES_CPP_EXPORT T& get(); // All possible types have been specialized
 
     template<typename T>
     // NOLINTNEXTLINE
-    T* get_if(); // All possible types have been specialized
+    WOW_LOGIN_MESSAGES_CPP_EXPORT T* get_if(); // All possible types have been specialized
+
+    WOW_LOGIN_MESSAGES_CPP_EXPORT const char* to_string() const;
 };
 
 template<>
-version3::CMD_AUTH_LOGON_PROOF_Client* ClientOpcode::get_if();
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_AUTH_LOGON_PROOF_Client* ClientOpcode::get_if();
 template<>
-version3::CMD_AUTH_LOGON_PROOF_Client& ClientOpcode::get();
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_AUTH_LOGON_PROOF_Client& ClientOpcode::get();
 template<>
-version3::CMD_SURVEY_RESULT* ClientOpcode::get_if();
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_SURVEY_RESULT* ClientOpcode::get_if();
 template<>
-version3::CMD_SURVEY_RESULT& ClientOpcode::get();
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_SURVEY_RESULT& ClientOpcode::get();
 template<>
-version3::CMD_REALM_LIST_Client* ClientOpcode::get_if();
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_REALM_LIST_Client* ClientOpcode::get_if();
 template<>
-version3::CMD_REALM_LIST_Client& ClientOpcode::get();
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_REALM_LIST_Client& ClientOpcode::get();
 template<>
-version3::CMD_XFER_ACCEPT* ClientOpcode::get_if();
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_XFER_ACCEPT* ClientOpcode::get_if();
 template<>
-version3::CMD_XFER_ACCEPT& ClientOpcode::get();
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_XFER_ACCEPT& ClientOpcode::get();
 template<>
-version3::CMD_XFER_RESUME* ClientOpcode::get_if();
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_XFER_RESUME* ClientOpcode::get_if();
 template<>
-version3::CMD_XFER_RESUME& ClientOpcode::get();
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_XFER_RESUME& ClientOpcode::get();
 template<>
-version3::CMD_XFER_CANCEL* ClientOpcode::get_if();
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_XFER_CANCEL* ClientOpcode::get_if();
 template<>
-version3::CMD_XFER_CANCEL& ClientOpcode::get();
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_XFER_CANCEL& ClientOpcode::get();
 
 WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const ClientOpcode& opcode);
 
@@ -320,33 +322,35 @@ struct ServerOpcode {
 
     template<typename T>
     // NOLINTNEXTLINE
-    T& get(); // All possible types have been specialized
+    WOW_LOGIN_MESSAGES_CPP_EXPORT T& get(); // All possible types have been specialized
 
     template<typename T>
     // NOLINTNEXTLINE
-    T* get_if(); // All possible types have been specialized
+    WOW_LOGIN_MESSAGES_CPP_EXPORT T* get_if(); // All possible types have been specialized
+
+    WOW_LOGIN_MESSAGES_CPP_EXPORT const char* to_string() const;
 };
 
 template<>
-version3::CMD_AUTH_LOGON_CHALLENGE_Server* ServerOpcode::get_if();
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_AUTH_LOGON_CHALLENGE_Server* ServerOpcode::get_if();
 template<>
-version3::CMD_AUTH_LOGON_CHALLENGE_Server& ServerOpcode::get();
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_AUTH_LOGON_CHALLENGE_Server& ServerOpcode::get();
 template<>
-version3::CMD_AUTH_LOGON_PROOF_Server* ServerOpcode::get_if();
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_AUTH_LOGON_PROOF_Server* ServerOpcode::get_if();
 template<>
-version3::CMD_AUTH_LOGON_PROOF_Server& ServerOpcode::get();
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_AUTH_LOGON_PROOF_Server& ServerOpcode::get();
 template<>
-version3::CMD_REALM_LIST_Server* ServerOpcode::get_if();
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_REALM_LIST_Server* ServerOpcode::get_if();
 template<>
-version3::CMD_REALM_LIST_Server& ServerOpcode::get();
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_REALM_LIST_Server& ServerOpcode::get();
 template<>
-version3::CMD_XFER_INITIATE* ServerOpcode::get_if();
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_XFER_INITIATE* ServerOpcode::get_if();
 template<>
-version3::CMD_XFER_INITIATE& ServerOpcode::get();
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_XFER_INITIATE& ServerOpcode::get();
 template<>
-version3::CMD_XFER_DATA* ServerOpcode::get_if();
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_XFER_DATA* ServerOpcode::get_if();
 template<>
-version3::CMD_XFER_DATA& ServerOpcode::get();
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_XFER_DATA& ServerOpcode::get();
 
 WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const ServerOpcode& opcode);
 

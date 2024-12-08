@@ -149,15 +149,20 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_AUTH_RECONNECT_CHAL
     return writer.m_buf;
 }
 
+WOW_LOGIN_MESSAGES_CPP_EXPORT const char* ClientOpcode::to_string() const {
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) { return "CMD_AUTH_LOGON_CHALLENGE_Client"; }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) { return "CMD_AUTH_RECONNECT_CHALLENGE_Client"; }
+    return nullptr;
+}
 template <>
-all::CMD_AUTH_LOGON_CHALLENGE_Client* ClientOpcode::get_if<CMD_AUTH_LOGON_CHALLENGE_Client>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT all::CMD_AUTH_LOGON_CHALLENGE_Client* ClientOpcode::get_if<CMD_AUTH_LOGON_CHALLENGE_Client>() {
     if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
         return &CMD_AUTH_LOGON_CHALLENGE;
     }
     return nullptr;
 }
 template <>
-all::CMD_AUTH_LOGON_CHALLENGE_Client& ClientOpcode::get<CMD_AUTH_LOGON_CHALLENGE_Client>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT all::CMD_AUTH_LOGON_CHALLENGE_Client& ClientOpcode::get<CMD_AUTH_LOGON_CHALLENGE_Client>() {
     auto p = ClientOpcode::get_if<all::CMD_AUTH_LOGON_CHALLENGE_Client>();
     if (p) {
         return *p;
@@ -166,14 +171,14 @@ all::CMD_AUTH_LOGON_CHALLENGE_Client& ClientOpcode::get<CMD_AUTH_LOGON_CHALLENGE
 }
 
 template <>
-all::CMD_AUTH_RECONNECT_CHALLENGE_Client* ClientOpcode::get_if<CMD_AUTH_RECONNECT_CHALLENGE_Client>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT all::CMD_AUTH_RECONNECT_CHALLENGE_Client* ClientOpcode::get_if<CMD_AUTH_RECONNECT_CHALLENGE_Client>() {
     if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
         return &CMD_AUTH_RECONNECT_CHALLENGE;
     }
     return nullptr;
 }
 template <>
-all::CMD_AUTH_RECONNECT_CHALLENGE_Client& ClientOpcode::get<CMD_AUTH_RECONNECT_CHALLENGE_Client>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT all::CMD_AUTH_RECONNECT_CHALLENGE_Client& ClientOpcode::get<CMD_AUTH_RECONNECT_CHALLENGE_Client>() {
     auto p = ClientOpcode::get_if<all::CMD_AUTH_RECONNECT_CHALLENGE_Client>();
     if (p) {
         return *p;
@@ -749,15 +754,24 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_XFER_CANCEL::write(
     return writer.m_buf;
 }
 
+WOW_LOGIN_MESSAGES_CPP_EXPORT const char* ClientOpcode::to_string() const {
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) { return "CMD_AUTH_LOGON_PROOF_Client"; }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) { return "CMD_AUTH_RECONNECT_PROOF_Client"; }
+    if (opcode == Opcode::CMD_REALM_LIST) { return "CMD_REALM_LIST_Client"; }
+    if (opcode == Opcode::CMD_XFER_ACCEPT) { return "CMD_XFER_ACCEPT"; }
+    if (opcode == Opcode::CMD_XFER_RESUME) { return "CMD_XFER_RESUME"; }
+    if (opcode == Opcode::CMD_XFER_CANCEL) { return "CMD_XFER_CANCEL"; }
+    return nullptr;
+}
 template <>
-version2::CMD_AUTH_LOGON_PROOF_Client* ClientOpcode::get_if<CMD_AUTH_LOGON_PROOF_Client>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version2::CMD_AUTH_LOGON_PROOF_Client* ClientOpcode::get_if<CMD_AUTH_LOGON_PROOF_Client>() {
     if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
         return &CMD_AUTH_LOGON_PROOF;
     }
     return nullptr;
 }
 template <>
-version2::CMD_AUTH_LOGON_PROOF_Client& ClientOpcode::get<CMD_AUTH_LOGON_PROOF_Client>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version2::CMD_AUTH_LOGON_PROOF_Client& ClientOpcode::get<CMD_AUTH_LOGON_PROOF_Client>() {
     auto p = ClientOpcode::get_if<version2::CMD_AUTH_LOGON_PROOF_Client>();
     if (p) {
         return *p;
@@ -766,14 +780,14 @@ version2::CMD_AUTH_LOGON_PROOF_Client& ClientOpcode::get<CMD_AUTH_LOGON_PROOF_Cl
 }
 
 template <>
-version2::CMD_AUTH_RECONNECT_PROOF_Client* ClientOpcode::get_if<CMD_AUTH_RECONNECT_PROOF_Client>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version2::CMD_AUTH_RECONNECT_PROOF_Client* ClientOpcode::get_if<CMD_AUTH_RECONNECT_PROOF_Client>() {
     if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
         return &CMD_AUTH_RECONNECT_PROOF;
     }
     return nullptr;
 }
 template <>
-version2::CMD_AUTH_RECONNECT_PROOF_Client& ClientOpcode::get<CMD_AUTH_RECONNECT_PROOF_Client>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version2::CMD_AUTH_RECONNECT_PROOF_Client& ClientOpcode::get<CMD_AUTH_RECONNECT_PROOF_Client>() {
     auto p = ClientOpcode::get_if<version2::CMD_AUTH_RECONNECT_PROOF_Client>();
     if (p) {
         return *p;
@@ -782,14 +796,14 @@ version2::CMD_AUTH_RECONNECT_PROOF_Client& ClientOpcode::get<CMD_AUTH_RECONNECT_
 }
 
 template <>
-version2::CMD_REALM_LIST_Client* ClientOpcode::get_if<CMD_REALM_LIST_Client>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version2::CMD_REALM_LIST_Client* ClientOpcode::get_if<CMD_REALM_LIST_Client>() {
     if (opcode == Opcode::CMD_REALM_LIST) {
         return &CMD_REALM_LIST;
     }
     return nullptr;
 }
 template <>
-version2::CMD_REALM_LIST_Client& ClientOpcode::get<CMD_REALM_LIST_Client>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version2::CMD_REALM_LIST_Client& ClientOpcode::get<CMD_REALM_LIST_Client>() {
     auto p = ClientOpcode::get_if<version2::CMD_REALM_LIST_Client>();
     if (p) {
         return *p;
@@ -798,14 +812,14 @@ version2::CMD_REALM_LIST_Client& ClientOpcode::get<CMD_REALM_LIST_Client>() {
 }
 
 template <>
-version2::CMD_XFER_ACCEPT* ClientOpcode::get_if<CMD_XFER_ACCEPT>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version2::CMD_XFER_ACCEPT* ClientOpcode::get_if<CMD_XFER_ACCEPT>() {
     if (opcode == Opcode::CMD_XFER_ACCEPT) {
         return &CMD_XFER_ACCEPT;
     }
     return nullptr;
 }
 template <>
-version2::CMD_XFER_ACCEPT& ClientOpcode::get<CMD_XFER_ACCEPT>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version2::CMD_XFER_ACCEPT& ClientOpcode::get<CMD_XFER_ACCEPT>() {
     auto p = ClientOpcode::get_if<version2::CMD_XFER_ACCEPT>();
     if (p) {
         return *p;
@@ -814,14 +828,14 @@ version2::CMD_XFER_ACCEPT& ClientOpcode::get<CMD_XFER_ACCEPT>() {
 }
 
 template <>
-version2::CMD_XFER_RESUME* ClientOpcode::get_if<CMD_XFER_RESUME>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version2::CMD_XFER_RESUME* ClientOpcode::get_if<CMD_XFER_RESUME>() {
     if (opcode == Opcode::CMD_XFER_RESUME) {
         return &CMD_XFER_RESUME;
     }
     return nullptr;
 }
 template <>
-version2::CMD_XFER_RESUME& ClientOpcode::get<CMD_XFER_RESUME>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version2::CMD_XFER_RESUME& ClientOpcode::get<CMD_XFER_RESUME>() {
     auto p = ClientOpcode::get_if<version2::CMD_XFER_RESUME>();
     if (p) {
         return *p;
@@ -830,14 +844,14 @@ version2::CMD_XFER_RESUME& ClientOpcode::get<CMD_XFER_RESUME>() {
 }
 
 template <>
-version2::CMD_XFER_CANCEL* ClientOpcode::get_if<CMD_XFER_CANCEL>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version2::CMD_XFER_CANCEL* ClientOpcode::get_if<CMD_XFER_CANCEL>() {
     if (opcode == Opcode::CMD_XFER_CANCEL) {
         return &CMD_XFER_CANCEL;
     }
     return nullptr;
 }
 template <>
-version2::CMD_XFER_CANCEL& ClientOpcode::get<CMD_XFER_CANCEL>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version2::CMD_XFER_CANCEL& ClientOpcode::get<CMD_XFER_CANCEL>() {
     auto p = ClientOpcode::get_if<version2::CMD_XFER_CANCEL>();
     if (p) {
         return *p;
@@ -895,15 +909,25 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode read_client_opcode(Reader& reader) {
 
     return op;
 }
+WOW_LOGIN_MESSAGES_CPP_EXPORT const char* ServerOpcode::to_string() const {
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) { return "CMD_AUTH_LOGON_CHALLENGE_Server"; }
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) { return "CMD_AUTH_LOGON_PROOF_Server"; }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) { return "CMD_AUTH_RECONNECT_CHALLENGE_Server"; }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) { return "CMD_AUTH_RECONNECT_PROOF_Server"; }
+    if (opcode == Opcode::CMD_REALM_LIST) { return "CMD_REALM_LIST_Server"; }
+    if (opcode == Opcode::CMD_XFER_INITIATE) { return "CMD_XFER_INITIATE"; }
+    if (opcode == Opcode::CMD_XFER_DATA) { return "CMD_XFER_DATA"; }
+    return nullptr;
+}
 template <>
-version2::CMD_AUTH_LOGON_CHALLENGE_Server* ServerOpcode::get_if<CMD_AUTH_LOGON_CHALLENGE_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version2::CMD_AUTH_LOGON_CHALLENGE_Server* ServerOpcode::get_if<CMD_AUTH_LOGON_CHALLENGE_Server>() {
     if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
         return &CMD_AUTH_LOGON_CHALLENGE;
     }
     return nullptr;
 }
 template <>
-version2::CMD_AUTH_LOGON_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_LOGON_CHALLENGE_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version2::CMD_AUTH_LOGON_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_LOGON_CHALLENGE_Server>() {
     auto p = ServerOpcode::get_if<version2::CMD_AUTH_LOGON_CHALLENGE_Server>();
     if (p) {
         return *p;
@@ -912,14 +936,14 @@ version2::CMD_AUTH_LOGON_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_LOGON_CHAL
 }
 
 template <>
-version2::CMD_AUTH_LOGON_PROOF_Server* ServerOpcode::get_if<CMD_AUTH_LOGON_PROOF_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version2::CMD_AUTH_LOGON_PROOF_Server* ServerOpcode::get_if<CMD_AUTH_LOGON_PROOF_Server>() {
     if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
         return &CMD_AUTH_LOGON_PROOF;
     }
     return nullptr;
 }
 template <>
-version2::CMD_AUTH_LOGON_PROOF_Server& ServerOpcode::get<CMD_AUTH_LOGON_PROOF_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version2::CMD_AUTH_LOGON_PROOF_Server& ServerOpcode::get<CMD_AUTH_LOGON_PROOF_Server>() {
     auto p = ServerOpcode::get_if<version2::CMD_AUTH_LOGON_PROOF_Server>();
     if (p) {
         return *p;
@@ -928,14 +952,14 @@ version2::CMD_AUTH_LOGON_PROOF_Server& ServerOpcode::get<CMD_AUTH_LOGON_PROOF_Se
 }
 
 template <>
-version2::CMD_AUTH_RECONNECT_CHALLENGE_Server* ServerOpcode::get_if<CMD_AUTH_RECONNECT_CHALLENGE_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version2::CMD_AUTH_RECONNECT_CHALLENGE_Server* ServerOpcode::get_if<CMD_AUTH_RECONNECT_CHALLENGE_Server>() {
     if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
         return &CMD_AUTH_RECONNECT_CHALLENGE;
     }
     return nullptr;
 }
 template <>
-version2::CMD_AUTH_RECONNECT_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_RECONNECT_CHALLENGE_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version2::CMD_AUTH_RECONNECT_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_RECONNECT_CHALLENGE_Server>() {
     auto p = ServerOpcode::get_if<version2::CMD_AUTH_RECONNECT_CHALLENGE_Server>();
     if (p) {
         return *p;
@@ -944,14 +968,14 @@ version2::CMD_AUTH_RECONNECT_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_RECONN
 }
 
 template <>
-version2::CMD_AUTH_RECONNECT_PROOF_Server* ServerOpcode::get_if<CMD_AUTH_RECONNECT_PROOF_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version2::CMD_AUTH_RECONNECT_PROOF_Server* ServerOpcode::get_if<CMD_AUTH_RECONNECT_PROOF_Server>() {
     if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
         return &CMD_AUTH_RECONNECT_PROOF;
     }
     return nullptr;
 }
 template <>
-version2::CMD_AUTH_RECONNECT_PROOF_Server& ServerOpcode::get<CMD_AUTH_RECONNECT_PROOF_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version2::CMD_AUTH_RECONNECT_PROOF_Server& ServerOpcode::get<CMD_AUTH_RECONNECT_PROOF_Server>() {
     auto p = ServerOpcode::get_if<version2::CMD_AUTH_RECONNECT_PROOF_Server>();
     if (p) {
         return *p;
@@ -960,14 +984,14 @@ version2::CMD_AUTH_RECONNECT_PROOF_Server& ServerOpcode::get<CMD_AUTH_RECONNECT_
 }
 
 template <>
-version2::CMD_REALM_LIST_Server* ServerOpcode::get_if<CMD_REALM_LIST_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version2::CMD_REALM_LIST_Server* ServerOpcode::get_if<CMD_REALM_LIST_Server>() {
     if (opcode == Opcode::CMD_REALM_LIST) {
         return &CMD_REALM_LIST;
     }
     return nullptr;
 }
 template <>
-version2::CMD_REALM_LIST_Server& ServerOpcode::get<CMD_REALM_LIST_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version2::CMD_REALM_LIST_Server& ServerOpcode::get<CMD_REALM_LIST_Server>() {
     auto p = ServerOpcode::get_if<version2::CMD_REALM_LIST_Server>();
     if (p) {
         return *p;
@@ -976,14 +1000,14 @@ version2::CMD_REALM_LIST_Server& ServerOpcode::get<CMD_REALM_LIST_Server>() {
 }
 
 template <>
-version2::CMD_XFER_INITIATE* ServerOpcode::get_if<CMD_XFER_INITIATE>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version2::CMD_XFER_INITIATE* ServerOpcode::get_if<CMD_XFER_INITIATE>() {
     if (opcode == Opcode::CMD_XFER_INITIATE) {
         return &CMD_XFER_INITIATE;
     }
     return nullptr;
 }
 template <>
-version2::CMD_XFER_INITIATE& ServerOpcode::get<CMD_XFER_INITIATE>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version2::CMD_XFER_INITIATE& ServerOpcode::get<CMD_XFER_INITIATE>() {
     auto p = ServerOpcode::get_if<version2::CMD_XFER_INITIATE>();
     if (p) {
         return *p;
@@ -992,14 +1016,14 @@ version2::CMD_XFER_INITIATE& ServerOpcode::get<CMD_XFER_INITIATE>() {
 }
 
 template <>
-version2::CMD_XFER_DATA* ServerOpcode::get_if<CMD_XFER_DATA>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version2::CMD_XFER_DATA* ServerOpcode::get_if<CMD_XFER_DATA>() {
     if (opcode == Opcode::CMD_XFER_DATA) {
         return &CMD_XFER_DATA;
     }
     return nullptr;
 }
 template <>
-version2::CMD_XFER_DATA& ServerOpcode::get<CMD_XFER_DATA>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version2::CMD_XFER_DATA& ServerOpcode::get<CMD_XFER_DATA>() {
     auto p = ServerOpcode::get_if<version2::CMD_XFER_DATA>();
     if (p) {
         return *p;
@@ -1331,15 +1355,24 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_XFER_CANCEL::write(
     return writer.m_buf;
 }
 
+WOW_LOGIN_MESSAGES_CPP_EXPORT const char* ClientOpcode::to_string() const {
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) { return "CMD_AUTH_LOGON_PROOF_Client"; }
+    if (opcode == Opcode::CMD_SURVEY_RESULT) { return "CMD_SURVEY_RESULT"; }
+    if (opcode == Opcode::CMD_REALM_LIST) { return "CMD_REALM_LIST_Client"; }
+    if (opcode == Opcode::CMD_XFER_ACCEPT) { return "CMD_XFER_ACCEPT"; }
+    if (opcode == Opcode::CMD_XFER_RESUME) { return "CMD_XFER_RESUME"; }
+    if (opcode == Opcode::CMD_XFER_CANCEL) { return "CMD_XFER_CANCEL"; }
+    return nullptr;
+}
 template <>
-version3::CMD_AUTH_LOGON_PROOF_Client* ClientOpcode::get_if<CMD_AUTH_LOGON_PROOF_Client>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_AUTH_LOGON_PROOF_Client* ClientOpcode::get_if<CMD_AUTH_LOGON_PROOF_Client>() {
     if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
         return &CMD_AUTH_LOGON_PROOF;
     }
     return nullptr;
 }
 template <>
-version3::CMD_AUTH_LOGON_PROOF_Client& ClientOpcode::get<CMD_AUTH_LOGON_PROOF_Client>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_AUTH_LOGON_PROOF_Client& ClientOpcode::get<CMD_AUTH_LOGON_PROOF_Client>() {
     auto p = ClientOpcode::get_if<version3::CMD_AUTH_LOGON_PROOF_Client>();
     if (p) {
         return *p;
@@ -1348,14 +1381,14 @@ version3::CMD_AUTH_LOGON_PROOF_Client& ClientOpcode::get<CMD_AUTH_LOGON_PROOF_Cl
 }
 
 template <>
-version3::CMD_SURVEY_RESULT* ClientOpcode::get_if<CMD_SURVEY_RESULT>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_SURVEY_RESULT* ClientOpcode::get_if<CMD_SURVEY_RESULT>() {
     if (opcode == Opcode::CMD_SURVEY_RESULT) {
         return &CMD_SURVEY_RESULT;
     }
     return nullptr;
 }
 template <>
-version3::CMD_SURVEY_RESULT& ClientOpcode::get<CMD_SURVEY_RESULT>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_SURVEY_RESULT& ClientOpcode::get<CMD_SURVEY_RESULT>() {
     auto p = ClientOpcode::get_if<version3::CMD_SURVEY_RESULT>();
     if (p) {
         return *p;
@@ -1364,14 +1397,14 @@ version3::CMD_SURVEY_RESULT& ClientOpcode::get<CMD_SURVEY_RESULT>() {
 }
 
 template <>
-version3::CMD_REALM_LIST_Client* ClientOpcode::get_if<CMD_REALM_LIST_Client>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_REALM_LIST_Client* ClientOpcode::get_if<CMD_REALM_LIST_Client>() {
     if (opcode == Opcode::CMD_REALM_LIST) {
         return &CMD_REALM_LIST;
     }
     return nullptr;
 }
 template <>
-version3::CMD_REALM_LIST_Client& ClientOpcode::get<CMD_REALM_LIST_Client>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_REALM_LIST_Client& ClientOpcode::get<CMD_REALM_LIST_Client>() {
     auto p = ClientOpcode::get_if<version3::CMD_REALM_LIST_Client>();
     if (p) {
         return *p;
@@ -1380,14 +1413,14 @@ version3::CMD_REALM_LIST_Client& ClientOpcode::get<CMD_REALM_LIST_Client>() {
 }
 
 template <>
-version3::CMD_XFER_ACCEPT* ClientOpcode::get_if<CMD_XFER_ACCEPT>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_XFER_ACCEPT* ClientOpcode::get_if<CMD_XFER_ACCEPT>() {
     if (opcode == Opcode::CMD_XFER_ACCEPT) {
         return &CMD_XFER_ACCEPT;
     }
     return nullptr;
 }
 template <>
-version3::CMD_XFER_ACCEPT& ClientOpcode::get<CMD_XFER_ACCEPT>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_XFER_ACCEPT& ClientOpcode::get<CMD_XFER_ACCEPT>() {
     auto p = ClientOpcode::get_if<version3::CMD_XFER_ACCEPT>();
     if (p) {
         return *p;
@@ -1396,14 +1429,14 @@ version3::CMD_XFER_ACCEPT& ClientOpcode::get<CMD_XFER_ACCEPT>() {
 }
 
 template <>
-version3::CMD_XFER_RESUME* ClientOpcode::get_if<CMD_XFER_RESUME>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_XFER_RESUME* ClientOpcode::get_if<CMD_XFER_RESUME>() {
     if (opcode == Opcode::CMD_XFER_RESUME) {
         return &CMD_XFER_RESUME;
     }
     return nullptr;
 }
 template <>
-version3::CMD_XFER_RESUME& ClientOpcode::get<CMD_XFER_RESUME>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_XFER_RESUME& ClientOpcode::get<CMD_XFER_RESUME>() {
     auto p = ClientOpcode::get_if<version3::CMD_XFER_RESUME>();
     if (p) {
         return *p;
@@ -1412,14 +1445,14 @@ version3::CMD_XFER_RESUME& ClientOpcode::get<CMD_XFER_RESUME>() {
 }
 
 template <>
-version3::CMD_XFER_CANCEL* ClientOpcode::get_if<CMD_XFER_CANCEL>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_XFER_CANCEL* ClientOpcode::get_if<CMD_XFER_CANCEL>() {
     if (opcode == Opcode::CMD_XFER_CANCEL) {
         return &CMD_XFER_CANCEL;
     }
     return nullptr;
 }
 template <>
-version3::CMD_XFER_CANCEL& ClientOpcode::get<CMD_XFER_CANCEL>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_XFER_CANCEL& ClientOpcode::get<CMD_XFER_CANCEL>() {
     auto p = ClientOpcode::get_if<version3::CMD_XFER_CANCEL>();
     if (p) {
         return *p;
@@ -1477,15 +1510,23 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode read_client_opcode(Reader& reader) {
 
     return op;
 }
+WOW_LOGIN_MESSAGES_CPP_EXPORT const char* ServerOpcode::to_string() const {
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) { return "CMD_AUTH_LOGON_CHALLENGE_Server"; }
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) { return "CMD_AUTH_LOGON_PROOF_Server"; }
+    if (opcode == Opcode::CMD_REALM_LIST) { return "CMD_REALM_LIST_Server"; }
+    if (opcode == Opcode::CMD_XFER_INITIATE) { return "CMD_XFER_INITIATE"; }
+    if (opcode == Opcode::CMD_XFER_DATA) { return "CMD_XFER_DATA"; }
+    return nullptr;
+}
 template <>
-version3::CMD_AUTH_LOGON_CHALLENGE_Server* ServerOpcode::get_if<CMD_AUTH_LOGON_CHALLENGE_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_AUTH_LOGON_CHALLENGE_Server* ServerOpcode::get_if<CMD_AUTH_LOGON_CHALLENGE_Server>() {
     if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
         return &CMD_AUTH_LOGON_CHALLENGE;
     }
     return nullptr;
 }
 template <>
-version3::CMD_AUTH_LOGON_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_LOGON_CHALLENGE_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_AUTH_LOGON_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_LOGON_CHALLENGE_Server>() {
     auto p = ServerOpcode::get_if<version3::CMD_AUTH_LOGON_CHALLENGE_Server>();
     if (p) {
         return *p;
@@ -1494,14 +1535,14 @@ version3::CMD_AUTH_LOGON_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_LOGON_CHAL
 }
 
 template <>
-version3::CMD_AUTH_LOGON_PROOF_Server* ServerOpcode::get_if<CMD_AUTH_LOGON_PROOF_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_AUTH_LOGON_PROOF_Server* ServerOpcode::get_if<CMD_AUTH_LOGON_PROOF_Server>() {
     if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
         return &CMD_AUTH_LOGON_PROOF;
     }
     return nullptr;
 }
 template <>
-version3::CMD_AUTH_LOGON_PROOF_Server& ServerOpcode::get<CMD_AUTH_LOGON_PROOF_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_AUTH_LOGON_PROOF_Server& ServerOpcode::get<CMD_AUTH_LOGON_PROOF_Server>() {
     auto p = ServerOpcode::get_if<version3::CMD_AUTH_LOGON_PROOF_Server>();
     if (p) {
         return *p;
@@ -1510,14 +1551,14 @@ version3::CMD_AUTH_LOGON_PROOF_Server& ServerOpcode::get<CMD_AUTH_LOGON_PROOF_Se
 }
 
 template <>
-version3::CMD_REALM_LIST_Server* ServerOpcode::get_if<CMD_REALM_LIST_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_REALM_LIST_Server* ServerOpcode::get_if<CMD_REALM_LIST_Server>() {
     if (opcode == Opcode::CMD_REALM_LIST) {
         return &CMD_REALM_LIST;
     }
     return nullptr;
 }
 template <>
-version3::CMD_REALM_LIST_Server& ServerOpcode::get<CMD_REALM_LIST_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_REALM_LIST_Server& ServerOpcode::get<CMD_REALM_LIST_Server>() {
     auto p = ServerOpcode::get_if<version3::CMD_REALM_LIST_Server>();
     if (p) {
         return *p;
@@ -1526,14 +1567,14 @@ version3::CMD_REALM_LIST_Server& ServerOpcode::get<CMD_REALM_LIST_Server>() {
 }
 
 template <>
-version3::CMD_XFER_INITIATE* ServerOpcode::get_if<CMD_XFER_INITIATE>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_XFER_INITIATE* ServerOpcode::get_if<CMD_XFER_INITIATE>() {
     if (opcode == Opcode::CMD_XFER_INITIATE) {
         return &CMD_XFER_INITIATE;
     }
     return nullptr;
 }
 template <>
-version3::CMD_XFER_INITIATE& ServerOpcode::get<CMD_XFER_INITIATE>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_XFER_INITIATE& ServerOpcode::get<CMD_XFER_INITIATE>() {
     auto p = ServerOpcode::get_if<version3::CMD_XFER_INITIATE>();
     if (p) {
         return *p;
@@ -1542,14 +1583,14 @@ version3::CMD_XFER_INITIATE& ServerOpcode::get<CMD_XFER_INITIATE>() {
 }
 
 template <>
-version3::CMD_XFER_DATA* ServerOpcode::get_if<CMD_XFER_DATA>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_XFER_DATA* ServerOpcode::get_if<CMD_XFER_DATA>() {
     if (opcode == Opcode::CMD_XFER_DATA) {
         return &CMD_XFER_DATA;
     }
     return nullptr;
 }
 template <>
-version3::CMD_XFER_DATA& ServerOpcode::get<CMD_XFER_DATA>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_XFER_DATA& ServerOpcode::get<CMD_XFER_DATA>() {
     auto p = ServerOpcode::get_if<version3::CMD_XFER_DATA>();
     if (p) {
         return *p;
@@ -2044,15 +2085,24 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_XFER_CANCEL::write(
     return writer.m_buf;
 }
 
+WOW_LOGIN_MESSAGES_CPP_EXPORT const char* ClientOpcode::to_string() const {
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) { return "CMD_AUTH_LOGON_PROOF_Client"; }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) { return "CMD_AUTH_RECONNECT_PROOF_Client"; }
+    if (opcode == Opcode::CMD_REALM_LIST) { return "CMD_REALM_LIST_Client"; }
+    if (opcode == Opcode::CMD_XFER_ACCEPT) { return "CMD_XFER_ACCEPT"; }
+    if (opcode == Opcode::CMD_XFER_RESUME) { return "CMD_XFER_RESUME"; }
+    if (opcode == Opcode::CMD_XFER_CANCEL) { return "CMD_XFER_CANCEL"; }
+    return nullptr;
+}
 template <>
-version5::CMD_AUTH_LOGON_PROOF_Client* ClientOpcode::get_if<CMD_AUTH_LOGON_PROOF_Client>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version5::CMD_AUTH_LOGON_PROOF_Client* ClientOpcode::get_if<CMD_AUTH_LOGON_PROOF_Client>() {
     if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
         return &CMD_AUTH_LOGON_PROOF;
     }
     return nullptr;
 }
 template <>
-version5::CMD_AUTH_LOGON_PROOF_Client& ClientOpcode::get<CMD_AUTH_LOGON_PROOF_Client>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version5::CMD_AUTH_LOGON_PROOF_Client& ClientOpcode::get<CMD_AUTH_LOGON_PROOF_Client>() {
     auto p = ClientOpcode::get_if<version5::CMD_AUTH_LOGON_PROOF_Client>();
     if (p) {
         return *p;
@@ -2061,14 +2111,14 @@ version5::CMD_AUTH_LOGON_PROOF_Client& ClientOpcode::get<CMD_AUTH_LOGON_PROOF_Cl
 }
 
 template <>
-version5::CMD_AUTH_RECONNECT_PROOF_Client* ClientOpcode::get_if<CMD_AUTH_RECONNECT_PROOF_Client>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version5::CMD_AUTH_RECONNECT_PROOF_Client* ClientOpcode::get_if<CMD_AUTH_RECONNECT_PROOF_Client>() {
     if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
         return &CMD_AUTH_RECONNECT_PROOF;
     }
     return nullptr;
 }
 template <>
-version5::CMD_AUTH_RECONNECT_PROOF_Client& ClientOpcode::get<CMD_AUTH_RECONNECT_PROOF_Client>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version5::CMD_AUTH_RECONNECT_PROOF_Client& ClientOpcode::get<CMD_AUTH_RECONNECT_PROOF_Client>() {
     auto p = ClientOpcode::get_if<version5::CMD_AUTH_RECONNECT_PROOF_Client>();
     if (p) {
         return *p;
@@ -2077,14 +2127,14 @@ version5::CMD_AUTH_RECONNECT_PROOF_Client& ClientOpcode::get<CMD_AUTH_RECONNECT_
 }
 
 template <>
-version5::CMD_REALM_LIST_Client* ClientOpcode::get_if<CMD_REALM_LIST_Client>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version5::CMD_REALM_LIST_Client* ClientOpcode::get_if<CMD_REALM_LIST_Client>() {
     if (opcode == Opcode::CMD_REALM_LIST) {
         return &CMD_REALM_LIST;
     }
     return nullptr;
 }
 template <>
-version5::CMD_REALM_LIST_Client& ClientOpcode::get<CMD_REALM_LIST_Client>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version5::CMD_REALM_LIST_Client& ClientOpcode::get<CMD_REALM_LIST_Client>() {
     auto p = ClientOpcode::get_if<version5::CMD_REALM_LIST_Client>();
     if (p) {
         return *p;
@@ -2093,14 +2143,14 @@ version5::CMD_REALM_LIST_Client& ClientOpcode::get<CMD_REALM_LIST_Client>() {
 }
 
 template <>
-version5::CMD_XFER_ACCEPT* ClientOpcode::get_if<CMD_XFER_ACCEPT>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version5::CMD_XFER_ACCEPT* ClientOpcode::get_if<CMD_XFER_ACCEPT>() {
     if (opcode == Opcode::CMD_XFER_ACCEPT) {
         return &CMD_XFER_ACCEPT;
     }
     return nullptr;
 }
 template <>
-version5::CMD_XFER_ACCEPT& ClientOpcode::get<CMD_XFER_ACCEPT>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version5::CMD_XFER_ACCEPT& ClientOpcode::get<CMD_XFER_ACCEPT>() {
     auto p = ClientOpcode::get_if<version5::CMD_XFER_ACCEPT>();
     if (p) {
         return *p;
@@ -2109,14 +2159,14 @@ version5::CMD_XFER_ACCEPT& ClientOpcode::get<CMD_XFER_ACCEPT>() {
 }
 
 template <>
-version5::CMD_XFER_RESUME* ClientOpcode::get_if<CMD_XFER_RESUME>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version5::CMD_XFER_RESUME* ClientOpcode::get_if<CMD_XFER_RESUME>() {
     if (opcode == Opcode::CMD_XFER_RESUME) {
         return &CMD_XFER_RESUME;
     }
     return nullptr;
 }
 template <>
-version5::CMD_XFER_RESUME& ClientOpcode::get<CMD_XFER_RESUME>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version5::CMD_XFER_RESUME& ClientOpcode::get<CMD_XFER_RESUME>() {
     auto p = ClientOpcode::get_if<version5::CMD_XFER_RESUME>();
     if (p) {
         return *p;
@@ -2125,14 +2175,14 @@ version5::CMD_XFER_RESUME& ClientOpcode::get<CMD_XFER_RESUME>() {
 }
 
 template <>
-version5::CMD_XFER_CANCEL* ClientOpcode::get_if<CMD_XFER_CANCEL>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version5::CMD_XFER_CANCEL* ClientOpcode::get_if<CMD_XFER_CANCEL>() {
     if (opcode == Opcode::CMD_XFER_CANCEL) {
         return &CMD_XFER_CANCEL;
     }
     return nullptr;
 }
 template <>
-version5::CMD_XFER_CANCEL& ClientOpcode::get<CMD_XFER_CANCEL>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version5::CMD_XFER_CANCEL& ClientOpcode::get<CMD_XFER_CANCEL>() {
     auto p = ClientOpcode::get_if<version5::CMD_XFER_CANCEL>();
     if (p) {
         return *p;
@@ -2190,15 +2240,25 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode read_client_opcode(Reader& reader) {
 
     return op;
 }
+WOW_LOGIN_MESSAGES_CPP_EXPORT const char* ServerOpcode::to_string() const {
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) { return "CMD_AUTH_LOGON_CHALLENGE_Server"; }
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) { return "CMD_AUTH_LOGON_PROOF_Server"; }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) { return "CMD_AUTH_RECONNECT_CHALLENGE_Server"; }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) { return "CMD_AUTH_RECONNECT_PROOF_Server"; }
+    if (opcode == Opcode::CMD_REALM_LIST) { return "CMD_REALM_LIST_Server"; }
+    if (opcode == Opcode::CMD_XFER_INITIATE) { return "CMD_XFER_INITIATE"; }
+    if (opcode == Opcode::CMD_XFER_DATA) { return "CMD_XFER_DATA"; }
+    return nullptr;
+}
 template <>
-version5::CMD_AUTH_LOGON_CHALLENGE_Server* ServerOpcode::get_if<CMD_AUTH_LOGON_CHALLENGE_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version5::CMD_AUTH_LOGON_CHALLENGE_Server* ServerOpcode::get_if<CMD_AUTH_LOGON_CHALLENGE_Server>() {
     if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
         return &CMD_AUTH_LOGON_CHALLENGE;
     }
     return nullptr;
 }
 template <>
-version5::CMD_AUTH_LOGON_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_LOGON_CHALLENGE_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version5::CMD_AUTH_LOGON_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_LOGON_CHALLENGE_Server>() {
     auto p = ServerOpcode::get_if<version5::CMD_AUTH_LOGON_CHALLENGE_Server>();
     if (p) {
         return *p;
@@ -2207,14 +2267,14 @@ version5::CMD_AUTH_LOGON_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_LOGON_CHAL
 }
 
 template <>
-version5::CMD_AUTH_LOGON_PROOF_Server* ServerOpcode::get_if<CMD_AUTH_LOGON_PROOF_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version5::CMD_AUTH_LOGON_PROOF_Server* ServerOpcode::get_if<CMD_AUTH_LOGON_PROOF_Server>() {
     if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
         return &CMD_AUTH_LOGON_PROOF;
     }
     return nullptr;
 }
 template <>
-version5::CMD_AUTH_LOGON_PROOF_Server& ServerOpcode::get<CMD_AUTH_LOGON_PROOF_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version5::CMD_AUTH_LOGON_PROOF_Server& ServerOpcode::get<CMD_AUTH_LOGON_PROOF_Server>() {
     auto p = ServerOpcode::get_if<version5::CMD_AUTH_LOGON_PROOF_Server>();
     if (p) {
         return *p;
@@ -2223,14 +2283,14 @@ version5::CMD_AUTH_LOGON_PROOF_Server& ServerOpcode::get<CMD_AUTH_LOGON_PROOF_Se
 }
 
 template <>
-version5::CMD_AUTH_RECONNECT_CHALLENGE_Server* ServerOpcode::get_if<CMD_AUTH_RECONNECT_CHALLENGE_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version5::CMD_AUTH_RECONNECT_CHALLENGE_Server* ServerOpcode::get_if<CMD_AUTH_RECONNECT_CHALLENGE_Server>() {
     if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
         return &CMD_AUTH_RECONNECT_CHALLENGE;
     }
     return nullptr;
 }
 template <>
-version5::CMD_AUTH_RECONNECT_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_RECONNECT_CHALLENGE_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version5::CMD_AUTH_RECONNECT_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_RECONNECT_CHALLENGE_Server>() {
     auto p = ServerOpcode::get_if<version5::CMD_AUTH_RECONNECT_CHALLENGE_Server>();
     if (p) {
         return *p;
@@ -2239,14 +2299,14 @@ version5::CMD_AUTH_RECONNECT_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_RECONN
 }
 
 template <>
-version5::CMD_AUTH_RECONNECT_PROOF_Server* ServerOpcode::get_if<CMD_AUTH_RECONNECT_PROOF_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version5::CMD_AUTH_RECONNECT_PROOF_Server* ServerOpcode::get_if<CMD_AUTH_RECONNECT_PROOF_Server>() {
     if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
         return &CMD_AUTH_RECONNECT_PROOF;
     }
     return nullptr;
 }
 template <>
-version5::CMD_AUTH_RECONNECT_PROOF_Server& ServerOpcode::get<CMD_AUTH_RECONNECT_PROOF_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version5::CMD_AUTH_RECONNECT_PROOF_Server& ServerOpcode::get<CMD_AUTH_RECONNECT_PROOF_Server>() {
     auto p = ServerOpcode::get_if<version5::CMD_AUTH_RECONNECT_PROOF_Server>();
     if (p) {
         return *p;
@@ -2255,14 +2315,14 @@ version5::CMD_AUTH_RECONNECT_PROOF_Server& ServerOpcode::get<CMD_AUTH_RECONNECT_
 }
 
 template <>
-version5::CMD_REALM_LIST_Server* ServerOpcode::get_if<CMD_REALM_LIST_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version5::CMD_REALM_LIST_Server* ServerOpcode::get_if<CMD_REALM_LIST_Server>() {
     if (opcode == Opcode::CMD_REALM_LIST) {
         return &CMD_REALM_LIST;
     }
     return nullptr;
 }
 template <>
-version5::CMD_REALM_LIST_Server& ServerOpcode::get<CMD_REALM_LIST_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version5::CMD_REALM_LIST_Server& ServerOpcode::get<CMD_REALM_LIST_Server>() {
     auto p = ServerOpcode::get_if<version5::CMD_REALM_LIST_Server>();
     if (p) {
         return *p;
@@ -2271,14 +2331,14 @@ version5::CMD_REALM_LIST_Server& ServerOpcode::get<CMD_REALM_LIST_Server>() {
 }
 
 template <>
-version5::CMD_XFER_INITIATE* ServerOpcode::get_if<CMD_XFER_INITIATE>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version5::CMD_XFER_INITIATE* ServerOpcode::get_if<CMD_XFER_INITIATE>() {
     if (opcode == Opcode::CMD_XFER_INITIATE) {
         return &CMD_XFER_INITIATE;
     }
     return nullptr;
 }
 template <>
-version5::CMD_XFER_INITIATE& ServerOpcode::get<CMD_XFER_INITIATE>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version5::CMD_XFER_INITIATE& ServerOpcode::get<CMD_XFER_INITIATE>() {
     auto p = ServerOpcode::get_if<version5::CMD_XFER_INITIATE>();
     if (p) {
         return *p;
@@ -2287,14 +2347,14 @@ version5::CMD_XFER_INITIATE& ServerOpcode::get<CMD_XFER_INITIATE>() {
 }
 
 template <>
-version5::CMD_XFER_DATA* ServerOpcode::get_if<CMD_XFER_DATA>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version5::CMD_XFER_DATA* ServerOpcode::get_if<CMD_XFER_DATA>() {
     if (opcode == Opcode::CMD_XFER_DATA) {
         return &CMD_XFER_DATA;
     }
     return nullptr;
 }
 template <>
-version5::CMD_XFER_DATA& ServerOpcode::get<CMD_XFER_DATA>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version5::CMD_XFER_DATA& ServerOpcode::get<CMD_XFER_DATA>() {
     auto p = ServerOpcode::get_if<version5::CMD_XFER_DATA>();
     if (p) {
         return *p;
@@ -2441,15 +2501,24 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_XFER_CANCEL::write(
     return writer.m_buf;
 }
 
+WOW_LOGIN_MESSAGES_CPP_EXPORT const char* ClientOpcode::to_string() const {
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) { return "CMD_AUTH_LOGON_PROOF_Client"; }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) { return "CMD_AUTH_RECONNECT_PROOF_Client"; }
+    if (opcode == Opcode::CMD_REALM_LIST) { return "CMD_REALM_LIST_Client"; }
+    if (opcode == Opcode::CMD_XFER_ACCEPT) { return "CMD_XFER_ACCEPT"; }
+    if (opcode == Opcode::CMD_XFER_RESUME) { return "CMD_XFER_RESUME"; }
+    if (opcode == Opcode::CMD_XFER_CANCEL) { return "CMD_XFER_CANCEL"; }
+    return nullptr;
+}
 template <>
-version6::CMD_AUTH_LOGON_PROOF_Client* ClientOpcode::get_if<CMD_AUTH_LOGON_PROOF_Client>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version6::CMD_AUTH_LOGON_PROOF_Client* ClientOpcode::get_if<CMD_AUTH_LOGON_PROOF_Client>() {
     if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
         return &CMD_AUTH_LOGON_PROOF;
     }
     return nullptr;
 }
 template <>
-version6::CMD_AUTH_LOGON_PROOF_Client& ClientOpcode::get<CMD_AUTH_LOGON_PROOF_Client>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version6::CMD_AUTH_LOGON_PROOF_Client& ClientOpcode::get<CMD_AUTH_LOGON_PROOF_Client>() {
     auto p = ClientOpcode::get_if<version6::CMD_AUTH_LOGON_PROOF_Client>();
     if (p) {
         return *p;
@@ -2458,14 +2527,14 @@ version6::CMD_AUTH_LOGON_PROOF_Client& ClientOpcode::get<CMD_AUTH_LOGON_PROOF_Cl
 }
 
 template <>
-version6::CMD_AUTH_RECONNECT_PROOF_Client* ClientOpcode::get_if<CMD_AUTH_RECONNECT_PROOF_Client>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version6::CMD_AUTH_RECONNECT_PROOF_Client* ClientOpcode::get_if<CMD_AUTH_RECONNECT_PROOF_Client>() {
     if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
         return &CMD_AUTH_RECONNECT_PROOF;
     }
     return nullptr;
 }
 template <>
-version6::CMD_AUTH_RECONNECT_PROOF_Client& ClientOpcode::get<CMD_AUTH_RECONNECT_PROOF_Client>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version6::CMD_AUTH_RECONNECT_PROOF_Client& ClientOpcode::get<CMD_AUTH_RECONNECT_PROOF_Client>() {
     auto p = ClientOpcode::get_if<version6::CMD_AUTH_RECONNECT_PROOF_Client>();
     if (p) {
         return *p;
@@ -2474,14 +2543,14 @@ version6::CMD_AUTH_RECONNECT_PROOF_Client& ClientOpcode::get<CMD_AUTH_RECONNECT_
 }
 
 template <>
-version6::CMD_REALM_LIST_Client* ClientOpcode::get_if<CMD_REALM_LIST_Client>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version6::CMD_REALM_LIST_Client* ClientOpcode::get_if<CMD_REALM_LIST_Client>() {
     if (opcode == Opcode::CMD_REALM_LIST) {
         return &CMD_REALM_LIST;
     }
     return nullptr;
 }
 template <>
-version6::CMD_REALM_LIST_Client& ClientOpcode::get<CMD_REALM_LIST_Client>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version6::CMD_REALM_LIST_Client& ClientOpcode::get<CMD_REALM_LIST_Client>() {
     auto p = ClientOpcode::get_if<version6::CMD_REALM_LIST_Client>();
     if (p) {
         return *p;
@@ -2490,14 +2559,14 @@ version6::CMD_REALM_LIST_Client& ClientOpcode::get<CMD_REALM_LIST_Client>() {
 }
 
 template <>
-version6::CMD_XFER_ACCEPT* ClientOpcode::get_if<CMD_XFER_ACCEPT>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version6::CMD_XFER_ACCEPT* ClientOpcode::get_if<CMD_XFER_ACCEPT>() {
     if (opcode == Opcode::CMD_XFER_ACCEPT) {
         return &CMD_XFER_ACCEPT;
     }
     return nullptr;
 }
 template <>
-version6::CMD_XFER_ACCEPT& ClientOpcode::get<CMD_XFER_ACCEPT>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version6::CMD_XFER_ACCEPT& ClientOpcode::get<CMD_XFER_ACCEPT>() {
     auto p = ClientOpcode::get_if<version6::CMD_XFER_ACCEPT>();
     if (p) {
         return *p;
@@ -2506,14 +2575,14 @@ version6::CMD_XFER_ACCEPT& ClientOpcode::get<CMD_XFER_ACCEPT>() {
 }
 
 template <>
-version6::CMD_XFER_RESUME* ClientOpcode::get_if<CMD_XFER_RESUME>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version6::CMD_XFER_RESUME* ClientOpcode::get_if<CMD_XFER_RESUME>() {
     if (opcode == Opcode::CMD_XFER_RESUME) {
         return &CMD_XFER_RESUME;
     }
     return nullptr;
 }
 template <>
-version6::CMD_XFER_RESUME& ClientOpcode::get<CMD_XFER_RESUME>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version6::CMD_XFER_RESUME& ClientOpcode::get<CMD_XFER_RESUME>() {
     auto p = ClientOpcode::get_if<version6::CMD_XFER_RESUME>();
     if (p) {
         return *p;
@@ -2522,14 +2591,14 @@ version6::CMD_XFER_RESUME& ClientOpcode::get<CMD_XFER_RESUME>() {
 }
 
 template <>
-version6::CMD_XFER_CANCEL* ClientOpcode::get_if<CMD_XFER_CANCEL>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version6::CMD_XFER_CANCEL* ClientOpcode::get_if<CMD_XFER_CANCEL>() {
     if (opcode == Opcode::CMD_XFER_CANCEL) {
         return &CMD_XFER_CANCEL;
     }
     return nullptr;
 }
 template <>
-version6::CMD_XFER_CANCEL& ClientOpcode::get<CMD_XFER_CANCEL>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version6::CMD_XFER_CANCEL& ClientOpcode::get<CMD_XFER_CANCEL>() {
     auto p = ClientOpcode::get_if<version6::CMD_XFER_CANCEL>();
     if (p) {
         return *p;
@@ -2587,15 +2656,25 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode read_client_opcode(Reader& reader) {
 
     return op;
 }
+WOW_LOGIN_MESSAGES_CPP_EXPORT const char* ServerOpcode::to_string() const {
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) { return "CMD_AUTH_LOGON_CHALLENGE_Server"; }
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) { return "CMD_AUTH_LOGON_PROOF_Server"; }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) { return "CMD_AUTH_RECONNECT_CHALLENGE_Server"; }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) { return "CMD_AUTH_RECONNECT_PROOF_Server"; }
+    if (opcode == Opcode::CMD_REALM_LIST) { return "CMD_REALM_LIST_Server"; }
+    if (opcode == Opcode::CMD_XFER_INITIATE) { return "CMD_XFER_INITIATE"; }
+    if (opcode == Opcode::CMD_XFER_DATA) { return "CMD_XFER_DATA"; }
+    return nullptr;
+}
 template <>
-version6::CMD_AUTH_LOGON_CHALLENGE_Server* ServerOpcode::get_if<CMD_AUTH_LOGON_CHALLENGE_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version6::CMD_AUTH_LOGON_CHALLENGE_Server* ServerOpcode::get_if<CMD_AUTH_LOGON_CHALLENGE_Server>() {
     if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
         return &CMD_AUTH_LOGON_CHALLENGE;
     }
     return nullptr;
 }
 template <>
-version6::CMD_AUTH_LOGON_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_LOGON_CHALLENGE_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version6::CMD_AUTH_LOGON_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_LOGON_CHALLENGE_Server>() {
     auto p = ServerOpcode::get_if<version6::CMD_AUTH_LOGON_CHALLENGE_Server>();
     if (p) {
         return *p;
@@ -2604,14 +2683,14 @@ version6::CMD_AUTH_LOGON_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_LOGON_CHAL
 }
 
 template <>
-version6::CMD_AUTH_LOGON_PROOF_Server* ServerOpcode::get_if<CMD_AUTH_LOGON_PROOF_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version6::CMD_AUTH_LOGON_PROOF_Server* ServerOpcode::get_if<CMD_AUTH_LOGON_PROOF_Server>() {
     if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
         return &CMD_AUTH_LOGON_PROOF;
     }
     return nullptr;
 }
 template <>
-version6::CMD_AUTH_LOGON_PROOF_Server& ServerOpcode::get<CMD_AUTH_LOGON_PROOF_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version6::CMD_AUTH_LOGON_PROOF_Server& ServerOpcode::get<CMD_AUTH_LOGON_PROOF_Server>() {
     auto p = ServerOpcode::get_if<version6::CMD_AUTH_LOGON_PROOF_Server>();
     if (p) {
         return *p;
@@ -2620,14 +2699,14 @@ version6::CMD_AUTH_LOGON_PROOF_Server& ServerOpcode::get<CMD_AUTH_LOGON_PROOF_Se
 }
 
 template <>
-version6::CMD_AUTH_RECONNECT_CHALLENGE_Server* ServerOpcode::get_if<CMD_AUTH_RECONNECT_CHALLENGE_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version6::CMD_AUTH_RECONNECT_CHALLENGE_Server* ServerOpcode::get_if<CMD_AUTH_RECONNECT_CHALLENGE_Server>() {
     if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
         return &CMD_AUTH_RECONNECT_CHALLENGE;
     }
     return nullptr;
 }
 template <>
-version6::CMD_AUTH_RECONNECT_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_RECONNECT_CHALLENGE_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version6::CMD_AUTH_RECONNECT_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_RECONNECT_CHALLENGE_Server>() {
     auto p = ServerOpcode::get_if<version6::CMD_AUTH_RECONNECT_CHALLENGE_Server>();
     if (p) {
         return *p;
@@ -2636,14 +2715,14 @@ version6::CMD_AUTH_RECONNECT_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_RECONN
 }
 
 template <>
-version6::CMD_AUTH_RECONNECT_PROOF_Server* ServerOpcode::get_if<CMD_AUTH_RECONNECT_PROOF_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version6::CMD_AUTH_RECONNECT_PROOF_Server* ServerOpcode::get_if<CMD_AUTH_RECONNECT_PROOF_Server>() {
     if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
         return &CMD_AUTH_RECONNECT_PROOF;
     }
     return nullptr;
 }
 template <>
-version6::CMD_AUTH_RECONNECT_PROOF_Server& ServerOpcode::get<CMD_AUTH_RECONNECT_PROOF_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version6::CMD_AUTH_RECONNECT_PROOF_Server& ServerOpcode::get<CMD_AUTH_RECONNECT_PROOF_Server>() {
     auto p = ServerOpcode::get_if<version6::CMD_AUTH_RECONNECT_PROOF_Server>();
     if (p) {
         return *p;
@@ -2652,14 +2731,14 @@ version6::CMD_AUTH_RECONNECT_PROOF_Server& ServerOpcode::get<CMD_AUTH_RECONNECT_
 }
 
 template <>
-version6::CMD_REALM_LIST_Server* ServerOpcode::get_if<CMD_REALM_LIST_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version6::CMD_REALM_LIST_Server* ServerOpcode::get_if<CMD_REALM_LIST_Server>() {
     if (opcode == Opcode::CMD_REALM_LIST) {
         return &CMD_REALM_LIST;
     }
     return nullptr;
 }
 template <>
-version6::CMD_REALM_LIST_Server& ServerOpcode::get<CMD_REALM_LIST_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version6::CMD_REALM_LIST_Server& ServerOpcode::get<CMD_REALM_LIST_Server>() {
     auto p = ServerOpcode::get_if<version6::CMD_REALM_LIST_Server>();
     if (p) {
         return *p;
@@ -2668,14 +2747,14 @@ version6::CMD_REALM_LIST_Server& ServerOpcode::get<CMD_REALM_LIST_Server>() {
 }
 
 template <>
-version6::CMD_XFER_INITIATE* ServerOpcode::get_if<CMD_XFER_INITIATE>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version6::CMD_XFER_INITIATE* ServerOpcode::get_if<CMD_XFER_INITIATE>() {
     if (opcode == Opcode::CMD_XFER_INITIATE) {
         return &CMD_XFER_INITIATE;
     }
     return nullptr;
 }
 template <>
-version6::CMD_XFER_INITIATE& ServerOpcode::get<CMD_XFER_INITIATE>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version6::CMD_XFER_INITIATE& ServerOpcode::get<CMD_XFER_INITIATE>() {
     auto p = ServerOpcode::get_if<version6::CMD_XFER_INITIATE>();
     if (p) {
         return *p;
@@ -2684,14 +2763,14 @@ version6::CMD_XFER_INITIATE& ServerOpcode::get<CMD_XFER_INITIATE>() {
 }
 
 template <>
-version6::CMD_XFER_DATA* ServerOpcode::get_if<CMD_XFER_DATA>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version6::CMD_XFER_DATA* ServerOpcode::get_if<CMD_XFER_DATA>() {
     if (opcode == Opcode::CMD_XFER_DATA) {
         return &CMD_XFER_DATA;
     }
     return nullptr;
 }
 template <>
-version6::CMD_XFER_DATA& ServerOpcode::get<CMD_XFER_DATA>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version6::CMD_XFER_DATA& ServerOpcode::get<CMD_XFER_DATA>() {
     auto p = ServerOpcode::get_if<version6::CMD_XFER_DATA>();
     if (p) {
         return *p;
@@ -2789,15 +2868,24 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_XFER_CANCEL::write(
     return writer.m_buf;
 }
 
+WOW_LOGIN_MESSAGES_CPP_EXPORT const char* ClientOpcode::to_string() const {
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) { return "CMD_AUTH_LOGON_PROOF_Client"; }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) { return "CMD_AUTH_RECONNECT_PROOF_Client"; }
+    if (opcode == Opcode::CMD_REALM_LIST) { return "CMD_REALM_LIST_Client"; }
+    if (opcode == Opcode::CMD_XFER_ACCEPT) { return "CMD_XFER_ACCEPT"; }
+    if (opcode == Opcode::CMD_XFER_RESUME) { return "CMD_XFER_RESUME"; }
+    if (opcode == Opcode::CMD_XFER_CANCEL) { return "CMD_XFER_CANCEL"; }
+    return nullptr;
+}
 template <>
-version7::CMD_AUTH_LOGON_PROOF_Client* ClientOpcode::get_if<CMD_AUTH_LOGON_PROOF_Client>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version7::CMD_AUTH_LOGON_PROOF_Client* ClientOpcode::get_if<CMD_AUTH_LOGON_PROOF_Client>() {
     if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
         return &CMD_AUTH_LOGON_PROOF;
     }
     return nullptr;
 }
 template <>
-version7::CMD_AUTH_LOGON_PROOF_Client& ClientOpcode::get<CMD_AUTH_LOGON_PROOF_Client>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version7::CMD_AUTH_LOGON_PROOF_Client& ClientOpcode::get<CMD_AUTH_LOGON_PROOF_Client>() {
     auto p = ClientOpcode::get_if<version7::CMD_AUTH_LOGON_PROOF_Client>();
     if (p) {
         return *p;
@@ -2806,14 +2894,14 @@ version7::CMD_AUTH_LOGON_PROOF_Client& ClientOpcode::get<CMD_AUTH_LOGON_PROOF_Cl
 }
 
 template <>
-version7::CMD_AUTH_RECONNECT_PROOF_Client* ClientOpcode::get_if<CMD_AUTH_RECONNECT_PROOF_Client>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version7::CMD_AUTH_RECONNECT_PROOF_Client* ClientOpcode::get_if<CMD_AUTH_RECONNECT_PROOF_Client>() {
     if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
         return &CMD_AUTH_RECONNECT_PROOF;
     }
     return nullptr;
 }
 template <>
-version7::CMD_AUTH_RECONNECT_PROOF_Client& ClientOpcode::get<CMD_AUTH_RECONNECT_PROOF_Client>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version7::CMD_AUTH_RECONNECT_PROOF_Client& ClientOpcode::get<CMD_AUTH_RECONNECT_PROOF_Client>() {
     auto p = ClientOpcode::get_if<version7::CMD_AUTH_RECONNECT_PROOF_Client>();
     if (p) {
         return *p;
@@ -2822,14 +2910,14 @@ version7::CMD_AUTH_RECONNECT_PROOF_Client& ClientOpcode::get<CMD_AUTH_RECONNECT_
 }
 
 template <>
-version7::CMD_REALM_LIST_Client* ClientOpcode::get_if<CMD_REALM_LIST_Client>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version7::CMD_REALM_LIST_Client* ClientOpcode::get_if<CMD_REALM_LIST_Client>() {
     if (opcode == Opcode::CMD_REALM_LIST) {
         return &CMD_REALM_LIST;
     }
     return nullptr;
 }
 template <>
-version7::CMD_REALM_LIST_Client& ClientOpcode::get<CMD_REALM_LIST_Client>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version7::CMD_REALM_LIST_Client& ClientOpcode::get<CMD_REALM_LIST_Client>() {
     auto p = ClientOpcode::get_if<version7::CMD_REALM_LIST_Client>();
     if (p) {
         return *p;
@@ -2838,14 +2926,14 @@ version7::CMD_REALM_LIST_Client& ClientOpcode::get<CMD_REALM_LIST_Client>() {
 }
 
 template <>
-version7::CMD_XFER_ACCEPT* ClientOpcode::get_if<CMD_XFER_ACCEPT>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version7::CMD_XFER_ACCEPT* ClientOpcode::get_if<CMD_XFER_ACCEPT>() {
     if (opcode == Opcode::CMD_XFER_ACCEPT) {
         return &CMD_XFER_ACCEPT;
     }
     return nullptr;
 }
 template <>
-version7::CMD_XFER_ACCEPT& ClientOpcode::get<CMD_XFER_ACCEPT>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version7::CMD_XFER_ACCEPT& ClientOpcode::get<CMD_XFER_ACCEPT>() {
     auto p = ClientOpcode::get_if<version7::CMD_XFER_ACCEPT>();
     if (p) {
         return *p;
@@ -2854,14 +2942,14 @@ version7::CMD_XFER_ACCEPT& ClientOpcode::get<CMD_XFER_ACCEPT>() {
 }
 
 template <>
-version7::CMD_XFER_RESUME* ClientOpcode::get_if<CMD_XFER_RESUME>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version7::CMD_XFER_RESUME* ClientOpcode::get_if<CMD_XFER_RESUME>() {
     if (opcode == Opcode::CMD_XFER_RESUME) {
         return &CMD_XFER_RESUME;
     }
     return nullptr;
 }
 template <>
-version7::CMD_XFER_RESUME& ClientOpcode::get<CMD_XFER_RESUME>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version7::CMD_XFER_RESUME& ClientOpcode::get<CMD_XFER_RESUME>() {
     auto p = ClientOpcode::get_if<version7::CMD_XFER_RESUME>();
     if (p) {
         return *p;
@@ -2870,14 +2958,14 @@ version7::CMD_XFER_RESUME& ClientOpcode::get<CMD_XFER_RESUME>() {
 }
 
 template <>
-version7::CMD_XFER_CANCEL* ClientOpcode::get_if<CMD_XFER_CANCEL>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version7::CMD_XFER_CANCEL* ClientOpcode::get_if<CMD_XFER_CANCEL>() {
     if (opcode == Opcode::CMD_XFER_CANCEL) {
         return &CMD_XFER_CANCEL;
     }
     return nullptr;
 }
 template <>
-version7::CMD_XFER_CANCEL& ClientOpcode::get<CMD_XFER_CANCEL>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version7::CMD_XFER_CANCEL& ClientOpcode::get<CMD_XFER_CANCEL>() {
     auto p = ClientOpcode::get_if<version7::CMD_XFER_CANCEL>();
     if (p) {
         return *p;
@@ -2935,15 +3023,25 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode read_client_opcode(Reader& reader) {
 
     return op;
 }
+WOW_LOGIN_MESSAGES_CPP_EXPORT const char* ServerOpcode::to_string() const {
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) { return "CMD_AUTH_LOGON_CHALLENGE_Server"; }
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) { return "CMD_AUTH_LOGON_PROOF_Server"; }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) { return "CMD_AUTH_RECONNECT_CHALLENGE_Server"; }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) { return "CMD_AUTH_RECONNECT_PROOF_Server"; }
+    if (opcode == Opcode::CMD_REALM_LIST) { return "CMD_REALM_LIST_Server"; }
+    if (opcode == Opcode::CMD_XFER_INITIATE) { return "CMD_XFER_INITIATE"; }
+    if (opcode == Opcode::CMD_XFER_DATA) { return "CMD_XFER_DATA"; }
+    return nullptr;
+}
 template <>
-version7::CMD_AUTH_LOGON_CHALLENGE_Server* ServerOpcode::get_if<CMD_AUTH_LOGON_CHALLENGE_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version7::CMD_AUTH_LOGON_CHALLENGE_Server* ServerOpcode::get_if<CMD_AUTH_LOGON_CHALLENGE_Server>() {
     if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
         return &CMD_AUTH_LOGON_CHALLENGE;
     }
     return nullptr;
 }
 template <>
-version7::CMD_AUTH_LOGON_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_LOGON_CHALLENGE_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version7::CMD_AUTH_LOGON_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_LOGON_CHALLENGE_Server>() {
     auto p = ServerOpcode::get_if<version7::CMD_AUTH_LOGON_CHALLENGE_Server>();
     if (p) {
         return *p;
@@ -2952,14 +3050,14 @@ version7::CMD_AUTH_LOGON_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_LOGON_CHAL
 }
 
 template <>
-version7::CMD_AUTH_LOGON_PROOF_Server* ServerOpcode::get_if<CMD_AUTH_LOGON_PROOF_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version7::CMD_AUTH_LOGON_PROOF_Server* ServerOpcode::get_if<CMD_AUTH_LOGON_PROOF_Server>() {
     if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
         return &CMD_AUTH_LOGON_PROOF;
     }
     return nullptr;
 }
 template <>
-version7::CMD_AUTH_LOGON_PROOF_Server& ServerOpcode::get<CMD_AUTH_LOGON_PROOF_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version7::CMD_AUTH_LOGON_PROOF_Server& ServerOpcode::get<CMD_AUTH_LOGON_PROOF_Server>() {
     auto p = ServerOpcode::get_if<version7::CMD_AUTH_LOGON_PROOF_Server>();
     if (p) {
         return *p;
@@ -2968,14 +3066,14 @@ version7::CMD_AUTH_LOGON_PROOF_Server& ServerOpcode::get<CMD_AUTH_LOGON_PROOF_Se
 }
 
 template <>
-version7::CMD_AUTH_RECONNECT_CHALLENGE_Server* ServerOpcode::get_if<CMD_AUTH_RECONNECT_CHALLENGE_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version7::CMD_AUTH_RECONNECT_CHALLENGE_Server* ServerOpcode::get_if<CMD_AUTH_RECONNECT_CHALLENGE_Server>() {
     if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
         return &CMD_AUTH_RECONNECT_CHALLENGE;
     }
     return nullptr;
 }
 template <>
-version7::CMD_AUTH_RECONNECT_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_RECONNECT_CHALLENGE_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version7::CMD_AUTH_RECONNECT_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_RECONNECT_CHALLENGE_Server>() {
     auto p = ServerOpcode::get_if<version7::CMD_AUTH_RECONNECT_CHALLENGE_Server>();
     if (p) {
         return *p;
@@ -2984,14 +3082,14 @@ version7::CMD_AUTH_RECONNECT_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_RECONN
 }
 
 template <>
-version7::CMD_AUTH_RECONNECT_PROOF_Server* ServerOpcode::get_if<CMD_AUTH_RECONNECT_PROOF_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version7::CMD_AUTH_RECONNECT_PROOF_Server* ServerOpcode::get_if<CMD_AUTH_RECONNECT_PROOF_Server>() {
     if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
         return &CMD_AUTH_RECONNECT_PROOF;
     }
     return nullptr;
 }
 template <>
-version7::CMD_AUTH_RECONNECT_PROOF_Server& ServerOpcode::get<CMD_AUTH_RECONNECT_PROOF_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version7::CMD_AUTH_RECONNECT_PROOF_Server& ServerOpcode::get<CMD_AUTH_RECONNECT_PROOF_Server>() {
     auto p = ServerOpcode::get_if<version7::CMD_AUTH_RECONNECT_PROOF_Server>();
     if (p) {
         return *p;
@@ -3000,14 +3098,14 @@ version7::CMD_AUTH_RECONNECT_PROOF_Server& ServerOpcode::get<CMD_AUTH_RECONNECT_
 }
 
 template <>
-version7::CMD_REALM_LIST_Server* ServerOpcode::get_if<CMD_REALM_LIST_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version7::CMD_REALM_LIST_Server* ServerOpcode::get_if<CMD_REALM_LIST_Server>() {
     if (opcode == Opcode::CMD_REALM_LIST) {
         return &CMD_REALM_LIST;
     }
     return nullptr;
 }
 template <>
-version7::CMD_REALM_LIST_Server& ServerOpcode::get<CMD_REALM_LIST_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version7::CMD_REALM_LIST_Server& ServerOpcode::get<CMD_REALM_LIST_Server>() {
     auto p = ServerOpcode::get_if<version7::CMD_REALM_LIST_Server>();
     if (p) {
         return *p;
@@ -3016,14 +3114,14 @@ version7::CMD_REALM_LIST_Server& ServerOpcode::get<CMD_REALM_LIST_Server>() {
 }
 
 template <>
-version7::CMD_XFER_INITIATE* ServerOpcode::get_if<CMD_XFER_INITIATE>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version7::CMD_XFER_INITIATE* ServerOpcode::get_if<CMD_XFER_INITIATE>() {
     if (opcode == Opcode::CMD_XFER_INITIATE) {
         return &CMD_XFER_INITIATE;
     }
     return nullptr;
 }
 template <>
-version7::CMD_XFER_INITIATE& ServerOpcode::get<CMD_XFER_INITIATE>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version7::CMD_XFER_INITIATE& ServerOpcode::get<CMD_XFER_INITIATE>() {
     auto p = ServerOpcode::get_if<version7::CMD_XFER_INITIATE>();
     if (p) {
         return *p;
@@ -3032,14 +3130,14 @@ version7::CMD_XFER_INITIATE& ServerOpcode::get<CMD_XFER_INITIATE>() {
 }
 
 template <>
-version7::CMD_XFER_DATA* ServerOpcode::get_if<CMD_XFER_DATA>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version7::CMD_XFER_DATA* ServerOpcode::get_if<CMD_XFER_DATA>() {
     if (opcode == Opcode::CMD_XFER_DATA) {
         return &CMD_XFER_DATA;
     }
     return nullptr;
 }
 template <>
-version7::CMD_XFER_DATA& ServerOpcode::get<CMD_XFER_DATA>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version7::CMD_XFER_DATA& ServerOpcode::get<CMD_XFER_DATA>() {
     auto p = ServerOpcode::get_if<version7::CMD_XFER_DATA>();
     if (p) {
         return *p;
@@ -3648,15 +3746,24 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_XFER_CANCEL::write(
     return writer.m_buf;
 }
 
+WOW_LOGIN_MESSAGES_CPP_EXPORT const char* ClientOpcode::to_string() const {
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) { return "CMD_AUTH_LOGON_PROOF_Client"; }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) { return "CMD_AUTH_RECONNECT_PROOF_Client"; }
+    if (opcode == Opcode::CMD_REALM_LIST) { return "CMD_REALM_LIST_Client"; }
+    if (opcode == Opcode::CMD_XFER_ACCEPT) { return "CMD_XFER_ACCEPT"; }
+    if (opcode == Opcode::CMD_XFER_RESUME) { return "CMD_XFER_RESUME"; }
+    if (opcode == Opcode::CMD_XFER_CANCEL) { return "CMD_XFER_CANCEL"; }
+    return nullptr;
+}
 template <>
-version8::CMD_AUTH_LOGON_PROOF_Client* ClientOpcode::get_if<CMD_AUTH_LOGON_PROOF_Client>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version8::CMD_AUTH_LOGON_PROOF_Client* ClientOpcode::get_if<CMD_AUTH_LOGON_PROOF_Client>() {
     if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
         return &CMD_AUTH_LOGON_PROOF;
     }
     return nullptr;
 }
 template <>
-version8::CMD_AUTH_LOGON_PROOF_Client& ClientOpcode::get<CMD_AUTH_LOGON_PROOF_Client>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version8::CMD_AUTH_LOGON_PROOF_Client& ClientOpcode::get<CMD_AUTH_LOGON_PROOF_Client>() {
     auto p = ClientOpcode::get_if<version8::CMD_AUTH_LOGON_PROOF_Client>();
     if (p) {
         return *p;
@@ -3665,14 +3772,14 @@ version8::CMD_AUTH_LOGON_PROOF_Client& ClientOpcode::get<CMD_AUTH_LOGON_PROOF_Cl
 }
 
 template <>
-version8::CMD_AUTH_RECONNECT_PROOF_Client* ClientOpcode::get_if<CMD_AUTH_RECONNECT_PROOF_Client>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version8::CMD_AUTH_RECONNECT_PROOF_Client* ClientOpcode::get_if<CMD_AUTH_RECONNECT_PROOF_Client>() {
     if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
         return &CMD_AUTH_RECONNECT_PROOF;
     }
     return nullptr;
 }
 template <>
-version8::CMD_AUTH_RECONNECT_PROOF_Client& ClientOpcode::get<CMD_AUTH_RECONNECT_PROOF_Client>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version8::CMD_AUTH_RECONNECT_PROOF_Client& ClientOpcode::get<CMD_AUTH_RECONNECT_PROOF_Client>() {
     auto p = ClientOpcode::get_if<version8::CMD_AUTH_RECONNECT_PROOF_Client>();
     if (p) {
         return *p;
@@ -3681,14 +3788,14 @@ version8::CMD_AUTH_RECONNECT_PROOF_Client& ClientOpcode::get<CMD_AUTH_RECONNECT_
 }
 
 template <>
-version8::CMD_REALM_LIST_Client* ClientOpcode::get_if<CMD_REALM_LIST_Client>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version8::CMD_REALM_LIST_Client* ClientOpcode::get_if<CMD_REALM_LIST_Client>() {
     if (opcode == Opcode::CMD_REALM_LIST) {
         return &CMD_REALM_LIST;
     }
     return nullptr;
 }
 template <>
-version8::CMD_REALM_LIST_Client& ClientOpcode::get<CMD_REALM_LIST_Client>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version8::CMD_REALM_LIST_Client& ClientOpcode::get<CMD_REALM_LIST_Client>() {
     auto p = ClientOpcode::get_if<version8::CMD_REALM_LIST_Client>();
     if (p) {
         return *p;
@@ -3697,14 +3804,14 @@ version8::CMD_REALM_LIST_Client& ClientOpcode::get<CMD_REALM_LIST_Client>() {
 }
 
 template <>
-version8::CMD_XFER_ACCEPT* ClientOpcode::get_if<CMD_XFER_ACCEPT>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version8::CMD_XFER_ACCEPT* ClientOpcode::get_if<CMD_XFER_ACCEPT>() {
     if (opcode == Opcode::CMD_XFER_ACCEPT) {
         return &CMD_XFER_ACCEPT;
     }
     return nullptr;
 }
 template <>
-version8::CMD_XFER_ACCEPT& ClientOpcode::get<CMD_XFER_ACCEPT>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version8::CMD_XFER_ACCEPT& ClientOpcode::get<CMD_XFER_ACCEPT>() {
     auto p = ClientOpcode::get_if<version8::CMD_XFER_ACCEPT>();
     if (p) {
         return *p;
@@ -3713,14 +3820,14 @@ version8::CMD_XFER_ACCEPT& ClientOpcode::get<CMD_XFER_ACCEPT>() {
 }
 
 template <>
-version8::CMD_XFER_RESUME* ClientOpcode::get_if<CMD_XFER_RESUME>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version8::CMD_XFER_RESUME* ClientOpcode::get_if<CMD_XFER_RESUME>() {
     if (opcode == Opcode::CMD_XFER_RESUME) {
         return &CMD_XFER_RESUME;
     }
     return nullptr;
 }
 template <>
-version8::CMD_XFER_RESUME& ClientOpcode::get<CMD_XFER_RESUME>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version8::CMD_XFER_RESUME& ClientOpcode::get<CMD_XFER_RESUME>() {
     auto p = ClientOpcode::get_if<version8::CMD_XFER_RESUME>();
     if (p) {
         return *p;
@@ -3729,14 +3836,14 @@ version8::CMD_XFER_RESUME& ClientOpcode::get<CMD_XFER_RESUME>() {
 }
 
 template <>
-version8::CMD_XFER_CANCEL* ClientOpcode::get_if<CMD_XFER_CANCEL>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version8::CMD_XFER_CANCEL* ClientOpcode::get_if<CMD_XFER_CANCEL>() {
     if (opcode == Opcode::CMD_XFER_CANCEL) {
         return &CMD_XFER_CANCEL;
     }
     return nullptr;
 }
 template <>
-version8::CMD_XFER_CANCEL& ClientOpcode::get<CMD_XFER_CANCEL>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version8::CMD_XFER_CANCEL& ClientOpcode::get<CMD_XFER_CANCEL>() {
     auto p = ClientOpcode::get_if<version8::CMD_XFER_CANCEL>();
     if (p) {
         return *p;
@@ -3794,15 +3901,25 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode read_client_opcode(Reader& reader) {
 
     return op;
 }
+WOW_LOGIN_MESSAGES_CPP_EXPORT const char* ServerOpcode::to_string() const {
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) { return "CMD_AUTH_LOGON_CHALLENGE_Server"; }
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) { return "CMD_AUTH_LOGON_PROOF_Server"; }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) { return "CMD_AUTH_RECONNECT_CHALLENGE_Server"; }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) { return "CMD_AUTH_RECONNECT_PROOF_Server"; }
+    if (opcode == Opcode::CMD_REALM_LIST) { return "CMD_REALM_LIST_Server"; }
+    if (opcode == Opcode::CMD_XFER_INITIATE) { return "CMD_XFER_INITIATE"; }
+    if (opcode == Opcode::CMD_XFER_DATA) { return "CMD_XFER_DATA"; }
+    return nullptr;
+}
 template <>
-version8::CMD_AUTH_LOGON_CHALLENGE_Server* ServerOpcode::get_if<CMD_AUTH_LOGON_CHALLENGE_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version8::CMD_AUTH_LOGON_CHALLENGE_Server* ServerOpcode::get_if<CMD_AUTH_LOGON_CHALLENGE_Server>() {
     if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
         return &CMD_AUTH_LOGON_CHALLENGE;
     }
     return nullptr;
 }
 template <>
-version8::CMD_AUTH_LOGON_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_LOGON_CHALLENGE_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version8::CMD_AUTH_LOGON_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_LOGON_CHALLENGE_Server>() {
     auto p = ServerOpcode::get_if<version8::CMD_AUTH_LOGON_CHALLENGE_Server>();
     if (p) {
         return *p;
@@ -3811,14 +3928,14 @@ version8::CMD_AUTH_LOGON_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_LOGON_CHAL
 }
 
 template <>
-version8::CMD_AUTH_LOGON_PROOF_Server* ServerOpcode::get_if<CMD_AUTH_LOGON_PROOF_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version8::CMD_AUTH_LOGON_PROOF_Server* ServerOpcode::get_if<CMD_AUTH_LOGON_PROOF_Server>() {
     if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
         return &CMD_AUTH_LOGON_PROOF;
     }
     return nullptr;
 }
 template <>
-version8::CMD_AUTH_LOGON_PROOF_Server& ServerOpcode::get<CMD_AUTH_LOGON_PROOF_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version8::CMD_AUTH_LOGON_PROOF_Server& ServerOpcode::get<CMD_AUTH_LOGON_PROOF_Server>() {
     auto p = ServerOpcode::get_if<version8::CMD_AUTH_LOGON_PROOF_Server>();
     if (p) {
         return *p;
@@ -3827,14 +3944,14 @@ version8::CMD_AUTH_LOGON_PROOF_Server& ServerOpcode::get<CMD_AUTH_LOGON_PROOF_Se
 }
 
 template <>
-version8::CMD_AUTH_RECONNECT_CHALLENGE_Server* ServerOpcode::get_if<CMD_AUTH_RECONNECT_CHALLENGE_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version8::CMD_AUTH_RECONNECT_CHALLENGE_Server* ServerOpcode::get_if<CMD_AUTH_RECONNECT_CHALLENGE_Server>() {
     if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
         return &CMD_AUTH_RECONNECT_CHALLENGE;
     }
     return nullptr;
 }
 template <>
-version8::CMD_AUTH_RECONNECT_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_RECONNECT_CHALLENGE_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version8::CMD_AUTH_RECONNECT_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_RECONNECT_CHALLENGE_Server>() {
     auto p = ServerOpcode::get_if<version8::CMD_AUTH_RECONNECT_CHALLENGE_Server>();
     if (p) {
         return *p;
@@ -3843,14 +3960,14 @@ version8::CMD_AUTH_RECONNECT_CHALLENGE_Server& ServerOpcode::get<CMD_AUTH_RECONN
 }
 
 template <>
-version8::CMD_AUTH_RECONNECT_PROOF_Server* ServerOpcode::get_if<CMD_AUTH_RECONNECT_PROOF_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version8::CMD_AUTH_RECONNECT_PROOF_Server* ServerOpcode::get_if<CMD_AUTH_RECONNECT_PROOF_Server>() {
     if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
         return &CMD_AUTH_RECONNECT_PROOF;
     }
     return nullptr;
 }
 template <>
-version8::CMD_AUTH_RECONNECT_PROOF_Server& ServerOpcode::get<CMD_AUTH_RECONNECT_PROOF_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version8::CMD_AUTH_RECONNECT_PROOF_Server& ServerOpcode::get<CMD_AUTH_RECONNECT_PROOF_Server>() {
     auto p = ServerOpcode::get_if<version8::CMD_AUTH_RECONNECT_PROOF_Server>();
     if (p) {
         return *p;
@@ -3859,14 +3976,14 @@ version8::CMD_AUTH_RECONNECT_PROOF_Server& ServerOpcode::get<CMD_AUTH_RECONNECT_
 }
 
 template <>
-version8::CMD_REALM_LIST_Server* ServerOpcode::get_if<CMD_REALM_LIST_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version8::CMD_REALM_LIST_Server* ServerOpcode::get_if<CMD_REALM_LIST_Server>() {
     if (opcode == Opcode::CMD_REALM_LIST) {
         return &CMD_REALM_LIST;
     }
     return nullptr;
 }
 template <>
-version8::CMD_REALM_LIST_Server& ServerOpcode::get<CMD_REALM_LIST_Server>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version8::CMD_REALM_LIST_Server& ServerOpcode::get<CMD_REALM_LIST_Server>() {
     auto p = ServerOpcode::get_if<version8::CMD_REALM_LIST_Server>();
     if (p) {
         return *p;
@@ -3875,14 +3992,14 @@ version8::CMD_REALM_LIST_Server& ServerOpcode::get<CMD_REALM_LIST_Server>() {
 }
 
 template <>
-version8::CMD_XFER_INITIATE* ServerOpcode::get_if<CMD_XFER_INITIATE>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version8::CMD_XFER_INITIATE* ServerOpcode::get_if<CMD_XFER_INITIATE>() {
     if (opcode == Opcode::CMD_XFER_INITIATE) {
         return &CMD_XFER_INITIATE;
     }
     return nullptr;
 }
 template <>
-version8::CMD_XFER_INITIATE& ServerOpcode::get<CMD_XFER_INITIATE>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version8::CMD_XFER_INITIATE& ServerOpcode::get<CMD_XFER_INITIATE>() {
     auto p = ServerOpcode::get_if<version8::CMD_XFER_INITIATE>();
     if (p) {
         return *p;
@@ -3891,14 +4008,14 @@ version8::CMD_XFER_INITIATE& ServerOpcode::get<CMD_XFER_INITIATE>() {
 }
 
 template <>
-version8::CMD_XFER_DATA* ServerOpcode::get_if<CMD_XFER_DATA>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version8::CMD_XFER_DATA* ServerOpcode::get_if<CMD_XFER_DATA>() {
     if (opcode == Opcode::CMD_XFER_DATA) {
         return &CMD_XFER_DATA;
     }
     return nullptr;
 }
 template <>
-version8::CMD_XFER_DATA& ServerOpcode::get<CMD_XFER_DATA>() {
+WOW_LOGIN_MESSAGES_CPP_EXPORT version8::CMD_XFER_DATA& ServerOpcode::get<CMD_XFER_DATA>() {
     auto p = ServerOpcode::get_if<version8::CMD_XFER_DATA>();
     if (p) {
         return *p;
