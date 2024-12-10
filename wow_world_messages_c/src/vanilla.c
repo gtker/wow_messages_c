@@ -15,23 +15,1475 @@ WowWorldResult all_Vector2d_read(WowWorldReader* reader, all_Vector2d* object);
 WowWorldResult all_Vector2d_write(WowWorldWriter* writer, const all_Vector2d* object);
 
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_set(vanilla_UpdateMask* mask, vanilla_UpdateMaskValues offset, uint32_t value) {
-    uint32_t block = offset / 32;
-    uint32_t bit = offset % 32;
-
-    mask->headers[block] |= 1 << bit;
-    mask->values[offset] = value;
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_object_guid_set(vanilla_UpdateMask* mask, uint64_t value) {
+    wwm_update_mask_set_u64(mask->headers, mask->values, 0, value);
 }
-
-WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_get(vanilla_UpdateMask* mask, vanilla_UpdateMaskValues offset) {
-    uint32_t block = offset / 32;
-    uint32_t bit = offset % 32;
-
-    if((mask->headers[block] & 1 << bit) != 0) {
-        return mask->values[offset];
-    }
-
-    return 0;
+WOW_WORLD_MESSAGES_C_EXPORT uint64_t vanilla_update_mask_object_guid_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u64(mask->headers, mask->values, 0);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_object_type_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 2, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_object_type_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 2);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_object_entry_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 3, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_object_entry_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 3);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_object_scale_x_set(vanilla_UpdateMask* mask, float value) {
+    wwm_update_mask_set_float(mask->headers, mask->values, 4, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT float vanilla_update_mask_object_scale_x_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_float(mask->headers, mask->values, 4);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_item_owner_set(vanilla_UpdateMask* mask, uint64_t value) {
+    wwm_update_mask_set_u64(mask->headers, mask->values, 6, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint64_t vanilla_update_mask_item_owner_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u64(mask->headers, mask->values, 6);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_item_contained_set(vanilla_UpdateMask* mask, uint64_t value) {
+    wwm_update_mask_set_u64(mask->headers, mask->values, 8, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint64_t vanilla_update_mask_item_contained_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u64(mask->headers, mask->values, 8);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_item_creator_set(vanilla_UpdateMask* mask, uint64_t value) {
+    wwm_update_mask_set_u64(mask->headers, mask->values, 10, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint64_t vanilla_update_mask_item_creator_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u64(mask->headers, mask->values, 10);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_item_giftcreator_set(vanilla_UpdateMask* mask, uint64_t value) {
+    wwm_update_mask_set_u64(mask->headers, mask->values, 12, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint64_t vanilla_update_mask_item_giftcreator_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u64(mask->headers, mask->values, 12);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_item_stack_count_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 14, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_item_stack_count_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 14);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_item_duration_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 15, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_item_duration_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 15);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_item_spell_charges_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 16, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_item_spell_charges_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 16);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_item_flags_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 21, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_item_flags_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 21);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_item_enchantment_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 22, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_item_enchantment_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 22);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_item_property_seed_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 43, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_item_property_seed_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 43);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_item_random_properties_id_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 44, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_item_random_properties_id_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 44);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_item_item_text_id_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 45, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_item_item_text_id_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 45);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_item_durability_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 46, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_item_durability_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 46);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_item_maxdurability_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 47, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_item_maxdurability_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 47);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_container_num_slots_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 48, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_container_num_slots_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 48);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_container_slot_1_set(vanilla_UpdateMask* mask, uint64_t value) {
+    wwm_update_mask_set_u64(mask->headers, mask->values, 50, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint64_t vanilla_update_mask_container_slot_1_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u64(mask->headers, mask->values, 50);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_charm_set(vanilla_UpdateMask* mask, uint64_t value) {
+    wwm_update_mask_set_u64(mask->headers, mask->values, 6, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint64_t vanilla_update_mask_unit_charm_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u64(mask->headers, mask->values, 6);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_summon_set(vanilla_UpdateMask* mask, uint64_t value) {
+    wwm_update_mask_set_u64(mask->headers, mask->values, 8, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint64_t vanilla_update_mask_unit_summon_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u64(mask->headers, mask->values, 8);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_charmedby_set(vanilla_UpdateMask* mask, uint64_t value) {
+    wwm_update_mask_set_u64(mask->headers, mask->values, 10, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint64_t vanilla_update_mask_unit_charmedby_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u64(mask->headers, mask->values, 10);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_summonedby_set(vanilla_UpdateMask* mask, uint64_t value) {
+    wwm_update_mask_set_u64(mask->headers, mask->values, 12, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint64_t vanilla_update_mask_unit_summonedby_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u64(mask->headers, mask->values, 12);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_createdby_set(vanilla_UpdateMask* mask, uint64_t value) {
+    wwm_update_mask_set_u64(mask->headers, mask->values, 14, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint64_t vanilla_update_mask_unit_createdby_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u64(mask->headers, mask->values, 14);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_target_set(vanilla_UpdateMask* mask, uint64_t value) {
+    wwm_update_mask_set_u64(mask->headers, mask->values, 16, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint64_t vanilla_update_mask_unit_target_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u64(mask->headers, mask->values, 16);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_persuaded_set(vanilla_UpdateMask* mask, uint64_t value) {
+    wwm_update_mask_set_u64(mask->headers, mask->values, 18, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint64_t vanilla_update_mask_unit_persuaded_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u64(mask->headers, mask->values, 18);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_channel_object_set(vanilla_UpdateMask* mask, uint64_t value) {
+    wwm_update_mask_set_u64(mask->headers, mask->values, 20, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint64_t vanilla_update_mask_unit_channel_object_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u64(mask->headers, mask->values, 20);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_health_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 22, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_health_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 22);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_power1_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 23, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_power1_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 23);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_power2_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 24, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_power2_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 24);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_power3_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 25, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_power3_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 25);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_power4_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 26, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_power4_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 26);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_power5_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 27, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_power5_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 27);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_maxhealth_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 28, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_maxhealth_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 28);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_maxpower1_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 29, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_maxpower1_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 29);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_maxpower2_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 30, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_maxpower2_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 30);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_maxpower3_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 31, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_maxpower3_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 31);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_maxpower4_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 32, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_maxpower4_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 32);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_maxpower5_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 33, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_maxpower5_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 33);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_level_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 34, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_level_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 34);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_factiontemplate_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 35, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_factiontemplate_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 35);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_bytes_0_set(vanilla_UpdateMask* mask, WowBytes value) {
+    wwm_update_mask_set_bytes(mask->headers, mask->values, 36, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT WowBytes vanilla_update_mask_unit_bytes_0_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_bytes(mask->headers, mask->values, 36);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_virtual_item_slot_display_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 37, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_virtual_item_slot_display_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 37);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_virtual_item_info_set(vanilla_UpdateMask* mask, WowBytes value) {
+    wwm_update_mask_set_bytes(mask->headers, mask->values, 40, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT WowBytes vanilla_update_mask_unit_virtual_item_info_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_bytes(mask->headers, mask->values, 40);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_flags_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 46, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_flags_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 46);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_aura_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 47, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_aura_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 47);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_auraflags_set(vanilla_UpdateMask* mask, WowBytes value) {
+    wwm_update_mask_set_bytes(mask->headers, mask->values, 95, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT WowBytes vanilla_update_mask_unit_auraflags_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_bytes(mask->headers, mask->values, 95);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_auralevels_set(vanilla_UpdateMask* mask, WowBytes value) {
+    wwm_update_mask_set_bytes(mask->headers, mask->values, 101, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT WowBytes vanilla_update_mask_unit_auralevels_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_bytes(mask->headers, mask->values, 101);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_auraapplications_set(vanilla_UpdateMask* mask, WowBytes value) {
+    wwm_update_mask_set_bytes(mask->headers, mask->values, 113, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT WowBytes vanilla_update_mask_unit_auraapplications_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_bytes(mask->headers, mask->values, 113);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_aurastate_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 125, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_aurastate_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 125);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_baseattacktime_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 126, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_baseattacktime_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 126);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_rangedattacktime_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 128, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_rangedattacktime_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 128);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_boundingradius_set(vanilla_UpdateMask* mask, float value) {
+    wwm_update_mask_set_float(mask->headers, mask->values, 129, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT float vanilla_update_mask_unit_boundingradius_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_float(mask->headers, mask->values, 129);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_combatreach_set(vanilla_UpdateMask* mask, float value) {
+    wwm_update_mask_set_float(mask->headers, mask->values, 130, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT float vanilla_update_mask_unit_combatreach_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_float(mask->headers, mask->values, 130);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_displayid_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 131, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_displayid_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 131);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_nativedisplayid_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 132, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_nativedisplayid_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 132);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_mountdisplayid_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 133, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_mountdisplayid_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 133);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_mindamage_set(vanilla_UpdateMask* mask, float value) {
+    wwm_update_mask_set_float(mask->headers, mask->values, 134, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT float vanilla_update_mask_unit_mindamage_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_float(mask->headers, mask->values, 134);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_maxdamage_set(vanilla_UpdateMask* mask, float value) {
+    wwm_update_mask_set_float(mask->headers, mask->values, 135, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT float vanilla_update_mask_unit_maxdamage_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_float(mask->headers, mask->values, 135);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_minoffhanddamage_set(vanilla_UpdateMask* mask, float value) {
+    wwm_update_mask_set_float(mask->headers, mask->values, 136, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT float vanilla_update_mask_unit_minoffhanddamage_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_float(mask->headers, mask->values, 136);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_maxoffhanddamage_set(vanilla_UpdateMask* mask, float value) {
+    wwm_update_mask_set_float(mask->headers, mask->values, 137, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT float vanilla_update_mask_unit_maxoffhanddamage_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_float(mask->headers, mask->values, 137);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_bytes_1_set(vanilla_UpdateMask* mask, WowBytes value) {
+    wwm_update_mask_set_bytes(mask->headers, mask->values, 138, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT WowBytes vanilla_update_mask_unit_bytes_1_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_bytes(mask->headers, mask->values, 138);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_petnumber_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 139, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_petnumber_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 139);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_pet_name_timestamp_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 140, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_pet_name_timestamp_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 140);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_petexperience_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 141, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_petexperience_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 141);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_petnextlevelexp_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 142, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_petnextlevelexp_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 142);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_dynamic_flags_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 143, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_dynamic_flags_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 143);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_channel_spell_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 144, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_channel_spell_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 144);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_mod_cast_speed_set(vanilla_UpdateMask* mask, float value) {
+    wwm_update_mask_set_float(mask->headers, mask->values, 145, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT float vanilla_update_mask_unit_mod_cast_speed_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_float(mask->headers, mask->values, 145);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_created_by_spell_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 146, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_created_by_spell_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 146);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_npc_flags_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 147, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_npc_flags_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 147);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_npc_emotestate_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 148, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_npc_emotestate_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 148);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_training_points_set(vanilla_UpdateMask* mask, WowTwoShorts value) {
+    wwm_update_mask_set_two_shorts(mask->headers, mask->values, 149, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT WowTwoShorts vanilla_update_mask_unit_training_points_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_two_shorts(mask->headers, mask->values, 149);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_strength_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 150, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_strength_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 150);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_agility_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 151, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_agility_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 151);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_stamina_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 152, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_stamina_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 152);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_intellect_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 153, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_intellect_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 153);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_spirit_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 154, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_spirit_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 154);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_normal_resistance_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 155, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_normal_resistance_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 155);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_holy_resistance_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 156, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_holy_resistance_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 156);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_fire_resistance_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 157, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_fire_resistance_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 157);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_nature_resistance_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 158, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_nature_resistance_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 158);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_frost_resistance_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 159, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_frost_resistance_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 159);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_shadow_resistance_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 160, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_shadow_resistance_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 160);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_arcane_resistance_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 161, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_arcane_resistance_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 161);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_base_mana_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 162, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_base_mana_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 162);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_base_health_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 163, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_base_health_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 163);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_bytes_2_set(vanilla_UpdateMask* mask, WowBytes value) {
+    wwm_update_mask_set_bytes(mask->headers, mask->values, 164, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT WowBytes vanilla_update_mask_unit_bytes_2_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_bytes(mask->headers, mask->values, 164);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_attack_power_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 165, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_attack_power_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 165);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_attack_power_mods_set(vanilla_UpdateMask* mask, WowTwoShorts value) {
+    wwm_update_mask_set_two_shorts(mask->headers, mask->values, 166, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT WowTwoShorts vanilla_update_mask_unit_attack_power_mods_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_two_shorts(mask->headers, mask->values, 166);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_attack_power_multiplier_set(vanilla_UpdateMask* mask, float value) {
+    wwm_update_mask_set_float(mask->headers, mask->values, 167, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT float vanilla_update_mask_unit_attack_power_multiplier_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_float(mask->headers, mask->values, 167);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_ranged_attack_power_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 168, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_ranged_attack_power_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 168);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_ranged_attack_power_mods_set(vanilla_UpdateMask* mask, WowTwoShorts value) {
+    wwm_update_mask_set_two_shorts(mask->headers, mask->values, 169, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT WowTwoShorts vanilla_update_mask_unit_ranged_attack_power_mods_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_two_shorts(mask->headers, mask->values, 169);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_ranged_attack_power_multiplier_set(vanilla_UpdateMask* mask, float value) {
+    wwm_update_mask_set_float(mask->headers, mask->values, 170, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT float vanilla_update_mask_unit_ranged_attack_power_multiplier_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_float(mask->headers, mask->values, 170);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_minrangeddamage_set(vanilla_UpdateMask* mask, float value) {
+    wwm_update_mask_set_float(mask->headers, mask->values, 171, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT float vanilla_update_mask_unit_minrangeddamage_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_float(mask->headers, mask->values, 171);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_maxrangeddamage_set(vanilla_UpdateMask* mask, float value) {
+    wwm_update_mask_set_float(mask->headers, mask->values, 172, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT float vanilla_update_mask_unit_maxrangeddamage_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_float(mask->headers, mask->values, 172);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_power_cost_modifier_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 173, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_unit_power_cost_modifier_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 173);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_unit_power_cost_multiplier_set(vanilla_UpdateMask* mask, float value) {
+    wwm_update_mask_set_float(mask->headers, mask->values, 180, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT float vanilla_update_mask_unit_power_cost_multiplier_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_float(mask->headers, mask->values, 180);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_duel_arbiter_set(vanilla_UpdateMask* mask, uint64_t value) {
+    wwm_update_mask_set_u64(mask->headers, mask->values, 188, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint64_t vanilla_update_mask_player_duel_arbiter_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u64(mask->headers, mask->values, 188);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_flags_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 190, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_flags_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 190);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_guildid_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 191, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_guildid_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 191);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_guildrank_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 192, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_guildrank_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 192);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_features_set(vanilla_UpdateMask* mask, WowBytes value) {
+    wwm_update_mask_set_bytes(mask->headers, mask->values, 193, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT WowBytes vanilla_update_mask_player_features_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_bytes(mask->headers, mask->values, 193);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_bytes_2_set(vanilla_UpdateMask* mask, WowBytes value) {
+    wwm_update_mask_set_bytes(mask->headers, mask->values, 194, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT WowBytes vanilla_update_mask_player_bytes_2_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_bytes(mask->headers, mask->values, 194);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_bytes_3_set(vanilla_UpdateMask* mask, WowBytes value) {
+    wwm_update_mask_set_bytes(mask->headers, mask->values, 195, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT WowBytes vanilla_update_mask_player_bytes_3_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_bytes(mask->headers, mask->values, 195);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_duel_team_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 196, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_duel_team_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 196);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_guild_timestamp_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 197, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_guild_timestamp_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 197);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_quest_log_1_1_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 198, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_quest_log_1_1_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 198);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_quest_log_1_2_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 199, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_quest_log_1_2_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 199);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_quest_log_2_1_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 201, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_quest_log_2_1_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 201);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_quest_log_2_2_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 202, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_quest_log_2_2_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 202);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_quest_log_3_1_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 204, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_quest_log_3_1_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 204);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_quest_log_3_2_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 205, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_quest_log_3_2_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 205);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_quest_log_4_1_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 207, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_quest_log_4_1_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 207);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_quest_log_4_2_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 208, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_quest_log_4_2_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 208);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_quest_log_5_1_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 210, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_quest_log_5_1_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 210);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_quest_log_5_2_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 211, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_quest_log_5_2_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 211);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_quest_log_6_1_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 213, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_quest_log_6_1_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 213);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_quest_log_6_2_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 214, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_quest_log_6_2_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 214);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_quest_log_7_1_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 216, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_quest_log_7_1_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 216);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_quest_log_7_2_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 217, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_quest_log_7_2_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 217);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_quest_log_8_1_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 219, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_quest_log_8_1_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 219);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_quest_log_8_2_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 220, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_quest_log_8_2_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 220);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_quest_log_9_1_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 222, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_quest_log_9_1_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 222);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_quest_log_9_2_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 223, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_quest_log_9_2_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 223);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_quest_log_10_1_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 225, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_quest_log_10_1_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 225);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_quest_log_10_2_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 226, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_quest_log_10_2_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 226);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_quest_log_11_1_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 228, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_quest_log_11_1_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 228);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_quest_log_11_2_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 229, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_quest_log_11_2_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 229);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_quest_log_12_1_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 231, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_quest_log_12_1_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 231);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_quest_log_12_2_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 232, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_quest_log_12_2_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 232);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_quest_log_13_1_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 234, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_quest_log_13_1_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 234);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_quest_log_13_2_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 235, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_quest_log_13_2_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 235);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_quest_log_14_1_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 237, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_quest_log_14_1_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 237);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_quest_log_14_2_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 238, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_quest_log_14_2_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 238);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_quest_log_15_1_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 240, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_quest_log_15_1_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 240);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_quest_log_15_2_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 241, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_quest_log_15_2_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 241);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_quest_log_16_1_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 243, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_quest_log_16_1_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 243);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_quest_log_16_2_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 244, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_quest_log_16_2_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 244);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_quest_log_17_1_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 246, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_quest_log_17_1_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 246);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_quest_log_17_2_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 247, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_quest_log_17_2_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 247);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_quest_log_18_1_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 249, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_quest_log_18_1_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 249);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_quest_log_18_2_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 250, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_quest_log_18_2_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 250);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_quest_log_19_1_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 252, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_quest_log_19_1_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 252);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_quest_log_19_2_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 253, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_quest_log_19_2_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 253);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_quest_log_20_1_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 255, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_quest_log_20_1_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 255);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_quest_log_20_2_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 256, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_quest_log_20_2_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 256);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_visible_item_creator_set(vanilla_UpdateMask* mask, uint32_t index, uint64_t value) {
+    wwm_update_mask_set_u64(mask->headers, mask->values, 258 + index * 12 + 0, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint64_t vanilla_update_mask_player_visible_item_creator_get(const vanilla_UpdateMask* mask, uint32_t index) {
+    return wwm_update_mask_get_u64(mask->headers, mask->values, 258 + index * 12 + 0);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_visible_item_item_set(vanilla_UpdateMask* mask, uint32_t index, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 258 + index * 12 + 2, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_visible_item_item_get(const vanilla_UpdateMask* mask, uint32_t index) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 258 + index * 12 + 2);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_visible_item_enchants_set(vanilla_UpdateMask* mask, uint32_t index, uint64_t value) {
+    wwm_update_mask_set_u64(mask->headers, mask->values, 258 + index * 12 + 3, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint64_t vanilla_update_mask_player_visible_item_enchants_get(const vanilla_UpdateMask* mask, uint32_t index) {
+    return wwm_update_mask_get_u64(mask->headers, mask->values, 258 + index * 12 + 3);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_visible_item_random_property_id_set(vanilla_UpdateMask* mask, uint32_t index, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 258 + index * 12 + 10, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_visible_item_random_property_id_get(const vanilla_UpdateMask* mask, uint32_t index) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 258 + index * 12 + 10);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_visible_item_item_suffix_factor_set(vanilla_UpdateMask* mask, uint32_t index, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 258 + index * 12 + 11, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_visible_item_item_suffix_factor_get(const vanilla_UpdateMask* mask, uint32_t index) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 258 + index * 12 + 11);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint64_t vanilla_update_mask_player_field_inv_get(const vanilla_UpdateMask* mask, vanilla_ItemSlot def) {
+    return wwm_update_mask_get_u64(mask->headers, mask->values, 486 + ((uint32_t)def * 2));
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_field_inv_set(vanilla_UpdateMask* mask, vanilla_ItemSlot def, uint64_t value) {
+    wwm_update_mask_set_u64(mask->headers, mask->values, 486 + ((uint32_t)def * 2), value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_farsight_set(vanilla_UpdateMask* mask, uint64_t value) {
+    wwm_update_mask_set_u64(mask->headers, mask->values, 712, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint64_t vanilla_update_mask_player_farsight_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u64(mask->headers, mask->values, 712);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_field_combo_target_set(vanilla_UpdateMask* mask, uint64_t value) {
+    wwm_update_mask_set_u64(mask->headers, mask->values, 714, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint64_t vanilla_update_mask_player_field_combo_target_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u64(mask->headers, mask->values, 714);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_xp_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 716, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_xp_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 716);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_next_level_xp_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 717, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_next_level_xp_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 717);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_skill_info_skill_set(vanilla_UpdateMask* mask, uint32_t index, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 718 + index * 3 + 0, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_skill_info_skill_get(const vanilla_UpdateMask* mask, uint32_t index) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 718 + index * 3 + 0);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_skill_info_skill_step_set(vanilla_UpdateMask* mask, uint32_t index, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 718 + index * 3 + 0, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_skill_info_skill_step_get(const vanilla_UpdateMask* mask, uint32_t index) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 718 + index * 3 + 0);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_skill_info_minimum_set(vanilla_UpdateMask* mask, uint32_t index, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 718 + index * 3 + 1, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_skill_info_minimum_get(const vanilla_UpdateMask* mask, uint32_t index) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 718 + index * 3 + 1);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_skill_info_maximum_set(vanilla_UpdateMask* mask, uint32_t index, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 718 + index * 3 + 1, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_skill_info_maximum_get(const vanilla_UpdateMask* mask, uint32_t index) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 718 + index * 3 + 1);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_skill_info_permanent_bonus_set(vanilla_UpdateMask* mask, uint32_t index, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 718 + index * 3 + 2, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_skill_info_permanent_bonus_get(const vanilla_UpdateMask* mask, uint32_t index) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 718 + index * 3 + 2);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_skill_info_temporary_bonus_set(vanilla_UpdateMask* mask, uint32_t index, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 718 + index * 3 + 2, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_skill_info_temporary_bonus_get(const vanilla_UpdateMask* mask, uint32_t index) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 718 + index * 3 + 2);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_character_points1_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 1102, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_character_points1_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 1102);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_character_points2_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 1103, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_character_points2_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 1103);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_track_creatures_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 1104, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_track_creatures_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 1104);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_track_resources_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 1105, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_track_resources_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 1105);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_block_percentage_set(vanilla_UpdateMask* mask, float value) {
+    wwm_update_mask_set_float(mask->headers, mask->values, 1106, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT float vanilla_update_mask_player_block_percentage_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_float(mask->headers, mask->values, 1106);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_dodge_percentage_set(vanilla_UpdateMask* mask, float value) {
+    wwm_update_mask_set_float(mask->headers, mask->values, 1107, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT float vanilla_update_mask_player_dodge_percentage_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_float(mask->headers, mask->values, 1107);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_parry_percentage_set(vanilla_UpdateMask* mask, float value) {
+    wwm_update_mask_set_float(mask->headers, mask->values, 1108, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT float vanilla_update_mask_player_parry_percentage_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_float(mask->headers, mask->values, 1108);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_crit_percentage_set(vanilla_UpdateMask* mask, float value) {
+    wwm_update_mask_set_float(mask->headers, mask->values, 1109, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT float vanilla_update_mask_player_crit_percentage_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_float(mask->headers, mask->values, 1109);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_ranged_crit_percentage_set(vanilla_UpdateMask* mask, float value) {
+    wwm_update_mask_set_float(mask->headers, mask->values, 1110, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT float vanilla_update_mask_player_ranged_crit_percentage_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_float(mask->headers, mask->values, 1110);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_explored_zones_1_set(vanilla_UpdateMask* mask, WowBytes value) {
+    wwm_update_mask_set_bytes(mask->headers, mask->values, 1111, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT WowBytes vanilla_update_mask_player_explored_zones_1_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_bytes(mask->headers, mask->values, 1111);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_rest_state_experience_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 1175, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_rest_state_experience_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 1175);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_field_coinage_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 1176, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_field_coinage_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 1176);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_field_posstat0_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 1177, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_field_posstat0_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 1177);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_field_posstat1_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 1178, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_field_posstat1_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 1178);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_field_posstat2_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 1179, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_field_posstat2_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 1179);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_field_posstat3_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 1180, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_field_posstat3_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 1180);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_field_posstat4_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 1181, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_field_posstat4_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 1181);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_field_negstat0_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 1182, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_field_negstat0_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 1182);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_field_negstat1_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 1183, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_field_negstat1_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 1183);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_field_negstat2_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 1184, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_field_negstat2_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 1184);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_field_negstat3_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 1185, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_field_negstat3_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 1185);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_field_negstat4_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 1186, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_field_negstat4_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 1186);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_field_resistancebuffmodspositive_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 1187, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_field_resistancebuffmodspositive_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 1187);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_field_resistancebuffmodsnegative_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 1194, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_field_resistancebuffmodsnegative_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 1194);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_field_mod_damage_done_pos_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 1201, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_field_mod_damage_done_pos_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 1201);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_field_mod_damage_done_neg_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 1208, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_field_mod_damage_done_neg_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 1208);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_field_mod_damage_done_pct_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 1215, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_field_mod_damage_done_pct_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 1215);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_field_bytes_set(vanilla_UpdateMask* mask, WowBytes value) {
+    wwm_update_mask_set_bytes(mask->headers, mask->values, 1222, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT WowBytes vanilla_update_mask_player_field_bytes_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_bytes(mask->headers, mask->values, 1222);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_ammo_id_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 1223, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_ammo_id_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 1223);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_self_res_spell_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 1224, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_self_res_spell_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 1224);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_field_pvp_medals_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 1225, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_field_pvp_medals_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 1225);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_field_buyback_price_1_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 1226, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_field_buyback_price_1_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 1226);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_field_buyback_timestamp_1_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 1238, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_field_buyback_timestamp_1_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 1238);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_field_session_kills_set(vanilla_UpdateMask* mask, WowTwoShorts value) {
+    wwm_update_mask_set_two_shorts(mask->headers, mask->values, 1250, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT WowTwoShorts vanilla_update_mask_player_field_session_kills_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_two_shorts(mask->headers, mask->values, 1250);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_field_yesterday_kills_set(vanilla_UpdateMask* mask, WowTwoShorts value) {
+    wwm_update_mask_set_two_shorts(mask->headers, mask->values, 1251, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT WowTwoShorts vanilla_update_mask_player_field_yesterday_kills_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_two_shorts(mask->headers, mask->values, 1251);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_field_last_week_kills_set(vanilla_UpdateMask* mask, WowTwoShorts value) {
+    wwm_update_mask_set_two_shorts(mask->headers, mask->values, 1252, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT WowTwoShorts vanilla_update_mask_player_field_last_week_kills_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_two_shorts(mask->headers, mask->values, 1252);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_field_this_week_kills_set(vanilla_UpdateMask* mask, WowTwoShorts value) {
+    wwm_update_mask_set_two_shorts(mask->headers, mask->values, 1253, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT WowTwoShorts vanilla_update_mask_player_field_this_week_kills_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_two_shorts(mask->headers, mask->values, 1253);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_field_this_week_contribution_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 1254, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_field_this_week_contribution_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 1254);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_field_lifetime_honorbale_kills_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 1255, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_field_lifetime_honorbale_kills_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 1255);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_field_lifetime_dishonorbale_kills_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 1256, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_field_lifetime_dishonorbale_kills_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 1256);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_field_yesterday_contribution_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 1257, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_field_yesterday_contribution_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 1257);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_field_last_week_contribution_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 1258, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_field_last_week_contribution_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 1258);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_field_last_week_rank_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 1259, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_field_last_week_rank_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 1259);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_field_bytes2_set(vanilla_UpdateMask* mask, WowBytes value) {
+    wwm_update_mask_set_bytes(mask->headers, mask->values, 1260, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT WowBytes vanilla_update_mask_player_field_bytes2_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_bytes(mask->headers, mask->values, 1260);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_field_watched_faction_index_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 1261, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_field_watched_faction_index_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 1261);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_player_field_combat_rating_1_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 1262, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_player_field_combat_rating_1_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 1262);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_game_object_created_by_set(vanilla_UpdateMask* mask, uint64_t value) {
+    wwm_update_mask_set_u64(mask->headers, mask->values, 6, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint64_t vanilla_update_mask_game_object_created_by_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u64(mask->headers, mask->values, 6);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_game_object_displayid_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 8, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_game_object_displayid_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 8);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_game_object_flags_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 9, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_game_object_flags_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 9);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_game_object_rotation_set(vanilla_UpdateMask* mask, float value) {
+    wwm_update_mask_set_float(mask->headers, mask->values, 10, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT float vanilla_update_mask_game_object_rotation_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_float(mask->headers, mask->values, 10);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_game_object_state_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 14, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_game_object_state_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 14);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_game_object_pos_x_set(vanilla_UpdateMask* mask, float value) {
+    wwm_update_mask_set_float(mask->headers, mask->values, 15, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT float vanilla_update_mask_game_object_pos_x_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_float(mask->headers, mask->values, 15);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_game_object_pos_y_set(vanilla_UpdateMask* mask, float value) {
+    wwm_update_mask_set_float(mask->headers, mask->values, 16, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT float vanilla_update_mask_game_object_pos_y_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_float(mask->headers, mask->values, 16);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_game_object_pos_z_set(vanilla_UpdateMask* mask, float value) {
+    wwm_update_mask_set_float(mask->headers, mask->values, 17, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT float vanilla_update_mask_game_object_pos_z_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_float(mask->headers, mask->values, 17);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_game_object_facing_set(vanilla_UpdateMask* mask, float value) {
+    wwm_update_mask_set_float(mask->headers, mask->values, 18, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT float vanilla_update_mask_game_object_facing_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_float(mask->headers, mask->values, 18);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_game_object_dyn_flags_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 19, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_game_object_dyn_flags_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 19);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_game_object_faction_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 20, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_game_object_faction_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 20);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_game_object_type_id_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 21, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_game_object_type_id_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 21);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_game_object_level_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 22, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_game_object_level_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 22);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_game_object_artkit_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 23, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_game_object_artkit_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 23);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_game_object_animprogress_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 24, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_game_object_animprogress_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 24);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_dynamic_object_caster_set(vanilla_UpdateMask* mask, uint64_t value) {
+    wwm_update_mask_set_u64(mask->headers, mask->values, 6, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint64_t vanilla_update_mask_dynamic_object_caster_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u64(mask->headers, mask->values, 6);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_dynamic_object_bytes_set(vanilla_UpdateMask* mask, WowBytes value) {
+    wwm_update_mask_set_bytes(mask->headers, mask->values, 8, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT WowBytes vanilla_update_mask_dynamic_object_bytes_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_bytes(mask->headers, mask->values, 8);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_dynamic_object_spellid_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 9, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_dynamic_object_spellid_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 9);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_dynamic_object_radius_set(vanilla_UpdateMask* mask, float value) {
+    wwm_update_mask_set_float(mask->headers, mask->values, 10, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT float vanilla_update_mask_dynamic_object_radius_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_float(mask->headers, mask->values, 10);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_dynamic_object_pos_x_set(vanilla_UpdateMask* mask, float value) {
+    wwm_update_mask_set_float(mask->headers, mask->values, 11, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT float vanilla_update_mask_dynamic_object_pos_x_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_float(mask->headers, mask->values, 11);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_dynamic_object_pos_y_set(vanilla_UpdateMask* mask, float value) {
+    wwm_update_mask_set_float(mask->headers, mask->values, 12, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT float vanilla_update_mask_dynamic_object_pos_y_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_float(mask->headers, mask->values, 12);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_dynamic_object_pos_z_set(vanilla_UpdateMask* mask, float value) {
+    wwm_update_mask_set_float(mask->headers, mask->values, 13, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT float vanilla_update_mask_dynamic_object_pos_z_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_float(mask->headers, mask->values, 13);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_dynamic_object_facing_set(vanilla_UpdateMask* mask, float value) {
+    wwm_update_mask_set_float(mask->headers, mask->values, 14, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT float vanilla_update_mask_dynamic_object_facing_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_float(mask->headers, mask->values, 14);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_corpse_owner_set(vanilla_UpdateMask* mask, uint64_t value) {
+    wwm_update_mask_set_u64(mask->headers, mask->values, 6, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint64_t vanilla_update_mask_corpse_owner_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u64(mask->headers, mask->values, 6);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_corpse_facing_set(vanilla_UpdateMask* mask, float value) {
+    wwm_update_mask_set_float(mask->headers, mask->values, 8, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT float vanilla_update_mask_corpse_facing_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_float(mask->headers, mask->values, 8);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_corpse_pos_x_set(vanilla_UpdateMask* mask, float value) {
+    wwm_update_mask_set_float(mask->headers, mask->values, 9, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT float vanilla_update_mask_corpse_pos_x_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_float(mask->headers, mask->values, 9);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_corpse_pos_y_set(vanilla_UpdateMask* mask, float value) {
+    wwm_update_mask_set_float(mask->headers, mask->values, 10, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT float vanilla_update_mask_corpse_pos_y_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_float(mask->headers, mask->values, 10);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_corpse_pos_z_set(vanilla_UpdateMask* mask, float value) {
+    wwm_update_mask_set_float(mask->headers, mask->values, 11, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT float vanilla_update_mask_corpse_pos_z_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_float(mask->headers, mask->values, 11);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_corpse_display_id_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 12, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_corpse_display_id_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 12);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_corpse_item_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 13, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_corpse_item_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 13);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_corpse_bytes_1_set(vanilla_UpdateMask* mask, WowBytes value) {
+    wwm_update_mask_set_bytes(mask->headers, mask->values, 32, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT WowBytes vanilla_update_mask_corpse_bytes_1_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_bytes(mask->headers, mask->values, 32);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_corpse_bytes_2_set(vanilla_UpdateMask* mask, WowBytes value) {
+    wwm_update_mask_set_bytes(mask->headers, mask->values, 33, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT WowBytes vanilla_update_mask_corpse_bytes_2_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_bytes(mask->headers, mask->values, 33);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_corpse_guild_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 34, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_corpse_guild_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 34);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_corpse_flags_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 35, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_corpse_flags_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 35);
+}
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_update_mask_corpse_dynamic_flags_set(vanilla_UpdateMask* mask, uint32_t value) {
+    wwm_update_mask_set_u32(mask->headers, mask->values, 36, value);
+}
+WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_corpse_dynamic_flags_get(const vanilla_UpdateMask* mask) {
+    return wwm_update_mask_get_u32(mask->headers, mask->values, 36);
 }
 
 static WowWorldResult vanilla_update_mask_write(WowWorldWriter* stream, const vanilla_UpdateMask* mask) {
@@ -55,7 +1507,7 @@ static WowWorldResult vanilla_update_mask_write(WowWorldWriter* stream, const va
     for (i = 0; i < amount_of_headers; ++i) {
         uint32_t header = mask->headers[i];
         for (j = 0; j < 32; ++j) {
-            if ((header & (1 << j)) != 0) {
+            if ((header & ((uint32_t)1 << j)) != 0) {
                 WWM_CHECK_RETURN_CODE(wwm_write_uint32(stream, mask->values[i * 32 + j]));
             }
         }
@@ -82,7 +1534,7 @@ static WowWorldResult vanilla_update_mask_read(WowWorldReader* stream, vanilla_U
     for (i = 0; i < amount_of_headers; ++i) {
         uint32_t header = mask->headers[i];
         for (j = 0; j < 32; ++j) {
-            if ((header & (1 << j)) != 0) {
+            if ((header & ((uint32_t)1 << j)) != 0) {
                 WWM_CHECK_RETURN_CODE(wwm_read_uint32(stream, &mask->values[i * 32 + j]));
             }
         }
@@ -102,7 +1554,7 @@ static size_t vanilla_update_mask_size(const vanilla_UpdateMask* mask) {
     for(i = 0; i < VANILLA_HEADERS_LENGTH; ++i) {
         uint32_t header = mask->headers[i];
         for(j = 0; j < 32; ++j) {
-            if((header & (1 << j)) != 0) {
+            if((header & ((uint32_t)1 << j)) != 0) {
                 max_header = i + 1;
                 amount_of_values += 4;
             }
@@ -142,8 +1594,12 @@ static WowWorldResult vanilla_Addon_read(WowWorldReader* reader, vanilla_Addon* 
         READ_U8(object->key_version);
 
         if (object->key_version == VANILLA_KEY_VERSION_ONE|| object->key_version == VANILLA_KEY_VERSION_TWO|| object->key_version == VANILLA_KEY_VERSION_THREE|| object->key_version == VANILLA_KEY_VERSION_FOUR|| object->key_version == VANILLA_KEY_VERSION_FIVE|| object->key_version == VANILLA_KEY_VERSION_SIX|| object->key_version == VANILLA_KEY_VERSION_SEVEN|| object->key_version == VANILLA_KEY_VERSION_EIGHT|| object->key_version == VANILLA_KEY_VERSION_NINE) {
-            READ_ARRAY_ALLOCATE(object->public_key, 256, sizeof(uint8_t));
+            object->public_key = malloc(sizeof(*object->public_key));
+            if (object->public_key == NULL) {
+                return WWM_RESULT_MALLOC_FAIL;
+            }
             READ_ARRAY(object->public_key, 256, READ_U8((*object->public_key)[i]));
+
 
         }
         READ_U32(object->update_available_flag);
@@ -417,8 +1873,12 @@ static WowWorldResult vanilla_BattlegroundPlayer_read(WowWorldReader* reader, va
 
     READ_U32(object->amount_of_extra_fields);
 
-    READ_ARRAY_ALLOCATE(object->fields, object->amount_of_extra_fields, sizeof(uint32_t));
+    object->fields = malloc(object->amount_of_extra_fields * sizeof(uint32_t));
+    if (object->fields == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->fields, object->amount_of_extra_fields, READ_U32(object->fields[i]));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -558,8 +2018,12 @@ static WowWorldResult vanilla_Character_read(WowWorldReader* reader, vanilla_Cha
     object->pet_family = 0;
     READ_U32(object->pet_family);
 
-    READ_ARRAY_ALLOCATE(object->equipment, 19, sizeof(vanilla_CharacterGear));
+    object->equipment = malloc(sizeof(*object->equipment));
+    if (object->equipment == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->equipment, 19, WWM_CHECK_RETURN_CODE(vanilla_CharacterGear_read(reader, &(*object->equipment)[i])));
+
 
     SKIP_FORWARD_BYTES(4);
 
@@ -1563,8 +3027,12 @@ static WowWorldResult vanilla_MovementBlock_read(WowWorldReader* reader, vanilla
 
             READ_U32(object->amount_of_nodes);
 
-            READ_ARRAY_ALLOCATE(object->nodes, object->amount_of_nodes, sizeof(all_Vector3d));
+            object->nodes = malloc(object->amount_of_nodes * sizeof(all_Vector3d));
+            if (object->nodes == NULL) {
+                return WWM_RESULT_MALLOC_FAIL;
+            }
             READ_ARRAY(object->nodes, object->amount_of_nodes, WWM_CHECK_RETURN_CODE(all_Vector3d_read(reader, &object->nodes[i])));
+
 
             WWM_CHECK_RETURN_CODE(all_Vector3d_read(reader, &object->final_node));
 
@@ -1904,14 +3372,22 @@ static size_t vanilla_NpcTextUpdate_size(const vanilla_NpcTextUpdate* object) {
 static WowWorldResult vanilla_NpcTextUpdate_read(WowWorldReader* reader, vanilla_NpcTextUpdate* object) {
     READ_FLOAT(object->probability);
 
-    READ_ARRAY_ALLOCATE(object->texts, 2, sizeof(WowWorldString));
+    object->texts = malloc(sizeof(*object->texts));
+    if (object->texts == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->texts, 2, READ_CSTRING((*object->texts)[i]));
+
 
     object->language = 0;
     READ_U32(object->language);
 
-    READ_ARRAY_ALLOCATE(object->emotes, 3, sizeof(vanilla_NpcTextUpdateEmote));
+    object->emotes = malloc(sizeof(*object->emotes));
+    if (object->emotes == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->emotes, 3, WWM_CHECK_RETURN_CODE(vanilla_NpcTextUpdateEmote_read(reader, &(*object->emotes)[i])));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -1998,8 +3474,12 @@ static WowWorldResult vanilla_Object_read(WowWorldReader* reader, vanilla_Object
     else if (object->update_type == VANILLA_UPDATE_TYPE_OUT_OF_RANGE_OBJECTS|| object->update_type == VANILLA_UPDATE_TYPE_NEAR_OBJECTS) {
         READ_U32(object->count);
 
-        READ_ARRAY_ALLOCATE(object->guids, object->count, sizeof(uint64_t));
+        object->guids = malloc(object->count * sizeof(uint64_t));
+        if (object->guids == NULL) {
+            return WWM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->guids, object->count, READ_PACKED_GUID(object->guids[i]));
+
 
     }
     return WWM_RESULT_SUCCESS;
@@ -2811,8 +4291,12 @@ static WowWorldResult vanilla_TrainerSpell_read(WowWorldReader* reader, vanilla_
 
     READ_U32(object->required_skill_value);
 
-    READ_ARRAY_ALLOCATE(object->required_spells, 3, sizeof(uint32_t));
+    object->required_spells = malloc(sizeof(*object->required_spells));
+    if (object->required_spells == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->required_spells, 3, READ_U32((*object->required_spells)[i]));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -3179,8 +4663,12 @@ static size_t vanilla_SMSG_CHAR_ENUM_size(const vanilla_SMSG_CHAR_ENUM* object) 
 static WowWorldResult vanilla_SMSG_CHAR_ENUM_read(WowWorldReader* reader, vanilla_SMSG_CHAR_ENUM* object) {
     READ_U8(object->amount_of_characters);
 
-    READ_ARRAY_ALLOCATE(object->characters, object->amount_of_characters, sizeof(vanilla_Character));
+    object->characters = malloc(object->amount_of_characters * sizeof(vanilla_Character));
+    if (object->characters == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->characters, object->amount_of_characters, WWM_CHECK_RETURN_CODE(vanilla_Character_read(reader, &object->characters[i])));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -3289,6 +4777,9 @@ static WowWorldResult vanilla_SMSG_TRANSFER_PENDING_read(WowWorldReader* reader,
     object->has_transport = NULL;
     if (_size < body_size) {
         object->has_transport = malloc(sizeof(vanilla_SMSG_TRANSFER_PENDING_has_transport));
+        if (object->has_transport == NULL) {
+            return WWM_RESULT_MALLOC_FAIL;
+        }
 
         READ_U32(object->has_transport->transport);
 
@@ -3612,8 +5103,12 @@ static WowWorldResult vanilla_SMSG_GUILD_QUERY_RESPONSE_read(WowWorldReader* rea
 
     READ_CSTRING(object->name);
 
-    READ_ARRAY_ALLOCATE(object->rank_names, 10, sizeof(WowWorldString));
+    object->rank_names = malloc(sizeof(*object->rank_names));
+    if (object->rank_names == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->rank_names, 10, READ_CSTRING((*object->rank_names)[i]));
+
 
     READ_U32(object->emblem_style);
 
@@ -3705,6 +5200,9 @@ static WowWorldResult vanilla_SMSG_ITEM_QUERY_SINGLE_RESPONSE_read(WowWorldReade
     object->found = NULL;
     if (_size < body_size) {
         object->found = malloc(sizeof(vanilla_SMSG_ITEM_QUERY_SINGLE_RESPONSE_found));
+        if (object->found == NULL) {
+            return WWM_RESULT_MALLOC_FAIL;
+        }
 
         object->found->class_and_sub_class = 0;
         READ_U64(object->found->class_and_sub_class);
@@ -3764,11 +5262,19 @@ static WowWorldResult vanilla_SMSG_ITEM_QUERY_SINGLE_RESPONSE_read(WowWorldReade
 
         READ_U32(object->found->container_slots);
 
-        READ_ARRAY_ALLOCATE(object->found->stats, 10, sizeof(vanilla_ItemStat));
+        object->found->stats = malloc(sizeof(*object->found->stats));
+        if (object->found->stats == NULL) {
+            return WWM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->found->stats, 10, WWM_CHECK_RETURN_CODE(vanilla_ItemStat_read(reader, &(*object->found->stats)[i])));
 
-        READ_ARRAY_ALLOCATE(object->found->damages, 5, sizeof(vanilla_ItemDamageType));
+
+        object->found->damages = malloc(sizeof(*object->found->damages));
+        if (object->found->damages == NULL) {
+            return WWM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->found->damages, 5, WWM_CHECK_RETURN_CODE(vanilla_ItemDamageType_read(reader, &(*object->found->damages)[i])));
+
 
         READ_I32(object->found->armor);
 
@@ -3790,8 +5296,12 @@ static WowWorldResult vanilla_SMSG_ITEM_QUERY_SINGLE_RESPONSE_read(WowWorldReade
 
         READ_FLOAT(object->found->ranged_range_modification);
 
-        READ_ARRAY_ALLOCATE(object->found->spells, 5, sizeof(vanilla_ItemSpells));
+        object->found->spells = malloc(sizeof(*object->found->spells));
+        if (object->found->spells == NULL) {
+            return WWM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->found->spells, 5, WWM_CHECK_RETURN_CODE(vanilla_ItemSpells_read(reader, &(*object->found->spells)[i])));
+
 
         object->found->bonding = 0;
         READ_U32(object->found->bonding);
@@ -4092,11 +5602,19 @@ static WowWorldResult vanilla_SMSG_QUEST_QUERY_RESPONSE_read(WowWorldReader* rea
 
     READ_U32(object->quest_flags);
 
-    READ_ARRAY_ALLOCATE(object->rewards, 4, sizeof(vanilla_QuestItemReward));
+    object->rewards = malloc(sizeof(*object->rewards));
+    if (object->rewards == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->rewards, 4, WWM_CHECK_RETURN_CODE(vanilla_QuestItemReward_read(reader, &(*object->rewards)[i])));
 
-    READ_ARRAY_ALLOCATE(object->choice_rewards, 6, sizeof(vanilla_QuestItemReward));
+
+    object->choice_rewards = malloc(sizeof(*object->choice_rewards));
+    if (object->choice_rewards == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->choice_rewards, 6, WWM_CHECK_RETURN_CODE(vanilla_QuestItemReward_read(reader, &(*object->choice_rewards)[i])));
+
 
     READ_U32(object->point_map_id);
 
@@ -4112,11 +5630,19 @@ static WowWorldResult vanilla_SMSG_QUEST_QUERY_RESPONSE_read(WowWorldReader* rea
 
     READ_CSTRING(object->end_text);
 
-    READ_ARRAY_ALLOCATE(object->objectives, 4, sizeof(vanilla_QuestObjective));
+    object->objectives = malloc(sizeof(*object->objectives));
+    if (object->objectives == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->objectives, 4, WWM_CHECK_RETURN_CODE(vanilla_QuestObjective_read(reader, &(*object->objectives)[i])));
 
-    READ_ARRAY_ALLOCATE(object->objective_texts, 4, sizeof(WowWorldString));
+
+    object->objective_texts = malloc(sizeof(*object->objective_texts));
+    if (object->objective_texts == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->objective_texts, 4, READ_CSTRING((*object->objective_texts)[i]));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -4246,6 +5772,9 @@ static WowWorldResult vanilla_SMSG_GAMEOBJECT_QUERY_RESPONSE_read(WowWorldReader
     object->found = NULL;
     if (_size < body_size) {
         object->found = malloc(sizeof(vanilla_SMSG_GAMEOBJECT_QUERY_RESPONSE_found));
+        if (object->found == NULL) {
+            return WWM_RESULT_MALLOC_FAIL;
+        }
 
         READ_U32(object->found->info_type);
 
@@ -4261,8 +5790,12 @@ static WowWorldResult vanilla_SMSG_GAMEOBJECT_QUERY_RESPONSE_read(WowWorldReader
 
         READ_CSTRING(object->found->name5);
 
-        READ_ARRAY_ALLOCATE(object->found->raw_data, 6, sizeof(uint32_t));
+        object->found->raw_data = malloc(sizeof(*object->found->raw_data));
+        if (object->found->raw_data == NULL) {
+            return WWM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->found->raw_data, 6, READ_U32((*object->found->raw_data)[i]));
+
 
     }
     return WWM_RESULT_SUCCESS;
@@ -4353,6 +5886,9 @@ static WowWorldResult vanilla_SMSG_CREATURE_QUERY_RESPONSE_read(WowWorldReader* 
     object->found = NULL;
     if (_size < body_size) {
         object->found = malloc(sizeof(vanilla_SMSG_CREATURE_QUERY_RESPONSE_found));
+        if (object->found == NULL) {
+            return WWM_RESULT_MALLOC_FAIL;
+        }
 
         READ_CSTRING(object->found->name1);
 
@@ -4470,13 +6006,21 @@ static WowWorldResult vanilla_CMSG_WHO_read(WowWorldReader* reader, vanilla_CMSG
 
     READ_U32(object->amount_of_zones);
 
-    READ_ARRAY_ALLOCATE(object->zones, object->amount_of_zones, sizeof(uint32_t));
+    object->zones = malloc(object->amount_of_zones * sizeof(uint32_t));
+    if (object->zones == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->zones, object->amount_of_zones, READ_U32(object->zones[i]));
+
 
     READ_U32(object->amount_of_strings);
 
-    READ_ARRAY_ALLOCATE(object->search_strings, object->amount_of_strings, sizeof(WowWorldString));
+    object->search_strings = malloc(object->amount_of_strings * sizeof(WowWorldString));
+    if (object->search_strings == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->search_strings, object->amount_of_strings, READ_CSTRING(object->search_strings[i]));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -4544,8 +6088,12 @@ static WowWorldResult vanilla_SMSG_WHO_read(WowWorldReader* reader, vanilla_SMSG
 
     READ_U32(object->online_players);
 
-    READ_ARRAY_ALLOCATE(object->players, object->listed_players, sizeof(vanilla_WhoPlayer));
+    object->players = malloc(object->listed_players * sizeof(vanilla_WhoPlayer));
+    if (object->players == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->players, object->listed_players, WWM_CHECK_RETURN_CODE(vanilla_WhoPlayer_read(reader, &object->players[i])));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -4652,8 +6200,12 @@ static size_t vanilla_SMSG_FRIEND_LIST_size(const vanilla_SMSG_FRIEND_LIST* obje
 static WowWorldResult vanilla_SMSG_FRIEND_LIST_read(WowWorldReader* reader, vanilla_SMSG_FRIEND_LIST* object) {
     READ_U8(object->amount_of_friends);
 
-    READ_ARRAY_ALLOCATE(object->friends, object->amount_of_friends, sizeof(vanilla_Friend));
+    object->friends = malloc(object->amount_of_friends * sizeof(vanilla_Friend));
+    if (object->friends == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->friends, object->amount_of_friends, WWM_CHECK_RETURN_CODE(vanilla_Friend_read(reader, &object->friends[i])));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -4753,8 +6305,12 @@ static size_t vanilla_SMSG_IGNORE_LIST_size(const vanilla_SMSG_IGNORE_LIST* obje
 static WowWorldResult vanilla_SMSG_IGNORE_LIST_read(WowWorldReader* reader, vanilla_SMSG_IGNORE_LIST* object) {
     READ_U8(object->amount_of_ignored);
 
-    READ_ARRAY_ALLOCATE(object->ignored, object->amount_of_ignored, sizeof(uint64_t));
+    object->ignored = malloc(object->amount_of_ignored * sizeof(uint64_t));
+    if (object->ignored == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->ignored, object->amount_of_ignored, READ_U64(object->ignored[i]));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -5086,8 +6642,12 @@ static WowWorldResult vanilla_SMSG_GROUP_LIST_read(WowWorldReader* reader, vanil
     READ_U32(object->amount_of_members);
     _size += 4;
 
-    READ_ARRAY_ALLOCATE(object->members, object->amount_of_members, sizeof(vanilla_GroupListMember));
+    object->members = malloc(object->amount_of_members * sizeof(vanilla_GroupListMember));
+    if (object->members == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->members, object->amount_of_members, WWM_CHECK_RETURN_CODE(vanilla_GroupListMember_read(reader, &object->members[i]));_size += vanilla_GroupListMember_size(&object->members[i]););
+
 
     READ_U64(object->leader);
     _size += 8;
@@ -5095,6 +6655,9 @@ static WowWorldResult vanilla_SMSG_GROUP_LIST_read(WowWorldReader* reader, vanil
     object->group_not_empty = NULL;
     if (_size < body_size) {
         object->group_not_empty = malloc(sizeof(vanilla_SMSG_GROUP_LIST_group_not_empty));
+        if (object->group_not_empty == NULL) {
+            return WWM_RESULT_MALLOC_FAIL;
+        }
 
         object->group_not_empty->loot_setting = 0;
         READ_U8(object->group_not_empty->loot_setting);
@@ -5691,11 +7254,19 @@ static WowWorldResult vanilla_SMSG_GUILD_ROSTER_read(WowWorldReader* reader, van
 
     READ_U32(object->amount_of_rights);
 
-    READ_ARRAY_ALLOCATE(object->rights, object->amount_of_rights, sizeof(uint32_t));
+    object->rights = malloc(object->amount_of_rights * sizeof(uint32_t));
+    if (object->rights == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->rights, object->amount_of_rights, READ_U32(object->rights[i]));
 
-    READ_ARRAY_ALLOCATE(object->members, object->amount_of_members, sizeof(vanilla_GuildMember));
+
+    object->members = malloc(object->amount_of_members * sizeof(vanilla_GuildMember));
+    if (object->members == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->members, object->amount_of_members, WWM_CHECK_RETURN_CODE(vanilla_GuildMember_read(reader, &object->members[i])));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -5904,8 +7475,12 @@ static WowWorldResult vanilla_SMSG_GUILD_EVENT_read(WowWorldReader* reader, vani
 
     READ_U8(object->amount_of_events);
 
-    READ_ARRAY_ALLOCATE(object->event_descriptions, object->amount_of_events, sizeof(WowWorldString));
+    object->event_descriptions = malloc(object->amount_of_events * sizeof(WowWorldString));
+    if (object->event_descriptions == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->event_descriptions, object->amount_of_events, READ_CSTRING(object->event_descriptions[i]));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -6306,8 +7881,12 @@ static WowWorldResult vanilla_SMSG_CHANNEL_LIST_read(WowWorldReader* reader, van
 
     READ_U32(object->amount_of_members);
 
-    READ_ARRAY_ALLOCATE(object->members, object->amount_of_members, sizeof(vanilla_ChannelMember));
+    object->members = malloc(object->amount_of_members * sizeof(vanilla_ChannelMember));
+    if (object->members == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->members, object->amount_of_members, WWM_CHECK_RETURN_CODE(vanilla_ChannelMember_read(reader, &object->members[i])));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -6752,8 +8331,12 @@ static WowWorldResult vanilla_SMSG_UPDATE_OBJECT_read(WowWorldReader* reader, va
 
     READ_U8(object->has_transport);
 
-    READ_ARRAY_ALLOCATE(object->objects, object->amount_of_objects, sizeof(vanilla_Object));
+    object->objects = malloc(object->amount_of_objects * sizeof(vanilla_Object));
+    if (object->objects == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->objects, object->amount_of_objects, WWM_CHECK_RETURN_CODE(vanilla_Object_read(reader, &object->objects[i])));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -8922,8 +10505,12 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_COMPLETE_CINEMATIC_write
 }
 
 static WowWorldResult vanilla_SMSG_TUTORIAL_FLAGS_read(WowWorldReader* reader, vanilla_SMSG_TUTORIAL_FLAGS* object) {
-    READ_ARRAY_ALLOCATE(object->tutorial_data, 8, sizeof(uint32_t));
+    object->tutorial_data = malloc(sizeof(*object->tutorial_data));
+    if (object->tutorial_data == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->tutorial_data, 8, READ_U32((*object->tutorial_data)[i]));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -9647,8 +11234,12 @@ static WowWorldResult vanilla_SMSG_TRADE_STATUS_EXTENDED_read(WowWorldReader* re
 
     READ_U32(object->spell_on_lowest_slot);
 
-    READ_ARRAY_ALLOCATE(object->trade_slots, 7, sizeof(vanilla_TradeSlot));
+    object->trade_slots = malloc(sizeof(*object->trade_slots));
+    if (object->trade_slots == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->trade_slots, 7, WWM_CHECK_RETURN_CODE(vanilla_TradeSlot_read(reader, &(*object->trade_slots)[i])));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -9686,8 +11277,12 @@ static size_t vanilla_SMSG_INITIALIZE_FACTIONS_size(const vanilla_SMSG_INITIALIZ
 static WowWorldResult vanilla_SMSG_INITIALIZE_FACTIONS_read(WowWorldReader* reader, vanilla_SMSG_INITIALIZE_FACTIONS* object) {
     READ_U32(object->amount_of_factions);
 
-    READ_ARRAY_ALLOCATE(object->factions, object->amount_of_factions, sizeof(vanilla_FactionInitializer));
+    object->factions = malloc(object->amount_of_factions * sizeof(vanilla_FactionInitializer));
+    if (object->factions == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->factions, object->amount_of_factions, WWM_CHECK_RETURN_CODE(vanilla_FactionInitializer_read(reader, &object->factions[i])));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -9735,8 +11330,12 @@ static size_t vanilla_SMSG_SET_FACTION_STANDING_size(const vanilla_SMSG_SET_FACT
 static WowWorldResult vanilla_SMSG_SET_FACTION_STANDING_read(WowWorldReader* reader, vanilla_SMSG_SET_FACTION_STANDING* object) {
     READ_U32(object->amount_of_faction_standings);
 
-    READ_ARRAY_ALLOCATE(object->faction_standings, object->amount_of_faction_standings, sizeof(vanilla_FactionStanding));
+    object->faction_standings = malloc(object->amount_of_faction_standings * sizeof(vanilla_FactionStanding));
+    if (object->faction_standings == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->faction_standings, object->amount_of_faction_standings, WWM_CHECK_RETURN_CODE(vanilla_FactionStanding_read(reader, &object->faction_standings[i])));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -9834,8 +11433,12 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SET_ACTION_BUTTON_write(
 }
 
 static WowWorldResult vanilla_SMSG_ACTION_BUTTONS_read(WowWorldReader* reader, vanilla_SMSG_ACTION_BUTTONS* object) {
-    READ_ARRAY_ALLOCATE(object->data, 120, sizeof(uint32_t));
+    object->data = malloc(sizeof(*object->data));
+    if (object->data == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->data, 120, READ_U32((*object->data)[i]));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -9865,13 +11468,21 @@ static WowWorldResult vanilla_SMSG_INITIAL_SPELLS_read(WowWorldReader* reader, v
 
     READ_U16(object->spell_count);
 
-    READ_ARRAY_ALLOCATE(object->initial_spells, object->spell_count, sizeof(vanilla_InitialSpell));
+    object->initial_spells = malloc(object->spell_count * sizeof(vanilla_InitialSpell));
+    if (object->initial_spells == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->initial_spells, object->spell_count, WWM_CHECK_RETURN_CODE(vanilla_InitialSpell_read(reader, &object->initial_spells[i])));
+
 
     READ_U16(object->cooldown_count);
 
-    READ_ARRAY_ALLOCATE(object->cooldowns, object->cooldown_count, sizeof(vanilla_CooldownSpell));
+    object->cooldowns = malloc(object->cooldown_count * sizeof(vanilla_CooldownSpell));
+    if (object->cooldowns == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->cooldowns, object->cooldown_count, WWM_CHECK_RETURN_CODE(vanilla_CooldownSpell_read(reader, &object->cooldowns[i])));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -10170,13 +11781,21 @@ static WowWorldResult vanilla_SMSG_SPELL_GO_read(WowWorldReader* reader, vanilla
 
     READ_U8(object->amount_of_hits);
 
-    READ_ARRAY_ALLOCATE(object->hits, object->amount_of_hits, sizeof(uint64_t));
+    object->hits = malloc(object->amount_of_hits * sizeof(uint64_t));
+    if (object->hits == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->hits, object->amount_of_hits, READ_U64(object->hits[i]));
+
 
     READ_U8(object->amount_of_misses);
 
-    READ_ARRAY_ALLOCATE(object->misses, object->amount_of_misses, sizeof(vanilla_SpellMiss));
+    object->misses = malloc(object->amount_of_misses * sizeof(vanilla_SpellMiss));
+    if (object->misses == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->misses, object->amount_of_misses, WWM_CHECK_RETURN_CODE(vanilla_SpellMiss_read(reader, &object->misses[i])));
+
 
     WWM_CHECK_RETURN_CODE(vanilla_SpellCastTargets_read(reader, &object->targets));
 
@@ -10274,6 +11893,9 @@ static WowWorldResult vanilla_SMSG_SPELL_COOLDOWN_read(WowWorldReader* reader, v
         size_t _current_size = 8 * sizeof(*object->cooldowns);
 
         object->cooldowns = malloc(_current_size);
+        if (object->cooldowns == NULL) {
+            return WWM_RESULT_MALLOC_FAIL;
+        }
         while (_size < body_size) {
             WWM_CHECK_RETURN_CODE(vanilla_SpellCooldownStatus_read(reader, &object->cooldowns[i]));
             _size += 8;
@@ -10282,6 +11904,10 @@ static WowWorldResult vanilla_SMSG_SPELL_COOLDOWN_read(WowWorldReader* reader, v
             if (i * sizeof(*object->cooldowns) >= _current_size) {
                 _current_size *= 2;
                 object->cooldowns = realloc(object->cooldowns, _current_size);
+                if (object->cooldowns == NULL) {
+                    free(object->cooldowns);
+                    return WWM_RESULT_MALLOC_FAIL;
+                }
             }
         }
 
@@ -10642,8 +12268,12 @@ static WowWorldResult vanilla_SMSG_ATTACKERSTATEUPDATE_read(WowWorldReader* read
 
     READ_U8(object->amount_of_damages);
 
-    READ_ARRAY_ALLOCATE(object->damages, object->amount_of_damages, sizeof(vanilla_DamageInfo));
+    object->damages = malloc(object->amount_of_damages * sizeof(vanilla_DamageInfo));
+    if (object->damages == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->damages, object->amount_of_damages, WWM_CHECK_RETURN_CODE(vanilla_DamageInfo_read(reader, &object->damages[i])));
+
 
     READ_U32(object->damage_state);
 
@@ -10980,8 +12610,12 @@ static WowWorldResult vanilla_SMSG_LOOT_RESPONSE_read(WowWorldReader* reader, va
 
     READ_U8(object->amount_of_items);
 
-    READ_ARRAY_ALLOCATE(object->items, object->amount_of_items, sizeof(vanilla_LootItem));
+    object->items = malloc(object->amount_of_items * sizeof(vanilla_LootItem));
+    if (object->items == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->items, object->amount_of_items, WWM_CHECK_RETURN_CODE(vanilla_LootItem_read(reader, &object->items[i])));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -11368,6 +13002,9 @@ static WowWorldResult vanilla_CMSG_PET_SET_ACTION_read(WowWorldReader* reader, v
     object->extra = NULL;
     if (_size < body_size) {
         object->extra = malloc(sizeof(vanilla_CMSG_PET_SET_ACTION_extra));
+        if (object->extra == NULL) {
+            return WWM_RESULT_MALLOC_FAIL;
+        }
 
         READ_U32(object->extra->position2);
 
@@ -11502,6 +13139,9 @@ static WowWorldResult vanilla_SMSG_PET_SPELLS_read(WowWorldReader* reader, vanil
     object->action_bars = NULL;
     if (_size < body_size) {
         object->action_bars = malloc(sizeof(vanilla_SMSG_PET_SPELLS_action_bars));
+        if (object->action_bars == NULL) {
+            return WWM_RESULT_MALLOC_FAIL;
+        }
 
         READ_U32(object->action_bars->duration);
 
@@ -11516,18 +13156,30 @@ static WowWorldResult vanilla_SMSG_PET_SPELLS_read(WowWorldReader* reader, vanil
         object->action_bars->pet_enabled = 0;
         READ_U8(object->action_bars->pet_enabled);
 
-        READ_ARRAY_ALLOCATE(object->action_bars->action_bars, 10, sizeof(uint32_t));
+        object->action_bars->action_bars = malloc(sizeof(*object->action_bars->action_bars));
+        if (object->action_bars->action_bars == NULL) {
+            return WWM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->action_bars->action_bars, 10, READ_U32((*object->action_bars->action_bars)[i]));
+
 
         READ_U8(object->action_bars->amount_of_spells);
 
-        READ_ARRAY_ALLOCATE(object->action_bars->spells, object->action_bars->amount_of_spells, sizeof(uint32_t));
+        object->action_bars->spells = malloc(object->action_bars->amount_of_spells * sizeof(uint32_t));
+        if (object->action_bars->spells == NULL) {
+            return WWM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->action_bars->spells, object->action_bars->amount_of_spells, READ_U32(object->action_bars->spells[i]));
+
 
         READ_U8(object->action_bars->amount_of_cooldowns);
 
-        READ_ARRAY_ALLOCATE(object->action_bars->cooldowns, object->action_bars->amount_of_cooldowns, sizeof(vanilla_PetSpellCooldown));
+        object->action_bars->cooldowns = malloc(object->action_bars->amount_of_cooldowns * sizeof(vanilla_PetSpellCooldown));
+        if (object->action_bars->cooldowns == NULL) {
+            return WWM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->action_bars->cooldowns, object->action_bars->amount_of_cooldowns, WWM_CHECK_RETURN_CODE(vanilla_PetSpellCooldown_read(reader, &object->action_bars->cooldowns[i])));
+
 
     }
     return WWM_RESULT_SUCCESS;
@@ -11651,6 +13303,9 @@ static WowWorldResult vanilla_CMSG_GOSSIP_SELECT_OPTION_read(WowWorldReader* rea
     object->unknown = NULL;
     if (_size < body_size) {
         object->unknown = malloc(sizeof(vanilla_CMSG_GOSSIP_SELECT_OPTION_unknown));
+        if (object->unknown == NULL) {
+            return WWM_RESULT_MALLOC_FAIL;
+        }
 
         READ_CSTRING(object->unknown->code);
 
@@ -11708,13 +13363,21 @@ static WowWorldResult vanilla_SMSG_GOSSIP_MESSAGE_read(WowWorldReader* reader, v
 
     READ_U32(object->amount_of_gossip_items);
 
-    READ_ARRAY_ALLOCATE(object->gossips, object->amount_of_gossip_items, sizeof(vanilla_GossipItem));
+    object->gossips = malloc(object->amount_of_gossip_items * sizeof(vanilla_GossipItem));
+    if (object->gossips == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->gossips, object->amount_of_gossip_items, WWM_CHECK_RETURN_CODE(vanilla_GossipItem_read(reader, &object->gossips[i])));
+
 
     READ_U32(object->amount_of_quests);
 
-    READ_ARRAY_ALLOCATE(object->quests, object->amount_of_quests, sizeof(vanilla_QuestItem));
+    object->quests = malloc(object->amount_of_quests * sizeof(vanilla_QuestItem));
+    if (object->quests == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->quests, object->amount_of_quests, WWM_CHECK_RETURN_CODE(vanilla_QuestItem_read(reader, &object->quests[i])));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -11801,8 +13464,12 @@ static size_t vanilla_SMSG_NPC_TEXT_UPDATE_size(const vanilla_SMSG_NPC_TEXT_UPDA
 static WowWorldResult vanilla_SMSG_NPC_TEXT_UPDATE_read(WowWorldReader* reader, vanilla_SMSG_NPC_TEXT_UPDATE* object) {
     READ_U32(object->text_id);
 
-    READ_ARRAY_ALLOCATE(object->texts, 8, sizeof(vanilla_NpcTextUpdate));
+    object->texts = malloc(sizeof(*object->texts));
+    if (object->texts == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->texts, 8, WWM_CHECK_RETURN_CODE(vanilla_NpcTextUpdate_read(reader, &(*object->texts)[i])));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -11910,8 +13577,12 @@ static WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_LIST_read(WowWorldReader* re
 
     READ_U8(object->amount_of_entries);
 
-    READ_ARRAY_ALLOCATE(object->quest_items, object->amount_of_entries, sizeof(vanilla_QuestItem));
+    object->quest_items = malloc(object->amount_of_entries * sizeof(vanilla_QuestItem));
+    if (object->quest_items == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->quest_items, object->amount_of_entries, WWM_CHECK_RETURN_CODE(vanilla_QuestItem_read(reader, &object->quest_items[i])));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -11998,13 +13669,21 @@ static WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_DETAILS_read(WowWorldReader*
 
     READ_U32(object->amount_of_choice_item_rewards);
 
-    READ_ARRAY_ALLOCATE(object->choice_item_rewards, object->amount_of_choice_item_rewards, sizeof(vanilla_QuestItemReward));
+    object->choice_item_rewards = malloc(object->amount_of_choice_item_rewards * sizeof(vanilla_QuestItemReward));
+    if (object->choice_item_rewards == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->choice_item_rewards, object->amount_of_choice_item_rewards, WWM_CHECK_RETURN_CODE(vanilla_QuestItemReward_read(reader, &object->choice_item_rewards[i])));
+
 
     READ_U32(object->amount_of_item_rewards);
 
-    READ_ARRAY_ALLOCATE(object->item_rewards, object->amount_of_item_rewards, sizeof(vanilla_QuestItemReward));
+    object->item_rewards = malloc(object->amount_of_item_rewards * sizeof(vanilla_QuestItemReward));
+    if (object->item_rewards == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->item_rewards, object->amount_of_item_rewards, WWM_CHECK_RETURN_CODE(vanilla_QuestItemReward_read(reader, &object->item_rewards[i])));
+
 
     READ_U32(object->money_reward);
 
@@ -12012,8 +13691,12 @@ static WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_DETAILS_read(WowWorldReader*
 
     READ_U32(object->amount_of_emotes);
 
-    READ_ARRAY_ALLOCATE(object->emotes, object->amount_of_emotes, sizeof(vanilla_QuestDetailsEmote));
+    object->emotes = malloc(object->amount_of_emotes * sizeof(vanilla_QuestDetailsEmote));
+    if (object->emotes == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->emotes, object->amount_of_emotes, WWM_CHECK_RETURN_CODE(vanilla_QuestDetailsEmote_read(reader, &object->emotes[i])));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -12135,8 +13818,12 @@ static WowWorldResult vanilla_SMSG_QUESTGIVER_REQUEST_ITEMS_read(WowWorldReader*
 
     READ_U32(object->amount_of_required_items);
 
-    READ_ARRAY_ALLOCATE(object->required_items, object->amount_of_required_items, sizeof(vanilla_QuestItemRequirement));
+    object->required_items = malloc(object->amount_of_required_items * sizeof(vanilla_QuestItemRequirement));
+    if (object->required_items == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->required_items, object->amount_of_required_items, WWM_CHECK_RETURN_CODE(vanilla_QuestItemRequirement_read(reader, &object->required_items[i])));
+
 
     READ_U32(object->unknown1);
 
@@ -12234,18 +13921,30 @@ static WowWorldResult vanilla_SMSG_QUESTGIVER_OFFER_REWARD_read(WowWorldReader* 
 
     READ_U32(object->amount_of_emotes);
 
-    READ_ARRAY_ALLOCATE(object->emotes, object->amount_of_emotes, sizeof(vanilla_NpcTextUpdateEmote));
+    object->emotes = malloc(object->amount_of_emotes * sizeof(vanilla_NpcTextUpdateEmote));
+    if (object->emotes == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->emotes, object->amount_of_emotes, WWM_CHECK_RETURN_CODE(vanilla_NpcTextUpdateEmote_read(reader, &object->emotes[i])));
+
 
     READ_U32(object->amount_of_choice_item_rewards);
 
-    READ_ARRAY_ALLOCATE(object->choice_item_rewards, object->amount_of_choice_item_rewards, sizeof(vanilla_QuestItemRequirement));
+    object->choice_item_rewards = malloc(object->amount_of_choice_item_rewards * sizeof(vanilla_QuestItemRequirement));
+    if (object->choice_item_rewards == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->choice_item_rewards, object->amount_of_choice_item_rewards, WWM_CHECK_RETURN_CODE(vanilla_QuestItemRequirement_read(reader, &object->choice_item_rewards[i])));
+
 
     READ_U32(object->amount_of_item_rewards);
 
-    READ_ARRAY_ALLOCATE(object->item_rewards, object->amount_of_item_rewards, sizeof(vanilla_QuestItemRequirement));
+    object->item_rewards = malloc(object->amount_of_item_rewards * sizeof(vanilla_QuestItemRequirement));
+    if (object->item_rewards == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->item_rewards, object->amount_of_item_rewards, WWM_CHECK_RETURN_CODE(vanilla_QuestItemRequirement_read(reader, &object->item_rewards[i])));
+
 
     READ_U32(object->money_reward);
 
@@ -12373,8 +14072,12 @@ static WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_COMPLETE_read(WowWorldReader
 
     READ_U32(object->amount_of_item_rewards);
 
-    READ_ARRAY_ALLOCATE(object->item_rewards, object->amount_of_item_rewards, sizeof(vanilla_QuestItemReward));
+    object->item_rewards = malloc(object->amount_of_item_rewards * sizeof(vanilla_QuestItemReward));
+    if (object->item_rewards == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->item_rewards, object->amount_of_item_rewards, WWM_CHECK_RETURN_CODE(vanilla_QuestItemReward_read(reader, &object->item_rewards[i])));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -12673,8 +14376,12 @@ static WowWorldResult vanilla_SMSG_LIST_INVENTORY_read(WowWorldReader* reader, v
 
     READ_U8(object->amount_of_items);
 
-    READ_ARRAY_ALLOCATE(object->items, object->amount_of_items, sizeof(vanilla_ListInventoryItem));
+    object->items = malloc(object->amount_of_items * sizeof(vanilla_ListInventoryItem));
+    if (object->items == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->items, object->amount_of_items, WWM_CHECK_RETURN_CODE(vanilla_ListInventoryItem_read(reader, &object->items[i])));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -12889,6 +14596,9 @@ static WowWorldResult vanilla_SMSG_SHOWTAXINODES_read(WowWorldReader* reader, va
         size_t _current_size = 8 * sizeof(*object->nodes);
 
         object->nodes = malloc(_current_size);
+        if (object->nodes == NULL) {
+            return WWM_RESULT_MALLOC_FAIL;
+        }
         while (_size < body_size) {
             READ_U32(object->nodes[i]);
             _size += 4;
@@ -12897,6 +14607,10 @@ static WowWorldResult vanilla_SMSG_SHOWTAXINODES_read(WowWorldReader* reader, va
             if (i * sizeof(*object->nodes) >= _current_size) {
                 _current_size *= 2;
                 object->nodes = realloc(object->nodes, _current_size);
+                if (object->nodes == NULL) {
+                    free(object->nodes);
+                    return WWM_RESULT_MALLOC_FAIL;
+                }
             }
         }
 
@@ -13063,8 +14777,12 @@ static WowWorldResult vanilla_SMSG_TRAINER_LIST_read(WowWorldReader* reader, van
 
     READ_U32(object->amount_of_spells);
 
-    READ_ARRAY_ALLOCATE(object->spells, object->amount_of_spells, sizeof(vanilla_TrainerSpell));
+    object->spells = malloc(object->amount_of_spells * sizeof(vanilla_TrainerSpell));
+    if (object->spells == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->spells, object->amount_of_spells, WWM_CHECK_RETURN_CODE(vanilla_TrainerSpell_read(reader, &object->spells[i])));
+
 
     READ_CSTRING(object->greeting);
 
@@ -13282,8 +15000,12 @@ static WowWorldResult vanilla_SMSG_PETITION_SHOWLIST_read(WowWorldReader* reader
 
     READ_U8(object->amount_of_petitions);
 
-    READ_ARRAY_ALLOCATE(object->petitions, object->amount_of_petitions, sizeof(vanilla_PetitionShowlist));
+    object->petitions = malloc(object->amount_of_petitions * sizeof(vanilla_PetitionShowlist));
+    if (object->petitions == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->petitions, object->amount_of_petitions, WWM_CHECK_RETURN_CODE(vanilla_PetitionShowlist_read(reader, &object->petitions[i])));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -13432,8 +15154,12 @@ static WowWorldResult vanilla_SMSG_PETITION_SHOW_SIGNATURES_read(WowWorldReader*
 
     READ_U8(object->amount_of_signatures);
 
-    READ_ARRAY_ALLOCATE(object->signatures, object->amount_of_signatures, sizeof(vanilla_PetitionSignature));
+    object->signatures = malloc(object->amount_of_signatures * sizeof(vanilla_PetitionSignature));
+    if (object->signatures == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->signatures, object->amount_of_signatures, WWM_CHECK_RETURN_CODE(vanilla_PetitionSignature_read(reader, &object->signatures[i])));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -14438,8 +16164,12 @@ static WowWorldResult vanilla_CMSG_AUTH_SESSION_read(WowWorldReader* reader, van
     READ_U32(object->client_seed);
     _size += 4;
 
-    READ_ARRAY_ALLOCATE(object->client_proof, 20, sizeof(uint8_t));
+    object->client_proof = malloc(sizeof(*object->client_proof));
+    if (object->client_proof == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->client_proof, 20, READ_U8((*object->client_proof)[i]);_size += 1;);
+
 
     if((body_size - _size) > (reader->length - reader->index)) {
         return WWM_RESULT_NOT_ENOUGH_BYTES;
@@ -14457,6 +16187,9 @@ static WowWorldResult vanilla_CMSG_AUTH_SESSION_read(WowWorldReader* reader, van
             return WWM_RESULT_NOT_ENOUGH_BYTES;
         }
         addon_info_decompressed_data = malloc(addon_info_decompressed_size);
+        if (addon_info_decompressed_data == NULL) {
+            return WWM_RESULT_MALLOC_FAIL;
+        }
 
         addon_info_decompressed_size = (uint32_t)wwm_decompress_data(&reader->source[reader->index], addon_info_compressed_data_size, addon_info_decompressed_data, addon_info_decompressed_size);
         if (addon_info_decompressed_size == 0) {
@@ -14471,6 +16204,9 @@ static WowWorldResult vanilla_CMSG_AUTH_SESSION_read(WowWorldReader* reader, van
             size_t _current_size = 8 * sizeof(*object->addon_info);
 
             object->addon_info = malloc(_current_size);
+            if (object->addon_info == NULL) {
+                return WWM_RESULT_MALLOC_FAIL;
+            }
             while (reader->index < reader->length) {
                 WWM_CHECK_RETURN_CODE(vanilla_AddonInfo_read(reader, &object->addon_info[i]));
                 ++i;
@@ -14478,6 +16214,10 @@ static WowWorldResult vanilla_CMSG_AUTH_SESSION_read(WowWorldReader* reader, van
                 if (i * sizeof(*object->addon_info) >= _current_size) {
                     _current_size *= 2;
                     object->addon_info = realloc(object->addon_info, _current_size);
+                    if (object->addon_info == NULL) {
+                        free(object->addon_info);
+                        return WWM_RESULT_MALLOC_FAIL;
+                    }
                 }
             }
 
@@ -14522,6 +16262,9 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUTH_SESSION_write(WowWo
             WRITE_U32((uint32_t)_size);
 
             addon_info_uncompressed_data = malloc(_size);
+            if (addon_info_uncompressed_data == NULL) {
+                return WWM_RESULT_MALLOC_FAIL;
+            }
             new_writer = wwm_create_writer(addon_info_uncompressed_data, _size);
             writer = &new_writer;
             WRITE_ARRAY(object->addon_info, object->amount_of_addon_info, WWM_CHECK_RETURN_CODE(vanilla_AddonInfo_write(writer, &object->addon_info[i])));
@@ -14814,6 +16557,9 @@ static WowWorldResult vanilla_SMSG_COMPRESSED_UPDATE_OBJECT_read(WowWorldReader*
     _size += 4;
 
     _compressed_data = malloc(_decompressed_size);
+    if (_compressed_data == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
 
     if (!wwm_decompress_data(&reader->source[reader->index], body_size - _size, _compressed_data, _decompressed_size)) {
         return WWM_RESULT_COMPRESSION_ERROR;
@@ -14828,8 +16574,12 @@ static WowWorldResult vanilla_SMSG_COMPRESSED_UPDATE_OBJECT_read(WowWorldReader*
     READ_U8(object->has_transport);
     _size += 1;
 
-    READ_ARRAY_ALLOCATE(object->objects, object->amount_of_objects, sizeof(vanilla_Object));
+    object->objects = malloc(object->amount_of_objects * sizeof(vanilla_Object));
+    if (object->objects == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->objects, object->amount_of_objects, WWM_CHECK_RETURN_CODE(vanilla_Object_read(reader, &object->objects[i]));_size += vanilla_Object_size(&object->objects[i]););
+
 
     free(_compressed_data);
 
@@ -14857,6 +16607,9 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_COMPRESSED_UPDATE_OBJECT
     }
 
     _decompressed_data = malloc(_decompressed_data_length);
+    if (_decompressed_data == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     stack_writer = wwm_create_writer(_decompressed_data, _decompressed_data_length);
 
     WRITE_U32(object->amount_of_objects);
@@ -15162,6 +16915,9 @@ static WowWorldResult vanilla_CMSG_GMTICKET_CREATE_read(WowWorldReader* reader, 
                 return WWM_RESULT_NOT_ENOUGH_BYTES;
             }
             compressed_chat_data_decompressed_data = malloc(compressed_chat_data_decompressed_size);
+            if (compressed_chat_data_decompressed_data == NULL) {
+                return WWM_RESULT_MALLOC_FAIL;
+            }
 
             compressed_chat_data_decompressed_size = (uint32_t)wwm_decompress_data(&reader->source[reader->index], compressed_chat_data_compressed_data_size, compressed_chat_data_decompressed_data, compressed_chat_data_decompressed_size);
             if (compressed_chat_data_decompressed_size == 0) {
@@ -15176,6 +16932,9 @@ static WowWorldResult vanilla_CMSG_GMTICKET_CREATE_read(WowWorldReader* reader, 
                 size_t _current_size = 8 * sizeof(*object->compressed_chat_data);
 
                 object->compressed_chat_data = malloc(_current_size);
+                if (object->compressed_chat_data == NULL) {
+                    return WWM_RESULT_MALLOC_FAIL;
+                }
                 while (reader->index < reader->length) {
                     READ_U8(object->compressed_chat_data[i]);
                     ++i;
@@ -15183,6 +16942,10 @@ static WowWorldResult vanilla_CMSG_GMTICKET_CREATE_read(WowWorldReader* reader, 
                     if (i * sizeof(*object->compressed_chat_data) >= _current_size) {
                         _current_size *= 2;
                         object->compressed_chat_data = realloc(object->compressed_chat_data, _current_size);
+                        if (object->compressed_chat_data == NULL) {
+                            free(object->compressed_chat_data);
+                            return WWM_RESULT_MALLOC_FAIL;
+                        }
                     }
                 }
 
@@ -15231,6 +16994,9 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GMTICKET_CREATE_write(Wo
                 WRITE_U32((uint32_t)_size);
 
                 compressed_chat_data_uncompressed_data = malloc(_size);
+                if (compressed_chat_data_uncompressed_data == NULL) {
+                    return WWM_RESULT_MALLOC_FAIL;
+                }
                 new_writer = wwm_create_writer(compressed_chat_data_uncompressed_data, _size);
                 writer = &new_writer;
                 WRITE_ARRAY(object->compressed_chat_data, object->amount_of_compressed_chat_data, WRITE_U8(object->compressed_chat_data[i]));
@@ -15328,8 +17094,12 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GMTICKET_UPDATETEXT_writ
 }
 
 static WowWorldResult vanilla_SMSG_ACCOUNT_DATA_TIMES_read(WowWorldReader* reader, vanilla_SMSG_ACCOUNT_DATA_TIMES* object) {
-    READ_ARRAY_ALLOCATE(object->data, 32, sizeof(uint32_t));
+    object->data = malloc(sizeof(*object->data));
+    if (object->data == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->data, 32, READ_U32((*object->data)[i]));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -15429,6 +17199,9 @@ static WowWorldResult vanilla_CMSG_UPDATE_ACCOUNT_DATA_read(WowWorldReader* read
             return WWM_RESULT_NOT_ENOUGH_BYTES;
         }
         compressed_data_decompressed_data = malloc(compressed_data_decompressed_size);
+        if (compressed_data_decompressed_data == NULL) {
+            return WWM_RESULT_MALLOC_FAIL;
+        }
 
         compressed_data_decompressed_size = (uint32_t)wwm_decompress_data(&reader->source[reader->index], compressed_data_compressed_data_size, compressed_data_decompressed_data, compressed_data_decompressed_size);
         if (compressed_data_decompressed_size == 0) {
@@ -15443,6 +17216,9 @@ static WowWorldResult vanilla_CMSG_UPDATE_ACCOUNT_DATA_read(WowWorldReader* read
             size_t _current_size = 8 * sizeof(*object->compressed_data);
 
             object->compressed_data = malloc(_current_size);
+            if (object->compressed_data == NULL) {
+                return WWM_RESULT_MALLOC_FAIL;
+            }
             while (reader->index < reader->length) {
                 READ_U8(object->compressed_data[i]);
                 ++i;
@@ -15450,6 +17226,10 @@ static WowWorldResult vanilla_CMSG_UPDATE_ACCOUNT_DATA_read(WowWorldReader* read
                 if (i * sizeof(*object->compressed_data) >= _current_size) {
                     _current_size *= 2;
                     object->compressed_data = realloc(object->compressed_data, _current_size);
+                    if (object->compressed_data == NULL) {
+                        free(object->compressed_data);
+                        return WWM_RESULT_MALLOC_FAIL;
+                    }
                 }
             }
 
@@ -15486,6 +17266,9 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_UPDATE_ACCOUNT_DATA_writ
             WRITE_U32((uint32_t)_size);
 
             compressed_data_uncompressed_data = malloc(_size);
+            if (compressed_data_uncompressed_data == NULL) {
+                return WWM_RESULT_MALLOC_FAIL;
+            }
             new_writer = wwm_create_writer(compressed_data_uncompressed_data, _size);
             writer = &new_writer;
             WRITE_ARRAY(object->compressed_data, object->amount_of_compressed_data, WRITE_U8(object->compressed_data[i]));
@@ -16222,8 +18005,12 @@ static size_t vanilla_SMSG_MAIL_LIST_RESULT_size(const vanilla_SMSG_MAIL_LIST_RE
 static WowWorldResult vanilla_SMSG_MAIL_LIST_RESULT_read(WowWorldReader* reader, vanilla_SMSG_MAIL_LIST_RESULT* object) {
     READ_U8(object->amount_of_mails);
 
-    READ_ARRAY_ALLOCATE(object->mails, object->amount_of_mails, sizeof(vanilla_Mail));
+    object->mails = malloc(object->amount_of_mails * sizeof(vanilla_Mail));
+    if (object->mails == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->mails, object->amount_of_mails, WWM_CHECK_RETURN_CODE(vanilla_Mail_read(reader, &object->mails[i])));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -16284,8 +18071,12 @@ static WowWorldResult vanilla_SMSG_BATTLEFIELD_LIST_read(WowWorldReader* reader,
 
     READ_U32(object->number_of_battlegrounds);
 
-    READ_ARRAY_ALLOCATE(object->battlegrounds, object->number_of_battlegrounds, sizeof(uint32_t));
+    object->battlegrounds = malloc(object->number_of_battlegrounds * sizeof(uint32_t));
+    if (object->battlegrounds == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->battlegrounds, object->number_of_battlegrounds, READ_U32(object->battlegrounds[i]));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -16530,8 +18321,12 @@ static WowWorldResult vanilla_SMSG_SPELLLOGMISS_read(WowWorldReader* reader, van
 
     READ_U32(object->amount_of_targets);
 
-    READ_ARRAY_ALLOCATE(object->targets, object->amount_of_targets, sizeof(vanilla_SpellLogMiss));
+    object->targets = malloc(object->amount_of_targets * sizeof(vanilla_SpellLogMiss));
+    if (object->targets == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->targets, object->amount_of_targets, WWM_CHECK_RETURN_CODE(vanilla_SpellLogMiss_read(reader, &object->targets[i])));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -16580,8 +18375,12 @@ static WowWorldResult vanilla_SMSG_SPELLLOGEXECUTE_read(WowWorldReader* reader, 
 
     READ_U32(object->amount_of_effects);
 
-    READ_ARRAY_ALLOCATE(object->logs, object->amount_of_effects, sizeof(vanilla_SpellLog));
+    object->logs = malloc(object->amount_of_effects * sizeof(vanilla_SpellLog));
+    if (object->logs == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->logs, object->amount_of_effects, WWM_CHECK_RETURN_CODE(vanilla_SpellLog_read(reader, &object->logs[i])));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -16635,8 +18434,12 @@ static WowWorldResult vanilla_SMSG_PERIODICAURALOG_read(WowWorldReader* reader, 
 
     READ_U32(object->amount_of_auras);
 
-    READ_ARRAY_ALLOCATE(object->auras, object->amount_of_auras, sizeof(vanilla_AuraLog));
+    object->auras = malloc(object->amount_of_auras * sizeof(vanilla_AuraLog));
+    if (object->auras == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->auras, object->amount_of_auras, WWM_CHECK_RETURN_CODE(vanilla_AuraLog_read(reader, &object->auras[i])));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -16805,6 +18608,9 @@ static WowWorldResult vanilla_CMSG_TOGGLE_PVP_read(WowWorldReader* reader, vanil
     object->set = NULL;
     if (_size < body_size) {
         object->set = malloc(sizeof(vanilla_CMSG_TOGGLE_PVP_set));
+        if (object->set == NULL) {
+            return WWM_RESULT_MALLOC_FAIL;
+        }
 
         READ_BOOL8(object->set->enable_pvp);
 
@@ -17203,8 +19009,12 @@ static size_t vanilla_SMSG_AUCTION_LIST_RESULT_size(const vanilla_SMSG_AUCTION_L
 static WowWorldResult vanilla_SMSG_AUCTION_LIST_RESULT_read(WowWorldReader* reader, vanilla_SMSG_AUCTION_LIST_RESULT* object) {
     READ_U32(object->count);
 
-    READ_ARRAY_ALLOCATE(object->auctions, object->count, sizeof(vanilla_AuctionListItem));
+    object->auctions = malloc(object->count * sizeof(vanilla_AuctionListItem));
+    if (object->auctions == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->auctions, object->count, WWM_CHECK_RETURN_CODE(vanilla_AuctionListItem_read(reader, &object->auctions[i])));
+
 
     READ_U32(object->total_amount_of_auctions);
 
@@ -17238,8 +19048,12 @@ static size_t vanilla_SMSG_AUCTION_OWNER_LIST_RESULT_size(const vanilla_SMSG_AUC
 static WowWorldResult vanilla_SMSG_AUCTION_OWNER_LIST_RESULT_read(WowWorldReader* reader, vanilla_SMSG_AUCTION_OWNER_LIST_RESULT* object) {
     READ_U32(object->count);
 
-    READ_ARRAY_ALLOCATE(object->auctions, object->count, sizeof(vanilla_AuctionListItem));
+    object->auctions = malloc(object->count * sizeof(vanilla_AuctionListItem));
+    if (object->auctions == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->auctions, object->count, WWM_CHECK_RETURN_CODE(vanilla_AuctionListItem_read(reader, &object->auctions[i])));
+
 
     READ_U32(object->total_amount_of_auctions);
 
@@ -17394,6 +19208,9 @@ static WowWorldResult vanilla_SMSG_DISPEL_FAILED_read(WowWorldReader* reader, va
         size_t _current_size = 8 * sizeof(*object->spells);
 
         object->spells = malloc(_current_size);
+        if (object->spells == NULL) {
+            return WWM_RESULT_MALLOC_FAIL;
+        }
         while (_size < body_size) {
             READ_U32(object->spells[i]);
             _size += 4;
@@ -17402,6 +19219,10 @@ static WowWorldResult vanilla_SMSG_DISPEL_FAILED_read(WowWorldReader* reader, va
             if (i * sizeof(*object->spells) >= _current_size) {
                 _current_size *= 2;
                 object->spells = realloc(object->spells, _current_size);
+                if (object->spells == NULL) {
+                    free(object->spells);
+                    return WWM_RESULT_MALLOC_FAIL;
+                }
             }
         }
 
@@ -17471,8 +19292,12 @@ static WowWorldResult vanilla_CMSG_AUCTION_LIST_BIDDER_ITEMS_read(WowWorldReader
 
     READ_U32(object->amount_of_outbid_items);
 
-    READ_ARRAY_ALLOCATE(object->outbid_item_ids, object->amount_of_outbid_items, sizeof(uint32_t));
+    object->outbid_item_ids = malloc(object->amount_of_outbid_items * sizeof(uint32_t));
+    if (object->outbid_item_ids == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->outbid_item_ids, object->amount_of_outbid_items, READ_U32(object->outbid_item_ids[i]));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -17506,8 +19331,12 @@ static size_t vanilla_SMSG_AUCTION_BIDDER_LIST_RESULT_size(const vanilla_SMSG_AU
 static WowWorldResult vanilla_SMSG_AUCTION_BIDDER_LIST_RESULT_read(WowWorldReader* reader, vanilla_SMSG_AUCTION_BIDDER_LIST_RESULT* object) {
     READ_U32(object->count);
 
-    READ_ARRAY_ALLOCATE(object->auctions, object->count, sizeof(vanilla_AuctionListItem));
+    object->auctions = malloc(object->count * sizeof(vanilla_AuctionListItem));
+    if (object->auctions == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->auctions, object->count, WWM_CHECK_RETURN_CODE(vanilla_AuctionListItem_read(reader, &object->auctions[i])));
+
 
     READ_U32(object->total_amount_of_auctions);
 
@@ -17702,8 +19531,12 @@ static WowWorldResult vanilla_MSG_LIST_STABLED_PETS_Server_read(WowWorldReader* 
 
     READ_U8(object->stable_slots);
 
-    READ_ARRAY_ALLOCATE(object->pets, object->amount_of_pets, sizeof(vanilla_StabledPet));
+    object->pets = malloc(object->amount_of_pets * sizeof(vanilla_StabledPet));
+    if (object->pets == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->pets, object->amount_of_pets, WWM_CHECK_RETURN_CODE(vanilla_StabledPet_read(reader, &object->pets[i])));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -17940,8 +19773,12 @@ static WowWorldResult vanilla_SMSG_SPELLDISPELLOG_read(WowWorldReader* reader, v
 
     READ_U32(object->amount_of_spells);
 
-    READ_ARRAY_ALLOCATE(object->spells, object->amount_of_spells, sizeof(uint32_t));
+    object->spells = malloc(object->amount_of_spells * sizeof(uint32_t));
+    if (object->spells == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->spells, object->amount_of_spells, READ_U32(object->spells[i]));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -18637,8 +20474,12 @@ static size_t vanilla_SMSG_LOOT_MASTER_LIST_size(const vanilla_SMSG_LOOT_MASTER_
 static WowWorldResult vanilla_SMSG_LOOT_MASTER_LIST_read(WowWorldReader* reader, vanilla_SMSG_LOOT_MASTER_LIST* object) {
     READ_U8(object->amount_of_players);
 
-    READ_ARRAY_ALLOCATE(object->guids, object->amount_of_players, sizeof(uint64_t));
+    object->guids = malloc(object->amount_of_players * sizeof(uint64_t));
+    if (object->guids == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->guids, object->amount_of_players, READ_U64(object->guids[i]));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -18668,8 +20509,12 @@ static size_t vanilla_SMSG_SET_FORCED_REACTIONS_size(const vanilla_SMSG_SET_FORC
 static WowWorldResult vanilla_SMSG_SET_FORCED_REACTIONS_read(WowWorldReader* reader, vanilla_SMSG_SET_FORCED_REACTIONS* object) {
     READ_U32(object->amount_of_reactions);
 
-    READ_ARRAY_ALLOCATE(object->reactions, object->amount_of_reactions, sizeof(vanilla_ForcedReaction));
+    object->reactions = malloc(object->amount_of_reactions * sizeof(vanilla_ForcedReaction));
+    if (object->reactions == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->reactions, object->amount_of_reactions, WWM_CHECK_RETURN_CODE(vanilla_ForcedReaction_read(reader, &object->reactions[i])));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -19232,8 +21077,12 @@ static WowWorldResult vanilla_SMSG_INIT_WORLD_STATES_read(WowWorldReader* reader
 
     READ_U16(object->amount_of_states);
 
-    READ_ARRAY_ALLOCATE(object->states, object->amount_of_states, sizeof(vanilla_WorldState));
+    object->states = malloc(object->amount_of_states * sizeof(vanilla_WorldState));
+    if (object->states == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->states, object->amount_of_states, WWM_CHECK_RETURN_CODE(vanilla_WorldState_read(reader, &object->states[i])));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -19505,8 +21354,12 @@ static size_t vanilla_SMSG_RAID_INSTANCE_INFO_size(const vanilla_SMSG_RAID_INSTA
 static WowWorldResult vanilla_SMSG_RAID_INSTANCE_INFO_read(WowWorldReader* reader, vanilla_SMSG_RAID_INSTANCE_INFO* object) {
     READ_U32(object->amount_of_raid_infos);
 
-    READ_ARRAY_ALLOCATE(object->raid_infos, object->amount_of_raid_infos, sizeof(vanilla_RaidInfo));
+    object->raid_infos = malloc(object->amount_of_raid_infos * sizeof(vanilla_RaidInfo));
+    if (object->raid_infos == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->raid_infos, object->amount_of_raid_infos, WWM_CHECK_RETURN_CODE(vanilla_RaidInfo_read(reader, &object->raid_infos[i])));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -20163,8 +22016,12 @@ static WowWorldResult vanilla_MSG_PVP_LOG_DATA_Server_read(WowWorldReader* reade
     }
     READ_U32(object->amount_of_players);
 
-    READ_ARRAY_ALLOCATE(object->players, object->amount_of_players, sizeof(vanilla_BattlegroundPlayer));
+    object->players = malloc(object->amount_of_players * sizeof(vanilla_BattlegroundPlayer));
+    if (object->players == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->players, object->amount_of_players, WWM_CHECK_RETURN_CODE(vanilla_BattlegroundPlayer_read(reader, &object->players[i])));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -20286,6 +22143,9 @@ static WowWorldResult vanilla_SMSG_WARDEN_DATA_read(WowWorldReader* reader, vani
         size_t _current_size = 8 * sizeof(*object->encrypted_data);
 
         object->encrypted_data = malloc(_current_size);
+        if (object->encrypted_data == NULL) {
+            return WWM_RESULT_MALLOC_FAIL;
+        }
         while (_size < body_size) {
             READ_U8(object->encrypted_data[i]);
             _size += 1;
@@ -20294,6 +22154,10 @@ static WowWorldResult vanilla_SMSG_WARDEN_DATA_read(WowWorldReader* reader, vani
             if (i * sizeof(*object->encrypted_data) >= _current_size) {
                 _current_size *= 2;
                 object->encrypted_data = realloc(object->encrypted_data, _current_size);
+                if (object->encrypted_data == NULL) {
+                    free(object->encrypted_data);
+                    return WWM_RESULT_MALLOC_FAIL;
+                }
             }
         }
 
@@ -20332,6 +22196,9 @@ static WowWorldResult vanilla_CMSG_WARDEN_DATA_read(WowWorldReader* reader, vani
         size_t _current_size = 8 * sizeof(*object->encrypted_data);
 
         object->encrypted_data = malloc(_current_size);
+        if (object->encrypted_data == NULL) {
+            return WWM_RESULT_MALLOC_FAIL;
+        }
         while (_size < body_size) {
             READ_U8(object->encrypted_data[i]);
             _size += 1;
@@ -20340,6 +22207,10 @@ static WowWorldResult vanilla_CMSG_WARDEN_DATA_read(WowWorldReader* reader, vani
             if (i * sizeof(*object->encrypted_data) >= _current_size) {
                 _current_size *= 2;
                 object->encrypted_data = realloc(object->encrypted_data, _current_size);
+                if (object->encrypted_data == NULL) {
+                    free(object->encrypted_data);
+                    return WWM_RESULT_MALLOC_FAIL;
+                }
             }
         }
 
@@ -20399,13 +22270,21 @@ static size_t vanilla_MSG_BATTLEGROUND_PLAYER_POSITIONS_Server_size(const vanill
 static WowWorldResult vanilla_MSG_BATTLEGROUND_PLAYER_POSITIONS_Server_read(WowWorldReader* reader, vanilla_MSG_BATTLEGROUND_PLAYER_POSITIONS_Server* object) {
     READ_U32(object->amount_of_teammates);
 
-    READ_ARRAY_ALLOCATE(object->teammates, object->amount_of_teammates, sizeof(vanilla_BattlegroundPlayerPosition));
+    object->teammates = malloc(object->amount_of_teammates * sizeof(vanilla_BattlegroundPlayerPosition));
+    if (object->teammates == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->teammates, object->amount_of_teammates, WWM_CHECK_RETURN_CODE(vanilla_BattlegroundPlayerPosition_read(reader, &object->teammates[i])));
+
 
     READ_U8(object->amount_of_carriers);
 
-    READ_ARRAY_ALLOCATE(object->carriers, object->amount_of_carriers, sizeof(vanilla_BattlegroundPlayerPosition));
+    object->carriers = malloc(object->amount_of_carriers * sizeof(vanilla_BattlegroundPlayerPosition));
+    if (object->carriers == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->carriers, object->amount_of_carriers, WWM_CHECK_RETURN_CODE(vanilla_BattlegroundPlayerPosition_read(reader, &object->carriers[i])));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -20554,6 +22433,9 @@ static WowWorldResult vanilla_SMSG_ADDON_INFO_read(WowWorldReader* reader, vanil
         size_t _current_size = 8 * sizeof(*object->addons);
 
         object->addons = malloc(_current_size);
+        if (object->addons == NULL) {
+            return WWM_RESULT_MALLOC_FAIL;
+        }
         while (_size < body_size) {
             WWM_CHECK_RETURN_CODE(vanilla_Addon_read(reader, &object->addons[i]));
             _size += vanilla_Addon_size(&object->addons[i]);
@@ -20562,6 +22444,10 @@ static WowWorldResult vanilla_SMSG_ADDON_INFO_read(WowWorldReader* reader, vanil
             if (i * sizeof(*object->addons) >= _current_size) {
                 _current_size *= 2;
                 object->addons = realloc(object->addons, _current_size);
+                if (object->addons == NULL) {
+                    free(object->addons);
+                    return WWM_RESULT_MALLOC_FAIL;
+                }
             }
         }
 
@@ -21043,6 +22929,9 @@ static WowWorldResult vanilla_SMSG_COMPRESSED_MOVES_read(WowWorldReader* reader,
     _size += 4;
 
     _compressed_data = malloc(_decompressed_size);
+    if (_compressed_data == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
 
     if (!wwm_decompress_data(&reader->source[reader->index], body_size - _size, _compressed_data, _decompressed_size)) {
         return WWM_RESULT_COMPRESSION_ERROR;
@@ -21057,6 +22946,9 @@ static WowWorldResult vanilla_SMSG_COMPRESSED_MOVES_read(WowWorldReader* reader,
         size_t _current_size = 8 * sizeof(*object->moves);
 
         object->moves = malloc(_current_size);
+        if (object->moves == NULL) {
+            return WWM_RESULT_MALLOC_FAIL;
+        }
         while (reader->index < reader->length) {
             WWM_CHECK_RETURN_CODE(vanilla_CompressedMove_read(reader, &object->moves[i]));
             ++i;
@@ -21064,6 +22956,10 @@ static WowWorldResult vanilla_SMSG_COMPRESSED_MOVES_read(WowWorldReader* reader,
             if (i * sizeof(*object->moves) >= _current_size) {
                 _current_size *= 2;
                 object->moves = realloc(object->moves, _current_size);
+                if (object->moves == NULL) {
+                    free(object->moves);
+                    return WWM_RESULT_MALLOC_FAIL;
+                }
             }
         }
 
@@ -21096,6 +22992,9 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_COMPRESSED_MOVES_write(W
     }
 
     _decompressed_data = malloc(_decompressed_data_length);
+    if (_decompressed_data == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     stack_writer = wwm_create_writer(_decompressed_data, _decompressed_data_length);
 
     WRITE_ARRAY(object->moves, object->amount_of_moves, WWM_CHECK_RETURN_CODE(vanilla_CompressedMove_write(writer, &object->moves[i])));
@@ -21552,8 +23451,12 @@ static WowWorldResult vanilla_CMSG_ACTIVATETAXIEXPRESS_read(WowWorldReader* read
 
     READ_U32(object->node_count);
 
-    READ_ARRAY_ALLOCATE(object->nodes, object->node_count, sizeof(uint32_t));
+    object->nodes = malloc(object->node_count * sizeof(uint32_t));
+    if (object->nodes == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->nodes, object->node_count, READ_U32(object->nodes[i]));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -21806,8 +23709,12 @@ static WowWorldResult vanilla_MSG_RAID_TARGET_UPDATE_Server_read(WowWorldReader*
     READ_U8(object->update_type);
 
     if (object->update_type == VANILLA_RAID_TARGET_UPDATE_TYPE_FULL) {
-        READ_ARRAY_ALLOCATE(object->raid_targets, 8, sizeof(vanilla_RaidTargetUpdate));
+        object->raid_targets = malloc(sizeof(*object->raid_targets));
+        if (object->raid_targets == NULL) {
+            return WWM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->raid_targets, 8, WWM_CHECK_RETURN_CODE(vanilla_RaidTargetUpdate_read(reader, &(*object->raid_targets)[i])));
+
 
     }
     else if (object->update_type == VANILLA_RAID_TARGET_UPDATE_TYPE_PARTIAL) {
@@ -21861,6 +23768,9 @@ static WowWorldResult vanilla_MSG_RAID_READY_CHECK_Client_read(WowWorldReader* r
     object->answer = NULL;
     if (_size < body_size) {
         object->answer = malloc(sizeof(vanilla_MSG_RAID_READY_CHECK_Client_answer));
+        if (object->answer == NULL) {
+            return WWM_RESULT_MALLOC_FAIL;
+        }
 
         READ_U8(object->answer->state);
 
@@ -21901,6 +23811,9 @@ static WowWorldResult vanilla_MSG_RAID_READY_CHECK_Server_read(WowWorldReader* r
     object->state_check = NULL;
     if (_size < body_size) {
         object->state_check = malloc(sizeof(vanilla_MSG_RAID_READY_CHECK_Server_state_check));
+        if (object->state_check == NULL) {
+            return WWM_RESULT_MALLOC_FAIL;
+        }
 
         READ_U64(object->state_check->guid);
 
@@ -22006,8 +23919,12 @@ static size_t vanilla_CMSG_GMSURVEY_SUBMIT_size(const vanilla_CMSG_GMSURVEY_SUBM
 static WowWorldResult vanilla_CMSG_GMSURVEY_SUBMIT_read(WowWorldReader* reader, vanilla_CMSG_GMSURVEY_SUBMIT* object) {
     READ_U32(object->survey_id);
 
-    READ_ARRAY_ALLOCATE(object->questions, 10, sizeof(vanilla_GmSurveyQuestion));
+    object->questions = malloc(sizeof(*object->questions));
+    if (object->questions == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->questions, 10, WWM_CHECK_RETURN_CODE(vanilla_GmSurveyQuestion_read(reader, &(*object->questions)[i])));
+
 
     READ_CSTRING(object->answer_comment);
 
@@ -22090,8 +24007,12 @@ static WowWorldResult vanilla_SMSG_SPELL_UPDATE_CHAIN_TARGETS_read(WowWorldReade
 
     READ_U32(object->amount_of_targets);
 
-    READ_ARRAY_ALLOCATE(object->targets, object->amount_of_targets, sizeof(uint64_t));
+    object->targets = malloc(object->amount_of_targets * sizeof(uint64_t));
+    if (object->targets == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->targets, object->amount_of_targets, READ_U64(object->targets[i]));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -22134,8 +24055,12 @@ static size_t vanilla_SMSG_EXPECTED_SPAM_RECORDS_size(const vanilla_SMSG_EXPECTE
 static WowWorldResult vanilla_SMSG_EXPECTED_SPAM_RECORDS_read(WowWorldReader* reader, vanilla_SMSG_EXPECTED_SPAM_RECORDS* object) {
     READ_U32(object->amount_of_records);
 
-    READ_ARRAY_ALLOCATE(object->records, object->amount_of_records, sizeof(WowWorldString));
+    object->records = malloc(object->amount_of_records * sizeof(WowWorldString));
+    if (object->records == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->records, object->amount_of_records, READ_CSTRING(object->records[i]));
+
 
     return WWM_RESULT_SUCCESS;
 }
@@ -22196,760 +24121,760 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_DEFENSE_MESSAGE_free(vanilla_SMSG_
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_client_opcode_write(WowWorldWriter* writer, const VanillaClientOpcodeContainer* opcodes) {
     switch (opcodes->opcode) {
-        case CMSG_DBLOOKUP:
+        case V_CMSG_DBLOOKUP:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_DBLOOKUP_write(writer, &opcodes->body.CMSG_DBLOOKUP));
             break;
-        case CMSG_WORLD_TELEPORT:
+        case V_CMSG_WORLD_TELEPORT:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_WORLD_TELEPORT_write(writer, &opcodes->body.CMSG_WORLD_TELEPORT));
             break;
-        case CMSG_TELEPORT_TO_UNIT:
+        case V_CMSG_TELEPORT_TO_UNIT:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_TELEPORT_TO_UNIT_write(writer, &opcodes->body.CMSG_TELEPORT_TO_UNIT));
             break;
-        case CMSG_CHAR_CREATE:
+        case V_CMSG_CHAR_CREATE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHAR_CREATE_write(writer, &opcodes->body.CMSG_CHAR_CREATE));
             break;
-        case CMSG_CHAR_DELETE:
+        case V_CMSG_CHAR_DELETE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHAR_DELETE_write(writer, &opcodes->body.CMSG_CHAR_DELETE));
             break;
-        case CMSG_PLAYER_LOGIN:
+        case V_CMSG_PLAYER_LOGIN:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_PLAYER_LOGIN_write(writer, &opcodes->body.CMSG_PLAYER_LOGIN));
             break;
-        case CMSG_NAME_QUERY:
+        case V_CMSG_NAME_QUERY:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_NAME_QUERY_write(writer, &opcodes->body.CMSG_NAME_QUERY));
             break;
-        case CMSG_PET_NAME_QUERY:
+        case V_CMSG_PET_NAME_QUERY:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_PET_NAME_QUERY_write(writer, &opcodes->body.CMSG_PET_NAME_QUERY));
             break;
-        case CMSG_GUILD_QUERY:
+        case V_CMSG_GUILD_QUERY:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GUILD_QUERY_write(writer, &opcodes->body.CMSG_GUILD_QUERY));
             break;
-        case CMSG_ITEM_QUERY_SINGLE:
+        case V_CMSG_ITEM_QUERY_SINGLE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_ITEM_QUERY_SINGLE_write(writer, &opcodes->body.CMSG_ITEM_QUERY_SINGLE));
             break;
-        case CMSG_PAGE_TEXT_QUERY:
+        case V_CMSG_PAGE_TEXT_QUERY:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_PAGE_TEXT_QUERY_write(writer, &opcodes->body.CMSG_PAGE_TEXT_QUERY));
             break;
-        case CMSG_QUEST_QUERY:
+        case V_CMSG_QUEST_QUERY:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_QUEST_QUERY_write(writer, &opcodes->body.CMSG_QUEST_QUERY));
             break;
-        case CMSG_GAMEOBJECT_QUERY:
+        case V_CMSG_GAMEOBJECT_QUERY:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GAMEOBJECT_QUERY_write(writer, &opcodes->body.CMSG_GAMEOBJECT_QUERY));
             break;
-        case CMSG_CREATURE_QUERY:
+        case V_CMSG_CREATURE_QUERY:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CREATURE_QUERY_write(writer, &opcodes->body.CMSG_CREATURE_QUERY));
             break;
-        case CMSG_WHO:
+        case V_CMSG_WHO:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_WHO_write(writer, &opcodes->body.CMSG_WHO));
             break;
-        case CMSG_WHOIS:
+        case V_CMSG_WHOIS:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_WHOIS_write(writer, &opcodes->body.CMSG_WHOIS));
             break;
-        case CMSG_ADD_FRIEND:
+        case V_CMSG_ADD_FRIEND:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_ADD_FRIEND_write(writer, &opcodes->body.CMSG_ADD_FRIEND));
             break;
-        case CMSG_DEL_FRIEND:
+        case V_CMSG_DEL_FRIEND:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_DEL_FRIEND_write(writer, &opcodes->body.CMSG_DEL_FRIEND));
             break;
-        case CMSG_ADD_IGNORE:
+        case V_CMSG_ADD_IGNORE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_ADD_IGNORE_write(writer, &opcodes->body.CMSG_ADD_IGNORE));
             break;
-        case CMSG_DEL_IGNORE:
+        case V_CMSG_DEL_IGNORE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_DEL_IGNORE_write(writer, &opcodes->body.CMSG_DEL_IGNORE));
             break;
-        case CMSG_GROUP_INVITE:
+        case V_CMSG_GROUP_INVITE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GROUP_INVITE_write(writer, &opcodes->body.CMSG_GROUP_INVITE));
             break;
-        case CMSG_GROUP_UNINVITE:
+        case V_CMSG_GROUP_UNINVITE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GROUP_UNINVITE_write(writer, &opcodes->body.CMSG_GROUP_UNINVITE));
             break;
-        case CMSG_GROUP_UNINVITE_GUID:
+        case V_CMSG_GROUP_UNINVITE_GUID:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GROUP_UNINVITE_GUID_write(writer, &opcodes->body.CMSG_GROUP_UNINVITE_GUID));
             break;
-        case CMSG_GROUP_SET_LEADER:
+        case V_CMSG_GROUP_SET_LEADER:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GROUP_SET_LEADER_write(writer, &opcodes->body.CMSG_GROUP_SET_LEADER));
             break;
-        case CMSG_LOOT_METHOD:
+        case V_CMSG_LOOT_METHOD:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_LOOT_METHOD_write(writer, &opcodes->body.CMSG_LOOT_METHOD));
             break;
-        case CMSG_GUILD_CREATE:
+        case V_CMSG_GUILD_CREATE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GUILD_CREATE_write(writer, &opcodes->body.CMSG_GUILD_CREATE));
             break;
-        case CMSG_GUILD_INVITE:
+        case V_CMSG_GUILD_INVITE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GUILD_INVITE_write(writer, &opcodes->body.CMSG_GUILD_INVITE));
             break;
-        case CMSG_GUILD_PROMOTE:
+        case V_CMSG_GUILD_PROMOTE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GUILD_PROMOTE_write(writer, &opcodes->body.CMSG_GUILD_PROMOTE));
             break;
-        case CMSG_GUILD_DEMOTE:
+        case V_CMSG_GUILD_DEMOTE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GUILD_DEMOTE_write(writer, &opcodes->body.CMSG_GUILD_DEMOTE));
             break;
-        case CMSG_GUILD_REMOVE:
+        case V_CMSG_GUILD_REMOVE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GUILD_REMOVE_write(writer, &opcodes->body.CMSG_GUILD_REMOVE));
             break;
-        case CMSG_GUILD_LEADER:
+        case V_CMSG_GUILD_LEADER:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GUILD_LEADER_write(writer, &opcodes->body.CMSG_GUILD_LEADER));
             break;
-        case CMSG_GUILD_MOTD:
+        case V_CMSG_GUILD_MOTD:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GUILD_MOTD_write(writer, &opcodes->body.CMSG_GUILD_MOTD));
             break;
-        case CMSG_MESSAGECHAT:
+        case V_CMSG_MESSAGECHAT:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_MESSAGECHAT_write(writer, &opcodes->body.CMSG_MESSAGECHAT));
             break;
-        case CMSG_JOIN_CHANNEL:
+        case V_CMSG_JOIN_CHANNEL:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_JOIN_CHANNEL_write(writer, &opcodes->body.CMSG_JOIN_CHANNEL));
             break;
-        case CMSG_LEAVE_CHANNEL:
+        case V_CMSG_LEAVE_CHANNEL:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_LEAVE_CHANNEL_write(writer, &opcodes->body.CMSG_LEAVE_CHANNEL));
             break;
-        case CMSG_CHANNEL_LIST:
+        case V_CMSG_CHANNEL_LIST:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_LIST_write(writer, &opcodes->body.CMSG_CHANNEL_LIST));
             break;
-        case CMSG_CHANNEL_PASSWORD:
+        case V_CMSG_CHANNEL_PASSWORD:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_PASSWORD_write(writer, &opcodes->body.CMSG_CHANNEL_PASSWORD));
             break;
-        case CMSG_CHANNEL_SET_OWNER:
+        case V_CMSG_CHANNEL_SET_OWNER:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_SET_OWNER_write(writer, &opcodes->body.CMSG_CHANNEL_SET_OWNER));
             break;
-        case CMSG_CHANNEL_OWNER:
+        case V_CMSG_CHANNEL_OWNER:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_OWNER_write(writer, &opcodes->body.CMSG_CHANNEL_OWNER));
             break;
-        case CMSG_CHANNEL_MODERATOR:
+        case V_CMSG_CHANNEL_MODERATOR:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_MODERATOR_write(writer, &opcodes->body.CMSG_CHANNEL_MODERATOR));
             break;
-        case CMSG_CHANNEL_UNMODERATOR:
+        case V_CMSG_CHANNEL_UNMODERATOR:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_UNMODERATOR_write(writer, &opcodes->body.CMSG_CHANNEL_UNMODERATOR));
             break;
-        case CMSG_CHANNEL_MUTE:
+        case V_CMSG_CHANNEL_MUTE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_MUTE_write(writer, &opcodes->body.CMSG_CHANNEL_MUTE));
             break;
-        case CMSG_CHANNEL_UNMUTE:
+        case V_CMSG_CHANNEL_UNMUTE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_UNMUTE_write(writer, &opcodes->body.CMSG_CHANNEL_UNMUTE));
             break;
-        case CMSG_CHANNEL_INVITE:
+        case V_CMSG_CHANNEL_INVITE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_INVITE_write(writer, &opcodes->body.CMSG_CHANNEL_INVITE));
             break;
-        case CMSG_CHANNEL_KICK:
+        case V_CMSG_CHANNEL_KICK:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_KICK_write(writer, &opcodes->body.CMSG_CHANNEL_KICK));
             break;
-        case CMSG_CHANNEL_BAN:
+        case V_CMSG_CHANNEL_BAN:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_BAN_write(writer, &opcodes->body.CMSG_CHANNEL_BAN));
             break;
-        case CMSG_CHANNEL_UNBAN:
+        case V_CMSG_CHANNEL_UNBAN:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_UNBAN_write(writer, &opcodes->body.CMSG_CHANNEL_UNBAN));
             break;
-        case CMSG_CHANNEL_ANNOUNCEMENTS:
+        case V_CMSG_CHANNEL_ANNOUNCEMENTS:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_ANNOUNCEMENTS_write(writer, &opcodes->body.CMSG_CHANNEL_ANNOUNCEMENTS));
             break;
-        case CMSG_CHANNEL_MODERATE:
+        case V_CMSG_CHANNEL_MODERATE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_MODERATE_write(writer, &opcodes->body.CMSG_CHANNEL_MODERATE));
             break;
-        case CMSG_USE_ITEM:
+        case V_CMSG_USE_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_USE_ITEM_write(writer, &opcodes->body.CMSG_USE_ITEM));
             break;
-        case CMSG_OPEN_ITEM:
+        case V_CMSG_OPEN_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_OPEN_ITEM_write(writer, &opcodes->body.CMSG_OPEN_ITEM));
             break;
-        case CMSG_READ_ITEM:
+        case V_CMSG_READ_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_READ_ITEM_write(writer, &opcodes->body.CMSG_READ_ITEM));
             break;
-        case CMSG_GAMEOBJ_USE:
+        case V_CMSG_GAMEOBJ_USE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GAMEOBJ_USE_write(writer, &opcodes->body.CMSG_GAMEOBJ_USE));
             break;
-        case CMSG_AREATRIGGER:
+        case V_CMSG_AREATRIGGER:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_AREATRIGGER_write(writer, &opcodes->body.CMSG_AREATRIGGER));
             break;
-        case MSG_MOVE_START_FORWARD:
+        case V_MSG_MOVE_START_FORWARD:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_FORWARD_Client_write(writer, &opcodes->body.MSG_MOVE_START_FORWARD_Client));
             break;
-        case MSG_MOVE_START_BACKWARD:
+        case V_MSG_MOVE_START_BACKWARD:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_BACKWARD_Client_write(writer, &opcodes->body.MSG_MOVE_START_BACKWARD_Client));
             break;
-        case MSG_MOVE_STOP:
+        case V_MSG_MOVE_STOP:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_STOP_Client_write(writer, &opcodes->body.MSG_MOVE_STOP_Client));
             break;
-        case MSG_MOVE_START_STRAFE_LEFT:
+        case V_MSG_MOVE_START_STRAFE_LEFT:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_STRAFE_LEFT_Client_write(writer, &opcodes->body.MSG_MOVE_START_STRAFE_LEFT_Client));
             break;
-        case MSG_MOVE_START_STRAFE_RIGHT:
+        case V_MSG_MOVE_START_STRAFE_RIGHT:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_STRAFE_RIGHT_Client_write(writer, &opcodes->body.MSG_MOVE_START_STRAFE_RIGHT_Client));
             break;
-        case MSG_MOVE_STOP_STRAFE:
+        case V_MSG_MOVE_STOP_STRAFE:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_STOP_STRAFE_Client_write(writer, &opcodes->body.MSG_MOVE_STOP_STRAFE_Client));
             break;
-        case MSG_MOVE_JUMP:
+        case V_MSG_MOVE_JUMP:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_JUMP_Client_write(writer, &opcodes->body.MSG_MOVE_JUMP_Client));
             break;
-        case MSG_MOVE_START_TURN_LEFT:
+        case V_MSG_MOVE_START_TURN_LEFT:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_TURN_LEFT_Client_write(writer, &opcodes->body.MSG_MOVE_START_TURN_LEFT_Client));
             break;
-        case MSG_MOVE_START_TURN_RIGHT:
+        case V_MSG_MOVE_START_TURN_RIGHT:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_TURN_RIGHT_Client_write(writer, &opcodes->body.MSG_MOVE_START_TURN_RIGHT_Client));
             break;
-        case MSG_MOVE_STOP_TURN:
+        case V_MSG_MOVE_STOP_TURN:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_STOP_TURN_Client_write(writer, &opcodes->body.MSG_MOVE_STOP_TURN_Client));
             break;
-        case MSG_MOVE_START_PITCH_UP:
+        case V_MSG_MOVE_START_PITCH_UP:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_PITCH_UP_Client_write(writer, &opcodes->body.MSG_MOVE_START_PITCH_UP_Client));
             break;
-        case MSG_MOVE_START_PITCH_DOWN:
+        case V_MSG_MOVE_START_PITCH_DOWN:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_PITCH_DOWN_Client_write(writer, &opcodes->body.MSG_MOVE_START_PITCH_DOWN_Client));
             break;
-        case MSG_MOVE_STOP_PITCH:
+        case V_MSG_MOVE_STOP_PITCH:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_STOP_PITCH_Client_write(writer, &opcodes->body.MSG_MOVE_STOP_PITCH_Client));
             break;
-        case MSG_MOVE_SET_RUN_MODE:
+        case V_MSG_MOVE_SET_RUN_MODE:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_SET_RUN_MODE_Client_write(writer, &opcodes->body.MSG_MOVE_SET_RUN_MODE_Client));
             break;
-        case MSG_MOVE_SET_WALK_MODE:
+        case V_MSG_MOVE_SET_WALK_MODE:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_SET_WALK_MODE_Client_write(writer, &opcodes->body.MSG_MOVE_SET_WALK_MODE_Client));
             break;
-        case MSG_MOVE_TELEPORT_ACK:
+        case V_MSG_MOVE_TELEPORT_ACK:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_TELEPORT_ACK_Client_write(writer, &opcodes->body.MSG_MOVE_TELEPORT_ACK_Client));
             break;
-        case MSG_MOVE_FALL_LAND:
+        case V_MSG_MOVE_FALL_LAND:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_FALL_LAND_Client_write(writer, &opcodes->body.MSG_MOVE_FALL_LAND_Client));
             break;
-        case MSG_MOVE_START_SWIM:
+        case V_MSG_MOVE_START_SWIM:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_SWIM_Client_write(writer, &opcodes->body.MSG_MOVE_START_SWIM_Client));
             break;
-        case MSG_MOVE_STOP_SWIM:
+        case V_MSG_MOVE_STOP_SWIM:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_STOP_SWIM_Client_write(writer, &opcodes->body.MSG_MOVE_STOP_SWIM_Client));
             break;
-        case MSG_MOVE_SET_FACING:
+        case V_MSG_MOVE_SET_FACING:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_SET_FACING_Client_write(writer, &opcodes->body.MSG_MOVE_SET_FACING_Client));
             break;
-        case MSG_MOVE_SET_PITCH:
+        case V_MSG_MOVE_SET_PITCH:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_SET_PITCH_Client_write(writer, &opcodes->body.MSG_MOVE_SET_PITCH_Client));
             break;
-        case CMSG_MOVE_SET_RAW_POSITION:
+        case V_CMSG_MOVE_SET_RAW_POSITION:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_MOVE_SET_RAW_POSITION_write(writer, &opcodes->body.CMSG_MOVE_SET_RAW_POSITION));
             break;
-        case CMSG_FORCE_RUN_SPEED_CHANGE_ACK:
+        case V_CMSG_FORCE_RUN_SPEED_CHANGE_ACK:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_FORCE_RUN_SPEED_CHANGE_ACK_write(writer, &opcodes->body.CMSG_FORCE_RUN_SPEED_CHANGE_ACK));
             break;
-        case CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK:
+        case V_CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK_write(writer, &opcodes->body.CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK));
             break;
-        case CMSG_FORCE_SWIM_SPEED_CHANGE_ACK:
+        case V_CMSG_FORCE_SWIM_SPEED_CHANGE_ACK:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_FORCE_SWIM_SPEED_CHANGE_ACK_write(writer, &opcodes->body.CMSG_FORCE_SWIM_SPEED_CHANGE_ACK));
             break;
-        case CMSG_FORCE_MOVE_ROOT_ACK:
+        case V_CMSG_FORCE_MOVE_ROOT_ACK:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_FORCE_MOVE_ROOT_ACK_write(writer, &opcodes->body.CMSG_FORCE_MOVE_ROOT_ACK));
             break;
-        case CMSG_FORCE_MOVE_UNROOT_ACK:
+        case V_CMSG_FORCE_MOVE_UNROOT_ACK:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_FORCE_MOVE_UNROOT_ACK_write(writer, &opcodes->body.CMSG_FORCE_MOVE_UNROOT_ACK));
             break;
-        case MSG_MOVE_HEARTBEAT:
+        case V_MSG_MOVE_HEARTBEAT:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_HEARTBEAT_Client_write(writer, &opcodes->body.MSG_MOVE_HEARTBEAT_Client));
             break;
-        case CMSG_MOVE_KNOCK_BACK_ACK:
+        case V_CMSG_MOVE_KNOCK_BACK_ACK:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_MOVE_KNOCK_BACK_ACK_write(writer, &opcodes->body.CMSG_MOVE_KNOCK_BACK_ACK));
             break;
-        case CMSG_MOVE_HOVER_ACK:
+        case V_CMSG_MOVE_HOVER_ACK:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_MOVE_HOVER_ACK_write(writer, &opcodes->body.CMSG_MOVE_HOVER_ACK));
             break;
-        case CMSG_TUTORIAL_FLAG:
+        case V_CMSG_TUTORIAL_FLAG:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_TUTORIAL_FLAG_write(writer, &opcodes->body.CMSG_TUTORIAL_FLAG));
             break;
-        case CMSG_STANDSTATECHANGE:
+        case V_CMSG_STANDSTATECHANGE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_STANDSTATECHANGE_write(writer, &opcodes->body.CMSG_STANDSTATECHANGE));
             break;
-        case CMSG_EMOTE:
+        case V_CMSG_EMOTE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_EMOTE_write(writer, &opcodes->body.CMSG_EMOTE));
             break;
-        case CMSG_TEXT_EMOTE:
+        case V_CMSG_TEXT_EMOTE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_TEXT_EMOTE_write(writer, &opcodes->body.CMSG_TEXT_EMOTE));
             break;
-        case CMSG_AUTOSTORE_LOOT_ITEM:
+        case V_CMSG_AUTOSTORE_LOOT_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_AUTOSTORE_LOOT_ITEM_write(writer, &opcodes->body.CMSG_AUTOSTORE_LOOT_ITEM));
             break;
-        case CMSG_AUTOEQUIP_ITEM:
+        case V_CMSG_AUTOEQUIP_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_AUTOEQUIP_ITEM_write(writer, &opcodes->body.CMSG_AUTOEQUIP_ITEM));
             break;
-        case CMSG_AUTOSTORE_BAG_ITEM:
+        case V_CMSG_AUTOSTORE_BAG_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_AUTOSTORE_BAG_ITEM_write(writer, &opcodes->body.CMSG_AUTOSTORE_BAG_ITEM));
             break;
-        case CMSG_SWAP_ITEM:
+        case V_CMSG_SWAP_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_SWAP_ITEM_write(writer, &opcodes->body.CMSG_SWAP_ITEM));
             break;
-        case CMSG_SWAP_INV_ITEM:
+        case V_CMSG_SWAP_INV_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_SWAP_INV_ITEM_write(writer, &opcodes->body.CMSG_SWAP_INV_ITEM));
             break;
-        case CMSG_SPLIT_ITEM:
+        case V_CMSG_SPLIT_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_SPLIT_ITEM_write(writer, &opcodes->body.CMSG_SPLIT_ITEM));
             break;
-        case CMSG_AUTOEQUIP_ITEM_SLOT:
+        case V_CMSG_AUTOEQUIP_ITEM_SLOT:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_AUTOEQUIP_ITEM_SLOT_write(writer, &opcodes->body.CMSG_AUTOEQUIP_ITEM_SLOT));
             break;
-        case CMSG_DESTROYITEM:
+        case V_CMSG_DESTROYITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_DESTROYITEM_write(writer, &opcodes->body.CMSG_DESTROYITEM));
             break;
-        case CMSG_INSPECT:
+        case V_CMSG_INSPECT:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_INSPECT_write(writer, &opcodes->body.CMSG_INSPECT));
             break;
-        case CMSG_INITIATE_TRADE:
+        case V_CMSG_INITIATE_TRADE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_INITIATE_TRADE_write(writer, &opcodes->body.CMSG_INITIATE_TRADE));
             break;
-        case CMSG_ACCEPT_TRADE:
+        case V_CMSG_ACCEPT_TRADE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_ACCEPT_TRADE_write(writer, &opcodes->body.CMSG_ACCEPT_TRADE));
             break;
-        case CMSG_SET_TRADE_ITEM:
+        case V_CMSG_SET_TRADE_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_SET_TRADE_ITEM_write(writer, &opcodes->body.CMSG_SET_TRADE_ITEM));
             break;
-        case CMSG_CLEAR_TRADE_ITEM:
+        case V_CMSG_CLEAR_TRADE_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CLEAR_TRADE_ITEM_write(writer, &opcodes->body.CMSG_CLEAR_TRADE_ITEM));
             break;
-        case CMSG_SET_TRADE_GOLD:
+        case V_CMSG_SET_TRADE_GOLD:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_SET_TRADE_GOLD_write(writer, &opcodes->body.CMSG_SET_TRADE_GOLD));
             break;
-        case CMSG_SET_FACTION_ATWAR:
+        case V_CMSG_SET_FACTION_ATWAR:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_SET_FACTION_ATWAR_write(writer, &opcodes->body.CMSG_SET_FACTION_ATWAR));
             break;
-        case CMSG_SET_ACTION_BUTTON:
+        case V_CMSG_SET_ACTION_BUTTON:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_SET_ACTION_BUTTON_write(writer, &opcodes->body.CMSG_SET_ACTION_BUTTON));
             break;
-        case CMSG_CAST_SPELL:
+        case V_CMSG_CAST_SPELL:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CAST_SPELL_write(writer, &opcodes->body.CMSG_CAST_SPELL));
             break;
-        case CMSG_CANCEL_CAST:
+        case V_CMSG_CANCEL_CAST:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CANCEL_CAST_write(writer, &opcodes->body.CMSG_CANCEL_CAST));
             break;
-        case CMSG_CANCEL_AURA:
+        case V_CMSG_CANCEL_AURA:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CANCEL_AURA_write(writer, &opcodes->body.CMSG_CANCEL_AURA));
             break;
-        case CMSG_CANCEL_CHANNELLING:
+        case V_CMSG_CANCEL_CHANNELLING:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CANCEL_CHANNELLING_write(writer, &opcodes->body.CMSG_CANCEL_CHANNELLING));
             break;
-        case CMSG_SET_SELECTION:
+        case V_CMSG_SET_SELECTION:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_SET_SELECTION_write(writer, &opcodes->body.CMSG_SET_SELECTION));
             break;
-        case CMSG_SET_TARGET_OBSOLETE:
+        case V_CMSG_SET_TARGET_OBSOLETE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_SET_TARGET_OBSOLETE_write(writer, &opcodes->body.CMSG_SET_TARGET_OBSOLETE));
             break;
-        case CMSG_ATTACKSWING:
+        case V_CMSG_ATTACKSWING:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_ATTACKSWING_write(writer, &opcodes->body.CMSG_ATTACKSWING));
             break;
-        case CMSG_RESURRECT_RESPONSE:
+        case V_CMSG_RESURRECT_RESPONSE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_RESURRECT_RESPONSE_write(writer, &opcodes->body.CMSG_RESURRECT_RESPONSE));
             break;
-        case CMSG_LOOT:
+        case V_CMSG_LOOT:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_LOOT_write(writer, &opcodes->body.CMSG_LOOT));
             break;
-        case CMSG_LOOT_RELEASE:
+        case V_CMSG_LOOT_RELEASE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_LOOT_RELEASE_write(writer, &opcodes->body.CMSG_LOOT_RELEASE));
             break;
-        case CMSG_DUEL_ACCEPTED:
+        case V_CMSG_DUEL_ACCEPTED:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_DUEL_ACCEPTED_write(writer, &opcodes->body.CMSG_DUEL_ACCEPTED));
             break;
-        case CMSG_DUEL_CANCELLED:
+        case V_CMSG_DUEL_CANCELLED:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_DUEL_CANCELLED_write(writer, &opcodes->body.CMSG_DUEL_CANCELLED));
             break;
-        case CMSG_PET_SET_ACTION:
+        case V_CMSG_PET_SET_ACTION:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_PET_SET_ACTION_write(writer, &opcodes->body.CMSG_PET_SET_ACTION));
             break;
-        case CMSG_PET_ACTION:
+        case V_CMSG_PET_ACTION:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_PET_ACTION_write(writer, &opcodes->body.CMSG_PET_ACTION));
             break;
-        case CMSG_PET_ABANDON:
+        case V_CMSG_PET_ABANDON:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_PET_ABANDON_write(writer, &opcodes->body.CMSG_PET_ABANDON));
             break;
-        case CMSG_PET_RENAME:
+        case V_CMSG_PET_RENAME:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_PET_RENAME_write(writer, &opcodes->body.CMSG_PET_RENAME));
             break;
-        case CMSG_GOSSIP_HELLO:
+        case V_CMSG_GOSSIP_HELLO:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GOSSIP_HELLO_write(writer, &opcodes->body.CMSG_GOSSIP_HELLO));
             break;
-        case CMSG_GOSSIP_SELECT_OPTION:
+        case V_CMSG_GOSSIP_SELECT_OPTION:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GOSSIP_SELECT_OPTION_write(writer, &opcodes->body.CMSG_GOSSIP_SELECT_OPTION));
             break;
-        case CMSG_NPC_TEXT_QUERY:
+        case V_CMSG_NPC_TEXT_QUERY:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_NPC_TEXT_QUERY_write(writer, &opcodes->body.CMSG_NPC_TEXT_QUERY));
             break;
-        case CMSG_QUESTGIVER_STATUS_QUERY:
+        case V_CMSG_QUESTGIVER_STATUS_QUERY:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_QUESTGIVER_STATUS_QUERY_write(writer, &opcodes->body.CMSG_QUESTGIVER_STATUS_QUERY));
             break;
-        case CMSG_QUESTGIVER_HELLO:
+        case V_CMSG_QUESTGIVER_HELLO:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_QUESTGIVER_HELLO_write(writer, &opcodes->body.CMSG_QUESTGIVER_HELLO));
             break;
-        case CMSG_QUESTGIVER_QUERY_QUEST:
+        case V_CMSG_QUESTGIVER_QUERY_QUEST:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_QUESTGIVER_QUERY_QUEST_write(writer, &opcodes->body.CMSG_QUESTGIVER_QUERY_QUEST));
             break;
-        case CMSG_QUESTGIVER_ACCEPT_QUEST:
+        case V_CMSG_QUESTGIVER_ACCEPT_QUEST:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_QUESTGIVER_ACCEPT_QUEST_write(writer, &opcodes->body.CMSG_QUESTGIVER_ACCEPT_QUEST));
             break;
-        case CMSG_QUESTGIVER_COMPLETE_QUEST:
+        case V_CMSG_QUESTGIVER_COMPLETE_QUEST:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_QUESTGIVER_COMPLETE_QUEST_write(writer, &opcodes->body.CMSG_QUESTGIVER_COMPLETE_QUEST));
             break;
-        case CMSG_QUESTGIVER_REQUEST_REWARD:
+        case V_CMSG_QUESTGIVER_REQUEST_REWARD:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_QUESTGIVER_REQUEST_REWARD_write(writer, &opcodes->body.CMSG_QUESTGIVER_REQUEST_REWARD));
             break;
-        case CMSG_QUESTGIVER_CHOOSE_REWARD:
+        case V_CMSG_QUESTGIVER_CHOOSE_REWARD:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_QUESTGIVER_CHOOSE_REWARD_write(writer, &opcodes->body.CMSG_QUESTGIVER_CHOOSE_REWARD));
             break;
-        case CMSG_QUESTLOG_SWAP_QUEST:
+        case V_CMSG_QUESTLOG_SWAP_QUEST:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_QUESTLOG_SWAP_QUEST_write(writer, &opcodes->body.CMSG_QUESTLOG_SWAP_QUEST));
             break;
-        case CMSG_QUESTLOG_REMOVE_QUEST:
+        case V_CMSG_QUESTLOG_REMOVE_QUEST:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_QUESTLOG_REMOVE_QUEST_write(writer, &opcodes->body.CMSG_QUESTLOG_REMOVE_QUEST));
             break;
-        case CMSG_QUEST_CONFIRM_ACCEPT:
+        case V_CMSG_QUEST_CONFIRM_ACCEPT:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_QUEST_CONFIRM_ACCEPT_write(writer, &opcodes->body.CMSG_QUEST_CONFIRM_ACCEPT));
             break;
-        case CMSG_PUSHQUESTTOPARTY:
+        case V_CMSG_PUSHQUESTTOPARTY:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_PUSHQUESTTOPARTY_write(writer, &opcodes->body.CMSG_PUSHQUESTTOPARTY));
             break;
-        case CMSG_LIST_INVENTORY:
+        case V_CMSG_LIST_INVENTORY:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_LIST_INVENTORY_write(writer, &opcodes->body.CMSG_LIST_INVENTORY));
             break;
-        case CMSG_SELL_ITEM:
+        case V_CMSG_SELL_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_SELL_ITEM_write(writer, &opcodes->body.CMSG_SELL_ITEM));
             break;
-        case CMSG_BUY_ITEM:
+        case V_CMSG_BUY_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_BUY_ITEM_write(writer, &opcodes->body.CMSG_BUY_ITEM));
             break;
-        case CMSG_BUY_ITEM_IN_SLOT:
+        case V_CMSG_BUY_ITEM_IN_SLOT:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_BUY_ITEM_IN_SLOT_write(writer, &opcodes->body.CMSG_BUY_ITEM_IN_SLOT));
             break;
-        case CMSG_TAXINODE_STATUS_QUERY:
+        case V_CMSG_TAXINODE_STATUS_QUERY:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_TAXINODE_STATUS_QUERY_write(writer, &opcodes->body.CMSG_TAXINODE_STATUS_QUERY));
             break;
-        case CMSG_TAXIQUERYAVAILABLENODES:
+        case V_CMSG_TAXIQUERYAVAILABLENODES:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_TAXIQUERYAVAILABLENODES_write(writer, &opcodes->body.CMSG_TAXIQUERYAVAILABLENODES));
             break;
-        case CMSG_ACTIVATETAXI:
+        case V_CMSG_ACTIVATETAXI:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_ACTIVATETAXI_write(writer, &opcodes->body.CMSG_ACTIVATETAXI));
             break;
-        case CMSG_TRAINER_LIST:
+        case V_CMSG_TRAINER_LIST:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_TRAINER_LIST_write(writer, &opcodes->body.CMSG_TRAINER_LIST));
             break;
-        case CMSG_TRAINER_BUY_SPELL:
+        case V_CMSG_TRAINER_BUY_SPELL:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_TRAINER_BUY_SPELL_write(writer, &opcodes->body.CMSG_TRAINER_BUY_SPELL));
             break;
-        case CMSG_BINDER_ACTIVATE:
+        case V_CMSG_BINDER_ACTIVATE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_BINDER_ACTIVATE_write(writer, &opcodes->body.CMSG_BINDER_ACTIVATE));
             break;
-        case CMSG_BANKER_ACTIVATE:
+        case V_CMSG_BANKER_ACTIVATE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_BANKER_ACTIVATE_write(writer, &opcodes->body.CMSG_BANKER_ACTIVATE));
             break;
-        case CMSG_BUY_BANK_SLOT:
+        case V_CMSG_BUY_BANK_SLOT:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_BUY_BANK_SLOT_write(writer, &opcodes->body.CMSG_BUY_BANK_SLOT));
             break;
-        case CMSG_PETITION_SHOWLIST:
+        case V_CMSG_PETITION_SHOWLIST:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_PETITION_SHOWLIST_write(writer, &opcodes->body.CMSG_PETITION_SHOWLIST));
             break;
-        case CMSG_PETITION_BUY:
+        case V_CMSG_PETITION_BUY:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_PETITION_BUY_write(writer, &opcodes->body.CMSG_PETITION_BUY));
             break;
-        case CMSG_PETITION_SHOW_SIGNATURES:
+        case V_CMSG_PETITION_SHOW_SIGNATURES:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_PETITION_SHOW_SIGNATURES_write(writer, &opcodes->body.CMSG_PETITION_SHOW_SIGNATURES));
             break;
-        case CMSG_PETITION_SIGN:
+        case V_CMSG_PETITION_SIGN:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_PETITION_SIGN_write(writer, &opcodes->body.CMSG_PETITION_SIGN));
             break;
-        case MSG_PETITION_DECLINE:
+        case V_MSG_PETITION_DECLINE:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_PETITION_DECLINE_cmsg_write(writer, &opcodes->body.MSG_PETITION_DECLINE));
             break;
-        case CMSG_OFFER_PETITION:
+        case V_CMSG_OFFER_PETITION:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_OFFER_PETITION_write(writer, &opcodes->body.CMSG_OFFER_PETITION));
             break;
-        case CMSG_TURN_IN_PETITION:
+        case V_CMSG_TURN_IN_PETITION:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_TURN_IN_PETITION_write(writer, &opcodes->body.CMSG_TURN_IN_PETITION));
             break;
-        case CMSG_PETITION_QUERY:
+        case V_CMSG_PETITION_QUERY:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_PETITION_QUERY_write(writer, &opcodes->body.CMSG_PETITION_QUERY));
             break;
-        case CMSG_BUG:
+        case V_CMSG_BUG:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_BUG_write(writer, &opcodes->body.CMSG_BUG));
             break;
-        case CMSG_RECLAIM_CORPSE:
+        case V_CMSG_RECLAIM_CORPSE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_RECLAIM_CORPSE_write(writer, &opcodes->body.CMSG_RECLAIM_CORPSE));
             break;
-        case CMSG_WRAP_ITEM:
+        case V_CMSG_WRAP_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_WRAP_ITEM_write(writer, &opcodes->body.CMSG_WRAP_ITEM));
             break;
-        case MSG_MINIMAP_PING:
+        case V_MSG_MINIMAP_PING:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MINIMAP_PING_Client_write(writer, &opcodes->body.MSG_MINIMAP_PING_Client));
             break;
-        case CMSG_PING:
+        case V_CMSG_PING:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_PING_write(writer, &opcodes->body.CMSG_PING));
             break;
-        case CMSG_SETSHEATHED:
+        case V_CMSG_SETSHEATHED:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_SETSHEATHED_write(writer, &opcodes->body.CMSG_SETSHEATHED));
             break;
-        case CMSG_AUTH_SESSION:
+        case V_CMSG_AUTH_SESSION:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_AUTH_SESSION_write(writer, &opcodes->body.CMSG_AUTH_SESSION));
             break;
-        case CMSG_PET_CAST_SPELL:
+        case V_CMSG_PET_CAST_SPELL:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_PET_CAST_SPELL_write(writer, &opcodes->body.CMSG_PET_CAST_SPELL));
             break;
-        case MSG_SAVE_GUILD_EMBLEM:
+        case V_MSG_SAVE_GUILD_EMBLEM:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_SAVE_GUILD_EMBLEM_Client_write(writer, &opcodes->body.MSG_SAVE_GUILD_EMBLEM_Client));
             break;
-        case MSG_TABARDVENDOR_ACTIVATE:
+        case V_MSG_TABARDVENDOR_ACTIVATE:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_TABARDVENDOR_ACTIVATE_cmsg_write(writer, &opcodes->body.MSG_TABARDVENDOR_ACTIVATE));
             break;
-        case CMSG_ZONEUPDATE:
+        case V_CMSG_ZONEUPDATE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_ZONEUPDATE_write(writer, &opcodes->body.CMSG_ZONEUPDATE));
             break;
-        case MSG_RANDOM_ROLL:
+        case V_MSG_RANDOM_ROLL:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_RANDOM_ROLL_Client_write(writer, &opcodes->body.MSG_RANDOM_ROLL_Client));
             break;
-        case CMSG_UNLEARN_SKILL:
+        case V_CMSG_UNLEARN_SKILL:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_UNLEARN_SKILL_write(writer, &opcodes->body.CMSG_UNLEARN_SKILL));
             break;
-        case CMSG_GMTICKET_CREATE:
+        case V_CMSG_GMTICKET_CREATE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GMTICKET_CREATE_write(writer, &opcodes->body.CMSG_GMTICKET_CREATE));
             break;
-        case CMSG_GMTICKET_UPDATETEXT:
+        case V_CMSG_GMTICKET_UPDATETEXT:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GMTICKET_UPDATETEXT_write(writer, &opcodes->body.CMSG_GMTICKET_UPDATETEXT));
             break;
-        case CMSG_REQUEST_ACCOUNT_DATA:
+        case V_CMSG_REQUEST_ACCOUNT_DATA:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_REQUEST_ACCOUNT_DATA_write(writer, &opcodes->body.CMSG_REQUEST_ACCOUNT_DATA));
             break;
-        case CMSG_UPDATE_ACCOUNT_DATA:
+        case V_CMSG_UPDATE_ACCOUNT_DATA:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_UPDATE_ACCOUNT_DATA_write(writer, &opcodes->body.CMSG_UPDATE_ACCOUNT_DATA));
             break;
-        case CMSG_SPIRIT_HEALER_ACTIVATE:
+        case V_CMSG_SPIRIT_HEALER_ACTIVATE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_SPIRIT_HEALER_ACTIVATE_write(writer, &opcodes->body.CMSG_SPIRIT_HEALER_ACTIVATE));
             break;
-        case CMSG_CHAT_IGNORED:
+        case V_CMSG_CHAT_IGNORED:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHAT_IGNORED_write(writer, &opcodes->body.CMSG_CHAT_IGNORED));
             break;
-        case CMSG_GUILD_RANK:
+        case V_CMSG_GUILD_RANK:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GUILD_RANK_write(writer, &opcodes->body.CMSG_GUILD_RANK));
             break;
-        case CMSG_GUILD_ADD_RANK:
+        case V_CMSG_GUILD_ADD_RANK:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GUILD_ADD_RANK_write(writer, &opcodes->body.CMSG_GUILD_ADD_RANK));
             break;
-        case CMSG_GUILD_SET_PUBLIC_NOTE:
+        case V_CMSG_GUILD_SET_PUBLIC_NOTE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GUILD_SET_PUBLIC_NOTE_write(writer, &opcodes->body.CMSG_GUILD_SET_PUBLIC_NOTE));
             break;
-        case CMSG_GUILD_SET_OFFICER_NOTE:
+        case V_CMSG_GUILD_SET_OFFICER_NOTE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GUILD_SET_OFFICER_NOTE_write(writer, &opcodes->body.CMSG_GUILD_SET_OFFICER_NOTE));
             break;
-        case CMSG_SEND_MAIL:
+        case V_CMSG_SEND_MAIL:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_SEND_MAIL_write(writer, &opcodes->body.CMSG_SEND_MAIL));
             break;
-        case CMSG_GET_MAIL_LIST:
+        case V_CMSG_GET_MAIL_LIST:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GET_MAIL_LIST_write(writer, &opcodes->body.CMSG_GET_MAIL_LIST));
             break;
-        case CMSG_BATTLEFIELD_LIST:
+        case V_CMSG_BATTLEFIELD_LIST:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_BATTLEFIELD_LIST_write(writer, &opcodes->body.CMSG_BATTLEFIELD_LIST));
             break;
-        case CMSG_BATTLEFIELD_JOIN:
+        case V_CMSG_BATTLEFIELD_JOIN:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_BATTLEFIELD_JOIN_write(writer, &opcodes->body.CMSG_BATTLEFIELD_JOIN));
             break;
-        case CMSG_ITEM_TEXT_QUERY:
+        case V_CMSG_ITEM_TEXT_QUERY:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_ITEM_TEXT_QUERY_write(writer, &opcodes->body.CMSG_ITEM_TEXT_QUERY));
             break;
-        case CMSG_MAIL_TAKE_MONEY:
+        case V_CMSG_MAIL_TAKE_MONEY:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_MAIL_TAKE_MONEY_write(writer, &opcodes->body.CMSG_MAIL_TAKE_MONEY));
             break;
-        case CMSG_MAIL_TAKE_ITEM:
+        case V_CMSG_MAIL_TAKE_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_MAIL_TAKE_ITEM_write(writer, &opcodes->body.CMSG_MAIL_TAKE_ITEM));
             break;
-        case CMSG_MAIL_MARK_AS_READ:
+        case V_CMSG_MAIL_MARK_AS_READ:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_MAIL_MARK_AS_READ_write(writer, &opcodes->body.CMSG_MAIL_MARK_AS_READ));
             break;
-        case CMSG_MAIL_RETURN_TO_SENDER:
+        case V_CMSG_MAIL_RETURN_TO_SENDER:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_MAIL_RETURN_TO_SENDER_write(writer, &opcodes->body.CMSG_MAIL_RETURN_TO_SENDER));
             break;
-        case CMSG_MAIL_DELETE:
+        case V_CMSG_MAIL_DELETE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_MAIL_DELETE_write(writer, &opcodes->body.CMSG_MAIL_DELETE));
             break;
-        case CMSG_MAIL_CREATE_TEXT_ITEM:
+        case V_CMSG_MAIL_CREATE_TEXT_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_MAIL_CREATE_TEXT_ITEM_write(writer, &opcodes->body.CMSG_MAIL_CREATE_TEXT_ITEM));
             break;
-        case CMSG_LEARN_TALENT:
+        case V_CMSG_LEARN_TALENT:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_LEARN_TALENT_write(writer, &opcodes->body.CMSG_LEARN_TALENT));
             break;
-        case CMSG_TOGGLE_PVP:
+        case V_CMSG_TOGGLE_PVP:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_TOGGLE_PVP_write(writer, &opcodes->body.CMSG_TOGGLE_PVP));
             break;
-        case MSG_AUCTION_HELLO:
+        case V_MSG_AUCTION_HELLO:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_AUCTION_HELLO_Client_write(writer, &opcodes->body.MSG_AUCTION_HELLO_Client));
             break;
-        case CMSG_AUCTION_SELL_ITEM:
+        case V_CMSG_AUCTION_SELL_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_AUCTION_SELL_ITEM_write(writer, &opcodes->body.CMSG_AUCTION_SELL_ITEM));
             break;
-        case CMSG_AUCTION_REMOVE_ITEM:
+        case V_CMSG_AUCTION_REMOVE_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_AUCTION_REMOVE_ITEM_write(writer, &opcodes->body.CMSG_AUCTION_REMOVE_ITEM));
             break;
-        case CMSG_AUCTION_LIST_ITEMS:
+        case V_CMSG_AUCTION_LIST_ITEMS:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_AUCTION_LIST_ITEMS_write(writer, &opcodes->body.CMSG_AUCTION_LIST_ITEMS));
             break;
-        case CMSG_AUCTION_LIST_OWNER_ITEMS:
+        case V_CMSG_AUCTION_LIST_OWNER_ITEMS:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_AUCTION_LIST_OWNER_ITEMS_write(writer, &opcodes->body.CMSG_AUCTION_LIST_OWNER_ITEMS));
             break;
-        case CMSG_AUCTION_PLACE_BID:
+        case V_CMSG_AUCTION_PLACE_BID:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_AUCTION_PLACE_BID_write(writer, &opcodes->body.CMSG_AUCTION_PLACE_BID));
             break;
-        case CMSG_AUCTION_LIST_BIDDER_ITEMS:
+        case V_CMSG_AUCTION_LIST_BIDDER_ITEMS:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_AUCTION_LIST_BIDDER_ITEMS_write(writer, &opcodes->body.CMSG_AUCTION_LIST_BIDDER_ITEMS));
             break;
-        case CMSG_SET_AMMO:
+        case V_CMSG_SET_AMMO:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_SET_AMMO_write(writer, &opcodes->body.CMSG_SET_AMMO));
             break;
-        case CMSG_SET_ACTIVE_MOVER:
+        case V_CMSG_SET_ACTIVE_MOVER:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_SET_ACTIVE_MOVER_write(writer, &opcodes->body.CMSG_SET_ACTIVE_MOVER));
             break;
-        case CMSG_PET_CANCEL_AURA:
+        case V_CMSG_PET_CANCEL_AURA:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_PET_CANCEL_AURA_write(writer, &opcodes->body.CMSG_PET_CANCEL_AURA));
             break;
-        case MSG_LIST_STABLED_PETS:
+        case V_MSG_LIST_STABLED_PETS:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_LIST_STABLED_PETS_Client_write(writer, &opcodes->body.MSG_LIST_STABLED_PETS_Client));
             break;
-        case CMSG_STABLE_PET:
+        case V_CMSG_STABLE_PET:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_STABLE_PET_write(writer, &opcodes->body.CMSG_STABLE_PET));
             break;
-        case CMSG_UNSTABLE_PET:
+        case V_CMSG_UNSTABLE_PET:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_UNSTABLE_PET_write(writer, &opcodes->body.CMSG_UNSTABLE_PET));
             break;
-        case CMSG_BUY_STABLE_SLOT:
+        case V_CMSG_BUY_STABLE_SLOT:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_BUY_STABLE_SLOT_write(writer, &opcodes->body.CMSG_BUY_STABLE_SLOT));
             break;
-        case CMSG_STABLE_SWAP_PET:
+        case V_CMSG_STABLE_SWAP_PET:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_STABLE_SWAP_PET_write(writer, &opcodes->body.CMSG_STABLE_SWAP_PET));
             break;
-        case MSG_QUEST_PUSH_RESULT:
+        case V_MSG_QUEST_PUSH_RESULT:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_QUEST_PUSH_RESULT_cmsg_write(writer, &opcodes->body.MSG_QUEST_PUSH_RESULT));
             break;
-        case CMSG_FAR_SIGHT:
+        case V_CMSG_FAR_SIGHT:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_FAR_SIGHT_write(writer, &opcodes->body.CMSG_FAR_SIGHT));
             break;
-        case CMSG_GROUP_CHANGE_SUB_GROUP:
+        case V_CMSG_GROUP_CHANGE_SUB_GROUP:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GROUP_CHANGE_SUB_GROUP_write(writer, &opcodes->body.CMSG_GROUP_CHANGE_SUB_GROUP));
             break;
-        case CMSG_REQUEST_PARTY_MEMBER_STATS:
+        case V_CMSG_REQUEST_PARTY_MEMBER_STATS:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_REQUEST_PARTY_MEMBER_STATS_write(writer, &opcodes->body.CMSG_REQUEST_PARTY_MEMBER_STATS));
             break;
-        case CMSG_GROUP_SWAP_SUB_GROUP:
+        case V_CMSG_GROUP_SWAP_SUB_GROUP:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GROUP_SWAP_SUB_GROUP_write(writer, &opcodes->body.CMSG_GROUP_SWAP_SUB_GROUP));
             break;
-        case CMSG_AUTOSTORE_BANK_ITEM:
+        case V_CMSG_AUTOSTORE_BANK_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_AUTOSTORE_BANK_ITEM_write(writer, &opcodes->body.CMSG_AUTOSTORE_BANK_ITEM));
             break;
-        case CMSG_AUTOBANK_ITEM:
+        case V_CMSG_AUTOBANK_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_AUTOBANK_ITEM_write(writer, &opcodes->body.CMSG_AUTOBANK_ITEM));
             break;
-        case CMSG_GROUP_ASSISTANT_LEADER:
+        case V_CMSG_GROUP_ASSISTANT_LEADER:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GROUP_ASSISTANT_LEADER_write(writer, &opcodes->body.CMSG_GROUP_ASSISTANT_LEADER));
             break;
-        case CMSG_BUYBACK_ITEM:
+        case V_CMSG_BUYBACK_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_BUYBACK_ITEM_write(writer, &opcodes->body.CMSG_BUYBACK_ITEM));
             break;
-        case CMSG_MEETINGSTONE_JOIN:
+        case V_CMSG_MEETINGSTONE_JOIN:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_MEETINGSTONE_JOIN_write(writer, &opcodes->body.CMSG_MEETINGSTONE_JOIN));
             break;
-        case CMSG_LOOT_ROLL:
+        case V_CMSG_LOOT_ROLL:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_LOOT_ROLL_write(writer, &opcodes->body.CMSG_LOOT_ROLL));
             break;
-        case CMSG_LOOT_MASTER_GIVE:
+        case V_CMSG_LOOT_MASTER_GIVE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_LOOT_MASTER_GIVE_write(writer, &opcodes->body.CMSG_LOOT_MASTER_GIVE));
             break;
-        case CMSG_REPAIR_ITEM:
+        case V_CMSG_REPAIR_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_REPAIR_ITEM_write(writer, &opcodes->body.CMSG_REPAIR_ITEM));
             break;
-        case MSG_TALENT_WIPE_CONFIRM:
+        case V_MSG_TALENT_WIPE_CONFIRM:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_TALENT_WIPE_CONFIRM_Client_write(writer, &opcodes->body.MSG_TALENT_WIPE_CONFIRM_Client));
             break;
-        case CMSG_SUMMON_RESPONSE:
+        case V_CMSG_SUMMON_RESPONSE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_SUMMON_RESPONSE_write(writer, &opcodes->body.CMSG_SUMMON_RESPONSE));
             break;
-        case MSG_MOVE_WATER_WALK:
+        case V_MSG_MOVE_WATER_WALK:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_WATER_WALK_cmsg_write(writer, &opcodes->body.MSG_MOVE_WATER_WALK));
             break;
-        case CMSG_SET_ACTIONBAR_TOGGLES:
+        case V_CMSG_SET_ACTIONBAR_TOGGLES:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_SET_ACTIONBAR_TOGGLES_write(writer, &opcodes->body.CMSG_SET_ACTIONBAR_TOGGLES));
             break;
-        case MSG_PETITION_RENAME:
+        case V_MSG_PETITION_RENAME:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_PETITION_RENAME_cmsg_write(writer, &opcodes->body.MSG_PETITION_RENAME));
             break;
-        case CMSG_ITEM_NAME_QUERY:
+        case V_CMSG_ITEM_NAME_QUERY:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_ITEM_NAME_QUERY_write(writer, &opcodes->body.CMSG_ITEM_NAME_QUERY));
             break;
-        case CMSG_CHAR_RENAME:
+        case V_CMSG_CHAR_RENAME:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHAR_RENAME_write(writer, &opcodes->body.CMSG_CHAR_RENAME));
             break;
-        case CMSG_MOVE_SPLINE_DONE:
+        case V_CMSG_MOVE_SPLINE_DONE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_MOVE_SPLINE_DONE_write(writer, &opcodes->body.CMSG_MOVE_SPLINE_DONE));
             break;
-        case CMSG_MOVE_FALL_RESET:
+        case V_CMSG_MOVE_FALL_RESET:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_MOVE_FALL_RESET_write(writer, &opcodes->body.CMSG_MOVE_FALL_RESET));
             break;
-        case CMSG_MOVE_TIME_SKIPPED:
+        case V_CMSG_MOVE_TIME_SKIPPED:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_MOVE_TIME_SKIPPED_write(writer, &opcodes->body.CMSG_MOVE_TIME_SKIPPED));
             break;
-        case CMSG_MOVE_FEATHER_FALL_ACK:
+        case V_CMSG_MOVE_FEATHER_FALL_ACK:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_MOVE_FEATHER_FALL_ACK_write(writer, &opcodes->body.CMSG_MOVE_FEATHER_FALL_ACK));
             break;
-        case CMSG_MOVE_WATER_WALK_ACK:
+        case V_CMSG_MOVE_WATER_WALK_ACK:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_MOVE_WATER_WALK_ACK_write(writer, &opcodes->body.CMSG_MOVE_WATER_WALK_ACK));
             break;
-        case CMSG_MOVE_NOT_ACTIVE_MOVER:
+        case V_CMSG_MOVE_NOT_ACTIVE_MOVER:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_MOVE_NOT_ACTIVE_MOVER_write(writer, &opcodes->body.CMSG_MOVE_NOT_ACTIVE_MOVER));
             break;
-        case CMSG_BATTLEFIELD_PORT:
+        case V_CMSG_BATTLEFIELD_PORT:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_BATTLEFIELD_PORT_write(writer, &opcodes->body.CMSG_BATTLEFIELD_PORT));
             break;
-        case MSG_INSPECT_HONOR_STATS:
+        case V_MSG_INSPECT_HONOR_STATS:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_INSPECT_HONOR_STATS_Client_write(writer, &opcodes->body.MSG_INSPECT_HONOR_STATS_Client));
             break;
-        case CMSG_BATTLEMASTER_HELLO:
+        case V_CMSG_BATTLEMASTER_HELLO:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_BATTLEMASTER_HELLO_write(writer, &opcodes->body.CMSG_BATTLEMASTER_HELLO));
             break;
-        case CMSG_FORCE_WALK_SPEED_CHANGE_ACK:
+        case V_CMSG_FORCE_WALK_SPEED_CHANGE_ACK:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_FORCE_WALK_SPEED_CHANGE_ACK_write(writer, &opcodes->body.CMSG_FORCE_WALK_SPEED_CHANGE_ACK));
             break;
-        case CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK:
+        case V_CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK_write(writer, &opcodes->body.CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK));
             break;
-        case CMSG_FORCE_TURN_RATE_CHANGE_ACK:
+        case V_CMSG_FORCE_TURN_RATE_CHANGE_ACK:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_FORCE_TURN_RATE_CHANGE_ACK_write(writer, &opcodes->body.CMSG_FORCE_TURN_RATE_CHANGE_ACK));
             break;
-        case CMSG_LEAVE_BATTLEFIELD:
+        case V_CMSG_LEAVE_BATTLEFIELD:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_LEAVE_BATTLEFIELD_write(writer, &opcodes->body.CMSG_LEAVE_BATTLEFIELD));
             break;
-        case CMSG_AREA_SPIRIT_HEALER_QUERY:
+        case V_CMSG_AREA_SPIRIT_HEALER_QUERY:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_AREA_SPIRIT_HEALER_QUERY_write(writer, &opcodes->body.CMSG_AREA_SPIRIT_HEALER_QUERY));
             break;
-        case CMSG_AREA_SPIRIT_HEALER_QUEUE:
+        case V_CMSG_AREA_SPIRIT_HEALER_QUEUE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_AREA_SPIRIT_HEALER_QUEUE_write(writer, &opcodes->body.CMSG_AREA_SPIRIT_HEALER_QUEUE));
             break;
-        case CMSG_WARDEN_DATA:
+        case V_CMSG_WARDEN_DATA:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_WARDEN_DATA_write(writer, &opcodes->body.CMSG_WARDEN_DATA));
             break;
-        case CMSG_PET_STOP_ATTACK:
+        case V_CMSG_PET_STOP_ATTACK:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_PET_STOP_ATTACK_write(writer, &opcodes->body.CMSG_PET_STOP_ATTACK));
             break;
-        case CMSG_BATTLEMASTER_JOIN:
+        case V_CMSG_BATTLEMASTER_JOIN:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_BATTLEMASTER_JOIN_write(writer, &opcodes->body.CMSG_BATTLEMASTER_JOIN));
             break;
-        case CMSG_PET_UNLEARN:
+        case V_CMSG_PET_UNLEARN:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_PET_UNLEARN_write(writer, &opcodes->body.CMSG_PET_UNLEARN));
             break;
-        case CMSG_PET_SPELL_AUTOCAST:
+        case V_CMSG_PET_SPELL_AUTOCAST:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_PET_SPELL_AUTOCAST_write(writer, &opcodes->body.CMSG_PET_SPELL_AUTOCAST));
             break;
-        case CMSG_GUILD_INFO_TEXT:
+        case V_CMSG_GUILD_INFO_TEXT:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GUILD_INFO_TEXT_write(writer, &opcodes->body.CMSG_GUILD_INFO_TEXT));
             break;
-        case CMSG_ACTIVATETAXIEXPRESS:
+        case V_CMSG_ACTIVATETAXIEXPRESS:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_ACTIVATETAXIEXPRESS_write(writer, &opcodes->body.CMSG_ACTIVATETAXIEXPRESS));
             break;
-        case CMSG_SET_FACTION_INACTIVE:
+        case V_CMSG_SET_FACTION_INACTIVE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_SET_FACTION_INACTIVE_write(writer, &opcodes->body.CMSG_SET_FACTION_INACTIVE));
             break;
-        case CMSG_SET_WATCHED_FACTION:
+        case V_CMSG_SET_WATCHED_FACTION:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_SET_WATCHED_FACTION_write(writer, &opcodes->body.CMSG_SET_WATCHED_FACTION));
             break;
-        case MSG_RAID_TARGET_UPDATE:
+        case V_MSG_RAID_TARGET_UPDATE:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_RAID_TARGET_UPDATE_Client_write(writer, &opcodes->body.MSG_RAID_TARGET_UPDATE_Client));
             break;
-        case MSG_RAID_READY_CHECK:
+        case V_MSG_RAID_READY_CHECK:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_RAID_READY_CHECK_Client_write(writer, &opcodes->body.MSG_RAID_READY_CHECK_Client));
             break;
-        case CMSG_GMSURVEY_SUBMIT:
+        case V_CMSG_GMSURVEY_SUBMIT:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GMSURVEY_SUBMIT_write(writer, &opcodes->body.CMSG_GMSURVEY_SUBMIT));
             break;
         default:
@@ -22967,760 +24892,760 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_client_opcode_read(WowWorldRe
     READ_U32(opcodes->opcode);
 
     switch (opcodes->opcode) {
-        case CMSG_DBLOOKUP:
+        case V_CMSG_DBLOOKUP:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_DBLOOKUP_read(reader, &opcodes->body.CMSG_DBLOOKUP));
             break;
-        case CMSG_WORLD_TELEPORT:
+        case V_CMSG_WORLD_TELEPORT:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_WORLD_TELEPORT_read(reader, &opcodes->body.CMSG_WORLD_TELEPORT));
             break;
-        case CMSG_TELEPORT_TO_UNIT:
+        case V_CMSG_TELEPORT_TO_UNIT:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_TELEPORT_TO_UNIT_read(reader, &opcodes->body.CMSG_TELEPORT_TO_UNIT));
             break;
-        case CMSG_CHAR_CREATE:
+        case V_CMSG_CHAR_CREATE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHAR_CREATE_read(reader, &opcodes->body.CMSG_CHAR_CREATE));
             break;
-        case CMSG_CHAR_DELETE:
+        case V_CMSG_CHAR_DELETE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHAR_DELETE_read(reader, &opcodes->body.CMSG_CHAR_DELETE));
             break;
-        case CMSG_PLAYER_LOGIN:
+        case V_CMSG_PLAYER_LOGIN:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_PLAYER_LOGIN_read(reader, &opcodes->body.CMSG_PLAYER_LOGIN));
             break;
-        case CMSG_NAME_QUERY:
+        case V_CMSG_NAME_QUERY:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_NAME_QUERY_read(reader, &opcodes->body.CMSG_NAME_QUERY));
             break;
-        case CMSG_PET_NAME_QUERY:
+        case V_CMSG_PET_NAME_QUERY:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_PET_NAME_QUERY_read(reader, &opcodes->body.CMSG_PET_NAME_QUERY));
             break;
-        case CMSG_GUILD_QUERY:
+        case V_CMSG_GUILD_QUERY:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GUILD_QUERY_read(reader, &opcodes->body.CMSG_GUILD_QUERY));
             break;
-        case CMSG_ITEM_QUERY_SINGLE:
+        case V_CMSG_ITEM_QUERY_SINGLE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_ITEM_QUERY_SINGLE_read(reader, &opcodes->body.CMSG_ITEM_QUERY_SINGLE));
             break;
-        case CMSG_PAGE_TEXT_QUERY:
+        case V_CMSG_PAGE_TEXT_QUERY:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_PAGE_TEXT_QUERY_read(reader, &opcodes->body.CMSG_PAGE_TEXT_QUERY));
             break;
-        case CMSG_QUEST_QUERY:
+        case V_CMSG_QUEST_QUERY:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_QUEST_QUERY_read(reader, &opcodes->body.CMSG_QUEST_QUERY));
             break;
-        case CMSG_GAMEOBJECT_QUERY:
+        case V_CMSG_GAMEOBJECT_QUERY:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GAMEOBJECT_QUERY_read(reader, &opcodes->body.CMSG_GAMEOBJECT_QUERY));
             break;
-        case CMSG_CREATURE_QUERY:
+        case V_CMSG_CREATURE_QUERY:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CREATURE_QUERY_read(reader, &opcodes->body.CMSG_CREATURE_QUERY));
             break;
-        case CMSG_WHO:
+        case V_CMSG_WHO:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_WHO_read(reader, &opcodes->body.CMSG_WHO));
             break;
-        case CMSG_WHOIS:
+        case V_CMSG_WHOIS:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_WHOIS_read(reader, &opcodes->body.CMSG_WHOIS));
             break;
-        case CMSG_ADD_FRIEND:
+        case V_CMSG_ADD_FRIEND:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_ADD_FRIEND_read(reader, &opcodes->body.CMSG_ADD_FRIEND));
             break;
-        case CMSG_DEL_FRIEND:
+        case V_CMSG_DEL_FRIEND:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_DEL_FRIEND_read(reader, &opcodes->body.CMSG_DEL_FRIEND));
             break;
-        case CMSG_ADD_IGNORE:
+        case V_CMSG_ADD_IGNORE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_ADD_IGNORE_read(reader, &opcodes->body.CMSG_ADD_IGNORE));
             break;
-        case CMSG_DEL_IGNORE:
+        case V_CMSG_DEL_IGNORE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_DEL_IGNORE_read(reader, &opcodes->body.CMSG_DEL_IGNORE));
             break;
-        case CMSG_GROUP_INVITE:
+        case V_CMSG_GROUP_INVITE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GROUP_INVITE_read(reader, &opcodes->body.CMSG_GROUP_INVITE));
             break;
-        case CMSG_GROUP_UNINVITE:
+        case V_CMSG_GROUP_UNINVITE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GROUP_UNINVITE_read(reader, &opcodes->body.CMSG_GROUP_UNINVITE));
             break;
-        case CMSG_GROUP_UNINVITE_GUID:
+        case V_CMSG_GROUP_UNINVITE_GUID:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GROUP_UNINVITE_GUID_read(reader, &opcodes->body.CMSG_GROUP_UNINVITE_GUID));
             break;
-        case CMSG_GROUP_SET_LEADER:
+        case V_CMSG_GROUP_SET_LEADER:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GROUP_SET_LEADER_read(reader, &opcodes->body.CMSG_GROUP_SET_LEADER));
             break;
-        case CMSG_LOOT_METHOD:
+        case V_CMSG_LOOT_METHOD:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_LOOT_METHOD_read(reader, &opcodes->body.CMSG_LOOT_METHOD));
             break;
-        case CMSG_GUILD_CREATE:
+        case V_CMSG_GUILD_CREATE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GUILD_CREATE_read(reader, &opcodes->body.CMSG_GUILD_CREATE));
             break;
-        case CMSG_GUILD_INVITE:
+        case V_CMSG_GUILD_INVITE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GUILD_INVITE_read(reader, &opcodes->body.CMSG_GUILD_INVITE));
             break;
-        case CMSG_GUILD_PROMOTE:
+        case V_CMSG_GUILD_PROMOTE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GUILD_PROMOTE_read(reader, &opcodes->body.CMSG_GUILD_PROMOTE));
             break;
-        case CMSG_GUILD_DEMOTE:
+        case V_CMSG_GUILD_DEMOTE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GUILD_DEMOTE_read(reader, &opcodes->body.CMSG_GUILD_DEMOTE));
             break;
-        case CMSG_GUILD_REMOVE:
+        case V_CMSG_GUILD_REMOVE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GUILD_REMOVE_read(reader, &opcodes->body.CMSG_GUILD_REMOVE));
             break;
-        case CMSG_GUILD_LEADER:
+        case V_CMSG_GUILD_LEADER:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GUILD_LEADER_read(reader, &opcodes->body.CMSG_GUILD_LEADER));
             break;
-        case CMSG_GUILD_MOTD:
+        case V_CMSG_GUILD_MOTD:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GUILD_MOTD_read(reader, &opcodes->body.CMSG_GUILD_MOTD));
             break;
-        case CMSG_MESSAGECHAT:
+        case V_CMSG_MESSAGECHAT:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_MESSAGECHAT_read(reader, &opcodes->body.CMSG_MESSAGECHAT));
             break;
-        case CMSG_JOIN_CHANNEL:
+        case V_CMSG_JOIN_CHANNEL:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_JOIN_CHANNEL_read(reader, &opcodes->body.CMSG_JOIN_CHANNEL));
             break;
-        case CMSG_LEAVE_CHANNEL:
+        case V_CMSG_LEAVE_CHANNEL:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_LEAVE_CHANNEL_read(reader, &opcodes->body.CMSG_LEAVE_CHANNEL));
             break;
-        case CMSG_CHANNEL_LIST:
+        case V_CMSG_CHANNEL_LIST:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_LIST_read(reader, &opcodes->body.CMSG_CHANNEL_LIST));
             break;
-        case CMSG_CHANNEL_PASSWORD:
+        case V_CMSG_CHANNEL_PASSWORD:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_PASSWORD_read(reader, &opcodes->body.CMSG_CHANNEL_PASSWORD));
             break;
-        case CMSG_CHANNEL_SET_OWNER:
+        case V_CMSG_CHANNEL_SET_OWNER:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_SET_OWNER_read(reader, &opcodes->body.CMSG_CHANNEL_SET_OWNER));
             break;
-        case CMSG_CHANNEL_OWNER:
+        case V_CMSG_CHANNEL_OWNER:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_OWNER_read(reader, &opcodes->body.CMSG_CHANNEL_OWNER));
             break;
-        case CMSG_CHANNEL_MODERATOR:
+        case V_CMSG_CHANNEL_MODERATOR:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_MODERATOR_read(reader, &opcodes->body.CMSG_CHANNEL_MODERATOR));
             break;
-        case CMSG_CHANNEL_UNMODERATOR:
+        case V_CMSG_CHANNEL_UNMODERATOR:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_UNMODERATOR_read(reader, &opcodes->body.CMSG_CHANNEL_UNMODERATOR));
             break;
-        case CMSG_CHANNEL_MUTE:
+        case V_CMSG_CHANNEL_MUTE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_MUTE_read(reader, &opcodes->body.CMSG_CHANNEL_MUTE));
             break;
-        case CMSG_CHANNEL_UNMUTE:
+        case V_CMSG_CHANNEL_UNMUTE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_UNMUTE_read(reader, &opcodes->body.CMSG_CHANNEL_UNMUTE));
             break;
-        case CMSG_CHANNEL_INVITE:
+        case V_CMSG_CHANNEL_INVITE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_INVITE_read(reader, &opcodes->body.CMSG_CHANNEL_INVITE));
             break;
-        case CMSG_CHANNEL_KICK:
+        case V_CMSG_CHANNEL_KICK:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_KICK_read(reader, &opcodes->body.CMSG_CHANNEL_KICK));
             break;
-        case CMSG_CHANNEL_BAN:
+        case V_CMSG_CHANNEL_BAN:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_BAN_read(reader, &opcodes->body.CMSG_CHANNEL_BAN));
             break;
-        case CMSG_CHANNEL_UNBAN:
+        case V_CMSG_CHANNEL_UNBAN:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_UNBAN_read(reader, &opcodes->body.CMSG_CHANNEL_UNBAN));
             break;
-        case CMSG_CHANNEL_ANNOUNCEMENTS:
+        case V_CMSG_CHANNEL_ANNOUNCEMENTS:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_ANNOUNCEMENTS_read(reader, &opcodes->body.CMSG_CHANNEL_ANNOUNCEMENTS));
             break;
-        case CMSG_CHANNEL_MODERATE:
+        case V_CMSG_CHANNEL_MODERATE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHANNEL_MODERATE_read(reader, &opcodes->body.CMSG_CHANNEL_MODERATE));
             break;
-        case CMSG_USE_ITEM:
+        case V_CMSG_USE_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_USE_ITEM_read(reader, &opcodes->body.CMSG_USE_ITEM));
             break;
-        case CMSG_OPEN_ITEM:
+        case V_CMSG_OPEN_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_OPEN_ITEM_read(reader, &opcodes->body.CMSG_OPEN_ITEM));
             break;
-        case CMSG_READ_ITEM:
+        case V_CMSG_READ_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_READ_ITEM_read(reader, &opcodes->body.CMSG_READ_ITEM));
             break;
-        case CMSG_GAMEOBJ_USE:
+        case V_CMSG_GAMEOBJ_USE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GAMEOBJ_USE_read(reader, &opcodes->body.CMSG_GAMEOBJ_USE));
             break;
-        case CMSG_AREATRIGGER:
+        case V_CMSG_AREATRIGGER:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_AREATRIGGER_read(reader, &opcodes->body.CMSG_AREATRIGGER));
             break;
-        case MSG_MOVE_START_FORWARD:
+        case V_MSG_MOVE_START_FORWARD:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_FORWARD_Client_read(reader, &opcodes->body.MSG_MOVE_START_FORWARD_Client));
             break;
-        case MSG_MOVE_START_BACKWARD:
+        case V_MSG_MOVE_START_BACKWARD:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_BACKWARD_Client_read(reader, &opcodes->body.MSG_MOVE_START_BACKWARD_Client));
             break;
-        case MSG_MOVE_STOP:
+        case V_MSG_MOVE_STOP:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_STOP_Client_read(reader, &opcodes->body.MSG_MOVE_STOP_Client));
             break;
-        case MSG_MOVE_START_STRAFE_LEFT:
+        case V_MSG_MOVE_START_STRAFE_LEFT:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_STRAFE_LEFT_Client_read(reader, &opcodes->body.MSG_MOVE_START_STRAFE_LEFT_Client));
             break;
-        case MSG_MOVE_START_STRAFE_RIGHT:
+        case V_MSG_MOVE_START_STRAFE_RIGHT:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_STRAFE_RIGHT_Client_read(reader, &opcodes->body.MSG_MOVE_START_STRAFE_RIGHT_Client));
             break;
-        case MSG_MOVE_STOP_STRAFE:
+        case V_MSG_MOVE_STOP_STRAFE:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_STOP_STRAFE_Client_read(reader, &opcodes->body.MSG_MOVE_STOP_STRAFE_Client));
             break;
-        case MSG_MOVE_JUMP:
+        case V_MSG_MOVE_JUMP:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_JUMP_Client_read(reader, &opcodes->body.MSG_MOVE_JUMP_Client));
             break;
-        case MSG_MOVE_START_TURN_LEFT:
+        case V_MSG_MOVE_START_TURN_LEFT:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_TURN_LEFT_Client_read(reader, &opcodes->body.MSG_MOVE_START_TURN_LEFT_Client));
             break;
-        case MSG_MOVE_START_TURN_RIGHT:
+        case V_MSG_MOVE_START_TURN_RIGHT:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_TURN_RIGHT_Client_read(reader, &opcodes->body.MSG_MOVE_START_TURN_RIGHT_Client));
             break;
-        case MSG_MOVE_STOP_TURN:
+        case V_MSG_MOVE_STOP_TURN:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_STOP_TURN_Client_read(reader, &opcodes->body.MSG_MOVE_STOP_TURN_Client));
             break;
-        case MSG_MOVE_START_PITCH_UP:
+        case V_MSG_MOVE_START_PITCH_UP:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_PITCH_UP_Client_read(reader, &opcodes->body.MSG_MOVE_START_PITCH_UP_Client));
             break;
-        case MSG_MOVE_START_PITCH_DOWN:
+        case V_MSG_MOVE_START_PITCH_DOWN:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_PITCH_DOWN_Client_read(reader, &opcodes->body.MSG_MOVE_START_PITCH_DOWN_Client));
             break;
-        case MSG_MOVE_STOP_PITCH:
+        case V_MSG_MOVE_STOP_PITCH:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_STOP_PITCH_Client_read(reader, &opcodes->body.MSG_MOVE_STOP_PITCH_Client));
             break;
-        case MSG_MOVE_SET_RUN_MODE:
+        case V_MSG_MOVE_SET_RUN_MODE:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_SET_RUN_MODE_Client_read(reader, &opcodes->body.MSG_MOVE_SET_RUN_MODE_Client));
             break;
-        case MSG_MOVE_SET_WALK_MODE:
+        case V_MSG_MOVE_SET_WALK_MODE:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_SET_WALK_MODE_Client_read(reader, &opcodes->body.MSG_MOVE_SET_WALK_MODE_Client));
             break;
-        case MSG_MOVE_TELEPORT_ACK:
+        case V_MSG_MOVE_TELEPORT_ACK:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_TELEPORT_ACK_Client_read(reader, &opcodes->body.MSG_MOVE_TELEPORT_ACK_Client));
             break;
-        case MSG_MOVE_FALL_LAND:
+        case V_MSG_MOVE_FALL_LAND:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_FALL_LAND_Client_read(reader, &opcodes->body.MSG_MOVE_FALL_LAND_Client));
             break;
-        case MSG_MOVE_START_SWIM:
+        case V_MSG_MOVE_START_SWIM:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_SWIM_Client_read(reader, &opcodes->body.MSG_MOVE_START_SWIM_Client));
             break;
-        case MSG_MOVE_STOP_SWIM:
+        case V_MSG_MOVE_STOP_SWIM:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_STOP_SWIM_Client_read(reader, &opcodes->body.MSG_MOVE_STOP_SWIM_Client));
             break;
-        case MSG_MOVE_SET_FACING:
+        case V_MSG_MOVE_SET_FACING:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_SET_FACING_Client_read(reader, &opcodes->body.MSG_MOVE_SET_FACING_Client));
             break;
-        case MSG_MOVE_SET_PITCH:
+        case V_MSG_MOVE_SET_PITCH:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_SET_PITCH_Client_read(reader, &opcodes->body.MSG_MOVE_SET_PITCH_Client));
             break;
-        case CMSG_MOVE_SET_RAW_POSITION:
+        case V_CMSG_MOVE_SET_RAW_POSITION:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_MOVE_SET_RAW_POSITION_read(reader, &opcodes->body.CMSG_MOVE_SET_RAW_POSITION));
             break;
-        case CMSG_FORCE_RUN_SPEED_CHANGE_ACK:
+        case V_CMSG_FORCE_RUN_SPEED_CHANGE_ACK:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_FORCE_RUN_SPEED_CHANGE_ACK_read(reader, &opcodes->body.CMSG_FORCE_RUN_SPEED_CHANGE_ACK));
             break;
-        case CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK:
+        case V_CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK_read(reader, &opcodes->body.CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK));
             break;
-        case CMSG_FORCE_SWIM_SPEED_CHANGE_ACK:
+        case V_CMSG_FORCE_SWIM_SPEED_CHANGE_ACK:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_FORCE_SWIM_SPEED_CHANGE_ACK_read(reader, &opcodes->body.CMSG_FORCE_SWIM_SPEED_CHANGE_ACK));
             break;
-        case CMSG_FORCE_MOVE_ROOT_ACK:
+        case V_CMSG_FORCE_MOVE_ROOT_ACK:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_FORCE_MOVE_ROOT_ACK_read(reader, &opcodes->body.CMSG_FORCE_MOVE_ROOT_ACK));
             break;
-        case CMSG_FORCE_MOVE_UNROOT_ACK:
+        case V_CMSG_FORCE_MOVE_UNROOT_ACK:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_FORCE_MOVE_UNROOT_ACK_read(reader, &opcodes->body.CMSG_FORCE_MOVE_UNROOT_ACK));
             break;
-        case MSG_MOVE_HEARTBEAT:
+        case V_MSG_MOVE_HEARTBEAT:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_HEARTBEAT_Client_read(reader, &opcodes->body.MSG_MOVE_HEARTBEAT_Client));
             break;
-        case CMSG_MOVE_KNOCK_BACK_ACK:
+        case V_CMSG_MOVE_KNOCK_BACK_ACK:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_MOVE_KNOCK_BACK_ACK_read(reader, &opcodes->body.CMSG_MOVE_KNOCK_BACK_ACK));
             break;
-        case CMSG_MOVE_HOVER_ACK:
+        case V_CMSG_MOVE_HOVER_ACK:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_MOVE_HOVER_ACK_read(reader, &opcodes->body.CMSG_MOVE_HOVER_ACK));
             break;
-        case CMSG_TUTORIAL_FLAG:
+        case V_CMSG_TUTORIAL_FLAG:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_TUTORIAL_FLAG_read(reader, &opcodes->body.CMSG_TUTORIAL_FLAG));
             break;
-        case CMSG_STANDSTATECHANGE:
+        case V_CMSG_STANDSTATECHANGE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_STANDSTATECHANGE_read(reader, &opcodes->body.CMSG_STANDSTATECHANGE));
             break;
-        case CMSG_EMOTE:
+        case V_CMSG_EMOTE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_EMOTE_read(reader, &opcodes->body.CMSG_EMOTE));
             break;
-        case CMSG_TEXT_EMOTE:
+        case V_CMSG_TEXT_EMOTE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_TEXT_EMOTE_read(reader, &opcodes->body.CMSG_TEXT_EMOTE));
             break;
-        case CMSG_AUTOSTORE_LOOT_ITEM:
+        case V_CMSG_AUTOSTORE_LOOT_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_AUTOSTORE_LOOT_ITEM_read(reader, &opcodes->body.CMSG_AUTOSTORE_LOOT_ITEM));
             break;
-        case CMSG_AUTOEQUIP_ITEM:
+        case V_CMSG_AUTOEQUIP_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_AUTOEQUIP_ITEM_read(reader, &opcodes->body.CMSG_AUTOEQUIP_ITEM));
             break;
-        case CMSG_AUTOSTORE_BAG_ITEM:
+        case V_CMSG_AUTOSTORE_BAG_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_AUTOSTORE_BAG_ITEM_read(reader, &opcodes->body.CMSG_AUTOSTORE_BAG_ITEM));
             break;
-        case CMSG_SWAP_ITEM:
+        case V_CMSG_SWAP_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_SWAP_ITEM_read(reader, &opcodes->body.CMSG_SWAP_ITEM));
             break;
-        case CMSG_SWAP_INV_ITEM:
+        case V_CMSG_SWAP_INV_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_SWAP_INV_ITEM_read(reader, &opcodes->body.CMSG_SWAP_INV_ITEM));
             break;
-        case CMSG_SPLIT_ITEM:
+        case V_CMSG_SPLIT_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_SPLIT_ITEM_read(reader, &opcodes->body.CMSG_SPLIT_ITEM));
             break;
-        case CMSG_AUTOEQUIP_ITEM_SLOT:
+        case V_CMSG_AUTOEQUIP_ITEM_SLOT:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_AUTOEQUIP_ITEM_SLOT_read(reader, &opcodes->body.CMSG_AUTOEQUIP_ITEM_SLOT));
             break;
-        case CMSG_DESTROYITEM:
+        case V_CMSG_DESTROYITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_DESTROYITEM_read(reader, &opcodes->body.CMSG_DESTROYITEM));
             break;
-        case CMSG_INSPECT:
+        case V_CMSG_INSPECT:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_INSPECT_read(reader, &opcodes->body.CMSG_INSPECT));
             break;
-        case CMSG_INITIATE_TRADE:
+        case V_CMSG_INITIATE_TRADE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_INITIATE_TRADE_read(reader, &opcodes->body.CMSG_INITIATE_TRADE));
             break;
-        case CMSG_ACCEPT_TRADE:
+        case V_CMSG_ACCEPT_TRADE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_ACCEPT_TRADE_read(reader, &opcodes->body.CMSG_ACCEPT_TRADE));
             break;
-        case CMSG_SET_TRADE_ITEM:
+        case V_CMSG_SET_TRADE_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_SET_TRADE_ITEM_read(reader, &opcodes->body.CMSG_SET_TRADE_ITEM));
             break;
-        case CMSG_CLEAR_TRADE_ITEM:
+        case V_CMSG_CLEAR_TRADE_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CLEAR_TRADE_ITEM_read(reader, &opcodes->body.CMSG_CLEAR_TRADE_ITEM));
             break;
-        case CMSG_SET_TRADE_GOLD:
+        case V_CMSG_SET_TRADE_GOLD:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_SET_TRADE_GOLD_read(reader, &opcodes->body.CMSG_SET_TRADE_GOLD));
             break;
-        case CMSG_SET_FACTION_ATWAR:
+        case V_CMSG_SET_FACTION_ATWAR:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_SET_FACTION_ATWAR_read(reader, &opcodes->body.CMSG_SET_FACTION_ATWAR));
             break;
-        case CMSG_SET_ACTION_BUTTON:
+        case V_CMSG_SET_ACTION_BUTTON:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_SET_ACTION_BUTTON_read(reader, &opcodes->body.CMSG_SET_ACTION_BUTTON));
             break;
-        case CMSG_CAST_SPELL:
+        case V_CMSG_CAST_SPELL:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CAST_SPELL_read(reader, &opcodes->body.CMSG_CAST_SPELL));
             break;
-        case CMSG_CANCEL_CAST:
+        case V_CMSG_CANCEL_CAST:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CANCEL_CAST_read(reader, &opcodes->body.CMSG_CANCEL_CAST));
             break;
-        case CMSG_CANCEL_AURA:
+        case V_CMSG_CANCEL_AURA:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CANCEL_AURA_read(reader, &opcodes->body.CMSG_CANCEL_AURA));
             break;
-        case CMSG_CANCEL_CHANNELLING:
+        case V_CMSG_CANCEL_CHANNELLING:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CANCEL_CHANNELLING_read(reader, &opcodes->body.CMSG_CANCEL_CHANNELLING));
             break;
-        case CMSG_SET_SELECTION:
+        case V_CMSG_SET_SELECTION:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_SET_SELECTION_read(reader, &opcodes->body.CMSG_SET_SELECTION));
             break;
-        case CMSG_SET_TARGET_OBSOLETE:
+        case V_CMSG_SET_TARGET_OBSOLETE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_SET_TARGET_OBSOLETE_read(reader, &opcodes->body.CMSG_SET_TARGET_OBSOLETE));
             break;
-        case CMSG_ATTACKSWING:
+        case V_CMSG_ATTACKSWING:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_ATTACKSWING_read(reader, &opcodes->body.CMSG_ATTACKSWING));
             break;
-        case CMSG_RESURRECT_RESPONSE:
+        case V_CMSG_RESURRECT_RESPONSE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_RESURRECT_RESPONSE_read(reader, &opcodes->body.CMSG_RESURRECT_RESPONSE));
             break;
-        case CMSG_LOOT:
+        case V_CMSG_LOOT:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_LOOT_read(reader, &opcodes->body.CMSG_LOOT));
             break;
-        case CMSG_LOOT_RELEASE:
+        case V_CMSG_LOOT_RELEASE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_LOOT_RELEASE_read(reader, &opcodes->body.CMSG_LOOT_RELEASE));
             break;
-        case CMSG_DUEL_ACCEPTED:
+        case V_CMSG_DUEL_ACCEPTED:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_DUEL_ACCEPTED_read(reader, &opcodes->body.CMSG_DUEL_ACCEPTED));
             break;
-        case CMSG_DUEL_CANCELLED:
+        case V_CMSG_DUEL_CANCELLED:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_DUEL_CANCELLED_read(reader, &opcodes->body.CMSG_DUEL_CANCELLED));
             break;
-        case CMSG_PET_SET_ACTION:
+        case V_CMSG_PET_SET_ACTION:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_PET_SET_ACTION_read(reader, &opcodes->body.CMSG_PET_SET_ACTION, _size - 4));
             break;
-        case CMSG_PET_ACTION:
+        case V_CMSG_PET_ACTION:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_PET_ACTION_read(reader, &opcodes->body.CMSG_PET_ACTION));
             break;
-        case CMSG_PET_ABANDON:
+        case V_CMSG_PET_ABANDON:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_PET_ABANDON_read(reader, &opcodes->body.CMSG_PET_ABANDON));
             break;
-        case CMSG_PET_RENAME:
+        case V_CMSG_PET_RENAME:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_PET_RENAME_read(reader, &opcodes->body.CMSG_PET_RENAME));
             break;
-        case CMSG_GOSSIP_HELLO:
+        case V_CMSG_GOSSIP_HELLO:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GOSSIP_HELLO_read(reader, &opcodes->body.CMSG_GOSSIP_HELLO));
             break;
-        case CMSG_GOSSIP_SELECT_OPTION:
+        case V_CMSG_GOSSIP_SELECT_OPTION:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GOSSIP_SELECT_OPTION_read(reader, &opcodes->body.CMSG_GOSSIP_SELECT_OPTION, _size - 4));
             break;
-        case CMSG_NPC_TEXT_QUERY:
+        case V_CMSG_NPC_TEXT_QUERY:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_NPC_TEXT_QUERY_read(reader, &opcodes->body.CMSG_NPC_TEXT_QUERY));
             break;
-        case CMSG_QUESTGIVER_STATUS_QUERY:
+        case V_CMSG_QUESTGIVER_STATUS_QUERY:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_QUESTGIVER_STATUS_QUERY_read(reader, &opcodes->body.CMSG_QUESTGIVER_STATUS_QUERY));
             break;
-        case CMSG_QUESTGIVER_HELLO:
+        case V_CMSG_QUESTGIVER_HELLO:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_QUESTGIVER_HELLO_read(reader, &opcodes->body.CMSG_QUESTGIVER_HELLO));
             break;
-        case CMSG_QUESTGIVER_QUERY_QUEST:
+        case V_CMSG_QUESTGIVER_QUERY_QUEST:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_QUESTGIVER_QUERY_QUEST_read(reader, &opcodes->body.CMSG_QUESTGIVER_QUERY_QUEST));
             break;
-        case CMSG_QUESTGIVER_ACCEPT_QUEST:
+        case V_CMSG_QUESTGIVER_ACCEPT_QUEST:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_QUESTGIVER_ACCEPT_QUEST_read(reader, &opcodes->body.CMSG_QUESTGIVER_ACCEPT_QUEST));
             break;
-        case CMSG_QUESTGIVER_COMPLETE_QUEST:
+        case V_CMSG_QUESTGIVER_COMPLETE_QUEST:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_QUESTGIVER_COMPLETE_QUEST_read(reader, &opcodes->body.CMSG_QUESTGIVER_COMPLETE_QUEST));
             break;
-        case CMSG_QUESTGIVER_REQUEST_REWARD:
+        case V_CMSG_QUESTGIVER_REQUEST_REWARD:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_QUESTGIVER_REQUEST_REWARD_read(reader, &opcodes->body.CMSG_QUESTGIVER_REQUEST_REWARD));
             break;
-        case CMSG_QUESTGIVER_CHOOSE_REWARD:
+        case V_CMSG_QUESTGIVER_CHOOSE_REWARD:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_QUESTGIVER_CHOOSE_REWARD_read(reader, &opcodes->body.CMSG_QUESTGIVER_CHOOSE_REWARD));
             break;
-        case CMSG_QUESTLOG_SWAP_QUEST:
+        case V_CMSG_QUESTLOG_SWAP_QUEST:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_QUESTLOG_SWAP_QUEST_read(reader, &opcodes->body.CMSG_QUESTLOG_SWAP_QUEST));
             break;
-        case CMSG_QUESTLOG_REMOVE_QUEST:
+        case V_CMSG_QUESTLOG_REMOVE_QUEST:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_QUESTLOG_REMOVE_QUEST_read(reader, &opcodes->body.CMSG_QUESTLOG_REMOVE_QUEST));
             break;
-        case CMSG_QUEST_CONFIRM_ACCEPT:
+        case V_CMSG_QUEST_CONFIRM_ACCEPT:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_QUEST_CONFIRM_ACCEPT_read(reader, &opcodes->body.CMSG_QUEST_CONFIRM_ACCEPT));
             break;
-        case CMSG_PUSHQUESTTOPARTY:
+        case V_CMSG_PUSHQUESTTOPARTY:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_PUSHQUESTTOPARTY_read(reader, &opcodes->body.CMSG_PUSHQUESTTOPARTY));
             break;
-        case CMSG_LIST_INVENTORY:
+        case V_CMSG_LIST_INVENTORY:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_LIST_INVENTORY_read(reader, &opcodes->body.CMSG_LIST_INVENTORY));
             break;
-        case CMSG_SELL_ITEM:
+        case V_CMSG_SELL_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_SELL_ITEM_read(reader, &opcodes->body.CMSG_SELL_ITEM));
             break;
-        case CMSG_BUY_ITEM:
+        case V_CMSG_BUY_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_BUY_ITEM_read(reader, &opcodes->body.CMSG_BUY_ITEM));
             break;
-        case CMSG_BUY_ITEM_IN_SLOT:
+        case V_CMSG_BUY_ITEM_IN_SLOT:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_BUY_ITEM_IN_SLOT_read(reader, &opcodes->body.CMSG_BUY_ITEM_IN_SLOT));
             break;
-        case CMSG_TAXINODE_STATUS_QUERY:
+        case V_CMSG_TAXINODE_STATUS_QUERY:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_TAXINODE_STATUS_QUERY_read(reader, &opcodes->body.CMSG_TAXINODE_STATUS_QUERY));
             break;
-        case CMSG_TAXIQUERYAVAILABLENODES:
+        case V_CMSG_TAXIQUERYAVAILABLENODES:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_TAXIQUERYAVAILABLENODES_read(reader, &opcodes->body.CMSG_TAXIQUERYAVAILABLENODES));
             break;
-        case CMSG_ACTIVATETAXI:
+        case V_CMSG_ACTIVATETAXI:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_ACTIVATETAXI_read(reader, &opcodes->body.CMSG_ACTIVATETAXI));
             break;
-        case CMSG_TRAINER_LIST:
+        case V_CMSG_TRAINER_LIST:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_TRAINER_LIST_read(reader, &opcodes->body.CMSG_TRAINER_LIST));
             break;
-        case CMSG_TRAINER_BUY_SPELL:
+        case V_CMSG_TRAINER_BUY_SPELL:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_TRAINER_BUY_SPELL_read(reader, &opcodes->body.CMSG_TRAINER_BUY_SPELL));
             break;
-        case CMSG_BINDER_ACTIVATE:
+        case V_CMSG_BINDER_ACTIVATE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_BINDER_ACTIVATE_read(reader, &opcodes->body.CMSG_BINDER_ACTIVATE));
             break;
-        case CMSG_BANKER_ACTIVATE:
+        case V_CMSG_BANKER_ACTIVATE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_BANKER_ACTIVATE_read(reader, &opcodes->body.CMSG_BANKER_ACTIVATE));
             break;
-        case CMSG_BUY_BANK_SLOT:
+        case V_CMSG_BUY_BANK_SLOT:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_BUY_BANK_SLOT_read(reader, &opcodes->body.CMSG_BUY_BANK_SLOT));
             break;
-        case CMSG_PETITION_SHOWLIST:
+        case V_CMSG_PETITION_SHOWLIST:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_PETITION_SHOWLIST_read(reader, &opcodes->body.CMSG_PETITION_SHOWLIST));
             break;
-        case CMSG_PETITION_BUY:
+        case V_CMSG_PETITION_BUY:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_PETITION_BUY_read(reader, &opcodes->body.CMSG_PETITION_BUY));
             break;
-        case CMSG_PETITION_SHOW_SIGNATURES:
+        case V_CMSG_PETITION_SHOW_SIGNATURES:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_PETITION_SHOW_SIGNATURES_read(reader, &opcodes->body.CMSG_PETITION_SHOW_SIGNATURES));
             break;
-        case CMSG_PETITION_SIGN:
+        case V_CMSG_PETITION_SIGN:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_PETITION_SIGN_read(reader, &opcodes->body.CMSG_PETITION_SIGN));
             break;
-        case MSG_PETITION_DECLINE:
+        case V_MSG_PETITION_DECLINE:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_PETITION_DECLINE_read(reader, &opcodes->body.MSG_PETITION_DECLINE));
             break;
-        case CMSG_OFFER_PETITION:
+        case V_CMSG_OFFER_PETITION:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_OFFER_PETITION_read(reader, &opcodes->body.CMSG_OFFER_PETITION));
             break;
-        case CMSG_TURN_IN_PETITION:
+        case V_CMSG_TURN_IN_PETITION:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_TURN_IN_PETITION_read(reader, &opcodes->body.CMSG_TURN_IN_PETITION));
             break;
-        case CMSG_PETITION_QUERY:
+        case V_CMSG_PETITION_QUERY:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_PETITION_QUERY_read(reader, &opcodes->body.CMSG_PETITION_QUERY));
             break;
-        case CMSG_BUG:
+        case V_CMSG_BUG:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_BUG_read(reader, &opcodes->body.CMSG_BUG));
             break;
-        case CMSG_RECLAIM_CORPSE:
+        case V_CMSG_RECLAIM_CORPSE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_RECLAIM_CORPSE_read(reader, &opcodes->body.CMSG_RECLAIM_CORPSE));
             break;
-        case CMSG_WRAP_ITEM:
+        case V_CMSG_WRAP_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_WRAP_ITEM_read(reader, &opcodes->body.CMSG_WRAP_ITEM));
             break;
-        case MSG_MINIMAP_PING:
+        case V_MSG_MINIMAP_PING:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MINIMAP_PING_Client_read(reader, &opcodes->body.MSG_MINIMAP_PING_Client));
             break;
-        case CMSG_PING:
+        case V_CMSG_PING:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_PING_read(reader, &opcodes->body.CMSG_PING));
             break;
-        case CMSG_SETSHEATHED:
+        case V_CMSG_SETSHEATHED:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_SETSHEATHED_read(reader, &opcodes->body.CMSG_SETSHEATHED));
             break;
-        case CMSG_AUTH_SESSION:
+        case V_CMSG_AUTH_SESSION:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_AUTH_SESSION_read(reader, &opcodes->body.CMSG_AUTH_SESSION, _size - 4));
             break;
-        case CMSG_PET_CAST_SPELL:
+        case V_CMSG_PET_CAST_SPELL:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_PET_CAST_SPELL_read(reader, &opcodes->body.CMSG_PET_CAST_SPELL));
             break;
-        case MSG_SAVE_GUILD_EMBLEM:
+        case V_MSG_SAVE_GUILD_EMBLEM:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_SAVE_GUILD_EMBLEM_Client_read(reader, &opcodes->body.MSG_SAVE_GUILD_EMBLEM_Client));
             break;
-        case MSG_TABARDVENDOR_ACTIVATE:
+        case V_MSG_TABARDVENDOR_ACTIVATE:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_TABARDVENDOR_ACTIVATE_read(reader, &opcodes->body.MSG_TABARDVENDOR_ACTIVATE));
             break;
-        case CMSG_ZONEUPDATE:
+        case V_CMSG_ZONEUPDATE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_ZONEUPDATE_read(reader, &opcodes->body.CMSG_ZONEUPDATE));
             break;
-        case MSG_RANDOM_ROLL:
+        case V_MSG_RANDOM_ROLL:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_RANDOM_ROLL_Client_read(reader, &opcodes->body.MSG_RANDOM_ROLL_Client));
             break;
-        case CMSG_UNLEARN_SKILL:
+        case V_CMSG_UNLEARN_SKILL:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_UNLEARN_SKILL_read(reader, &opcodes->body.CMSG_UNLEARN_SKILL));
             break;
-        case CMSG_GMTICKET_CREATE:
+        case V_CMSG_GMTICKET_CREATE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GMTICKET_CREATE_read(reader, &opcodes->body.CMSG_GMTICKET_CREATE, _size - 4));
             break;
-        case CMSG_GMTICKET_UPDATETEXT:
+        case V_CMSG_GMTICKET_UPDATETEXT:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GMTICKET_UPDATETEXT_read(reader, &opcodes->body.CMSG_GMTICKET_UPDATETEXT));
             break;
-        case CMSG_REQUEST_ACCOUNT_DATA:
+        case V_CMSG_REQUEST_ACCOUNT_DATA:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_REQUEST_ACCOUNT_DATA_read(reader, &opcodes->body.CMSG_REQUEST_ACCOUNT_DATA));
             break;
-        case CMSG_UPDATE_ACCOUNT_DATA:
+        case V_CMSG_UPDATE_ACCOUNT_DATA:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_UPDATE_ACCOUNT_DATA_read(reader, &opcodes->body.CMSG_UPDATE_ACCOUNT_DATA, _size - 4));
             break;
-        case CMSG_SPIRIT_HEALER_ACTIVATE:
+        case V_CMSG_SPIRIT_HEALER_ACTIVATE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_SPIRIT_HEALER_ACTIVATE_read(reader, &opcodes->body.CMSG_SPIRIT_HEALER_ACTIVATE));
             break;
-        case CMSG_CHAT_IGNORED:
+        case V_CMSG_CHAT_IGNORED:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHAT_IGNORED_read(reader, &opcodes->body.CMSG_CHAT_IGNORED));
             break;
-        case CMSG_GUILD_RANK:
+        case V_CMSG_GUILD_RANK:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GUILD_RANK_read(reader, &opcodes->body.CMSG_GUILD_RANK));
             break;
-        case CMSG_GUILD_ADD_RANK:
+        case V_CMSG_GUILD_ADD_RANK:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GUILD_ADD_RANK_read(reader, &opcodes->body.CMSG_GUILD_ADD_RANK));
             break;
-        case CMSG_GUILD_SET_PUBLIC_NOTE:
+        case V_CMSG_GUILD_SET_PUBLIC_NOTE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GUILD_SET_PUBLIC_NOTE_read(reader, &opcodes->body.CMSG_GUILD_SET_PUBLIC_NOTE));
             break;
-        case CMSG_GUILD_SET_OFFICER_NOTE:
+        case V_CMSG_GUILD_SET_OFFICER_NOTE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GUILD_SET_OFFICER_NOTE_read(reader, &opcodes->body.CMSG_GUILD_SET_OFFICER_NOTE));
             break;
-        case CMSG_SEND_MAIL:
+        case V_CMSG_SEND_MAIL:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_SEND_MAIL_read(reader, &opcodes->body.CMSG_SEND_MAIL));
             break;
-        case CMSG_GET_MAIL_LIST:
+        case V_CMSG_GET_MAIL_LIST:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GET_MAIL_LIST_read(reader, &opcodes->body.CMSG_GET_MAIL_LIST));
             break;
-        case CMSG_BATTLEFIELD_LIST:
+        case V_CMSG_BATTLEFIELD_LIST:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_BATTLEFIELD_LIST_read(reader, &opcodes->body.CMSG_BATTLEFIELD_LIST));
             break;
-        case CMSG_BATTLEFIELD_JOIN:
+        case V_CMSG_BATTLEFIELD_JOIN:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_BATTLEFIELD_JOIN_read(reader, &opcodes->body.CMSG_BATTLEFIELD_JOIN));
             break;
-        case CMSG_ITEM_TEXT_QUERY:
+        case V_CMSG_ITEM_TEXT_QUERY:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_ITEM_TEXT_QUERY_read(reader, &opcodes->body.CMSG_ITEM_TEXT_QUERY));
             break;
-        case CMSG_MAIL_TAKE_MONEY:
+        case V_CMSG_MAIL_TAKE_MONEY:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_MAIL_TAKE_MONEY_read(reader, &opcodes->body.CMSG_MAIL_TAKE_MONEY));
             break;
-        case CMSG_MAIL_TAKE_ITEM:
+        case V_CMSG_MAIL_TAKE_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_MAIL_TAKE_ITEM_read(reader, &opcodes->body.CMSG_MAIL_TAKE_ITEM));
             break;
-        case CMSG_MAIL_MARK_AS_READ:
+        case V_CMSG_MAIL_MARK_AS_READ:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_MAIL_MARK_AS_READ_read(reader, &opcodes->body.CMSG_MAIL_MARK_AS_READ));
             break;
-        case CMSG_MAIL_RETURN_TO_SENDER:
+        case V_CMSG_MAIL_RETURN_TO_SENDER:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_MAIL_RETURN_TO_SENDER_read(reader, &opcodes->body.CMSG_MAIL_RETURN_TO_SENDER));
             break;
-        case CMSG_MAIL_DELETE:
+        case V_CMSG_MAIL_DELETE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_MAIL_DELETE_read(reader, &opcodes->body.CMSG_MAIL_DELETE));
             break;
-        case CMSG_MAIL_CREATE_TEXT_ITEM:
+        case V_CMSG_MAIL_CREATE_TEXT_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_MAIL_CREATE_TEXT_ITEM_read(reader, &opcodes->body.CMSG_MAIL_CREATE_TEXT_ITEM));
             break;
-        case CMSG_LEARN_TALENT:
+        case V_CMSG_LEARN_TALENT:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_LEARN_TALENT_read(reader, &opcodes->body.CMSG_LEARN_TALENT));
             break;
-        case CMSG_TOGGLE_PVP:
+        case V_CMSG_TOGGLE_PVP:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_TOGGLE_PVP_read(reader, &opcodes->body.CMSG_TOGGLE_PVP, _size - 4));
             break;
-        case MSG_AUCTION_HELLO:
+        case V_MSG_AUCTION_HELLO:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_AUCTION_HELLO_Client_read(reader, &opcodes->body.MSG_AUCTION_HELLO_Client));
             break;
-        case CMSG_AUCTION_SELL_ITEM:
+        case V_CMSG_AUCTION_SELL_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_AUCTION_SELL_ITEM_read(reader, &opcodes->body.CMSG_AUCTION_SELL_ITEM));
             break;
-        case CMSG_AUCTION_REMOVE_ITEM:
+        case V_CMSG_AUCTION_REMOVE_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_AUCTION_REMOVE_ITEM_read(reader, &opcodes->body.CMSG_AUCTION_REMOVE_ITEM));
             break;
-        case CMSG_AUCTION_LIST_ITEMS:
+        case V_CMSG_AUCTION_LIST_ITEMS:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_AUCTION_LIST_ITEMS_read(reader, &opcodes->body.CMSG_AUCTION_LIST_ITEMS));
             break;
-        case CMSG_AUCTION_LIST_OWNER_ITEMS:
+        case V_CMSG_AUCTION_LIST_OWNER_ITEMS:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_AUCTION_LIST_OWNER_ITEMS_read(reader, &opcodes->body.CMSG_AUCTION_LIST_OWNER_ITEMS));
             break;
-        case CMSG_AUCTION_PLACE_BID:
+        case V_CMSG_AUCTION_PLACE_BID:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_AUCTION_PLACE_BID_read(reader, &opcodes->body.CMSG_AUCTION_PLACE_BID));
             break;
-        case CMSG_AUCTION_LIST_BIDDER_ITEMS:
+        case V_CMSG_AUCTION_LIST_BIDDER_ITEMS:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_AUCTION_LIST_BIDDER_ITEMS_read(reader, &opcodes->body.CMSG_AUCTION_LIST_BIDDER_ITEMS));
             break;
-        case CMSG_SET_AMMO:
+        case V_CMSG_SET_AMMO:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_SET_AMMO_read(reader, &opcodes->body.CMSG_SET_AMMO));
             break;
-        case CMSG_SET_ACTIVE_MOVER:
+        case V_CMSG_SET_ACTIVE_MOVER:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_SET_ACTIVE_MOVER_read(reader, &opcodes->body.CMSG_SET_ACTIVE_MOVER));
             break;
-        case CMSG_PET_CANCEL_AURA:
+        case V_CMSG_PET_CANCEL_AURA:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_PET_CANCEL_AURA_read(reader, &opcodes->body.CMSG_PET_CANCEL_AURA));
             break;
-        case MSG_LIST_STABLED_PETS:
+        case V_MSG_LIST_STABLED_PETS:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_LIST_STABLED_PETS_Client_read(reader, &opcodes->body.MSG_LIST_STABLED_PETS_Client));
             break;
-        case CMSG_STABLE_PET:
+        case V_CMSG_STABLE_PET:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_STABLE_PET_read(reader, &opcodes->body.CMSG_STABLE_PET));
             break;
-        case CMSG_UNSTABLE_PET:
+        case V_CMSG_UNSTABLE_PET:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_UNSTABLE_PET_read(reader, &opcodes->body.CMSG_UNSTABLE_PET));
             break;
-        case CMSG_BUY_STABLE_SLOT:
+        case V_CMSG_BUY_STABLE_SLOT:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_BUY_STABLE_SLOT_read(reader, &opcodes->body.CMSG_BUY_STABLE_SLOT));
             break;
-        case CMSG_STABLE_SWAP_PET:
+        case V_CMSG_STABLE_SWAP_PET:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_STABLE_SWAP_PET_read(reader, &opcodes->body.CMSG_STABLE_SWAP_PET));
             break;
-        case MSG_QUEST_PUSH_RESULT:
+        case V_MSG_QUEST_PUSH_RESULT:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_QUEST_PUSH_RESULT_read(reader, &opcodes->body.MSG_QUEST_PUSH_RESULT));
             break;
-        case CMSG_FAR_SIGHT:
+        case V_CMSG_FAR_SIGHT:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_FAR_SIGHT_read(reader, &opcodes->body.CMSG_FAR_SIGHT));
             break;
-        case CMSG_GROUP_CHANGE_SUB_GROUP:
+        case V_CMSG_GROUP_CHANGE_SUB_GROUP:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GROUP_CHANGE_SUB_GROUP_read(reader, &opcodes->body.CMSG_GROUP_CHANGE_SUB_GROUP));
             break;
-        case CMSG_REQUEST_PARTY_MEMBER_STATS:
+        case V_CMSG_REQUEST_PARTY_MEMBER_STATS:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_REQUEST_PARTY_MEMBER_STATS_read(reader, &opcodes->body.CMSG_REQUEST_PARTY_MEMBER_STATS));
             break;
-        case CMSG_GROUP_SWAP_SUB_GROUP:
+        case V_CMSG_GROUP_SWAP_SUB_GROUP:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GROUP_SWAP_SUB_GROUP_read(reader, &opcodes->body.CMSG_GROUP_SWAP_SUB_GROUP));
             break;
-        case CMSG_AUTOSTORE_BANK_ITEM:
+        case V_CMSG_AUTOSTORE_BANK_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_AUTOSTORE_BANK_ITEM_read(reader, &opcodes->body.CMSG_AUTOSTORE_BANK_ITEM));
             break;
-        case CMSG_AUTOBANK_ITEM:
+        case V_CMSG_AUTOBANK_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_AUTOBANK_ITEM_read(reader, &opcodes->body.CMSG_AUTOBANK_ITEM));
             break;
-        case CMSG_GROUP_ASSISTANT_LEADER:
+        case V_CMSG_GROUP_ASSISTANT_LEADER:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GROUP_ASSISTANT_LEADER_read(reader, &opcodes->body.CMSG_GROUP_ASSISTANT_LEADER));
             break;
-        case CMSG_BUYBACK_ITEM:
+        case V_CMSG_BUYBACK_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_BUYBACK_ITEM_read(reader, &opcodes->body.CMSG_BUYBACK_ITEM));
             break;
-        case CMSG_MEETINGSTONE_JOIN:
+        case V_CMSG_MEETINGSTONE_JOIN:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_MEETINGSTONE_JOIN_read(reader, &opcodes->body.CMSG_MEETINGSTONE_JOIN));
             break;
-        case CMSG_LOOT_ROLL:
+        case V_CMSG_LOOT_ROLL:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_LOOT_ROLL_read(reader, &opcodes->body.CMSG_LOOT_ROLL));
             break;
-        case CMSG_LOOT_MASTER_GIVE:
+        case V_CMSG_LOOT_MASTER_GIVE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_LOOT_MASTER_GIVE_read(reader, &opcodes->body.CMSG_LOOT_MASTER_GIVE));
             break;
-        case CMSG_REPAIR_ITEM:
+        case V_CMSG_REPAIR_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_REPAIR_ITEM_read(reader, &opcodes->body.CMSG_REPAIR_ITEM));
             break;
-        case MSG_TALENT_WIPE_CONFIRM:
+        case V_MSG_TALENT_WIPE_CONFIRM:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_TALENT_WIPE_CONFIRM_Client_read(reader, &opcodes->body.MSG_TALENT_WIPE_CONFIRM_Client));
             break;
-        case CMSG_SUMMON_RESPONSE:
+        case V_CMSG_SUMMON_RESPONSE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_SUMMON_RESPONSE_read(reader, &opcodes->body.CMSG_SUMMON_RESPONSE));
             break;
-        case MSG_MOVE_WATER_WALK:
+        case V_MSG_MOVE_WATER_WALK:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_WATER_WALK_read(reader, &opcodes->body.MSG_MOVE_WATER_WALK));
             break;
-        case CMSG_SET_ACTIONBAR_TOGGLES:
+        case V_CMSG_SET_ACTIONBAR_TOGGLES:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_SET_ACTIONBAR_TOGGLES_read(reader, &opcodes->body.CMSG_SET_ACTIONBAR_TOGGLES));
             break;
-        case MSG_PETITION_RENAME:
+        case V_MSG_PETITION_RENAME:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_PETITION_RENAME_read(reader, &opcodes->body.MSG_PETITION_RENAME));
             break;
-        case CMSG_ITEM_NAME_QUERY:
+        case V_CMSG_ITEM_NAME_QUERY:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_ITEM_NAME_QUERY_read(reader, &opcodes->body.CMSG_ITEM_NAME_QUERY));
             break;
-        case CMSG_CHAR_RENAME:
+        case V_CMSG_CHAR_RENAME:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_CHAR_RENAME_read(reader, &opcodes->body.CMSG_CHAR_RENAME));
             break;
-        case CMSG_MOVE_SPLINE_DONE:
+        case V_CMSG_MOVE_SPLINE_DONE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_MOVE_SPLINE_DONE_read(reader, &opcodes->body.CMSG_MOVE_SPLINE_DONE));
             break;
-        case CMSG_MOVE_FALL_RESET:
+        case V_CMSG_MOVE_FALL_RESET:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_MOVE_FALL_RESET_read(reader, &opcodes->body.CMSG_MOVE_FALL_RESET));
             break;
-        case CMSG_MOVE_TIME_SKIPPED:
+        case V_CMSG_MOVE_TIME_SKIPPED:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_MOVE_TIME_SKIPPED_read(reader, &opcodes->body.CMSG_MOVE_TIME_SKIPPED));
             break;
-        case CMSG_MOVE_FEATHER_FALL_ACK:
+        case V_CMSG_MOVE_FEATHER_FALL_ACK:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_MOVE_FEATHER_FALL_ACK_read(reader, &opcodes->body.CMSG_MOVE_FEATHER_FALL_ACK));
             break;
-        case CMSG_MOVE_WATER_WALK_ACK:
+        case V_CMSG_MOVE_WATER_WALK_ACK:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_MOVE_WATER_WALK_ACK_read(reader, &opcodes->body.CMSG_MOVE_WATER_WALK_ACK));
             break;
-        case CMSG_MOVE_NOT_ACTIVE_MOVER:
+        case V_CMSG_MOVE_NOT_ACTIVE_MOVER:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_MOVE_NOT_ACTIVE_MOVER_read(reader, &opcodes->body.CMSG_MOVE_NOT_ACTIVE_MOVER));
             break;
-        case CMSG_BATTLEFIELD_PORT:
+        case V_CMSG_BATTLEFIELD_PORT:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_BATTLEFIELD_PORT_read(reader, &opcodes->body.CMSG_BATTLEFIELD_PORT));
             break;
-        case MSG_INSPECT_HONOR_STATS:
+        case V_MSG_INSPECT_HONOR_STATS:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_INSPECT_HONOR_STATS_Client_read(reader, &opcodes->body.MSG_INSPECT_HONOR_STATS_Client));
             break;
-        case CMSG_BATTLEMASTER_HELLO:
+        case V_CMSG_BATTLEMASTER_HELLO:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_BATTLEMASTER_HELLO_read(reader, &opcodes->body.CMSG_BATTLEMASTER_HELLO));
             break;
-        case CMSG_FORCE_WALK_SPEED_CHANGE_ACK:
+        case V_CMSG_FORCE_WALK_SPEED_CHANGE_ACK:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_FORCE_WALK_SPEED_CHANGE_ACK_read(reader, &opcodes->body.CMSG_FORCE_WALK_SPEED_CHANGE_ACK));
             break;
-        case CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK:
+        case V_CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK_read(reader, &opcodes->body.CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK));
             break;
-        case CMSG_FORCE_TURN_RATE_CHANGE_ACK:
+        case V_CMSG_FORCE_TURN_RATE_CHANGE_ACK:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_FORCE_TURN_RATE_CHANGE_ACK_read(reader, &opcodes->body.CMSG_FORCE_TURN_RATE_CHANGE_ACK));
             break;
-        case CMSG_LEAVE_BATTLEFIELD:
+        case V_CMSG_LEAVE_BATTLEFIELD:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_LEAVE_BATTLEFIELD_read(reader, &opcodes->body.CMSG_LEAVE_BATTLEFIELD));
             break;
-        case CMSG_AREA_SPIRIT_HEALER_QUERY:
+        case V_CMSG_AREA_SPIRIT_HEALER_QUERY:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_AREA_SPIRIT_HEALER_QUERY_read(reader, &opcodes->body.CMSG_AREA_SPIRIT_HEALER_QUERY));
             break;
-        case CMSG_AREA_SPIRIT_HEALER_QUEUE:
+        case V_CMSG_AREA_SPIRIT_HEALER_QUEUE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_AREA_SPIRIT_HEALER_QUEUE_read(reader, &opcodes->body.CMSG_AREA_SPIRIT_HEALER_QUEUE));
             break;
-        case CMSG_WARDEN_DATA:
+        case V_CMSG_WARDEN_DATA:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_WARDEN_DATA_read(reader, &opcodes->body.CMSG_WARDEN_DATA, _size - 4));
             break;
-        case CMSG_PET_STOP_ATTACK:
+        case V_CMSG_PET_STOP_ATTACK:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_PET_STOP_ATTACK_read(reader, &opcodes->body.CMSG_PET_STOP_ATTACK));
             break;
-        case CMSG_BATTLEMASTER_JOIN:
+        case V_CMSG_BATTLEMASTER_JOIN:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_BATTLEMASTER_JOIN_read(reader, &opcodes->body.CMSG_BATTLEMASTER_JOIN));
             break;
-        case CMSG_PET_UNLEARN:
+        case V_CMSG_PET_UNLEARN:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_PET_UNLEARN_read(reader, &opcodes->body.CMSG_PET_UNLEARN));
             break;
-        case CMSG_PET_SPELL_AUTOCAST:
+        case V_CMSG_PET_SPELL_AUTOCAST:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_PET_SPELL_AUTOCAST_read(reader, &opcodes->body.CMSG_PET_SPELL_AUTOCAST));
             break;
-        case CMSG_GUILD_INFO_TEXT:
+        case V_CMSG_GUILD_INFO_TEXT:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GUILD_INFO_TEXT_read(reader, &opcodes->body.CMSG_GUILD_INFO_TEXT));
             break;
-        case CMSG_ACTIVATETAXIEXPRESS:
+        case V_CMSG_ACTIVATETAXIEXPRESS:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_ACTIVATETAXIEXPRESS_read(reader, &opcodes->body.CMSG_ACTIVATETAXIEXPRESS));
             break;
-        case CMSG_SET_FACTION_INACTIVE:
+        case V_CMSG_SET_FACTION_INACTIVE:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_SET_FACTION_INACTIVE_read(reader, &opcodes->body.CMSG_SET_FACTION_INACTIVE));
             break;
-        case CMSG_SET_WATCHED_FACTION:
+        case V_CMSG_SET_WATCHED_FACTION:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_SET_WATCHED_FACTION_read(reader, &opcodes->body.CMSG_SET_WATCHED_FACTION));
             break;
-        case MSG_RAID_TARGET_UPDATE:
+        case V_MSG_RAID_TARGET_UPDATE:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_RAID_TARGET_UPDATE_Client_read(reader, &opcodes->body.MSG_RAID_TARGET_UPDATE_Client));
             break;
-        case MSG_RAID_READY_CHECK:
+        case V_MSG_RAID_READY_CHECK:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_RAID_READY_CHECK_Client_read(reader, &opcodes->body.MSG_RAID_READY_CHECK_Client, _size - 4));
             break;
-        case CMSG_GMSURVEY_SUBMIT:
+        case V_CMSG_GMSURVEY_SUBMIT:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_GMSURVEY_SUBMIT_read(reader, &opcodes->body.CMSG_GMSURVEY_SUBMIT));
             break;
         default:
@@ -23732,304 +25657,304 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_client_opcode_read(WowWorldRe
 
 WOW_WORLD_MESSAGES_C_EXPORT void vanilla_client_opcode_free(VanillaClientOpcodeContainer* opcodes) {
     switch (opcodes->opcode) {
-        case CMSG_DBLOOKUP:
+        case V_CMSG_DBLOOKUP:
             vanilla_CMSG_DBLOOKUP_free(&opcodes->body.CMSG_DBLOOKUP);
             break;
-        case CMSG_TELEPORT_TO_UNIT:
+        case V_CMSG_TELEPORT_TO_UNIT:
             vanilla_CMSG_TELEPORT_TO_UNIT_free(&opcodes->body.CMSG_TELEPORT_TO_UNIT);
             break;
-        case CMSG_CHAR_CREATE:
+        case V_CMSG_CHAR_CREATE:
             vanilla_CMSG_CHAR_CREATE_free(&opcodes->body.CMSG_CHAR_CREATE);
             break;
-        case CMSG_WHO:
+        case V_CMSG_WHO:
             vanilla_CMSG_WHO_free(&opcodes->body.CMSG_WHO);
             break;
-        case CMSG_WHOIS:
+        case V_CMSG_WHOIS:
             vanilla_CMSG_WHOIS_free(&opcodes->body.CMSG_WHOIS);
             break;
-        case CMSG_ADD_FRIEND:
+        case V_CMSG_ADD_FRIEND:
             vanilla_CMSG_ADD_FRIEND_free(&opcodes->body.CMSG_ADD_FRIEND);
             break;
-        case CMSG_ADD_IGNORE:
+        case V_CMSG_ADD_IGNORE:
             vanilla_CMSG_ADD_IGNORE_free(&opcodes->body.CMSG_ADD_IGNORE);
             break;
-        case CMSG_GROUP_INVITE:
+        case V_CMSG_GROUP_INVITE:
             vanilla_CMSG_GROUP_INVITE_free(&opcodes->body.CMSG_GROUP_INVITE);
             break;
-        case CMSG_GROUP_UNINVITE:
+        case V_CMSG_GROUP_UNINVITE:
             vanilla_CMSG_GROUP_UNINVITE_free(&opcodes->body.CMSG_GROUP_UNINVITE);
             break;
-        case CMSG_GUILD_CREATE:
+        case V_CMSG_GUILD_CREATE:
             vanilla_CMSG_GUILD_CREATE_free(&opcodes->body.CMSG_GUILD_CREATE);
             break;
-        case CMSG_GUILD_INVITE:
+        case V_CMSG_GUILD_INVITE:
             vanilla_CMSG_GUILD_INVITE_free(&opcodes->body.CMSG_GUILD_INVITE);
             break;
-        case CMSG_GUILD_PROMOTE:
+        case V_CMSG_GUILD_PROMOTE:
             vanilla_CMSG_GUILD_PROMOTE_free(&opcodes->body.CMSG_GUILD_PROMOTE);
             break;
-        case CMSG_GUILD_DEMOTE:
+        case V_CMSG_GUILD_DEMOTE:
             vanilla_CMSG_GUILD_DEMOTE_free(&opcodes->body.CMSG_GUILD_DEMOTE);
             break;
-        case CMSG_GUILD_REMOVE:
+        case V_CMSG_GUILD_REMOVE:
             vanilla_CMSG_GUILD_REMOVE_free(&opcodes->body.CMSG_GUILD_REMOVE);
             break;
-        case CMSG_GUILD_LEADER:
+        case V_CMSG_GUILD_LEADER:
             vanilla_CMSG_GUILD_LEADER_free(&opcodes->body.CMSG_GUILD_LEADER);
             break;
-        case CMSG_GUILD_MOTD:
+        case V_CMSG_GUILD_MOTD:
             vanilla_CMSG_GUILD_MOTD_free(&opcodes->body.CMSG_GUILD_MOTD);
             break;
-        case CMSG_MESSAGECHAT:
+        case V_CMSG_MESSAGECHAT:
             vanilla_CMSG_MESSAGECHAT_free(&opcodes->body.CMSG_MESSAGECHAT);
             break;
-        case CMSG_JOIN_CHANNEL:
+        case V_CMSG_JOIN_CHANNEL:
             vanilla_CMSG_JOIN_CHANNEL_free(&opcodes->body.CMSG_JOIN_CHANNEL);
             break;
-        case CMSG_LEAVE_CHANNEL:
+        case V_CMSG_LEAVE_CHANNEL:
             vanilla_CMSG_LEAVE_CHANNEL_free(&opcodes->body.CMSG_LEAVE_CHANNEL);
             break;
-        case CMSG_CHANNEL_LIST:
+        case V_CMSG_CHANNEL_LIST:
             vanilla_CMSG_CHANNEL_LIST_free(&opcodes->body.CMSG_CHANNEL_LIST);
             break;
-        case CMSG_CHANNEL_PASSWORD:
+        case V_CMSG_CHANNEL_PASSWORD:
             vanilla_CMSG_CHANNEL_PASSWORD_free(&opcodes->body.CMSG_CHANNEL_PASSWORD);
             break;
-        case CMSG_CHANNEL_SET_OWNER:
+        case V_CMSG_CHANNEL_SET_OWNER:
             vanilla_CMSG_CHANNEL_SET_OWNER_free(&opcodes->body.CMSG_CHANNEL_SET_OWNER);
             break;
-        case CMSG_CHANNEL_OWNER:
+        case V_CMSG_CHANNEL_OWNER:
             vanilla_CMSG_CHANNEL_OWNER_free(&opcodes->body.CMSG_CHANNEL_OWNER);
             break;
-        case CMSG_CHANNEL_MODERATOR:
+        case V_CMSG_CHANNEL_MODERATOR:
             vanilla_CMSG_CHANNEL_MODERATOR_free(&opcodes->body.CMSG_CHANNEL_MODERATOR);
             break;
-        case CMSG_CHANNEL_UNMODERATOR:
+        case V_CMSG_CHANNEL_UNMODERATOR:
             vanilla_CMSG_CHANNEL_UNMODERATOR_free(&opcodes->body.CMSG_CHANNEL_UNMODERATOR);
             break;
-        case CMSG_CHANNEL_MUTE:
+        case V_CMSG_CHANNEL_MUTE:
             vanilla_CMSG_CHANNEL_MUTE_free(&opcodes->body.CMSG_CHANNEL_MUTE);
             break;
-        case CMSG_CHANNEL_UNMUTE:
+        case V_CMSG_CHANNEL_UNMUTE:
             vanilla_CMSG_CHANNEL_UNMUTE_free(&opcodes->body.CMSG_CHANNEL_UNMUTE);
             break;
-        case CMSG_CHANNEL_INVITE:
+        case V_CMSG_CHANNEL_INVITE:
             vanilla_CMSG_CHANNEL_INVITE_free(&opcodes->body.CMSG_CHANNEL_INVITE);
             break;
-        case CMSG_CHANNEL_KICK:
+        case V_CMSG_CHANNEL_KICK:
             vanilla_CMSG_CHANNEL_KICK_free(&opcodes->body.CMSG_CHANNEL_KICK);
             break;
-        case CMSG_CHANNEL_BAN:
+        case V_CMSG_CHANNEL_BAN:
             vanilla_CMSG_CHANNEL_BAN_free(&opcodes->body.CMSG_CHANNEL_BAN);
             break;
-        case CMSG_CHANNEL_UNBAN:
+        case V_CMSG_CHANNEL_UNBAN:
             vanilla_CMSG_CHANNEL_UNBAN_free(&opcodes->body.CMSG_CHANNEL_UNBAN);
             break;
-        case CMSG_CHANNEL_ANNOUNCEMENTS:
+        case V_CMSG_CHANNEL_ANNOUNCEMENTS:
             vanilla_CMSG_CHANNEL_ANNOUNCEMENTS_free(&opcodes->body.CMSG_CHANNEL_ANNOUNCEMENTS);
             break;
-        case CMSG_CHANNEL_MODERATE:
+        case V_CMSG_CHANNEL_MODERATE:
             vanilla_CMSG_CHANNEL_MODERATE_free(&opcodes->body.CMSG_CHANNEL_MODERATE);
             break;
-        case CMSG_USE_ITEM:
+        case V_CMSG_USE_ITEM:
             vanilla_CMSG_USE_ITEM_free(&opcodes->body.CMSG_USE_ITEM);
             break;
-        case MSG_MOVE_START_FORWARD:
+        case V_MSG_MOVE_START_FORWARD:
             vanilla_MSG_MOVE_START_FORWARD_Client_free(&opcodes->body.MSG_MOVE_START_FORWARD_Client);
             break;
-        case MSG_MOVE_START_BACKWARD:
+        case V_MSG_MOVE_START_BACKWARD:
             vanilla_MSG_MOVE_START_BACKWARD_Client_free(&opcodes->body.MSG_MOVE_START_BACKWARD_Client);
             break;
-        case MSG_MOVE_STOP:
+        case V_MSG_MOVE_STOP:
             vanilla_MSG_MOVE_STOP_Client_free(&opcodes->body.MSG_MOVE_STOP_Client);
             break;
-        case MSG_MOVE_START_STRAFE_LEFT:
+        case V_MSG_MOVE_START_STRAFE_LEFT:
             vanilla_MSG_MOVE_START_STRAFE_LEFT_Client_free(&opcodes->body.MSG_MOVE_START_STRAFE_LEFT_Client);
             break;
-        case MSG_MOVE_START_STRAFE_RIGHT:
+        case V_MSG_MOVE_START_STRAFE_RIGHT:
             vanilla_MSG_MOVE_START_STRAFE_RIGHT_Client_free(&opcodes->body.MSG_MOVE_START_STRAFE_RIGHT_Client);
             break;
-        case MSG_MOVE_STOP_STRAFE:
+        case V_MSG_MOVE_STOP_STRAFE:
             vanilla_MSG_MOVE_STOP_STRAFE_Client_free(&opcodes->body.MSG_MOVE_STOP_STRAFE_Client);
             break;
-        case MSG_MOVE_JUMP:
+        case V_MSG_MOVE_JUMP:
             vanilla_MSG_MOVE_JUMP_Client_free(&opcodes->body.MSG_MOVE_JUMP_Client);
             break;
-        case MSG_MOVE_START_TURN_LEFT:
+        case V_MSG_MOVE_START_TURN_LEFT:
             vanilla_MSG_MOVE_START_TURN_LEFT_Client_free(&opcodes->body.MSG_MOVE_START_TURN_LEFT_Client);
             break;
-        case MSG_MOVE_START_TURN_RIGHT:
+        case V_MSG_MOVE_START_TURN_RIGHT:
             vanilla_MSG_MOVE_START_TURN_RIGHT_Client_free(&opcodes->body.MSG_MOVE_START_TURN_RIGHT_Client);
             break;
-        case MSG_MOVE_STOP_TURN:
+        case V_MSG_MOVE_STOP_TURN:
             vanilla_MSG_MOVE_STOP_TURN_Client_free(&opcodes->body.MSG_MOVE_STOP_TURN_Client);
             break;
-        case MSG_MOVE_START_PITCH_UP:
+        case V_MSG_MOVE_START_PITCH_UP:
             vanilla_MSG_MOVE_START_PITCH_UP_Client_free(&opcodes->body.MSG_MOVE_START_PITCH_UP_Client);
             break;
-        case MSG_MOVE_START_PITCH_DOWN:
+        case V_MSG_MOVE_START_PITCH_DOWN:
             vanilla_MSG_MOVE_START_PITCH_DOWN_Client_free(&opcodes->body.MSG_MOVE_START_PITCH_DOWN_Client);
             break;
-        case MSG_MOVE_STOP_PITCH:
+        case V_MSG_MOVE_STOP_PITCH:
             vanilla_MSG_MOVE_STOP_PITCH_Client_free(&opcodes->body.MSG_MOVE_STOP_PITCH_Client);
             break;
-        case MSG_MOVE_SET_RUN_MODE:
+        case V_MSG_MOVE_SET_RUN_MODE:
             vanilla_MSG_MOVE_SET_RUN_MODE_Client_free(&opcodes->body.MSG_MOVE_SET_RUN_MODE_Client);
             break;
-        case MSG_MOVE_SET_WALK_MODE:
+        case V_MSG_MOVE_SET_WALK_MODE:
             vanilla_MSG_MOVE_SET_WALK_MODE_Client_free(&opcodes->body.MSG_MOVE_SET_WALK_MODE_Client);
             break;
-        case MSG_MOVE_FALL_LAND:
+        case V_MSG_MOVE_FALL_LAND:
             vanilla_MSG_MOVE_FALL_LAND_Client_free(&opcodes->body.MSG_MOVE_FALL_LAND_Client);
             break;
-        case MSG_MOVE_START_SWIM:
+        case V_MSG_MOVE_START_SWIM:
             vanilla_MSG_MOVE_START_SWIM_Client_free(&opcodes->body.MSG_MOVE_START_SWIM_Client);
             break;
-        case MSG_MOVE_STOP_SWIM:
+        case V_MSG_MOVE_STOP_SWIM:
             vanilla_MSG_MOVE_STOP_SWIM_Client_free(&opcodes->body.MSG_MOVE_STOP_SWIM_Client);
             break;
-        case MSG_MOVE_SET_FACING:
+        case V_MSG_MOVE_SET_FACING:
             vanilla_MSG_MOVE_SET_FACING_Client_free(&opcodes->body.MSG_MOVE_SET_FACING_Client);
             break;
-        case MSG_MOVE_SET_PITCH:
+        case V_MSG_MOVE_SET_PITCH:
             vanilla_MSG_MOVE_SET_PITCH_Client_free(&opcodes->body.MSG_MOVE_SET_PITCH_Client);
             break;
-        case CMSG_FORCE_RUN_SPEED_CHANGE_ACK:
+        case V_CMSG_FORCE_RUN_SPEED_CHANGE_ACK:
             vanilla_CMSG_FORCE_RUN_SPEED_CHANGE_ACK_free(&opcodes->body.CMSG_FORCE_RUN_SPEED_CHANGE_ACK);
             break;
-        case CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK:
+        case V_CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK:
             vanilla_CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK_free(&opcodes->body.CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK);
             break;
-        case CMSG_FORCE_SWIM_SPEED_CHANGE_ACK:
+        case V_CMSG_FORCE_SWIM_SPEED_CHANGE_ACK:
             vanilla_CMSG_FORCE_SWIM_SPEED_CHANGE_ACK_free(&opcodes->body.CMSG_FORCE_SWIM_SPEED_CHANGE_ACK);
             break;
-        case CMSG_FORCE_MOVE_ROOT_ACK:
+        case V_CMSG_FORCE_MOVE_ROOT_ACK:
             vanilla_CMSG_FORCE_MOVE_ROOT_ACK_free(&opcodes->body.CMSG_FORCE_MOVE_ROOT_ACK);
             break;
-        case CMSG_FORCE_MOVE_UNROOT_ACK:
+        case V_CMSG_FORCE_MOVE_UNROOT_ACK:
             vanilla_CMSG_FORCE_MOVE_UNROOT_ACK_free(&opcodes->body.CMSG_FORCE_MOVE_UNROOT_ACK);
             break;
-        case MSG_MOVE_HEARTBEAT:
+        case V_MSG_MOVE_HEARTBEAT:
             vanilla_MSG_MOVE_HEARTBEAT_Client_free(&opcodes->body.MSG_MOVE_HEARTBEAT_Client);
             break;
-        case CMSG_MOVE_KNOCK_BACK_ACK:
+        case V_CMSG_MOVE_KNOCK_BACK_ACK:
             vanilla_CMSG_MOVE_KNOCK_BACK_ACK_free(&opcodes->body.CMSG_MOVE_KNOCK_BACK_ACK);
             break;
-        case CMSG_MOVE_HOVER_ACK:
+        case V_CMSG_MOVE_HOVER_ACK:
             vanilla_CMSG_MOVE_HOVER_ACK_free(&opcodes->body.CMSG_MOVE_HOVER_ACK);
             break;
-        case CMSG_CAST_SPELL:
+        case V_CMSG_CAST_SPELL:
             vanilla_CMSG_CAST_SPELL_free(&opcodes->body.CMSG_CAST_SPELL);
             break;
-        case CMSG_PET_SET_ACTION:
+        case V_CMSG_PET_SET_ACTION:
             vanilla_CMSG_PET_SET_ACTION_free(&opcodes->body.CMSG_PET_SET_ACTION);
             break;
-        case CMSG_PET_RENAME:
+        case V_CMSG_PET_RENAME:
             vanilla_CMSG_PET_RENAME_free(&opcodes->body.CMSG_PET_RENAME);
             break;
-        case CMSG_GOSSIP_SELECT_OPTION:
+        case V_CMSG_GOSSIP_SELECT_OPTION:
             vanilla_CMSG_GOSSIP_SELECT_OPTION_free(&opcodes->body.CMSG_GOSSIP_SELECT_OPTION);
             break;
-        case CMSG_PETITION_BUY:
+        case V_CMSG_PETITION_BUY:
             vanilla_CMSG_PETITION_BUY_free(&opcodes->body.CMSG_PETITION_BUY);
             break;
-        case CMSG_BUG:
+        case V_CMSG_BUG:
             vanilla_CMSG_BUG_free(&opcodes->body.CMSG_BUG);
             break;
-        case CMSG_AUTH_SESSION:
+        case V_CMSG_AUTH_SESSION:
             vanilla_CMSG_AUTH_SESSION_free(&opcodes->body.CMSG_AUTH_SESSION);
             break;
-        case CMSG_PET_CAST_SPELL:
+        case V_CMSG_PET_CAST_SPELL:
             vanilla_CMSG_PET_CAST_SPELL_free(&opcodes->body.CMSG_PET_CAST_SPELL);
             break;
-        case CMSG_GMTICKET_CREATE:
+        case V_CMSG_GMTICKET_CREATE:
             vanilla_CMSG_GMTICKET_CREATE_free(&opcodes->body.CMSG_GMTICKET_CREATE);
             break;
-        case CMSG_GMTICKET_UPDATETEXT:
+        case V_CMSG_GMTICKET_UPDATETEXT:
             vanilla_CMSG_GMTICKET_UPDATETEXT_free(&opcodes->body.CMSG_GMTICKET_UPDATETEXT);
             break;
-        case CMSG_UPDATE_ACCOUNT_DATA:
+        case V_CMSG_UPDATE_ACCOUNT_DATA:
             vanilla_CMSG_UPDATE_ACCOUNT_DATA_free(&opcodes->body.CMSG_UPDATE_ACCOUNT_DATA);
             break;
-        case CMSG_GUILD_RANK:
+        case V_CMSG_GUILD_RANK:
             vanilla_CMSG_GUILD_RANK_free(&opcodes->body.CMSG_GUILD_RANK);
             break;
-        case CMSG_GUILD_ADD_RANK:
+        case V_CMSG_GUILD_ADD_RANK:
             vanilla_CMSG_GUILD_ADD_RANK_free(&opcodes->body.CMSG_GUILD_ADD_RANK);
             break;
-        case CMSG_GUILD_SET_PUBLIC_NOTE:
+        case V_CMSG_GUILD_SET_PUBLIC_NOTE:
             vanilla_CMSG_GUILD_SET_PUBLIC_NOTE_free(&opcodes->body.CMSG_GUILD_SET_PUBLIC_NOTE);
             break;
-        case CMSG_GUILD_SET_OFFICER_NOTE:
+        case V_CMSG_GUILD_SET_OFFICER_NOTE:
             vanilla_CMSG_GUILD_SET_OFFICER_NOTE_free(&opcodes->body.CMSG_GUILD_SET_OFFICER_NOTE);
             break;
-        case CMSG_SEND_MAIL:
+        case V_CMSG_SEND_MAIL:
             vanilla_CMSG_SEND_MAIL_free(&opcodes->body.CMSG_SEND_MAIL);
             break;
-        case CMSG_TOGGLE_PVP:
+        case V_CMSG_TOGGLE_PVP:
             vanilla_CMSG_TOGGLE_PVP_free(&opcodes->body.CMSG_TOGGLE_PVP);
             break;
-        case CMSG_AUCTION_LIST_ITEMS:
+        case V_CMSG_AUCTION_LIST_ITEMS:
             vanilla_CMSG_AUCTION_LIST_ITEMS_free(&opcodes->body.CMSG_AUCTION_LIST_ITEMS);
             break;
-        case CMSG_AUCTION_LIST_BIDDER_ITEMS:
+        case V_CMSG_AUCTION_LIST_BIDDER_ITEMS:
             vanilla_CMSG_AUCTION_LIST_BIDDER_ITEMS_free(&opcodes->body.CMSG_AUCTION_LIST_BIDDER_ITEMS);
             break;
-        case CMSG_GROUP_CHANGE_SUB_GROUP:
+        case V_CMSG_GROUP_CHANGE_SUB_GROUP:
             vanilla_CMSG_GROUP_CHANGE_SUB_GROUP_free(&opcodes->body.CMSG_GROUP_CHANGE_SUB_GROUP);
             break;
-        case CMSG_GROUP_SWAP_SUB_GROUP:
+        case V_CMSG_GROUP_SWAP_SUB_GROUP:
             vanilla_CMSG_GROUP_SWAP_SUB_GROUP_free(&opcodes->body.CMSG_GROUP_SWAP_SUB_GROUP);
             break;
-        case MSG_MOVE_WATER_WALK:
+        case V_MSG_MOVE_WATER_WALK:
             vanilla_MSG_MOVE_WATER_WALK_free(&opcodes->body.MSG_MOVE_WATER_WALK);
             break;
-        case MSG_PETITION_RENAME:
+        case V_MSG_PETITION_RENAME:
             vanilla_MSG_PETITION_RENAME_free(&opcodes->body.MSG_PETITION_RENAME);
             break;
-        case CMSG_CHAR_RENAME:
+        case V_CMSG_CHAR_RENAME:
             vanilla_CMSG_CHAR_RENAME_free(&opcodes->body.CMSG_CHAR_RENAME);
             break;
-        case CMSG_MOVE_SPLINE_DONE:
+        case V_CMSG_MOVE_SPLINE_DONE:
             vanilla_CMSG_MOVE_SPLINE_DONE_free(&opcodes->body.CMSG_MOVE_SPLINE_DONE);
             break;
-        case CMSG_MOVE_FALL_RESET:
+        case V_CMSG_MOVE_FALL_RESET:
             vanilla_CMSG_MOVE_FALL_RESET_free(&opcodes->body.CMSG_MOVE_FALL_RESET);
             break;
-        case CMSG_MOVE_FEATHER_FALL_ACK:
+        case V_CMSG_MOVE_FEATHER_FALL_ACK:
             vanilla_CMSG_MOVE_FEATHER_FALL_ACK_free(&opcodes->body.CMSG_MOVE_FEATHER_FALL_ACK);
             break;
-        case CMSG_MOVE_WATER_WALK_ACK:
+        case V_CMSG_MOVE_WATER_WALK_ACK:
             vanilla_CMSG_MOVE_WATER_WALK_ACK_free(&opcodes->body.CMSG_MOVE_WATER_WALK_ACK);
             break;
-        case CMSG_MOVE_NOT_ACTIVE_MOVER:
+        case V_CMSG_MOVE_NOT_ACTIVE_MOVER:
             vanilla_CMSG_MOVE_NOT_ACTIVE_MOVER_free(&opcodes->body.CMSG_MOVE_NOT_ACTIVE_MOVER);
             break;
-        case CMSG_FORCE_WALK_SPEED_CHANGE_ACK:
+        case V_CMSG_FORCE_WALK_SPEED_CHANGE_ACK:
             vanilla_CMSG_FORCE_WALK_SPEED_CHANGE_ACK_free(&opcodes->body.CMSG_FORCE_WALK_SPEED_CHANGE_ACK);
             break;
-        case CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK:
+        case V_CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK:
             vanilla_CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK_free(&opcodes->body.CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK);
             break;
-        case CMSG_FORCE_TURN_RATE_CHANGE_ACK:
+        case V_CMSG_FORCE_TURN_RATE_CHANGE_ACK:
             vanilla_CMSG_FORCE_TURN_RATE_CHANGE_ACK_free(&opcodes->body.CMSG_FORCE_TURN_RATE_CHANGE_ACK);
             break;
-        case CMSG_WARDEN_DATA:
+        case V_CMSG_WARDEN_DATA:
             vanilla_CMSG_WARDEN_DATA_free(&opcodes->body.CMSG_WARDEN_DATA);
             break;
-        case CMSG_GUILD_INFO_TEXT:
+        case V_CMSG_GUILD_INFO_TEXT:
             vanilla_CMSG_GUILD_INFO_TEXT_free(&opcodes->body.CMSG_GUILD_INFO_TEXT);
             break;
-        case CMSG_ACTIVATETAXIEXPRESS:
+        case V_CMSG_ACTIVATETAXIEXPRESS:
             vanilla_CMSG_ACTIVATETAXIEXPRESS_free(&opcodes->body.CMSG_ACTIVATETAXIEXPRESS);
             break;
-        case MSG_RAID_TARGET_UPDATE:
+        case V_MSG_RAID_TARGET_UPDATE:
             vanilla_MSG_RAID_TARGET_UPDATE_Client_free(&opcodes->body.MSG_RAID_TARGET_UPDATE_Client);
             break;
-        case MSG_RAID_READY_CHECK:
+        case V_MSG_RAID_READY_CHECK:
             vanilla_MSG_RAID_READY_CHECK_Client_free(&opcodes->body.MSG_RAID_READY_CHECK_Client);
             break;
-        case CMSG_GMSURVEY_SUBMIT:
+        case V_CMSG_GMSURVEY_SUBMIT:
             vanilla_CMSG_GMSURVEY_SUBMIT_free(&opcodes->body.CMSG_GMSURVEY_SUBMIT);
             break;
         default:
@@ -24039,258 +25964,258 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_client_opcode_free(VanillaClientOpcodeC
 
 WOW_WORLD_MESSAGES_C_EXPORT char* vanilla_client_opcode_to_str(VanillaClientOpcodeContainer* opcodes) {
     switch (opcodes->opcode) {
-        case CMSG_DBLOOKUP: return "CMSG_DBLOOKUP";
-        case CMSG_WORLD_TELEPORT: return "CMSG_WORLD_TELEPORT";
-        case CMSG_TELEPORT_TO_UNIT: return "CMSG_TELEPORT_TO_UNIT";
-        case CMSG_CHAR_CREATE: return "CMSG_CHAR_CREATE";
-        case CMSG_CHAR_DELETE: return "CMSG_CHAR_DELETE";
-        case CMSG_PLAYER_LOGIN: return "CMSG_PLAYER_LOGIN";
-        case CMSG_NAME_QUERY: return "CMSG_NAME_QUERY";
-        case CMSG_PET_NAME_QUERY: return "CMSG_PET_NAME_QUERY";
-        case CMSG_GUILD_QUERY: return "CMSG_GUILD_QUERY";
-        case CMSG_ITEM_QUERY_SINGLE: return "CMSG_ITEM_QUERY_SINGLE";
-        case CMSG_PAGE_TEXT_QUERY: return "CMSG_PAGE_TEXT_QUERY";
-        case CMSG_QUEST_QUERY: return "CMSG_QUEST_QUERY";
-        case CMSG_GAMEOBJECT_QUERY: return "CMSG_GAMEOBJECT_QUERY";
-        case CMSG_CREATURE_QUERY: return "CMSG_CREATURE_QUERY";
-        case CMSG_WHO: return "CMSG_WHO";
-        case CMSG_WHOIS: return "CMSG_WHOIS";
-        case CMSG_ADD_FRIEND: return "CMSG_ADD_FRIEND";
-        case CMSG_DEL_FRIEND: return "CMSG_DEL_FRIEND";
-        case CMSG_ADD_IGNORE: return "CMSG_ADD_IGNORE";
-        case CMSG_DEL_IGNORE: return "CMSG_DEL_IGNORE";
-        case CMSG_GROUP_INVITE: return "CMSG_GROUP_INVITE";
-        case CMSG_GROUP_UNINVITE: return "CMSG_GROUP_UNINVITE";
-        case CMSG_GROUP_UNINVITE_GUID: return "CMSG_GROUP_UNINVITE_GUID";
-        case CMSG_GROUP_SET_LEADER: return "CMSG_GROUP_SET_LEADER";
-        case CMSG_LOOT_METHOD: return "CMSG_LOOT_METHOD";
-        case CMSG_GUILD_CREATE: return "CMSG_GUILD_CREATE";
-        case CMSG_GUILD_INVITE: return "CMSG_GUILD_INVITE";
-        case CMSG_GUILD_PROMOTE: return "CMSG_GUILD_PROMOTE";
-        case CMSG_GUILD_DEMOTE: return "CMSG_GUILD_DEMOTE";
-        case CMSG_GUILD_REMOVE: return "CMSG_GUILD_REMOVE";
-        case CMSG_GUILD_LEADER: return "CMSG_GUILD_LEADER";
-        case CMSG_GUILD_MOTD: return "CMSG_GUILD_MOTD";
-        case CMSG_MESSAGECHAT: return "CMSG_MESSAGECHAT";
-        case CMSG_JOIN_CHANNEL: return "CMSG_JOIN_CHANNEL";
-        case CMSG_LEAVE_CHANNEL: return "CMSG_LEAVE_CHANNEL";
-        case CMSG_CHANNEL_LIST: return "CMSG_CHANNEL_LIST";
-        case CMSG_CHANNEL_PASSWORD: return "CMSG_CHANNEL_PASSWORD";
-        case CMSG_CHANNEL_SET_OWNER: return "CMSG_CHANNEL_SET_OWNER";
-        case CMSG_CHANNEL_OWNER: return "CMSG_CHANNEL_OWNER";
-        case CMSG_CHANNEL_MODERATOR: return "CMSG_CHANNEL_MODERATOR";
-        case CMSG_CHANNEL_UNMODERATOR: return "CMSG_CHANNEL_UNMODERATOR";
-        case CMSG_CHANNEL_MUTE: return "CMSG_CHANNEL_MUTE";
-        case CMSG_CHANNEL_UNMUTE: return "CMSG_CHANNEL_UNMUTE";
-        case CMSG_CHANNEL_INVITE: return "CMSG_CHANNEL_INVITE";
-        case CMSG_CHANNEL_KICK: return "CMSG_CHANNEL_KICK";
-        case CMSG_CHANNEL_BAN: return "CMSG_CHANNEL_BAN";
-        case CMSG_CHANNEL_UNBAN: return "CMSG_CHANNEL_UNBAN";
-        case CMSG_CHANNEL_ANNOUNCEMENTS: return "CMSG_CHANNEL_ANNOUNCEMENTS";
-        case CMSG_CHANNEL_MODERATE: return "CMSG_CHANNEL_MODERATE";
-        case CMSG_USE_ITEM: return "CMSG_USE_ITEM";
-        case CMSG_OPEN_ITEM: return "CMSG_OPEN_ITEM";
-        case CMSG_READ_ITEM: return "CMSG_READ_ITEM";
-        case CMSG_GAMEOBJ_USE: return "CMSG_GAMEOBJ_USE";
-        case CMSG_AREATRIGGER: return "CMSG_AREATRIGGER";
-        case MSG_MOVE_START_FORWARD: return "MSG_MOVE_START_FORWARD_Client";
-        case MSG_MOVE_START_BACKWARD: return "MSG_MOVE_START_BACKWARD_Client";
-        case MSG_MOVE_STOP: return "MSG_MOVE_STOP_Client";
-        case MSG_MOVE_START_STRAFE_LEFT: return "MSG_MOVE_START_STRAFE_LEFT_Client";
-        case MSG_MOVE_START_STRAFE_RIGHT: return "MSG_MOVE_START_STRAFE_RIGHT_Client";
-        case MSG_MOVE_STOP_STRAFE: return "MSG_MOVE_STOP_STRAFE_Client";
-        case MSG_MOVE_JUMP: return "MSG_MOVE_JUMP_Client";
-        case MSG_MOVE_START_TURN_LEFT: return "MSG_MOVE_START_TURN_LEFT_Client";
-        case MSG_MOVE_START_TURN_RIGHT: return "MSG_MOVE_START_TURN_RIGHT_Client";
-        case MSG_MOVE_STOP_TURN: return "MSG_MOVE_STOP_TURN_Client";
-        case MSG_MOVE_START_PITCH_UP: return "MSG_MOVE_START_PITCH_UP_Client";
-        case MSG_MOVE_START_PITCH_DOWN: return "MSG_MOVE_START_PITCH_DOWN_Client";
-        case MSG_MOVE_STOP_PITCH: return "MSG_MOVE_STOP_PITCH_Client";
-        case MSG_MOVE_SET_RUN_MODE: return "MSG_MOVE_SET_RUN_MODE_Client";
-        case MSG_MOVE_SET_WALK_MODE: return "MSG_MOVE_SET_WALK_MODE_Client";
-        case MSG_MOVE_TELEPORT_ACK: return "MSG_MOVE_TELEPORT_ACK_Client";
-        case MSG_MOVE_FALL_LAND: return "MSG_MOVE_FALL_LAND_Client";
-        case MSG_MOVE_START_SWIM: return "MSG_MOVE_START_SWIM_Client";
-        case MSG_MOVE_STOP_SWIM: return "MSG_MOVE_STOP_SWIM_Client";
-        case MSG_MOVE_SET_FACING: return "MSG_MOVE_SET_FACING_Client";
-        case MSG_MOVE_SET_PITCH: return "MSG_MOVE_SET_PITCH_Client";
-        case CMSG_MOVE_SET_RAW_POSITION: return "CMSG_MOVE_SET_RAW_POSITION";
-        case CMSG_FORCE_RUN_SPEED_CHANGE_ACK: return "CMSG_FORCE_RUN_SPEED_CHANGE_ACK";
-        case CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK: return "CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK";
-        case CMSG_FORCE_SWIM_SPEED_CHANGE_ACK: return "CMSG_FORCE_SWIM_SPEED_CHANGE_ACK";
-        case CMSG_FORCE_MOVE_ROOT_ACK: return "CMSG_FORCE_MOVE_ROOT_ACK";
-        case CMSG_FORCE_MOVE_UNROOT_ACK: return "CMSG_FORCE_MOVE_UNROOT_ACK";
-        case MSG_MOVE_HEARTBEAT: return "MSG_MOVE_HEARTBEAT_Client";
-        case CMSG_MOVE_KNOCK_BACK_ACK: return "CMSG_MOVE_KNOCK_BACK_ACK";
-        case CMSG_MOVE_HOVER_ACK: return "CMSG_MOVE_HOVER_ACK";
-        case CMSG_TUTORIAL_FLAG: return "CMSG_TUTORIAL_FLAG";
-        case CMSG_STANDSTATECHANGE: return "CMSG_STANDSTATECHANGE";
-        case CMSG_EMOTE: return "CMSG_EMOTE";
-        case CMSG_TEXT_EMOTE: return "CMSG_TEXT_EMOTE";
-        case CMSG_AUTOSTORE_LOOT_ITEM: return "CMSG_AUTOSTORE_LOOT_ITEM";
-        case CMSG_AUTOEQUIP_ITEM: return "CMSG_AUTOEQUIP_ITEM";
-        case CMSG_AUTOSTORE_BAG_ITEM: return "CMSG_AUTOSTORE_BAG_ITEM";
-        case CMSG_SWAP_ITEM: return "CMSG_SWAP_ITEM";
-        case CMSG_SWAP_INV_ITEM: return "CMSG_SWAP_INV_ITEM";
-        case CMSG_SPLIT_ITEM: return "CMSG_SPLIT_ITEM";
-        case CMSG_AUTOEQUIP_ITEM_SLOT: return "CMSG_AUTOEQUIP_ITEM_SLOT";
-        case CMSG_DESTROYITEM: return "CMSG_DESTROYITEM";
-        case CMSG_INSPECT: return "CMSG_INSPECT";
-        case CMSG_INITIATE_TRADE: return "CMSG_INITIATE_TRADE";
-        case CMSG_ACCEPT_TRADE: return "CMSG_ACCEPT_TRADE";
-        case CMSG_SET_TRADE_ITEM: return "CMSG_SET_TRADE_ITEM";
-        case CMSG_CLEAR_TRADE_ITEM: return "CMSG_CLEAR_TRADE_ITEM";
-        case CMSG_SET_TRADE_GOLD: return "CMSG_SET_TRADE_GOLD";
-        case CMSG_SET_FACTION_ATWAR: return "CMSG_SET_FACTION_ATWAR";
-        case CMSG_SET_ACTION_BUTTON: return "CMSG_SET_ACTION_BUTTON";
-        case CMSG_CAST_SPELL: return "CMSG_CAST_SPELL";
-        case CMSG_CANCEL_CAST: return "CMSG_CANCEL_CAST";
-        case CMSG_CANCEL_AURA: return "CMSG_CANCEL_AURA";
-        case CMSG_CANCEL_CHANNELLING: return "CMSG_CANCEL_CHANNELLING";
-        case CMSG_SET_SELECTION: return "CMSG_SET_SELECTION";
-        case CMSG_SET_TARGET_OBSOLETE: return "CMSG_SET_TARGET_OBSOLETE";
-        case CMSG_ATTACKSWING: return "CMSG_ATTACKSWING";
-        case CMSG_RESURRECT_RESPONSE: return "CMSG_RESURRECT_RESPONSE";
-        case CMSG_LOOT: return "CMSG_LOOT";
-        case CMSG_LOOT_RELEASE: return "CMSG_LOOT_RELEASE";
-        case CMSG_DUEL_ACCEPTED: return "CMSG_DUEL_ACCEPTED";
-        case CMSG_DUEL_CANCELLED: return "CMSG_DUEL_CANCELLED";
-        case CMSG_PET_SET_ACTION: return "CMSG_PET_SET_ACTION";
-        case CMSG_PET_ACTION: return "CMSG_PET_ACTION";
-        case CMSG_PET_ABANDON: return "CMSG_PET_ABANDON";
-        case CMSG_PET_RENAME: return "CMSG_PET_RENAME";
-        case CMSG_GOSSIP_HELLO: return "CMSG_GOSSIP_HELLO";
-        case CMSG_GOSSIP_SELECT_OPTION: return "CMSG_GOSSIP_SELECT_OPTION";
-        case CMSG_NPC_TEXT_QUERY: return "CMSG_NPC_TEXT_QUERY";
-        case CMSG_QUESTGIVER_STATUS_QUERY: return "CMSG_QUESTGIVER_STATUS_QUERY";
-        case CMSG_QUESTGIVER_HELLO: return "CMSG_QUESTGIVER_HELLO";
-        case CMSG_QUESTGIVER_QUERY_QUEST: return "CMSG_QUESTGIVER_QUERY_QUEST";
-        case CMSG_QUESTGIVER_ACCEPT_QUEST: return "CMSG_QUESTGIVER_ACCEPT_QUEST";
-        case CMSG_QUESTGIVER_COMPLETE_QUEST: return "CMSG_QUESTGIVER_COMPLETE_QUEST";
-        case CMSG_QUESTGIVER_REQUEST_REWARD: return "CMSG_QUESTGIVER_REQUEST_REWARD";
-        case CMSG_QUESTGIVER_CHOOSE_REWARD: return "CMSG_QUESTGIVER_CHOOSE_REWARD";
-        case CMSG_QUESTLOG_SWAP_QUEST: return "CMSG_QUESTLOG_SWAP_QUEST";
-        case CMSG_QUESTLOG_REMOVE_QUEST: return "CMSG_QUESTLOG_REMOVE_QUEST";
-        case CMSG_QUEST_CONFIRM_ACCEPT: return "CMSG_QUEST_CONFIRM_ACCEPT";
-        case CMSG_PUSHQUESTTOPARTY: return "CMSG_PUSHQUESTTOPARTY";
-        case CMSG_LIST_INVENTORY: return "CMSG_LIST_INVENTORY";
-        case CMSG_SELL_ITEM: return "CMSG_SELL_ITEM";
-        case CMSG_BUY_ITEM: return "CMSG_BUY_ITEM";
-        case CMSG_BUY_ITEM_IN_SLOT: return "CMSG_BUY_ITEM_IN_SLOT";
-        case CMSG_TAXINODE_STATUS_QUERY: return "CMSG_TAXINODE_STATUS_QUERY";
-        case CMSG_TAXIQUERYAVAILABLENODES: return "CMSG_TAXIQUERYAVAILABLENODES";
-        case CMSG_ACTIVATETAXI: return "CMSG_ACTIVATETAXI";
-        case CMSG_TRAINER_LIST: return "CMSG_TRAINER_LIST";
-        case CMSG_TRAINER_BUY_SPELL: return "CMSG_TRAINER_BUY_SPELL";
-        case CMSG_BINDER_ACTIVATE: return "CMSG_BINDER_ACTIVATE";
-        case CMSG_BANKER_ACTIVATE: return "CMSG_BANKER_ACTIVATE";
-        case CMSG_BUY_BANK_SLOT: return "CMSG_BUY_BANK_SLOT";
-        case CMSG_PETITION_SHOWLIST: return "CMSG_PETITION_SHOWLIST";
-        case CMSG_PETITION_BUY: return "CMSG_PETITION_BUY";
-        case CMSG_PETITION_SHOW_SIGNATURES: return "CMSG_PETITION_SHOW_SIGNATURES";
-        case CMSG_PETITION_SIGN: return "CMSG_PETITION_SIGN";
-        case MSG_PETITION_DECLINE: return "MSG_PETITION_DECLINE";
-        case CMSG_OFFER_PETITION: return "CMSG_OFFER_PETITION";
-        case CMSG_TURN_IN_PETITION: return "CMSG_TURN_IN_PETITION";
-        case CMSG_PETITION_QUERY: return "CMSG_PETITION_QUERY";
-        case CMSG_BUG: return "CMSG_BUG";
-        case CMSG_RECLAIM_CORPSE: return "CMSG_RECLAIM_CORPSE";
-        case CMSG_WRAP_ITEM: return "CMSG_WRAP_ITEM";
-        case MSG_MINIMAP_PING: return "MSG_MINIMAP_PING_Client";
-        case CMSG_PING: return "CMSG_PING";
-        case CMSG_SETSHEATHED: return "CMSG_SETSHEATHED";
-        case CMSG_AUTH_SESSION: return "CMSG_AUTH_SESSION";
-        case CMSG_PET_CAST_SPELL: return "CMSG_PET_CAST_SPELL";
-        case MSG_SAVE_GUILD_EMBLEM: return "MSG_SAVE_GUILD_EMBLEM_Client";
-        case MSG_TABARDVENDOR_ACTIVATE: return "MSG_TABARDVENDOR_ACTIVATE";
-        case CMSG_ZONEUPDATE: return "CMSG_ZONEUPDATE";
-        case MSG_RANDOM_ROLL: return "MSG_RANDOM_ROLL_Client";
-        case CMSG_UNLEARN_SKILL: return "CMSG_UNLEARN_SKILL";
-        case CMSG_GMTICKET_CREATE: return "CMSG_GMTICKET_CREATE";
-        case CMSG_GMTICKET_UPDATETEXT: return "CMSG_GMTICKET_UPDATETEXT";
-        case CMSG_REQUEST_ACCOUNT_DATA: return "CMSG_REQUEST_ACCOUNT_DATA";
-        case CMSG_UPDATE_ACCOUNT_DATA: return "CMSG_UPDATE_ACCOUNT_DATA";
-        case CMSG_SPIRIT_HEALER_ACTIVATE: return "CMSG_SPIRIT_HEALER_ACTIVATE";
-        case CMSG_CHAT_IGNORED: return "CMSG_CHAT_IGNORED";
-        case CMSG_GUILD_RANK: return "CMSG_GUILD_RANK";
-        case CMSG_GUILD_ADD_RANK: return "CMSG_GUILD_ADD_RANK";
-        case CMSG_GUILD_SET_PUBLIC_NOTE: return "CMSG_GUILD_SET_PUBLIC_NOTE";
-        case CMSG_GUILD_SET_OFFICER_NOTE: return "CMSG_GUILD_SET_OFFICER_NOTE";
-        case CMSG_SEND_MAIL: return "CMSG_SEND_MAIL";
-        case CMSG_GET_MAIL_LIST: return "CMSG_GET_MAIL_LIST";
-        case CMSG_BATTLEFIELD_LIST: return "CMSG_BATTLEFIELD_LIST";
-        case CMSG_BATTLEFIELD_JOIN: return "CMSG_BATTLEFIELD_JOIN";
-        case CMSG_ITEM_TEXT_QUERY: return "CMSG_ITEM_TEXT_QUERY";
-        case CMSG_MAIL_TAKE_MONEY: return "CMSG_MAIL_TAKE_MONEY";
-        case CMSG_MAIL_TAKE_ITEM: return "CMSG_MAIL_TAKE_ITEM";
-        case CMSG_MAIL_MARK_AS_READ: return "CMSG_MAIL_MARK_AS_READ";
-        case CMSG_MAIL_RETURN_TO_SENDER: return "CMSG_MAIL_RETURN_TO_SENDER";
-        case CMSG_MAIL_DELETE: return "CMSG_MAIL_DELETE";
-        case CMSG_MAIL_CREATE_TEXT_ITEM: return "CMSG_MAIL_CREATE_TEXT_ITEM";
-        case CMSG_LEARN_TALENT: return "CMSG_LEARN_TALENT";
-        case CMSG_TOGGLE_PVP: return "CMSG_TOGGLE_PVP";
-        case MSG_AUCTION_HELLO: return "MSG_AUCTION_HELLO_Client";
-        case CMSG_AUCTION_SELL_ITEM: return "CMSG_AUCTION_SELL_ITEM";
-        case CMSG_AUCTION_REMOVE_ITEM: return "CMSG_AUCTION_REMOVE_ITEM";
-        case CMSG_AUCTION_LIST_ITEMS: return "CMSG_AUCTION_LIST_ITEMS";
-        case CMSG_AUCTION_LIST_OWNER_ITEMS: return "CMSG_AUCTION_LIST_OWNER_ITEMS";
-        case CMSG_AUCTION_PLACE_BID: return "CMSG_AUCTION_PLACE_BID";
-        case CMSG_AUCTION_LIST_BIDDER_ITEMS: return "CMSG_AUCTION_LIST_BIDDER_ITEMS";
-        case CMSG_SET_AMMO: return "CMSG_SET_AMMO";
-        case CMSG_SET_ACTIVE_MOVER: return "CMSG_SET_ACTIVE_MOVER";
-        case CMSG_PET_CANCEL_AURA: return "CMSG_PET_CANCEL_AURA";
-        case MSG_LIST_STABLED_PETS: return "MSG_LIST_STABLED_PETS_Client";
-        case CMSG_STABLE_PET: return "CMSG_STABLE_PET";
-        case CMSG_UNSTABLE_PET: return "CMSG_UNSTABLE_PET";
-        case CMSG_BUY_STABLE_SLOT: return "CMSG_BUY_STABLE_SLOT";
-        case CMSG_STABLE_SWAP_PET: return "CMSG_STABLE_SWAP_PET";
-        case MSG_QUEST_PUSH_RESULT: return "MSG_QUEST_PUSH_RESULT";
-        case CMSG_FAR_SIGHT: return "CMSG_FAR_SIGHT";
-        case CMSG_GROUP_CHANGE_SUB_GROUP: return "CMSG_GROUP_CHANGE_SUB_GROUP";
-        case CMSG_REQUEST_PARTY_MEMBER_STATS: return "CMSG_REQUEST_PARTY_MEMBER_STATS";
-        case CMSG_GROUP_SWAP_SUB_GROUP: return "CMSG_GROUP_SWAP_SUB_GROUP";
-        case CMSG_AUTOSTORE_BANK_ITEM: return "CMSG_AUTOSTORE_BANK_ITEM";
-        case CMSG_AUTOBANK_ITEM: return "CMSG_AUTOBANK_ITEM";
-        case CMSG_GROUP_ASSISTANT_LEADER: return "CMSG_GROUP_ASSISTANT_LEADER";
-        case CMSG_BUYBACK_ITEM: return "CMSG_BUYBACK_ITEM";
-        case CMSG_MEETINGSTONE_JOIN: return "CMSG_MEETINGSTONE_JOIN";
-        case CMSG_LOOT_ROLL: return "CMSG_LOOT_ROLL";
-        case CMSG_LOOT_MASTER_GIVE: return "CMSG_LOOT_MASTER_GIVE";
-        case CMSG_REPAIR_ITEM: return "CMSG_REPAIR_ITEM";
-        case MSG_TALENT_WIPE_CONFIRM: return "MSG_TALENT_WIPE_CONFIRM_Client";
-        case CMSG_SUMMON_RESPONSE: return "CMSG_SUMMON_RESPONSE";
-        case MSG_MOVE_WATER_WALK: return "MSG_MOVE_WATER_WALK";
-        case CMSG_SET_ACTIONBAR_TOGGLES: return "CMSG_SET_ACTIONBAR_TOGGLES";
-        case MSG_PETITION_RENAME: return "MSG_PETITION_RENAME";
-        case CMSG_ITEM_NAME_QUERY: return "CMSG_ITEM_NAME_QUERY";
-        case CMSG_CHAR_RENAME: return "CMSG_CHAR_RENAME";
-        case CMSG_MOVE_SPLINE_DONE: return "CMSG_MOVE_SPLINE_DONE";
-        case CMSG_MOVE_FALL_RESET: return "CMSG_MOVE_FALL_RESET";
-        case CMSG_MOVE_TIME_SKIPPED: return "CMSG_MOVE_TIME_SKIPPED";
-        case CMSG_MOVE_FEATHER_FALL_ACK: return "CMSG_MOVE_FEATHER_FALL_ACK";
-        case CMSG_MOVE_WATER_WALK_ACK: return "CMSG_MOVE_WATER_WALK_ACK";
-        case CMSG_MOVE_NOT_ACTIVE_MOVER: return "CMSG_MOVE_NOT_ACTIVE_MOVER";
-        case CMSG_BATTLEFIELD_PORT: return "CMSG_BATTLEFIELD_PORT";
-        case MSG_INSPECT_HONOR_STATS: return "MSG_INSPECT_HONOR_STATS_Client";
-        case CMSG_BATTLEMASTER_HELLO: return "CMSG_BATTLEMASTER_HELLO";
-        case CMSG_FORCE_WALK_SPEED_CHANGE_ACK: return "CMSG_FORCE_WALK_SPEED_CHANGE_ACK";
-        case CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK: return "CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK";
-        case CMSG_FORCE_TURN_RATE_CHANGE_ACK: return "CMSG_FORCE_TURN_RATE_CHANGE_ACK";
-        case CMSG_LEAVE_BATTLEFIELD: return "CMSG_LEAVE_BATTLEFIELD";
-        case CMSG_AREA_SPIRIT_HEALER_QUERY: return "CMSG_AREA_SPIRIT_HEALER_QUERY";
-        case CMSG_AREA_SPIRIT_HEALER_QUEUE: return "CMSG_AREA_SPIRIT_HEALER_QUEUE";
-        case CMSG_WARDEN_DATA: return "CMSG_WARDEN_DATA";
-        case CMSG_PET_STOP_ATTACK: return "CMSG_PET_STOP_ATTACK";
-        case CMSG_BATTLEMASTER_JOIN: return "CMSG_BATTLEMASTER_JOIN";
-        case CMSG_PET_UNLEARN: return "CMSG_PET_UNLEARN";
-        case CMSG_PET_SPELL_AUTOCAST: return "CMSG_PET_SPELL_AUTOCAST";
-        case CMSG_GUILD_INFO_TEXT: return "CMSG_GUILD_INFO_TEXT";
-        case CMSG_ACTIVATETAXIEXPRESS: return "CMSG_ACTIVATETAXIEXPRESS";
-        case CMSG_SET_FACTION_INACTIVE: return "CMSG_SET_FACTION_INACTIVE";
-        case CMSG_SET_WATCHED_FACTION: return "CMSG_SET_WATCHED_FACTION";
-        case MSG_RAID_TARGET_UPDATE: return "MSG_RAID_TARGET_UPDATE_Client";
-        case MSG_RAID_READY_CHECK: return "MSG_RAID_READY_CHECK_Client";
-        case CMSG_GMSURVEY_SUBMIT: return "CMSG_GMSURVEY_SUBMIT";
+        case V_CMSG_DBLOOKUP: return "CMSG_DBLOOKUP";
+        case V_CMSG_WORLD_TELEPORT: return "CMSG_WORLD_TELEPORT";
+        case V_CMSG_TELEPORT_TO_UNIT: return "CMSG_TELEPORT_TO_UNIT";
+        case V_CMSG_CHAR_CREATE: return "CMSG_CHAR_CREATE";
+        case V_CMSG_CHAR_DELETE: return "CMSG_CHAR_DELETE";
+        case V_CMSG_PLAYER_LOGIN: return "CMSG_PLAYER_LOGIN";
+        case V_CMSG_NAME_QUERY: return "CMSG_NAME_QUERY";
+        case V_CMSG_PET_NAME_QUERY: return "CMSG_PET_NAME_QUERY";
+        case V_CMSG_GUILD_QUERY: return "CMSG_GUILD_QUERY";
+        case V_CMSG_ITEM_QUERY_SINGLE: return "CMSG_ITEM_QUERY_SINGLE";
+        case V_CMSG_PAGE_TEXT_QUERY: return "CMSG_PAGE_TEXT_QUERY";
+        case V_CMSG_QUEST_QUERY: return "CMSG_QUEST_QUERY";
+        case V_CMSG_GAMEOBJECT_QUERY: return "CMSG_GAMEOBJECT_QUERY";
+        case V_CMSG_CREATURE_QUERY: return "CMSG_CREATURE_QUERY";
+        case V_CMSG_WHO: return "CMSG_WHO";
+        case V_CMSG_WHOIS: return "CMSG_WHOIS";
+        case V_CMSG_ADD_FRIEND: return "CMSG_ADD_FRIEND";
+        case V_CMSG_DEL_FRIEND: return "CMSG_DEL_FRIEND";
+        case V_CMSG_ADD_IGNORE: return "CMSG_ADD_IGNORE";
+        case V_CMSG_DEL_IGNORE: return "CMSG_DEL_IGNORE";
+        case V_CMSG_GROUP_INVITE: return "CMSG_GROUP_INVITE";
+        case V_CMSG_GROUP_UNINVITE: return "CMSG_GROUP_UNINVITE";
+        case V_CMSG_GROUP_UNINVITE_GUID: return "CMSG_GROUP_UNINVITE_GUID";
+        case V_CMSG_GROUP_SET_LEADER: return "CMSG_GROUP_SET_LEADER";
+        case V_CMSG_LOOT_METHOD: return "CMSG_LOOT_METHOD";
+        case V_CMSG_GUILD_CREATE: return "CMSG_GUILD_CREATE";
+        case V_CMSG_GUILD_INVITE: return "CMSG_GUILD_INVITE";
+        case V_CMSG_GUILD_PROMOTE: return "CMSG_GUILD_PROMOTE";
+        case V_CMSG_GUILD_DEMOTE: return "CMSG_GUILD_DEMOTE";
+        case V_CMSG_GUILD_REMOVE: return "CMSG_GUILD_REMOVE";
+        case V_CMSG_GUILD_LEADER: return "CMSG_GUILD_LEADER";
+        case V_CMSG_GUILD_MOTD: return "CMSG_GUILD_MOTD";
+        case V_CMSG_MESSAGECHAT: return "CMSG_MESSAGECHAT";
+        case V_CMSG_JOIN_CHANNEL: return "CMSG_JOIN_CHANNEL";
+        case V_CMSG_LEAVE_CHANNEL: return "CMSG_LEAVE_CHANNEL";
+        case V_CMSG_CHANNEL_LIST: return "CMSG_CHANNEL_LIST";
+        case V_CMSG_CHANNEL_PASSWORD: return "CMSG_CHANNEL_PASSWORD";
+        case V_CMSG_CHANNEL_SET_OWNER: return "CMSG_CHANNEL_SET_OWNER";
+        case V_CMSG_CHANNEL_OWNER: return "CMSG_CHANNEL_OWNER";
+        case V_CMSG_CHANNEL_MODERATOR: return "CMSG_CHANNEL_MODERATOR";
+        case V_CMSG_CHANNEL_UNMODERATOR: return "CMSG_CHANNEL_UNMODERATOR";
+        case V_CMSG_CHANNEL_MUTE: return "CMSG_CHANNEL_MUTE";
+        case V_CMSG_CHANNEL_UNMUTE: return "CMSG_CHANNEL_UNMUTE";
+        case V_CMSG_CHANNEL_INVITE: return "CMSG_CHANNEL_INVITE";
+        case V_CMSG_CHANNEL_KICK: return "CMSG_CHANNEL_KICK";
+        case V_CMSG_CHANNEL_BAN: return "CMSG_CHANNEL_BAN";
+        case V_CMSG_CHANNEL_UNBAN: return "CMSG_CHANNEL_UNBAN";
+        case V_CMSG_CHANNEL_ANNOUNCEMENTS: return "CMSG_CHANNEL_ANNOUNCEMENTS";
+        case V_CMSG_CHANNEL_MODERATE: return "CMSG_CHANNEL_MODERATE";
+        case V_CMSG_USE_ITEM: return "CMSG_USE_ITEM";
+        case V_CMSG_OPEN_ITEM: return "CMSG_OPEN_ITEM";
+        case V_CMSG_READ_ITEM: return "CMSG_READ_ITEM";
+        case V_CMSG_GAMEOBJ_USE: return "CMSG_GAMEOBJ_USE";
+        case V_CMSG_AREATRIGGER: return "CMSG_AREATRIGGER";
+        case V_MSG_MOVE_START_FORWARD: return "MSG_MOVE_START_FORWARD_Client";
+        case V_MSG_MOVE_START_BACKWARD: return "MSG_MOVE_START_BACKWARD_Client";
+        case V_MSG_MOVE_STOP: return "MSG_MOVE_STOP_Client";
+        case V_MSG_MOVE_START_STRAFE_LEFT: return "MSG_MOVE_START_STRAFE_LEFT_Client";
+        case V_MSG_MOVE_START_STRAFE_RIGHT: return "MSG_MOVE_START_STRAFE_RIGHT_Client";
+        case V_MSG_MOVE_STOP_STRAFE: return "MSG_MOVE_STOP_STRAFE_Client";
+        case V_MSG_MOVE_JUMP: return "MSG_MOVE_JUMP_Client";
+        case V_MSG_MOVE_START_TURN_LEFT: return "MSG_MOVE_START_TURN_LEFT_Client";
+        case V_MSG_MOVE_START_TURN_RIGHT: return "MSG_MOVE_START_TURN_RIGHT_Client";
+        case V_MSG_MOVE_STOP_TURN: return "MSG_MOVE_STOP_TURN_Client";
+        case V_MSG_MOVE_START_PITCH_UP: return "MSG_MOVE_START_PITCH_UP_Client";
+        case V_MSG_MOVE_START_PITCH_DOWN: return "MSG_MOVE_START_PITCH_DOWN_Client";
+        case V_MSG_MOVE_STOP_PITCH: return "MSG_MOVE_STOP_PITCH_Client";
+        case V_MSG_MOVE_SET_RUN_MODE: return "MSG_MOVE_SET_RUN_MODE_Client";
+        case V_MSG_MOVE_SET_WALK_MODE: return "MSG_MOVE_SET_WALK_MODE_Client";
+        case V_MSG_MOVE_TELEPORT_ACK: return "MSG_MOVE_TELEPORT_ACK_Client";
+        case V_MSG_MOVE_FALL_LAND: return "MSG_MOVE_FALL_LAND_Client";
+        case V_MSG_MOVE_START_SWIM: return "MSG_MOVE_START_SWIM_Client";
+        case V_MSG_MOVE_STOP_SWIM: return "MSG_MOVE_STOP_SWIM_Client";
+        case V_MSG_MOVE_SET_FACING: return "MSG_MOVE_SET_FACING_Client";
+        case V_MSG_MOVE_SET_PITCH: return "MSG_MOVE_SET_PITCH_Client";
+        case V_CMSG_MOVE_SET_RAW_POSITION: return "CMSG_MOVE_SET_RAW_POSITION";
+        case V_CMSG_FORCE_RUN_SPEED_CHANGE_ACK: return "CMSG_FORCE_RUN_SPEED_CHANGE_ACK";
+        case V_CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK: return "CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK";
+        case V_CMSG_FORCE_SWIM_SPEED_CHANGE_ACK: return "CMSG_FORCE_SWIM_SPEED_CHANGE_ACK";
+        case V_CMSG_FORCE_MOVE_ROOT_ACK: return "CMSG_FORCE_MOVE_ROOT_ACK";
+        case V_CMSG_FORCE_MOVE_UNROOT_ACK: return "CMSG_FORCE_MOVE_UNROOT_ACK";
+        case V_MSG_MOVE_HEARTBEAT: return "MSG_MOVE_HEARTBEAT_Client";
+        case V_CMSG_MOVE_KNOCK_BACK_ACK: return "CMSG_MOVE_KNOCK_BACK_ACK";
+        case V_CMSG_MOVE_HOVER_ACK: return "CMSG_MOVE_HOVER_ACK";
+        case V_CMSG_TUTORIAL_FLAG: return "CMSG_TUTORIAL_FLAG";
+        case V_CMSG_STANDSTATECHANGE: return "CMSG_STANDSTATECHANGE";
+        case V_CMSG_EMOTE: return "CMSG_EMOTE";
+        case V_CMSG_TEXT_EMOTE: return "CMSG_TEXT_EMOTE";
+        case V_CMSG_AUTOSTORE_LOOT_ITEM: return "CMSG_AUTOSTORE_LOOT_ITEM";
+        case V_CMSG_AUTOEQUIP_ITEM: return "CMSG_AUTOEQUIP_ITEM";
+        case V_CMSG_AUTOSTORE_BAG_ITEM: return "CMSG_AUTOSTORE_BAG_ITEM";
+        case V_CMSG_SWAP_ITEM: return "CMSG_SWAP_ITEM";
+        case V_CMSG_SWAP_INV_ITEM: return "CMSG_SWAP_INV_ITEM";
+        case V_CMSG_SPLIT_ITEM: return "CMSG_SPLIT_ITEM";
+        case V_CMSG_AUTOEQUIP_ITEM_SLOT: return "CMSG_AUTOEQUIP_ITEM_SLOT";
+        case V_CMSG_DESTROYITEM: return "CMSG_DESTROYITEM";
+        case V_CMSG_INSPECT: return "CMSG_INSPECT";
+        case V_CMSG_INITIATE_TRADE: return "CMSG_INITIATE_TRADE";
+        case V_CMSG_ACCEPT_TRADE: return "CMSG_ACCEPT_TRADE";
+        case V_CMSG_SET_TRADE_ITEM: return "CMSG_SET_TRADE_ITEM";
+        case V_CMSG_CLEAR_TRADE_ITEM: return "CMSG_CLEAR_TRADE_ITEM";
+        case V_CMSG_SET_TRADE_GOLD: return "CMSG_SET_TRADE_GOLD";
+        case V_CMSG_SET_FACTION_ATWAR: return "CMSG_SET_FACTION_ATWAR";
+        case V_CMSG_SET_ACTION_BUTTON: return "CMSG_SET_ACTION_BUTTON";
+        case V_CMSG_CAST_SPELL: return "CMSG_CAST_SPELL";
+        case V_CMSG_CANCEL_CAST: return "CMSG_CANCEL_CAST";
+        case V_CMSG_CANCEL_AURA: return "CMSG_CANCEL_AURA";
+        case V_CMSG_CANCEL_CHANNELLING: return "CMSG_CANCEL_CHANNELLING";
+        case V_CMSG_SET_SELECTION: return "CMSG_SET_SELECTION";
+        case V_CMSG_SET_TARGET_OBSOLETE: return "CMSG_SET_TARGET_OBSOLETE";
+        case V_CMSG_ATTACKSWING: return "CMSG_ATTACKSWING";
+        case V_CMSG_RESURRECT_RESPONSE: return "CMSG_RESURRECT_RESPONSE";
+        case V_CMSG_LOOT: return "CMSG_LOOT";
+        case V_CMSG_LOOT_RELEASE: return "CMSG_LOOT_RELEASE";
+        case V_CMSG_DUEL_ACCEPTED: return "CMSG_DUEL_ACCEPTED";
+        case V_CMSG_DUEL_CANCELLED: return "CMSG_DUEL_CANCELLED";
+        case V_CMSG_PET_SET_ACTION: return "CMSG_PET_SET_ACTION";
+        case V_CMSG_PET_ACTION: return "CMSG_PET_ACTION";
+        case V_CMSG_PET_ABANDON: return "CMSG_PET_ABANDON";
+        case V_CMSG_PET_RENAME: return "CMSG_PET_RENAME";
+        case V_CMSG_GOSSIP_HELLO: return "CMSG_GOSSIP_HELLO";
+        case V_CMSG_GOSSIP_SELECT_OPTION: return "CMSG_GOSSIP_SELECT_OPTION";
+        case V_CMSG_NPC_TEXT_QUERY: return "CMSG_NPC_TEXT_QUERY";
+        case V_CMSG_QUESTGIVER_STATUS_QUERY: return "CMSG_QUESTGIVER_STATUS_QUERY";
+        case V_CMSG_QUESTGIVER_HELLO: return "CMSG_QUESTGIVER_HELLO";
+        case V_CMSG_QUESTGIVER_QUERY_QUEST: return "CMSG_QUESTGIVER_QUERY_QUEST";
+        case V_CMSG_QUESTGIVER_ACCEPT_QUEST: return "CMSG_QUESTGIVER_ACCEPT_QUEST";
+        case V_CMSG_QUESTGIVER_COMPLETE_QUEST: return "CMSG_QUESTGIVER_COMPLETE_QUEST";
+        case V_CMSG_QUESTGIVER_REQUEST_REWARD: return "CMSG_QUESTGIVER_REQUEST_REWARD";
+        case V_CMSG_QUESTGIVER_CHOOSE_REWARD: return "CMSG_QUESTGIVER_CHOOSE_REWARD";
+        case V_CMSG_QUESTLOG_SWAP_QUEST: return "CMSG_QUESTLOG_SWAP_QUEST";
+        case V_CMSG_QUESTLOG_REMOVE_QUEST: return "CMSG_QUESTLOG_REMOVE_QUEST";
+        case V_CMSG_QUEST_CONFIRM_ACCEPT: return "CMSG_QUEST_CONFIRM_ACCEPT";
+        case V_CMSG_PUSHQUESTTOPARTY: return "CMSG_PUSHQUESTTOPARTY";
+        case V_CMSG_LIST_INVENTORY: return "CMSG_LIST_INVENTORY";
+        case V_CMSG_SELL_ITEM: return "CMSG_SELL_ITEM";
+        case V_CMSG_BUY_ITEM: return "CMSG_BUY_ITEM";
+        case V_CMSG_BUY_ITEM_IN_SLOT: return "CMSG_BUY_ITEM_IN_SLOT";
+        case V_CMSG_TAXINODE_STATUS_QUERY: return "CMSG_TAXINODE_STATUS_QUERY";
+        case V_CMSG_TAXIQUERYAVAILABLENODES: return "CMSG_TAXIQUERYAVAILABLENODES";
+        case V_CMSG_ACTIVATETAXI: return "CMSG_ACTIVATETAXI";
+        case V_CMSG_TRAINER_LIST: return "CMSG_TRAINER_LIST";
+        case V_CMSG_TRAINER_BUY_SPELL: return "CMSG_TRAINER_BUY_SPELL";
+        case V_CMSG_BINDER_ACTIVATE: return "CMSG_BINDER_ACTIVATE";
+        case V_CMSG_BANKER_ACTIVATE: return "CMSG_BANKER_ACTIVATE";
+        case V_CMSG_BUY_BANK_SLOT: return "CMSG_BUY_BANK_SLOT";
+        case V_CMSG_PETITION_SHOWLIST: return "CMSG_PETITION_SHOWLIST";
+        case V_CMSG_PETITION_BUY: return "CMSG_PETITION_BUY";
+        case V_CMSG_PETITION_SHOW_SIGNATURES: return "CMSG_PETITION_SHOW_SIGNATURES";
+        case V_CMSG_PETITION_SIGN: return "CMSG_PETITION_SIGN";
+        case V_MSG_PETITION_DECLINE: return "MSG_PETITION_DECLINE";
+        case V_CMSG_OFFER_PETITION: return "CMSG_OFFER_PETITION";
+        case V_CMSG_TURN_IN_PETITION: return "CMSG_TURN_IN_PETITION";
+        case V_CMSG_PETITION_QUERY: return "CMSG_PETITION_QUERY";
+        case V_CMSG_BUG: return "CMSG_BUG";
+        case V_CMSG_RECLAIM_CORPSE: return "CMSG_RECLAIM_CORPSE";
+        case V_CMSG_WRAP_ITEM: return "CMSG_WRAP_ITEM";
+        case V_MSG_MINIMAP_PING: return "MSG_MINIMAP_PING_Client";
+        case V_CMSG_PING: return "CMSG_PING";
+        case V_CMSG_SETSHEATHED: return "CMSG_SETSHEATHED";
+        case V_CMSG_AUTH_SESSION: return "CMSG_AUTH_SESSION";
+        case V_CMSG_PET_CAST_SPELL: return "CMSG_PET_CAST_SPELL";
+        case V_MSG_SAVE_GUILD_EMBLEM: return "MSG_SAVE_GUILD_EMBLEM_Client";
+        case V_MSG_TABARDVENDOR_ACTIVATE: return "MSG_TABARDVENDOR_ACTIVATE";
+        case V_CMSG_ZONEUPDATE: return "CMSG_ZONEUPDATE";
+        case V_MSG_RANDOM_ROLL: return "MSG_RANDOM_ROLL_Client";
+        case V_CMSG_UNLEARN_SKILL: return "CMSG_UNLEARN_SKILL";
+        case V_CMSG_GMTICKET_CREATE: return "CMSG_GMTICKET_CREATE";
+        case V_CMSG_GMTICKET_UPDATETEXT: return "CMSG_GMTICKET_UPDATETEXT";
+        case V_CMSG_REQUEST_ACCOUNT_DATA: return "CMSG_REQUEST_ACCOUNT_DATA";
+        case V_CMSG_UPDATE_ACCOUNT_DATA: return "CMSG_UPDATE_ACCOUNT_DATA";
+        case V_CMSG_SPIRIT_HEALER_ACTIVATE: return "CMSG_SPIRIT_HEALER_ACTIVATE";
+        case V_CMSG_CHAT_IGNORED: return "CMSG_CHAT_IGNORED";
+        case V_CMSG_GUILD_RANK: return "CMSG_GUILD_RANK";
+        case V_CMSG_GUILD_ADD_RANK: return "CMSG_GUILD_ADD_RANK";
+        case V_CMSG_GUILD_SET_PUBLIC_NOTE: return "CMSG_GUILD_SET_PUBLIC_NOTE";
+        case V_CMSG_GUILD_SET_OFFICER_NOTE: return "CMSG_GUILD_SET_OFFICER_NOTE";
+        case V_CMSG_SEND_MAIL: return "CMSG_SEND_MAIL";
+        case V_CMSG_GET_MAIL_LIST: return "CMSG_GET_MAIL_LIST";
+        case V_CMSG_BATTLEFIELD_LIST: return "CMSG_BATTLEFIELD_LIST";
+        case V_CMSG_BATTLEFIELD_JOIN: return "CMSG_BATTLEFIELD_JOIN";
+        case V_CMSG_ITEM_TEXT_QUERY: return "CMSG_ITEM_TEXT_QUERY";
+        case V_CMSG_MAIL_TAKE_MONEY: return "CMSG_MAIL_TAKE_MONEY";
+        case V_CMSG_MAIL_TAKE_ITEM: return "CMSG_MAIL_TAKE_ITEM";
+        case V_CMSG_MAIL_MARK_AS_READ: return "CMSG_MAIL_MARK_AS_READ";
+        case V_CMSG_MAIL_RETURN_TO_SENDER: return "CMSG_MAIL_RETURN_TO_SENDER";
+        case V_CMSG_MAIL_DELETE: return "CMSG_MAIL_DELETE";
+        case V_CMSG_MAIL_CREATE_TEXT_ITEM: return "CMSG_MAIL_CREATE_TEXT_ITEM";
+        case V_CMSG_LEARN_TALENT: return "CMSG_LEARN_TALENT";
+        case V_CMSG_TOGGLE_PVP: return "CMSG_TOGGLE_PVP";
+        case V_MSG_AUCTION_HELLO: return "MSG_AUCTION_HELLO_Client";
+        case V_CMSG_AUCTION_SELL_ITEM: return "CMSG_AUCTION_SELL_ITEM";
+        case V_CMSG_AUCTION_REMOVE_ITEM: return "CMSG_AUCTION_REMOVE_ITEM";
+        case V_CMSG_AUCTION_LIST_ITEMS: return "CMSG_AUCTION_LIST_ITEMS";
+        case V_CMSG_AUCTION_LIST_OWNER_ITEMS: return "CMSG_AUCTION_LIST_OWNER_ITEMS";
+        case V_CMSG_AUCTION_PLACE_BID: return "CMSG_AUCTION_PLACE_BID";
+        case V_CMSG_AUCTION_LIST_BIDDER_ITEMS: return "CMSG_AUCTION_LIST_BIDDER_ITEMS";
+        case V_CMSG_SET_AMMO: return "CMSG_SET_AMMO";
+        case V_CMSG_SET_ACTIVE_MOVER: return "CMSG_SET_ACTIVE_MOVER";
+        case V_CMSG_PET_CANCEL_AURA: return "CMSG_PET_CANCEL_AURA";
+        case V_MSG_LIST_STABLED_PETS: return "MSG_LIST_STABLED_PETS_Client";
+        case V_CMSG_STABLE_PET: return "CMSG_STABLE_PET";
+        case V_CMSG_UNSTABLE_PET: return "CMSG_UNSTABLE_PET";
+        case V_CMSG_BUY_STABLE_SLOT: return "CMSG_BUY_STABLE_SLOT";
+        case V_CMSG_STABLE_SWAP_PET: return "CMSG_STABLE_SWAP_PET";
+        case V_MSG_QUEST_PUSH_RESULT: return "MSG_QUEST_PUSH_RESULT";
+        case V_CMSG_FAR_SIGHT: return "CMSG_FAR_SIGHT";
+        case V_CMSG_GROUP_CHANGE_SUB_GROUP: return "CMSG_GROUP_CHANGE_SUB_GROUP";
+        case V_CMSG_REQUEST_PARTY_MEMBER_STATS: return "CMSG_REQUEST_PARTY_MEMBER_STATS";
+        case V_CMSG_GROUP_SWAP_SUB_GROUP: return "CMSG_GROUP_SWAP_SUB_GROUP";
+        case V_CMSG_AUTOSTORE_BANK_ITEM: return "CMSG_AUTOSTORE_BANK_ITEM";
+        case V_CMSG_AUTOBANK_ITEM: return "CMSG_AUTOBANK_ITEM";
+        case V_CMSG_GROUP_ASSISTANT_LEADER: return "CMSG_GROUP_ASSISTANT_LEADER";
+        case V_CMSG_BUYBACK_ITEM: return "CMSG_BUYBACK_ITEM";
+        case V_CMSG_MEETINGSTONE_JOIN: return "CMSG_MEETINGSTONE_JOIN";
+        case V_CMSG_LOOT_ROLL: return "CMSG_LOOT_ROLL";
+        case V_CMSG_LOOT_MASTER_GIVE: return "CMSG_LOOT_MASTER_GIVE";
+        case V_CMSG_REPAIR_ITEM: return "CMSG_REPAIR_ITEM";
+        case V_MSG_TALENT_WIPE_CONFIRM: return "MSG_TALENT_WIPE_CONFIRM_Client";
+        case V_CMSG_SUMMON_RESPONSE: return "CMSG_SUMMON_RESPONSE";
+        case V_MSG_MOVE_WATER_WALK: return "MSG_MOVE_WATER_WALK";
+        case V_CMSG_SET_ACTIONBAR_TOGGLES: return "CMSG_SET_ACTIONBAR_TOGGLES";
+        case V_MSG_PETITION_RENAME: return "MSG_PETITION_RENAME";
+        case V_CMSG_ITEM_NAME_QUERY: return "CMSG_ITEM_NAME_QUERY";
+        case V_CMSG_CHAR_RENAME: return "CMSG_CHAR_RENAME";
+        case V_CMSG_MOVE_SPLINE_DONE: return "CMSG_MOVE_SPLINE_DONE";
+        case V_CMSG_MOVE_FALL_RESET: return "CMSG_MOVE_FALL_RESET";
+        case V_CMSG_MOVE_TIME_SKIPPED: return "CMSG_MOVE_TIME_SKIPPED";
+        case V_CMSG_MOVE_FEATHER_FALL_ACK: return "CMSG_MOVE_FEATHER_FALL_ACK";
+        case V_CMSG_MOVE_WATER_WALK_ACK: return "CMSG_MOVE_WATER_WALK_ACK";
+        case V_CMSG_MOVE_NOT_ACTIVE_MOVER: return "CMSG_MOVE_NOT_ACTIVE_MOVER";
+        case V_CMSG_BATTLEFIELD_PORT: return "CMSG_BATTLEFIELD_PORT";
+        case V_MSG_INSPECT_HONOR_STATS: return "MSG_INSPECT_HONOR_STATS_Client";
+        case V_CMSG_BATTLEMASTER_HELLO: return "CMSG_BATTLEMASTER_HELLO";
+        case V_CMSG_FORCE_WALK_SPEED_CHANGE_ACK: return "CMSG_FORCE_WALK_SPEED_CHANGE_ACK";
+        case V_CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK: return "CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK";
+        case V_CMSG_FORCE_TURN_RATE_CHANGE_ACK: return "CMSG_FORCE_TURN_RATE_CHANGE_ACK";
+        case V_CMSG_LEAVE_BATTLEFIELD: return "CMSG_LEAVE_BATTLEFIELD";
+        case V_CMSG_AREA_SPIRIT_HEALER_QUERY: return "CMSG_AREA_SPIRIT_HEALER_QUERY";
+        case V_CMSG_AREA_SPIRIT_HEALER_QUEUE: return "CMSG_AREA_SPIRIT_HEALER_QUEUE";
+        case V_CMSG_WARDEN_DATA: return "CMSG_WARDEN_DATA";
+        case V_CMSG_PET_STOP_ATTACK: return "CMSG_PET_STOP_ATTACK";
+        case V_CMSG_BATTLEMASTER_JOIN: return "CMSG_BATTLEMASTER_JOIN";
+        case V_CMSG_PET_UNLEARN: return "CMSG_PET_UNLEARN";
+        case V_CMSG_PET_SPELL_AUTOCAST: return "CMSG_PET_SPELL_AUTOCAST";
+        case V_CMSG_GUILD_INFO_TEXT: return "CMSG_GUILD_INFO_TEXT";
+        case V_CMSG_ACTIVATETAXIEXPRESS: return "CMSG_ACTIVATETAXIEXPRESS";
+        case V_CMSG_SET_FACTION_INACTIVE: return "CMSG_SET_FACTION_INACTIVE";
+        case V_CMSG_SET_WATCHED_FACTION: return "CMSG_SET_WATCHED_FACTION";
+        case V_MSG_RAID_TARGET_UPDATE: return "MSG_RAID_TARGET_UPDATE_Client";
+        case V_MSG_RAID_READY_CHECK: return "MSG_RAID_READY_CHECK_Client";
+        case V_CMSG_GMSURVEY_SUBMIT: return "CMSG_GMSURVEY_SUBMIT";
         default:
             break;
     }
@@ -24300,970 +26225,970 @@ WOW_WORLD_MESSAGES_C_EXPORT char* vanilla_client_opcode_to_str(VanillaClientOpco
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_server_opcode_write(WowWorldWriter* writer, const VanillaServerOpcodeContainer* opcodes) {
     switch (opcodes->opcode) {
-        case SMSG_CHAR_CREATE:
+        case V_SMSG_CHAR_CREATE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_CHAR_CREATE_write(writer, &opcodes->body.SMSG_CHAR_CREATE));
             break;
-        case SMSG_CHAR_ENUM:
+        case V_SMSG_CHAR_ENUM:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_CHAR_ENUM_write(writer, &opcodes->body.SMSG_CHAR_ENUM));
             break;
-        case SMSG_CHAR_DELETE:
+        case V_SMSG_CHAR_DELETE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_CHAR_DELETE_write(writer, &opcodes->body.SMSG_CHAR_DELETE));
             break;
-        case SMSG_NEW_WORLD:
+        case V_SMSG_NEW_WORLD:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_NEW_WORLD_write(writer, &opcodes->body.SMSG_NEW_WORLD));
             break;
-        case SMSG_TRANSFER_PENDING:
+        case V_SMSG_TRANSFER_PENDING:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_TRANSFER_PENDING_write(writer, &opcodes->body.SMSG_TRANSFER_PENDING));
             break;
-        case SMSG_TRANSFER_ABORTED:
+        case V_SMSG_TRANSFER_ABORTED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_TRANSFER_ABORTED_write(writer, &opcodes->body.SMSG_TRANSFER_ABORTED));
             break;
-        case SMSG_CHARACTER_LOGIN_FAILED:
+        case V_SMSG_CHARACTER_LOGIN_FAILED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_CHARACTER_LOGIN_FAILED_write(writer, &opcodes->body.SMSG_CHARACTER_LOGIN_FAILED));
             break;
-        case SMSG_LOGIN_SETTIMESPEED:
+        case V_SMSG_LOGIN_SETTIMESPEED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_LOGIN_SETTIMESPEED_write(writer, &opcodes->body.SMSG_LOGIN_SETTIMESPEED));
             break;
-        case SMSG_LOGOUT_RESPONSE:
+        case V_SMSG_LOGOUT_RESPONSE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_LOGOUT_RESPONSE_write(writer, &opcodes->body.SMSG_LOGOUT_RESPONSE));
             break;
-        case SMSG_NAME_QUERY_RESPONSE:
+        case V_SMSG_NAME_QUERY_RESPONSE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_NAME_QUERY_RESPONSE_write(writer, &opcodes->body.SMSG_NAME_QUERY_RESPONSE));
             break;
-        case SMSG_PET_NAME_QUERY_RESPONSE:
+        case V_SMSG_PET_NAME_QUERY_RESPONSE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PET_NAME_QUERY_RESPONSE_write(writer, &opcodes->body.SMSG_PET_NAME_QUERY_RESPONSE));
             break;
-        case SMSG_GUILD_QUERY_RESPONSE:
+        case V_SMSG_GUILD_QUERY_RESPONSE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GUILD_QUERY_RESPONSE_write(writer, &opcodes->body.SMSG_GUILD_QUERY_RESPONSE));
             break;
-        case SMSG_ITEM_QUERY_SINGLE_RESPONSE:
+        case V_SMSG_ITEM_QUERY_SINGLE_RESPONSE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_ITEM_QUERY_SINGLE_RESPONSE_write(writer, &opcodes->body.SMSG_ITEM_QUERY_SINGLE_RESPONSE));
             break;
-        case SMSG_PAGE_TEXT_QUERY_RESPONSE:
+        case V_SMSG_PAGE_TEXT_QUERY_RESPONSE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PAGE_TEXT_QUERY_RESPONSE_write(writer, &opcodes->body.SMSG_PAGE_TEXT_QUERY_RESPONSE));
             break;
-        case SMSG_QUEST_QUERY_RESPONSE:
+        case V_SMSG_QUEST_QUERY_RESPONSE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUEST_QUERY_RESPONSE_write(writer, &opcodes->body.SMSG_QUEST_QUERY_RESPONSE));
             break;
-        case SMSG_GAMEOBJECT_QUERY_RESPONSE:
+        case V_SMSG_GAMEOBJECT_QUERY_RESPONSE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GAMEOBJECT_QUERY_RESPONSE_write(writer, &opcodes->body.SMSG_GAMEOBJECT_QUERY_RESPONSE));
             break;
-        case SMSG_CREATURE_QUERY_RESPONSE:
+        case V_SMSG_CREATURE_QUERY_RESPONSE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_CREATURE_QUERY_RESPONSE_write(writer, &opcodes->body.SMSG_CREATURE_QUERY_RESPONSE));
             break;
-        case SMSG_WHO:
+        case V_SMSG_WHO:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_WHO_write(writer, &opcodes->body.SMSG_WHO));
             break;
-        case SMSG_WHOIS:
+        case V_SMSG_WHOIS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_WHOIS_write(writer, &opcodes->body.SMSG_WHOIS));
             break;
-        case SMSG_FRIEND_LIST:
+        case V_SMSG_FRIEND_LIST:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_FRIEND_LIST_write(writer, &opcodes->body.SMSG_FRIEND_LIST));
             break;
-        case SMSG_FRIEND_STATUS:
+        case V_SMSG_FRIEND_STATUS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_FRIEND_STATUS_write(writer, &opcodes->body.SMSG_FRIEND_STATUS));
             break;
-        case SMSG_IGNORE_LIST:
+        case V_SMSG_IGNORE_LIST:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_IGNORE_LIST_write(writer, &opcodes->body.SMSG_IGNORE_LIST));
             break;
-        case SMSG_GROUP_INVITE:
+        case V_SMSG_GROUP_INVITE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GROUP_INVITE_write(writer, &opcodes->body.SMSG_GROUP_INVITE));
             break;
-        case SMSG_GROUP_DECLINE:
+        case V_SMSG_GROUP_DECLINE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GROUP_DECLINE_write(writer, &opcodes->body.SMSG_GROUP_DECLINE));
             break;
-        case SMSG_GROUP_SET_LEADER:
+        case V_SMSG_GROUP_SET_LEADER:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GROUP_SET_LEADER_write(writer, &opcodes->body.SMSG_GROUP_SET_LEADER));
             break;
-        case SMSG_GROUP_LIST:
+        case V_SMSG_GROUP_LIST:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GROUP_LIST_write(writer, &opcodes->body.SMSG_GROUP_LIST));
             break;
-        case SMSG_PARTY_MEMBER_STATS:
+        case V_SMSG_PARTY_MEMBER_STATS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PARTY_MEMBER_STATS_write(writer, &opcodes->body.SMSG_PARTY_MEMBER_STATS));
             break;
-        case SMSG_PARTY_COMMAND_RESULT:
+        case V_SMSG_PARTY_COMMAND_RESULT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PARTY_COMMAND_RESULT_write(writer, &opcodes->body.SMSG_PARTY_COMMAND_RESULT));
             break;
-        case SMSG_GUILD_INVITE:
+        case V_SMSG_GUILD_INVITE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GUILD_INVITE_write(writer, &opcodes->body.SMSG_GUILD_INVITE));
             break;
-        case SMSG_GUILD_INFO:
+        case V_SMSG_GUILD_INFO:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GUILD_INFO_write(writer, &opcodes->body.SMSG_GUILD_INFO));
             break;
-        case SMSG_GUILD_ROSTER:
+        case V_SMSG_GUILD_ROSTER:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GUILD_ROSTER_write(writer, &opcodes->body.SMSG_GUILD_ROSTER));
             break;
-        case SMSG_GUILD_EVENT:
+        case V_SMSG_GUILD_EVENT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GUILD_EVENT_write(writer, &opcodes->body.SMSG_GUILD_EVENT));
             break;
-        case SMSG_GUILD_COMMAND_RESULT:
+        case V_SMSG_GUILD_COMMAND_RESULT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GUILD_COMMAND_RESULT_write(writer, &opcodes->body.SMSG_GUILD_COMMAND_RESULT));
             break;
-        case SMSG_MESSAGECHAT:
+        case V_SMSG_MESSAGECHAT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_MESSAGECHAT_write(writer, &opcodes->body.SMSG_MESSAGECHAT));
             break;
-        case SMSG_CHANNEL_NOTIFY:
+        case V_SMSG_CHANNEL_NOTIFY:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_CHANNEL_NOTIFY_write(writer, &opcodes->body.SMSG_CHANNEL_NOTIFY));
             break;
-        case SMSG_CHANNEL_LIST:
+        case V_SMSG_CHANNEL_LIST:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_CHANNEL_LIST_write(writer, &opcodes->body.SMSG_CHANNEL_LIST));
             break;
-        case SMSG_UPDATE_OBJECT:
+        case V_SMSG_UPDATE_OBJECT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_UPDATE_OBJECT_write(writer, &opcodes->body.SMSG_UPDATE_OBJECT));
             break;
-        case SMSG_DESTROY_OBJECT:
+        case V_SMSG_DESTROY_OBJECT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_DESTROY_OBJECT_write(writer, &opcodes->body.SMSG_DESTROY_OBJECT));
             break;
-        case SMSG_READ_ITEM_OK:
+        case V_SMSG_READ_ITEM_OK:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_READ_ITEM_OK_write(writer, &opcodes->body.SMSG_READ_ITEM_OK));
             break;
-        case SMSG_READ_ITEM_FAILED:
+        case V_SMSG_READ_ITEM_FAILED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_READ_ITEM_FAILED_write(writer, &opcodes->body.SMSG_READ_ITEM_FAILED));
             break;
-        case SMSG_ITEM_COOLDOWN:
+        case V_SMSG_ITEM_COOLDOWN:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_ITEM_COOLDOWN_write(writer, &opcodes->body.SMSG_ITEM_COOLDOWN));
             break;
-        case SMSG_GAMEOBJECT_CUSTOM_ANIM:
+        case V_SMSG_GAMEOBJECT_CUSTOM_ANIM:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GAMEOBJECT_CUSTOM_ANIM_write(writer, &opcodes->body.SMSG_GAMEOBJECT_CUSTOM_ANIM));
             break;
-        case MSG_MOVE_START_FORWARD:
+        case V_MSG_MOVE_START_FORWARD:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_FORWARD_Server_write(writer, &opcodes->body.MSG_MOVE_START_FORWARD_Server));
             break;
-        case MSG_MOVE_START_BACKWARD:
+        case V_MSG_MOVE_START_BACKWARD:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_BACKWARD_Server_write(writer, &opcodes->body.MSG_MOVE_START_BACKWARD_Server));
             break;
-        case MSG_MOVE_STOP:
+        case V_MSG_MOVE_STOP:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_STOP_Server_write(writer, &opcodes->body.MSG_MOVE_STOP_Server));
             break;
-        case MSG_MOVE_START_STRAFE_LEFT:
+        case V_MSG_MOVE_START_STRAFE_LEFT:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_STRAFE_LEFT_Server_write(writer, &opcodes->body.MSG_MOVE_START_STRAFE_LEFT_Server));
             break;
-        case MSG_MOVE_START_STRAFE_RIGHT:
+        case V_MSG_MOVE_START_STRAFE_RIGHT:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_STRAFE_RIGHT_Server_write(writer, &opcodes->body.MSG_MOVE_START_STRAFE_RIGHT_Server));
             break;
-        case MSG_MOVE_STOP_STRAFE:
+        case V_MSG_MOVE_STOP_STRAFE:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_STOP_STRAFE_Server_write(writer, &opcodes->body.MSG_MOVE_STOP_STRAFE_Server));
             break;
-        case MSG_MOVE_JUMP:
+        case V_MSG_MOVE_JUMP:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_JUMP_Server_write(writer, &opcodes->body.MSG_MOVE_JUMP_Server));
             break;
-        case MSG_MOVE_START_TURN_LEFT:
+        case V_MSG_MOVE_START_TURN_LEFT:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_TURN_LEFT_Server_write(writer, &opcodes->body.MSG_MOVE_START_TURN_LEFT_Server));
             break;
-        case MSG_MOVE_START_TURN_RIGHT:
+        case V_MSG_MOVE_START_TURN_RIGHT:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_TURN_RIGHT_Server_write(writer, &opcodes->body.MSG_MOVE_START_TURN_RIGHT_Server));
             break;
-        case MSG_MOVE_STOP_TURN:
+        case V_MSG_MOVE_STOP_TURN:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_STOP_TURN_Server_write(writer, &opcodes->body.MSG_MOVE_STOP_TURN_Server));
             break;
-        case MSG_MOVE_START_PITCH_UP:
+        case V_MSG_MOVE_START_PITCH_UP:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_PITCH_UP_Server_write(writer, &opcodes->body.MSG_MOVE_START_PITCH_UP_Server));
             break;
-        case MSG_MOVE_START_PITCH_DOWN:
+        case V_MSG_MOVE_START_PITCH_DOWN:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_PITCH_DOWN_Server_write(writer, &opcodes->body.MSG_MOVE_START_PITCH_DOWN_Server));
             break;
-        case MSG_MOVE_STOP_PITCH:
+        case V_MSG_MOVE_STOP_PITCH:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_STOP_PITCH_Server_write(writer, &opcodes->body.MSG_MOVE_STOP_PITCH_Server));
             break;
-        case MSG_MOVE_SET_RUN_MODE:
+        case V_MSG_MOVE_SET_RUN_MODE:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_SET_RUN_MODE_Server_write(writer, &opcodes->body.MSG_MOVE_SET_RUN_MODE_Server));
             break;
-        case MSG_MOVE_SET_WALK_MODE:
+        case V_MSG_MOVE_SET_WALK_MODE:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_SET_WALK_MODE_Server_write(writer, &opcodes->body.MSG_MOVE_SET_WALK_MODE_Server));
             break;
-        case MSG_MOVE_TELEPORT_ACK:
+        case V_MSG_MOVE_TELEPORT_ACK:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_TELEPORT_ACK_Server_write(writer, &opcodes->body.MSG_MOVE_TELEPORT_ACK_Server));
             break;
-        case MSG_MOVE_FALL_LAND:
+        case V_MSG_MOVE_FALL_LAND:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_FALL_LAND_Server_write(writer, &opcodes->body.MSG_MOVE_FALL_LAND_Server));
             break;
-        case MSG_MOVE_START_SWIM:
+        case V_MSG_MOVE_START_SWIM:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_SWIM_Server_write(writer, &opcodes->body.MSG_MOVE_START_SWIM_Server));
             break;
-        case MSG_MOVE_STOP_SWIM:
+        case V_MSG_MOVE_STOP_SWIM:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_STOP_SWIM_Server_write(writer, &opcodes->body.MSG_MOVE_STOP_SWIM_Server));
             break;
-        case MSG_MOVE_SET_FACING:
+        case V_MSG_MOVE_SET_FACING:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_SET_FACING_Server_write(writer, &opcodes->body.MSG_MOVE_SET_FACING_Server));
             break;
-        case MSG_MOVE_SET_PITCH:
+        case V_MSG_MOVE_SET_PITCH:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_SET_PITCH_Server_write(writer, &opcodes->body.MSG_MOVE_SET_PITCH_Server));
             break;
-        case SMSG_MONSTER_MOVE:
+        case V_SMSG_MONSTER_MOVE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_MONSTER_MOVE_write(writer, &opcodes->body.SMSG_MONSTER_MOVE));
             break;
-        case SMSG_MOVE_WATER_WALK:
+        case V_SMSG_MOVE_WATER_WALK:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_MOVE_WATER_WALK_write(writer, &opcodes->body.SMSG_MOVE_WATER_WALK));
             break;
-        case SMSG_MOVE_LAND_WALK:
+        case V_SMSG_MOVE_LAND_WALK:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_MOVE_LAND_WALK_write(writer, &opcodes->body.SMSG_MOVE_LAND_WALK));
             break;
-        case SMSG_FORCE_RUN_SPEED_CHANGE:
+        case V_SMSG_FORCE_RUN_SPEED_CHANGE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_FORCE_RUN_SPEED_CHANGE_write(writer, &opcodes->body.SMSG_FORCE_RUN_SPEED_CHANGE));
             break;
-        case SMSG_FORCE_RUN_BACK_SPEED_CHANGE:
+        case V_SMSG_FORCE_RUN_BACK_SPEED_CHANGE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_FORCE_RUN_BACK_SPEED_CHANGE_write(writer, &opcodes->body.SMSG_FORCE_RUN_BACK_SPEED_CHANGE));
             break;
-        case SMSG_FORCE_SWIM_SPEED_CHANGE:
+        case V_SMSG_FORCE_SWIM_SPEED_CHANGE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_FORCE_SWIM_SPEED_CHANGE_write(writer, &opcodes->body.SMSG_FORCE_SWIM_SPEED_CHANGE));
             break;
-        case SMSG_FORCE_MOVE_ROOT:
+        case V_SMSG_FORCE_MOVE_ROOT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_FORCE_MOVE_ROOT_write(writer, &opcodes->body.SMSG_FORCE_MOVE_ROOT));
             break;
-        case SMSG_FORCE_MOVE_UNROOT:
+        case V_SMSG_FORCE_MOVE_UNROOT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_FORCE_MOVE_UNROOT_write(writer, &opcodes->body.SMSG_FORCE_MOVE_UNROOT));
             break;
-        case MSG_MOVE_HEARTBEAT:
+        case V_MSG_MOVE_HEARTBEAT:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_HEARTBEAT_Server_write(writer, &opcodes->body.MSG_MOVE_HEARTBEAT_Server));
             break;
-        case SMSG_MOVE_KNOCK_BACK:
+        case V_SMSG_MOVE_KNOCK_BACK:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_MOVE_KNOCK_BACK_write(writer, &opcodes->body.SMSG_MOVE_KNOCK_BACK));
             break;
-        case SMSG_MOVE_FEATHER_FALL:
+        case V_SMSG_MOVE_FEATHER_FALL:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_MOVE_FEATHER_FALL_write(writer, &opcodes->body.SMSG_MOVE_FEATHER_FALL));
             break;
-        case SMSG_MOVE_NORMAL_FALL:
+        case V_SMSG_MOVE_NORMAL_FALL:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_MOVE_NORMAL_FALL_write(writer, &opcodes->body.SMSG_MOVE_NORMAL_FALL));
             break;
-        case SMSG_MOVE_SET_HOVER:
+        case V_SMSG_MOVE_SET_HOVER:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_MOVE_SET_HOVER_write(writer, &opcodes->body.SMSG_MOVE_SET_HOVER));
             break;
-        case SMSG_MOVE_UNSET_HOVER:
+        case V_SMSG_MOVE_UNSET_HOVER:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_MOVE_UNSET_HOVER_write(writer, &opcodes->body.SMSG_MOVE_UNSET_HOVER));
             break;
-        case SMSG_TRIGGER_CINEMATIC:
+        case V_SMSG_TRIGGER_CINEMATIC:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_TRIGGER_CINEMATIC_write(writer, &opcodes->body.SMSG_TRIGGER_CINEMATIC));
             break;
-        case SMSG_TUTORIAL_FLAGS:
+        case V_SMSG_TUTORIAL_FLAGS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_TUTORIAL_FLAGS_write(writer, &opcodes->body.SMSG_TUTORIAL_FLAGS));
             break;
-        case SMSG_EMOTE:
+        case V_SMSG_EMOTE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_EMOTE_write(writer, &opcodes->body.SMSG_EMOTE));
             break;
-        case SMSG_TEXT_EMOTE:
+        case V_SMSG_TEXT_EMOTE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_TEXT_EMOTE_write(writer, &opcodes->body.SMSG_TEXT_EMOTE));
             break;
-        case SMSG_INVENTORY_CHANGE_FAILURE:
+        case V_SMSG_INVENTORY_CHANGE_FAILURE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_INVENTORY_CHANGE_FAILURE_write(writer, &opcodes->body.SMSG_INVENTORY_CHANGE_FAILURE));
             break;
-        case SMSG_OPEN_CONTAINER:
+        case V_SMSG_OPEN_CONTAINER:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_OPEN_CONTAINER_write(writer, &opcodes->body.SMSG_OPEN_CONTAINER));
             break;
-        case SMSG_INSPECT:
+        case V_SMSG_INSPECT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_INSPECT_write(writer, &opcodes->body.SMSG_INSPECT));
             break;
-        case SMSG_TRADE_STATUS:
+        case V_SMSG_TRADE_STATUS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_TRADE_STATUS_write(writer, &opcodes->body.SMSG_TRADE_STATUS));
             break;
-        case SMSG_TRADE_STATUS_EXTENDED:
+        case V_SMSG_TRADE_STATUS_EXTENDED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_TRADE_STATUS_EXTENDED_write(writer, &opcodes->body.SMSG_TRADE_STATUS_EXTENDED));
             break;
-        case SMSG_INITIALIZE_FACTIONS:
+        case V_SMSG_INITIALIZE_FACTIONS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_INITIALIZE_FACTIONS_write(writer, &opcodes->body.SMSG_INITIALIZE_FACTIONS));
             break;
-        case SMSG_SET_FACTION_VISIBLE:
+        case V_SMSG_SET_FACTION_VISIBLE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SET_FACTION_VISIBLE_write(writer, &opcodes->body.SMSG_SET_FACTION_VISIBLE));
             break;
-        case SMSG_SET_FACTION_STANDING:
+        case V_SMSG_SET_FACTION_STANDING:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SET_FACTION_STANDING_write(writer, &opcodes->body.SMSG_SET_FACTION_STANDING));
             break;
-        case SMSG_SET_PROFICIENCY:
+        case V_SMSG_SET_PROFICIENCY:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SET_PROFICIENCY_write(writer, &opcodes->body.SMSG_SET_PROFICIENCY));
             break;
-        case SMSG_ACTION_BUTTONS:
+        case V_SMSG_ACTION_BUTTONS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_ACTION_BUTTONS_write(writer, &opcodes->body.SMSG_ACTION_BUTTONS));
             break;
-        case SMSG_INITIAL_SPELLS:
+        case V_SMSG_INITIAL_SPELLS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_INITIAL_SPELLS_write(writer, &opcodes->body.SMSG_INITIAL_SPELLS));
             break;
-        case SMSG_LEARNED_SPELL:
+        case V_SMSG_LEARNED_SPELL:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_LEARNED_SPELL_write(writer, &opcodes->body.SMSG_LEARNED_SPELL));
             break;
-        case SMSG_SUPERCEDED_SPELL:
+        case V_SMSG_SUPERCEDED_SPELL:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SUPERCEDED_SPELL_write(writer, &opcodes->body.SMSG_SUPERCEDED_SPELL));
             break;
-        case SMSG_CAST_RESULT:
+        case V_SMSG_CAST_RESULT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_CAST_RESULT_write(writer, &opcodes->body.SMSG_CAST_RESULT));
             break;
-        case SMSG_SPELL_START:
+        case V_SMSG_SPELL_START:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELL_START_write(writer, &opcodes->body.SMSG_SPELL_START));
             break;
-        case SMSG_SPELL_GO:
+        case V_SMSG_SPELL_GO:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELL_GO_write(writer, &opcodes->body.SMSG_SPELL_GO));
             break;
-        case SMSG_SPELL_FAILURE:
+        case V_SMSG_SPELL_FAILURE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELL_FAILURE_write(writer, &opcodes->body.SMSG_SPELL_FAILURE));
             break;
-        case SMSG_SPELL_COOLDOWN:
+        case V_SMSG_SPELL_COOLDOWN:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELL_COOLDOWN_write(writer, &opcodes->body.SMSG_SPELL_COOLDOWN));
             break;
-        case SMSG_COOLDOWN_EVENT:
+        case V_SMSG_COOLDOWN_EVENT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_COOLDOWN_EVENT_write(writer, &opcodes->body.SMSG_COOLDOWN_EVENT));
             break;
-        case SMSG_UPDATE_AURA_DURATION:
+        case V_SMSG_UPDATE_AURA_DURATION:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_UPDATE_AURA_DURATION_write(writer, &opcodes->body.SMSG_UPDATE_AURA_DURATION));
             break;
-        case SMSG_PET_CAST_FAILED:
+        case V_SMSG_PET_CAST_FAILED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PET_CAST_FAILED_write(writer, &opcodes->body.SMSG_PET_CAST_FAILED));
             break;
-        case MSG_CHANNEL_START:
+        case V_MSG_CHANNEL_START:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_CHANNEL_START_Server_write(writer, &opcodes->body.MSG_CHANNEL_START_Server));
             break;
-        case MSG_CHANNEL_UPDATE:
+        case V_MSG_CHANNEL_UPDATE:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_CHANNEL_UPDATE_Server_write(writer, &opcodes->body.MSG_CHANNEL_UPDATE_Server));
             break;
-        case SMSG_AI_REACTION:
+        case V_SMSG_AI_REACTION:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_AI_REACTION_write(writer, &opcodes->body.SMSG_AI_REACTION));
             break;
-        case SMSG_ATTACKSTART:
+        case V_SMSG_ATTACKSTART:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_ATTACKSTART_write(writer, &opcodes->body.SMSG_ATTACKSTART));
             break;
-        case SMSG_ATTACKSTOP:
+        case V_SMSG_ATTACKSTOP:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_ATTACKSTOP_write(writer, &opcodes->body.SMSG_ATTACKSTOP));
             break;
-        case SMSG_ATTACKERSTATEUPDATE:
+        case V_SMSG_ATTACKERSTATEUPDATE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_ATTACKERSTATEUPDATE_write(writer, &opcodes->body.SMSG_ATTACKERSTATEUPDATE));
             break;
-        case SMSG_SPELLHEALLOG:
+        case V_SMSG_SPELLHEALLOG:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELLHEALLOG_write(writer, &opcodes->body.SMSG_SPELLHEALLOG));
             break;
-        case SMSG_SPELLENERGIZELOG:
+        case V_SMSG_SPELLENERGIZELOG:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELLENERGIZELOG_write(writer, &opcodes->body.SMSG_SPELLENERGIZELOG));
             break;
-        case SMSG_BINDPOINTUPDATE:
+        case V_SMSG_BINDPOINTUPDATE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_BINDPOINTUPDATE_write(writer, &opcodes->body.SMSG_BINDPOINTUPDATE));
             break;
-        case SMSG_PLAYERBOUND:
+        case V_SMSG_PLAYERBOUND:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PLAYERBOUND_write(writer, &opcodes->body.SMSG_PLAYERBOUND));
             break;
-        case SMSG_CLIENT_CONTROL_UPDATE:
+        case V_SMSG_CLIENT_CONTROL_UPDATE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_CLIENT_CONTROL_UPDATE_write(writer, &opcodes->body.SMSG_CLIENT_CONTROL_UPDATE));
             break;
-        case SMSG_RESURRECT_REQUEST:
+        case V_SMSG_RESURRECT_REQUEST:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_RESURRECT_REQUEST_write(writer, &opcodes->body.SMSG_RESURRECT_REQUEST));
             break;
-        case SMSG_LOOT_RESPONSE:
+        case V_SMSG_LOOT_RESPONSE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_LOOT_RESPONSE_write(writer, &opcodes->body.SMSG_LOOT_RESPONSE));
             break;
-        case SMSG_LOOT_RELEASE_RESPONSE:
+        case V_SMSG_LOOT_RELEASE_RESPONSE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_LOOT_RELEASE_RESPONSE_write(writer, &opcodes->body.SMSG_LOOT_RELEASE_RESPONSE));
             break;
-        case SMSG_LOOT_REMOVED:
+        case V_SMSG_LOOT_REMOVED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_LOOT_REMOVED_write(writer, &opcodes->body.SMSG_LOOT_REMOVED));
             break;
-        case SMSG_LOOT_MONEY_NOTIFY:
+        case V_SMSG_LOOT_MONEY_NOTIFY:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_LOOT_MONEY_NOTIFY_write(writer, &opcodes->body.SMSG_LOOT_MONEY_NOTIFY));
             break;
-        case SMSG_ITEM_PUSH_RESULT:
+        case V_SMSG_ITEM_PUSH_RESULT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_ITEM_PUSH_RESULT_write(writer, &opcodes->body.SMSG_ITEM_PUSH_RESULT));
             break;
-        case SMSG_DUEL_REQUESTED:
+        case V_SMSG_DUEL_REQUESTED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_DUEL_REQUESTED_write(writer, &opcodes->body.SMSG_DUEL_REQUESTED));
             break;
-        case SMSG_DUEL_COMPLETE:
+        case V_SMSG_DUEL_COMPLETE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_DUEL_COMPLETE_write(writer, &opcodes->body.SMSG_DUEL_COMPLETE));
             break;
-        case SMSG_DUEL_WINNER:
+        case V_SMSG_DUEL_WINNER:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_DUEL_WINNER_write(writer, &opcodes->body.SMSG_DUEL_WINNER));
             break;
-        case SMSG_MOUNTRESULT:
+        case V_SMSG_MOUNTRESULT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_MOUNTRESULT_write(writer, &opcodes->body.SMSG_MOUNTRESULT));
             break;
-        case SMSG_DISMOUNTRESULT:
+        case V_SMSG_DISMOUNTRESULT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_DISMOUNTRESULT_write(writer, &opcodes->body.SMSG_DISMOUNTRESULT));
             break;
-        case SMSG_MOUNTSPECIAL_ANIM:
+        case V_SMSG_MOUNTSPECIAL_ANIM:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_MOUNTSPECIAL_ANIM_write(writer, &opcodes->body.SMSG_MOUNTSPECIAL_ANIM));
             break;
-        case SMSG_PET_TAME_FAILURE:
+        case V_SMSG_PET_TAME_FAILURE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PET_TAME_FAILURE_write(writer, &opcodes->body.SMSG_PET_TAME_FAILURE));
             break;
-        case SMSG_PET_SPELLS:
+        case V_SMSG_PET_SPELLS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PET_SPELLS_write(writer, &opcodes->body.SMSG_PET_SPELLS));
             break;
-        case SMSG_PET_MODE:
+        case V_SMSG_PET_MODE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PET_MODE_write(writer, &opcodes->body.SMSG_PET_MODE));
             break;
-        case SMSG_GOSSIP_MESSAGE:
+        case V_SMSG_GOSSIP_MESSAGE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GOSSIP_MESSAGE_write(writer, &opcodes->body.SMSG_GOSSIP_MESSAGE));
             break;
-        case SMSG_NPC_TEXT_UPDATE:
+        case V_SMSG_NPC_TEXT_UPDATE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_NPC_TEXT_UPDATE_write(writer, &opcodes->body.SMSG_NPC_TEXT_UPDATE));
             break;
-        case SMSG_QUESTGIVER_STATUS:
+        case V_SMSG_QUESTGIVER_STATUS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUESTGIVER_STATUS_write(writer, &opcodes->body.SMSG_QUESTGIVER_STATUS));
             break;
-        case SMSG_QUESTGIVER_QUEST_LIST:
+        case V_SMSG_QUESTGIVER_QUEST_LIST:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUESTGIVER_QUEST_LIST_write(writer, &opcodes->body.SMSG_QUESTGIVER_QUEST_LIST));
             break;
-        case SMSG_QUESTGIVER_QUEST_DETAILS:
+        case V_SMSG_QUESTGIVER_QUEST_DETAILS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUESTGIVER_QUEST_DETAILS_write(writer, &opcodes->body.SMSG_QUESTGIVER_QUEST_DETAILS));
             break;
-        case SMSG_QUESTGIVER_REQUEST_ITEMS:
+        case V_SMSG_QUESTGIVER_REQUEST_ITEMS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUESTGIVER_REQUEST_ITEMS_write(writer, &opcodes->body.SMSG_QUESTGIVER_REQUEST_ITEMS));
             break;
-        case SMSG_QUESTGIVER_OFFER_REWARD:
+        case V_SMSG_QUESTGIVER_OFFER_REWARD:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUESTGIVER_OFFER_REWARD_write(writer, &opcodes->body.SMSG_QUESTGIVER_OFFER_REWARD));
             break;
-        case SMSG_QUESTGIVER_QUEST_INVALID:
+        case V_SMSG_QUESTGIVER_QUEST_INVALID:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUESTGIVER_QUEST_INVALID_write(writer, &opcodes->body.SMSG_QUESTGIVER_QUEST_INVALID));
             break;
-        case SMSG_QUESTGIVER_QUEST_COMPLETE:
+        case V_SMSG_QUESTGIVER_QUEST_COMPLETE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUESTGIVER_QUEST_COMPLETE_write(writer, &opcodes->body.SMSG_QUESTGIVER_QUEST_COMPLETE));
             break;
-        case SMSG_QUESTGIVER_QUEST_FAILED:
+        case V_SMSG_QUESTGIVER_QUEST_FAILED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUESTGIVER_QUEST_FAILED_write(writer, &opcodes->body.SMSG_QUESTGIVER_QUEST_FAILED));
             break;
-        case SMSG_QUESTUPDATE_FAILED:
+        case V_SMSG_QUESTUPDATE_FAILED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUESTUPDATE_FAILED_write(writer, &opcodes->body.SMSG_QUESTUPDATE_FAILED));
             break;
-        case SMSG_QUESTUPDATE_FAILEDTIMER:
+        case V_SMSG_QUESTUPDATE_FAILEDTIMER:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUESTUPDATE_FAILEDTIMER_write(writer, &opcodes->body.SMSG_QUESTUPDATE_FAILEDTIMER));
             break;
-        case SMSG_QUESTUPDATE_COMPLETE:
+        case V_SMSG_QUESTUPDATE_COMPLETE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUESTUPDATE_COMPLETE_write(writer, &opcodes->body.SMSG_QUESTUPDATE_COMPLETE));
             break;
-        case SMSG_QUESTUPDATE_ADD_KILL:
+        case V_SMSG_QUESTUPDATE_ADD_KILL:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUESTUPDATE_ADD_KILL_write(writer, &opcodes->body.SMSG_QUESTUPDATE_ADD_KILL));
             break;
-        case SMSG_QUESTUPDATE_ADD_ITEM:
+        case V_SMSG_QUESTUPDATE_ADD_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUESTUPDATE_ADD_ITEM_write(writer, &opcodes->body.SMSG_QUESTUPDATE_ADD_ITEM));
             break;
-        case SMSG_QUEST_CONFIRM_ACCEPT:
+        case V_SMSG_QUEST_CONFIRM_ACCEPT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUEST_CONFIRM_ACCEPT_write(writer, &opcodes->body.SMSG_QUEST_CONFIRM_ACCEPT));
             break;
-        case SMSG_LIST_INVENTORY:
+        case V_SMSG_LIST_INVENTORY:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_LIST_INVENTORY_write(writer, &opcodes->body.SMSG_LIST_INVENTORY));
             break;
-        case SMSG_SELL_ITEM:
+        case V_SMSG_SELL_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SELL_ITEM_write(writer, &opcodes->body.SMSG_SELL_ITEM));
             break;
-        case SMSG_BUY_ITEM:
+        case V_SMSG_BUY_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_BUY_ITEM_write(writer, &opcodes->body.SMSG_BUY_ITEM));
             break;
-        case SMSG_BUY_FAILED:
+        case V_SMSG_BUY_FAILED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_BUY_FAILED_write(writer, &opcodes->body.SMSG_BUY_FAILED));
             break;
-        case SMSG_SHOWTAXINODES:
+        case V_SMSG_SHOWTAXINODES:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SHOWTAXINODES_write(writer, &opcodes->body.SMSG_SHOWTAXINODES));
             break;
-        case SMSG_TAXINODE_STATUS:
+        case V_SMSG_TAXINODE_STATUS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_TAXINODE_STATUS_write(writer, &opcodes->body.SMSG_TAXINODE_STATUS));
             break;
-        case SMSG_ACTIVATETAXIREPLY:
+        case V_SMSG_ACTIVATETAXIREPLY:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_ACTIVATETAXIREPLY_write(writer, &opcodes->body.SMSG_ACTIVATETAXIREPLY));
             break;
-        case SMSG_TRAINER_LIST:
+        case V_SMSG_TRAINER_LIST:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_TRAINER_LIST_write(writer, &opcodes->body.SMSG_TRAINER_LIST));
             break;
-        case SMSG_TRAINER_BUY_SUCCEEDED:
+        case V_SMSG_TRAINER_BUY_SUCCEEDED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_TRAINER_BUY_SUCCEEDED_write(writer, &opcodes->body.SMSG_TRAINER_BUY_SUCCEEDED));
             break;
-        case SMSG_TRAINER_BUY_FAILED:
+        case V_SMSG_TRAINER_BUY_FAILED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_TRAINER_BUY_FAILED_write(writer, &opcodes->body.SMSG_TRAINER_BUY_FAILED));
             break;
-        case SMSG_SHOW_BANK:
+        case V_SMSG_SHOW_BANK:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SHOW_BANK_write(writer, &opcodes->body.SMSG_SHOW_BANK));
             break;
-        case SMSG_BUY_BANK_SLOT_RESULT:
+        case V_SMSG_BUY_BANK_SLOT_RESULT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_BUY_BANK_SLOT_RESULT_write(writer, &opcodes->body.SMSG_BUY_BANK_SLOT_RESULT));
             break;
-        case SMSG_PETITION_SHOWLIST:
+        case V_SMSG_PETITION_SHOWLIST:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PETITION_SHOWLIST_write(writer, &opcodes->body.SMSG_PETITION_SHOWLIST));
             break;
-        case SMSG_PETITION_SHOW_SIGNATURES:
+        case V_SMSG_PETITION_SHOW_SIGNATURES:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PETITION_SHOW_SIGNATURES_write(writer, &opcodes->body.SMSG_PETITION_SHOW_SIGNATURES));
             break;
-        case SMSG_PETITION_SIGN_RESULTS:
+        case V_SMSG_PETITION_SIGN_RESULTS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PETITION_SIGN_RESULTS_write(writer, &opcodes->body.SMSG_PETITION_SIGN_RESULTS));
             break;
-        case MSG_PETITION_DECLINE:
+        case V_MSG_PETITION_DECLINE:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_PETITION_DECLINE_smsg_write(writer, &opcodes->body.MSG_PETITION_DECLINE));
             break;
-        case SMSG_TURN_IN_PETITION_RESULTS:
+        case V_SMSG_TURN_IN_PETITION_RESULTS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_TURN_IN_PETITION_RESULTS_write(writer, &opcodes->body.SMSG_TURN_IN_PETITION_RESULTS));
             break;
-        case SMSG_PETITION_QUERY_RESPONSE:
+        case V_SMSG_PETITION_QUERY_RESPONSE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PETITION_QUERY_RESPONSE_write(writer, &opcodes->body.SMSG_PETITION_QUERY_RESPONSE));
             break;
-        case SMSG_NOTIFICATION:
+        case V_SMSG_NOTIFICATION:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_NOTIFICATION_write(writer, &opcodes->body.SMSG_NOTIFICATION));
             break;
-        case SMSG_PLAYED_TIME:
+        case V_SMSG_PLAYED_TIME:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PLAYED_TIME_write(writer, &opcodes->body.SMSG_PLAYED_TIME));
             break;
-        case SMSG_QUERY_TIME_RESPONSE:
+        case V_SMSG_QUERY_TIME_RESPONSE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUERY_TIME_RESPONSE_write(writer, &opcodes->body.SMSG_QUERY_TIME_RESPONSE));
             break;
-        case SMSG_LOG_XPGAIN:
+        case V_SMSG_LOG_XPGAIN:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_LOG_XPGAIN_write(writer, &opcodes->body.SMSG_LOG_XPGAIN));
             break;
-        case SMSG_LEVELUP_INFO:
+        case V_SMSG_LEVELUP_INFO:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_LEVELUP_INFO_write(writer, &opcodes->body.SMSG_LEVELUP_INFO));
             break;
-        case MSG_MINIMAP_PING:
+        case V_MSG_MINIMAP_PING:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MINIMAP_PING_Server_write(writer, &opcodes->body.MSG_MINIMAP_PING_Server));
             break;
-        case SMSG_RESISTLOG:
+        case V_SMSG_RESISTLOG:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_RESISTLOG_write(writer, &opcodes->body.SMSG_RESISTLOG));
             break;
-        case SMSG_ENCHANTMENTLOG:
+        case V_SMSG_ENCHANTMENTLOG:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_ENCHANTMENTLOG_write(writer, &opcodes->body.SMSG_ENCHANTMENTLOG));
             break;
-        case SMSG_START_MIRROR_TIMER:
+        case V_SMSG_START_MIRROR_TIMER:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_START_MIRROR_TIMER_write(writer, &opcodes->body.SMSG_START_MIRROR_TIMER));
             break;
-        case SMSG_PAUSE_MIRROR_TIMER:
+        case V_SMSG_PAUSE_MIRROR_TIMER:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PAUSE_MIRROR_TIMER_write(writer, &opcodes->body.SMSG_PAUSE_MIRROR_TIMER));
             break;
-        case SMSG_STOP_MIRROR_TIMER:
+        case V_SMSG_STOP_MIRROR_TIMER:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_STOP_MIRROR_TIMER_write(writer, &opcodes->body.SMSG_STOP_MIRROR_TIMER));
             break;
-        case SMSG_PONG:
+        case V_SMSG_PONG:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PONG_write(writer, &opcodes->body.SMSG_PONG));
             break;
-        case SMSG_CLEAR_COOLDOWN:
+        case V_SMSG_CLEAR_COOLDOWN:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_CLEAR_COOLDOWN_write(writer, &opcodes->body.SMSG_CLEAR_COOLDOWN));
             break;
-        case SMSG_GAMEOBJECT_PAGETEXT:
+        case V_SMSG_GAMEOBJECT_PAGETEXT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GAMEOBJECT_PAGETEXT_write(writer, &opcodes->body.SMSG_GAMEOBJECT_PAGETEXT));
             break;
-        case SMSG_SPELL_DELAYED:
+        case V_SMSG_SPELL_DELAYED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELL_DELAYED_write(writer, &opcodes->body.SMSG_SPELL_DELAYED));
             break;
-        case SMSG_ITEM_TIME_UPDATE:
+        case V_SMSG_ITEM_TIME_UPDATE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_ITEM_TIME_UPDATE_write(writer, &opcodes->body.SMSG_ITEM_TIME_UPDATE));
             break;
-        case SMSG_ITEM_ENCHANT_TIME_UPDATE:
+        case V_SMSG_ITEM_ENCHANT_TIME_UPDATE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_ITEM_ENCHANT_TIME_UPDATE_write(writer, &opcodes->body.SMSG_ITEM_ENCHANT_TIME_UPDATE));
             break;
-        case SMSG_AUTH_CHALLENGE:
+        case V_SMSG_AUTH_CHALLENGE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_AUTH_CHALLENGE_write(writer, &opcodes->body.SMSG_AUTH_CHALLENGE));
             break;
-        case SMSG_AUTH_RESPONSE:
+        case V_SMSG_AUTH_RESPONSE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_AUTH_RESPONSE_write(writer, &opcodes->body.SMSG_AUTH_RESPONSE));
             break;
-        case MSG_SAVE_GUILD_EMBLEM:
+        case V_MSG_SAVE_GUILD_EMBLEM:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_SAVE_GUILD_EMBLEM_Server_write(writer, &opcodes->body.MSG_SAVE_GUILD_EMBLEM_Server));
             break;
-        case MSG_TABARDVENDOR_ACTIVATE:
+        case V_MSG_TABARDVENDOR_ACTIVATE:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_TABARDVENDOR_ACTIVATE_smsg_write(writer, &opcodes->body.MSG_TABARDVENDOR_ACTIVATE));
             break;
-        case SMSG_PLAY_SPELL_VISUAL:
+        case V_SMSG_PLAY_SPELL_VISUAL:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PLAY_SPELL_VISUAL_write(writer, &opcodes->body.SMSG_PLAY_SPELL_VISUAL));
             break;
-        case SMSG_PARTYKILLLOG:
+        case V_SMSG_PARTYKILLLOG:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PARTYKILLLOG_write(writer, &opcodes->body.SMSG_PARTYKILLLOG));
             break;
-        case SMSG_COMPRESSED_UPDATE_OBJECT:
+        case V_SMSG_COMPRESSED_UPDATE_OBJECT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_COMPRESSED_UPDATE_OBJECT_write(writer, &opcodes->body.SMSG_COMPRESSED_UPDATE_OBJECT));
             break;
-        case SMSG_PLAY_SPELL_IMPACT:
+        case V_SMSG_PLAY_SPELL_IMPACT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PLAY_SPELL_IMPACT_write(writer, &opcodes->body.SMSG_PLAY_SPELL_IMPACT));
             break;
-        case SMSG_EXPLORATION_EXPERIENCE:
+        case V_SMSG_EXPLORATION_EXPERIENCE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_EXPLORATION_EXPERIENCE_write(writer, &opcodes->body.SMSG_EXPLORATION_EXPERIENCE));
             break;
-        case MSG_RANDOM_ROLL:
+        case V_MSG_RANDOM_ROLL:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_RANDOM_ROLL_Server_write(writer, &opcodes->body.MSG_RANDOM_ROLL_Server));
             break;
-        case SMSG_ENVIRONMENTAL_DAMAGE_LOG:
+        case V_SMSG_ENVIRONMENTAL_DAMAGE_LOG:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_ENVIRONMENTAL_DAMAGE_LOG_write(writer, &opcodes->body.SMSG_ENVIRONMENTAL_DAMAGE_LOG));
             break;
-        case MSG_LOOKING_FOR_GROUP:
+        case V_MSG_LOOKING_FOR_GROUP:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_LOOKING_FOR_GROUP_Server_write(writer, &opcodes->body.MSG_LOOKING_FOR_GROUP_Server));
             break;
-        case SMSG_REMOVED_SPELL:
+        case V_SMSG_REMOVED_SPELL:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_REMOVED_SPELL_write(writer, &opcodes->body.SMSG_REMOVED_SPELL));
             break;
-        case SMSG_GMTICKET_CREATE:
+        case V_SMSG_GMTICKET_CREATE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GMTICKET_CREATE_write(writer, &opcodes->body.SMSG_GMTICKET_CREATE));
             break;
-        case SMSG_GMTICKET_UPDATETEXT:
+        case V_SMSG_GMTICKET_UPDATETEXT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GMTICKET_UPDATETEXT_write(writer, &opcodes->body.SMSG_GMTICKET_UPDATETEXT));
             break;
-        case SMSG_ACCOUNT_DATA_TIMES:
+        case V_SMSG_ACCOUNT_DATA_TIMES:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_ACCOUNT_DATA_TIMES_write(writer, &opcodes->body.SMSG_ACCOUNT_DATA_TIMES));
             break;
-        case SMSG_GMTICKET_GETTICKET:
+        case V_SMSG_GMTICKET_GETTICKET:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GMTICKET_GETTICKET_write(writer, &opcodes->body.SMSG_GMTICKET_GETTICKET));
             break;
-        case SMSG_GAMEOBJECT_SPAWN_ANIM:
+        case V_SMSG_GAMEOBJECT_SPAWN_ANIM:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GAMEOBJECT_SPAWN_ANIM_write(writer, &opcodes->body.SMSG_GAMEOBJECT_SPAWN_ANIM));
             break;
-        case SMSG_GAMEOBJECT_DESPAWN_ANIM:
+        case V_SMSG_GAMEOBJECT_DESPAWN_ANIM:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GAMEOBJECT_DESPAWN_ANIM_write(writer, &opcodes->body.SMSG_GAMEOBJECT_DESPAWN_ANIM));
             break;
-        case MSG_CORPSE_QUERY:
+        case V_MSG_CORPSE_QUERY:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_CORPSE_QUERY_Server_write(writer, &opcodes->body.MSG_CORPSE_QUERY_Server));
             break;
-        case SMSG_GMTICKET_DELETETICKET:
+        case V_SMSG_GMTICKET_DELETETICKET:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GMTICKET_DELETETICKET_write(writer, &opcodes->body.SMSG_GMTICKET_DELETETICKET));
             break;
-        case SMSG_GMTICKET_SYSTEMSTATUS:
+        case V_SMSG_GMTICKET_SYSTEMSTATUS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GMTICKET_SYSTEMSTATUS_write(writer, &opcodes->body.SMSG_GMTICKET_SYSTEMSTATUS));
             break;
-        case SMSG_SET_REST_START:
+        case V_SMSG_SET_REST_START:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SET_REST_START_write(writer, &opcodes->body.SMSG_SET_REST_START));
             break;
-        case SMSG_SPIRIT_HEALER_CONFIRM:
+        case V_SMSG_SPIRIT_HEALER_CONFIRM:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPIRIT_HEALER_CONFIRM_write(writer, &opcodes->body.SMSG_SPIRIT_HEALER_CONFIRM));
             break;
-        case SMSG_GOSSIP_POI:
+        case V_SMSG_GOSSIP_POI:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GOSSIP_POI_write(writer, &opcodes->body.SMSG_GOSSIP_POI));
             break;
-        case SMSG_LOGIN_VERIFY_WORLD:
+        case V_SMSG_LOGIN_VERIFY_WORLD:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_LOGIN_VERIFY_WORLD_write(writer, &opcodes->body.SMSG_LOGIN_VERIFY_WORLD));
             break;
-        case SMSG_SEND_MAIL_RESULT:
+        case V_SMSG_SEND_MAIL_RESULT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SEND_MAIL_RESULT_write(writer, &opcodes->body.SMSG_SEND_MAIL_RESULT));
             break;
-        case SMSG_MAIL_LIST_RESULT:
+        case V_SMSG_MAIL_LIST_RESULT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_MAIL_LIST_RESULT_write(writer, &opcodes->body.SMSG_MAIL_LIST_RESULT));
             break;
-        case SMSG_BATTLEFIELD_LIST:
+        case V_SMSG_BATTLEFIELD_LIST:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_BATTLEFIELD_LIST_write(writer, &opcodes->body.SMSG_BATTLEFIELD_LIST));
             break;
-        case SMSG_ITEM_TEXT_QUERY_RESPONSE:
+        case V_SMSG_ITEM_TEXT_QUERY_RESPONSE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_ITEM_TEXT_QUERY_RESPONSE_write(writer, &opcodes->body.SMSG_ITEM_TEXT_QUERY_RESPONSE));
             break;
-        case SMSG_SPELLLOGMISS:
+        case V_SMSG_SPELLLOGMISS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELLLOGMISS_write(writer, &opcodes->body.SMSG_SPELLLOGMISS));
             break;
-        case SMSG_SPELLLOGEXECUTE:
+        case V_SMSG_SPELLLOGEXECUTE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELLLOGEXECUTE_write(writer, &opcodes->body.SMSG_SPELLLOGEXECUTE));
             break;
-        case SMSG_PERIODICAURALOG:
+        case V_SMSG_PERIODICAURALOG:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PERIODICAURALOG_write(writer, &opcodes->body.SMSG_PERIODICAURALOG));
             break;
-        case SMSG_SPELLDAMAGESHIELD:
+        case V_SMSG_SPELLDAMAGESHIELD:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELLDAMAGESHIELD_write(writer, &opcodes->body.SMSG_SPELLDAMAGESHIELD));
             break;
-        case SMSG_SPELLNONMELEEDAMAGELOG:
+        case V_SMSG_SPELLNONMELEEDAMAGELOG:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELLNONMELEEDAMAGELOG_write(writer, &opcodes->body.SMSG_SPELLNONMELEEDAMAGELOG));
             break;
-        case SMSG_ZONE_UNDER_ATTACK:
+        case V_SMSG_ZONE_UNDER_ATTACK:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_ZONE_UNDER_ATTACK_write(writer, &opcodes->body.SMSG_ZONE_UNDER_ATTACK));
             break;
-        case MSG_AUCTION_HELLO:
+        case V_MSG_AUCTION_HELLO:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_AUCTION_HELLO_Server_write(writer, &opcodes->body.MSG_AUCTION_HELLO_Server));
             break;
-        case SMSG_AUCTION_COMMAND_RESULT:
+        case V_SMSG_AUCTION_COMMAND_RESULT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_AUCTION_COMMAND_RESULT_write(writer, &opcodes->body.SMSG_AUCTION_COMMAND_RESULT));
             break;
-        case SMSG_AUCTION_LIST_RESULT:
+        case V_SMSG_AUCTION_LIST_RESULT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_AUCTION_LIST_RESULT_write(writer, &opcodes->body.SMSG_AUCTION_LIST_RESULT));
             break;
-        case SMSG_AUCTION_OWNER_LIST_RESULT:
+        case V_SMSG_AUCTION_OWNER_LIST_RESULT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_AUCTION_OWNER_LIST_RESULT_write(writer, &opcodes->body.SMSG_AUCTION_OWNER_LIST_RESULT));
             break;
-        case SMSG_AUCTION_BIDDER_NOTIFICATION:
+        case V_SMSG_AUCTION_BIDDER_NOTIFICATION:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_AUCTION_BIDDER_NOTIFICATION_write(writer, &opcodes->body.SMSG_AUCTION_BIDDER_NOTIFICATION));
             break;
-        case SMSG_AUCTION_OWNER_NOTIFICATION:
+        case V_SMSG_AUCTION_OWNER_NOTIFICATION:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_AUCTION_OWNER_NOTIFICATION_write(writer, &opcodes->body.SMSG_AUCTION_OWNER_NOTIFICATION));
             break;
-        case SMSG_PROCRESIST:
+        case V_SMSG_PROCRESIST:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PROCRESIST_write(writer, &opcodes->body.SMSG_PROCRESIST));
             break;
-        case SMSG_DISPEL_FAILED:
+        case V_SMSG_DISPEL_FAILED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_DISPEL_FAILED_write(writer, &opcodes->body.SMSG_DISPEL_FAILED));
             break;
-        case SMSG_SPELLORDAMAGE_IMMUNE:
+        case V_SMSG_SPELLORDAMAGE_IMMUNE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELLORDAMAGE_IMMUNE_write(writer, &opcodes->body.SMSG_SPELLORDAMAGE_IMMUNE));
             break;
-        case SMSG_AUCTION_BIDDER_LIST_RESULT:
+        case V_SMSG_AUCTION_BIDDER_LIST_RESULT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_AUCTION_BIDDER_LIST_RESULT_write(writer, &opcodes->body.SMSG_AUCTION_BIDDER_LIST_RESULT));
             break;
-        case SMSG_SET_FLAT_SPELL_MODIFIER:
+        case V_SMSG_SET_FLAT_SPELL_MODIFIER:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SET_FLAT_SPELL_MODIFIER_write(writer, &opcodes->body.SMSG_SET_FLAT_SPELL_MODIFIER));
             break;
-        case SMSG_SET_PCT_SPELL_MODIFIER:
+        case V_SMSG_SET_PCT_SPELL_MODIFIER:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SET_PCT_SPELL_MODIFIER_write(writer, &opcodes->body.SMSG_SET_PCT_SPELL_MODIFIER));
             break;
-        case SMSG_CORPSE_RECLAIM_DELAY:
+        case V_SMSG_CORPSE_RECLAIM_DELAY:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_CORPSE_RECLAIM_DELAY_write(writer, &opcodes->body.SMSG_CORPSE_RECLAIM_DELAY));
             break;
-        case MSG_LIST_STABLED_PETS:
+        case V_MSG_LIST_STABLED_PETS:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_LIST_STABLED_PETS_Server_write(writer, &opcodes->body.MSG_LIST_STABLED_PETS_Server));
             break;
-        case SMSG_STABLE_RESULT:
+        case V_SMSG_STABLE_RESULT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_STABLE_RESULT_write(writer, &opcodes->body.SMSG_STABLE_RESULT));
             break;
-        case MSG_QUEST_PUSH_RESULT:
+        case V_MSG_QUEST_PUSH_RESULT:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_QUEST_PUSH_RESULT_smsg_write(writer, &opcodes->body.MSG_QUEST_PUSH_RESULT));
             break;
-        case SMSG_PLAY_MUSIC:
+        case V_SMSG_PLAY_MUSIC:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PLAY_MUSIC_write(writer, &opcodes->body.SMSG_PLAY_MUSIC));
             break;
-        case SMSG_PLAY_OBJECT_SOUND:
+        case V_SMSG_PLAY_OBJECT_SOUND:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PLAY_OBJECT_SOUND_write(writer, &opcodes->body.SMSG_PLAY_OBJECT_SOUND));
             break;
-        case SMSG_SPELLDISPELLOG:
+        case V_SMSG_SPELLDISPELLOG:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELLDISPELLOG_write(writer, &opcodes->body.SMSG_SPELLDISPELLOG));
             break;
-        case MSG_QUERY_NEXT_MAIL_TIME:
+        case V_MSG_QUERY_NEXT_MAIL_TIME:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_QUERY_NEXT_MAIL_TIME_Server_write(writer, &opcodes->body.MSG_QUERY_NEXT_MAIL_TIME_Server));
             break;
-        case SMSG_RECEIVED_MAIL:
+        case V_SMSG_RECEIVED_MAIL:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_RECEIVED_MAIL_write(writer, &opcodes->body.SMSG_RECEIVED_MAIL));
             break;
-        case SMSG_RAID_GROUP_ONLY:
+        case V_SMSG_RAID_GROUP_ONLY:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_RAID_GROUP_ONLY_write(writer, &opcodes->body.SMSG_RAID_GROUP_ONLY));
             break;
-        case SMSG_PVP_CREDIT:
+        case V_SMSG_PVP_CREDIT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PVP_CREDIT_write(writer, &opcodes->body.SMSG_PVP_CREDIT));
             break;
-        case SMSG_AUCTION_REMOVED_NOTIFICATION:
+        case V_SMSG_AUCTION_REMOVED_NOTIFICATION:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_AUCTION_REMOVED_NOTIFICATION_write(writer, &opcodes->body.SMSG_AUCTION_REMOVED_NOTIFICATION));
             break;
-        case SMSG_SERVER_MESSAGE:
+        case V_SMSG_SERVER_MESSAGE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SERVER_MESSAGE_write(writer, &opcodes->body.SMSG_SERVER_MESSAGE));
             break;
-        case SMSG_MEETINGSTONE_SETQUEUE:
+        case V_SMSG_MEETINGSTONE_SETQUEUE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_MEETINGSTONE_SETQUEUE_write(writer, &opcodes->body.SMSG_MEETINGSTONE_SETQUEUE));
             break;
-        case SMSG_MEETINGSTONE_MEMBER_ADDED:
+        case V_SMSG_MEETINGSTONE_MEMBER_ADDED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_MEETINGSTONE_MEMBER_ADDED_write(writer, &opcodes->body.SMSG_MEETINGSTONE_MEMBER_ADDED));
             break;
-        case SMSG_STANDSTATE_UPDATE:
+        case V_SMSG_STANDSTATE_UPDATE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_STANDSTATE_UPDATE_write(writer, &opcodes->body.SMSG_STANDSTATE_UPDATE));
             break;
-        case SMSG_LOOT_ALL_PASSED:
+        case V_SMSG_LOOT_ALL_PASSED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_LOOT_ALL_PASSED_write(writer, &opcodes->body.SMSG_LOOT_ALL_PASSED));
             break;
-        case SMSG_LOOT_ROLL_WON:
+        case V_SMSG_LOOT_ROLL_WON:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_LOOT_ROLL_WON_write(writer, &opcodes->body.SMSG_LOOT_ROLL_WON));
             break;
-        case SMSG_LOOT_START_ROLL:
+        case V_SMSG_LOOT_START_ROLL:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_LOOT_START_ROLL_write(writer, &opcodes->body.SMSG_LOOT_START_ROLL));
             break;
-        case SMSG_LOOT_ROLL:
+        case V_SMSG_LOOT_ROLL:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_LOOT_ROLL_write(writer, &opcodes->body.SMSG_LOOT_ROLL));
             break;
-        case SMSG_LOOT_MASTER_LIST:
+        case V_SMSG_LOOT_MASTER_LIST:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_LOOT_MASTER_LIST_write(writer, &opcodes->body.SMSG_LOOT_MASTER_LIST));
             break;
-        case SMSG_SET_FORCED_REACTIONS:
+        case V_SMSG_SET_FORCED_REACTIONS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SET_FORCED_REACTIONS_write(writer, &opcodes->body.SMSG_SET_FORCED_REACTIONS));
             break;
-        case SMSG_SPELL_FAILED_OTHER:
+        case V_SMSG_SPELL_FAILED_OTHER:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELL_FAILED_OTHER_write(writer, &opcodes->body.SMSG_SPELL_FAILED_OTHER));
             break;
-        case SMSG_GAMEOBJECT_RESET_STATE:
+        case V_SMSG_GAMEOBJECT_RESET_STATE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GAMEOBJECT_RESET_STATE_write(writer, &opcodes->body.SMSG_GAMEOBJECT_RESET_STATE));
             break;
-        case SMSG_CHAT_PLAYER_NOT_FOUND:
+        case V_SMSG_CHAT_PLAYER_NOT_FOUND:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_CHAT_PLAYER_NOT_FOUND_write(writer, &opcodes->body.SMSG_CHAT_PLAYER_NOT_FOUND));
             break;
-        case MSG_TALENT_WIPE_CONFIRM:
+        case V_MSG_TALENT_WIPE_CONFIRM:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_TALENT_WIPE_CONFIRM_Server_write(writer, &opcodes->body.MSG_TALENT_WIPE_CONFIRM_Server));
             break;
-        case SMSG_SUMMON_REQUEST:
+        case V_SMSG_SUMMON_REQUEST:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SUMMON_REQUEST_write(writer, &opcodes->body.SMSG_SUMMON_REQUEST));
             break;
-        case SMSG_MONSTER_MOVE_TRANSPORT:
+        case V_SMSG_MONSTER_MOVE_TRANSPORT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_MONSTER_MOVE_TRANSPORT_write(writer, &opcodes->body.SMSG_MONSTER_MOVE_TRANSPORT));
             break;
-        case MSG_MOVE_FEATHER_FALL:
+        case V_MSG_MOVE_FEATHER_FALL:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_FEATHER_FALL_Server_write(writer, &opcodes->body.MSG_MOVE_FEATHER_FALL_Server));
             break;
-        case MSG_MOVE_WATER_WALK:
+        case V_MSG_MOVE_WATER_WALK:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_WATER_WALK_smsg_write(writer, &opcodes->body.MSG_MOVE_WATER_WALK));
             break;
-        case SMSG_DUEL_COUNTDOWN:
+        case V_SMSG_DUEL_COUNTDOWN:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_DUEL_COUNTDOWN_write(writer, &opcodes->body.SMSG_DUEL_COUNTDOWN));
             break;
-        case SMSG_AREA_TRIGGER_MESSAGE:
+        case V_SMSG_AREA_TRIGGER_MESSAGE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_AREA_TRIGGER_MESSAGE_write(writer, &opcodes->body.SMSG_AREA_TRIGGER_MESSAGE));
             break;
-        case SMSG_MEETINGSTONE_JOINFAILED:
+        case V_SMSG_MEETINGSTONE_JOINFAILED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_MEETINGSTONE_JOINFAILED_write(writer, &opcodes->body.SMSG_MEETINGSTONE_JOINFAILED));
             break;
-        case SMSG_PLAYER_SKINNED:
+        case V_SMSG_PLAYER_SKINNED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PLAYER_SKINNED_write(writer, &opcodes->body.SMSG_PLAYER_SKINNED));
             break;
-        case MSG_PETITION_RENAME:
+        case V_MSG_PETITION_RENAME:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_PETITION_RENAME_smsg_write(writer, &opcodes->body.MSG_PETITION_RENAME));
             break;
-        case SMSG_INIT_WORLD_STATES:
+        case V_SMSG_INIT_WORLD_STATES:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_INIT_WORLD_STATES_write(writer, &opcodes->body.SMSG_INIT_WORLD_STATES));
             break;
-        case SMSG_UPDATE_WORLD_STATE:
+        case V_SMSG_UPDATE_WORLD_STATE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_UPDATE_WORLD_STATE_write(writer, &opcodes->body.SMSG_UPDATE_WORLD_STATE));
             break;
-        case SMSG_ITEM_NAME_QUERY_RESPONSE:
+        case V_SMSG_ITEM_NAME_QUERY_RESPONSE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_ITEM_NAME_QUERY_RESPONSE_write(writer, &opcodes->body.SMSG_ITEM_NAME_QUERY_RESPONSE));
             break;
-        case SMSG_PET_ACTION_FEEDBACK:
+        case V_SMSG_PET_ACTION_FEEDBACK:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PET_ACTION_FEEDBACK_write(writer, &opcodes->body.SMSG_PET_ACTION_FEEDBACK));
             break;
-        case SMSG_CHAR_RENAME:
+        case V_SMSG_CHAR_RENAME:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_CHAR_RENAME_write(writer, &opcodes->body.SMSG_CHAR_RENAME));
             break;
-        case SMSG_INSTANCE_SAVE_CREATED:
+        case V_SMSG_INSTANCE_SAVE_CREATED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_INSTANCE_SAVE_CREATED_write(writer, &opcodes->body.SMSG_INSTANCE_SAVE_CREATED));
             break;
-        case SMSG_RAID_INSTANCE_INFO:
+        case V_SMSG_RAID_INSTANCE_INFO:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_RAID_INSTANCE_INFO_write(writer, &opcodes->body.SMSG_RAID_INSTANCE_INFO));
             break;
-        case SMSG_PLAY_SOUND:
+        case V_SMSG_PLAY_SOUND:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PLAY_SOUND_write(writer, &opcodes->body.SMSG_PLAY_SOUND));
             break;
-        case SMSG_BATTLEFIELD_STATUS:
+        case V_SMSG_BATTLEFIELD_STATUS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_BATTLEFIELD_STATUS_write(writer, &opcodes->body.SMSG_BATTLEFIELD_STATUS));
             break;
-        case MSG_INSPECT_HONOR_STATS:
+        case V_MSG_INSPECT_HONOR_STATS:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_INSPECT_HONOR_STATS_Server_write(writer, &opcodes->body.MSG_INSPECT_HONOR_STATS_Server));
             break;
-        case SMSG_FORCE_WALK_SPEED_CHANGE:
+        case V_SMSG_FORCE_WALK_SPEED_CHANGE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_FORCE_WALK_SPEED_CHANGE_write(writer, &opcodes->body.SMSG_FORCE_WALK_SPEED_CHANGE));
             break;
-        case SMSG_FORCE_SWIM_BACK_SPEED_CHANGE:
+        case V_SMSG_FORCE_SWIM_BACK_SPEED_CHANGE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_FORCE_SWIM_BACK_SPEED_CHANGE_write(writer, &opcodes->body.SMSG_FORCE_SWIM_BACK_SPEED_CHANGE));
             break;
-        case SMSG_FORCE_TURN_RATE_CHANGE:
+        case V_SMSG_FORCE_TURN_RATE_CHANGE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_FORCE_TURN_RATE_CHANGE_write(writer, &opcodes->body.SMSG_FORCE_TURN_RATE_CHANGE));
             break;
-        case MSG_PVP_LOG_DATA:
+        case V_MSG_PVP_LOG_DATA:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_PVP_LOG_DATA_Server_write(writer, &opcodes->body.MSG_PVP_LOG_DATA_Server));
             break;
-        case SMSG_AREA_SPIRIT_HEALER_TIME:
+        case V_SMSG_AREA_SPIRIT_HEALER_TIME:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_AREA_SPIRIT_HEALER_TIME_write(writer, &opcodes->body.SMSG_AREA_SPIRIT_HEALER_TIME));
             break;
-        case SMSG_WARDEN_DATA:
+        case V_SMSG_WARDEN_DATA:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_WARDEN_DATA_write(writer, &opcodes->body.SMSG_WARDEN_DATA));
             break;
-        case SMSG_GROUP_JOINED_BATTLEGROUND:
+        case V_SMSG_GROUP_JOINED_BATTLEGROUND:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GROUP_JOINED_BATTLEGROUND_write(writer, &opcodes->body.SMSG_GROUP_JOINED_BATTLEGROUND));
             break;
-        case MSG_BATTLEGROUND_PLAYER_POSITIONS:
+        case V_MSG_BATTLEGROUND_PLAYER_POSITIONS:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_BATTLEGROUND_PLAYER_POSITIONS_Server_write(writer, &opcodes->body.MSG_BATTLEGROUND_PLAYER_POSITIONS_Server));
             break;
-        case SMSG_BINDER_CONFIRM:
+        case V_SMSG_BINDER_CONFIRM:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_BINDER_CONFIRM_write(writer, &opcodes->body.SMSG_BINDER_CONFIRM));
             break;
-        case SMSG_BATTLEGROUND_PLAYER_JOINED:
+        case V_SMSG_BATTLEGROUND_PLAYER_JOINED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_BATTLEGROUND_PLAYER_JOINED_write(writer, &opcodes->body.SMSG_BATTLEGROUND_PLAYER_JOINED));
             break;
-        case SMSG_BATTLEGROUND_PLAYER_LEFT:
+        case V_SMSG_BATTLEGROUND_PLAYER_LEFT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_BATTLEGROUND_PLAYER_LEFT_write(writer, &opcodes->body.SMSG_BATTLEGROUND_PLAYER_LEFT));
             break;
-        case SMSG_ADDON_INFO:
+        case V_SMSG_ADDON_INFO:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_ADDON_INFO_write(writer, &opcodes->body.SMSG_ADDON_INFO));
             break;
-        case SMSG_PET_UNLEARN_CONFIRM:
+        case V_SMSG_PET_UNLEARN_CONFIRM:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PET_UNLEARN_CONFIRM_write(writer, &opcodes->body.SMSG_PET_UNLEARN_CONFIRM));
             break;
-        case SMSG_PARTY_MEMBER_STATS_FULL:
+        case V_SMSG_PARTY_MEMBER_STATS_FULL:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PARTY_MEMBER_STATS_FULL_write(writer, &opcodes->body.SMSG_PARTY_MEMBER_STATS_FULL));
             break;
-        case SMSG_WEATHER:
+        case V_SMSG_WEATHER:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_WEATHER_write(writer, &opcodes->body.SMSG_WEATHER));
             break;
-        case SMSG_RAID_INSTANCE_MESSAGE:
+        case V_SMSG_RAID_INSTANCE_MESSAGE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_RAID_INSTANCE_MESSAGE_write(writer, &opcodes->body.SMSG_RAID_INSTANCE_MESSAGE));
             break;
-        case SMSG_COMPRESSED_MOVES:
+        case V_SMSG_COMPRESSED_MOVES:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_COMPRESSED_MOVES_write(writer, &opcodes->body.SMSG_COMPRESSED_MOVES));
             break;
-        case SMSG_SPLINE_SET_RUN_SPEED:
+        case V_SMSG_SPLINE_SET_RUN_SPEED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_SET_RUN_SPEED_write(writer, &opcodes->body.SMSG_SPLINE_SET_RUN_SPEED));
             break;
-        case SMSG_SPLINE_SET_RUN_BACK_SPEED:
+        case V_SMSG_SPLINE_SET_RUN_BACK_SPEED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_SET_RUN_BACK_SPEED_write(writer, &opcodes->body.SMSG_SPLINE_SET_RUN_BACK_SPEED));
             break;
-        case SMSG_SPLINE_SET_SWIM_SPEED:
+        case V_SMSG_SPLINE_SET_SWIM_SPEED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_SET_SWIM_SPEED_write(writer, &opcodes->body.SMSG_SPLINE_SET_SWIM_SPEED));
             break;
-        case SMSG_SPLINE_SET_WALK_SPEED:
+        case V_SMSG_SPLINE_SET_WALK_SPEED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_SET_WALK_SPEED_write(writer, &opcodes->body.SMSG_SPLINE_SET_WALK_SPEED));
             break;
-        case SMSG_SPLINE_SET_SWIM_BACK_SPEED:
+        case V_SMSG_SPLINE_SET_SWIM_BACK_SPEED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_SET_SWIM_BACK_SPEED_write(writer, &opcodes->body.SMSG_SPLINE_SET_SWIM_BACK_SPEED));
             break;
-        case SMSG_SPLINE_SET_TURN_RATE:
+        case V_SMSG_SPLINE_SET_TURN_RATE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_SET_TURN_RATE_write(writer, &opcodes->body.SMSG_SPLINE_SET_TURN_RATE));
             break;
-        case SMSG_SPLINE_MOVE_UNROOT:
+        case V_SMSG_SPLINE_MOVE_UNROOT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_MOVE_UNROOT_write(writer, &opcodes->body.SMSG_SPLINE_MOVE_UNROOT));
             break;
-        case SMSG_SPLINE_MOVE_FEATHER_FALL:
+        case V_SMSG_SPLINE_MOVE_FEATHER_FALL:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_MOVE_FEATHER_FALL_write(writer, &opcodes->body.SMSG_SPLINE_MOVE_FEATHER_FALL));
             break;
-        case SMSG_SPLINE_MOVE_NORMAL_FALL:
+        case V_SMSG_SPLINE_MOVE_NORMAL_FALL:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_MOVE_NORMAL_FALL_write(writer, &opcodes->body.SMSG_SPLINE_MOVE_NORMAL_FALL));
             break;
-        case SMSG_SPLINE_MOVE_SET_HOVER:
+        case V_SMSG_SPLINE_MOVE_SET_HOVER:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_MOVE_SET_HOVER_write(writer, &opcodes->body.SMSG_SPLINE_MOVE_SET_HOVER));
             break;
-        case SMSG_SPLINE_MOVE_UNSET_HOVER:
+        case V_SMSG_SPLINE_MOVE_UNSET_HOVER:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_MOVE_UNSET_HOVER_write(writer, &opcodes->body.SMSG_SPLINE_MOVE_UNSET_HOVER));
             break;
-        case SMSG_SPLINE_MOVE_WATER_WALK:
+        case V_SMSG_SPLINE_MOVE_WATER_WALK:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_MOVE_WATER_WALK_write(writer, &opcodes->body.SMSG_SPLINE_MOVE_WATER_WALK));
             break;
-        case SMSG_SPLINE_MOVE_LAND_WALK:
+        case V_SMSG_SPLINE_MOVE_LAND_WALK:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_MOVE_LAND_WALK_write(writer, &opcodes->body.SMSG_SPLINE_MOVE_LAND_WALK));
             break;
-        case SMSG_SPLINE_MOVE_START_SWIM:
+        case V_SMSG_SPLINE_MOVE_START_SWIM:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_MOVE_START_SWIM_write(writer, &opcodes->body.SMSG_SPLINE_MOVE_START_SWIM));
             break;
-        case SMSG_SPLINE_MOVE_STOP_SWIM:
+        case V_SMSG_SPLINE_MOVE_STOP_SWIM:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_MOVE_STOP_SWIM_write(writer, &opcodes->body.SMSG_SPLINE_MOVE_STOP_SWIM));
             break;
-        case SMSG_SPLINE_MOVE_SET_RUN_MODE:
+        case V_SMSG_SPLINE_MOVE_SET_RUN_MODE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_MOVE_SET_RUN_MODE_write(writer, &opcodes->body.SMSG_SPLINE_MOVE_SET_RUN_MODE));
             break;
-        case SMSG_SPLINE_MOVE_SET_WALK_MODE:
+        case V_SMSG_SPLINE_MOVE_SET_WALK_MODE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_MOVE_SET_WALK_MODE_write(writer, &opcodes->body.SMSG_SPLINE_MOVE_SET_WALK_MODE));
             break;
-        case MSG_MOVE_TIME_SKIPPED:
+        case V_MSG_MOVE_TIME_SKIPPED:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_TIME_SKIPPED_Server_write(writer, &opcodes->body.MSG_MOVE_TIME_SKIPPED_Server));
             break;
-        case SMSG_SPLINE_MOVE_ROOT:
+        case V_SMSG_SPLINE_MOVE_ROOT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_MOVE_ROOT_write(writer, &opcodes->body.SMSG_SPLINE_MOVE_ROOT));
             break;
-        case SMSG_INVALIDATE_PLAYER:
+        case V_SMSG_INVALIDATE_PLAYER:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_INVALIDATE_PLAYER_write(writer, &opcodes->body.SMSG_INVALIDATE_PLAYER));
             break;
-        case SMSG_INSTANCE_RESET:
+        case V_SMSG_INSTANCE_RESET:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_INSTANCE_RESET_write(writer, &opcodes->body.SMSG_INSTANCE_RESET));
             break;
-        case SMSG_INSTANCE_RESET_FAILED:
+        case V_SMSG_INSTANCE_RESET_FAILED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_INSTANCE_RESET_FAILED_write(writer, &opcodes->body.SMSG_INSTANCE_RESET_FAILED));
             break;
-        case SMSG_UPDATE_LAST_INSTANCE:
+        case V_SMSG_UPDATE_LAST_INSTANCE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_UPDATE_LAST_INSTANCE_write(writer, &opcodes->body.SMSG_UPDATE_LAST_INSTANCE));
             break;
-        case MSG_RAID_TARGET_UPDATE:
+        case V_MSG_RAID_TARGET_UPDATE:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_RAID_TARGET_UPDATE_Server_write(writer, &opcodes->body.MSG_RAID_TARGET_UPDATE_Server));
             break;
-        case MSG_RAID_READY_CHECK:
+        case V_MSG_RAID_READY_CHECK:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_RAID_READY_CHECK_Server_write(writer, &opcodes->body.MSG_RAID_READY_CHECK_Server));
             break;
-        case SMSG_PET_ACTION_SOUND:
+        case V_SMSG_PET_ACTION_SOUND:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PET_ACTION_SOUND_write(writer, &opcodes->body.SMSG_PET_ACTION_SOUND));
             break;
-        case SMSG_PET_DISMISS_SOUND:
+        case V_SMSG_PET_DISMISS_SOUND:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PET_DISMISS_SOUND_write(writer, &opcodes->body.SMSG_PET_DISMISS_SOUND));
             break;
-        case SMSG_GM_TICKET_STATUS_UPDATE:
+        case V_SMSG_GM_TICKET_STATUS_UPDATE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GM_TICKET_STATUS_UPDATE_write(writer, &opcodes->body.SMSG_GM_TICKET_STATUS_UPDATE));
             break;
-        case SMSG_UPDATE_INSTANCE_OWNERSHIP:
+        case V_SMSG_UPDATE_INSTANCE_OWNERSHIP:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_UPDATE_INSTANCE_OWNERSHIP_write(writer, &opcodes->body.SMSG_UPDATE_INSTANCE_OWNERSHIP));
             break;
-        case SMSG_SPELLINSTAKILLLOG:
+        case V_SMSG_SPELLINSTAKILLLOG:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELLINSTAKILLLOG_write(writer, &opcodes->body.SMSG_SPELLINSTAKILLLOG));
             break;
-        case SMSG_SPELL_UPDATE_CHAIN_TARGETS:
+        case V_SMSG_SPELL_UPDATE_CHAIN_TARGETS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELL_UPDATE_CHAIN_TARGETS_write(writer, &opcodes->body.SMSG_SPELL_UPDATE_CHAIN_TARGETS));
             break;
-        case SMSG_EXPECTED_SPAM_RECORDS:
+        case V_SMSG_EXPECTED_SPAM_RECORDS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_EXPECTED_SPAM_RECORDS_write(writer, &opcodes->body.SMSG_EXPECTED_SPAM_RECORDS));
             break;
-        case SMSG_DEFENSE_MESSAGE:
+        case V_SMSG_DEFENSE_MESSAGE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_DEFENSE_MESSAGE_write(writer, &opcodes->body.SMSG_DEFENSE_MESSAGE));
             break;
         default:
@@ -25281,970 +27206,970 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_server_opcode_read(WowWorldRe
     READ_U16(opcodes->opcode);
 
     switch (opcodes->opcode) {
-        case SMSG_CHAR_CREATE:
+        case V_SMSG_CHAR_CREATE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_CHAR_CREATE_read(reader, &opcodes->body.SMSG_CHAR_CREATE));
             break;
-        case SMSG_CHAR_ENUM:
+        case V_SMSG_CHAR_ENUM:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_CHAR_ENUM_read(reader, &opcodes->body.SMSG_CHAR_ENUM));
             break;
-        case SMSG_CHAR_DELETE:
+        case V_SMSG_CHAR_DELETE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_CHAR_DELETE_read(reader, &opcodes->body.SMSG_CHAR_DELETE));
             break;
-        case SMSG_NEW_WORLD:
+        case V_SMSG_NEW_WORLD:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_NEW_WORLD_read(reader, &opcodes->body.SMSG_NEW_WORLD));
             break;
-        case SMSG_TRANSFER_PENDING:
+        case V_SMSG_TRANSFER_PENDING:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_TRANSFER_PENDING_read(reader, &opcodes->body.SMSG_TRANSFER_PENDING, _size - 2));
             break;
-        case SMSG_TRANSFER_ABORTED:
+        case V_SMSG_TRANSFER_ABORTED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_TRANSFER_ABORTED_read(reader, &opcodes->body.SMSG_TRANSFER_ABORTED));
             break;
-        case SMSG_CHARACTER_LOGIN_FAILED:
+        case V_SMSG_CHARACTER_LOGIN_FAILED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_CHARACTER_LOGIN_FAILED_read(reader, &opcodes->body.SMSG_CHARACTER_LOGIN_FAILED));
             break;
-        case SMSG_LOGIN_SETTIMESPEED:
+        case V_SMSG_LOGIN_SETTIMESPEED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_LOGIN_SETTIMESPEED_read(reader, &opcodes->body.SMSG_LOGIN_SETTIMESPEED));
             break;
-        case SMSG_LOGOUT_RESPONSE:
+        case V_SMSG_LOGOUT_RESPONSE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_LOGOUT_RESPONSE_read(reader, &opcodes->body.SMSG_LOGOUT_RESPONSE));
             break;
-        case SMSG_NAME_QUERY_RESPONSE:
+        case V_SMSG_NAME_QUERY_RESPONSE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_NAME_QUERY_RESPONSE_read(reader, &opcodes->body.SMSG_NAME_QUERY_RESPONSE));
             break;
-        case SMSG_PET_NAME_QUERY_RESPONSE:
+        case V_SMSG_PET_NAME_QUERY_RESPONSE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PET_NAME_QUERY_RESPONSE_read(reader, &opcodes->body.SMSG_PET_NAME_QUERY_RESPONSE));
             break;
-        case SMSG_GUILD_QUERY_RESPONSE:
+        case V_SMSG_GUILD_QUERY_RESPONSE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GUILD_QUERY_RESPONSE_read(reader, &opcodes->body.SMSG_GUILD_QUERY_RESPONSE));
             break;
-        case SMSG_ITEM_QUERY_SINGLE_RESPONSE:
+        case V_SMSG_ITEM_QUERY_SINGLE_RESPONSE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_ITEM_QUERY_SINGLE_RESPONSE_read(reader, &opcodes->body.SMSG_ITEM_QUERY_SINGLE_RESPONSE, _size - 2));
             break;
-        case SMSG_PAGE_TEXT_QUERY_RESPONSE:
+        case V_SMSG_PAGE_TEXT_QUERY_RESPONSE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PAGE_TEXT_QUERY_RESPONSE_read(reader, &opcodes->body.SMSG_PAGE_TEXT_QUERY_RESPONSE));
             break;
-        case SMSG_QUEST_QUERY_RESPONSE:
+        case V_SMSG_QUEST_QUERY_RESPONSE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUEST_QUERY_RESPONSE_read(reader, &opcodes->body.SMSG_QUEST_QUERY_RESPONSE));
             break;
-        case SMSG_GAMEOBJECT_QUERY_RESPONSE:
+        case V_SMSG_GAMEOBJECT_QUERY_RESPONSE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GAMEOBJECT_QUERY_RESPONSE_read(reader, &opcodes->body.SMSG_GAMEOBJECT_QUERY_RESPONSE, _size - 2));
             break;
-        case SMSG_CREATURE_QUERY_RESPONSE:
+        case V_SMSG_CREATURE_QUERY_RESPONSE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_CREATURE_QUERY_RESPONSE_read(reader, &opcodes->body.SMSG_CREATURE_QUERY_RESPONSE, _size - 2));
             break;
-        case SMSG_WHO:
+        case V_SMSG_WHO:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_WHO_read(reader, &opcodes->body.SMSG_WHO));
             break;
-        case SMSG_WHOIS:
+        case V_SMSG_WHOIS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_WHOIS_read(reader, &opcodes->body.SMSG_WHOIS));
             break;
-        case SMSG_FRIEND_LIST:
+        case V_SMSG_FRIEND_LIST:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_FRIEND_LIST_read(reader, &opcodes->body.SMSG_FRIEND_LIST));
             break;
-        case SMSG_FRIEND_STATUS:
+        case V_SMSG_FRIEND_STATUS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_FRIEND_STATUS_read(reader, &opcodes->body.SMSG_FRIEND_STATUS));
             break;
-        case SMSG_IGNORE_LIST:
+        case V_SMSG_IGNORE_LIST:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_IGNORE_LIST_read(reader, &opcodes->body.SMSG_IGNORE_LIST));
             break;
-        case SMSG_GROUP_INVITE:
+        case V_SMSG_GROUP_INVITE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GROUP_INVITE_read(reader, &opcodes->body.SMSG_GROUP_INVITE));
             break;
-        case SMSG_GROUP_DECLINE:
+        case V_SMSG_GROUP_DECLINE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GROUP_DECLINE_read(reader, &opcodes->body.SMSG_GROUP_DECLINE));
             break;
-        case SMSG_GROUP_SET_LEADER:
+        case V_SMSG_GROUP_SET_LEADER:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GROUP_SET_LEADER_read(reader, &opcodes->body.SMSG_GROUP_SET_LEADER));
             break;
-        case SMSG_GROUP_LIST:
+        case V_SMSG_GROUP_LIST:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GROUP_LIST_read(reader, &opcodes->body.SMSG_GROUP_LIST, _size - 2));
             break;
-        case SMSG_PARTY_MEMBER_STATS:
+        case V_SMSG_PARTY_MEMBER_STATS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PARTY_MEMBER_STATS_read(reader, &opcodes->body.SMSG_PARTY_MEMBER_STATS));
             break;
-        case SMSG_PARTY_COMMAND_RESULT:
+        case V_SMSG_PARTY_COMMAND_RESULT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PARTY_COMMAND_RESULT_read(reader, &opcodes->body.SMSG_PARTY_COMMAND_RESULT));
             break;
-        case SMSG_GUILD_INVITE:
+        case V_SMSG_GUILD_INVITE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GUILD_INVITE_read(reader, &opcodes->body.SMSG_GUILD_INVITE));
             break;
-        case SMSG_GUILD_INFO:
+        case V_SMSG_GUILD_INFO:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GUILD_INFO_read(reader, &opcodes->body.SMSG_GUILD_INFO));
             break;
-        case SMSG_GUILD_ROSTER:
+        case V_SMSG_GUILD_ROSTER:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GUILD_ROSTER_read(reader, &opcodes->body.SMSG_GUILD_ROSTER));
             break;
-        case SMSG_GUILD_EVENT:
+        case V_SMSG_GUILD_EVENT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GUILD_EVENT_read(reader, &opcodes->body.SMSG_GUILD_EVENT));
             break;
-        case SMSG_GUILD_COMMAND_RESULT:
+        case V_SMSG_GUILD_COMMAND_RESULT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GUILD_COMMAND_RESULT_read(reader, &opcodes->body.SMSG_GUILD_COMMAND_RESULT));
             break;
-        case SMSG_MESSAGECHAT:
+        case V_SMSG_MESSAGECHAT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_MESSAGECHAT_read(reader, &opcodes->body.SMSG_MESSAGECHAT));
             break;
-        case SMSG_CHANNEL_NOTIFY:
+        case V_SMSG_CHANNEL_NOTIFY:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_CHANNEL_NOTIFY_read(reader, &opcodes->body.SMSG_CHANNEL_NOTIFY));
             break;
-        case SMSG_CHANNEL_LIST:
+        case V_SMSG_CHANNEL_LIST:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_CHANNEL_LIST_read(reader, &opcodes->body.SMSG_CHANNEL_LIST));
             break;
-        case SMSG_UPDATE_OBJECT:
+        case V_SMSG_UPDATE_OBJECT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_UPDATE_OBJECT_read(reader, &opcodes->body.SMSG_UPDATE_OBJECT));
             break;
-        case SMSG_DESTROY_OBJECT:
+        case V_SMSG_DESTROY_OBJECT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_DESTROY_OBJECT_read(reader, &opcodes->body.SMSG_DESTROY_OBJECT));
             break;
-        case SMSG_READ_ITEM_OK:
+        case V_SMSG_READ_ITEM_OK:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_READ_ITEM_OK_read(reader, &opcodes->body.SMSG_READ_ITEM_OK));
             break;
-        case SMSG_READ_ITEM_FAILED:
+        case V_SMSG_READ_ITEM_FAILED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_READ_ITEM_FAILED_read(reader, &opcodes->body.SMSG_READ_ITEM_FAILED));
             break;
-        case SMSG_ITEM_COOLDOWN:
+        case V_SMSG_ITEM_COOLDOWN:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_ITEM_COOLDOWN_read(reader, &opcodes->body.SMSG_ITEM_COOLDOWN));
             break;
-        case SMSG_GAMEOBJECT_CUSTOM_ANIM:
+        case V_SMSG_GAMEOBJECT_CUSTOM_ANIM:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GAMEOBJECT_CUSTOM_ANIM_read(reader, &opcodes->body.SMSG_GAMEOBJECT_CUSTOM_ANIM));
             break;
-        case MSG_MOVE_START_FORWARD:
+        case V_MSG_MOVE_START_FORWARD:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_FORWARD_Server_read(reader, &opcodes->body.MSG_MOVE_START_FORWARD_Server));
             break;
-        case MSG_MOVE_START_BACKWARD:
+        case V_MSG_MOVE_START_BACKWARD:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_BACKWARD_Server_read(reader, &opcodes->body.MSG_MOVE_START_BACKWARD_Server));
             break;
-        case MSG_MOVE_STOP:
+        case V_MSG_MOVE_STOP:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_STOP_Server_read(reader, &opcodes->body.MSG_MOVE_STOP_Server));
             break;
-        case MSG_MOVE_START_STRAFE_LEFT:
+        case V_MSG_MOVE_START_STRAFE_LEFT:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_STRAFE_LEFT_Server_read(reader, &opcodes->body.MSG_MOVE_START_STRAFE_LEFT_Server));
             break;
-        case MSG_MOVE_START_STRAFE_RIGHT:
+        case V_MSG_MOVE_START_STRAFE_RIGHT:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_STRAFE_RIGHT_Server_read(reader, &opcodes->body.MSG_MOVE_START_STRAFE_RIGHT_Server));
             break;
-        case MSG_MOVE_STOP_STRAFE:
+        case V_MSG_MOVE_STOP_STRAFE:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_STOP_STRAFE_Server_read(reader, &opcodes->body.MSG_MOVE_STOP_STRAFE_Server));
             break;
-        case MSG_MOVE_JUMP:
+        case V_MSG_MOVE_JUMP:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_JUMP_Server_read(reader, &opcodes->body.MSG_MOVE_JUMP_Server));
             break;
-        case MSG_MOVE_START_TURN_LEFT:
+        case V_MSG_MOVE_START_TURN_LEFT:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_TURN_LEFT_Server_read(reader, &opcodes->body.MSG_MOVE_START_TURN_LEFT_Server));
             break;
-        case MSG_MOVE_START_TURN_RIGHT:
+        case V_MSG_MOVE_START_TURN_RIGHT:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_TURN_RIGHT_Server_read(reader, &opcodes->body.MSG_MOVE_START_TURN_RIGHT_Server));
             break;
-        case MSG_MOVE_STOP_TURN:
+        case V_MSG_MOVE_STOP_TURN:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_STOP_TURN_Server_read(reader, &opcodes->body.MSG_MOVE_STOP_TURN_Server));
             break;
-        case MSG_MOVE_START_PITCH_UP:
+        case V_MSG_MOVE_START_PITCH_UP:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_PITCH_UP_Server_read(reader, &opcodes->body.MSG_MOVE_START_PITCH_UP_Server));
             break;
-        case MSG_MOVE_START_PITCH_DOWN:
+        case V_MSG_MOVE_START_PITCH_DOWN:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_PITCH_DOWN_Server_read(reader, &opcodes->body.MSG_MOVE_START_PITCH_DOWN_Server));
             break;
-        case MSG_MOVE_STOP_PITCH:
+        case V_MSG_MOVE_STOP_PITCH:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_STOP_PITCH_Server_read(reader, &opcodes->body.MSG_MOVE_STOP_PITCH_Server));
             break;
-        case MSG_MOVE_SET_RUN_MODE:
+        case V_MSG_MOVE_SET_RUN_MODE:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_SET_RUN_MODE_Server_read(reader, &opcodes->body.MSG_MOVE_SET_RUN_MODE_Server));
             break;
-        case MSG_MOVE_SET_WALK_MODE:
+        case V_MSG_MOVE_SET_WALK_MODE:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_SET_WALK_MODE_Server_read(reader, &opcodes->body.MSG_MOVE_SET_WALK_MODE_Server));
             break;
-        case MSG_MOVE_TELEPORT_ACK:
+        case V_MSG_MOVE_TELEPORT_ACK:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_TELEPORT_ACK_Server_read(reader, &opcodes->body.MSG_MOVE_TELEPORT_ACK_Server));
             break;
-        case MSG_MOVE_FALL_LAND:
+        case V_MSG_MOVE_FALL_LAND:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_FALL_LAND_Server_read(reader, &opcodes->body.MSG_MOVE_FALL_LAND_Server));
             break;
-        case MSG_MOVE_START_SWIM:
+        case V_MSG_MOVE_START_SWIM:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_START_SWIM_Server_read(reader, &opcodes->body.MSG_MOVE_START_SWIM_Server));
             break;
-        case MSG_MOVE_STOP_SWIM:
+        case V_MSG_MOVE_STOP_SWIM:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_STOP_SWIM_Server_read(reader, &opcodes->body.MSG_MOVE_STOP_SWIM_Server));
             break;
-        case MSG_MOVE_SET_FACING:
+        case V_MSG_MOVE_SET_FACING:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_SET_FACING_Server_read(reader, &opcodes->body.MSG_MOVE_SET_FACING_Server));
             break;
-        case MSG_MOVE_SET_PITCH:
+        case V_MSG_MOVE_SET_PITCH:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_SET_PITCH_Server_read(reader, &opcodes->body.MSG_MOVE_SET_PITCH_Server));
             break;
-        case SMSG_MONSTER_MOVE:
+        case V_SMSG_MONSTER_MOVE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_MONSTER_MOVE_read(reader, &opcodes->body.SMSG_MONSTER_MOVE));
             break;
-        case SMSG_MOVE_WATER_WALK:
+        case V_SMSG_MOVE_WATER_WALK:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_MOVE_WATER_WALK_read(reader, &opcodes->body.SMSG_MOVE_WATER_WALK));
             break;
-        case SMSG_MOVE_LAND_WALK:
+        case V_SMSG_MOVE_LAND_WALK:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_MOVE_LAND_WALK_read(reader, &opcodes->body.SMSG_MOVE_LAND_WALK));
             break;
-        case SMSG_FORCE_RUN_SPEED_CHANGE:
+        case V_SMSG_FORCE_RUN_SPEED_CHANGE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_FORCE_RUN_SPEED_CHANGE_read(reader, &opcodes->body.SMSG_FORCE_RUN_SPEED_CHANGE));
             break;
-        case SMSG_FORCE_RUN_BACK_SPEED_CHANGE:
+        case V_SMSG_FORCE_RUN_BACK_SPEED_CHANGE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_FORCE_RUN_BACK_SPEED_CHANGE_read(reader, &opcodes->body.SMSG_FORCE_RUN_BACK_SPEED_CHANGE));
             break;
-        case SMSG_FORCE_SWIM_SPEED_CHANGE:
+        case V_SMSG_FORCE_SWIM_SPEED_CHANGE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_FORCE_SWIM_SPEED_CHANGE_read(reader, &opcodes->body.SMSG_FORCE_SWIM_SPEED_CHANGE));
             break;
-        case SMSG_FORCE_MOVE_ROOT:
+        case V_SMSG_FORCE_MOVE_ROOT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_FORCE_MOVE_ROOT_read(reader, &opcodes->body.SMSG_FORCE_MOVE_ROOT));
             break;
-        case SMSG_FORCE_MOVE_UNROOT:
+        case V_SMSG_FORCE_MOVE_UNROOT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_FORCE_MOVE_UNROOT_read(reader, &opcodes->body.SMSG_FORCE_MOVE_UNROOT));
             break;
-        case MSG_MOVE_HEARTBEAT:
+        case V_MSG_MOVE_HEARTBEAT:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_HEARTBEAT_Server_read(reader, &opcodes->body.MSG_MOVE_HEARTBEAT_Server));
             break;
-        case SMSG_MOVE_KNOCK_BACK:
+        case V_SMSG_MOVE_KNOCK_BACK:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_MOVE_KNOCK_BACK_read(reader, &opcodes->body.SMSG_MOVE_KNOCK_BACK));
             break;
-        case SMSG_MOVE_FEATHER_FALL:
+        case V_SMSG_MOVE_FEATHER_FALL:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_MOVE_FEATHER_FALL_read(reader, &opcodes->body.SMSG_MOVE_FEATHER_FALL));
             break;
-        case SMSG_MOVE_NORMAL_FALL:
+        case V_SMSG_MOVE_NORMAL_FALL:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_MOVE_NORMAL_FALL_read(reader, &opcodes->body.SMSG_MOVE_NORMAL_FALL));
             break;
-        case SMSG_MOVE_SET_HOVER:
+        case V_SMSG_MOVE_SET_HOVER:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_MOVE_SET_HOVER_read(reader, &opcodes->body.SMSG_MOVE_SET_HOVER));
             break;
-        case SMSG_MOVE_UNSET_HOVER:
+        case V_SMSG_MOVE_UNSET_HOVER:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_MOVE_UNSET_HOVER_read(reader, &opcodes->body.SMSG_MOVE_UNSET_HOVER));
             break;
-        case SMSG_TRIGGER_CINEMATIC:
+        case V_SMSG_TRIGGER_CINEMATIC:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_TRIGGER_CINEMATIC_read(reader, &opcodes->body.SMSG_TRIGGER_CINEMATIC));
             break;
-        case SMSG_TUTORIAL_FLAGS:
+        case V_SMSG_TUTORIAL_FLAGS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_TUTORIAL_FLAGS_read(reader, &opcodes->body.SMSG_TUTORIAL_FLAGS));
             break;
-        case SMSG_EMOTE:
+        case V_SMSG_EMOTE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_EMOTE_read(reader, &opcodes->body.SMSG_EMOTE));
             break;
-        case SMSG_TEXT_EMOTE:
+        case V_SMSG_TEXT_EMOTE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_TEXT_EMOTE_read(reader, &opcodes->body.SMSG_TEXT_EMOTE));
             break;
-        case SMSG_INVENTORY_CHANGE_FAILURE:
+        case V_SMSG_INVENTORY_CHANGE_FAILURE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_INVENTORY_CHANGE_FAILURE_read(reader, &opcodes->body.SMSG_INVENTORY_CHANGE_FAILURE));
             break;
-        case SMSG_OPEN_CONTAINER:
+        case V_SMSG_OPEN_CONTAINER:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_OPEN_CONTAINER_read(reader, &opcodes->body.SMSG_OPEN_CONTAINER));
             break;
-        case SMSG_INSPECT:
+        case V_SMSG_INSPECT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_INSPECT_read(reader, &opcodes->body.SMSG_INSPECT));
             break;
-        case SMSG_TRADE_STATUS:
+        case V_SMSG_TRADE_STATUS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_TRADE_STATUS_read(reader, &opcodes->body.SMSG_TRADE_STATUS));
             break;
-        case SMSG_TRADE_STATUS_EXTENDED:
+        case V_SMSG_TRADE_STATUS_EXTENDED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_TRADE_STATUS_EXTENDED_read(reader, &opcodes->body.SMSG_TRADE_STATUS_EXTENDED));
             break;
-        case SMSG_INITIALIZE_FACTIONS:
+        case V_SMSG_INITIALIZE_FACTIONS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_INITIALIZE_FACTIONS_read(reader, &opcodes->body.SMSG_INITIALIZE_FACTIONS));
             break;
-        case SMSG_SET_FACTION_VISIBLE:
+        case V_SMSG_SET_FACTION_VISIBLE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SET_FACTION_VISIBLE_read(reader, &opcodes->body.SMSG_SET_FACTION_VISIBLE));
             break;
-        case SMSG_SET_FACTION_STANDING:
+        case V_SMSG_SET_FACTION_STANDING:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SET_FACTION_STANDING_read(reader, &opcodes->body.SMSG_SET_FACTION_STANDING));
             break;
-        case SMSG_SET_PROFICIENCY:
+        case V_SMSG_SET_PROFICIENCY:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SET_PROFICIENCY_read(reader, &opcodes->body.SMSG_SET_PROFICIENCY));
             break;
-        case SMSG_ACTION_BUTTONS:
+        case V_SMSG_ACTION_BUTTONS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_ACTION_BUTTONS_read(reader, &opcodes->body.SMSG_ACTION_BUTTONS));
             break;
-        case SMSG_INITIAL_SPELLS:
+        case V_SMSG_INITIAL_SPELLS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_INITIAL_SPELLS_read(reader, &opcodes->body.SMSG_INITIAL_SPELLS));
             break;
-        case SMSG_LEARNED_SPELL:
+        case V_SMSG_LEARNED_SPELL:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_LEARNED_SPELL_read(reader, &opcodes->body.SMSG_LEARNED_SPELL));
             break;
-        case SMSG_SUPERCEDED_SPELL:
+        case V_SMSG_SUPERCEDED_SPELL:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SUPERCEDED_SPELL_read(reader, &opcodes->body.SMSG_SUPERCEDED_SPELL));
             break;
-        case SMSG_CAST_RESULT:
+        case V_SMSG_CAST_RESULT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_CAST_RESULT_read(reader, &opcodes->body.SMSG_CAST_RESULT));
             break;
-        case SMSG_SPELL_START:
+        case V_SMSG_SPELL_START:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELL_START_read(reader, &opcodes->body.SMSG_SPELL_START));
             break;
-        case SMSG_SPELL_GO:
+        case V_SMSG_SPELL_GO:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELL_GO_read(reader, &opcodes->body.SMSG_SPELL_GO));
             break;
-        case SMSG_SPELL_FAILURE:
+        case V_SMSG_SPELL_FAILURE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELL_FAILURE_read(reader, &opcodes->body.SMSG_SPELL_FAILURE));
             break;
-        case SMSG_SPELL_COOLDOWN:
+        case V_SMSG_SPELL_COOLDOWN:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELL_COOLDOWN_read(reader, &opcodes->body.SMSG_SPELL_COOLDOWN, _size - 2));
             break;
-        case SMSG_COOLDOWN_EVENT:
+        case V_SMSG_COOLDOWN_EVENT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_COOLDOWN_EVENT_read(reader, &opcodes->body.SMSG_COOLDOWN_EVENT));
             break;
-        case SMSG_UPDATE_AURA_DURATION:
+        case V_SMSG_UPDATE_AURA_DURATION:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_UPDATE_AURA_DURATION_read(reader, &opcodes->body.SMSG_UPDATE_AURA_DURATION));
             break;
-        case SMSG_PET_CAST_FAILED:
+        case V_SMSG_PET_CAST_FAILED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PET_CAST_FAILED_read(reader, &opcodes->body.SMSG_PET_CAST_FAILED));
             break;
-        case MSG_CHANNEL_START:
+        case V_MSG_CHANNEL_START:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_CHANNEL_START_Server_read(reader, &opcodes->body.MSG_CHANNEL_START_Server));
             break;
-        case MSG_CHANNEL_UPDATE:
+        case V_MSG_CHANNEL_UPDATE:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_CHANNEL_UPDATE_Server_read(reader, &opcodes->body.MSG_CHANNEL_UPDATE_Server));
             break;
-        case SMSG_AI_REACTION:
+        case V_SMSG_AI_REACTION:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_AI_REACTION_read(reader, &opcodes->body.SMSG_AI_REACTION));
             break;
-        case SMSG_ATTACKSTART:
+        case V_SMSG_ATTACKSTART:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_ATTACKSTART_read(reader, &opcodes->body.SMSG_ATTACKSTART));
             break;
-        case SMSG_ATTACKSTOP:
+        case V_SMSG_ATTACKSTOP:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_ATTACKSTOP_read(reader, &opcodes->body.SMSG_ATTACKSTOP));
             break;
-        case SMSG_ATTACKERSTATEUPDATE:
+        case V_SMSG_ATTACKERSTATEUPDATE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_ATTACKERSTATEUPDATE_read(reader, &opcodes->body.SMSG_ATTACKERSTATEUPDATE));
             break;
-        case SMSG_SPELLHEALLOG:
+        case V_SMSG_SPELLHEALLOG:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELLHEALLOG_read(reader, &opcodes->body.SMSG_SPELLHEALLOG));
             break;
-        case SMSG_SPELLENERGIZELOG:
+        case V_SMSG_SPELLENERGIZELOG:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELLENERGIZELOG_read(reader, &opcodes->body.SMSG_SPELLENERGIZELOG));
             break;
-        case SMSG_BINDPOINTUPDATE:
+        case V_SMSG_BINDPOINTUPDATE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_BINDPOINTUPDATE_read(reader, &opcodes->body.SMSG_BINDPOINTUPDATE));
             break;
-        case SMSG_PLAYERBOUND:
+        case V_SMSG_PLAYERBOUND:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PLAYERBOUND_read(reader, &opcodes->body.SMSG_PLAYERBOUND));
             break;
-        case SMSG_CLIENT_CONTROL_UPDATE:
+        case V_SMSG_CLIENT_CONTROL_UPDATE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_CLIENT_CONTROL_UPDATE_read(reader, &opcodes->body.SMSG_CLIENT_CONTROL_UPDATE));
             break;
-        case SMSG_RESURRECT_REQUEST:
+        case V_SMSG_RESURRECT_REQUEST:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_RESURRECT_REQUEST_read(reader, &opcodes->body.SMSG_RESURRECT_REQUEST));
             break;
-        case SMSG_LOOT_RESPONSE:
+        case V_SMSG_LOOT_RESPONSE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_LOOT_RESPONSE_read(reader, &opcodes->body.SMSG_LOOT_RESPONSE));
             break;
-        case SMSG_LOOT_RELEASE_RESPONSE:
+        case V_SMSG_LOOT_RELEASE_RESPONSE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_LOOT_RELEASE_RESPONSE_read(reader, &opcodes->body.SMSG_LOOT_RELEASE_RESPONSE));
             break;
-        case SMSG_LOOT_REMOVED:
+        case V_SMSG_LOOT_REMOVED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_LOOT_REMOVED_read(reader, &opcodes->body.SMSG_LOOT_REMOVED));
             break;
-        case SMSG_LOOT_MONEY_NOTIFY:
+        case V_SMSG_LOOT_MONEY_NOTIFY:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_LOOT_MONEY_NOTIFY_read(reader, &opcodes->body.SMSG_LOOT_MONEY_NOTIFY));
             break;
-        case SMSG_ITEM_PUSH_RESULT:
+        case V_SMSG_ITEM_PUSH_RESULT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_ITEM_PUSH_RESULT_read(reader, &opcodes->body.SMSG_ITEM_PUSH_RESULT));
             break;
-        case SMSG_DUEL_REQUESTED:
+        case V_SMSG_DUEL_REQUESTED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_DUEL_REQUESTED_read(reader, &opcodes->body.SMSG_DUEL_REQUESTED));
             break;
-        case SMSG_DUEL_COMPLETE:
+        case V_SMSG_DUEL_COMPLETE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_DUEL_COMPLETE_read(reader, &opcodes->body.SMSG_DUEL_COMPLETE));
             break;
-        case SMSG_DUEL_WINNER:
+        case V_SMSG_DUEL_WINNER:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_DUEL_WINNER_read(reader, &opcodes->body.SMSG_DUEL_WINNER));
             break;
-        case SMSG_MOUNTRESULT:
+        case V_SMSG_MOUNTRESULT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_MOUNTRESULT_read(reader, &opcodes->body.SMSG_MOUNTRESULT));
             break;
-        case SMSG_DISMOUNTRESULT:
+        case V_SMSG_DISMOUNTRESULT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_DISMOUNTRESULT_read(reader, &opcodes->body.SMSG_DISMOUNTRESULT));
             break;
-        case SMSG_MOUNTSPECIAL_ANIM:
+        case V_SMSG_MOUNTSPECIAL_ANIM:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_MOUNTSPECIAL_ANIM_read(reader, &opcodes->body.SMSG_MOUNTSPECIAL_ANIM));
             break;
-        case SMSG_PET_TAME_FAILURE:
+        case V_SMSG_PET_TAME_FAILURE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PET_TAME_FAILURE_read(reader, &opcodes->body.SMSG_PET_TAME_FAILURE));
             break;
-        case SMSG_PET_SPELLS:
+        case V_SMSG_PET_SPELLS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PET_SPELLS_read(reader, &opcodes->body.SMSG_PET_SPELLS, _size - 2));
             break;
-        case SMSG_PET_MODE:
+        case V_SMSG_PET_MODE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PET_MODE_read(reader, &opcodes->body.SMSG_PET_MODE));
             break;
-        case SMSG_GOSSIP_MESSAGE:
+        case V_SMSG_GOSSIP_MESSAGE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GOSSIP_MESSAGE_read(reader, &opcodes->body.SMSG_GOSSIP_MESSAGE));
             break;
-        case SMSG_NPC_TEXT_UPDATE:
+        case V_SMSG_NPC_TEXT_UPDATE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_NPC_TEXT_UPDATE_read(reader, &opcodes->body.SMSG_NPC_TEXT_UPDATE));
             break;
-        case SMSG_QUESTGIVER_STATUS:
+        case V_SMSG_QUESTGIVER_STATUS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUESTGIVER_STATUS_read(reader, &opcodes->body.SMSG_QUESTGIVER_STATUS));
             break;
-        case SMSG_QUESTGIVER_QUEST_LIST:
+        case V_SMSG_QUESTGIVER_QUEST_LIST:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUESTGIVER_QUEST_LIST_read(reader, &opcodes->body.SMSG_QUESTGIVER_QUEST_LIST));
             break;
-        case SMSG_QUESTGIVER_QUEST_DETAILS:
+        case V_SMSG_QUESTGIVER_QUEST_DETAILS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUESTGIVER_QUEST_DETAILS_read(reader, &opcodes->body.SMSG_QUESTGIVER_QUEST_DETAILS));
             break;
-        case SMSG_QUESTGIVER_REQUEST_ITEMS:
+        case V_SMSG_QUESTGIVER_REQUEST_ITEMS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUESTGIVER_REQUEST_ITEMS_read(reader, &opcodes->body.SMSG_QUESTGIVER_REQUEST_ITEMS));
             break;
-        case SMSG_QUESTGIVER_OFFER_REWARD:
+        case V_SMSG_QUESTGIVER_OFFER_REWARD:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUESTGIVER_OFFER_REWARD_read(reader, &opcodes->body.SMSG_QUESTGIVER_OFFER_REWARD));
             break;
-        case SMSG_QUESTGIVER_QUEST_INVALID:
+        case V_SMSG_QUESTGIVER_QUEST_INVALID:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUESTGIVER_QUEST_INVALID_read(reader, &opcodes->body.SMSG_QUESTGIVER_QUEST_INVALID));
             break;
-        case SMSG_QUESTGIVER_QUEST_COMPLETE:
+        case V_SMSG_QUESTGIVER_QUEST_COMPLETE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUESTGIVER_QUEST_COMPLETE_read(reader, &opcodes->body.SMSG_QUESTGIVER_QUEST_COMPLETE));
             break;
-        case SMSG_QUESTGIVER_QUEST_FAILED:
+        case V_SMSG_QUESTGIVER_QUEST_FAILED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUESTGIVER_QUEST_FAILED_read(reader, &opcodes->body.SMSG_QUESTGIVER_QUEST_FAILED));
             break;
-        case SMSG_QUESTUPDATE_FAILED:
+        case V_SMSG_QUESTUPDATE_FAILED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUESTUPDATE_FAILED_read(reader, &opcodes->body.SMSG_QUESTUPDATE_FAILED));
             break;
-        case SMSG_QUESTUPDATE_FAILEDTIMER:
+        case V_SMSG_QUESTUPDATE_FAILEDTIMER:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUESTUPDATE_FAILEDTIMER_read(reader, &opcodes->body.SMSG_QUESTUPDATE_FAILEDTIMER));
             break;
-        case SMSG_QUESTUPDATE_COMPLETE:
+        case V_SMSG_QUESTUPDATE_COMPLETE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUESTUPDATE_COMPLETE_read(reader, &opcodes->body.SMSG_QUESTUPDATE_COMPLETE));
             break;
-        case SMSG_QUESTUPDATE_ADD_KILL:
+        case V_SMSG_QUESTUPDATE_ADD_KILL:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUESTUPDATE_ADD_KILL_read(reader, &opcodes->body.SMSG_QUESTUPDATE_ADD_KILL));
             break;
-        case SMSG_QUESTUPDATE_ADD_ITEM:
+        case V_SMSG_QUESTUPDATE_ADD_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUESTUPDATE_ADD_ITEM_read(reader, &opcodes->body.SMSG_QUESTUPDATE_ADD_ITEM));
             break;
-        case SMSG_QUEST_CONFIRM_ACCEPT:
+        case V_SMSG_QUEST_CONFIRM_ACCEPT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUEST_CONFIRM_ACCEPT_read(reader, &opcodes->body.SMSG_QUEST_CONFIRM_ACCEPT));
             break;
-        case SMSG_LIST_INVENTORY:
+        case V_SMSG_LIST_INVENTORY:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_LIST_INVENTORY_read(reader, &opcodes->body.SMSG_LIST_INVENTORY));
             break;
-        case SMSG_SELL_ITEM:
+        case V_SMSG_SELL_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SELL_ITEM_read(reader, &opcodes->body.SMSG_SELL_ITEM));
             break;
-        case SMSG_BUY_ITEM:
+        case V_SMSG_BUY_ITEM:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_BUY_ITEM_read(reader, &opcodes->body.SMSG_BUY_ITEM));
             break;
-        case SMSG_BUY_FAILED:
+        case V_SMSG_BUY_FAILED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_BUY_FAILED_read(reader, &opcodes->body.SMSG_BUY_FAILED));
             break;
-        case SMSG_SHOWTAXINODES:
+        case V_SMSG_SHOWTAXINODES:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SHOWTAXINODES_read(reader, &opcodes->body.SMSG_SHOWTAXINODES, _size - 2));
             break;
-        case SMSG_TAXINODE_STATUS:
+        case V_SMSG_TAXINODE_STATUS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_TAXINODE_STATUS_read(reader, &opcodes->body.SMSG_TAXINODE_STATUS));
             break;
-        case SMSG_ACTIVATETAXIREPLY:
+        case V_SMSG_ACTIVATETAXIREPLY:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_ACTIVATETAXIREPLY_read(reader, &opcodes->body.SMSG_ACTIVATETAXIREPLY));
             break;
-        case SMSG_TRAINER_LIST:
+        case V_SMSG_TRAINER_LIST:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_TRAINER_LIST_read(reader, &opcodes->body.SMSG_TRAINER_LIST));
             break;
-        case SMSG_TRAINER_BUY_SUCCEEDED:
+        case V_SMSG_TRAINER_BUY_SUCCEEDED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_TRAINER_BUY_SUCCEEDED_read(reader, &opcodes->body.SMSG_TRAINER_BUY_SUCCEEDED));
             break;
-        case SMSG_TRAINER_BUY_FAILED:
+        case V_SMSG_TRAINER_BUY_FAILED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_TRAINER_BUY_FAILED_read(reader, &opcodes->body.SMSG_TRAINER_BUY_FAILED));
             break;
-        case SMSG_SHOW_BANK:
+        case V_SMSG_SHOW_BANK:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SHOW_BANK_read(reader, &opcodes->body.SMSG_SHOW_BANK));
             break;
-        case SMSG_BUY_BANK_SLOT_RESULT:
+        case V_SMSG_BUY_BANK_SLOT_RESULT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_BUY_BANK_SLOT_RESULT_read(reader, &opcodes->body.SMSG_BUY_BANK_SLOT_RESULT));
             break;
-        case SMSG_PETITION_SHOWLIST:
+        case V_SMSG_PETITION_SHOWLIST:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PETITION_SHOWLIST_read(reader, &opcodes->body.SMSG_PETITION_SHOWLIST));
             break;
-        case SMSG_PETITION_SHOW_SIGNATURES:
+        case V_SMSG_PETITION_SHOW_SIGNATURES:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PETITION_SHOW_SIGNATURES_read(reader, &opcodes->body.SMSG_PETITION_SHOW_SIGNATURES));
             break;
-        case SMSG_PETITION_SIGN_RESULTS:
+        case V_SMSG_PETITION_SIGN_RESULTS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PETITION_SIGN_RESULTS_read(reader, &opcodes->body.SMSG_PETITION_SIGN_RESULTS));
             break;
-        case MSG_PETITION_DECLINE:
+        case V_MSG_PETITION_DECLINE:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_PETITION_DECLINE_read(reader, &opcodes->body.MSG_PETITION_DECLINE));
             break;
-        case SMSG_TURN_IN_PETITION_RESULTS:
+        case V_SMSG_TURN_IN_PETITION_RESULTS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_TURN_IN_PETITION_RESULTS_read(reader, &opcodes->body.SMSG_TURN_IN_PETITION_RESULTS));
             break;
-        case SMSG_PETITION_QUERY_RESPONSE:
+        case V_SMSG_PETITION_QUERY_RESPONSE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PETITION_QUERY_RESPONSE_read(reader, &opcodes->body.SMSG_PETITION_QUERY_RESPONSE));
             break;
-        case SMSG_NOTIFICATION:
+        case V_SMSG_NOTIFICATION:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_NOTIFICATION_read(reader, &opcodes->body.SMSG_NOTIFICATION));
             break;
-        case SMSG_PLAYED_TIME:
+        case V_SMSG_PLAYED_TIME:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PLAYED_TIME_read(reader, &opcodes->body.SMSG_PLAYED_TIME));
             break;
-        case SMSG_QUERY_TIME_RESPONSE:
+        case V_SMSG_QUERY_TIME_RESPONSE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_QUERY_TIME_RESPONSE_read(reader, &opcodes->body.SMSG_QUERY_TIME_RESPONSE));
             break;
-        case SMSG_LOG_XPGAIN:
+        case V_SMSG_LOG_XPGAIN:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_LOG_XPGAIN_read(reader, &opcodes->body.SMSG_LOG_XPGAIN));
             break;
-        case SMSG_LEVELUP_INFO:
+        case V_SMSG_LEVELUP_INFO:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_LEVELUP_INFO_read(reader, &opcodes->body.SMSG_LEVELUP_INFO));
             break;
-        case MSG_MINIMAP_PING:
+        case V_MSG_MINIMAP_PING:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MINIMAP_PING_Server_read(reader, &opcodes->body.MSG_MINIMAP_PING_Server));
             break;
-        case SMSG_RESISTLOG:
+        case V_SMSG_RESISTLOG:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_RESISTLOG_read(reader, &opcodes->body.SMSG_RESISTLOG));
             break;
-        case SMSG_ENCHANTMENTLOG:
+        case V_SMSG_ENCHANTMENTLOG:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_ENCHANTMENTLOG_read(reader, &opcodes->body.SMSG_ENCHANTMENTLOG));
             break;
-        case SMSG_START_MIRROR_TIMER:
+        case V_SMSG_START_MIRROR_TIMER:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_START_MIRROR_TIMER_read(reader, &opcodes->body.SMSG_START_MIRROR_TIMER));
             break;
-        case SMSG_PAUSE_MIRROR_TIMER:
+        case V_SMSG_PAUSE_MIRROR_TIMER:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PAUSE_MIRROR_TIMER_read(reader, &opcodes->body.SMSG_PAUSE_MIRROR_TIMER));
             break;
-        case SMSG_STOP_MIRROR_TIMER:
+        case V_SMSG_STOP_MIRROR_TIMER:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_STOP_MIRROR_TIMER_read(reader, &opcodes->body.SMSG_STOP_MIRROR_TIMER));
             break;
-        case SMSG_PONG:
+        case V_SMSG_PONG:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PONG_read(reader, &opcodes->body.SMSG_PONG));
             break;
-        case SMSG_CLEAR_COOLDOWN:
+        case V_SMSG_CLEAR_COOLDOWN:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_CLEAR_COOLDOWN_read(reader, &opcodes->body.SMSG_CLEAR_COOLDOWN));
             break;
-        case SMSG_GAMEOBJECT_PAGETEXT:
+        case V_SMSG_GAMEOBJECT_PAGETEXT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GAMEOBJECT_PAGETEXT_read(reader, &opcodes->body.SMSG_GAMEOBJECT_PAGETEXT));
             break;
-        case SMSG_SPELL_DELAYED:
+        case V_SMSG_SPELL_DELAYED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELL_DELAYED_read(reader, &opcodes->body.SMSG_SPELL_DELAYED));
             break;
-        case SMSG_ITEM_TIME_UPDATE:
+        case V_SMSG_ITEM_TIME_UPDATE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_ITEM_TIME_UPDATE_read(reader, &opcodes->body.SMSG_ITEM_TIME_UPDATE));
             break;
-        case SMSG_ITEM_ENCHANT_TIME_UPDATE:
+        case V_SMSG_ITEM_ENCHANT_TIME_UPDATE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_ITEM_ENCHANT_TIME_UPDATE_read(reader, &opcodes->body.SMSG_ITEM_ENCHANT_TIME_UPDATE));
             break;
-        case SMSG_AUTH_CHALLENGE:
+        case V_SMSG_AUTH_CHALLENGE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_AUTH_CHALLENGE_read(reader, &opcodes->body.SMSG_AUTH_CHALLENGE));
             break;
-        case SMSG_AUTH_RESPONSE:
+        case V_SMSG_AUTH_RESPONSE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_AUTH_RESPONSE_read(reader, &opcodes->body.SMSG_AUTH_RESPONSE));
             break;
-        case MSG_SAVE_GUILD_EMBLEM:
+        case V_MSG_SAVE_GUILD_EMBLEM:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_SAVE_GUILD_EMBLEM_Server_read(reader, &opcodes->body.MSG_SAVE_GUILD_EMBLEM_Server));
             break;
-        case MSG_TABARDVENDOR_ACTIVATE:
+        case V_MSG_TABARDVENDOR_ACTIVATE:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_TABARDVENDOR_ACTIVATE_read(reader, &opcodes->body.MSG_TABARDVENDOR_ACTIVATE));
             break;
-        case SMSG_PLAY_SPELL_VISUAL:
+        case V_SMSG_PLAY_SPELL_VISUAL:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PLAY_SPELL_VISUAL_read(reader, &opcodes->body.SMSG_PLAY_SPELL_VISUAL));
             break;
-        case SMSG_PARTYKILLLOG:
+        case V_SMSG_PARTYKILLLOG:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PARTYKILLLOG_read(reader, &opcodes->body.SMSG_PARTYKILLLOG));
             break;
-        case SMSG_COMPRESSED_UPDATE_OBJECT:
+        case V_SMSG_COMPRESSED_UPDATE_OBJECT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_COMPRESSED_UPDATE_OBJECT_read(reader, &opcodes->body.SMSG_COMPRESSED_UPDATE_OBJECT, _size - 2));
             break;
-        case SMSG_PLAY_SPELL_IMPACT:
+        case V_SMSG_PLAY_SPELL_IMPACT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PLAY_SPELL_IMPACT_read(reader, &opcodes->body.SMSG_PLAY_SPELL_IMPACT));
             break;
-        case SMSG_EXPLORATION_EXPERIENCE:
+        case V_SMSG_EXPLORATION_EXPERIENCE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_EXPLORATION_EXPERIENCE_read(reader, &opcodes->body.SMSG_EXPLORATION_EXPERIENCE));
             break;
-        case MSG_RANDOM_ROLL:
+        case V_MSG_RANDOM_ROLL:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_RANDOM_ROLL_Server_read(reader, &opcodes->body.MSG_RANDOM_ROLL_Server));
             break;
-        case SMSG_ENVIRONMENTAL_DAMAGE_LOG:
+        case V_SMSG_ENVIRONMENTAL_DAMAGE_LOG:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_ENVIRONMENTAL_DAMAGE_LOG_read(reader, &opcodes->body.SMSG_ENVIRONMENTAL_DAMAGE_LOG));
             break;
-        case MSG_LOOKING_FOR_GROUP:
+        case V_MSG_LOOKING_FOR_GROUP:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_LOOKING_FOR_GROUP_Server_read(reader, &opcodes->body.MSG_LOOKING_FOR_GROUP_Server));
             break;
-        case SMSG_REMOVED_SPELL:
+        case V_SMSG_REMOVED_SPELL:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_REMOVED_SPELL_read(reader, &opcodes->body.SMSG_REMOVED_SPELL));
             break;
-        case SMSG_GMTICKET_CREATE:
+        case V_SMSG_GMTICKET_CREATE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GMTICKET_CREATE_read(reader, &opcodes->body.SMSG_GMTICKET_CREATE));
             break;
-        case SMSG_GMTICKET_UPDATETEXT:
+        case V_SMSG_GMTICKET_UPDATETEXT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GMTICKET_UPDATETEXT_read(reader, &opcodes->body.SMSG_GMTICKET_UPDATETEXT));
             break;
-        case SMSG_ACCOUNT_DATA_TIMES:
+        case V_SMSG_ACCOUNT_DATA_TIMES:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_ACCOUNT_DATA_TIMES_read(reader, &opcodes->body.SMSG_ACCOUNT_DATA_TIMES));
             break;
-        case SMSG_GMTICKET_GETTICKET:
+        case V_SMSG_GMTICKET_GETTICKET:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GMTICKET_GETTICKET_read(reader, &opcodes->body.SMSG_GMTICKET_GETTICKET));
             break;
-        case SMSG_GAMEOBJECT_SPAWN_ANIM:
+        case V_SMSG_GAMEOBJECT_SPAWN_ANIM:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GAMEOBJECT_SPAWN_ANIM_read(reader, &opcodes->body.SMSG_GAMEOBJECT_SPAWN_ANIM));
             break;
-        case SMSG_GAMEOBJECT_DESPAWN_ANIM:
+        case V_SMSG_GAMEOBJECT_DESPAWN_ANIM:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GAMEOBJECT_DESPAWN_ANIM_read(reader, &opcodes->body.SMSG_GAMEOBJECT_DESPAWN_ANIM));
             break;
-        case MSG_CORPSE_QUERY:
+        case V_MSG_CORPSE_QUERY:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_CORPSE_QUERY_Server_read(reader, &opcodes->body.MSG_CORPSE_QUERY_Server));
             break;
-        case SMSG_GMTICKET_DELETETICKET:
+        case V_SMSG_GMTICKET_DELETETICKET:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GMTICKET_DELETETICKET_read(reader, &opcodes->body.SMSG_GMTICKET_DELETETICKET));
             break;
-        case SMSG_GMTICKET_SYSTEMSTATUS:
+        case V_SMSG_GMTICKET_SYSTEMSTATUS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GMTICKET_SYSTEMSTATUS_read(reader, &opcodes->body.SMSG_GMTICKET_SYSTEMSTATUS));
             break;
-        case SMSG_SET_REST_START:
+        case V_SMSG_SET_REST_START:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SET_REST_START_read(reader, &opcodes->body.SMSG_SET_REST_START));
             break;
-        case SMSG_SPIRIT_HEALER_CONFIRM:
+        case V_SMSG_SPIRIT_HEALER_CONFIRM:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPIRIT_HEALER_CONFIRM_read(reader, &opcodes->body.SMSG_SPIRIT_HEALER_CONFIRM));
             break;
-        case SMSG_GOSSIP_POI:
+        case V_SMSG_GOSSIP_POI:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GOSSIP_POI_read(reader, &opcodes->body.SMSG_GOSSIP_POI));
             break;
-        case SMSG_LOGIN_VERIFY_WORLD:
+        case V_SMSG_LOGIN_VERIFY_WORLD:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_LOGIN_VERIFY_WORLD_read(reader, &opcodes->body.SMSG_LOGIN_VERIFY_WORLD));
             break;
-        case SMSG_SEND_MAIL_RESULT:
+        case V_SMSG_SEND_MAIL_RESULT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SEND_MAIL_RESULT_read(reader, &opcodes->body.SMSG_SEND_MAIL_RESULT));
             break;
-        case SMSG_MAIL_LIST_RESULT:
+        case V_SMSG_MAIL_LIST_RESULT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_MAIL_LIST_RESULT_read(reader, &opcodes->body.SMSG_MAIL_LIST_RESULT));
             break;
-        case SMSG_BATTLEFIELD_LIST:
+        case V_SMSG_BATTLEFIELD_LIST:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_BATTLEFIELD_LIST_read(reader, &opcodes->body.SMSG_BATTLEFIELD_LIST));
             break;
-        case SMSG_ITEM_TEXT_QUERY_RESPONSE:
+        case V_SMSG_ITEM_TEXT_QUERY_RESPONSE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_ITEM_TEXT_QUERY_RESPONSE_read(reader, &opcodes->body.SMSG_ITEM_TEXT_QUERY_RESPONSE));
             break;
-        case SMSG_SPELLLOGMISS:
+        case V_SMSG_SPELLLOGMISS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELLLOGMISS_read(reader, &opcodes->body.SMSG_SPELLLOGMISS));
             break;
-        case SMSG_SPELLLOGEXECUTE:
+        case V_SMSG_SPELLLOGEXECUTE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELLLOGEXECUTE_read(reader, &opcodes->body.SMSG_SPELLLOGEXECUTE));
             break;
-        case SMSG_PERIODICAURALOG:
+        case V_SMSG_PERIODICAURALOG:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PERIODICAURALOG_read(reader, &opcodes->body.SMSG_PERIODICAURALOG));
             break;
-        case SMSG_SPELLDAMAGESHIELD:
+        case V_SMSG_SPELLDAMAGESHIELD:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELLDAMAGESHIELD_read(reader, &opcodes->body.SMSG_SPELLDAMAGESHIELD));
             break;
-        case SMSG_SPELLNONMELEEDAMAGELOG:
+        case V_SMSG_SPELLNONMELEEDAMAGELOG:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELLNONMELEEDAMAGELOG_read(reader, &opcodes->body.SMSG_SPELLNONMELEEDAMAGELOG));
             break;
-        case SMSG_ZONE_UNDER_ATTACK:
+        case V_SMSG_ZONE_UNDER_ATTACK:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_ZONE_UNDER_ATTACK_read(reader, &opcodes->body.SMSG_ZONE_UNDER_ATTACK));
             break;
-        case MSG_AUCTION_HELLO:
+        case V_MSG_AUCTION_HELLO:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_AUCTION_HELLO_Server_read(reader, &opcodes->body.MSG_AUCTION_HELLO_Server));
             break;
-        case SMSG_AUCTION_COMMAND_RESULT:
+        case V_SMSG_AUCTION_COMMAND_RESULT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_AUCTION_COMMAND_RESULT_read(reader, &opcodes->body.SMSG_AUCTION_COMMAND_RESULT));
             break;
-        case SMSG_AUCTION_LIST_RESULT:
+        case V_SMSG_AUCTION_LIST_RESULT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_AUCTION_LIST_RESULT_read(reader, &opcodes->body.SMSG_AUCTION_LIST_RESULT));
             break;
-        case SMSG_AUCTION_OWNER_LIST_RESULT:
+        case V_SMSG_AUCTION_OWNER_LIST_RESULT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_AUCTION_OWNER_LIST_RESULT_read(reader, &opcodes->body.SMSG_AUCTION_OWNER_LIST_RESULT));
             break;
-        case SMSG_AUCTION_BIDDER_NOTIFICATION:
+        case V_SMSG_AUCTION_BIDDER_NOTIFICATION:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_AUCTION_BIDDER_NOTIFICATION_read(reader, &opcodes->body.SMSG_AUCTION_BIDDER_NOTIFICATION));
             break;
-        case SMSG_AUCTION_OWNER_NOTIFICATION:
+        case V_SMSG_AUCTION_OWNER_NOTIFICATION:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_AUCTION_OWNER_NOTIFICATION_read(reader, &opcodes->body.SMSG_AUCTION_OWNER_NOTIFICATION));
             break;
-        case SMSG_PROCRESIST:
+        case V_SMSG_PROCRESIST:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PROCRESIST_read(reader, &opcodes->body.SMSG_PROCRESIST));
             break;
-        case SMSG_DISPEL_FAILED:
+        case V_SMSG_DISPEL_FAILED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_DISPEL_FAILED_read(reader, &opcodes->body.SMSG_DISPEL_FAILED, _size - 2));
             break;
-        case SMSG_SPELLORDAMAGE_IMMUNE:
+        case V_SMSG_SPELLORDAMAGE_IMMUNE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELLORDAMAGE_IMMUNE_read(reader, &opcodes->body.SMSG_SPELLORDAMAGE_IMMUNE));
             break;
-        case SMSG_AUCTION_BIDDER_LIST_RESULT:
+        case V_SMSG_AUCTION_BIDDER_LIST_RESULT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_AUCTION_BIDDER_LIST_RESULT_read(reader, &opcodes->body.SMSG_AUCTION_BIDDER_LIST_RESULT));
             break;
-        case SMSG_SET_FLAT_SPELL_MODIFIER:
+        case V_SMSG_SET_FLAT_SPELL_MODIFIER:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SET_FLAT_SPELL_MODIFIER_read(reader, &opcodes->body.SMSG_SET_FLAT_SPELL_MODIFIER));
             break;
-        case SMSG_SET_PCT_SPELL_MODIFIER:
+        case V_SMSG_SET_PCT_SPELL_MODIFIER:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SET_PCT_SPELL_MODIFIER_read(reader, &opcodes->body.SMSG_SET_PCT_SPELL_MODIFIER));
             break;
-        case SMSG_CORPSE_RECLAIM_DELAY:
+        case V_SMSG_CORPSE_RECLAIM_DELAY:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_CORPSE_RECLAIM_DELAY_read(reader, &opcodes->body.SMSG_CORPSE_RECLAIM_DELAY));
             break;
-        case MSG_LIST_STABLED_PETS:
+        case V_MSG_LIST_STABLED_PETS:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_LIST_STABLED_PETS_Server_read(reader, &opcodes->body.MSG_LIST_STABLED_PETS_Server));
             break;
-        case SMSG_STABLE_RESULT:
+        case V_SMSG_STABLE_RESULT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_STABLE_RESULT_read(reader, &opcodes->body.SMSG_STABLE_RESULT));
             break;
-        case MSG_QUEST_PUSH_RESULT:
+        case V_MSG_QUEST_PUSH_RESULT:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_QUEST_PUSH_RESULT_read(reader, &opcodes->body.MSG_QUEST_PUSH_RESULT));
             break;
-        case SMSG_PLAY_MUSIC:
+        case V_SMSG_PLAY_MUSIC:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PLAY_MUSIC_read(reader, &opcodes->body.SMSG_PLAY_MUSIC));
             break;
-        case SMSG_PLAY_OBJECT_SOUND:
+        case V_SMSG_PLAY_OBJECT_SOUND:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PLAY_OBJECT_SOUND_read(reader, &opcodes->body.SMSG_PLAY_OBJECT_SOUND));
             break;
-        case SMSG_SPELLDISPELLOG:
+        case V_SMSG_SPELLDISPELLOG:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELLDISPELLOG_read(reader, &opcodes->body.SMSG_SPELLDISPELLOG));
             break;
-        case MSG_QUERY_NEXT_MAIL_TIME:
+        case V_MSG_QUERY_NEXT_MAIL_TIME:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_QUERY_NEXT_MAIL_TIME_Server_read(reader, &opcodes->body.MSG_QUERY_NEXT_MAIL_TIME_Server));
             break;
-        case SMSG_RECEIVED_MAIL:
+        case V_SMSG_RECEIVED_MAIL:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_RECEIVED_MAIL_read(reader, &opcodes->body.SMSG_RECEIVED_MAIL));
             break;
-        case SMSG_RAID_GROUP_ONLY:
+        case V_SMSG_RAID_GROUP_ONLY:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_RAID_GROUP_ONLY_read(reader, &opcodes->body.SMSG_RAID_GROUP_ONLY));
             break;
-        case SMSG_PVP_CREDIT:
+        case V_SMSG_PVP_CREDIT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PVP_CREDIT_read(reader, &opcodes->body.SMSG_PVP_CREDIT));
             break;
-        case SMSG_AUCTION_REMOVED_NOTIFICATION:
+        case V_SMSG_AUCTION_REMOVED_NOTIFICATION:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_AUCTION_REMOVED_NOTIFICATION_read(reader, &opcodes->body.SMSG_AUCTION_REMOVED_NOTIFICATION));
             break;
-        case SMSG_SERVER_MESSAGE:
+        case V_SMSG_SERVER_MESSAGE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SERVER_MESSAGE_read(reader, &opcodes->body.SMSG_SERVER_MESSAGE));
             break;
-        case SMSG_MEETINGSTONE_SETQUEUE:
+        case V_SMSG_MEETINGSTONE_SETQUEUE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_MEETINGSTONE_SETQUEUE_read(reader, &opcodes->body.SMSG_MEETINGSTONE_SETQUEUE));
             break;
-        case SMSG_MEETINGSTONE_MEMBER_ADDED:
+        case V_SMSG_MEETINGSTONE_MEMBER_ADDED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_MEETINGSTONE_MEMBER_ADDED_read(reader, &opcodes->body.SMSG_MEETINGSTONE_MEMBER_ADDED));
             break;
-        case SMSG_STANDSTATE_UPDATE:
+        case V_SMSG_STANDSTATE_UPDATE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_STANDSTATE_UPDATE_read(reader, &opcodes->body.SMSG_STANDSTATE_UPDATE));
             break;
-        case SMSG_LOOT_ALL_PASSED:
+        case V_SMSG_LOOT_ALL_PASSED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_LOOT_ALL_PASSED_read(reader, &opcodes->body.SMSG_LOOT_ALL_PASSED));
             break;
-        case SMSG_LOOT_ROLL_WON:
+        case V_SMSG_LOOT_ROLL_WON:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_LOOT_ROLL_WON_read(reader, &opcodes->body.SMSG_LOOT_ROLL_WON));
             break;
-        case SMSG_LOOT_START_ROLL:
+        case V_SMSG_LOOT_START_ROLL:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_LOOT_START_ROLL_read(reader, &opcodes->body.SMSG_LOOT_START_ROLL));
             break;
-        case SMSG_LOOT_ROLL:
+        case V_SMSG_LOOT_ROLL:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_LOOT_ROLL_read(reader, &opcodes->body.SMSG_LOOT_ROLL));
             break;
-        case SMSG_LOOT_MASTER_LIST:
+        case V_SMSG_LOOT_MASTER_LIST:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_LOOT_MASTER_LIST_read(reader, &opcodes->body.SMSG_LOOT_MASTER_LIST));
             break;
-        case SMSG_SET_FORCED_REACTIONS:
+        case V_SMSG_SET_FORCED_REACTIONS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SET_FORCED_REACTIONS_read(reader, &opcodes->body.SMSG_SET_FORCED_REACTIONS));
             break;
-        case SMSG_SPELL_FAILED_OTHER:
+        case V_SMSG_SPELL_FAILED_OTHER:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELL_FAILED_OTHER_read(reader, &opcodes->body.SMSG_SPELL_FAILED_OTHER));
             break;
-        case SMSG_GAMEOBJECT_RESET_STATE:
+        case V_SMSG_GAMEOBJECT_RESET_STATE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GAMEOBJECT_RESET_STATE_read(reader, &opcodes->body.SMSG_GAMEOBJECT_RESET_STATE));
             break;
-        case SMSG_CHAT_PLAYER_NOT_FOUND:
+        case V_SMSG_CHAT_PLAYER_NOT_FOUND:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_CHAT_PLAYER_NOT_FOUND_read(reader, &opcodes->body.SMSG_CHAT_PLAYER_NOT_FOUND));
             break;
-        case MSG_TALENT_WIPE_CONFIRM:
+        case V_MSG_TALENT_WIPE_CONFIRM:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_TALENT_WIPE_CONFIRM_Server_read(reader, &opcodes->body.MSG_TALENT_WIPE_CONFIRM_Server));
             break;
-        case SMSG_SUMMON_REQUEST:
+        case V_SMSG_SUMMON_REQUEST:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SUMMON_REQUEST_read(reader, &opcodes->body.SMSG_SUMMON_REQUEST));
             break;
-        case SMSG_MONSTER_MOVE_TRANSPORT:
+        case V_SMSG_MONSTER_MOVE_TRANSPORT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_MONSTER_MOVE_TRANSPORT_read(reader, &opcodes->body.SMSG_MONSTER_MOVE_TRANSPORT));
             break;
-        case MSG_MOVE_FEATHER_FALL:
+        case V_MSG_MOVE_FEATHER_FALL:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_FEATHER_FALL_Server_read(reader, &opcodes->body.MSG_MOVE_FEATHER_FALL_Server));
             break;
-        case MSG_MOVE_WATER_WALK:
+        case V_MSG_MOVE_WATER_WALK:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_WATER_WALK_read(reader, &opcodes->body.MSG_MOVE_WATER_WALK));
             break;
-        case SMSG_DUEL_COUNTDOWN:
+        case V_SMSG_DUEL_COUNTDOWN:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_DUEL_COUNTDOWN_read(reader, &opcodes->body.SMSG_DUEL_COUNTDOWN));
             break;
-        case SMSG_AREA_TRIGGER_MESSAGE:
+        case V_SMSG_AREA_TRIGGER_MESSAGE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_AREA_TRIGGER_MESSAGE_read(reader, &opcodes->body.SMSG_AREA_TRIGGER_MESSAGE));
             break;
-        case SMSG_MEETINGSTONE_JOINFAILED:
+        case V_SMSG_MEETINGSTONE_JOINFAILED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_MEETINGSTONE_JOINFAILED_read(reader, &opcodes->body.SMSG_MEETINGSTONE_JOINFAILED));
             break;
-        case SMSG_PLAYER_SKINNED:
+        case V_SMSG_PLAYER_SKINNED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PLAYER_SKINNED_read(reader, &opcodes->body.SMSG_PLAYER_SKINNED));
             break;
-        case MSG_PETITION_RENAME:
+        case V_MSG_PETITION_RENAME:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_PETITION_RENAME_read(reader, &opcodes->body.MSG_PETITION_RENAME));
             break;
-        case SMSG_INIT_WORLD_STATES:
+        case V_SMSG_INIT_WORLD_STATES:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_INIT_WORLD_STATES_read(reader, &opcodes->body.SMSG_INIT_WORLD_STATES));
             break;
-        case SMSG_UPDATE_WORLD_STATE:
+        case V_SMSG_UPDATE_WORLD_STATE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_UPDATE_WORLD_STATE_read(reader, &opcodes->body.SMSG_UPDATE_WORLD_STATE));
             break;
-        case SMSG_ITEM_NAME_QUERY_RESPONSE:
+        case V_SMSG_ITEM_NAME_QUERY_RESPONSE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_ITEM_NAME_QUERY_RESPONSE_read(reader, &opcodes->body.SMSG_ITEM_NAME_QUERY_RESPONSE));
             break;
-        case SMSG_PET_ACTION_FEEDBACK:
+        case V_SMSG_PET_ACTION_FEEDBACK:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PET_ACTION_FEEDBACK_read(reader, &opcodes->body.SMSG_PET_ACTION_FEEDBACK));
             break;
-        case SMSG_CHAR_RENAME:
+        case V_SMSG_CHAR_RENAME:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_CHAR_RENAME_read(reader, &opcodes->body.SMSG_CHAR_RENAME));
             break;
-        case SMSG_INSTANCE_SAVE_CREATED:
+        case V_SMSG_INSTANCE_SAVE_CREATED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_INSTANCE_SAVE_CREATED_read(reader, &opcodes->body.SMSG_INSTANCE_SAVE_CREATED));
             break;
-        case SMSG_RAID_INSTANCE_INFO:
+        case V_SMSG_RAID_INSTANCE_INFO:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_RAID_INSTANCE_INFO_read(reader, &opcodes->body.SMSG_RAID_INSTANCE_INFO));
             break;
-        case SMSG_PLAY_SOUND:
+        case V_SMSG_PLAY_SOUND:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PLAY_SOUND_read(reader, &opcodes->body.SMSG_PLAY_SOUND));
             break;
-        case SMSG_BATTLEFIELD_STATUS:
+        case V_SMSG_BATTLEFIELD_STATUS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_BATTLEFIELD_STATUS_read(reader, &opcodes->body.SMSG_BATTLEFIELD_STATUS));
             break;
-        case MSG_INSPECT_HONOR_STATS:
+        case V_MSG_INSPECT_HONOR_STATS:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_INSPECT_HONOR_STATS_Server_read(reader, &opcodes->body.MSG_INSPECT_HONOR_STATS_Server));
             break;
-        case SMSG_FORCE_WALK_SPEED_CHANGE:
+        case V_SMSG_FORCE_WALK_SPEED_CHANGE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_FORCE_WALK_SPEED_CHANGE_read(reader, &opcodes->body.SMSG_FORCE_WALK_SPEED_CHANGE));
             break;
-        case SMSG_FORCE_SWIM_BACK_SPEED_CHANGE:
+        case V_SMSG_FORCE_SWIM_BACK_SPEED_CHANGE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_FORCE_SWIM_BACK_SPEED_CHANGE_read(reader, &opcodes->body.SMSG_FORCE_SWIM_BACK_SPEED_CHANGE));
             break;
-        case SMSG_FORCE_TURN_RATE_CHANGE:
+        case V_SMSG_FORCE_TURN_RATE_CHANGE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_FORCE_TURN_RATE_CHANGE_read(reader, &opcodes->body.SMSG_FORCE_TURN_RATE_CHANGE));
             break;
-        case MSG_PVP_LOG_DATA:
+        case V_MSG_PVP_LOG_DATA:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_PVP_LOG_DATA_Server_read(reader, &opcodes->body.MSG_PVP_LOG_DATA_Server));
             break;
-        case SMSG_AREA_SPIRIT_HEALER_TIME:
+        case V_SMSG_AREA_SPIRIT_HEALER_TIME:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_AREA_SPIRIT_HEALER_TIME_read(reader, &opcodes->body.SMSG_AREA_SPIRIT_HEALER_TIME));
             break;
-        case SMSG_WARDEN_DATA:
+        case V_SMSG_WARDEN_DATA:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_WARDEN_DATA_read(reader, &opcodes->body.SMSG_WARDEN_DATA, _size - 2));
             break;
-        case SMSG_GROUP_JOINED_BATTLEGROUND:
+        case V_SMSG_GROUP_JOINED_BATTLEGROUND:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GROUP_JOINED_BATTLEGROUND_read(reader, &opcodes->body.SMSG_GROUP_JOINED_BATTLEGROUND));
             break;
-        case MSG_BATTLEGROUND_PLAYER_POSITIONS:
+        case V_MSG_BATTLEGROUND_PLAYER_POSITIONS:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_BATTLEGROUND_PLAYER_POSITIONS_Server_read(reader, &opcodes->body.MSG_BATTLEGROUND_PLAYER_POSITIONS_Server));
             break;
-        case SMSG_BINDER_CONFIRM:
+        case V_SMSG_BINDER_CONFIRM:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_BINDER_CONFIRM_read(reader, &opcodes->body.SMSG_BINDER_CONFIRM));
             break;
-        case SMSG_BATTLEGROUND_PLAYER_JOINED:
+        case V_SMSG_BATTLEGROUND_PLAYER_JOINED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_BATTLEGROUND_PLAYER_JOINED_read(reader, &opcodes->body.SMSG_BATTLEGROUND_PLAYER_JOINED));
             break;
-        case SMSG_BATTLEGROUND_PLAYER_LEFT:
+        case V_SMSG_BATTLEGROUND_PLAYER_LEFT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_BATTLEGROUND_PLAYER_LEFT_read(reader, &opcodes->body.SMSG_BATTLEGROUND_PLAYER_LEFT));
             break;
-        case SMSG_ADDON_INFO:
+        case V_SMSG_ADDON_INFO:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_ADDON_INFO_read(reader, &opcodes->body.SMSG_ADDON_INFO, _size - 2));
             break;
-        case SMSG_PET_UNLEARN_CONFIRM:
+        case V_SMSG_PET_UNLEARN_CONFIRM:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PET_UNLEARN_CONFIRM_read(reader, &opcodes->body.SMSG_PET_UNLEARN_CONFIRM));
             break;
-        case SMSG_PARTY_MEMBER_STATS_FULL:
+        case V_SMSG_PARTY_MEMBER_STATS_FULL:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PARTY_MEMBER_STATS_FULL_read(reader, &opcodes->body.SMSG_PARTY_MEMBER_STATS_FULL));
             break;
-        case SMSG_WEATHER:
+        case V_SMSG_WEATHER:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_WEATHER_read(reader, &opcodes->body.SMSG_WEATHER));
             break;
-        case SMSG_RAID_INSTANCE_MESSAGE:
+        case V_SMSG_RAID_INSTANCE_MESSAGE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_RAID_INSTANCE_MESSAGE_read(reader, &opcodes->body.SMSG_RAID_INSTANCE_MESSAGE));
             break;
-        case SMSG_COMPRESSED_MOVES:
+        case V_SMSG_COMPRESSED_MOVES:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_COMPRESSED_MOVES_read(reader, &opcodes->body.SMSG_COMPRESSED_MOVES, _size - 2));
             break;
-        case SMSG_SPLINE_SET_RUN_SPEED:
+        case V_SMSG_SPLINE_SET_RUN_SPEED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_SET_RUN_SPEED_read(reader, &opcodes->body.SMSG_SPLINE_SET_RUN_SPEED));
             break;
-        case SMSG_SPLINE_SET_RUN_BACK_SPEED:
+        case V_SMSG_SPLINE_SET_RUN_BACK_SPEED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_SET_RUN_BACK_SPEED_read(reader, &opcodes->body.SMSG_SPLINE_SET_RUN_BACK_SPEED));
             break;
-        case SMSG_SPLINE_SET_SWIM_SPEED:
+        case V_SMSG_SPLINE_SET_SWIM_SPEED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_SET_SWIM_SPEED_read(reader, &opcodes->body.SMSG_SPLINE_SET_SWIM_SPEED));
             break;
-        case SMSG_SPLINE_SET_WALK_SPEED:
+        case V_SMSG_SPLINE_SET_WALK_SPEED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_SET_WALK_SPEED_read(reader, &opcodes->body.SMSG_SPLINE_SET_WALK_SPEED));
             break;
-        case SMSG_SPLINE_SET_SWIM_BACK_SPEED:
+        case V_SMSG_SPLINE_SET_SWIM_BACK_SPEED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_SET_SWIM_BACK_SPEED_read(reader, &opcodes->body.SMSG_SPLINE_SET_SWIM_BACK_SPEED));
             break;
-        case SMSG_SPLINE_SET_TURN_RATE:
+        case V_SMSG_SPLINE_SET_TURN_RATE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_SET_TURN_RATE_read(reader, &opcodes->body.SMSG_SPLINE_SET_TURN_RATE));
             break;
-        case SMSG_SPLINE_MOVE_UNROOT:
+        case V_SMSG_SPLINE_MOVE_UNROOT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_MOVE_UNROOT_read(reader, &opcodes->body.SMSG_SPLINE_MOVE_UNROOT));
             break;
-        case SMSG_SPLINE_MOVE_FEATHER_FALL:
+        case V_SMSG_SPLINE_MOVE_FEATHER_FALL:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_MOVE_FEATHER_FALL_read(reader, &opcodes->body.SMSG_SPLINE_MOVE_FEATHER_FALL));
             break;
-        case SMSG_SPLINE_MOVE_NORMAL_FALL:
+        case V_SMSG_SPLINE_MOVE_NORMAL_FALL:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_MOVE_NORMAL_FALL_read(reader, &opcodes->body.SMSG_SPLINE_MOVE_NORMAL_FALL));
             break;
-        case SMSG_SPLINE_MOVE_SET_HOVER:
+        case V_SMSG_SPLINE_MOVE_SET_HOVER:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_MOVE_SET_HOVER_read(reader, &opcodes->body.SMSG_SPLINE_MOVE_SET_HOVER));
             break;
-        case SMSG_SPLINE_MOVE_UNSET_HOVER:
+        case V_SMSG_SPLINE_MOVE_UNSET_HOVER:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_MOVE_UNSET_HOVER_read(reader, &opcodes->body.SMSG_SPLINE_MOVE_UNSET_HOVER));
             break;
-        case SMSG_SPLINE_MOVE_WATER_WALK:
+        case V_SMSG_SPLINE_MOVE_WATER_WALK:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_MOVE_WATER_WALK_read(reader, &opcodes->body.SMSG_SPLINE_MOVE_WATER_WALK));
             break;
-        case SMSG_SPLINE_MOVE_LAND_WALK:
+        case V_SMSG_SPLINE_MOVE_LAND_WALK:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_MOVE_LAND_WALK_read(reader, &opcodes->body.SMSG_SPLINE_MOVE_LAND_WALK));
             break;
-        case SMSG_SPLINE_MOVE_START_SWIM:
+        case V_SMSG_SPLINE_MOVE_START_SWIM:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_MOVE_START_SWIM_read(reader, &opcodes->body.SMSG_SPLINE_MOVE_START_SWIM));
             break;
-        case SMSG_SPLINE_MOVE_STOP_SWIM:
+        case V_SMSG_SPLINE_MOVE_STOP_SWIM:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_MOVE_STOP_SWIM_read(reader, &opcodes->body.SMSG_SPLINE_MOVE_STOP_SWIM));
             break;
-        case SMSG_SPLINE_MOVE_SET_RUN_MODE:
+        case V_SMSG_SPLINE_MOVE_SET_RUN_MODE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_MOVE_SET_RUN_MODE_read(reader, &opcodes->body.SMSG_SPLINE_MOVE_SET_RUN_MODE));
             break;
-        case SMSG_SPLINE_MOVE_SET_WALK_MODE:
+        case V_SMSG_SPLINE_MOVE_SET_WALK_MODE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_MOVE_SET_WALK_MODE_read(reader, &opcodes->body.SMSG_SPLINE_MOVE_SET_WALK_MODE));
             break;
-        case MSG_MOVE_TIME_SKIPPED:
+        case V_MSG_MOVE_TIME_SKIPPED:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_MOVE_TIME_SKIPPED_Server_read(reader, &opcodes->body.MSG_MOVE_TIME_SKIPPED_Server));
             break;
-        case SMSG_SPLINE_MOVE_ROOT:
+        case V_SMSG_SPLINE_MOVE_ROOT:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPLINE_MOVE_ROOT_read(reader, &opcodes->body.SMSG_SPLINE_MOVE_ROOT));
             break;
-        case SMSG_INVALIDATE_PLAYER:
+        case V_SMSG_INVALIDATE_PLAYER:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_INVALIDATE_PLAYER_read(reader, &opcodes->body.SMSG_INVALIDATE_PLAYER));
             break;
-        case SMSG_INSTANCE_RESET:
+        case V_SMSG_INSTANCE_RESET:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_INSTANCE_RESET_read(reader, &opcodes->body.SMSG_INSTANCE_RESET));
             break;
-        case SMSG_INSTANCE_RESET_FAILED:
+        case V_SMSG_INSTANCE_RESET_FAILED:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_INSTANCE_RESET_FAILED_read(reader, &opcodes->body.SMSG_INSTANCE_RESET_FAILED));
             break;
-        case SMSG_UPDATE_LAST_INSTANCE:
+        case V_SMSG_UPDATE_LAST_INSTANCE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_UPDATE_LAST_INSTANCE_read(reader, &opcodes->body.SMSG_UPDATE_LAST_INSTANCE));
             break;
-        case MSG_RAID_TARGET_UPDATE:
+        case V_MSG_RAID_TARGET_UPDATE:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_RAID_TARGET_UPDATE_Server_read(reader, &opcodes->body.MSG_RAID_TARGET_UPDATE_Server));
             break;
-        case MSG_RAID_READY_CHECK:
+        case V_MSG_RAID_READY_CHECK:
             WWM_CHECK_RETURN_CODE(vanilla_MSG_RAID_READY_CHECK_Server_read(reader, &opcodes->body.MSG_RAID_READY_CHECK_Server, _size - 2));
             break;
-        case SMSG_PET_ACTION_SOUND:
+        case V_SMSG_PET_ACTION_SOUND:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PET_ACTION_SOUND_read(reader, &opcodes->body.SMSG_PET_ACTION_SOUND));
             break;
-        case SMSG_PET_DISMISS_SOUND:
+        case V_SMSG_PET_DISMISS_SOUND:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_PET_DISMISS_SOUND_read(reader, &opcodes->body.SMSG_PET_DISMISS_SOUND));
             break;
-        case SMSG_GM_TICKET_STATUS_UPDATE:
+        case V_SMSG_GM_TICKET_STATUS_UPDATE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_GM_TICKET_STATUS_UPDATE_read(reader, &opcodes->body.SMSG_GM_TICKET_STATUS_UPDATE));
             break;
-        case SMSG_UPDATE_INSTANCE_OWNERSHIP:
+        case V_SMSG_UPDATE_INSTANCE_OWNERSHIP:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_UPDATE_INSTANCE_OWNERSHIP_read(reader, &opcodes->body.SMSG_UPDATE_INSTANCE_OWNERSHIP));
             break;
-        case SMSG_SPELLINSTAKILLLOG:
+        case V_SMSG_SPELLINSTAKILLLOG:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELLINSTAKILLLOG_read(reader, &opcodes->body.SMSG_SPELLINSTAKILLLOG));
             break;
-        case SMSG_SPELL_UPDATE_CHAIN_TARGETS:
+        case V_SMSG_SPELL_UPDATE_CHAIN_TARGETS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_SPELL_UPDATE_CHAIN_TARGETS_read(reader, &opcodes->body.SMSG_SPELL_UPDATE_CHAIN_TARGETS));
             break;
-        case SMSG_EXPECTED_SPAM_RECORDS:
+        case V_SMSG_EXPECTED_SPAM_RECORDS:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_EXPECTED_SPAM_RECORDS_read(reader, &opcodes->body.SMSG_EXPECTED_SPAM_RECORDS));
             break;
-        case SMSG_DEFENSE_MESSAGE:
+        case V_SMSG_DEFENSE_MESSAGE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_DEFENSE_MESSAGE_read(reader, &opcodes->body.SMSG_DEFENSE_MESSAGE));
             break;
         default:
@@ -26256,397 +28181,397 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_server_opcode_read(WowWorldRe
 
 WOW_WORLD_MESSAGES_C_EXPORT void vanilla_server_opcode_free(VanillaServerOpcodeContainer* opcodes) {
     switch (opcodes->opcode) {
-        case SMSG_CHAR_ENUM:
+        case V_SMSG_CHAR_ENUM:
             vanilla_SMSG_CHAR_ENUM_free(&opcodes->body.SMSG_CHAR_ENUM);
             break;
-        case SMSG_TRANSFER_PENDING:
+        case V_SMSG_TRANSFER_PENDING:
             vanilla_SMSG_TRANSFER_PENDING_free(&opcodes->body.SMSG_TRANSFER_PENDING);
             break;
-        case SMSG_NAME_QUERY_RESPONSE:
+        case V_SMSG_NAME_QUERY_RESPONSE:
             vanilla_SMSG_NAME_QUERY_RESPONSE_free(&opcodes->body.SMSG_NAME_QUERY_RESPONSE);
             break;
-        case SMSG_PET_NAME_QUERY_RESPONSE:
+        case V_SMSG_PET_NAME_QUERY_RESPONSE:
             vanilla_SMSG_PET_NAME_QUERY_RESPONSE_free(&opcodes->body.SMSG_PET_NAME_QUERY_RESPONSE);
             break;
-        case SMSG_GUILD_QUERY_RESPONSE:
+        case V_SMSG_GUILD_QUERY_RESPONSE:
             vanilla_SMSG_GUILD_QUERY_RESPONSE_free(&opcodes->body.SMSG_GUILD_QUERY_RESPONSE);
             break;
-        case SMSG_ITEM_QUERY_SINGLE_RESPONSE:
+        case V_SMSG_ITEM_QUERY_SINGLE_RESPONSE:
             vanilla_SMSG_ITEM_QUERY_SINGLE_RESPONSE_free(&opcodes->body.SMSG_ITEM_QUERY_SINGLE_RESPONSE);
             break;
-        case SMSG_PAGE_TEXT_QUERY_RESPONSE:
+        case V_SMSG_PAGE_TEXT_QUERY_RESPONSE:
             vanilla_SMSG_PAGE_TEXT_QUERY_RESPONSE_free(&opcodes->body.SMSG_PAGE_TEXT_QUERY_RESPONSE);
             break;
-        case SMSG_QUEST_QUERY_RESPONSE:
+        case V_SMSG_QUEST_QUERY_RESPONSE:
             vanilla_SMSG_QUEST_QUERY_RESPONSE_free(&opcodes->body.SMSG_QUEST_QUERY_RESPONSE);
             break;
-        case SMSG_GAMEOBJECT_QUERY_RESPONSE:
+        case V_SMSG_GAMEOBJECT_QUERY_RESPONSE:
             vanilla_SMSG_GAMEOBJECT_QUERY_RESPONSE_free(&opcodes->body.SMSG_GAMEOBJECT_QUERY_RESPONSE);
             break;
-        case SMSG_CREATURE_QUERY_RESPONSE:
+        case V_SMSG_CREATURE_QUERY_RESPONSE:
             vanilla_SMSG_CREATURE_QUERY_RESPONSE_free(&opcodes->body.SMSG_CREATURE_QUERY_RESPONSE);
             break;
-        case SMSG_WHO:
+        case V_SMSG_WHO:
             vanilla_SMSG_WHO_free(&opcodes->body.SMSG_WHO);
             break;
-        case SMSG_WHOIS:
+        case V_SMSG_WHOIS:
             vanilla_SMSG_WHOIS_free(&opcodes->body.SMSG_WHOIS);
             break;
-        case SMSG_FRIEND_LIST:
+        case V_SMSG_FRIEND_LIST:
             vanilla_SMSG_FRIEND_LIST_free(&opcodes->body.SMSG_FRIEND_LIST);
             break;
-        case SMSG_IGNORE_LIST:
+        case V_SMSG_IGNORE_LIST:
             vanilla_SMSG_IGNORE_LIST_free(&opcodes->body.SMSG_IGNORE_LIST);
             break;
-        case SMSG_GROUP_INVITE:
+        case V_SMSG_GROUP_INVITE:
             vanilla_SMSG_GROUP_INVITE_free(&opcodes->body.SMSG_GROUP_INVITE);
             break;
-        case SMSG_GROUP_DECLINE:
+        case V_SMSG_GROUP_DECLINE:
             vanilla_SMSG_GROUP_DECLINE_free(&opcodes->body.SMSG_GROUP_DECLINE);
             break;
-        case SMSG_GROUP_SET_LEADER:
+        case V_SMSG_GROUP_SET_LEADER:
             vanilla_SMSG_GROUP_SET_LEADER_free(&opcodes->body.SMSG_GROUP_SET_LEADER);
             break;
-        case SMSG_GROUP_LIST:
+        case V_SMSG_GROUP_LIST:
             vanilla_SMSG_GROUP_LIST_free(&opcodes->body.SMSG_GROUP_LIST);
             break;
-        case SMSG_PARTY_MEMBER_STATS:
+        case V_SMSG_PARTY_MEMBER_STATS:
             vanilla_SMSG_PARTY_MEMBER_STATS_free(&opcodes->body.SMSG_PARTY_MEMBER_STATS);
             break;
-        case SMSG_PARTY_COMMAND_RESULT:
+        case V_SMSG_PARTY_COMMAND_RESULT:
             vanilla_SMSG_PARTY_COMMAND_RESULT_free(&opcodes->body.SMSG_PARTY_COMMAND_RESULT);
             break;
-        case SMSG_GUILD_INVITE:
+        case V_SMSG_GUILD_INVITE:
             vanilla_SMSG_GUILD_INVITE_free(&opcodes->body.SMSG_GUILD_INVITE);
             break;
-        case SMSG_GUILD_INFO:
+        case V_SMSG_GUILD_INFO:
             vanilla_SMSG_GUILD_INFO_free(&opcodes->body.SMSG_GUILD_INFO);
             break;
-        case SMSG_GUILD_ROSTER:
+        case V_SMSG_GUILD_ROSTER:
             vanilla_SMSG_GUILD_ROSTER_free(&opcodes->body.SMSG_GUILD_ROSTER);
             break;
-        case SMSG_GUILD_EVENT:
+        case V_SMSG_GUILD_EVENT:
             vanilla_SMSG_GUILD_EVENT_free(&opcodes->body.SMSG_GUILD_EVENT);
             break;
-        case SMSG_GUILD_COMMAND_RESULT:
+        case V_SMSG_GUILD_COMMAND_RESULT:
             vanilla_SMSG_GUILD_COMMAND_RESULT_free(&opcodes->body.SMSG_GUILD_COMMAND_RESULT);
             break;
-        case SMSG_MESSAGECHAT:
+        case V_SMSG_MESSAGECHAT:
             vanilla_SMSG_MESSAGECHAT_free(&opcodes->body.SMSG_MESSAGECHAT);
             break;
-        case SMSG_CHANNEL_NOTIFY:
+        case V_SMSG_CHANNEL_NOTIFY:
             vanilla_SMSG_CHANNEL_NOTIFY_free(&opcodes->body.SMSG_CHANNEL_NOTIFY);
             break;
-        case SMSG_CHANNEL_LIST:
+        case V_SMSG_CHANNEL_LIST:
             vanilla_SMSG_CHANNEL_LIST_free(&opcodes->body.SMSG_CHANNEL_LIST);
             break;
-        case SMSG_UPDATE_OBJECT:
+        case V_SMSG_UPDATE_OBJECT:
             vanilla_SMSG_UPDATE_OBJECT_free(&opcodes->body.SMSG_UPDATE_OBJECT);
             break;
-        case MSG_MOVE_START_FORWARD:
+        case V_MSG_MOVE_START_FORWARD:
             vanilla_MSG_MOVE_START_FORWARD_Server_free(&opcodes->body.MSG_MOVE_START_FORWARD_Server);
             break;
-        case MSG_MOVE_START_BACKWARD:
+        case V_MSG_MOVE_START_BACKWARD:
             vanilla_MSG_MOVE_START_BACKWARD_Server_free(&opcodes->body.MSG_MOVE_START_BACKWARD_Server);
             break;
-        case MSG_MOVE_STOP:
+        case V_MSG_MOVE_STOP:
             vanilla_MSG_MOVE_STOP_Server_free(&opcodes->body.MSG_MOVE_STOP_Server);
             break;
-        case MSG_MOVE_START_STRAFE_LEFT:
+        case V_MSG_MOVE_START_STRAFE_LEFT:
             vanilla_MSG_MOVE_START_STRAFE_LEFT_Server_free(&opcodes->body.MSG_MOVE_START_STRAFE_LEFT_Server);
             break;
-        case MSG_MOVE_START_STRAFE_RIGHT:
+        case V_MSG_MOVE_START_STRAFE_RIGHT:
             vanilla_MSG_MOVE_START_STRAFE_RIGHT_Server_free(&opcodes->body.MSG_MOVE_START_STRAFE_RIGHT_Server);
             break;
-        case MSG_MOVE_STOP_STRAFE:
+        case V_MSG_MOVE_STOP_STRAFE:
             vanilla_MSG_MOVE_STOP_STRAFE_Server_free(&opcodes->body.MSG_MOVE_STOP_STRAFE_Server);
             break;
-        case MSG_MOVE_JUMP:
+        case V_MSG_MOVE_JUMP:
             vanilla_MSG_MOVE_JUMP_Server_free(&opcodes->body.MSG_MOVE_JUMP_Server);
             break;
-        case MSG_MOVE_START_TURN_LEFT:
+        case V_MSG_MOVE_START_TURN_LEFT:
             vanilla_MSG_MOVE_START_TURN_LEFT_Server_free(&opcodes->body.MSG_MOVE_START_TURN_LEFT_Server);
             break;
-        case MSG_MOVE_START_TURN_RIGHT:
+        case V_MSG_MOVE_START_TURN_RIGHT:
             vanilla_MSG_MOVE_START_TURN_RIGHT_Server_free(&opcodes->body.MSG_MOVE_START_TURN_RIGHT_Server);
             break;
-        case MSG_MOVE_STOP_TURN:
+        case V_MSG_MOVE_STOP_TURN:
             vanilla_MSG_MOVE_STOP_TURN_Server_free(&opcodes->body.MSG_MOVE_STOP_TURN_Server);
             break;
-        case MSG_MOVE_START_PITCH_UP:
+        case V_MSG_MOVE_START_PITCH_UP:
             vanilla_MSG_MOVE_START_PITCH_UP_Server_free(&opcodes->body.MSG_MOVE_START_PITCH_UP_Server);
             break;
-        case MSG_MOVE_START_PITCH_DOWN:
+        case V_MSG_MOVE_START_PITCH_DOWN:
             vanilla_MSG_MOVE_START_PITCH_DOWN_Server_free(&opcodes->body.MSG_MOVE_START_PITCH_DOWN_Server);
             break;
-        case MSG_MOVE_STOP_PITCH:
+        case V_MSG_MOVE_STOP_PITCH:
             vanilla_MSG_MOVE_STOP_PITCH_Server_free(&opcodes->body.MSG_MOVE_STOP_PITCH_Server);
             break;
-        case MSG_MOVE_SET_RUN_MODE:
+        case V_MSG_MOVE_SET_RUN_MODE:
             vanilla_MSG_MOVE_SET_RUN_MODE_Server_free(&opcodes->body.MSG_MOVE_SET_RUN_MODE_Server);
             break;
-        case MSG_MOVE_SET_WALK_MODE:
+        case V_MSG_MOVE_SET_WALK_MODE:
             vanilla_MSG_MOVE_SET_WALK_MODE_Server_free(&opcodes->body.MSG_MOVE_SET_WALK_MODE_Server);
             break;
-        case MSG_MOVE_TELEPORT_ACK:
+        case V_MSG_MOVE_TELEPORT_ACK:
             vanilla_MSG_MOVE_TELEPORT_ACK_Server_free(&opcodes->body.MSG_MOVE_TELEPORT_ACK_Server);
             break;
-        case MSG_MOVE_FALL_LAND:
+        case V_MSG_MOVE_FALL_LAND:
             vanilla_MSG_MOVE_FALL_LAND_Server_free(&opcodes->body.MSG_MOVE_FALL_LAND_Server);
             break;
-        case MSG_MOVE_START_SWIM:
+        case V_MSG_MOVE_START_SWIM:
             vanilla_MSG_MOVE_START_SWIM_Server_free(&opcodes->body.MSG_MOVE_START_SWIM_Server);
             break;
-        case MSG_MOVE_STOP_SWIM:
+        case V_MSG_MOVE_STOP_SWIM:
             vanilla_MSG_MOVE_STOP_SWIM_Server_free(&opcodes->body.MSG_MOVE_STOP_SWIM_Server);
             break;
-        case MSG_MOVE_SET_FACING:
+        case V_MSG_MOVE_SET_FACING:
             vanilla_MSG_MOVE_SET_FACING_Server_free(&opcodes->body.MSG_MOVE_SET_FACING_Server);
             break;
-        case MSG_MOVE_SET_PITCH:
+        case V_MSG_MOVE_SET_PITCH:
             vanilla_MSG_MOVE_SET_PITCH_Server_free(&opcodes->body.MSG_MOVE_SET_PITCH_Server);
             break;
-        case SMSG_MONSTER_MOVE:
+        case V_SMSG_MONSTER_MOVE:
             vanilla_SMSG_MONSTER_MOVE_free(&opcodes->body.SMSG_MONSTER_MOVE);
             break;
-        case MSG_MOVE_HEARTBEAT:
+        case V_MSG_MOVE_HEARTBEAT:
             vanilla_MSG_MOVE_HEARTBEAT_Server_free(&opcodes->body.MSG_MOVE_HEARTBEAT_Server);
             break;
-        case SMSG_TUTORIAL_FLAGS:
+        case V_SMSG_TUTORIAL_FLAGS:
             vanilla_SMSG_TUTORIAL_FLAGS_free(&opcodes->body.SMSG_TUTORIAL_FLAGS);
             break;
-        case SMSG_TEXT_EMOTE:
+        case V_SMSG_TEXT_EMOTE:
             vanilla_SMSG_TEXT_EMOTE_free(&opcodes->body.SMSG_TEXT_EMOTE);
             break;
-        case SMSG_INVENTORY_CHANGE_FAILURE:
+        case V_SMSG_INVENTORY_CHANGE_FAILURE:
             vanilla_SMSG_INVENTORY_CHANGE_FAILURE_free(&opcodes->body.SMSG_INVENTORY_CHANGE_FAILURE);
             break;
-        case SMSG_TRADE_STATUS:
+        case V_SMSG_TRADE_STATUS:
             vanilla_SMSG_TRADE_STATUS_free(&opcodes->body.SMSG_TRADE_STATUS);
             break;
-        case SMSG_TRADE_STATUS_EXTENDED:
+        case V_SMSG_TRADE_STATUS_EXTENDED:
             vanilla_SMSG_TRADE_STATUS_EXTENDED_free(&opcodes->body.SMSG_TRADE_STATUS_EXTENDED);
             break;
-        case SMSG_INITIALIZE_FACTIONS:
+        case V_SMSG_INITIALIZE_FACTIONS:
             vanilla_SMSG_INITIALIZE_FACTIONS_free(&opcodes->body.SMSG_INITIALIZE_FACTIONS);
             break;
-        case SMSG_SET_FACTION_STANDING:
+        case V_SMSG_SET_FACTION_STANDING:
             vanilla_SMSG_SET_FACTION_STANDING_free(&opcodes->body.SMSG_SET_FACTION_STANDING);
             break;
-        case SMSG_ACTION_BUTTONS:
+        case V_SMSG_ACTION_BUTTONS:
             vanilla_SMSG_ACTION_BUTTONS_free(&opcodes->body.SMSG_ACTION_BUTTONS);
             break;
-        case SMSG_INITIAL_SPELLS:
+        case V_SMSG_INITIAL_SPELLS:
             vanilla_SMSG_INITIAL_SPELLS_free(&opcodes->body.SMSG_INITIAL_SPELLS);
             break;
-        case SMSG_CAST_RESULT:
+        case V_SMSG_CAST_RESULT:
             vanilla_SMSG_CAST_RESULT_free(&opcodes->body.SMSG_CAST_RESULT);
             break;
-        case SMSG_SPELL_START:
+        case V_SMSG_SPELL_START:
             vanilla_SMSG_SPELL_START_free(&opcodes->body.SMSG_SPELL_START);
             break;
-        case SMSG_SPELL_GO:
+        case V_SMSG_SPELL_GO:
             vanilla_SMSG_SPELL_GO_free(&opcodes->body.SMSG_SPELL_GO);
             break;
-        case SMSG_SPELL_COOLDOWN:
+        case V_SMSG_SPELL_COOLDOWN:
             vanilla_SMSG_SPELL_COOLDOWN_free(&opcodes->body.SMSG_SPELL_COOLDOWN);
             break;
-        case SMSG_ATTACKERSTATEUPDATE:
+        case V_SMSG_ATTACKERSTATEUPDATE:
             vanilla_SMSG_ATTACKERSTATEUPDATE_free(&opcodes->body.SMSG_ATTACKERSTATEUPDATE);
             break;
-        case SMSG_RESURRECT_REQUEST:
+        case V_SMSG_RESURRECT_REQUEST:
             vanilla_SMSG_RESURRECT_REQUEST_free(&opcodes->body.SMSG_RESURRECT_REQUEST);
             break;
-        case SMSG_LOOT_RESPONSE:
+        case V_SMSG_LOOT_RESPONSE:
             vanilla_SMSG_LOOT_RESPONSE_free(&opcodes->body.SMSG_LOOT_RESPONSE);
             break;
-        case SMSG_DUEL_WINNER:
+        case V_SMSG_DUEL_WINNER:
             vanilla_SMSG_DUEL_WINNER_free(&opcodes->body.SMSG_DUEL_WINNER);
             break;
-        case SMSG_PET_SPELLS:
+        case V_SMSG_PET_SPELLS:
             vanilla_SMSG_PET_SPELLS_free(&opcodes->body.SMSG_PET_SPELLS);
             break;
-        case SMSG_GOSSIP_MESSAGE:
+        case V_SMSG_GOSSIP_MESSAGE:
             vanilla_SMSG_GOSSIP_MESSAGE_free(&opcodes->body.SMSG_GOSSIP_MESSAGE);
             break;
-        case SMSG_NPC_TEXT_UPDATE:
+        case V_SMSG_NPC_TEXT_UPDATE:
             vanilla_SMSG_NPC_TEXT_UPDATE_free(&opcodes->body.SMSG_NPC_TEXT_UPDATE);
             break;
-        case SMSG_QUESTGIVER_QUEST_LIST:
+        case V_SMSG_QUESTGIVER_QUEST_LIST:
             vanilla_SMSG_QUESTGIVER_QUEST_LIST_free(&opcodes->body.SMSG_QUESTGIVER_QUEST_LIST);
             break;
-        case SMSG_QUESTGIVER_QUEST_DETAILS:
+        case V_SMSG_QUESTGIVER_QUEST_DETAILS:
             vanilla_SMSG_QUESTGIVER_QUEST_DETAILS_free(&opcodes->body.SMSG_QUESTGIVER_QUEST_DETAILS);
             break;
-        case SMSG_QUESTGIVER_REQUEST_ITEMS:
+        case V_SMSG_QUESTGIVER_REQUEST_ITEMS:
             vanilla_SMSG_QUESTGIVER_REQUEST_ITEMS_free(&opcodes->body.SMSG_QUESTGIVER_REQUEST_ITEMS);
             break;
-        case SMSG_QUESTGIVER_OFFER_REWARD:
+        case V_SMSG_QUESTGIVER_OFFER_REWARD:
             vanilla_SMSG_QUESTGIVER_OFFER_REWARD_free(&opcodes->body.SMSG_QUESTGIVER_OFFER_REWARD);
             break;
-        case SMSG_QUESTGIVER_QUEST_COMPLETE:
+        case V_SMSG_QUESTGIVER_QUEST_COMPLETE:
             vanilla_SMSG_QUESTGIVER_QUEST_COMPLETE_free(&opcodes->body.SMSG_QUESTGIVER_QUEST_COMPLETE);
             break;
-        case SMSG_QUEST_CONFIRM_ACCEPT:
+        case V_SMSG_QUEST_CONFIRM_ACCEPT:
             vanilla_SMSG_QUEST_CONFIRM_ACCEPT_free(&opcodes->body.SMSG_QUEST_CONFIRM_ACCEPT);
             break;
-        case SMSG_LIST_INVENTORY:
+        case V_SMSG_LIST_INVENTORY:
             vanilla_SMSG_LIST_INVENTORY_free(&opcodes->body.SMSG_LIST_INVENTORY);
             break;
-        case SMSG_SHOWTAXINODES:
+        case V_SMSG_SHOWTAXINODES:
             vanilla_SMSG_SHOWTAXINODES_free(&opcodes->body.SMSG_SHOWTAXINODES);
             break;
-        case SMSG_TRAINER_LIST:
+        case V_SMSG_TRAINER_LIST:
             vanilla_SMSG_TRAINER_LIST_free(&opcodes->body.SMSG_TRAINER_LIST);
             break;
-        case SMSG_PETITION_SHOWLIST:
+        case V_SMSG_PETITION_SHOWLIST:
             vanilla_SMSG_PETITION_SHOWLIST_free(&opcodes->body.SMSG_PETITION_SHOWLIST);
             break;
-        case SMSG_PETITION_SHOW_SIGNATURES:
+        case V_SMSG_PETITION_SHOW_SIGNATURES:
             vanilla_SMSG_PETITION_SHOW_SIGNATURES_free(&opcodes->body.SMSG_PETITION_SHOW_SIGNATURES);
             break;
-        case SMSG_PETITION_QUERY_RESPONSE:
+        case V_SMSG_PETITION_QUERY_RESPONSE:
             vanilla_SMSG_PETITION_QUERY_RESPONSE_free(&opcodes->body.SMSG_PETITION_QUERY_RESPONSE);
             break;
-        case SMSG_NOTIFICATION:
+        case V_SMSG_NOTIFICATION:
             vanilla_SMSG_NOTIFICATION_free(&opcodes->body.SMSG_NOTIFICATION);
             break;
-        case SMSG_LOG_XPGAIN:
+        case V_SMSG_LOG_XPGAIN:
             vanilla_SMSG_LOG_XPGAIN_free(&opcodes->body.SMSG_LOG_XPGAIN);
             break;
-        case SMSG_AUTH_RESPONSE:
+        case V_SMSG_AUTH_RESPONSE:
             vanilla_SMSG_AUTH_RESPONSE_free(&opcodes->body.SMSG_AUTH_RESPONSE);
             break;
-        case SMSG_COMPRESSED_UPDATE_OBJECT:
+        case V_SMSG_COMPRESSED_UPDATE_OBJECT:
             vanilla_SMSG_COMPRESSED_UPDATE_OBJECT_free(&opcodes->body.SMSG_COMPRESSED_UPDATE_OBJECT);
             break;
-        case SMSG_ACCOUNT_DATA_TIMES:
+        case V_SMSG_ACCOUNT_DATA_TIMES:
             vanilla_SMSG_ACCOUNT_DATA_TIMES_free(&opcodes->body.SMSG_ACCOUNT_DATA_TIMES);
             break;
-        case SMSG_GMTICKET_GETTICKET:
+        case V_SMSG_GMTICKET_GETTICKET:
             vanilla_SMSG_GMTICKET_GETTICKET_free(&opcodes->body.SMSG_GMTICKET_GETTICKET);
             break;
-        case MSG_CORPSE_QUERY:
+        case V_MSG_CORPSE_QUERY:
             vanilla_MSG_CORPSE_QUERY_Server_free(&opcodes->body.MSG_CORPSE_QUERY_Server);
             break;
-        case SMSG_GOSSIP_POI:
+        case V_SMSG_GOSSIP_POI:
             vanilla_SMSG_GOSSIP_POI_free(&opcodes->body.SMSG_GOSSIP_POI);
             break;
-        case SMSG_SEND_MAIL_RESULT:
+        case V_SMSG_SEND_MAIL_RESULT:
             vanilla_SMSG_SEND_MAIL_RESULT_free(&opcodes->body.SMSG_SEND_MAIL_RESULT);
             break;
-        case SMSG_MAIL_LIST_RESULT:
+        case V_SMSG_MAIL_LIST_RESULT:
             vanilla_SMSG_MAIL_LIST_RESULT_free(&opcodes->body.SMSG_MAIL_LIST_RESULT);
             break;
-        case SMSG_BATTLEFIELD_LIST:
+        case V_SMSG_BATTLEFIELD_LIST:
             vanilla_SMSG_BATTLEFIELD_LIST_free(&opcodes->body.SMSG_BATTLEFIELD_LIST);
             break;
-        case SMSG_ITEM_TEXT_QUERY_RESPONSE:
+        case V_SMSG_ITEM_TEXT_QUERY_RESPONSE:
             vanilla_SMSG_ITEM_TEXT_QUERY_RESPONSE_free(&opcodes->body.SMSG_ITEM_TEXT_QUERY_RESPONSE);
             break;
-        case SMSG_SPELLLOGMISS:
+        case V_SMSG_SPELLLOGMISS:
             vanilla_SMSG_SPELLLOGMISS_free(&opcodes->body.SMSG_SPELLLOGMISS);
             break;
-        case SMSG_SPELLLOGEXECUTE:
+        case V_SMSG_SPELLLOGEXECUTE:
             vanilla_SMSG_SPELLLOGEXECUTE_free(&opcodes->body.SMSG_SPELLLOGEXECUTE);
             break;
-        case SMSG_PERIODICAURALOG:
+        case V_SMSG_PERIODICAURALOG:
             vanilla_SMSG_PERIODICAURALOG_free(&opcodes->body.SMSG_PERIODICAURALOG);
             break;
-        case SMSG_AUCTION_COMMAND_RESULT:
+        case V_SMSG_AUCTION_COMMAND_RESULT:
             vanilla_SMSG_AUCTION_COMMAND_RESULT_free(&opcodes->body.SMSG_AUCTION_COMMAND_RESULT);
             break;
-        case SMSG_AUCTION_LIST_RESULT:
+        case V_SMSG_AUCTION_LIST_RESULT:
             vanilla_SMSG_AUCTION_LIST_RESULT_free(&opcodes->body.SMSG_AUCTION_LIST_RESULT);
             break;
-        case SMSG_AUCTION_OWNER_LIST_RESULT:
+        case V_SMSG_AUCTION_OWNER_LIST_RESULT:
             vanilla_SMSG_AUCTION_OWNER_LIST_RESULT_free(&opcodes->body.SMSG_AUCTION_OWNER_LIST_RESULT);
             break;
-        case SMSG_DISPEL_FAILED:
+        case V_SMSG_DISPEL_FAILED:
             vanilla_SMSG_DISPEL_FAILED_free(&opcodes->body.SMSG_DISPEL_FAILED);
             break;
-        case SMSG_AUCTION_BIDDER_LIST_RESULT:
+        case V_SMSG_AUCTION_BIDDER_LIST_RESULT:
             vanilla_SMSG_AUCTION_BIDDER_LIST_RESULT_free(&opcodes->body.SMSG_AUCTION_BIDDER_LIST_RESULT);
             break;
-        case MSG_LIST_STABLED_PETS:
+        case V_MSG_LIST_STABLED_PETS:
             vanilla_MSG_LIST_STABLED_PETS_Server_free(&opcodes->body.MSG_LIST_STABLED_PETS_Server);
             break;
-        case SMSG_SPELLDISPELLOG:
+        case V_SMSG_SPELLDISPELLOG:
             vanilla_SMSG_SPELLDISPELLOG_free(&opcodes->body.SMSG_SPELLDISPELLOG);
             break;
-        case SMSG_SERVER_MESSAGE:
+        case V_SMSG_SERVER_MESSAGE:
             vanilla_SMSG_SERVER_MESSAGE_free(&opcodes->body.SMSG_SERVER_MESSAGE);
             break;
-        case SMSG_LOOT_MASTER_LIST:
+        case V_SMSG_LOOT_MASTER_LIST:
             vanilla_SMSG_LOOT_MASTER_LIST_free(&opcodes->body.SMSG_LOOT_MASTER_LIST);
             break;
-        case SMSG_SET_FORCED_REACTIONS:
+        case V_SMSG_SET_FORCED_REACTIONS:
             vanilla_SMSG_SET_FORCED_REACTIONS_free(&opcodes->body.SMSG_SET_FORCED_REACTIONS);
             break;
-        case SMSG_CHAT_PLAYER_NOT_FOUND:
+        case V_SMSG_CHAT_PLAYER_NOT_FOUND:
             vanilla_SMSG_CHAT_PLAYER_NOT_FOUND_free(&opcodes->body.SMSG_CHAT_PLAYER_NOT_FOUND);
             break;
-        case SMSG_MONSTER_MOVE_TRANSPORT:
+        case V_SMSG_MONSTER_MOVE_TRANSPORT:
             vanilla_SMSG_MONSTER_MOVE_TRANSPORT_free(&opcodes->body.SMSG_MONSTER_MOVE_TRANSPORT);
             break;
-        case MSG_MOVE_FEATHER_FALL:
+        case V_MSG_MOVE_FEATHER_FALL:
             vanilla_MSG_MOVE_FEATHER_FALL_Server_free(&opcodes->body.MSG_MOVE_FEATHER_FALL_Server);
             break;
-        case MSG_MOVE_WATER_WALK:
+        case V_MSG_MOVE_WATER_WALK:
             vanilla_MSG_MOVE_WATER_WALK_free(&opcodes->body.MSG_MOVE_WATER_WALK);
             break;
-        case SMSG_AREA_TRIGGER_MESSAGE:
+        case V_SMSG_AREA_TRIGGER_MESSAGE:
             vanilla_SMSG_AREA_TRIGGER_MESSAGE_free(&opcodes->body.SMSG_AREA_TRIGGER_MESSAGE);
             break;
-        case MSG_PETITION_RENAME:
+        case V_MSG_PETITION_RENAME:
             vanilla_MSG_PETITION_RENAME_free(&opcodes->body.MSG_PETITION_RENAME);
             break;
-        case SMSG_INIT_WORLD_STATES:
+        case V_SMSG_INIT_WORLD_STATES:
             vanilla_SMSG_INIT_WORLD_STATES_free(&opcodes->body.SMSG_INIT_WORLD_STATES);
             break;
-        case SMSG_ITEM_NAME_QUERY_RESPONSE:
+        case V_SMSG_ITEM_NAME_QUERY_RESPONSE:
             vanilla_SMSG_ITEM_NAME_QUERY_RESPONSE_free(&opcodes->body.SMSG_ITEM_NAME_QUERY_RESPONSE);
             break;
-        case SMSG_CHAR_RENAME:
+        case V_SMSG_CHAR_RENAME:
             vanilla_SMSG_CHAR_RENAME_free(&opcodes->body.SMSG_CHAR_RENAME);
             break;
-        case SMSG_RAID_INSTANCE_INFO:
+        case V_SMSG_RAID_INSTANCE_INFO:
             vanilla_SMSG_RAID_INSTANCE_INFO_free(&opcodes->body.SMSG_RAID_INSTANCE_INFO);
             break;
-        case SMSG_BATTLEFIELD_STATUS:
+        case V_SMSG_BATTLEFIELD_STATUS:
             vanilla_SMSG_BATTLEFIELD_STATUS_free(&opcodes->body.SMSG_BATTLEFIELD_STATUS);
             break;
-        case MSG_PVP_LOG_DATA:
+        case V_MSG_PVP_LOG_DATA:
             vanilla_MSG_PVP_LOG_DATA_Server_free(&opcodes->body.MSG_PVP_LOG_DATA_Server);
             break;
-        case SMSG_WARDEN_DATA:
+        case V_SMSG_WARDEN_DATA:
             vanilla_SMSG_WARDEN_DATA_free(&opcodes->body.SMSG_WARDEN_DATA);
             break;
-        case MSG_BATTLEGROUND_PLAYER_POSITIONS:
+        case V_MSG_BATTLEGROUND_PLAYER_POSITIONS:
             vanilla_MSG_BATTLEGROUND_PLAYER_POSITIONS_Server_free(&opcodes->body.MSG_BATTLEGROUND_PLAYER_POSITIONS_Server);
             break;
-        case SMSG_ADDON_INFO:
+        case V_SMSG_ADDON_INFO:
             vanilla_SMSG_ADDON_INFO_free(&opcodes->body.SMSG_ADDON_INFO);
             break;
-        case SMSG_PARTY_MEMBER_STATS_FULL:
+        case V_SMSG_PARTY_MEMBER_STATS_FULL:
             vanilla_SMSG_PARTY_MEMBER_STATS_FULL_free(&opcodes->body.SMSG_PARTY_MEMBER_STATS_FULL);
             break;
-        case SMSG_COMPRESSED_MOVES:
+        case V_SMSG_COMPRESSED_MOVES:
             vanilla_SMSG_COMPRESSED_MOVES_free(&opcodes->body.SMSG_COMPRESSED_MOVES);
             break;
-        case MSG_RAID_TARGET_UPDATE:
+        case V_MSG_RAID_TARGET_UPDATE:
             vanilla_MSG_RAID_TARGET_UPDATE_Server_free(&opcodes->body.MSG_RAID_TARGET_UPDATE_Server);
             break;
-        case MSG_RAID_READY_CHECK:
+        case V_MSG_RAID_READY_CHECK:
             vanilla_MSG_RAID_READY_CHECK_Server_free(&opcodes->body.MSG_RAID_READY_CHECK_Server);
             break;
-        case SMSG_SPELL_UPDATE_CHAIN_TARGETS:
+        case V_SMSG_SPELL_UPDATE_CHAIN_TARGETS:
             vanilla_SMSG_SPELL_UPDATE_CHAIN_TARGETS_free(&opcodes->body.SMSG_SPELL_UPDATE_CHAIN_TARGETS);
             break;
-        case SMSG_EXPECTED_SPAM_RECORDS:
+        case V_SMSG_EXPECTED_SPAM_RECORDS:
             vanilla_SMSG_EXPECTED_SPAM_RECORDS_free(&opcodes->body.SMSG_EXPECTED_SPAM_RECORDS);
             break;
-        case SMSG_DEFENSE_MESSAGE:
+        case V_SMSG_DEFENSE_MESSAGE:
             vanilla_SMSG_DEFENSE_MESSAGE_free(&opcodes->body.SMSG_DEFENSE_MESSAGE);
             break;
         default:
@@ -26656,328 +28581,328 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_server_opcode_free(VanillaServerOpcodeC
 
 WOW_WORLD_MESSAGES_C_EXPORT char* vanilla_server_opcode_to_str(VanillaServerOpcodeContainer* opcodes) {
     switch (opcodes->opcode) {
-        case SMSG_CHAR_CREATE: return "SMSG_CHAR_CREATE";
-        case SMSG_CHAR_ENUM: return "SMSG_CHAR_ENUM";
-        case SMSG_CHAR_DELETE: return "SMSG_CHAR_DELETE";
-        case SMSG_NEW_WORLD: return "SMSG_NEW_WORLD";
-        case SMSG_TRANSFER_PENDING: return "SMSG_TRANSFER_PENDING";
-        case SMSG_TRANSFER_ABORTED: return "SMSG_TRANSFER_ABORTED";
-        case SMSG_CHARACTER_LOGIN_FAILED: return "SMSG_CHARACTER_LOGIN_FAILED";
-        case SMSG_LOGIN_SETTIMESPEED: return "SMSG_LOGIN_SETTIMESPEED";
-        case SMSG_LOGOUT_RESPONSE: return "SMSG_LOGOUT_RESPONSE";
-        case SMSG_NAME_QUERY_RESPONSE: return "SMSG_NAME_QUERY_RESPONSE";
-        case SMSG_PET_NAME_QUERY_RESPONSE: return "SMSG_PET_NAME_QUERY_RESPONSE";
-        case SMSG_GUILD_QUERY_RESPONSE: return "SMSG_GUILD_QUERY_RESPONSE";
-        case SMSG_ITEM_QUERY_SINGLE_RESPONSE: return "SMSG_ITEM_QUERY_SINGLE_RESPONSE";
-        case SMSG_PAGE_TEXT_QUERY_RESPONSE: return "SMSG_PAGE_TEXT_QUERY_RESPONSE";
-        case SMSG_QUEST_QUERY_RESPONSE: return "SMSG_QUEST_QUERY_RESPONSE";
-        case SMSG_GAMEOBJECT_QUERY_RESPONSE: return "SMSG_GAMEOBJECT_QUERY_RESPONSE";
-        case SMSG_CREATURE_QUERY_RESPONSE: return "SMSG_CREATURE_QUERY_RESPONSE";
-        case SMSG_WHO: return "SMSG_WHO";
-        case SMSG_WHOIS: return "SMSG_WHOIS";
-        case SMSG_FRIEND_LIST: return "SMSG_FRIEND_LIST";
-        case SMSG_FRIEND_STATUS: return "SMSG_FRIEND_STATUS";
-        case SMSG_IGNORE_LIST: return "SMSG_IGNORE_LIST";
-        case SMSG_GROUP_INVITE: return "SMSG_GROUP_INVITE";
-        case SMSG_GROUP_DECLINE: return "SMSG_GROUP_DECLINE";
-        case SMSG_GROUP_SET_LEADER: return "SMSG_GROUP_SET_LEADER";
-        case SMSG_GROUP_LIST: return "SMSG_GROUP_LIST";
-        case SMSG_PARTY_MEMBER_STATS: return "SMSG_PARTY_MEMBER_STATS";
-        case SMSG_PARTY_COMMAND_RESULT: return "SMSG_PARTY_COMMAND_RESULT";
-        case SMSG_GUILD_INVITE: return "SMSG_GUILD_INVITE";
-        case SMSG_GUILD_INFO: return "SMSG_GUILD_INFO";
-        case SMSG_GUILD_ROSTER: return "SMSG_GUILD_ROSTER";
-        case SMSG_GUILD_EVENT: return "SMSG_GUILD_EVENT";
-        case SMSG_GUILD_COMMAND_RESULT: return "SMSG_GUILD_COMMAND_RESULT";
-        case SMSG_MESSAGECHAT: return "SMSG_MESSAGECHAT";
-        case SMSG_CHANNEL_NOTIFY: return "SMSG_CHANNEL_NOTIFY";
-        case SMSG_CHANNEL_LIST: return "SMSG_CHANNEL_LIST";
-        case SMSG_UPDATE_OBJECT: return "SMSG_UPDATE_OBJECT";
-        case SMSG_DESTROY_OBJECT: return "SMSG_DESTROY_OBJECT";
-        case SMSG_READ_ITEM_OK: return "SMSG_READ_ITEM_OK";
-        case SMSG_READ_ITEM_FAILED: return "SMSG_READ_ITEM_FAILED";
-        case SMSG_ITEM_COOLDOWN: return "SMSG_ITEM_COOLDOWN";
-        case SMSG_GAMEOBJECT_CUSTOM_ANIM: return "SMSG_GAMEOBJECT_CUSTOM_ANIM";
-        case MSG_MOVE_START_FORWARD: return "MSG_MOVE_START_FORWARD_Server";
-        case MSG_MOVE_START_BACKWARD: return "MSG_MOVE_START_BACKWARD_Server";
-        case MSG_MOVE_STOP: return "MSG_MOVE_STOP_Server";
-        case MSG_MOVE_START_STRAFE_LEFT: return "MSG_MOVE_START_STRAFE_LEFT_Server";
-        case MSG_MOVE_START_STRAFE_RIGHT: return "MSG_MOVE_START_STRAFE_RIGHT_Server";
-        case MSG_MOVE_STOP_STRAFE: return "MSG_MOVE_STOP_STRAFE_Server";
-        case MSG_MOVE_JUMP: return "MSG_MOVE_JUMP_Server";
-        case MSG_MOVE_START_TURN_LEFT: return "MSG_MOVE_START_TURN_LEFT_Server";
-        case MSG_MOVE_START_TURN_RIGHT: return "MSG_MOVE_START_TURN_RIGHT_Server";
-        case MSG_MOVE_STOP_TURN: return "MSG_MOVE_STOP_TURN_Server";
-        case MSG_MOVE_START_PITCH_UP: return "MSG_MOVE_START_PITCH_UP_Server";
-        case MSG_MOVE_START_PITCH_DOWN: return "MSG_MOVE_START_PITCH_DOWN_Server";
-        case MSG_MOVE_STOP_PITCH: return "MSG_MOVE_STOP_PITCH_Server";
-        case MSG_MOVE_SET_RUN_MODE: return "MSG_MOVE_SET_RUN_MODE_Server";
-        case MSG_MOVE_SET_WALK_MODE: return "MSG_MOVE_SET_WALK_MODE_Server";
-        case MSG_MOVE_TELEPORT_ACK: return "MSG_MOVE_TELEPORT_ACK_Server";
-        case MSG_MOVE_FALL_LAND: return "MSG_MOVE_FALL_LAND_Server";
-        case MSG_MOVE_START_SWIM: return "MSG_MOVE_START_SWIM_Server";
-        case MSG_MOVE_STOP_SWIM: return "MSG_MOVE_STOP_SWIM_Server";
-        case MSG_MOVE_SET_FACING: return "MSG_MOVE_SET_FACING_Server";
-        case MSG_MOVE_SET_PITCH: return "MSG_MOVE_SET_PITCH_Server";
-        case SMSG_MONSTER_MOVE: return "SMSG_MONSTER_MOVE";
-        case SMSG_MOVE_WATER_WALK: return "SMSG_MOVE_WATER_WALK";
-        case SMSG_MOVE_LAND_WALK: return "SMSG_MOVE_LAND_WALK";
-        case SMSG_FORCE_RUN_SPEED_CHANGE: return "SMSG_FORCE_RUN_SPEED_CHANGE";
-        case SMSG_FORCE_RUN_BACK_SPEED_CHANGE: return "SMSG_FORCE_RUN_BACK_SPEED_CHANGE";
-        case SMSG_FORCE_SWIM_SPEED_CHANGE: return "SMSG_FORCE_SWIM_SPEED_CHANGE";
-        case SMSG_FORCE_MOVE_ROOT: return "SMSG_FORCE_MOVE_ROOT";
-        case SMSG_FORCE_MOVE_UNROOT: return "SMSG_FORCE_MOVE_UNROOT";
-        case MSG_MOVE_HEARTBEAT: return "MSG_MOVE_HEARTBEAT_Server";
-        case SMSG_MOVE_KNOCK_BACK: return "SMSG_MOVE_KNOCK_BACK";
-        case SMSG_MOVE_FEATHER_FALL: return "SMSG_MOVE_FEATHER_FALL";
-        case SMSG_MOVE_NORMAL_FALL: return "SMSG_MOVE_NORMAL_FALL";
-        case SMSG_MOVE_SET_HOVER: return "SMSG_MOVE_SET_HOVER";
-        case SMSG_MOVE_UNSET_HOVER: return "SMSG_MOVE_UNSET_HOVER";
-        case SMSG_TRIGGER_CINEMATIC: return "SMSG_TRIGGER_CINEMATIC";
-        case SMSG_TUTORIAL_FLAGS: return "SMSG_TUTORIAL_FLAGS";
-        case SMSG_EMOTE: return "SMSG_EMOTE";
-        case SMSG_TEXT_EMOTE: return "SMSG_TEXT_EMOTE";
-        case SMSG_INVENTORY_CHANGE_FAILURE: return "SMSG_INVENTORY_CHANGE_FAILURE";
-        case SMSG_OPEN_CONTAINER: return "SMSG_OPEN_CONTAINER";
-        case SMSG_INSPECT: return "SMSG_INSPECT";
-        case SMSG_TRADE_STATUS: return "SMSG_TRADE_STATUS";
-        case SMSG_TRADE_STATUS_EXTENDED: return "SMSG_TRADE_STATUS_EXTENDED";
-        case SMSG_INITIALIZE_FACTIONS: return "SMSG_INITIALIZE_FACTIONS";
-        case SMSG_SET_FACTION_VISIBLE: return "SMSG_SET_FACTION_VISIBLE";
-        case SMSG_SET_FACTION_STANDING: return "SMSG_SET_FACTION_STANDING";
-        case SMSG_SET_PROFICIENCY: return "SMSG_SET_PROFICIENCY";
-        case SMSG_ACTION_BUTTONS: return "SMSG_ACTION_BUTTONS";
-        case SMSG_INITIAL_SPELLS: return "SMSG_INITIAL_SPELLS";
-        case SMSG_LEARNED_SPELL: return "SMSG_LEARNED_SPELL";
-        case SMSG_SUPERCEDED_SPELL: return "SMSG_SUPERCEDED_SPELL";
-        case SMSG_CAST_RESULT: return "SMSG_CAST_RESULT";
-        case SMSG_SPELL_START: return "SMSG_SPELL_START";
-        case SMSG_SPELL_GO: return "SMSG_SPELL_GO";
-        case SMSG_SPELL_FAILURE: return "SMSG_SPELL_FAILURE";
-        case SMSG_SPELL_COOLDOWN: return "SMSG_SPELL_COOLDOWN";
-        case SMSG_COOLDOWN_EVENT: return "SMSG_COOLDOWN_EVENT";
-        case SMSG_UPDATE_AURA_DURATION: return "SMSG_UPDATE_AURA_DURATION";
-        case SMSG_PET_CAST_FAILED: return "SMSG_PET_CAST_FAILED";
-        case MSG_CHANNEL_START: return "MSG_CHANNEL_START_Server";
-        case MSG_CHANNEL_UPDATE: return "MSG_CHANNEL_UPDATE_Server";
-        case SMSG_AI_REACTION: return "SMSG_AI_REACTION";
-        case SMSG_ATTACKSTART: return "SMSG_ATTACKSTART";
-        case SMSG_ATTACKSTOP: return "SMSG_ATTACKSTOP";
-        case SMSG_ATTACKERSTATEUPDATE: return "SMSG_ATTACKERSTATEUPDATE";
-        case SMSG_SPELLHEALLOG: return "SMSG_SPELLHEALLOG";
-        case SMSG_SPELLENERGIZELOG: return "SMSG_SPELLENERGIZELOG";
-        case SMSG_BINDPOINTUPDATE: return "SMSG_BINDPOINTUPDATE";
-        case SMSG_PLAYERBOUND: return "SMSG_PLAYERBOUND";
-        case SMSG_CLIENT_CONTROL_UPDATE: return "SMSG_CLIENT_CONTROL_UPDATE";
-        case SMSG_RESURRECT_REQUEST: return "SMSG_RESURRECT_REQUEST";
-        case SMSG_LOOT_RESPONSE: return "SMSG_LOOT_RESPONSE";
-        case SMSG_LOOT_RELEASE_RESPONSE: return "SMSG_LOOT_RELEASE_RESPONSE";
-        case SMSG_LOOT_REMOVED: return "SMSG_LOOT_REMOVED";
-        case SMSG_LOOT_MONEY_NOTIFY: return "SMSG_LOOT_MONEY_NOTIFY";
-        case SMSG_ITEM_PUSH_RESULT: return "SMSG_ITEM_PUSH_RESULT";
-        case SMSG_DUEL_REQUESTED: return "SMSG_DUEL_REQUESTED";
-        case SMSG_DUEL_COMPLETE: return "SMSG_DUEL_COMPLETE";
-        case SMSG_DUEL_WINNER: return "SMSG_DUEL_WINNER";
-        case SMSG_MOUNTRESULT: return "SMSG_MOUNTRESULT";
-        case SMSG_DISMOUNTRESULT: return "SMSG_DISMOUNTRESULT";
-        case SMSG_MOUNTSPECIAL_ANIM: return "SMSG_MOUNTSPECIAL_ANIM";
-        case SMSG_PET_TAME_FAILURE: return "SMSG_PET_TAME_FAILURE";
-        case SMSG_PET_SPELLS: return "SMSG_PET_SPELLS";
-        case SMSG_PET_MODE: return "SMSG_PET_MODE";
-        case SMSG_GOSSIP_MESSAGE: return "SMSG_GOSSIP_MESSAGE";
-        case SMSG_NPC_TEXT_UPDATE: return "SMSG_NPC_TEXT_UPDATE";
-        case SMSG_QUESTGIVER_STATUS: return "SMSG_QUESTGIVER_STATUS";
-        case SMSG_QUESTGIVER_QUEST_LIST: return "SMSG_QUESTGIVER_QUEST_LIST";
-        case SMSG_QUESTGIVER_QUEST_DETAILS: return "SMSG_QUESTGIVER_QUEST_DETAILS";
-        case SMSG_QUESTGIVER_REQUEST_ITEMS: return "SMSG_QUESTGIVER_REQUEST_ITEMS";
-        case SMSG_QUESTGIVER_OFFER_REWARD: return "SMSG_QUESTGIVER_OFFER_REWARD";
-        case SMSG_QUESTGIVER_QUEST_INVALID: return "SMSG_QUESTGIVER_QUEST_INVALID";
-        case SMSG_QUESTGIVER_QUEST_COMPLETE: return "SMSG_QUESTGIVER_QUEST_COMPLETE";
-        case SMSG_QUESTGIVER_QUEST_FAILED: return "SMSG_QUESTGIVER_QUEST_FAILED";
-        case SMSG_QUESTUPDATE_FAILED: return "SMSG_QUESTUPDATE_FAILED";
-        case SMSG_QUESTUPDATE_FAILEDTIMER: return "SMSG_QUESTUPDATE_FAILEDTIMER";
-        case SMSG_QUESTUPDATE_COMPLETE: return "SMSG_QUESTUPDATE_COMPLETE";
-        case SMSG_QUESTUPDATE_ADD_KILL: return "SMSG_QUESTUPDATE_ADD_KILL";
-        case SMSG_QUESTUPDATE_ADD_ITEM: return "SMSG_QUESTUPDATE_ADD_ITEM";
-        case SMSG_QUEST_CONFIRM_ACCEPT: return "SMSG_QUEST_CONFIRM_ACCEPT";
-        case SMSG_LIST_INVENTORY: return "SMSG_LIST_INVENTORY";
-        case SMSG_SELL_ITEM: return "SMSG_SELL_ITEM";
-        case SMSG_BUY_ITEM: return "SMSG_BUY_ITEM";
-        case SMSG_BUY_FAILED: return "SMSG_BUY_FAILED";
-        case SMSG_SHOWTAXINODES: return "SMSG_SHOWTAXINODES";
-        case SMSG_TAXINODE_STATUS: return "SMSG_TAXINODE_STATUS";
-        case SMSG_ACTIVATETAXIREPLY: return "SMSG_ACTIVATETAXIREPLY";
-        case SMSG_TRAINER_LIST: return "SMSG_TRAINER_LIST";
-        case SMSG_TRAINER_BUY_SUCCEEDED: return "SMSG_TRAINER_BUY_SUCCEEDED";
-        case SMSG_TRAINER_BUY_FAILED: return "SMSG_TRAINER_BUY_FAILED";
-        case SMSG_SHOW_BANK: return "SMSG_SHOW_BANK";
-        case SMSG_BUY_BANK_SLOT_RESULT: return "SMSG_BUY_BANK_SLOT_RESULT";
-        case SMSG_PETITION_SHOWLIST: return "SMSG_PETITION_SHOWLIST";
-        case SMSG_PETITION_SHOW_SIGNATURES: return "SMSG_PETITION_SHOW_SIGNATURES";
-        case SMSG_PETITION_SIGN_RESULTS: return "SMSG_PETITION_SIGN_RESULTS";
-        case MSG_PETITION_DECLINE: return "MSG_PETITION_DECLINE";
-        case SMSG_TURN_IN_PETITION_RESULTS: return "SMSG_TURN_IN_PETITION_RESULTS";
-        case SMSG_PETITION_QUERY_RESPONSE: return "SMSG_PETITION_QUERY_RESPONSE";
-        case SMSG_NOTIFICATION: return "SMSG_NOTIFICATION";
-        case SMSG_PLAYED_TIME: return "SMSG_PLAYED_TIME";
-        case SMSG_QUERY_TIME_RESPONSE: return "SMSG_QUERY_TIME_RESPONSE";
-        case SMSG_LOG_XPGAIN: return "SMSG_LOG_XPGAIN";
-        case SMSG_LEVELUP_INFO: return "SMSG_LEVELUP_INFO";
-        case MSG_MINIMAP_PING: return "MSG_MINIMAP_PING_Server";
-        case SMSG_RESISTLOG: return "SMSG_RESISTLOG";
-        case SMSG_ENCHANTMENTLOG: return "SMSG_ENCHANTMENTLOG";
-        case SMSG_START_MIRROR_TIMER: return "SMSG_START_MIRROR_TIMER";
-        case SMSG_PAUSE_MIRROR_TIMER: return "SMSG_PAUSE_MIRROR_TIMER";
-        case SMSG_STOP_MIRROR_TIMER: return "SMSG_STOP_MIRROR_TIMER";
-        case SMSG_PONG: return "SMSG_PONG";
-        case SMSG_CLEAR_COOLDOWN: return "SMSG_CLEAR_COOLDOWN";
-        case SMSG_GAMEOBJECT_PAGETEXT: return "SMSG_GAMEOBJECT_PAGETEXT";
-        case SMSG_SPELL_DELAYED: return "SMSG_SPELL_DELAYED";
-        case SMSG_ITEM_TIME_UPDATE: return "SMSG_ITEM_TIME_UPDATE";
-        case SMSG_ITEM_ENCHANT_TIME_UPDATE: return "SMSG_ITEM_ENCHANT_TIME_UPDATE";
-        case SMSG_AUTH_CHALLENGE: return "SMSG_AUTH_CHALLENGE";
-        case SMSG_AUTH_RESPONSE: return "SMSG_AUTH_RESPONSE";
-        case MSG_SAVE_GUILD_EMBLEM: return "MSG_SAVE_GUILD_EMBLEM_Server";
-        case MSG_TABARDVENDOR_ACTIVATE: return "MSG_TABARDVENDOR_ACTIVATE";
-        case SMSG_PLAY_SPELL_VISUAL: return "SMSG_PLAY_SPELL_VISUAL";
-        case SMSG_PARTYKILLLOG: return "SMSG_PARTYKILLLOG";
-        case SMSG_COMPRESSED_UPDATE_OBJECT: return "SMSG_COMPRESSED_UPDATE_OBJECT";
-        case SMSG_PLAY_SPELL_IMPACT: return "SMSG_PLAY_SPELL_IMPACT";
-        case SMSG_EXPLORATION_EXPERIENCE: return "SMSG_EXPLORATION_EXPERIENCE";
-        case MSG_RANDOM_ROLL: return "MSG_RANDOM_ROLL_Server";
-        case SMSG_ENVIRONMENTAL_DAMAGE_LOG: return "SMSG_ENVIRONMENTAL_DAMAGE_LOG";
-        case MSG_LOOKING_FOR_GROUP: return "MSG_LOOKING_FOR_GROUP_Server";
-        case SMSG_REMOVED_SPELL: return "SMSG_REMOVED_SPELL";
-        case SMSG_GMTICKET_CREATE: return "SMSG_GMTICKET_CREATE";
-        case SMSG_GMTICKET_UPDATETEXT: return "SMSG_GMTICKET_UPDATETEXT";
-        case SMSG_ACCOUNT_DATA_TIMES: return "SMSG_ACCOUNT_DATA_TIMES";
-        case SMSG_GMTICKET_GETTICKET: return "SMSG_GMTICKET_GETTICKET";
-        case SMSG_GAMEOBJECT_SPAWN_ANIM: return "SMSG_GAMEOBJECT_SPAWN_ANIM";
-        case SMSG_GAMEOBJECT_DESPAWN_ANIM: return "SMSG_GAMEOBJECT_DESPAWN_ANIM";
-        case MSG_CORPSE_QUERY: return "MSG_CORPSE_QUERY_Server";
-        case SMSG_GMTICKET_DELETETICKET: return "SMSG_GMTICKET_DELETETICKET";
-        case SMSG_GMTICKET_SYSTEMSTATUS: return "SMSG_GMTICKET_SYSTEMSTATUS";
-        case SMSG_SET_REST_START: return "SMSG_SET_REST_START";
-        case SMSG_SPIRIT_HEALER_CONFIRM: return "SMSG_SPIRIT_HEALER_CONFIRM";
-        case SMSG_GOSSIP_POI: return "SMSG_GOSSIP_POI";
-        case SMSG_LOGIN_VERIFY_WORLD: return "SMSG_LOGIN_VERIFY_WORLD";
-        case SMSG_SEND_MAIL_RESULT: return "SMSG_SEND_MAIL_RESULT";
-        case SMSG_MAIL_LIST_RESULT: return "SMSG_MAIL_LIST_RESULT";
-        case SMSG_BATTLEFIELD_LIST: return "SMSG_BATTLEFIELD_LIST";
-        case SMSG_ITEM_TEXT_QUERY_RESPONSE: return "SMSG_ITEM_TEXT_QUERY_RESPONSE";
-        case SMSG_SPELLLOGMISS: return "SMSG_SPELLLOGMISS";
-        case SMSG_SPELLLOGEXECUTE: return "SMSG_SPELLLOGEXECUTE";
-        case SMSG_PERIODICAURALOG: return "SMSG_PERIODICAURALOG";
-        case SMSG_SPELLDAMAGESHIELD: return "SMSG_SPELLDAMAGESHIELD";
-        case SMSG_SPELLNONMELEEDAMAGELOG: return "SMSG_SPELLNONMELEEDAMAGELOG";
-        case SMSG_ZONE_UNDER_ATTACK: return "SMSG_ZONE_UNDER_ATTACK";
-        case MSG_AUCTION_HELLO: return "MSG_AUCTION_HELLO_Server";
-        case SMSG_AUCTION_COMMAND_RESULT: return "SMSG_AUCTION_COMMAND_RESULT";
-        case SMSG_AUCTION_LIST_RESULT: return "SMSG_AUCTION_LIST_RESULT";
-        case SMSG_AUCTION_OWNER_LIST_RESULT: return "SMSG_AUCTION_OWNER_LIST_RESULT";
-        case SMSG_AUCTION_BIDDER_NOTIFICATION: return "SMSG_AUCTION_BIDDER_NOTIFICATION";
-        case SMSG_AUCTION_OWNER_NOTIFICATION: return "SMSG_AUCTION_OWNER_NOTIFICATION";
-        case SMSG_PROCRESIST: return "SMSG_PROCRESIST";
-        case SMSG_DISPEL_FAILED: return "SMSG_DISPEL_FAILED";
-        case SMSG_SPELLORDAMAGE_IMMUNE: return "SMSG_SPELLORDAMAGE_IMMUNE";
-        case SMSG_AUCTION_BIDDER_LIST_RESULT: return "SMSG_AUCTION_BIDDER_LIST_RESULT";
-        case SMSG_SET_FLAT_SPELL_MODIFIER: return "SMSG_SET_FLAT_SPELL_MODIFIER";
-        case SMSG_SET_PCT_SPELL_MODIFIER: return "SMSG_SET_PCT_SPELL_MODIFIER";
-        case SMSG_CORPSE_RECLAIM_DELAY: return "SMSG_CORPSE_RECLAIM_DELAY";
-        case MSG_LIST_STABLED_PETS: return "MSG_LIST_STABLED_PETS_Server";
-        case SMSG_STABLE_RESULT: return "SMSG_STABLE_RESULT";
-        case MSG_QUEST_PUSH_RESULT: return "MSG_QUEST_PUSH_RESULT";
-        case SMSG_PLAY_MUSIC: return "SMSG_PLAY_MUSIC";
-        case SMSG_PLAY_OBJECT_SOUND: return "SMSG_PLAY_OBJECT_SOUND";
-        case SMSG_SPELLDISPELLOG: return "SMSG_SPELLDISPELLOG";
-        case MSG_QUERY_NEXT_MAIL_TIME: return "MSG_QUERY_NEXT_MAIL_TIME_Server";
-        case SMSG_RECEIVED_MAIL: return "SMSG_RECEIVED_MAIL";
-        case SMSG_RAID_GROUP_ONLY: return "SMSG_RAID_GROUP_ONLY";
-        case SMSG_PVP_CREDIT: return "SMSG_PVP_CREDIT";
-        case SMSG_AUCTION_REMOVED_NOTIFICATION: return "SMSG_AUCTION_REMOVED_NOTIFICATION";
-        case SMSG_SERVER_MESSAGE: return "SMSG_SERVER_MESSAGE";
-        case SMSG_MEETINGSTONE_SETQUEUE: return "SMSG_MEETINGSTONE_SETQUEUE";
-        case SMSG_MEETINGSTONE_MEMBER_ADDED: return "SMSG_MEETINGSTONE_MEMBER_ADDED";
-        case SMSG_STANDSTATE_UPDATE: return "SMSG_STANDSTATE_UPDATE";
-        case SMSG_LOOT_ALL_PASSED: return "SMSG_LOOT_ALL_PASSED";
-        case SMSG_LOOT_ROLL_WON: return "SMSG_LOOT_ROLL_WON";
-        case SMSG_LOOT_START_ROLL: return "SMSG_LOOT_START_ROLL";
-        case SMSG_LOOT_ROLL: return "SMSG_LOOT_ROLL";
-        case SMSG_LOOT_MASTER_LIST: return "SMSG_LOOT_MASTER_LIST";
-        case SMSG_SET_FORCED_REACTIONS: return "SMSG_SET_FORCED_REACTIONS";
-        case SMSG_SPELL_FAILED_OTHER: return "SMSG_SPELL_FAILED_OTHER";
-        case SMSG_GAMEOBJECT_RESET_STATE: return "SMSG_GAMEOBJECT_RESET_STATE";
-        case SMSG_CHAT_PLAYER_NOT_FOUND: return "SMSG_CHAT_PLAYER_NOT_FOUND";
-        case MSG_TALENT_WIPE_CONFIRM: return "MSG_TALENT_WIPE_CONFIRM_Server";
-        case SMSG_SUMMON_REQUEST: return "SMSG_SUMMON_REQUEST";
-        case SMSG_MONSTER_MOVE_TRANSPORT: return "SMSG_MONSTER_MOVE_TRANSPORT";
-        case MSG_MOVE_FEATHER_FALL: return "MSG_MOVE_FEATHER_FALL_Server";
-        case MSG_MOVE_WATER_WALK: return "MSG_MOVE_WATER_WALK";
-        case SMSG_DUEL_COUNTDOWN: return "SMSG_DUEL_COUNTDOWN";
-        case SMSG_AREA_TRIGGER_MESSAGE: return "SMSG_AREA_TRIGGER_MESSAGE";
-        case SMSG_MEETINGSTONE_JOINFAILED: return "SMSG_MEETINGSTONE_JOINFAILED";
-        case SMSG_PLAYER_SKINNED: return "SMSG_PLAYER_SKINNED";
-        case MSG_PETITION_RENAME: return "MSG_PETITION_RENAME";
-        case SMSG_INIT_WORLD_STATES: return "SMSG_INIT_WORLD_STATES";
-        case SMSG_UPDATE_WORLD_STATE: return "SMSG_UPDATE_WORLD_STATE";
-        case SMSG_ITEM_NAME_QUERY_RESPONSE: return "SMSG_ITEM_NAME_QUERY_RESPONSE";
-        case SMSG_PET_ACTION_FEEDBACK: return "SMSG_PET_ACTION_FEEDBACK";
-        case SMSG_CHAR_RENAME: return "SMSG_CHAR_RENAME";
-        case SMSG_INSTANCE_SAVE_CREATED: return "SMSG_INSTANCE_SAVE_CREATED";
-        case SMSG_RAID_INSTANCE_INFO: return "SMSG_RAID_INSTANCE_INFO";
-        case SMSG_PLAY_SOUND: return "SMSG_PLAY_SOUND";
-        case SMSG_BATTLEFIELD_STATUS: return "SMSG_BATTLEFIELD_STATUS";
-        case MSG_INSPECT_HONOR_STATS: return "MSG_INSPECT_HONOR_STATS_Server";
-        case SMSG_FORCE_WALK_SPEED_CHANGE: return "SMSG_FORCE_WALK_SPEED_CHANGE";
-        case SMSG_FORCE_SWIM_BACK_SPEED_CHANGE: return "SMSG_FORCE_SWIM_BACK_SPEED_CHANGE";
-        case SMSG_FORCE_TURN_RATE_CHANGE: return "SMSG_FORCE_TURN_RATE_CHANGE";
-        case MSG_PVP_LOG_DATA: return "MSG_PVP_LOG_DATA_Server";
-        case SMSG_AREA_SPIRIT_HEALER_TIME: return "SMSG_AREA_SPIRIT_HEALER_TIME";
-        case SMSG_WARDEN_DATA: return "SMSG_WARDEN_DATA";
-        case SMSG_GROUP_JOINED_BATTLEGROUND: return "SMSG_GROUP_JOINED_BATTLEGROUND";
-        case MSG_BATTLEGROUND_PLAYER_POSITIONS: return "MSG_BATTLEGROUND_PLAYER_POSITIONS_Server";
-        case SMSG_BINDER_CONFIRM: return "SMSG_BINDER_CONFIRM";
-        case SMSG_BATTLEGROUND_PLAYER_JOINED: return "SMSG_BATTLEGROUND_PLAYER_JOINED";
-        case SMSG_BATTLEGROUND_PLAYER_LEFT: return "SMSG_BATTLEGROUND_PLAYER_LEFT";
-        case SMSG_ADDON_INFO: return "SMSG_ADDON_INFO";
-        case SMSG_PET_UNLEARN_CONFIRM: return "SMSG_PET_UNLEARN_CONFIRM";
-        case SMSG_PARTY_MEMBER_STATS_FULL: return "SMSG_PARTY_MEMBER_STATS_FULL";
-        case SMSG_WEATHER: return "SMSG_WEATHER";
-        case SMSG_RAID_INSTANCE_MESSAGE: return "SMSG_RAID_INSTANCE_MESSAGE";
-        case SMSG_COMPRESSED_MOVES: return "SMSG_COMPRESSED_MOVES";
-        case SMSG_SPLINE_SET_RUN_SPEED: return "SMSG_SPLINE_SET_RUN_SPEED";
-        case SMSG_SPLINE_SET_RUN_BACK_SPEED: return "SMSG_SPLINE_SET_RUN_BACK_SPEED";
-        case SMSG_SPLINE_SET_SWIM_SPEED: return "SMSG_SPLINE_SET_SWIM_SPEED";
-        case SMSG_SPLINE_SET_WALK_SPEED: return "SMSG_SPLINE_SET_WALK_SPEED";
-        case SMSG_SPLINE_SET_SWIM_BACK_SPEED: return "SMSG_SPLINE_SET_SWIM_BACK_SPEED";
-        case SMSG_SPLINE_SET_TURN_RATE: return "SMSG_SPLINE_SET_TURN_RATE";
-        case SMSG_SPLINE_MOVE_UNROOT: return "SMSG_SPLINE_MOVE_UNROOT";
-        case SMSG_SPLINE_MOVE_FEATHER_FALL: return "SMSG_SPLINE_MOVE_FEATHER_FALL";
-        case SMSG_SPLINE_MOVE_NORMAL_FALL: return "SMSG_SPLINE_MOVE_NORMAL_FALL";
-        case SMSG_SPLINE_MOVE_SET_HOVER: return "SMSG_SPLINE_MOVE_SET_HOVER";
-        case SMSG_SPLINE_MOVE_UNSET_HOVER: return "SMSG_SPLINE_MOVE_UNSET_HOVER";
-        case SMSG_SPLINE_MOVE_WATER_WALK: return "SMSG_SPLINE_MOVE_WATER_WALK";
-        case SMSG_SPLINE_MOVE_LAND_WALK: return "SMSG_SPLINE_MOVE_LAND_WALK";
-        case SMSG_SPLINE_MOVE_START_SWIM: return "SMSG_SPLINE_MOVE_START_SWIM";
-        case SMSG_SPLINE_MOVE_STOP_SWIM: return "SMSG_SPLINE_MOVE_STOP_SWIM";
-        case SMSG_SPLINE_MOVE_SET_RUN_MODE: return "SMSG_SPLINE_MOVE_SET_RUN_MODE";
-        case SMSG_SPLINE_MOVE_SET_WALK_MODE: return "SMSG_SPLINE_MOVE_SET_WALK_MODE";
-        case MSG_MOVE_TIME_SKIPPED: return "MSG_MOVE_TIME_SKIPPED_Server";
-        case SMSG_SPLINE_MOVE_ROOT: return "SMSG_SPLINE_MOVE_ROOT";
-        case SMSG_INVALIDATE_PLAYER: return "SMSG_INVALIDATE_PLAYER";
-        case SMSG_INSTANCE_RESET: return "SMSG_INSTANCE_RESET";
-        case SMSG_INSTANCE_RESET_FAILED: return "SMSG_INSTANCE_RESET_FAILED";
-        case SMSG_UPDATE_LAST_INSTANCE: return "SMSG_UPDATE_LAST_INSTANCE";
-        case MSG_RAID_TARGET_UPDATE: return "MSG_RAID_TARGET_UPDATE_Server";
-        case MSG_RAID_READY_CHECK: return "MSG_RAID_READY_CHECK_Server";
-        case SMSG_PET_ACTION_SOUND: return "SMSG_PET_ACTION_SOUND";
-        case SMSG_PET_DISMISS_SOUND: return "SMSG_PET_DISMISS_SOUND";
-        case SMSG_GM_TICKET_STATUS_UPDATE: return "SMSG_GM_TICKET_STATUS_UPDATE";
-        case SMSG_UPDATE_INSTANCE_OWNERSHIP: return "SMSG_UPDATE_INSTANCE_OWNERSHIP";
-        case SMSG_SPELLINSTAKILLLOG: return "SMSG_SPELLINSTAKILLLOG";
-        case SMSG_SPELL_UPDATE_CHAIN_TARGETS: return "SMSG_SPELL_UPDATE_CHAIN_TARGETS";
-        case SMSG_EXPECTED_SPAM_RECORDS: return "SMSG_EXPECTED_SPAM_RECORDS";
-        case SMSG_DEFENSE_MESSAGE: return "SMSG_DEFENSE_MESSAGE";
+        case V_SMSG_CHAR_CREATE: return "SMSG_CHAR_CREATE";
+        case V_SMSG_CHAR_ENUM: return "SMSG_CHAR_ENUM";
+        case V_SMSG_CHAR_DELETE: return "SMSG_CHAR_DELETE";
+        case V_SMSG_NEW_WORLD: return "SMSG_NEW_WORLD";
+        case V_SMSG_TRANSFER_PENDING: return "SMSG_TRANSFER_PENDING";
+        case V_SMSG_TRANSFER_ABORTED: return "SMSG_TRANSFER_ABORTED";
+        case V_SMSG_CHARACTER_LOGIN_FAILED: return "SMSG_CHARACTER_LOGIN_FAILED";
+        case V_SMSG_LOGIN_SETTIMESPEED: return "SMSG_LOGIN_SETTIMESPEED";
+        case V_SMSG_LOGOUT_RESPONSE: return "SMSG_LOGOUT_RESPONSE";
+        case V_SMSG_NAME_QUERY_RESPONSE: return "SMSG_NAME_QUERY_RESPONSE";
+        case V_SMSG_PET_NAME_QUERY_RESPONSE: return "SMSG_PET_NAME_QUERY_RESPONSE";
+        case V_SMSG_GUILD_QUERY_RESPONSE: return "SMSG_GUILD_QUERY_RESPONSE";
+        case V_SMSG_ITEM_QUERY_SINGLE_RESPONSE: return "SMSG_ITEM_QUERY_SINGLE_RESPONSE";
+        case V_SMSG_PAGE_TEXT_QUERY_RESPONSE: return "SMSG_PAGE_TEXT_QUERY_RESPONSE";
+        case V_SMSG_QUEST_QUERY_RESPONSE: return "SMSG_QUEST_QUERY_RESPONSE";
+        case V_SMSG_GAMEOBJECT_QUERY_RESPONSE: return "SMSG_GAMEOBJECT_QUERY_RESPONSE";
+        case V_SMSG_CREATURE_QUERY_RESPONSE: return "SMSG_CREATURE_QUERY_RESPONSE";
+        case V_SMSG_WHO: return "SMSG_WHO";
+        case V_SMSG_WHOIS: return "SMSG_WHOIS";
+        case V_SMSG_FRIEND_LIST: return "SMSG_FRIEND_LIST";
+        case V_SMSG_FRIEND_STATUS: return "SMSG_FRIEND_STATUS";
+        case V_SMSG_IGNORE_LIST: return "SMSG_IGNORE_LIST";
+        case V_SMSG_GROUP_INVITE: return "SMSG_GROUP_INVITE";
+        case V_SMSG_GROUP_DECLINE: return "SMSG_GROUP_DECLINE";
+        case V_SMSG_GROUP_SET_LEADER: return "SMSG_GROUP_SET_LEADER";
+        case V_SMSG_GROUP_LIST: return "SMSG_GROUP_LIST";
+        case V_SMSG_PARTY_MEMBER_STATS: return "SMSG_PARTY_MEMBER_STATS";
+        case V_SMSG_PARTY_COMMAND_RESULT: return "SMSG_PARTY_COMMAND_RESULT";
+        case V_SMSG_GUILD_INVITE: return "SMSG_GUILD_INVITE";
+        case V_SMSG_GUILD_INFO: return "SMSG_GUILD_INFO";
+        case V_SMSG_GUILD_ROSTER: return "SMSG_GUILD_ROSTER";
+        case V_SMSG_GUILD_EVENT: return "SMSG_GUILD_EVENT";
+        case V_SMSG_GUILD_COMMAND_RESULT: return "SMSG_GUILD_COMMAND_RESULT";
+        case V_SMSG_MESSAGECHAT: return "SMSG_MESSAGECHAT";
+        case V_SMSG_CHANNEL_NOTIFY: return "SMSG_CHANNEL_NOTIFY";
+        case V_SMSG_CHANNEL_LIST: return "SMSG_CHANNEL_LIST";
+        case V_SMSG_UPDATE_OBJECT: return "SMSG_UPDATE_OBJECT";
+        case V_SMSG_DESTROY_OBJECT: return "SMSG_DESTROY_OBJECT";
+        case V_SMSG_READ_ITEM_OK: return "SMSG_READ_ITEM_OK";
+        case V_SMSG_READ_ITEM_FAILED: return "SMSG_READ_ITEM_FAILED";
+        case V_SMSG_ITEM_COOLDOWN: return "SMSG_ITEM_COOLDOWN";
+        case V_SMSG_GAMEOBJECT_CUSTOM_ANIM: return "SMSG_GAMEOBJECT_CUSTOM_ANIM";
+        case V_MSG_MOVE_START_FORWARD: return "MSG_MOVE_START_FORWARD_Server";
+        case V_MSG_MOVE_START_BACKWARD: return "MSG_MOVE_START_BACKWARD_Server";
+        case V_MSG_MOVE_STOP: return "MSG_MOVE_STOP_Server";
+        case V_MSG_MOVE_START_STRAFE_LEFT: return "MSG_MOVE_START_STRAFE_LEFT_Server";
+        case V_MSG_MOVE_START_STRAFE_RIGHT: return "MSG_MOVE_START_STRAFE_RIGHT_Server";
+        case V_MSG_MOVE_STOP_STRAFE: return "MSG_MOVE_STOP_STRAFE_Server";
+        case V_MSG_MOVE_JUMP: return "MSG_MOVE_JUMP_Server";
+        case V_MSG_MOVE_START_TURN_LEFT: return "MSG_MOVE_START_TURN_LEFT_Server";
+        case V_MSG_MOVE_START_TURN_RIGHT: return "MSG_MOVE_START_TURN_RIGHT_Server";
+        case V_MSG_MOVE_STOP_TURN: return "MSG_MOVE_STOP_TURN_Server";
+        case V_MSG_MOVE_START_PITCH_UP: return "MSG_MOVE_START_PITCH_UP_Server";
+        case V_MSG_MOVE_START_PITCH_DOWN: return "MSG_MOVE_START_PITCH_DOWN_Server";
+        case V_MSG_MOVE_STOP_PITCH: return "MSG_MOVE_STOP_PITCH_Server";
+        case V_MSG_MOVE_SET_RUN_MODE: return "MSG_MOVE_SET_RUN_MODE_Server";
+        case V_MSG_MOVE_SET_WALK_MODE: return "MSG_MOVE_SET_WALK_MODE_Server";
+        case V_MSG_MOVE_TELEPORT_ACK: return "MSG_MOVE_TELEPORT_ACK_Server";
+        case V_MSG_MOVE_FALL_LAND: return "MSG_MOVE_FALL_LAND_Server";
+        case V_MSG_MOVE_START_SWIM: return "MSG_MOVE_START_SWIM_Server";
+        case V_MSG_MOVE_STOP_SWIM: return "MSG_MOVE_STOP_SWIM_Server";
+        case V_MSG_MOVE_SET_FACING: return "MSG_MOVE_SET_FACING_Server";
+        case V_MSG_MOVE_SET_PITCH: return "MSG_MOVE_SET_PITCH_Server";
+        case V_SMSG_MONSTER_MOVE: return "SMSG_MONSTER_MOVE";
+        case V_SMSG_MOVE_WATER_WALK: return "SMSG_MOVE_WATER_WALK";
+        case V_SMSG_MOVE_LAND_WALK: return "SMSG_MOVE_LAND_WALK";
+        case V_SMSG_FORCE_RUN_SPEED_CHANGE: return "SMSG_FORCE_RUN_SPEED_CHANGE";
+        case V_SMSG_FORCE_RUN_BACK_SPEED_CHANGE: return "SMSG_FORCE_RUN_BACK_SPEED_CHANGE";
+        case V_SMSG_FORCE_SWIM_SPEED_CHANGE: return "SMSG_FORCE_SWIM_SPEED_CHANGE";
+        case V_SMSG_FORCE_MOVE_ROOT: return "SMSG_FORCE_MOVE_ROOT";
+        case V_SMSG_FORCE_MOVE_UNROOT: return "SMSG_FORCE_MOVE_UNROOT";
+        case V_MSG_MOVE_HEARTBEAT: return "MSG_MOVE_HEARTBEAT_Server";
+        case V_SMSG_MOVE_KNOCK_BACK: return "SMSG_MOVE_KNOCK_BACK";
+        case V_SMSG_MOVE_FEATHER_FALL: return "SMSG_MOVE_FEATHER_FALL";
+        case V_SMSG_MOVE_NORMAL_FALL: return "SMSG_MOVE_NORMAL_FALL";
+        case V_SMSG_MOVE_SET_HOVER: return "SMSG_MOVE_SET_HOVER";
+        case V_SMSG_MOVE_UNSET_HOVER: return "SMSG_MOVE_UNSET_HOVER";
+        case V_SMSG_TRIGGER_CINEMATIC: return "SMSG_TRIGGER_CINEMATIC";
+        case V_SMSG_TUTORIAL_FLAGS: return "SMSG_TUTORIAL_FLAGS";
+        case V_SMSG_EMOTE: return "SMSG_EMOTE";
+        case V_SMSG_TEXT_EMOTE: return "SMSG_TEXT_EMOTE";
+        case V_SMSG_INVENTORY_CHANGE_FAILURE: return "SMSG_INVENTORY_CHANGE_FAILURE";
+        case V_SMSG_OPEN_CONTAINER: return "SMSG_OPEN_CONTAINER";
+        case V_SMSG_INSPECT: return "SMSG_INSPECT";
+        case V_SMSG_TRADE_STATUS: return "SMSG_TRADE_STATUS";
+        case V_SMSG_TRADE_STATUS_EXTENDED: return "SMSG_TRADE_STATUS_EXTENDED";
+        case V_SMSG_INITIALIZE_FACTIONS: return "SMSG_INITIALIZE_FACTIONS";
+        case V_SMSG_SET_FACTION_VISIBLE: return "SMSG_SET_FACTION_VISIBLE";
+        case V_SMSG_SET_FACTION_STANDING: return "SMSG_SET_FACTION_STANDING";
+        case V_SMSG_SET_PROFICIENCY: return "SMSG_SET_PROFICIENCY";
+        case V_SMSG_ACTION_BUTTONS: return "SMSG_ACTION_BUTTONS";
+        case V_SMSG_INITIAL_SPELLS: return "SMSG_INITIAL_SPELLS";
+        case V_SMSG_LEARNED_SPELL: return "SMSG_LEARNED_SPELL";
+        case V_SMSG_SUPERCEDED_SPELL: return "SMSG_SUPERCEDED_SPELL";
+        case V_SMSG_CAST_RESULT: return "SMSG_CAST_RESULT";
+        case V_SMSG_SPELL_START: return "SMSG_SPELL_START";
+        case V_SMSG_SPELL_GO: return "SMSG_SPELL_GO";
+        case V_SMSG_SPELL_FAILURE: return "SMSG_SPELL_FAILURE";
+        case V_SMSG_SPELL_COOLDOWN: return "SMSG_SPELL_COOLDOWN";
+        case V_SMSG_COOLDOWN_EVENT: return "SMSG_COOLDOWN_EVENT";
+        case V_SMSG_UPDATE_AURA_DURATION: return "SMSG_UPDATE_AURA_DURATION";
+        case V_SMSG_PET_CAST_FAILED: return "SMSG_PET_CAST_FAILED";
+        case V_MSG_CHANNEL_START: return "MSG_CHANNEL_START_Server";
+        case V_MSG_CHANNEL_UPDATE: return "MSG_CHANNEL_UPDATE_Server";
+        case V_SMSG_AI_REACTION: return "SMSG_AI_REACTION";
+        case V_SMSG_ATTACKSTART: return "SMSG_ATTACKSTART";
+        case V_SMSG_ATTACKSTOP: return "SMSG_ATTACKSTOP";
+        case V_SMSG_ATTACKERSTATEUPDATE: return "SMSG_ATTACKERSTATEUPDATE";
+        case V_SMSG_SPELLHEALLOG: return "SMSG_SPELLHEALLOG";
+        case V_SMSG_SPELLENERGIZELOG: return "SMSG_SPELLENERGIZELOG";
+        case V_SMSG_BINDPOINTUPDATE: return "SMSG_BINDPOINTUPDATE";
+        case V_SMSG_PLAYERBOUND: return "SMSG_PLAYERBOUND";
+        case V_SMSG_CLIENT_CONTROL_UPDATE: return "SMSG_CLIENT_CONTROL_UPDATE";
+        case V_SMSG_RESURRECT_REQUEST: return "SMSG_RESURRECT_REQUEST";
+        case V_SMSG_LOOT_RESPONSE: return "SMSG_LOOT_RESPONSE";
+        case V_SMSG_LOOT_RELEASE_RESPONSE: return "SMSG_LOOT_RELEASE_RESPONSE";
+        case V_SMSG_LOOT_REMOVED: return "SMSG_LOOT_REMOVED";
+        case V_SMSG_LOOT_MONEY_NOTIFY: return "SMSG_LOOT_MONEY_NOTIFY";
+        case V_SMSG_ITEM_PUSH_RESULT: return "SMSG_ITEM_PUSH_RESULT";
+        case V_SMSG_DUEL_REQUESTED: return "SMSG_DUEL_REQUESTED";
+        case V_SMSG_DUEL_COMPLETE: return "SMSG_DUEL_COMPLETE";
+        case V_SMSG_DUEL_WINNER: return "SMSG_DUEL_WINNER";
+        case V_SMSG_MOUNTRESULT: return "SMSG_MOUNTRESULT";
+        case V_SMSG_DISMOUNTRESULT: return "SMSG_DISMOUNTRESULT";
+        case V_SMSG_MOUNTSPECIAL_ANIM: return "SMSG_MOUNTSPECIAL_ANIM";
+        case V_SMSG_PET_TAME_FAILURE: return "SMSG_PET_TAME_FAILURE";
+        case V_SMSG_PET_SPELLS: return "SMSG_PET_SPELLS";
+        case V_SMSG_PET_MODE: return "SMSG_PET_MODE";
+        case V_SMSG_GOSSIP_MESSAGE: return "SMSG_GOSSIP_MESSAGE";
+        case V_SMSG_NPC_TEXT_UPDATE: return "SMSG_NPC_TEXT_UPDATE";
+        case V_SMSG_QUESTGIVER_STATUS: return "SMSG_QUESTGIVER_STATUS";
+        case V_SMSG_QUESTGIVER_QUEST_LIST: return "SMSG_QUESTGIVER_QUEST_LIST";
+        case V_SMSG_QUESTGIVER_QUEST_DETAILS: return "SMSG_QUESTGIVER_QUEST_DETAILS";
+        case V_SMSG_QUESTGIVER_REQUEST_ITEMS: return "SMSG_QUESTGIVER_REQUEST_ITEMS";
+        case V_SMSG_QUESTGIVER_OFFER_REWARD: return "SMSG_QUESTGIVER_OFFER_REWARD";
+        case V_SMSG_QUESTGIVER_QUEST_INVALID: return "SMSG_QUESTGIVER_QUEST_INVALID";
+        case V_SMSG_QUESTGIVER_QUEST_COMPLETE: return "SMSG_QUESTGIVER_QUEST_COMPLETE";
+        case V_SMSG_QUESTGIVER_QUEST_FAILED: return "SMSG_QUESTGIVER_QUEST_FAILED";
+        case V_SMSG_QUESTUPDATE_FAILED: return "SMSG_QUESTUPDATE_FAILED";
+        case V_SMSG_QUESTUPDATE_FAILEDTIMER: return "SMSG_QUESTUPDATE_FAILEDTIMER";
+        case V_SMSG_QUESTUPDATE_COMPLETE: return "SMSG_QUESTUPDATE_COMPLETE";
+        case V_SMSG_QUESTUPDATE_ADD_KILL: return "SMSG_QUESTUPDATE_ADD_KILL";
+        case V_SMSG_QUESTUPDATE_ADD_ITEM: return "SMSG_QUESTUPDATE_ADD_ITEM";
+        case V_SMSG_QUEST_CONFIRM_ACCEPT: return "SMSG_QUEST_CONFIRM_ACCEPT";
+        case V_SMSG_LIST_INVENTORY: return "SMSG_LIST_INVENTORY";
+        case V_SMSG_SELL_ITEM: return "SMSG_SELL_ITEM";
+        case V_SMSG_BUY_ITEM: return "SMSG_BUY_ITEM";
+        case V_SMSG_BUY_FAILED: return "SMSG_BUY_FAILED";
+        case V_SMSG_SHOWTAXINODES: return "SMSG_SHOWTAXINODES";
+        case V_SMSG_TAXINODE_STATUS: return "SMSG_TAXINODE_STATUS";
+        case V_SMSG_ACTIVATETAXIREPLY: return "SMSG_ACTIVATETAXIREPLY";
+        case V_SMSG_TRAINER_LIST: return "SMSG_TRAINER_LIST";
+        case V_SMSG_TRAINER_BUY_SUCCEEDED: return "SMSG_TRAINER_BUY_SUCCEEDED";
+        case V_SMSG_TRAINER_BUY_FAILED: return "SMSG_TRAINER_BUY_FAILED";
+        case V_SMSG_SHOW_BANK: return "SMSG_SHOW_BANK";
+        case V_SMSG_BUY_BANK_SLOT_RESULT: return "SMSG_BUY_BANK_SLOT_RESULT";
+        case V_SMSG_PETITION_SHOWLIST: return "SMSG_PETITION_SHOWLIST";
+        case V_SMSG_PETITION_SHOW_SIGNATURES: return "SMSG_PETITION_SHOW_SIGNATURES";
+        case V_SMSG_PETITION_SIGN_RESULTS: return "SMSG_PETITION_SIGN_RESULTS";
+        case V_MSG_PETITION_DECLINE: return "MSG_PETITION_DECLINE";
+        case V_SMSG_TURN_IN_PETITION_RESULTS: return "SMSG_TURN_IN_PETITION_RESULTS";
+        case V_SMSG_PETITION_QUERY_RESPONSE: return "SMSG_PETITION_QUERY_RESPONSE";
+        case V_SMSG_NOTIFICATION: return "SMSG_NOTIFICATION";
+        case V_SMSG_PLAYED_TIME: return "SMSG_PLAYED_TIME";
+        case V_SMSG_QUERY_TIME_RESPONSE: return "SMSG_QUERY_TIME_RESPONSE";
+        case V_SMSG_LOG_XPGAIN: return "SMSG_LOG_XPGAIN";
+        case V_SMSG_LEVELUP_INFO: return "SMSG_LEVELUP_INFO";
+        case V_MSG_MINIMAP_PING: return "MSG_MINIMAP_PING_Server";
+        case V_SMSG_RESISTLOG: return "SMSG_RESISTLOG";
+        case V_SMSG_ENCHANTMENTLOG: return "SMSG_ENCHANTMENTLOG";
+        case V_SMSG_START_MIRROR_TIMER: return "SMSG_START_MIRROR_TIMER";
+        case V_SMSG_PAUSE_MIRROR_TIMER: return "SMSG_PAUSE_MIRROR_TIMER";
+        case V_SMSG_STOP_MIRROR_TIMER: return "SMSG_STOP_MIRROR_TIMER";
+        case V_SMSG_PONG: return "SMSG_PONG";
+        case V_SMSG_CLEAR_COOLDOWN: return "SMSG_CLEAR_COOLDOWN";
+        case V_SMSG_GAMEOBJECT_PAGETEXT: return "SMSG_GAMEOBJECT_PAGETEXT";
+        case V_SMSG_SPELL_DELAYED: return "SMSG_SPELL_DELAYED";
+        case V_SMSG_ITEM_TIME_UPDATE: return "SMSG_ITEM_TIME_UPDATE";
+        case V_SMSG_ITEM_ENCHANT_TIME_UPDATE: return "SMSG_ITEM_ENCHANT_TIME_UPDATE";
+        case V_SMSG_AUTH_CHALLENGE: return "SMSG_AUTH_CHALLENGE";
+        case V_SMSG_AUTH_RESPONSE: return "SMSG_AUTH_RESPONSE";
+        case V_MSG_SAVE_GUILD_EMBLEM: return "MSG_SAVE_GUILD_EMBLEM_Server";
+        case V_MSG_TABARDVENDOR_ACTIVATE: return "MSG_TABARDVENDOR_ACTIVATE";
+        case V_SMSG_PLAY_SPELL_VISUAL: return "SMSG_PLAY_SPELL_VISUAL";
+        case V_SMSG_PARTYKILLLOG: return "SMSG_PARTYKILLLOG";
+        case V_SMSG_COMPRESSED_UPDATE_OBJECT: return "SMSG_COMPRESSED_UPDATE_OBJECT";
+        case V_SMSG_PLAY_SPELL_IMPACT: return "SMSG_PLAY_SPELL_IMPACT";
+        case V_SMSG_EXPLORATION_EXPERIENCE: return "SMSG_EXPLORATION_EXPERIENCE";
+        case V_MSG_RANDOM_ROLL: return "MSG_RANDOM_ROLL_Server";
+        case V_SMSG_ENVIRONMENTAL_DAMAGE_LOG: return "SMSG_ENVIRONMENTAL_DAMAGE_LOG";
+        case V_MSG_LOOKING_FOR_GROUP: return "MSG_LOOKING_FOR_GROUP_Server";
+        case V_SMSG_REMOVED_SPELL: return "SMSG_REMOVED_SPELL";
+        case V_SMSG_GMTICKET_CREATE: return "SMSG_GMTICKET_CREATE";
+        case V_SMSG_GMTICKET_UPDATETEXT: return "SMSG_GMTICKET_UPDATETEXT";
+        case V_SMSG_ACCOUNT_DATA_TIMES: return "SMSG_ACCOUNT_DATA_TIMES";
+        case V_SMSG_GMTICKET_GETTICKET: return "SMSG_GMTICKET_GETTICKET";
+        case V_SMSG_GAMEOBJECT_SPAWN_ANIM: return "SMSG_GAMEOBJECT_SPAWN_ANIM";
+        case V_SMSG_GAMEOBJECT_DESPAWN_ANIM: return "SMSG_GAMEOBJECT_DESPAWN_ANIM";
+        case V_MSG_CORPSE_QUERY: return "MSG_CORPSE_QUERY_Server";
+        case V_SMSG_GMTICKET_DELETETICKET: return "SMSG_GMTICKET_DELETETICKET";
+        case V_SMSG_GMTICKET_SYSTEMSTATUS: return "SMSG_GMTICKET_SYSTEMSTATUS";
+        case V_SMSG_SET_REST_START: return "SMSG_SET_REST_START";
+        case V_SMSG_SPIRIT_HEALER_CONFIRM: return "SMSG_SPIRIT_HEALER_CONFIRM";
+        case V_SMSG_GOSSIP_POI: return "SMSG_GOSSIP_POI";
+        case V_SMSG_LOGIN_VERIFY_WORLD: return "SMSG_LOGIN_VERIFY_WORLD";
+        case V_SMSG_SEND_MAIL_RESULT: return "SMSG_SEND_MAIL_RESULT";
+        case V_SMSG_MAIL_LIST_RESULT: return "SMSG_MAIL_LIST_RESULT";
+        case V_SMSG_BATTLEFIELD_LIST: return "SMSG_BATTLEFIELD_LIST";
+        case V_SMSG_ITEM_TEXT_QUERY_RESPONSE: return "SMSG_ITEM_TEXT_QUERY_RESPONSE";
+        case V_SMSG_SPELLLOGMISS: return "SMSG_SPELLLOGMISS";
+        case V_SMSG_SPELLLOGEXECUTE: return "SMSG_SPELLLOGEXECUTE";
+        case V_SMSG_PERIODICAURALOG: return "SMSG_PERIODICAURALOG";
+        case V_SMSG_SPELLDAMAGESHIELD: return "SMSG_SPELLDAMAGESHIELD";
+        case V_SMSG_SPELLNONMELEEDAMAGELOG: return "SMSG_SPELLNONMELEEDAMAGELOG";
+        case V_SMSG_ZONE_UNDER_ATTACK: return "SMSG_ZONE_UNDER_ATTACK";
+        case V_MSG_AUCTION_HELLO: return "MSG_AUCTION_HELLO_Server";
+        case V_SMSG_AUCTION_COMMAND_RESULT: return "SMSG_AUCTION_COMMAND_RESULT";
+        case V_SMSG_AUCTION_LIST_RESULT: return "SMSG_AUCTION_LIST_RESULT";
+        case V_SMSG_AUCTION_OWNER_LIST_RESULT: return "SMSG_AUCTION_OWNER_LIST_RESULT";
+        case V_SMSG_AUCTION_BIDDER_NOTIFICATION: return "SMSG_AUCTION_BIDDER_NOTIFICATION";
+        case V_SMSG_AUCTION_OWNER_NOTIFICATION: return "SMSG_AUCTION_OWNER_NOTIFICATION";
+        case V_SMSG_PROCRESIST: return "SMSG_PROCRESIST";
+        case V_SMSG_DISPEL_FAILED: return "SMSG_DISPEL_FAILED";
+        case V_SMSG_SPELLORDAMAGE_IMMUNE: return "SMSG_SPELLORDAMAGE_IMMUNE";
+        case V_SMSG_AUCTION_BIDDER_LIST_RESULT: return "SMSG_AUCTION_BIDDER_LIST_RESULT";
+        case V_SMSG_SET_FLAT_SPELL_MODIFIER: return "SMSG_SET_FLAT_SPELL_MODIFIER";
+        case V_SMSG_SET_PCT_SPELL_MODIFIER: return "SMSG_SET_PCT_SPELL_MODIFIER";
+        case V_SMSG_CORPSE_RECLAIM_DELAY: return "SMSG_CORPSE_RECLAIM_DELAY";
+        case V_MSG_LIST_STABLED_PETS: return "MSG_LIST_STABLED_PETS_Server";
+        case V_SMSG_STABLE_RESULT: return "SMSG_STABLE_RESULT";
+        case V_MSG_QUEST_PUSH_RESULT: return "MSG_QUEST_PUSH_RESULT";
+        case V_SMSG_PLAY_MUSIC: return "SMSG_PLAY_MUSIC";
+        case V_SMSG_PLAY_OBJECT_SOUND: return "SMSG_PLAY_OBJECT_SOUND";
+        case V_SMSG_SPELLDISPELLOG: return "SMSG_SPELLDISPELLOG";
+        case V_MSG_QUERY_NEXT_MAIL_TIME: return "MSG_QUERY_NEXT_MAIL_TIME_Server";
+        case V_SMSG_RECEIVED_MAIL: return "SMSG_RECEIVED_MAIL";
+        case V_SMSG_RAID_GROUP_ONLY: return "SMSG_RAID_GROUP_ONLY";
+        case V_SMSG_PVP_CREDIT: return "SMSG_PVP_CREDIT";
+        case V_SMSG_AUCTION_REMOVED_NOTIFICATION: return "SMSG_AUCTION_REMOVED_NOTIFICATION";
+        case V_SMSG_SERVER_MESSAGE: return "SMSG_SERVER_MESSAGE";
+        case V_SMSG_MEETINGSTONE_SETQUEUE: return "SMSG_MEETINGSTONE_SETQUEUE";
+        case V_SMSG_MEETINGSTONE_MEMBER_ADDED: return "SMSG_MEETINGSTONE_MEMBER_ADDED";
+        case V_SMSG_STANDSTATE_UPDATE: return "SMSG_STANDSTATE_UPDATE";
+        case V_SMSG_LOOT_ALL_PASSED: return "SMSG_LOOT_ALL_PASSED";
+        case V_SMSG_LOOT_ROLL_WON: return "SMSG_LOOT_ROLL_WON";
+        case V_SMSG_LOOT_START_ROLL: return "SMSG_LOOT_START_ROLL";
+        case V_SMSG_LOOT_ROLL: return "SMSG_LOOT_ROLL";
+        case V_SMSG_LOOT_MASTER_LIST: return "SMSG_LOOT_MASTER_LIST";
+        case V_SMSG_SET_FORCED_REACTIONS: return "SMSG_SET_FORCED_REACTIONS";
+        case V_SMSG_SPELL_FAILED_OTHER: return "SMSG_SPELL_FAILED_OTHER";
+        case V_SMSG_GAMEOBJECT_RESET_STATE: return "SMSG_GAMEOBJECT_RESET_STATE";
+        case V_SMSG_CHAT_PLAYER_NOT_FOUND: return "SMSG_CHAT_PLAYER_NOT_FOUND";
+        case V_MSG_TALENT_WIPE_CONFIRM: return "MSG_TALENT_WIPE_CONFIRM_Server";
+        case V_SMSG_SUMMON_REQUEST: return "SMSG_SUMMON_REQUEST";
+        case V_SMSG_MONSTER_MOVE_TRANSPORT: return "SMSG_MONSTER_MOVE_TRANSPORT";
+        case V_MSG_MOVE_FEATHER_FALL: return "MSG_MOVE_FEATHER_FALL_Server";
+        case V_MSG_MOVE_WATER_WALK: return "MSG_MOVE_WATER_WALK";
+        case V_SMSG_DUEL_COUNTDOWN: return "SMSG_DUEL_COUNTDOWN";
+        case V_SMSG_AREA_TRIGGER_MESSAGE: return "SMSG_AREA_TRIGGER_MESSAGE";
+        case V_SMSG_MEETINGSTONE_JOINFAILED: return "SMSG_MEETINGSTONE_JOINFAILED";
+        case V_SMSG_PLAYER_SKINNED: return "SMSG_PLAYER_SKINNED";
+        case V_MSG_PETITION_RENAME: return "MSG_PETITION_RENAME";
+        case V_SMSG_INIT_WORLD_STATES: return "SMSG_INIT_WORLD_STATES";
+        case V_SMSG_UPDATE_WORLD_STATE: return "SMSG_UPDATE_WORLD_STATE";
+        case V_SMSG_ITEM_NAME_QUERY_RESPONSE: return "SMSG_ITEM_NAME_QUERY_RESPONSE";
+        case V_SMSG_PET_ACTION_FEEDBACK: return "SMSG_PET_ACTION_FEEDBACK";
+        case V_SMSG_CHAR_RENAME: return "SMSG_CHAR_RENAME";
+        case V_SMSG_INSTANCE_SAVE_CREATED: return "SMSG_INSTANCE_SAVE_CREATED";
+        case V_SMSG_RAID_INSTANCE_INFO: return "SMSG_RAID_INSTANCE_INFO";
+        case V_SMSG_PLAY_SOUND: return "SMSG_PLAY_SOUND";
+        case V_SMSG_BATTLEFIELD_STATUS: return "SMSG_BATTLEFIELD_STATUS";
+        case V_MSG_INSPECT_HONOR_STATS: return "MSG_INSPECT_HONOR_STATS_Server";
+        case V_SMSG_FORCE_WALK_SPEED_CHANGE: return "SMSG_FORCE_WALK_SPEED_CHANGE";
+        case V_SMSG_FORCE_SWIM_BACK_SPEED_CHANGE: return "SMSG_FORCE_SWIM_BACK_SPEED_CHANGE";
+        case V_SMSG_FORCE_TURN_RATE_CHANGE: return "SMSG_FORCE_TURN_RATE_CHANGE";
+        case V_MSG_PVP_LOG_DATA: return "MSG_PVP_LOG_DATA_Server";
+        case V_SMSG_AREA_SPIRIT_HEALER_TIME: return "SMSG_AREA_SPIRIT_HEALER_TIME";
+        case V_SMSG_WARDEN_DATA: return "SMSG_WARDEN_DATA";
+        case V_SMSG_GROUP_JOINED_BATTLEGROUND: return "SMSG_GROUP_JOINED_BATTLEGROUND";
+        case V_MSG_BATTLEGROUND_PLAYER_POSITIONS: return "MSG_BATTLEGROUND_PLAYER_POSITIONS_Server";
+        case V_SMSG_BINDER_CONFIRM: return "SMSG_BINDER_CONFIRM";
+        case V_SMSG_BATTLEGROUND_PLAYER_JOINED: return "SMSG_BATTLEGROUND_PLAYER_JOINED";
+        case V_SMSG_BATTLEGROUND_PLAYER_LEFT: return "SMSG_BATTLEGROUND_PLAYER_LEFT";
+        case V_SMSG_ADDON_INFO: return "SMSG_ADDON_INFO";
+        case V_SMSG_PET_UNLEARN_CONFIRM: return "SMSG_PET_UNLEARN_CONFIRM";
+        case V_SMSG_PARTY_MEMBER_STATS_FULL: return "SMSG_PARTY_MEMBER_STATS_FULL";
+        case V_SMSG_WEATHER: return "SMSG_WEATHER";
+        case V_SMSG_RAID_INSTANCE_MESSAGE: return "SMSG_RAID_INSTANCE_MESSAGE";
+        case V_SMSG_COMPRESSED_MOVES: return "SMSG_COMPRESSED_MOVES";
+        case V_SMSG_SPLINE_SET_RUN_SPEED: return "SMSG_SPLINE_SET_RUN_SPEED";
+        case V_SMSG_SPLINE_SET_RUN_BACK_SPEED: return "SMSG_SPLINE_SET_RUN_BACK_SPEED";
+        case V_SMSG_SPLINE_SET_SWIM_SPEED: return "SMSG_SPLINE_SET_SWIM_SPEED";
+        case V_SMSG_SPLINE_SET_WALK_SPEED: return "SMSG_SPLINE_SET_WALK_SPEED";
+        case V_SMSG_SPLINE_SET_SWIM_BACK_SPEED: return "SMSG_SPLINE_SET_SWIM_BACK_SPEED";
+        case V_SMSG_SPLINE_SET_TURN_RATE: return "SMSG_SPLINE_SET_TURN_RATE";
+        case V_SMSG_SPLINE_MOVE_UNROOT: return "SMSG_SPLINE_MOVE_UNROOT";
+        case V_SMSG_SPLINE_MOVE_FEATHER_FALL: return "SMSG_SPLINE_MOVE_FEATHER_FALL";
+        case V_SMSG_SPLINE_MOVE_NORMAL_FALL: return "SMSG_SPLINE_MOVE_NORMAL_FALL";
+        case V_SMSG_SPLINE_MOVE_SET_HOVER: return "SMSG_SPLINE_MOVE_SET_HOVER";
+        case V_SMSG_SPLINE_MOVE_UNSET_HOVER: return "SMSG_SPLINE_MOVE_UNSET_HOVER";
+        case V_SMSG_SPLINE_MOVE_WATER_WALK: return "SMSG_SPLINE_MOVE_WATER_WALK";
+        case V_SMSG_SPLINE_MOVE_LAND_WALK: return "SMSG_SPLINE_MOVE_LAND_WALK";
+        case V_SMSG_SPLINE_MOVE_START_SWIM: return "SMSG_SPLINE_MOVE_START_SWIM";
+        case V_SMSG_SPLINE_MOVE_STOP_SWIM: return "SMSG_SPLINE_MOVE_STOP_SWIM";
+        case V_SMSG_SPLINE_MOVE_SET_RUN_MODE: return "SMSG_SPLINE_MOVE_SET_RUN_MODE";
+        case V_SMSG_SPLINE_MOVE_SET_WALK_MODE: return "SMSG_SPLINE_MOVE_SET_WALK_MODE";
+        case V_MSG_MOVE_TIME_SKIPPED: return "MSG_MOVE_TIME_SKIPPED_Server";
+        case V_SMSG_SPLINE_MOVE_ROOT: return "SMSG_SPLINE_MOVE_ROOT";
+        case V_SMSG_INVALIDATE_PLAYER: return "SMSG_INVALIDATE_PLAYER";
+        case V_SMSG_INSTANCE_RESET: return "SMSG_INSTANCE_RESET";
+        case V_SMSG_INSTANCE_RESET_FAILED: return "SMSG_INSTANCE_RESET_FAILED";
+        case V_SMSG_UPDATE_LAST_INSTANCE: return "SMSG_UPDATE_LAST_INSTANCE";
+        case V_MSG_RAID_TARGET_UPDATE: return "MSG_RAID_TARGET_UPDATE_Server";
+        case V_MSG_RAID_READY_CHECK: return "MSG_RAID_READY_CHECK_Server";
+        case V_SMSG_PET_ACTION_SOUND: return "SMSG_PET_ACTION_SOUND";
+        case V_SMSG_PET_DISMISS_SOUND: return "SMSG_PET_DISMISS_SOUND";
+        case V_SMSG_GM_TICKET_STATUS_UPDATE: return "SMSG_GM_TICKET_STATUS_UPDATE";
+        case V_SMSG_UPDATE_INSTANCE_OWNERSHIP: return "SMSG_UPDATE_INSTANCE_OWNERSHIP";
+        case V_SMSG_SPELLINSTAKILLLOG: return "SMSG_SPELLINSTAKILLLOG";
+        case V_SMSG_SPELL_UPDATE_CHAIN_TARGETS: return "SMSG_SPELL_UPDATE_CHAIN_TARGETS";
+        case V_SMSG_EXPECTED_SPAM_RECORDS: return "SMSG_EXPECTED_SPAM_RECORDS";
+        case V_SMSG_DEFENSE_MESSAGE: return "SMSG_DEFENSE_MESSAGE";
         default:
             break;
     }

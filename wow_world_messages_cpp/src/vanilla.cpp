@@ -19,24 +19,1477 @@ namespace wow_world_messages {
 
 namespace wow_world_messages {
 namespace vanilla {
-WOW_WORLD_MESSAGES_CPP_EXPORT void update_mask_set(UpdateMask& mask, UpdateMaskValues offset, uint32_t value) {
-    uint32_t block = static_cast<uint32_t>(offset) / 32;
-    uint32_t bit = static_cast<uint32_t>(offset) % 32;
-
-    mask.headers[block] |= 1 << bit;
-    mask.values[static_cast<uint32_t>(offset)] = value;
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::object_guid_set(uint64_t value) {
+    ::wow_world_messages::util::update_mask_set_u64(headers, values, 0, value);
 }
-
-WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t update_mask_get(const UpdateMask& mask, UpdateMaskValues offset) {
-    uint32_t block = static_cast<uint32_t>(offset) / 32;
-    uint32_t bit = static_cast<uint32_t>(offset) % 32;
-
-    if((mask.headers[block] & 1 << bit) != 0) {
-        return mask.values[static_cast<uint32_t>(offset)];
-    }
-
-    return 0;
+WOW_WORLD_MESSAGES_CPP_EXPORT uint64_t UpdateMask::object_guid_get() {
+    return ::wow_world_messages::util::update_mask_get_u64(headers, values, 0);
 }
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::object_type_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 2, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::object_type_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 2);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::object_entry_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 3, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::object_entry_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 3);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::object_scale_x_set(float value) {
+    ::wow_world_messages::util::update_mask_set_float(headers, values, 4, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT float UpdateMask::object_scale_x_get() {
+    return ::wow_world_messages::util::update_mask_get_float(headers, values, 4);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::item_owner_set(uint64_t value) {
+    ::wow_world_messages::util::update_mask_set_u64(headers, values, 6, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint64_t UpdateMask::item_owner_get() {
+    return ::wow_world_messages::util::update_mask_get_u64(headers, values, 6);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::item_contained_set(uint64_t value) {
+    ::wow_world_messages::util::update_mask_set_u64(headers, values, 8, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint64_t UpdateMask::item_contained_get() {
+    return ::wow_world_messages::util::update_mask_get_u64(headers, values, 8);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::item_creator_set(uint64_t value) {
+    ::wow_world_messages::util::update_mask_set_u64(headers, values, 10, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint64_t UpdateMask::item_creator_get() {
+    return ::wow_world_messages::util::update_mask_get_u64(headers, values, 10);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::item_giftcreator_set(uint64_t value) {
+    ::wow_world_messages::util::update_mask_set_u64(headers, values, 12, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint64_t UpdateMask::item_giftcreator_get() {
+    return ::wow_world_messages::util::update_mask_get_u64(headers, values, 12);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::item_stack_count_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 14, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::item_stack_count_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 14);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::item_duration_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 15, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::item_duration_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 15);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::item_spell_charges_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 16, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::item_spell_charges_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 16);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::item_flags_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 21, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::item_flags_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 21);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::item_enchantment_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 22, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::item_enchantment_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 22);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::item_property_seed_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 43, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::item_property_seed_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 43);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::item_random_properties_id_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 44, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::item_random_properties_id_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 44);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::item_item_text_id_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 45, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::item_item_text_id_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 45);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::item_durability_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 46, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::item_durability_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 46);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::item_maxdurability_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 47, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::item_maxdurability_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 47);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::container_num_slots_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 48, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::container_num_slots_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 48);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::container_slot_1_set(uint64_t value) {
+    ::wow_world_messages::util::update_mask_set_u64(headers, values, 50, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint64_t UpdateMask::container_slot_1_get() {
+    return ::wow_world_messages::util::update_mask_get_u64(headers, values, 50);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_charm_set(uint64_t value) {
+    ::wow_world_messages::util::update_mask_set_u64(headers, values, 6, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint64_t UpdateMask::unit_charm_get() {
+    return ::wow_world_messages::util::update_mask_get_u64(headers, values, 6);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_summon_set(uint64_t value) {
+    ::wow_world_messages::util::update_mask_set_u64(headers, values, 8, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint64_t UpdateMask::unit_summon_get() {
+    return ::wow_world_messages::util::update_mask_get_u64(headers, values, 8);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_charmedby_set(uint64_t value) {
+    ::wow_world_messages::util::update_mask_set_u64(headers, values, 10, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint64_t UpdateMask::unit_charmedby_get() {
+    return ::wow_world_messages::util::update_mask_get_u64(headers, values, 10);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_summonedby_set(uint64_t value) {
+    ::wow_world_messages::util::update_mask_set_u64(headers, values, 12, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint64_t UpdateMask::unit_summonedby_get() {
+    return ::wow_world_messages::util::update_mask_get_u64(headers, values, 12);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_createdby_set(uint64_t value) {
+    ::wow_world_messages::util::update_mask_set_u64(headers, values, 14, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint64_t UpdateMask::unit_createdby_get() {
+    return ::wow_world_messages::util::update_mask_get_u64(headers, values, 14);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_target_set(uint64_t value) {
+    ::wow_world_messages::util::update_mask_set_u64(headers, values, 16, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint64_t UpdateMask::unit_target_get() {
+    return ::wow_world_messages::util::update_mask_get_u64(headers, values, 16);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_persuaded_set(uint64_t value) {
+    ::wow_world_messages::util::update_mask_set_u64(headers, values, 18, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint64_t UpdateMask::unit_persuaded_get() {
+    return ::wow_world_messages::util::update_mask_get_u64(headers, values, 18);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_channel_object_set(uint64_t value) {
+    ::wow_world_messages::util::update_mask_set_u64(headers, values, 20, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint64_t UpdateMask::unit_channel_object_get() {
+    return ::wow_world_messages::util::update_mask_get_u64(headers, values, 20);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_health_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 22, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_health_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 22);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_power1_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 23, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_power1_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 23);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_power2_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 24, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_power2_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 24);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_power3_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 25, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_power3_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 25);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_power4_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 26, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_power4_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 26);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_power5_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 27, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_power5_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 27);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_maxhealth_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 28, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_maxhealth_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 28);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_maxpower1_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 29, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_maxpower1_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 29);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_maxpower2_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 30, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_maxpower2_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 30);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_maxpower3_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 31, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_maxpower3_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 31);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_maxpower4_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 32, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_maxpower4_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 32);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_maxpower5_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 33, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_maxpower5_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 33);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_level_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 34, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_level_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 34);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_factiontemplate_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 35, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_factiontemplate_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 35);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_bytes_0_set(std::array<uint8_t, 4> value) {
+    ::wow_world_messages::util::update_mask_set_bytes(headers, values, 36, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT std::array<uint8_t, 4> UpdateMask::unit_bytes_0_get() {
+    return ::wow_world_messages::util::update_mask_get_bytes(headers, values, 36);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_virtual_item_slot_display_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 37, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_virtual_item_slot_display_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 37);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_virtual_item_info_set(std::array<uint8_t, 4> value) {
+    ::wow_world_messages::util::update_mask_set_bytes(headers, values, 40, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT std::array<uint8_t, 4> UpdateMask::unit_virtual_item_info_get() {
+    return ::wow_world_messages::util::update_mask_get_bytes(headers, values, 40);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_flags_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 46, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_flags_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 46);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_aura_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 47, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_aura_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 47);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_auraflags_set(std::array<uint8_t, 4> value) {
+    ::wow_world_messages::util::update_mask_set_bytes(headers, values, 95, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT std::array<uint8_t, 4> UpdateMask::unit_auraflags_get() {
+    return ::wow_world_messages::util::update_mask_get_bytes(headers, values, 95);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_auralevels_set(std::array<uint8_t, 4> value) {
+    ::wow_world_messages::util::update_mask_set_bytes(headers, values, 101, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT std::array<uint8_t, 4> UpdateMask::unit_auralevels_get() {
+    return ::wow_world_messages::util::update_mask_get_bytes(headers, values, 101);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_auraapplications_set(std::array<uint8_t, 4> value) {
+    ::wow_world_messages::util::update_mask_set_bytes(headers, values, 113, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT std::array<uint8_t, 4> UpdateMask::unit_auraapplications_get() {
+    return ::wow_world_messages::util::update_mask_get_bytes(headers, values, 113);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_aurastate_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 125, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_aurastate_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 125);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_baseattacktime_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 126, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_baseattacktime_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 126);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_rangedattacktime_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 128, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_rangedattacktime_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 128);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_boundingradius_set(float value) {
+    ::wow_world_messages::util::update_mask_set_float(headers, values, 129, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT float UpdateMask::unit_boundingradius_get() {
+    return ::wow_world_messages::util::update_mask_get_float(headers, values, 129);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_combatreach_set(float value) {
+    ::wow_world_messages::util::update_mask_set_float(headers, values, 130, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT float UpdateMask::unit_combatreach_get() {
+    return ::wow_world_messages::util::update_mask_get_float(headers, values, 130);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_displayid_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 131, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_displayid_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 131);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_nativedisplayid_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 132, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_nativedisplayid_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 132);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_mountdisplayid_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 133, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_mountdisplayid_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 133);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_mindamage_set(float value) {
+    ::wow_world_messages::util::update_mask_set_float(headers, values, 134, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT float UpdateMask::unit_mindamage_get() {
+    return ::wow_world_messages::util::update_mask_get_float(headers, values, 134);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_maxdamage_set(float value) {
+    ::wow_world_messages::util::update_mask_set_float(headers, values, 135, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT float UpdateMask::unit_maxdamage_get() {
+    return ::wow_world_messages::util::update_mask_get_float(headers, values, 135);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_minoffhanddamage_set(float value) {
+    ::wow_world_messages::util::update_mask_set_float(headers, values, 136, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT float UpdateMask::unit_minoffhanddamage_get() {
+    return ::wow_world_messages::util::update_mask_get_float(headers, values, 136);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_maxoffhanddamage_set(float value) {
+    ::wow_world_messages::util::update_mask_set_float(headers, values, 137, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT float UpdateMask::unit_maxoffhanddamage_get() {
+    return ::wow_world_messages::util::update_mask_get_float(headers, values, 137);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_bytes_1_set(std::array<uint8_t, 4> value) {
+    ::wow_world_messages::util::update_mask_set_bytes(headers, values, 138, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT std::array<uint8_t, 4> UpdateMask::unit_bytes_1_get() {
+    return ::wow_world_messages::util::update_mask_get_bytes(headers, values, 138);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_petnumber_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 139, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_petnumber_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 139);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_pet_name_timestamp_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 140, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_pet_name_timestamp_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 140);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_petexperience_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 141, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_petexperience_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 141);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_petnextlevelexp_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 142, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_petnextlevelexp_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 142);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_dynamic_flags_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 143, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_dynamic_flags_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 143);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_channel_spell_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 144, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_channel_spell_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 144);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_mod_cast_speed_set(float value) {
+    ::wow_world_messages::util::update_mask_set_float(headers, values, 145, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT float UpdateMask::unit_mod_cast_speed_get() {
+    return ::wow_world_messages::util::update_mask_get_float(headers, values, 145);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_created_by_spell_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 146, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_created_by_spell_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 146);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_npc_flags_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 147, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_npc_flags_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 147);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_npc_emotestate_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 148, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_npc_emotestate_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 148);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_training_points_set(std::pair<uint16_t, uint16_t> value) {
+    ::wow_world_messages::util::update_mask_set_two_shorts(headers, values, 149, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT std::pair<uint16_t, uint16_t> UpdateMask::unit_training_points_get() {
+    return ::wow_world_messages::util::update_mask_get_two_shorts(headers, values, 149);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_strength_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 150, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_strength_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 150);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_agility_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 151, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_agility_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 151);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_stamina_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 152, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_stamina_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 152);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_intellect_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 153, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_intellect_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 153);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_spirit_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 154, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_spirit_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 154);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_normal_resistance_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 155, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_normal_resistance_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 155);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_holy_resistance_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 156, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_holy_resistance_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 156);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_fire_resistance_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 157, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_fire_resistance_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 157);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_nature_resistance_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 158, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_nature_resistance_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 158);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_frost_resistance_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 159, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_frost_resistance_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 159);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_shadow_resistance_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 160, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_shadow_resistance_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 160);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_arcane_resistance_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 161, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_arcane_resistance_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 161);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_base_mana_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 162, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_base_mana_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 162);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_base_health_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 163, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_base_health_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 163);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_bytes_2_set(std::array<uint8_t, 4> value) {
+    ::wow_world_messages::util::update_mask_set_bytes(headers, values, 164, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT std::array<uint8_t, 4> UpdateMask::unit_bytes_2_get() {
+    return ::wow_world_messages::util::update_mask_get_bytes(headers, values, 164);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_attack_power_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 165, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_attack_power_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 165);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_attack_power_mods_set(std::pair<uint16_t, uint16_t> value) {
+    ::wow_world_messages::util::update_mask_set_two_shorts(headers, values, 166, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT std::pair<uint16_t, uint16_t> UpdateMask::unit_attack_power_mods_get() {
+    return ::wow_world_messages::util::update_mask_get_two_shorts(headers, values, 166);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_attack_power_multiplier_set(float value) {
+    ::wow_world_messages::util::update_mask_set_float(headers, values, 167, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT float UpdateMask::unit_attack_power_multiplier_get() {
+    return ::wow_world_messages::util::update_mask_get_float(headers, values, 167);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_ranged_attack_power_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 168, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_ranged_attack_power_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 168);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_ranged_attack_power_mods_set(std::pair<uint16_t, uint16_t> value) {
+    ::wow_world_messages::util::update_mask_set_two_shorts(headers, values, 169, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT std::pair<uint16_t, uint16_t> UpdateMask::unit_ranged_attack_power_mods_get() {
+    return ::wow_world_messages::util::update_mask_get_two_shorts(headers, values, 169);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_ranged_attack_power_multiplier_set(float value) {
+    ::wow_world_messages::util::update_mask_set_float(headers, values, 170, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT float UpdateMask::unit_ranged_attack_power_multiplier_get() {
+    return ::wow_world_messages::util::update_mask_get_float(headers, values, 170);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_minrangeddamage_set(float value) {
+    ::wow_world_messages::util::update_mask_set_float(headers, values, 171, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT float UpdateMask::unit_minrangeddamage_get() {
+    return ::wow_world_messages::util::update_mask_get_float(headers, values, 171);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_maxrangeddamage_set(float value) {
+    ::wow_world_messages::util::update_mask_set_float(headers, values, 172, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT float UpdateMask::unit_maxrangeddamage_get() {
+    return ::wow_world_messages::util::update_mask_get_float(headers, values, 172);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_power_cost_modifier_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 173, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::unit_power_cost_modifier_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 173);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::unit_power_cost_multiplier_set(float value) {
+    ::wow_world_messages::util::update_mask_set_float(headers, values, 180, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT float UpdateMask::unit_power_cost_multiplier_get() {
+    return ::wow_world_messages::util::update_mask_get_float(headers, values, 180);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_duel_arbiter_set(uint64_t value) {
+    ::wow_world_messages::util::update_mask_set_u64(headers, values, 188, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint64_t UpdateMask::player_duel_arbiter_get() {
+    return ::wow_world_messages::util::update_mask_get_u64(headers, values, 188);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_flags_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 190, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_flags_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 190);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_guildid_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 191, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_guildid_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 191);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_guildrank_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 192, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_guildrank_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 192);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_features_set(std::array<uint8_t, 4> value) {
+    ::wow_world_messages::util::update_mask_set_bytes(headers, values, 193, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT std::array<uint8_t, 4> UpdateMask::player_features_get() {
+    return ::wow_world_messages::util::update_mask_get_bytes(headers, values, 193);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_bytes_2_set(std::array<uint8_t, 4> value) {
+    ::wow_world_messages::util::update_mask_set_bytes(headers, values, 194, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT std::array<uint8_t, 4> UpdateMask::player_bytes_2_get() {
+    return ::wow_world_messages::util::update_mask_get_bytes(headers, values, 194);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_bytes_3_set(std::array<uint8_t, 4> value) {
+    ::wow_world_messages::util::update_mask_set_bytes(headers, values, 195, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT std::array<uint8_t, 4> UpdateMask::player_bytes_3_get() {
+    return ::wow_world_messages::util::update_mask_get_bytes(headers, values, 195);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_duel_team_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 196, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_duel_team_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 196);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_guild_timestamp_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 197, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_guild_timestamp_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 197);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_quest_log_1_1_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 198, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_quest_log_1_1_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 198);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_quest_log_1_2_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 199, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_quest_log_1_2_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 199);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_quest_log_2_1_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 201, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_quest_log_2_1_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 201);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_quest_log_2_2_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 202, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_quest_log_2_2_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 202);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_quest_log_3_1_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 204, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_quest_log_3_1_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 204);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_quest_log_3_2_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 205, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_quest_log_3_2_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 205);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_quest_log_4_1_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 207, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_quest_log_4_1_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 207);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_quest_log_4_2_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 208, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_quest_log_4_2_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 208);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_quest_log_5_1_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 210, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_quest_log_5_1_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 210);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_quest_log_5_2_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 211, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_quest_log_5_2_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 211);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_quest_log_6_1_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 213, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_quest_log_6_1_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 213);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_quest_log_6_2_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 214, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_quest_log_6_2_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 214);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_quest_log_7_1_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 216, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_quest_log_7_1_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 216);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_quest_log_7_2_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 217, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_quest_log_7_2_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 217);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_quest_log_8_1_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 219, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_quest_log_8_1_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 219);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_quest_log_8_2_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 220, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_quest_log_8_2_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 220);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_quest_log_9_1_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 222, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_quest_log_9_1_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 222);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_quest_log_9_2_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 223, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_quest_log_9_2_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 223);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_quest_log_10_1_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 225, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_quest_log_10_1_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 225);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_quest_log_10_2_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 226, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_quest_log_10_2_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 226);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_quest_log_11_1_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 228, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_quest_log_11_1_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 228);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_quest_log_11_2_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 229, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_quest_log_11_2_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 229);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_quest_log_12_1_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 231, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_quest_log_12_1_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 231);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_quest_log_12_2_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 232, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_quest_log_12_2_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 232);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_quest_log_13_1_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 234, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_quest_log_13_1_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 234);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_quest_log_13_2_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 235, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_quest_log_13_2_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 235);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_quest_log_14_1_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 237, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_quest_log_14_1_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 237);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_quest_log_14_2_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 238, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_quest_log_14_2_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 238);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_quest_log_15_1_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 240, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_quest_log_15_1_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 240);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_quest_log_15_2_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 241, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_quest_log_15_2_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 241);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_quest_log_16_1_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 243, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_quest_log_16_1_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 243);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_quest_log_16_2_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 244, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_quest_log_16_2_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 244);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_quest_log_17_1_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 246, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_quest_log_17_1_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 246);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_quest_log_17_2_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 247, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_quest_log_17_2_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 247);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_quest_log_18_1_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 249, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_quest_log_18_1_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 249);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_quest_log_18_2_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 250, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_quest_log_18_2_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 250);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_quest_log_19_1_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 252, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_quest_log_19_1_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 252);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_quest_log_19_2_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 253, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_quest_log_19_2_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 253);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_quest_log_20_1_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 255, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_quest_log_20_1_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 255);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_quest_log_20_2_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 256, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_quest_log_20_2_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 256);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_visible_item_creator_set(uint32_t index, uint64_t value) {
+    ::wow_world_messages::util::update_mask_set_u64(headers, values, 258 + index * 12 + 0, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint64_t UpdateMask::player_visible_item_creator_get(uint32_t index) {
+    return ::wow_world_messages::util::update_mask_get_u64(headers, values, 258 + index * 12 + 0);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_visible_item_item_set(uint32_t index, uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 258 + index * 12 + 2, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_visible_item_item_get(uint32_t index) {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 258 + index * 12 + 2);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_visible_item_enchants_set(uint32_t index, uint64_t value) {
+    ::wow_world_messages::util::update_mask_set_u64(headers, values, 258 + index * 12 + 3, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint64_t UpdateMask::player_visible_item_enchants_get(uint32_t index) {
+    return ::wow_world_messages::util::update_mask_get_u64(headers, values, 258 + index * 12 + 3);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_visible_item_random_property_id_set(uint32_t index, uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 258 + index * 12 + 10, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_visible_item_random_property_id_get(uint32_t index) {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 258 + index * 12 + 10);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_visible_item_item_suffix_factor_set(uint32_t index, uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 258 + index * 12 + 11, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_visible_item_item_suffix_factor_get(uint32_t index) {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 258 + index * 12 + 11);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_field_inv_set(ItemSlot def, uint64_t value) {
+    ::wow_world_messages::util::update_mask_set_u64(headers, values, 486 + (static_cast<uint32_t>(def) * 2), value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint64_t UpdateMask::player_field_inv_get(ItemSlot def) {
+    return ::wow_world_messages::util::update_mask_get_u64(headers, values, 486 + (static_cast<uint32_t>(def) * 2));
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_farsight_set(uint64_t value) {
+    ::wow_world_messages::util::update_mask_set_u64(headers, values, 712, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint64_t UpdateMask::player_farsight_get() {
+    return ::wow_world_messages::util::update_mask_get_u64(headers, values, 712);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_field_combo_target_set(uint64_t value) {
+    ::wow_world_messages::util::update_mask_set_u64(headers, values, 714, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint64_t UpdateMask::player_field_combo_target_get() {
+    return ::wow_world_messages::util::update_mask_get_u64(headers, values, 714);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_xp_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 716, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_xp_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 716);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_next_level_xp_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 717, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_next_level_xp_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 717);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_skill_info_skill_set(uint32_t index, uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 718 + index * 3 + 0, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_skill_info_skill_get(uint32_t index) {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 718 + index * 3 + 0);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_skill_info_skill_step_set(uint32_t index, uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 718 + index * 3 + 0, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_skill_info_skill_step_get(uint32_t index) {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 718 + index * 3 + 0);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_skill_info_minimum_set(uint32_t index, uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 718 + index * 3 + 1, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_skill_info_minimum_get(uint32_t index) {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 718 + index * 3 + 1);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_skill_info_maximum_set(uint32_t index, uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 718 + index * 3 + 1, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_skill_info_maximum_get(uint32_t index) {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 718 + index * 3 + 1);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_skill_info_permanent_bonus_set(uint32_t index, uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 718 + index * 3 + 2, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_skill_info_permanent_bonus_get(uint32_t index) {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 718 + index * 3 + 2);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_skill_info_temporary_bonus_set(uint32_t index, uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 718 + index * 3 + 2, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_skill_info_temporary_bonus_get(uint32_t index) {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 718 + index * 3 + 2);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_character_points1_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 1102, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_character_points1_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 1102);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_character_points2_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 1103, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_character_points2_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 1103);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_track_creatures_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 1104, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_track_creatures_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 1104);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_track_resources_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 1105, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_track_resources_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 1105);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_block_percentage_set(float value) {
+    ::wow_world_messages::util::update_mask_set_float(headers, values, 1106, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT float UpdateMask::player_block_percentage_get() {
+    return ::wow_world_messages::util::update_mask_get_float(headers, values, 1106);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_dodge_percentage_set(float value) {
+    ::wow_world_messages::util::update_mask_set_float(headers, values, 1107, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT float UpdateMask::player_dodge_percentage_get() {
+    return ::wow_world_messages::util::update_mask_get_float(headers, values, 1107);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_parry_percentage_set(float value) {
+    ::wow_world_messages::util::update_mask_set_float(headers, values, 1108, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT float UpdateMask::player_parry_percentage_get() {
+    return ::wow_world_messages::util::update_mask_get_float(headers, values, 1108);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_crit_percentage_set(float value) {
+    ::wow_world_messages::util::update_mask_set_float(headers, values, 1109, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT float UpdateMask::player_crit_percentage_get() {
+    return ::wow_world_messages::util::update_mask_get_float(headers, values, 1109);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_ranged_crit_percentage_set(float value) {
+    ::wow_world_messages::util::update_mask_set_float(headers, values, 1110, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT float UpdateMask::player_ranged_crit_percentage_get() {
+    return ::wow_world_messages::util::update_mask_get_float(headers, values, 1110);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_explored_zones_1_set(std::array<uint8_t, 4> value) {
+    ::wow_world_messages::util::update_mask_set_bytes(headers, values, 1111, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT std::array<uint8_t, 4> UpdateMask::player_explored_zones_1_get() {
+    return ::wow_world_messages::util::update_mask_get_bytes(headers, values, 1111);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_rest_state_experience_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 1175, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_rest_state_experience_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 1175);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_field_coinage_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 1176, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_field_coinage_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 1176);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_field_posstat0_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 1177, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_field_posstat0_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 1177);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_field_posstat1_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 1178, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_field_posstat1_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 1178);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_field_posstat2_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 1179, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_field_posstat2_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 1179);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_field_posstat3_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 1180, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_field_posstat3_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 1180);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_field_posstat4_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 1181, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_field_posstat4_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 1181);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_field_negstat0_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 1182, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_field_negstat0_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 1182);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_field_negstat1_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 1183, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_field_negstat1_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 1183);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_field_negstat2_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 1184, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_field_negstat2_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 1184);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_field_negstat3_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 1185, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_field_negstat3_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 1185);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_field_negstat4_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 1186, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_field_negstat4_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 1186);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_field_resistancebuffmodspositive_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 1187, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_field_resistancebuffmodspositive_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 1187);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_field_resistancebuffmodsnegative_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 1194, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_field_resistancebuffmodsnegative_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 1194);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_field_mod_damage_done_pos_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 1201, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_field_mod_damage_done_pos_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 1201);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_field_mod_damage_done_neg_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 1208, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_field_mod_damage_done_neg_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 1208);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_field_mod_damage_done_pct_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 1215, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_field_mod_damage_done_pct_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 1215);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_field_bytes_set(std::array<uint8_t, 4> value) {
+    ::wow_world_messages::util::update_mask_set_bytes(headers, values, 1222, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT std::array<uint8_t, 4> UpdateMask::player_field_bytes_get() {
+    return ::wow_world_messages::util::update_mask_get_bytes(headers, values, 1222);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_ammo_id_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 1223, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_ammo_id_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 1223);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_self_res_spell_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 1224, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_self_res_spell_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 1224);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_field_pvp_medals_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 1225, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_field_pvp_medals_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 1225);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_field_buyback_price_1_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 1226, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_field_buyback_price_1_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 1226);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_field_buyback_timestamp_1_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 1238, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_field_buyback_timestamp_1_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 1238);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_field_session_kills_set(std::pair<uint16_t, uint16_t> value) {
+    ::wow_world_messages::util::update_mask_set_two_shorts(headers, values, 1250, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT std::pair<uint16_t, uint16_t> UpdateMask::player_field_session_kills_get() {
+    return ::wow_world_messages::util::update_mask_get_two_shorts(headers, values, 1250);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_field_yesterday_kills_set(std::pair<uint16_t, uint16_t> value) {
+    ::wow_world_messages::util::update_mask_set_two_shorts(headers, values, 1251, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT std::pair<uint16_t, uint16_t> UpdateMask::player_field_yesterday_kills_get() {
+    return ::wow_world_messages::util::update_mask_get_two_shorts(headers, values, 1251);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_field_last_week_kills_set(std::pair<uint16_t, uint16_t> value) {
+    ::wow_world_messages::util::update_mask_set_two_shorts(headers, values, 1252, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT std::pair<uint16_t, uint16_t> UpdateMask::player_field_last_week_kills_get() {
+    return ::wow_world_messages::util::update_mask_get_two_shorts(headers, values, 1252);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_field_this_week_kills_set(std::pair<uint16_t, uint16_t> value) {
+    ::wow_world_messages::util::update_mask_set_two_shorts(headers, values, 1253, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT std::pair<uint16_t, uint16_t> UpdateMask::player_field_this_week_kills_get() {
+    return ::wow_world_messages::util::update_mask_get_two_shorts(headers, values, 1253);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_field_this_week_contribution_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 1254, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_field_this_week_contribution_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 1254);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_field_lifetime_honorbale_kills_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 1255, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_field_lifetime_honorbale_kills_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 1255);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_field_lifetime_dishonorbale_kills_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 1256, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_field_lifetime_dishonorbale_kills_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 1256);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_field_yesterday_contribution_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 1257, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_field_yesterday_contribution_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 1257);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_field_last_week_contribution_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 1258, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_field_last_week_contribution_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 1258);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_field_last_week_rank_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 1259, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_field_last_week_rank_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 1259);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_field_bytes2_set(std::array<uint8_t, 4> value) {
+    ::wow_world_messages::util::update_mask_set_bytes(headers, values, 1260, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT std::array<uint8_t, 4> UpdateMask::player_field_bytes2_get() {
+    return ::wow_world_messages::util::update_mask_get_bytes(headers, values, 1260);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_field_watched_faction_index_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 1261, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_field_watched_faction_index_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 1261);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::player_field_combat_rating_1_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 1262, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::player_field_combat_rating_1_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 1262);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::game_object_created_by_set(uint64_t value) {
+    ::wow_world_messages::util::update_mask_set_u64(headers, values, 6, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint64_t UpdateMask::game_object_created_by_get() {
+    return ::wow_world_messages::util::update_mask_get_u64(headers, values, 6);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::game_object_displayid_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 8, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::game_object_displayid_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 8);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::game_object_flags_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 9, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::game_object_flags_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 9);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::game_object_rotation_set(float value) {
+    ::wow_world_messages::util::update_mask_set_float(headers, values, 10, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT float UpdateMask::game_object_rotation_get() {
+    return ::wow_world_messages::util::update_mask_get_float(headers, values, 10);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::game_object_state_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 14, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::game_object_state_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 14);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::game_object_pos_x_set(float value) {
+    ::wow_world_messages::util::update_mask_set_float(headers, values, 15, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT float UpdateMask::game_object_pos_x_get() {
+    return ::wow_world_messages::util::update_mask_get_float(headers, values, 15);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::game_object_pos_y_set(float value) {
+    ::wow_world_messages::util::update_mask_set_float(headers, values, 16, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT float UpdateMask::game_object_pos_y_get() {
+    return ::wow_world_messages::util::update_mask_get_float(headers, values, 16);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::game_object_pos_z_set(float value) {
+    ::wow_world_messages::util::update_mask_set_float(headers, values, 17, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT float UpdateMask::game_object_pos_z_get() {
+    return ::wow_world_messages::util::update_mask_get_float(headers, values, 17);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::game_object_facing_set(float value) {
+    ::wow_world_messages::util::update_mask_set_float(headers, values, 18, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT float UpdateMask::game_object_facing_get() {
+    return ::wow_world_messages::util::update_mask_get_float(headers, values, 18);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::game_object_dyn_flags_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 19, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::game_object_dyn_flags_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 19);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::game_object_faction_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 20, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::game_object_faction_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 20);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::game_object_type_id_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 21, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::game_object_type_id_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 21);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::game_object_level_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 22, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::game_object_level_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 22);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::game_object_artkit_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 23, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::game_object_artkit_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 23);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::game_object_animprogress_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 24, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::game_object_animprogress_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 24);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::dynamic_object_caster_set(uint64_t value) {
+    ::wow_world_messages::util::update_mask_set_u64(headers, values, 6, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint64_t UpdateMask::dynamic_object_caster_get() {
+    return ::wow_world_messages::util::update_mask_get_u64(headers, values, 6);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::dynamic_object_bytes_set(std::array<uint8_t, 4> value) {
+    ::wow_world_messages::util::update_mask_set_bytes(headers, values, 8, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT std::array<uint8_t, 4> UpdateMask::dynamic_object_bytes_get() {
+    return ::wow_world_messages::util::update_mask_get_bytes(headers, values, 8);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::dynamic_object_spellid_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 9, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::dynamic_object_spellid_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 9);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::dynamic_object_radius_set(float value) {
+    ::wow_world_messages::util::update_mask_set_float(headers, values, 10, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT float UpdateMask::dynamic_object_radius_get() {
+    return ::wow_world_messages::util::update_mask_get_float(headers, values, 10);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::dynamic_object_pos_x_set(float value) {
+    ::wow_world_messages::util::update_mask_set_float(headers, values, 11, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT float UpdateMask::dynamic_object_pos_x_get() {
+    return ::wow_world_messages::util::update_mask_get_float(headers, values, 11);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::dynamic_object_pos_y_set(float value) {
+    ::wow_world_messages::util::update_mask_set_float(headers, values, 12, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT float UpdateMask::dynamic_object_pos_y_get() {
+    return ::wow_world_messages::util::update_mask_get_float(headers, values, 12);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::dynamic_object_pos_z_set(float value) {
+    ::wow_world_messages::util::update_mask_set_float(headers, values, 13, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT float UpdateMask::dynamic_object_pos_z_get() {
+    return ::wow_world_messages::util::update_mask_get_float(headers, values, 13);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::dynamic_object_facing_set(float value) {
+    ::wow_world_messages::util::update_mask_set_float(headers, values, 14, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT float UpdateMask::dynamic_object_facing_get() {
+    return ::wow_world_messages::util::update_mask_get_float(headers, values, 14);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::corpse_owner_set(uint64_t value) {
+    ::wow_world_messages::util::update_mask_set_u64(headers, values, 6, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint64_t UpdateMask::corpse_owner_get() {
+    return ::wow_world_messages::util::update_mask_get_u64(headers, values, 6);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::corpse_facing_set(float value) {
+    ::wow_world_messages::util::update_mask_set_float(headers, values, 8, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT float UpdateMask::corpse_facing_get() {
+    return ::wow_world_messages::util::update_mask_get_float(headers, values, 8);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::corpse_pos_x_set(float value) {
+    ::wow_world_messages::util::update_mask_set_float(headers, values, 9, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT float UpdateMask::corpse_pos_x_get() {
+    return ::wow_world_messages::util::update_mask_get_float(headers, values, 9);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::corpse_pos_y_set(float value) {
+    ::wow_world_messages::util::update_mask_set_float(headers, values, 10, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT float UpdateMask::corpse_pos_y_get() {
+    return ::wow_world_messages::util::update_mask_get_float(headers, values, 10);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::corpse_pos_z_set(float value) {
+    ::wow_world_messages::util::update_mask_set_float(headers, values, 11, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT float UpdateMask::corpse_pos_z_get() {
+    return ::wow_world_messages::util::update_mask_get_float(headers, values, 11);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::corpse_display_id_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 12, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::corpse_display_id_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 12);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::corpse_item_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 13, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::corpse_item_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 13);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::corpse_bytes_1_set(std::array<uint8_t, 4> value) {
+    ::wow_world_messages::util::update_mask_set_bytes(headers, values, 32, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT std::array<uint8_t, 4> UpdateMask::corpse_bytes_1_get() {
+    return ::wow_world_messages::util::update_mask_get_bytes(headers, values, 32);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::corpse_bytes_2_set(std::array<uint8_t, 4> value) {
+    ::wow_world_messages::util::update_mask_set_bytes(headers, values, 33, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT std::array<uint8_t, 4> UpdateMask::corpse_bytes_2_get() {
+    return ::wow_world_messages::util::update_mask_get_bytes(headers, values, 33);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::corpse_guild_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 34, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::corpse_guild_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 34);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::corpse_flags_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 35, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::corpse_flags_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 35);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT void UpdateMask::corpse_dynamic_flags_set(uint32_t value) {
+    ::wow_world_messages::util::update_mask_set_u32(headers, values, 36, value);
+}
+WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t UpdateMask::corpse_dynamic_flags_get() {
+    return ::wow_world_messages::util::update_mask_get_u32(headers, values, 36);
+}
+constexpr auto UPDATE_MASK_HEADERS_LENGTH = 40;
 
 static void update_mask_write(Writer& writer, const UpdateMask& mask) {
     uint8_t amount_of_headers = 0;
@@ -57,7 +1510,7 @@ static void update_mask_write(Writer& writer, const UpdateMask& mask) {
     for (int i = 0; i < amount_of_headers; ++i) {
         const uint32_t header = mask.headers[i];
         for (int j = 0; j < 32; ++j) {
-            if ((header & (1 << j)) != 0) {
+            if ((header & (static_cast<uint32_t>(1) << j)) != 0) {
                 writer.write_u32(mask.values[i * 32 + j]);
             }
         }
@@ -76,7 +1529,7 @@ static UpdateMask update_mask_read(Reader& reader) {
     for (int i = 0; i < amount_of_headers; ++i) {
         uint32_t header = mask.headers[i];
         for (int j = 0; j < 32; ++j) {
-            if ((header & (1 << j)) != 0) {
+            if ((header & (static_cast<uint32_t>(1) << j)) != 0) {
                 mask.values[i * 32 + j] = reader.read_u32();
             }
         }
@@ -94,7 +1547,7 @@ static size_t update_mask_size(const UpdateMask& mask) {
     for(int i = 0; i < UPDATE_MASK_HEADERS_LENGTH; ++i) {
         uint32_t header = mask.headers[i];
         for(int j = 0; j < 32; ++j) {
-            if((header & (1 << j)) != 0) {
+            if((header & (static_cast<uint32_t>(1) << j)) != 0) {
                 max_header = i + 1;
                 amount_of_values += 4;
             }

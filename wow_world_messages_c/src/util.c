@@ -41,6 +41,17 @@ WowWorldResult wwm_read_uint32(WowWorldReader* stream, uint32_t* value)
     return WWM_RESULT_SUCCESS;
 }
 
+WowWorldResult wwm_read_uint48(WowWorldReader* stream, uint64_t* value)
+{
+    const size_t index = WWM_CHECK_LENGTH(6);
+
+    *value = stream->source[index] | (uint64_t)stream->source[index + 1] << 8 |
+        (uint64_t)stream->source[index + 2] << 16 | (uint64_t)stream->source[index + 3] << 24 |
+        (uint64_t)stream->source[index + 5] << 32 | (uint64_t)stream->source[index + 4] << 40;
+
+    return WWM_RESULT_SUCCESS;
+}
+
 WowWorldResult wwm_read_uint64(WowWorldReader* stream, uint64_t* value)
 {
     const size_t index = WWM_CHECK_LENGTH(8);
@@ -100,6 +111,20 @@ WowWorldResult wwm_write_uint32(WowWorldWriter* stream, const uint32_t value)
     stream->destination[index + 1] = (char)(value >> 8);
     stream->destination[index + 2] = (char)(value >> 16);
     stream->destination[index + 3] = (char)(value >> 24);
+
+    return WWM_RESULT_SUCCESS;
+}
+
+WowWorldResult wwm_write_uint48(WowWorldWriter* stream, const uint64_t value)
+{
+    const size_t index = WWM_CHECK_LENGTH(6);
+
+    stream->destination[index] = (char)value;
+    stream->destination[index + 1] = (char)(value >> 8);
+    stream->destination[index + 2] = (char)(value >> 16);
+    stream->destination[index + 3] = (char)(value >> 24);
+    stream->destination[index + 4] = (char)(value >> 40);
+    stream->destination[index + 5] = (char)(value >> 32);
 
     return WWM_RESULT_SUCCESS;
 }
@@ -539,6 +564,95 @@ WOW_WORLD_MESSAGES_C_EXPORT const char* wwm_error_code_to_string(const WowWorldR
     }
 
     return "";
+}
+
+void wwm_update_mask_set_u32(uint32_t* headers, uint32_t* values, const uint32_t offset, const uint32_t value)
+{
+    const uint32_t block = offset / 32;
+    const uint32_t bit = offset % 32;
+
+    headers[block] |= 1 << bit;
+    values[offset] = value;
+}
+
+uint32_t wwm_update_mask_get_u32(const uint32_t* headers,
+                                 const uint32_t* values, const uint32_t offset)
+{
+    const uint32_t block = offset / 32;
+    const uint32_t bit = offset % 32;
+
+    if((headers[block] & 1 << bit) != 0) {
+        return values[offset];
+    }
+
+    return 0;
+}
+
+void wwm_update_mask_set_u64(uint32_t* headers, uint32_t* values, const uint32_t offset, const uint64_t value)
+{
+    const uint32_t lower = (uint32_t)value;
+    const uint32_t upper = (uint32_t)(value >> 32);
+
+    wwm_update_mask_set_u32(headers, values, offset, lower);
+    wwm_update_mask_set_u32(headers, values, offset + 1, upper);
+}
+
+uint64_t wwm_update_mask_get_u64(const uint32_t* headers, const uint32_t* values, const uint32_t offset)
+{
+    const uint32_t lower = wwm_update_mask_get_u32(headers, values, offset);
+    const uint32_t upper = wwm_update_mask_get_u32(headers, values, offset + 1);
+
+    return (uint64_t)lower | ((uint64_t)upper << 32);
+}
+
+void wwm_update_mask_set_float(uint32_t* headers, uint32_t* values, const uint32_t offset, const float value)
+{
+    uint32_t val;
+    memcpy(&val, &value, 4);
+    wwm_update_mask_set_u32(headers, values, offset, val);
+}
+
+float wwm_update_mask_get_float(const uint32_t* headers, const uint32_t* values, const uint32_t offset)
+{
+    float val;
+    const uint32_t value = wwm_update_mask_get_u32(headers, values, offset);
+    memcpy(&val, &value, 4);
+    return val;
+}
+
+void wwm_update_mask_set_two_shorts(uint32_t* headers, uint32_t* values, const uint32_t offset,
+                                    const WowTwoShorts value)
+{
+    const uint32_t val = value.lower | ((uint32_t)value.upper << 16);
+    wwm_update_mask_set_u32(headers, values, offset, val);
+}
+WowTwoShorts wwm_update_mask_get_two_shorts(const uint32_t* headers, const uint32_t* values, uint32_t offset)
+{
+    const uint32_t value = wwm_update_mask_get_u32(headers, values, offset);
+    WowTwoShorts val;
+
+    val.lower = (uint16_t)value;
+    val.upper = (uint16_t)(value >> 16);
+    return val;
+}
+
+void wwm_update_mask_set_bytes(uint32_t* headers, uint32_t* values, uint32_t offset, WowBytes value)
+{
+    const uint32_t val = value.a | (uint32_t)value.b << 8 | (uint32_t)value.c << 16 | (uint32_t)value.d << 24;
+    wwm_update_mask_set_u32(headers, values, offset, val);
+}
+
+WowBytes wwm_update_mask_get_bytes(const uint32_t* headers, const uint32_t* values, uint32_t offset)
+{
+    const uint32_t value = wwm_update_mask_get_u32(headers, values, offset);
+    WowBytes val;
+
+    val.a = (uint8_t)value;
+    val.b = (uint8_t)(value >> 8);
+    val.c = (uint8_t)(value >> 16);
+    val.d = (uint8_t)(value >> 24);
+
+    return val;
 }
 
 static uint32_t wwm_adler32(const unsigned char* data, const size_t len)

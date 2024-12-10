@@ -4,7 +4,7 @@ project(wow_messages LANGUAGES C CXX)
 if (BUILD_TESTING)
     include(CTest)
 
-    add_library(wow_messages_test_utils test_utils/test_utils.c)
+    add_library(wow_messages_test_utils STATIC test_utils/test_utils.c)
     target_include_directories(wow_messages_test_utils PUBLIC test_utils)
     target_link_libraries(wow_messages_test_utils
             PUBLIC

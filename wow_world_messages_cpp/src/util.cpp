@@ -164,6 +164,96 @@ VariableItemRandomProperty wwm_read_variable_item_random_property(Reader& reader
         return {};
 }
 
+void update_mask_set_u32(uint32_t* headers, uint32_t* values, const uint32_t offset, const uint32_t value)
+{
+    const uint32_t block = offset / 32;
+    const uint32_t bit = offset % 32;
+
+    headers[block] |= 1 << bit;
+    values[offset] = value;
+}
+
+uint32_t update_mask_get_u32(const uint32_t* headers,
+                                 const uint32_t* values, const uint32_t offset)
+{
+    const uint32_t block = offset / 32;
+    const uint32_t bit = offset % 32;
+
+    if((headers[block] & 1 << bit) != 0) {
+        return values[offset];
+    }
+
+    return 0;
+}
+
+void update_mask_set_u64(uint32_t* headers, uint32_t* values, const uint32_t offset, const uint64_t value)
+{
+    const auto lower = static_cast<uint32_t>(value);
+    const auto upper = static_cast<uint32_t>(value >> 32);
+
+    update_mask_set_u32(headers, values, offset, lower);
+    update_mask_set_u32(headers, values, offset + 1, upper);
+}
+
+uint64_t update_mask_get_u64(const uint32_t* headers, const uint32_t* values, const uint32_t offset)
+{
+    const uint32_t lower = update_mask_get_u32(headers, values, offset);
+    const uint32_t upper = update_mask_get_u32(headers, values, offset + 1);
+
+    return static_cast<uint64_t>(lower) | (static_cast<uint64_t>(upper) << 32);
+}
+
+void update_mask_set_float(uint32_t* headers, uint32_t* values, const uint32_t offset, const float value)
+{
+    uint32_t val;
+    memcpy(&val, &value, 4);
+    update_mask_set_u32(headers, values, offset, val);
+}
+
+float update_mask_get_float(const uint32_t* headers, const uint32_t* values, const uint32_t offset)
+{
+    float val;
+    const uint32_t value = update_mask_get_u32(headers, values, offset);
+    memcpy(&val, &value, 4);
+    return val;
+}
+
+void update_mask_set_two_shorts(uint32_t* headers, uint32_t* values, const uint32_t offset,
+                                    const std::pair<uint16_t, uint16_t> value)
+{
+    const uint32_t val = value.first | (static_cast<uint32_t>(value.second) << 16);
+    update_mask_set_u32(headers, values, offset, val);
+}
+std::pair<uint16_t, uint16_t> update_mask_get_two_shorts(const uint32_t* headers, const uint32_t* values, uint32_t offset)
+{
+    const uint32_t value = update_mask_get_u32(headers, values, offset);
+    std::pair<uint16_t, uint16_t> val;
+
+    val.first = static_cast<uint16_t>(value);
+    val.second = static_cast<uint16_t>(value >> 16);
+
+    return val;
+}
+
+void update_mask_set_bytes(uint32_t* headers, uint32_t* values, uint32_t offset, const std::array<uint8_t, 4>& value)
+{
+    const uint32_t val = value[0] | static_cast<uint32_t>(value[1]) << 8 | static_cast<uint32_t>(value[2]) << 16 | static_cast<uint32_t>(value[3]) << 24;
+    update_mask_set_u32(headers, values, offset, val);
+}
+
+std::array<uint8_t, 4> update_mask_get_bytes(const uint32_t* headers, const uint32_t* values, uint32_t offset)
+{
+    const uint32_t value = update_mask_get_u32(headers, values, offset);
+    std::array<uint8_t, 4> val{};
+
+    val[0] = static_cast<uint8_t>(value);
+    val[1] = static_cast<uint8_t>(value >> 8);
+    val[2] = static_cast<uint8_t>(value >> 16);
+    val[3] = static_cast<uint8_t>(value >> 24);
+
+    return val;
+}
+
 static uint32_t wwm_adler32(const unsigned char* data, const size_t len)
 {
     uint32_t a = 1, b = 0;

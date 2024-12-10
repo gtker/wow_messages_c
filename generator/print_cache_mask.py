@@ -1,38 +1,125 @@
+import model
+from util import is_cpp, world_version_is_wrath
 from writer import Writer
 
+def print_cache_mask_c(s: Writer, h: Writer):
+    h.write_block(f"""
+        #define WRATH_CACHE_MASK_LENGTH 32
 
-def print_cache_mask(s: Writer):
-    s.write_block("""
-@dataclasses.dataclass
-class CacheMask:
-    fields: dict[int, int]
+        typedef struct {{
+            uint32_t values[WRATH_CACHE_MASK_LENGTH];
+        }} wrath_CacheMask;
+    """)
 
-    @staticmethod
-    async def read(reader: asyncio.StreamReader):
-        mask = await read_int(reader, 4)
+    s.write_block(f"""
+        static WowWorldResult wrath_cache_mask_write(WowWorldWriter* stream, const wrath_CacheMask* mask) {{
+            int i;
+            uint32_t header = 0;
 
-        fields = {}
-        for index in range(0, 32):
-            if mask & 1 << index:
-                fields[index] = await read_int(reader, 2)
+            for (i = 0; i < WRATH_CACHE_MASK_LENGTH; ++i) {{
+                if (mask->values[i] != 0) {{
+                    header |= (uint32_t)1 << i;
+                }}
+            }}
 
-        return AuraMask(fields=fields)
+            WWM_CHECK_RETURN_CODE(wwm_write_uint32(stream, header));
 
-    def write(self, fmt, data):
-        mask = 0
-        for key in self.fields:
-            mask |= 1 << key
+            for (i = 0; i < WRATH_CACHE_MASK_LENGTH; ++i) {{
+                if (mask->values[i] != 0) {{
+                    WWM_CHECK_RETURN_CODE(wwm_write_uint32(stream, mask->values[i]));
+                }}
+            }}
 
-        fmt += 'I'
-        data.append(mask)
+            return WWM_RESULT_SUCCESS;
+        }}
 
-        fmt += f"{len(self.fields)}H"
-        data.extend(list(self.fields.values()))
+        static WowWorldResult wrath_cache_mask_read(WowWorldReader* stream, wrath_CacheMask* mask) {{
+            int i = 0;
+            uint32_t header = 0;
+            WWM_CHECK_RETURN_CODE(wwm_read_uint32(stream, &header));
 
-        return fmt, data
+            for (i = 0; i < WRATH_CACHE_MASK_LENGTH; ++i) {{
+                if ((header & (uint32_t)1 << i) != 0) {{
+                    WWM_CHECK_RETURN_CODE(wwm_read_uint32(stream, &mask->values[i]));
+                }} else {{
+                    mask->values[i] = 0;
+                }}
+            }}
 
-    def size(self):
-        return 4 + len(self.fields) * 2
-""")
+            return WWM_RESULT_SUCCESS;
+        }}
 
-    s.double_newline()
+        static size_t wrath_cache_mask_size(const wrath_CacheMask* mask) {{
+            int i;
+            size_t size = 4; /* u32 header */
+            for (i = 0; i < WRATH_CACHE_MASK_LENGTH; ++i) {{
+                if (mask->values[i] != 0) {{
+                    size += 4;
+                }}
+            }}
+
+            return size;
+        }}
+    """)
+
+
+def print_cache_mask_cpp(s: Writer, h: Writer):
+    h.write_block(f"""
+        constexpr auto WRATH_CACHE_MASK_LENGTH = 32;
+        struct CacheMask {{
+            uint32_t values[WRATH_CACHE_MASK_LENGTH];
+        }};
+    """)
+
+    s.write_block(f"""
+        static void cache_mask_write(Writer& writer, const CacheMask& mask) {{
+            uint32_t header = 0;
+            for (int i = 0; i < WRATH_CACHE_MASK_LENGTH; ++i) {{
+                if (mask.values[i] != 0) {{
+                    header |= static_cast<uint32_t>(1) << i;
+                }}
+            }}
+
+            writer.write_u32(header);
+
+            for (const auto v : mask.values) {{
+                if (v != 0) {{
+                    writer.write_u32(v);
+                }}
+            }}
+        }}
+
+        static CacheMask cache_mask_read(Reader& reader) {{
+            uint32_t header = reader.read_u32();
+            CacheMask mask{{}};
+
+            for (int i = 0; i < WRATH_CACHE_MASK_LENGTH; ++i) {{
+                if ((header & static_cast<uint32_t>(1) << i) != 0) {{
+                    mask.values[i] = reader.read_u32();
+                }}
+            }}
+
+            return mask;
+        }}
+
+        static size_t cache_mask_size(const CacheMask& mask) {{
+            size_t size = 4; /* u32 header */
+            for (int i = 0; i < WRATH_CACHE_MASK_LENGTH; ++i) {{
+                if (mask.values[i] != 0) {{
+                    size += 4;
+                }}
+            }}
+
+            return size;
+        }}
+    """)
+
+def print_cache_mask(s: Writer, h: Writer, v: model.WorldVersion):
+    if not world_version_is_wrath(v):
+        return
+
+
+    if is_cpp():
+        print_cache_mask_cpp(s, h)
+    else:
+        print_cache_mask_c(s, h)

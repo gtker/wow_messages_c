@@ -264,7 +264,7 @@ int main(void)
     char err = 0;
 
     VanillaServerOpcodeContainer server_opcode;
-    server_opcode.opcode = SMSG_AUTH_CHALLENGE;
+    server_opcode.opcode = V_SMSG_AUTH_CHALLENGE;
     server_opcode.body.SMSG_AUTH_CHALLENGE.server_seed = wow_srp_vanilla_proof_seed(seed, &err);
 
     WowWorldWriter world_writer = wwm_create_writer(buffer, BUFFER_SIZE);
@@ -273,7 +273,7 @@ int main(void)
 
     WowWorldReader world_reader = wwm_create_reader(buffer, BUFFER_SIZE);
     VanillaClientOpcodeContainer client_opcode;
-    expect_unencrypted_opcode(&world_reader, &world, &client_opcode, CMSG_AUTH_SESSION);
+    expect_unencrypted_opcode(&world_reader, &world, &client_opcode, V_CMSG_AUTH_SESSION);
     printf("Accepted %s\n", client_opcode.body.CMSG_AUTH_SESSION.username.string);
 
     WowSrpVanillaHeaderCrypto* header_crypto = wow_srp_vanilla_proof_seed_into_server_header_crypto(
@@ -288,28 +288,28 @@ int main(void)
         goto exit_goto;
     }
 
-    server_opcode.opcode = SMSG_AUTH_RESPONSE;
+    server_opcode.opcode = V_SMSG_AUTH_RESPONSE;
     server_opcode.body.SMSG_AUTH_RESPONSE.result = VANILLA_WORLD_RESULT_AUTH_OK;
 
     write_opcode(&world_writer, &world, &server_opcode, header_crypto);
 
-    expect_opcode(&world_reader, &world, &client_opcode, CMSG_CHAR_ENUM, header_crypto);
+    expect_opcode(&world_reader, &world, &client_opcode, V_CMSG_CHAR_ENUM, header_crypto);
 
-    server_opcode.opcode = SMSG_CHAR_ENUM;
+    server_opcode.opcode = V_SMSG_CHAR_ENUM;
     server_opcode.body.SMSG_CHAR_ENUM.amount_of_characters = 1;
     server_opcode.body.SMSG_CHAR_ENUM.characters = &characters;
 
     write_opcode(&world_writer, &world, &server_opcode, header_crypto);
 
-    while (client_opcode.opcode != CMSG_PLAYER_LOGIN)
+    while (client_opcode.opcode != V_CMSG_PLAYER_LOGIN)
     {
         read_opcode(&world_reader, &world, &client_opcode, header_crypto);
 
         printf("Received %s\n", vanilla_client_opcode_to_str(&client_opcode));
 
-        if (client_opcode.opcode == CMSG_CHAR_ENUM)
+        if (client_opcode.opcode == V_CMSG_CHAR_ENUM)
         {
-            server_opcode.opcode = SMSG_CHAR_ENUM;
+            server_opcode.opcode = V_SMSG_CHAR_ENUM;
             server_opcode.body.SMSG_CHAR_ENUM.amount_of_characters = 1;
             server_opcode.body.SMSG_CHAR_ENUM.characters = &characters;
 
@@ -317,15 +317,15 @@ int main(void)
         }
     }
 
-    printf("Logging into %lu\n", client_opcode.body.CMSG_PLAYER_LOGIN.guid);
+    printf("Logging into %lu\n", (unsigned long)client_opcode.body.CMSG_PLAYER_LOGIN.guid);
 
-    server_opcode.opcode = SMSG_LOGIN_VERIFY_WORLD;
+    server_opcode.opcode = V_SMSG_LOGIN_VERIFY_WORLD;
     server_opcode.body.SMSG_LOGIN_VERIFY_WORLD.map = VANILLA_MAP_EASTERN_KINGDOMS;
     server_opcode.body.SMSG_LOGIN_VERIFY_WORLD.orientation = 0.0f;
     server_opcode.body.SMSG_LOGIN_VERIFY_WORLD.position = (all_Vector3d){
-        -8949.95,
-        -132.493,
-        83.5312,
+        -8949.95f,
+        -132.493f,
+        83.5312f,
     };
     write_opcode(&world_writer, &world, &server_opcode, header_crypto);
 
@@ -333,11 +333,11 @@ int main(void)
         0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
     };
 
-    server_opcode.opcode = SMSG_TUTORIAL_FLAGS;
+    server_opcode.opcode = V_SMSG_TUTORIAL_FLAGS;
     server_opcode.body.SMSG_TUTORIAL_FLAGS.tutorial_data = &tutorial_data;
     write_opcode(&world_writer, &world, &server_opcode, header_crypto);
 
-    server_opcode.opcode = SMSG_UPDATE_OBJECT;
+    server_opcode.opcode = V_SMSG_UPDATE_OBJECT;
     server_opcode.body.SMSG_UPDATE_OBJECT.has_transport = 0;
     server_opcode.body.SMSG_UPDATE_OBJECT.amount_of_objects = 1;
     vanilla_Object objects = {0};
@@ -350,31 +350,32 @@ int main(void)
     objects.movement2.flags = VANILLA_MOVEMENT_FLAGS_NONE;
     objects.movement2.timestamp = 0;
     objects.movement2.living_position = (all_Vector3d){
-        -8949.95,
-        -132.493,
-        83.5312,
+        -8949.95f,
+        -132.493f,
+        83.5312f,
     };
-    objects.movement2.living_orientation = 0.0;
-    objects.movement2.fall_time = 0.0;
-    objects.movement2.walking_speed = 1.0;
-    objects.movement2.running_speed = 70.0;
-    objects.movement2.backwards_running_speed = 4.5;
-    objects.movement2.swimming_speed = 0.0;
-    objects.movement2.backwards_swimming_speed = 0.0;
-    objects.movement2.turn_rate = 3.1415;
+    objects.movement2.living_orientation = 0.0f;
+    objects.movement2.fall_time = 0.0f;
+    objects.movement2.walking_speed = 1.0f;
+    objects.movement2.running_speed = 70.0f;
+    objects.movement2.backwards_running_speed = 4.5f;
+    objects.movement2.swimming_speed = 0.0f;
+    objects.movement2.backwards_swimming_speed = 0.0f;
+    objects.movement2.turn_rate = 3.1415f;
     objects.movement2.unknown1 = 0;
 
-    vanilla_update_mask_set(&objects.mask2, VANILLA_OBJECT_GUID, 1);
-    vanilla_update_mask_set(&objects.mask2, VANILLA_OBJECT_GUID + 1, 0);
 
-    vanilla_update_mask_set(&objects.mask2, VANILLA_OBJECT_SCALE_X, 1.0f);
-    vanilla_update_mask_set(&objects.mask2, VANILLA_OBJECT_TYPE, 25);
-    vanilla_update_mask_set(&objects.mask2, VANILLA_UNIT_BYTES_0, 0x01010101);
-    vanilla_update_mask_set(&objects.mask2, VANILLA_UNIT_DISPLAYID, 50);
-    vanilla_update_mask_set(&objects.mask2, VANILLA_UNIT_FACTIONTEMPLATE, 1);
-    vanilla_update_mask_set(&objects.mask2, VANILLA_UNIT_HEALTH, 100);
-    vanilla_update_mask_set(&objects.mask2, VANILLA_UNIT_LEVEL, 1);
-    vanilla_update_mask_set(&objects.mask2, VANILLA_UNIT_NATIVEDISPLAYID, 50);
+    vanilla_update_mask_object_guid_set(&objects.mask2,  1);
+
+    vanilla_update_mask_object_scale_x_set(&objects.mask2,  1.0f);
+    vanilla_update_mask_object_type_set(&objects.mask2,  25);
+    WowBytes bytes0 = {0x01, 0x01, 0x01, 0x01};
+    vanilla_update_mask_unit_bytes_0_set(&objects.mask2,  bytes0);
+    vanilla_update_mask_unit_displayid_set(&objects.mask2,  50);
+    vanilla_update_mask_unit_factiontemplate_set(&objects.mask2,  1);
+    vanilla_update_mask_unit_health_set(&objects.mask2,  100);
+    vanilla_update_mask_unit_level_set(&objects.mask2,  1);
+    vanilla_update_mask_unit_nativedisplayid_set(&objects.mask2,  50);
 
     write_opcode(&world_writer, &world, &server_opcode, header_crypto);
 

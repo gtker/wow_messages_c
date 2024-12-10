@@ -278,11 +278,19 @@ static WowLoginResult version2_TelemetryKey_read(WowLoginReader* reader, version
 
     READ_U32(object->unknown2);
 
-    READ_ARRAY_ALLOCATE(object->unknown3, 4, sizeof(uint8_t));
+    object->unknown3 = malloc(sizeof(*object->unknown3));
+    if (object->unknown3 == NULL) {
+        return WLM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->unknown3, 4, READ_U8((*object->unknown3)[i]));
 
-    READ_ARRAY_ALLOCATE(object->cd_key_proof, 20, sizeof(uint8_t));
+
+    object->cd_key_proof = malloc(sizeof(*object->cd_key_proof));
+    if (object->cd_key_proof == NULL) {
+        return WLM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->cd_key_proof, 20, READ_U8((*object->cd_key_proof)[i]));
+
 
     return WLM_RESULT_SUCCESS;
 }
@@ -314,24 +322,44 @@ static WowLoginResult version2_CMD_AUTH_LOGON_CHALLENGE_Server_read(WowLoginRead
     READ_U8(object->result);
 
     if (object->result == VERSION2_LOGIN_RESULT_SUCCESS) {
-        READ_ARRAY_ALLOCATE(object->server_public_key, 32, sizeof(uint8_t));
+        object->server_public_key = malloc(sizeof(*object->server_public_key));
+        if (object->server_public_key == NULL) {
+            return WLM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->server_public_key, 32, READ_U8((*object->server_public_key)[i]));
+
 
         READ_U8(object->generator_length);
 
-        READ_ARRAY_ALLOCATE(object->generator, object->generator_length, sizeof(uint8_t));
+        object->generator = malloc(object->generator_length * sizeof(uint8_t));
+        if (object->generator == NULL) {
+            return WLM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->generator, object->generator_length, READ_U8(object->generator[i]));
+
 
         READ_U8(object->large_safe_prime_length);
 
-        READ_ARRAY_ALLOCATE(object->large_safe_prime, object->large_safe_prime_length, sizeof(uint8_t));
+        object->large_safe_prime = malloc(object->large_safe_prime_length * sizeof(uint8_t));
+        if (object->large_safe_prime == NULL) {
+            return WLM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->large_safe_prime, object->large_safe_prime_length, READ_U8(object->large_safe_prime[i]));
 
-        READ_ARRAY_ALLOCATE(object->salt, 32, sizeof(uint8_t));
+
+        object->salt = malloc(sizeof(*object->salt));
+        if (object->salt == NULL) {
+            return WLM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->salt, 32, READ_U8((*object->salt)[i]));
 
-        READ_ARRAY_ALLOCATE(object->crc_salt, 16, sizeof(uint8_t));
+
+        object->crc_salt = malloc(sizeof(*object->crc_salt));
+        if (object->crc_salt == NULL) {
+            return WLM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->crc_salt, 16, READ_U8((*object->crc_salt)[i]));
+
 
     }
     return WLM_RESULT_SUCCESS;
@@ -380,19 +408,35 @@ WOW_LOGIN_MESSAGES_C_EXPORT void version2_CMD_AUTH_LOGON_CHALLENGE_Server_free(v
 }
 
 static WowLoginResult version2_CMD_AUTH_LOGON_PROOF_Client_read(WowLoginReader* reader, version2_CMD_AUTH_LOGON_PROOF_Client* object) {
-    READ_ARRAY_ALLOCATE(object->client_public_key, 32, sizeof(uint8_t));
+    object->client_public_key = malloc(sizeof(*object->client_public_key));
+    if (object->client_public_key == NULL) {
+        return WLM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->client_public_key, 32, READ_U8((*object->client_public_key)[i]));
 
-    READ_ARRAY_ALLOCATE(object->client_proof, 20, sizeof(uint8_t));
+
+    object->client_proof = malloc(sizeof(*object->client_proof));
+    if (object->client_proof == NULL) {
+        return WLM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->client_proof, 20, READ_U8((*object->client_proof)[i]));
 
-    READ_ARRAY_ALLOCATE(object->crc_hash, 20, sizeof(uint8_t));
+
+    object->crc_hash = malloc(sizeof(*object->crc_hash));
+    if (object->crc_hash == NULL) {
+        return WLM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->crc_hash, 20, READ_U8((*object->crc_hash)[i]));
+
 
     READ_U8(object->number_of_telemetry_keys);
 
-    READ_ARRAY_ALLOCATE(object->telemetry_keys, object->number_of_telemetry_keys, sizeof(version2_TelemetryKey));
+    object->telemetry_keys = malloc(object->number_of_telemetry_keys * sizeof(version2_TelemetryKey));
+    if (object->telemetry_keys == NULL) {
+        return WLM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->telemetry_keys, object->number_of_telemetry_keys, WLM_CHECK_RETURN_CODE(version2_TelemetryKey_read(reader, &object->telemetry_keys[i])));
+
 
     return WLM_RESULT_SUCCESS;
 }
@@ -435,8 +479,12 @@ static WowLoginResult version2_CMD_AUTH_LOGON_PROOF_Server_read(WowLoginReader* 
     READ_U8(object->result);
 
     if (object->result == VERSION2_LOGIN_RESULT_SUCCESS) {
-        READ_ARRAY_ALLOCATE(object->server_proof, 20, sizeof(uint8_t));
+        object->server_proof = malloc(sizeof(*object->server_proof));
+        if (object->server_proof == NULL) {
+            return WLM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->server_proof, 20, READ_U8((*object->server_proof)[i]));
+
 
         READ_U32(object->hardware_survey_id);
 
@@ -471,11 +519,19 @@ static WowLoginResult version2_CMD_AUTH_RECONNECT_CHALLENGE_Server_read(WowLogin
     READ_U8(object->result);
 
     if (object->result == VERSION2_LOGIN_RESULT_SUCCESS) {
-        READ_ARRAY_ALLOCATE(object->challenge_data, 16, sizeof(uint8_t));
+        object->challenge_data = malloc(sizeof(*object->challenge_data));
+        if (object->challenge_data == NULL) {
+            return WLM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->challenge_data, 16, READ_U8((*object->challenge_data)[i]));
 
-        READ_ARRAY_ALLOCATE(object->checksum_salt, 16, sizeof(uint8_t));
+
+        object->checksum_salt = malloc(sizeof(*object->checksum_salt));
+        if (object->checksum_salt == NULL) {
+            return WLM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->checksum_salt, 16, READ_U8((*object->checksum_salt)[i]));
+
 
     }
     return WLM_RESULT_SUCCESS;
@@ -522,14 +578,26 @@ WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version2_CMD_AUTH_RECONNECT_PROOF_Ser
 }
 
 static WowLoginResult version2_CMD_AUTH_RECONNECT_PROOF_Client_read(WowLoginReader* reader, version2_CMD_AUTH_RECONNECT_PROOF_Client* object) {
-    READ_ARRAY_ALLOCATE(object->proof_data, 16, sizeof(uint8_t));
+    object->proof_data = malloc(sizeof(*object->proof_data));
+    if (object->proof_data == NULL) {
+        return WLM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->proof_data, 16, READ_U8((*object->proof_data)[i]));
 
-    READ_ARRAY_ALLOCATE(object->client_proof, 20, sizeof(uint8_t));
+
+    object->client_proof = malloc(sizeof(*object->client_proof));
+    if (object->client_proof == NULL) {
+        return WLM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->client_proof, 20, READ_U8((*object->client_proof)[i]));
 
-    READ_ARRAY_ALLOCATE(object->client_checksum, 20, sizeof(uint8_t));
+
+    object->client_checksum = malloc(sizeof(*object->client_checksum));
+    if (object->client_checksum == NULL) {
+        return WLM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->client_checksum, 20, READ_U8((*object->client_checksum)[i]));
+
 
     SKIP_FORWARD_BYTES(1);
 
@@ -580,8 +648,12 @@ static WowLoginResult version2_CMD_REALM_LIST_Server_read(WowLoginReader* reader
 
     READ_U8(object->number_of_realms);
 
-    READ_ARRAY_ALLOCATE(object->realms, object->number_of_realms, sizeof(version2_Realm));
+    object->realms = malloc(object->number_of_realms * sizeof(version2_Realm));
+    if (object->realms == NULL) {
+        return WLM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->realms, object->number_of_realms, WLM_CHECK_RETURN_CODE(version2_Realm_read(reader, &object->realms[i])));
+
 
     SKIP_FORWARD_BYTES(2);
 
@@ -629,8 +701,12 @@ static WowLoginResult version2_CMD_XFER_INITIATE_read(WowLoginReader* reader, ve
 
     READ_U64(object->file_size);
 
-    READ_ARRAY_ALLOCATE(object->file_md5, 16, sizeof(uint8_t));
+    object->file_md5 = malloc(sizeof(*object->file_md5));
+    if (object->file_md5 == NULL) {
+        return WLM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->file_md5, 16, READ_U8((*object->file_md5)[i]));
+
 
     return WLM_RESULT_SUCCESS;
 }
@@ -658,8 +734,12 @@ WOW_LOGIN_MESSAGES_C_EXPORT void version2_CMD_XFER_INITIATE_free(version2_CMD_XF
 static WowLoginResult version2_CMD_XFER_DATA_read(WowLoginReader* reader, version2_CMD_XFER_DATA* object) {
     READ_U16(object->size);
 
-    READ_ARRAY_ALLOCATE(object->data, object->size, sizeof(uint8_t));
+    object->data = malloc(object->size * sizeof(uint8_t));
+    if (object->data == NULL) {
+        return WLM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->data, object->size, READ_U8(object->data[i]));
+
 
     return WLM_RESULT_SUCCESS;
 }
@@ -888,24 +968,44 @@ static WowLoginResult version3_CMD_AUTH_LOGON_CHALLENGE_Server_read(WowLoginRead
     READ_U8(object->result);
 
     if (object->result == VERSION2_LOGIN_RESULT_SUCCESS) {
-        READ_ARRAY_ALLOCATE(object->server_public_key, 32, sizeof(uint8_t));
+        object->server_public_key = malloc(sizeof(*object->server_public_key));
+        if (object->server_public_key == NULL) {
+            return WLM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->server_public_key, 32, READ_U8((*object->server_public_key)[i]));
+
 
         READ_U8(object->generator_length);
 
-        READ_ARRAY_ALLOCATE(object->generator, object->generator_length, sizeof(uint8_t));
+        object->generator = malloc(object->generator_length * sizeof(uint8_t));
+        if (object->generator == NULL) {
+            return WLM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->generator, object->generator_length, READ_U8(object->generator[i]));
+
 
         READ_U8(object->large_safe_prime_length);
 
-        READ_ARRAY_ALLOCATE(object->large_safe_prime, object->large_safe_prime_length, sizeof(uint8_t));
+        object->large_safe_prime = malloc(object->large_safe_prime_length * sizeof(uint8_t));
+        if (object->large_safe_prime == NULL) {
+            return WLM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->large_safe_prime, object->large_safe_prime_length, READ_U8(object->large_safe_prime[i]));
 
-        READ_ARRAY_ALLOCATE(object->salt, 32, sizeof(uint8_t));
+
+        object->salt = malloc(sizeof(*object->salt));
+        if (object->salt == NULL) {
+            return WLM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->salt, 32, READ_U8((*object->salt)[i]));
 
-        READ_ARRAY_ALLOCATE(object->crc_salt, 16, sizeof(uint8_t));
+
+        object->crc_salt = malloc(sizeof(*object->crc_salt));
+        if (object->crc_salt == NULL) {
+            return WLM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->crc_salt, 16, READ_U8((*object->crc_salt)[i]));
+
 
         object->security_flag = 0;
         READ_U8(object->security_flag);
@@ -913,8 +1013,12 @@ static WowLoginResult version3_CMD_AUTH_LOGON_CHALLENGE_Server_read(WowLoginRead
         if (object->security_flag == VERSION3_SECURITY_FLAG_PIN) {
             READ_U32(object->pin_grid_seed);
 
-            READ_ARRAY_ALLOCATE(object->pin_salt, 16, sizeof(uint8_t));
+            object->pin_salt = malloc(sizeof(*object->pin_salt));
+            if (object->pin_salt == NULL) {
+                return WLM_RESULT_MALLOC_FAIL;
+            }
             READ_ARRAY(object->pin_salt, 16, READ_U8((*object->pin_salt)[i]));
+
 
         }
     }
@@ -976,29 +1080,53 @@ WOW_LOGIN_MESSAGES_C_EXPORT void version3_CMD_AUTH_LOGON_CHALLENGE_Server_free(v
 }
 
 static WowLoginResult version3_CMD_AUTH_LOGON_PROOF_Client_read(WowLoginReader* reader, version3_CMD_AUTH_LOGON_PROOF_Client* object) {
-    READ_ARRAY_ALLOCATE(object->client_public_key, 32, sizeof(uint8_t));
+    object->client_public_key = malloc(sizeof(*object->client_public_key));
+    if (object->client_public_key == NULL) {
+        return WLM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->client_public_key, 32, READ_U8((*object->client_public_key)[i]));
 
-    READ_ARRAY_ALLOCATE(object->client_proof, 20, sizeof(uint8_t));
+
+    object->client_proof = malloc(sizeof(*object->client_proof));
+    if (object->client_proof == NULL) {
+        return WLM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->client_proof, 20, READ_U8((*object->client_proof)[i]));
 
-    READ_ARRAY_ALLOCATE(object->crc_hash, 20, sizeof(uint8_t));
+
+    object->crc_hash = malloc(sizeof(*object->crc_hash));
+    if (object->crc_hash == NULL) {
+        return WLM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->crc_hash, 20, READ_U8((*object->crc_hash)[i]));
+
 
     READ_U8(object->number_of_telemetry_keys);
 
-    READ_ARRAY_ALLOCATE(object->telemetry_keys, object->number_of_telemetry_keys, sizeof(version2_TelemetryKey));
+    object->telemetry_keys = malloc(object->number_of_telemetry_keys * sizeof(version2_TelemetryKey));
+    if (object->telemetry_keys == NULL) {
+        return WLM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->telemetry_keys, object->number_of_telemetry_keys, WLM_CHECK_RETURN_CODE(version2_TelemetryKey_read(reader, &object->telemetry_keys[i])));
+
 
     object->security_flag = 0;
     READ_U8(object->security_flag);
 
     if (object->security_flag == VERSION3_SECURITY_FLAG_PIN) {
-        READ_ARRAY_ALLOCATE(object->pin_salt, 16, sizeof(uint8_t));
+        object->pin_salt = malloc(sizeof(*object->pin_salt));
+        if (object->pin_salt == NULL) {
+            return WLM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->pin_salt, 16, READ_U8((*object->pin_salt)[i]));
 
-        READ_ARRAY_ALLOCATE(object->pin_hash, 20, sizeof(uint8_t));
+
+        object->pin_hash = malloc(sizeof(*object->pin_hash));
+        if (object->pin_hash == NULL) {
+            return WLM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->pin_hash, 20, READ_U8((*object->pin_hash)[i]));
+
 
     }
     return WLM_RESULT_SUCCESS;
@@ -1058,8 +1186,12 @@ static WowLoginResult version3_CMD_SURVEY_RESULT_read(WowLoginReader* reader, ve
 
     READ_U16(object->compressed_data_length);
 
-    READ_ARRAY_ALLOCATE(object->data, object->compressed_data_length, sizeof(uint8_t));
+    object->data = malloc(object->compressed_data_length * sizeof(uint8_t));
+    if (object->data == NULL) {
+        return WLM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->data, object->compressed_data_length, READ_U8(object->data[i]));
+
 
     return WLM_RESULT_SUCCESS;
 }
@@ -1328,24 +1460,44 @@ static WowLoginResult version5_CMD_AUTH_LOGON_CHALLENGE_Server_read(WowLoginRead
     READ_U8(object->result);
 
     if (object->result == VERSION2_LOGIN_RESULT_SUCCESS) {
-        READ_ARRAY_ALLOCATE(object->server_public_key, 32, sizeof(uint8_t));
+        object->server_public_key = malloc(sizeof(*object->server_public_key));
+        if (object->server_public_key == NULL) {
+            return WLM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->server_public_key, 32, READ_U8((*object->server_public_key)[i]));
+
 
         READ_U8(object->generator_length);
 
-        READ_ARRAY_ALLOCATE(object->generator, object->generator_length, sizeof(uint8_t));
+        object->generator = malloc(object->generator_length * sizeof(uint8_t));
+        if (object->generator == NULL) {
+            return WLM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->generator, object->generator_length, READ_U8(object->generator[i]));
+
 
         READ_U8(object->large_safe_prime_length);
 
-        READ_ARRAY_ALLOCATE(object->large_safe_prime, object->large_safe_prime_length, sizeof(uint8_t));
+        object->large_safe_prime = malloc(object->large_safe_prime_length * sizeof(uint8_t));
+        if (object->large_safe_prime == NULL) {
+            return WLM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->large_safe_prime, object->large_safe_prime_length, READ_U8(object->large_safe_prime[i]));
 
-        READ_ARRAY_ALLOCATE(object->salt, 32, sizeof(uint8_t));
+
+        object->salt = malloc(sizeof(*object->salt));
+        if (object->salt == NULL) {
+            return WLM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->salt, 32, READ_U8((*object->salt)[i]));
 
-        READ_ARRAY_ALLOCATE(object->crc_salt, 16, sizeof(uint8_t));
+
+        object->crc_salt = malloc(sizeof(*object->crc_salt));
+        if (object->crc_salt == NULL) {
+            return WLM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->crc_salt, 16, READ_U8((*object->crc_salt)[i]));
+
 
         object->security_flag = 0;
         READ_U8(object->security_flag);
@@ -1353,8 +1505,12 @@ static WowLoginResult version5_CMD_AUTH_LOGON_CHALLENGE_Server_read(WowLoginRead
         if ((object->security_flag & VERSION5_SECURITY_FLAG_PIN) != 0) {
             READ_U32(object->pin_grid_seed);
 
-            READ_ARRAY_ALLOCATE(object->pin_salt, 16, sizeof(uint8_t));
+            object->pin_salt = malloc(sizeof(*object->pin_salt));
+            if (object->pin_salt == NULL) {
+                return WLM_RESULT_MALLOC_FAIL;
+            }
             READ_ARRAY(object->pin_salt, 16, READ_U8((*object->pin_salt)[i]));
+
 
         }
         if ((object->security_flag & VERSION5_SECURITY_FLAG_MATRIX_CARD) != 0) {
@@ -1442,34 +1598,62 @@ WOW_LOGIN_MESSAGES_C_EXPORT void version5_CMD_AUTH_LOGON_CHALLENGE_Server_free(v
 }
 
 static WowLoginResult version5_CMD_AUTH_LOGON_PROOF_Client_read(WowLoginReader* reader, version5_CMD_AUTH_LOGON_PROOF_Client* object) {
-    READ_ARRAY_ALLOCATE(object->client_public_key, 32, sizeof(uint8_t));
+    object->client_public_key = malloc(sizeof(*object->client_public_key));
+    if (object->client_public_key == NULL) {
+        return WLM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->client_public_key, 32, READ_U8((*object->client_public_key)[i]));
 
-    READ_ARRAY_ALLOCATE(object->client_proof, 20, sizeof(uint8_t));
+
+    object->client_proof = malloc(sizeof(*object->client_proof));
+    if (object->client_proof == NULL) {
+        return WLM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->client_proof, 20, READ_U8((*object->client_proof)[i]));
 
-    READ_ARRAY_ALLOCATE(object->crc_hash, 20, sizeof(uint8_t));
+
+    object->crc_hash = malloc(sizeof(*object->crc_hash));
+    if (object->crc_hash == NULL) {
+        return WLM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->crc_hash, 20, READ_U8((*object->crc_hash)[i]));
+
 
     READ_U8(object->number_of_telemetry_keys);
 
-    READ_ARRAY_ALLOCATE(object->telemetry_keys, object->number_of_telemetry_keys, sizeof(version2_TelemetryKey));
+    object->telemetry_keys = malloc(object->number_of_telemetry_keys * sizeof(version2_TelemetryKey));
+    if (object->telemetry_keys == NULL) {
+        return WLM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->telemetry_keys, object->number_of_telemetry_keys, WLM_CHECK_RETURN_CODE(version2_TelemetryKey_read(reader, &object->telemetry_keys[i])));
+
 
     object->security_flag = 0;
     READ_U8(object->security_flag);
 
     if ((object->security_flag & VERSION5_SECURITY_FLAG_PIN) != 0) {
-        READ_ARRAY_ALLOCATE(object->pin_salt, 16, sizeof(uint8_t));
+        object->pin_salt = malloc(sizeof(*object->pin_salt));
+        if (object->pin_salt == NULL) {
+            return WLM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->pin_salt, 16, READ_U8((*object->pin_salt)[i]));
 
-        READ_ARRAY_ALLOCATE(object->pin_hash, 20, sizeof(uint8_t));
+
+        object->pin_hash = malloc(sizeof(*object->pin_hash));
+        if (object->pin_hash == NULL) {
+            return WLM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->pin_hash, 20, READ_U8((*object->pin_hash)[i]));
+
 
     }
     if ((object->security_flag & VERSION5_SECURITY_FLAG_MATRIX_CARD) != 0) {
-        READ_ARRAY_ALLOCATE(object->matrix_card_proof, 20, sizeof(uint8_t));
+        object->matrix_card_proof = malloc(sizeof(*object->matrix_card_proof));
+        if (object->matrix_card_proof == NULL) {
+            return WLM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->matrix_card_proof, 20, READ_U8((*object->matrix_card_proof)[i]));
+
 
     }
     return WLM_RESULT_SUCCESS;
@@ -1535,8 +1719,12 @@ static WowLoginResult version5_CMD_AUTH_LOGON_PROOF_Server_read(WowLoginReader* 
     READ_U8(object->result);
 
     if (object->result == VERSION2_LOGIN_RESULT_SUCCESS) {
-        READ_ARRAY_ALLOCATE(object->server_proof, 20, sizeof(uint8_t));
+        object->server_proof = malloc(sizeof(*object->server_proof));
+        if (object->server_proof == NULL) {
+            return WLM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->server_proof, 20, READ_U8((*object->server_proof)[i]));
+
 
         READ_U32(object->hardware_survey_id);
 
@@ -1619,8 +1807,12 @@ static WowLoginResult version5_CMD_REALM_LIST_Server_read(WowLoginReader* reader
 
     READ_U8(object->number_of_realms);
 
-    READ_ARRAY_ALLOCATE(object->realms, object->number_of_realms, sizeof(version5_Realm));
+    object->realms = malloc(object->number_of_realms * sizeof(version5_Realm));
+    if (object->realms == NULL) {
+        return WLM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->realms, object->number_of_realms, WLM_CHECK_RETURN_CODE(version5_Realm_read(reader, &object->realms[i])));
+
 
     SKIP_FORWARD_BYTES(2);
 
@@ -1869,8 +2061,12 @@ static WowLoginResult version6_CMD_REALM_LIST_Server_read(WowLoginReader* reader
 
     READ_U16(object->number_of_realms);
 
-    READ_ARRAY_ALLOCATE(object->realms, object->number_of_realms, sizeof(version5_Realm));
+    object->realms = malloc(object->number_of_realms * sizeof(version5_Realm));
+    if (object->realms == NULL) {
+        return WLM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->realms, object->number_of_realms, WLM_CHECK_RETURN_CODE(version5_Realm_read(reader, &object->realms[i])));
+
 
     SKIP_FORWARD_BYTES(2);
 
@@ -2367,24 +2563,44 @@ static WowLoginResult version8_CMD_AUTH_LOGON_CHALLENGE_Server_read(WowLoginRead
     READ_U8(object->result);
 
     if (object->result == VERSION8_LOGIN_RESULT_SUCCESS) {
-        READ_ARRAY_ALLOCATE(object->server_public_key, 32, sizeof(uint8_t));
+        object->server_public_key = malloc(sizeof(*object->server_public_key));
+        if (object->server_public_key == NULL) {
+            return WLM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->server_public_key, 32, READ_U8((*object->server_public_key)[i]));
+
 
         READ_U8(object->generator_length);
 
-        READ_ARRAY_ALLOCATE(object->generator, object->generator_length, sizeof(uint8_t));
+        object->generator = malloc(object->generator_length * sizeof(uint8_t));
+        if (object->generator == NULL) {
+            return WLM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->generator, object->generator_length, READ_U8(object->generator[i]));
+
 
         READ_U8(object->large_safe_prime_length);
 
-        READ_ARRAY_ALLOCATE(object->large_safe_prime, object->large_safe_prime_length, sizeof(uint8_t));
+        object->large_safe_prime = malloc(object->large_safe_prime_length * sizeof(uint8_t));
+        if (object->large_safe_prime == NULL) {
+            return WLM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->large_safe_prime, object->large_safe_prime_length, READ_U8(object->large_safe_prime[i]));
 
-        READ_ARRAY_ALLOCATE(object->salt, 32, sizeof(uint8_t));
+
+        object->salt = malloc(sizeof(*object->salt));
+        if (object->salt == NULL) {
+            return WLM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->salt, 32, READ_U8((*object->salt)[i]));
 
-        READ_ARRAY_ALLOCATE(object->crc_salt, 16, sizeof(uint8_t));
+
+        object->crc_salt = malloc(sizeof(*object->crc_salt));
+        if (object->crc_salt == NULL) {
+            return WLM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->crc_salt, 16, READ_U8((*object->crc_salt)[i]));
+
 
         object->security_flag = 0;
         READ_U8(object->security_flag);
@@ -2392,8 +2608,12 @@ static WowLoginResult version8_CMD_AUTH_LOGON_CHALLENGE_Server_read(WowLoginRead
         if ((object->security_flag & VERSION8_SECURITY_FLAG_PIN) != 0) {
             READ_U32(object->pin_grid_seed);
 
-            READ_ARRAY_ALLOCATE(object->pin_salt, 16, sizeof(uint8_t));
+            object->pin_salt = malloc(sizeof(*object->pin_salt));
+            if (object->pin_salt == NULL) {
+                return WLM_RESULT_MALLOC_FAIL;
+            }
             READ_ARRAY(object->pin_salt, 16, READ_U8((*object->pin_salt)[i]));
+
 
         }
         if ((object->security_flag & VERSION8_SECURITY_FLAG_MATRIX_CARD) != 0) {
@@ -2491,34 +2711,62 @@ WOW_LOGIN_MESSAGES_C_EXPORT void version8_CMD_AUTH_LOGON_CHALLENGE_Server_free(v
 }
 
 static WowLoginResult version8_CMD_AUTH_LOGON_PROOF_Client_read(WowLoginReader* reader, version8_CMD_AUTH_LOGON_PROOF_Client* object) {
-    READ_ARRAY_ALLOCATE(object->client_public_key, 32, sizeof(uint8_t));
+    object->client_public_key = malloc(sizeof(*object->client_public_key));
+    if (object->client_public_key == NULL) {
+        return WLM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->client_public_key, 32, READ_U8((*object->client_public_key)[i]));
 
-    READ_ARRAY_ALLOCATE(object->client_proof, 20, sizeof(uint8_t));
+
+    object->client_proof = malloc(sizeof(*object->client_proof));
+    if (object->client_proof == NULL) {
+        return WLM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->client_proof, 20, READ_U8((*object->client_proof)[i]));
 
-    READ_ARRAY_ALLOCATE(object->crc_hash, 20, sizeof(uint8_t));
+
+    object->crc_hash = malloc(sizeof(*object->crc_hash));
+    if (object->crc_hash == NULL) {
+        return WLM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->crc_hash, 20, READ_U8((*object->crc_hash)[i]));
+
 
     READ_U8(object->number_of_telemetry_keys);
 
-    READ_ARRAY_ALLOCATE(object->telemetry_keys, object->number_of_telemetry_keys, sizeof(version2_TelemetryKey));
+    object->telemetry_keys = malloc(object->number_of_telemetry_keys * sizeof(version2_TelemetryKey));
+    if (object->telemetry_keys == NULL) {
+        return WLM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->telemetry_keys, object->number_of_telemetry_keys, WLM_CHECK_RETURN_CODE(version2_TelemetryKey_read(reader, &object->telemetry_keys[i])));
+
 
     object->security_flag = 0;
     READ_U8(object->security_flag);
 
     if ((object->security_flag & VERSION8_SECURITY_FLAG_PIN) != 0) {
-        READ_ARRAY_ALLOCATE(object->pin_salt, 16, sizeof(uint8_t));
+        object->pin_salt = malloc(sizeof(*object->pin_salt));
+        if (object->pin_salt == NULL) {
+            return WLM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->pin_salt, 16, READ_U8((*object->pin_salt)[i]));
 
-        READ_ARRAY_ALLOCATE(object->pin_hash, 20, sizeof(uint8_t));
+
+        object->pin_hash = malloc(sizeof(*object->pin_hash));
+        if (object->pin_hash == NULL) {
+            return WLM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->pin_hash, 20, READ_U8((*object->pin_hash)[i]));
+
 
     }
     if ((object->security_flag & VERSION8_SECURITY_FLAG_MATRIX_CARD) != 0) {
-        READ_ARRAY_ALLOCATE(object->matrix_card_proof, 20, sizeof(uint8_t));
+        object->matrix_card_proof = malloc(sizeof(*object->matrix_card_proof));
+        if (object->matrix_card_proof == NULL) {
+            return WLM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->matrix_card_proof, 20, READ_U8((*object->matrix_card_proof)[i]));
+
 
     }
     if ((object->security_flag & VERSION8_SECURITY_FLAG_AUTHENTICATOR) != 0) {
@@ -2596,8 +2844,12 @@ static WowLoginResult version8_CMD_AUTH_LOGON_PROOF_Server_read(WowLoginReader* 
     READ_U8(object->result);
 
     if (object->result == VERSION8_LOGIN_RESULT_SUCCESS) {
-        READ_ARRAY_ALLOCATE(object->server_proof, 20, sizeof(uint8_t));
+        object->server_proof = malloc(sizeof(*object->server_proof));
+        if (object->server_proof == NULL) {
+            return WLM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->server_proof, 20, READ_U8((*object->server_proof)[i]));
+
 
         object->account_flag = 0;
         READ_U32(object->account_flag);
@@ -2651,11 +2903,19 @@ static WowLoginResult version8_CMD_AUTH_RECONNECT_CHALLENGE_Server_read(WowLogin
     READ_U8(object->result);
 
     if (object->result == VERSION8_LOGIN_RESULT_SUCCESS) {
-        READ_ARRAY_ALLOCATE(object->challenge_data, 16, sizeof(uint8_t));
+        object->challenge_data = malloc(sizeof(*object->challenge_data));
+        if (object->challenge_data == NULL) {
+            return WLM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->challenge_data, 16, READ_U8((*object->challenge_data)[i]));
 
-        READ_ARRAY_ALLOCATE(object->checksum_salt, 16, sizeof(uint8_t));
+
+        object->checksum_salt = malloc(sizeof(*object->checksum_salt));
+        if (object->checksum_salt == NULL) {
+            return WLM_RESULT_MALLOC_FAIL;
+        }
         READ_ARRAY(object->checksum_salt, 16, READ_U8((*object->checksum_salt)[i]));
+
 
     }
     return WLM_RESULT_SUCCESS;
@@ -2734,8 +2994,12 @@ static WowLoginResult version8_CMD_REALM_LIST_Server_read(WowLoginReader* reader
 
     READ_U16(object->number_of_realms);
 
-    READ_ARRAY_ALLOCATE(object->realms, object->number_of_realms, sizeof(version8_Realm));
+    object->realms = malloc(object->number_of_realms * sizeof(version8_Realm));
+    if (object->realms == NULL) {
+        return WLM_RESULT_MALLOC_FAIL;
+    }
     READ_ARRAY(object->realms, object->number_of_realms, WLM_CHECK_RETURN_CODE(version8_Realm_read(reader, &object->realms[i])));
+
 
     SKIP_FORWARD_BYTES(2);
 

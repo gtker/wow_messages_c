@@ -1,58 +1,127 @@
+import model
+from util import world_version_is_wrath, is_cpp
 from writer import Writer
 
+def print_achievement_in_progress_array_c(s: Writer, h: Writer):
+    h.write_block(f"""
+        typedef struct {{
+            uint32_t amount_of_achievements;
+            wrath_AchievementInProgress* achievements;
+        }} wrath_AchievementInProgressArray;
+    """)
 
-def print_achievement_in_progress_array(s: Writer):
-    s.write_block("""
-@dataclasses.dataclass
-class AchievementInProgressArray:
-    data: list[AchievementInProgress]
+    s.write_block(f"""
+        static WowWorldResult wrath_achievement_in_progress_array_write(WowWorldWriter* stream, const wrath_AchievementInProgressArray* mask) {{
+            uint32_t i;
+            for (i = 0; i < mask->amount_of_achievements; ++i) {{
+                WWM_CHECK_RETURN_CODE(wrath_AchievementInProgress_write(stream, &mask->achievements[i]));
+            }}
 
-    @staticmethod
-    async def read(reader: asyncio.StreamReader):
-        data = []
-        achievement = await read_int(reader, 4)
+            WWM_CHECK_RETURN_CODE(wwm_write_uint32(stream, 0xFFFFFFFF));
 
-        while achievement != -1:
-            counter = await read_packed_guid(reader)
+            return WWM_RESULT_SUCCESS;
+        }}
 
-            player = await read_packed_guid(reader)
+        static WowWorldResult wrath_achievement_in_progress_array_read(WowWorldReader* stream, wrath_AchievementInProgressArray* mask) {{
+            uint32_t achievement;
+            size_t array_size = 8;
 
-            timed_criteria_failed = await read_bool(reader, 4)
+            WWM_CHECK_RETURN_CODE(wwm_read_uint32(stream, &achievement));
+            stream->index -= 4; /* we're just checking achievement */
 
-            progress_date = await read_int(reader, 4)
+            mask->achievements = malloc(array_size * sizeof(wrath_AchievementInProgress));
+            if (mask->achievements == NULL) {{
+                return WWM_RESULT_MALLOC_FAIL;
+            }}
+            mask->amount_of_achievements = 0;
 
-            time_since_progress = await read_int(reader, 4)
+            while(achievement != 0xFFFFFFFF) {{
+                mask->achievements[mask->amount_of_achievements].achievement = achievement;
+                WWM_CHECK_RETURN_CODE(wrath_AchievementInProgress_read(stream, &mask->achievements[mask->amount_of_achievements]));
 
-            time_since_progress2 = await read_int(reader, 4)
-            
-            data.append(AchievementInProgress(
-                                              achievement=achievement,
-                                              counter=counter,
-                                              player=player,
-                                              timed_criteria_failed=timed_criteria_failed,
-                                              progress_date=progress_date,
-                                              time_since_progress=time_since_progress,
-                                              time_since_progress2=time_since_progress2,
-                                              ))
+                WWM_CHECK_RETURN_CODE(wwm_read_uint32(stream, &achievement));
+                stream->index -= 4; /* we're just checking achievement */
+                ++mask->amount_of_achievements;
 
-            achievement = await read_int(reader, 4)
+                if (mask->amount_of_achievements > array_size) {{
+                    array_size *= 2;
+                    mask->achievements = realloc(mask->achievements, array_size * sizeof(wrath_AchievementInProgress));
+                    if (mask->achievements == NULL) {{
+                        return WWM_RESULT_MALLOC_FAIL;
+                    }}
+                }}
+            }}
 
-        return AchievementInProgressArray(data=data)
+            return WWM_RESULT_SUCCESS;
+        }}
 
-    def write(self, fmt, data):
-        for d in self.data:
-            fmt, data = d.write(fmt, data)
+        static size_t wrath_achievement_in_progress_array_size(const wrath_AchievementInProgressArray* mask) {{
+            size_t size = 0;
+            uint32_t i;
+            for (i = 0; i < mask->amount_of_achievements; ++i) {{
+                size += wrath_AchievementInProgress_size(&mask->achievements[i]);
+            }}
+            return size;
+        }}
 
-        fmt += "i"
-        data.append(-1)
+        static void wrath_achievement_in_progress_array_free(wrath_AchievementInProgressArray* mask) {{
+            mask->amount_of_achievements = 0;
+            free(mask->achievements);
+        }}
+    """)
 
-        return fmt, data
+def print_achievement_in_progress_array_cpp(s: Writer, h: Writer):
+    s.write_block(f"""
+        static void achievement_in_progress_array_write(Writer& writer, const std::vector<AchievementInProgress>& mask) {{
+            for (const auto& v : mask) {{
+                AchievementInProgress_write(writer, v);
+            }}
 
-    def size(self):
-        size = 4
-        for d in self.data:
-            size += d.size()
-        return size
-""")
+            writer.write_u32(0xFFFFFFFF);
+        }}
 
-    s.double_newline()
+        static std::vector<AchievementInProgress> achievement_in_progress_array_read(Reader& reader) {{
+            std::vector<AchievementInProgress> mask;
+            uint32_t achievement = reader.read_u32();
+
+            while(achievement != 0xFFFFFFFF) {{
+                AchievementInProgress obj;
+
+                obj.achievement = achievement;
+
+                obj.counter = reader.read_packed_guid();
+
+                obj.player = reader.read_packed_guid();
+
+                obj.timed_criteria_failed = reader.read_bool32();
+
+                obj.progress_date = reader.read_u32();
+
+                obj.time_since_progress = reader.read_u32();
+
+                obj.time_since_progress2 = reader.read_u32();
+
+                mask.push_back(obj);
+
+                achievement = reader.read_u32();
+            }}
+
+            return mask;
+        }}
+
+        static size_t achievement_in_progress_array_size(const std::vector<AchievementInProgress>& mask) {{
+            size_t size = 0;
+            for (const auto& v : mask) {{
+                size += AchievementInProgress_size(v);
+            }}
+            return size;
+        }}
+    """)
+
+def print_achievement_in_progress_array(s: Writer, h: Writer, v: model.WorldVersion):
+    if not world_version_is_wrath(v):
+        return
+    if is_cpp():
+        print_achievement_in_progress_array_cpp(s, h)
+    else:
+        print_achievement_in_progress_array_c(s, h)

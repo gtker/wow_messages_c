@@ -136,7 +136,10 @@ def print_write_struct_member(s: Writer, d: model.Definition, module_name: str, 
                 s.wln(f"WRITE_MONSTER_MOVE_SPLINE({variable_name});")
 
         case model.DataTypeEnchantMask():
-            s.wln(f"WRITE_ENCHANT_MASK_{module_name}({variable_name});")
+            if is_cpp():
+                s.wln(f"{module_name}::enchant_mask_write(writer, {variable_name});")
+            else:
+                s.wln(f"{module_name}_enchant_mask_write(writer, &{variable_name});")
 
         case model.DataTypeNamedGUID():
             if is_cpp():
@@ -145,7 +148,10 @@ def print_write_struct_member(s: Writer, d: model.Definition, module_name: str, 
                 s.wln(f"WRITE_NAMED_GUID({variable_name});")
 
         case model.DataTypeInspectTalentGearMask():
-            s.wln(f"WRITE_INSPECT_TALENT_GEAR_MASK({variable_name});")
+            if is_cpp():
+                s.wln(f"{module_name}::inspect_talent_gear_mask_write(writer, {variable_name});")
+            else:
+                s.wln(f"{module_name}_inspect_talent_gear_mask_write(writer, &{variable_name});")
 
         case model.DataTypeVariableItemRandomProperty():
             if is_cpp():
@@ -154,7 +160,11 @@ def print_write_struct_member(s: Writer, d: model.Definition, module_name: str, 
                 s.wln(f"WRITE_VARIABLE_ITEM_RANDOM_PROPERTY({variable_name});")
 
         case model.DataTypeCacheMask():
-            s.wln(f"WRITE_CACHE_MASK_{module_name}({variable_name});")
+            if is_cpp():
+                s.wln(f"{module_name}::cache_mask_write(writer, {variable_name});")
+            else:
+                s.wln(f"{module_name}_cache_mask_write(writer, &{variable_name});")
+
 
         case model.DataTypeAddonArray():
             if is_cpp():
@@ -163,10 +173,17 @@ def print_write_struct_member(s: Writer, d: model.Definition, module_name: str, 
                 s.wln(f"{module_name}_addon_array_write(writer, &{variable_name});")
 
         case model.DataTypeAchievementDoneArray():
-            s.wln(f"WRITE_ACHIEVEMENT_DONE_ARRAY({variable_name});")
+            if is_cpp():
+                s.wln(f"{module_name}::achievement_done_array_write(writer, {variable_name});")
+            else:
+                s.wln(f"{module_name}_achievement_done_array_write(writer, &{variable_name});")
+
 
         case model.DataTypeAchievementInProgressArray():
-            s.wln(f"WRITE_ACHIEVEMENT_IN_PROGRESS_ARRAY({variable_name});")
+            if is_cpp():
+                s.wln(f"{module_name}::achievement_in_progress_array_write(writer, {variable_name});")
+            else:
+                s.wln(f"{module_name}_achievement_in_progress_array_write(writer, &{variable_name});")
 
         case model.DataTypeArray(compressed=compressed, size=size, inner_type=inner_type):
             if is_cpp():
@@ -225,6 +242,9 @@ def print_write_struct_member(s: Writer, d: model.Definition, module_name: str, 
                     s.newline()
 
                     s.wln(f"{d.name}_uncompressed_data = malloc(_size);")
+                    s.open_curly(f"if ({d.name}_uncompressed_data == NULL)")
+                    s.wln("return WWM_RESULT_MALLOC_FAIL;")
+                    s.closing_curly()
                     s.wln(f"new_writer = wwm_create_writer({d.name}_uncompressed_data, _size);")
                     s.wln("writer = &new_writer;")
 
@@ -464,6 +484,9 @@ def print_write(s: Writer, h: Writer, container: Container, object_type: model.O
                 }}
                 
                 _decompressed_data = malloc(_decompressed_data_length);
+                if (_decompressed_data == NULL) {{
+                    return WWM_RESULT_MALLOC_FAIL;
+                }}
                 stack_writer = wwm_create_writer(_decompressed_data, _decompressed_data_length);
             """)
 

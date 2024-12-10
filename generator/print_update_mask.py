@@ -14,84 +14,108 @@ def print_update_mask(s: Writer, h: Writer, update_mask: list[model.UpdateMask],
 
 
 def print_update_mask_cpp(s: Writer, h: Writer, update_mask: list[model.UpdateMask], module_name: str):
-    h.open_curly("enum class UpdateMaskValues")
+    h.open_curly("class UpdateMask")
+    h.wln_no_indent("public:")
+    export_define = "WOW_WORLD_MESSAGES_CPP_EXPORT"
 
-    highest_offset = 0
+    highest_offset: int = 0
     for index, value in enumerate(update_mask):
         highest_offset = max(value.offset, highest_offset)
+        name = f"{value.object_type.name.lower()}_{value.name.lower()}"
 
-        comma = "," if index < (len(update_mask) - 1) else ""
-        name = f"{value.object_type.name}_{value.name}"
         match value.data_type:
             case model.UpdateMaskDataTypeGUIDArrayUsingEnum(content=content):
-                for enumerator in content.definer.enumerators:
-                    h.wln(f"{name}_{enumerator.name} = {value.offset + int(enumerator.value.value) * 2}{comma}")
-            case model.UpdateMaskDataTypeArrayOfStruct(content=content):
-                amount_of_items = value.size // content.size
-                mask = content.update_mask_struct
-                for i in range(0, amount_of_items):
-                    for word_index, word in enumerate(mask.members):
-                        for member_index, member in enumerate(word):
-                            val = value.offset + i * content.size + word_index
-                            extra = member.member.name.upper()
+                offset = f"{value.offset} + (static_cast<uint32_t>(def) * 2)"
 
-                            if member.size == 4:
-                                h.wln(f"{name}_{i}_{extra} = {val}{comma}")
-                            elif member.size == 8:
-                                h.wln(f"{name}_{i}_{extra}_LOW = {val}{comma}")
-                                h.wln(f"{name}_{i}_{extra}_HIGH = {val + 1}{comma}")
-                            else:
-                                h.wln(f"{name}_{i}_{extra}_{member_index} = {val}{comma}")
+                h.wln(f"{export_define} void {name}_set({content.definer.name} def, uint64_t value);")
+                s.open_curly(f"{export_define} void UpdateMask::{name}_set({content.definer.name} def, uint64_t value)")
+                s.wln(f"::wow_world_messages::util::update_mask_set_u64(headers, values, {offset}, value);")
+                s.closing_curly()
+
+                h.wln(f"{export_define} uint64_t {name}_get({content.definer.name} def);")
+                s.open_curly(f"{export_define} uint64_t UpdateMask::{name}_get({content.definer.name} def)")
+                s.wln(f"return ::wow_world_messages::util::update_mask_get_u64(headers, values, {offset});")
+                s.closing_curly()
+
+                continue
+
+            case model.UpdateMaskDataTypeArrayOfStruct(content=content):
+                mask: model.UpdateMaskStruct = content.update_mask_struct
+
+                for word_index, word in enumerate(mask.members):
+                    member: model.UpdateMaskStructMember
+                    for member_index, member in enumerate(word):
+                        if member.size == 4:
+                            value_type = "uint32_t"
+                            function_type = "u32"
+                        elif member.size == 8:
+                            value_type = "uint64_t"
+                            function_type = "u64"
+                        else:
+                            value_type = "uint32_t"
+                            function_type = "u32"
+
+                        h.wln(f"{export_define} void {name}_{member.member.name}_set(uint32_t index, {value_type} value);")
+                        s.open_curly(f"{export_define} void UpdateMask::{name}_{member.member.name}_set(uint32_t index, {value_type} value)")
+                        s.wln(f"::wow_world_messages::util::update_mask_set_{function_type}(headers, values, {value.offset} + index * {content.size} + {word_index}, value);")
+                        s.closing_curly()
+
+                        h.wln(f"{export_define} {value_type} {name}_{member.member.name}_get(uint32_t index);")
+                        s.open_curly(f"{export_define} {value_type} UpdateMask::{name}_{member.member.name}_get(uint32_t index)")
+                        s.wln(f"return ::wow_world_messages::util::update_mask_get_{function_type}(headers, values, {value.offset} + index * {content.size} + {word_index});")
+                        s.closing_curly()
+                continue
+
+            case model.UpdateMaskDataTypeInt():
+                value_type = "uint32_t"
+                function_type = "u32"
+
+            case model.UpdateMaskDataTypeGUID():
+                value_type = "uint64_t"
+                function_type = "u64"
+
+            case model.UpdateMaskDataTypeFloat():
+                value_type = "float"
+                function_type = "float"
+
+            case model.UpdateMaskDataTypeBytes():
+                value_type = "std::array<uint8_t, 4>"
+                function_type = "bytes"
+
+            case model.UpdateMaskDataTypeTwoShort():
+                value_type = "std::pair<uint16_t, uint16_t>"
+                function_type = "two_shorts"
 
             case _:
-                h.wln(f"{name} = {value.offset}{comma}")
+                raise Exception(f"unknown update mask type {value.data_type}")
 
-    h.closing_curly(";")
-    h.newline()
+        h.wln(f"{export_define} void {name}_set({value_type} value);")
+        s.open_curly(f"{export_define} void UpdateMask::{name}_set({value_type} value)")
+        s.wln(f"::wow_world_messages::util::update_mask_set_{function_type}(headers, values, {value.offset}, value);")
+        s.closing_curly()
+
+        h.wln(f"{export_define} {value_type} {name}_get();")
+        s.open_curly(f"{export_define} {value_type} UpdateMask::{name}_get()")
+        s.wln(f"return ::wow_world_messages::util::update_mask_get_{function_type}(headers, values, {value.offset});")
+        s.closing_curly()
 
     max_headers = highest_offset // 32
     if max_headers % 32 != 0:
         max_headers += 1
     max_values = highest_offset
-    h.write_block(f"""
-constexpr auto UPDATE_MASK_HEADERS_LENGTH = {max_headers};
-constexpr auto UPDATE_MASK_VALUES_LENGTH = {max_values};
-    
-struct UpdateMask {{
-    uint32_t headers[UPDATE_MASK_HEADERS_LENGTH];
-    uint32_t values[UPDATE_MASK_VALUES_LENGTH];
-}};
 
-""")
+    #h.wln_no_indent("private:") TODO Private?
+    h.wln(f"uint32_t headers[{max_headers}];")
+    h.wln(f"uint32_t values[{max_values}];")
 
-    set_declaration = f"WOW_WORLD_MESSAGES_CPP_EXPORT void update_mask_set(UpdateMask& mask, UpdateMaskValues offset, uint32_t value)"
-    h.wln(f"{set_declaration};")
+    h.closing_curly(";")
     h.newline()
 
-    get_declaration = f"WOW_WORLD_MESSAGES_CPP_EXPORT uint32_t update_mask_get(const UpdateMask& mask, UpdateMaskValues offset)"
-    h.wln(f"{get_declaration};")
-    h.newline()
+    one = "static_cast<uint32_t>(1)"
 
     s.write_block(f"""
-        {set_declaration} {{
-            uint32_t block = static_cast<uint32_t>(offset) / 32;
-            uint32_t bit = static_cast<uint32_t>(offset) % 32;
-
-            mask.headers[block] |= 1 << bit;
-            mask.values[static_cast<uint32_t>(offset)] = value;
-        }}
-
-        {get_declaration} {{
-            uint32_t block = static_cast<uint32_t>(offset) / 32;
-            uint32_t bit = static_cast<uint32_t>(offset) % 32;
-            
-            if((mask.headers[block] & 1 << bit) != 0) {{
-                return mask.values[static_cast<uint32_t>(offset)];
-            }}
-
-            return 0;
-        }}
-
+        constexpr auto UPDATE_MASK_HEADERS_LENGTH = {max_headers};
+    
         static void update_mask_write(Writer& writer, const UpdateMask& mask) {{
             uint8_t amount_of_headers = 0;
 
@@ -111,7 +135,7 @@ struct UpdateMask {{
             for (int i = 0; i < amount_of_headers; ++i) {{
                 const uint32_t header = mask.headers[i];
                 for (int j = 0; j < 32; ++j) {{
-                    if ((header & (1 << j)) != 0) {{
+                    if ((header & ({one} << j)) != 0) {{
                         writer.write_u32(mask.values[i * 32 + j]);
                     }}
                 }}
@@ -130,7 +154,7 @@ struct UpdateMask {{
             for (int i = 0; i < amount_of_headers; ++i) {{
                 uint32_t header = mask.headers[i];
                 for (int j = 0; j < 32; ++j) {{
-                    if ((header & (1 << j)) != 0) {{
+                    if ((header & ({one} << j)) != 0) {{
                         mask.values[i * 32 + j] = reader.read_u32();
                     }}
                 }}
@@ -148,7 +172,7 @@ struct UpdateMask {{
             for(int i = 0; i < UPDATE_MASK_HEADERS_LENGTH; ++i) {{
                 uint32_t header = mask.headers[i];
                 for(int j = 0; j < 32; ++j) {{
-                    if((header & (1 << j)) != 0) {{
+                    if((header & ({one} << j)) != 0) {{
                         max_header = i + 1;
                         amount_of_values += 4;
                     }}
@@ -161,40 +185,10 @@ struct UpdateMask {{
 
 
 def print_update_mask_c(s: Writer, h: Writer, update_mask: list[model.UpdateMask], module_name: str):
-    h.open_curly("typedef enum")
-
+    one = "(uint32_t)1"
     highest_offset = 0
     for index, value in enumerate(update_mask):
         highest_offset = max(value.offset, highest_offset)
-
-        comma = "," if index < (len(update_mask) - 1) else ""
-        name = f"{module_name.upper()}_{value.object_type.name}_{value.name}"
-        match value.data_type:
-            case model.UpdateMaskDataTypeGUIDArrayUsingEnum(content=content):
-                for enumerator in content.definer.enumerators:
-                    h.wln(f"{name}_{enumerator.name} = {value.offset + int(enumerator.value.value) * 2}{comma}")
-            case model.UpdateMaskDataTypeArrayOfStruct(content=content):
-                amount_of_items = value.size // content.size
-                mask = content.update_mask_struct
-                for i in range(0, amount_of_items):
-                    for word_index, word in enumerate(mask.members):
-                        for member_index, member in enumerate(word):
-                            val = value.offset + i * content.size + word_index
-                            extra = member.member.name.upper()
-
-                            if member.size == 4:
-                                h.wln(f"{name}_{i}_{extra} = {val}{comma}")
-                            elif member.size == 8:
-                                h.wln(f"{name}_{i}_{extra}_LOW = {val}{comma}")
-                                h.wln(f"{name}_{i}_{extra}_HIGH = {val + 1}{comma}")
-                            else:
-                                h.wln(f"{name}_{i}_{extra}_{member_index} = {val}{comma}")
-
-            case _:
-                h.wln(f"{name} = {value.offset}{comma}")
-
-    h.closing_curly(f" {module_name}_UpdateMaskValues;")
-    h.newline()
 
     max_headers = highest_offset // 32
     if max_headers % 32 != 0:
@@ -211,34 +205,96 @@ typedef struct {{
 
 """)
 
-    set_declaration = f"WOW_WORLD_MESSAGES_C_EXPORT void {module_name}_update_mask_set({module_name}_UpdateMask* mask, {module_name}_UpdateMaskValues offset, uint32_t value)"
-    h.wln(f"{set_declaration};")
-    h.newline()
+    for index, value in enumerate(update_mask):
+        name = f"{module_name.lower()}_update_mask_{value.object_type.name.lower()}_{value.name.lower()}"
+        export_define = "WOW_WORLD_MESSAGES_C_EXPORT"
 
-    get_declaration = f"WOW_WORLD_MESSAGES_C_EXPORT uint32_t {module_name}_update_mask_get({module_name}_UpdateMask* mask, {module_name}_UpdateMaskValues offset)"
-    h.wln(f"{get_declaration};")
+        match value.data_type:
+            case model.UpdateMaskDataTypeGUIDArrayUsingEnum(content=content):
+                function_declaration_set = f"{export_define} void {name}_set({module_name}_UpdateMask* mask, {module_name}_{content.definer.name} def, uint64_t value)"
+                function_declaration_get = f"{export_define} uint64_t {name}_get(const {module_name}_UpdateMask* mask, {module_name}_{content.definer.name} def)"
+
+                offset = f"{value.offset} + ((uint32_t)def * 2)"
+
+                h.wln(f"{function_declaration_get};")
+                s.open_curly(f"{function_declaration_get}")
+                s.wln(f"return wwm_update_mask_get_u64(mask->headers, mask->values, {offset});")
+                s.closing_curly()
+
+                h.wln(f"{function_declaration_set};")
+                s.open_curly(f"{function_declaration_set}")
+                s.wln(f"wwm_update_mask_set_u64(mask->headers, mask->values, {offset}, value);")
+                s.closing_curly()
+                continue
+
+            case model.UpdateMaskDataTypeArrayOfStruct(content=content):
+                mask: model.UpdateMaskStruct = content.update_mask_struct
+
+                for word_index, word in enumerate(mask.members):
+                    member: model.UpdateMaskStructMember
+                    for member_index, member in enumerate(word):
+                        if member.size == 4:
+                            value_type = "uint32_t"
+                            function_type = "u32"
+                        elif member.size == 8:
+                            value_type = "uint64_t"
+                            function_type = "u64"
+                        else:
+                            value_type = "uint32_t"
+                            function_type = "u32"
+
+                        function_declaration_set = f"{export_define} void {name}_{member.member.name}_set({module_name}_UpdateMask* mask, uint32_t index, {value_type} value)"
+                        function_declaration_get = f"{export_define} {value_type} {name}_{member.member.name}_get(const {module_name}_UpdateMask* mask, uint32_t index)"
+                        h.wln(f"{function_declaration_set};")
+                        s.open_curly(function_declaration_set)
+                        s.wln(f"wwm_update_mask_set_{function_type}(mask->headers, mask->values, {value.offset} + index * {content.size} + {word_index}, value);")
+                        s.closing_curly()
+
+                        h.wln(f"{function_declaration_get};")
+                        s.open_curly(function_declaration_get)
+                        s.wln(f"return wwm_update_mask_get_{function_type}(mask->headers, mask->values, {value.offset} + index * {content.size} + {word_index});")
+                        s.closing_curly()
+                continue
+
+            case model.UpdateMaskDataTypeInt():
+                value_type = "uint32_t"
+                function_type = "u32"
+
+            case model.UpdateMaskDataTypeGUID():
+                value_type = "uint64_t"
+                function_type = "u64"
+
+            case model.UpdateMaskDataTypeFloat():
+                value_type = "float"
+                function_type = "float"
+
+            case model.UpdateMaskDataTypeBytes():
+                value_type = "WowBytes"
+                function_type = "bytes"
+
+            case model.UpdateMaskDataTypeTwoShort():
+                value_type = "WowTwoShorts"
+                function_type = "two_shorts"
+
+            case _:
+                raise Exception(f"unknown update mask type {value.data_type}")
+
+        function_declaration_set = f"{export_define} void {name}_set({module_name}_UpdateMask* mask, {value_type} value)"
+        function_declaration_get = f"{export_define} {value_type} {name}_get(const {module_name}_UpdateMask* mask)"
+
+        h.wln(f"{function_declaration_set};")
+        s.open_curly(f"{function_declaration_set}")
+        s.wln(f"wwm_update_mask_set_{function_type}(mask->headers, mask->values, {value.offset}, value);")
+        s.closing_curly()
+
+        h.wln(f"{function_declaration_get};")
+        s.open_curly(f"{function_declaration_get}")
+        s.wln(f"return wwm_update_mask_get_{function_type}(mask->headers, mask->values, {value.offset});")
+        s.closing_curly()
     h.newline()
+    s.newline()
 
     s.write_block(f"""
-{set_declaration} {{
-    uint32_t block = offset / 32;
-    uint32_t bit = offset % 32;
-
-    mask->headers[block] |= 1 << bit;
-    mask->values[offset] = value;
-}}
-
-{get_declaration} {{
-    uint32_t block = offset / 32;
-    uint32_t bit = offset % 32;
-    
-    if((mask->headers[block] & 1 << bit) != 0) {{
-        return mask->values[offset];
-    }}
-
-    return 0;
-}}
-
 static WowWorldResult {module_name}_update_mask_write(WowWorldWriter* stream, const {module_name}_UpdateMask* mask) {{
     uint8_t i;
     uint8_t j;
@@ -260,7 +316,7 @@ static WowWorldResult {module_name}_update_mask_write(WowWorldWriter* stream, co
     for (i = 0; i < amount_of_headers; ++i) {{
         uint32_t header = mask->headers[i];
         for (j = 0; j < 32; ++j) {{
-            if ((header & (1 << j)) != 0) {{
+            if ((header & ({one} << j)) != 0) {{
                 WWM_CHECK_RETURN_CODE(wwm_write_uint32(stream, mask->values[i * 32 + j]));
             }}
         }}
@@ -287,7 +343,7 @@ static WowWorldResult {module_name}_update_mask_read(WowWorldReader* stream, {mo
     for (i = 0; i < amount_of_headers; ++i) {{
         uint32_t header = mask->headers[i];
         for (j = 0; j < 32; ++j) {{
-            if ((header & (1 << j)) != 0) {{
+            if ((header & ({one} << j)) != 0) {{
                 WWM_CHECK_RETURN_CODE(wwm_read_uint32(stream, &mask->values[i * 32 + j]));
             }}
         }}
@@ -307,7 +363,7 @@ static size_t {module_name}_update_mask_size(const {module_name}_UpdateMask* mas
     for(i = 0; i < {module_name.upper()}_HEADERS_LENGTH; ++i) {{
         uint32_t header = mask->headers[i];
         for(j = 0; j < 32; ++j) {{
-            if((header & (1 << j)) != 0) {{
+            if((header & ({one} << j)) != 0) {{
                 max_header = i + 1;
                 amount_of_values += 4;
             }}
@@ -317,67 +373,3 @@ static size_t {module_name}_update_mask_size(const {module_name}_UpdateMask* mas
     return size + amount_of_values + (max_header * 4);
 }}
 """)
-
-    nothing = """
-@dataclasses.dataclass
-class UpdateMask:
-    fields: dict[int, int]
-    
-    @staticmethod
-    async def read(reader: asyncio.StreamReader):
-        amount_of_blocks = await read_int(reader, 1)
-
-        blocks = []
-        for _ in range(0, amount_of_blocks):
-            blocks.append(await read_int(reader, 4))
-
-        fields = {}
-        for block_index, block in enumerate(blocks):
-            for bit in range(0, 32):
-                if block & 1 << bit:
-                    value = await read_int(reader, 4)
-                    key = block_index * 32 + bit
-                    fields[key] = value
-
-        return UpdateMask(fields=fields)
-
-    def write(self, fmt, data):
-        highest_key = max(self.fields, default=0)
-        amount_of_blocks = highest_key // 32
-        if highest_key % 32 != 0:
-            amount_of_blocks += 1
-
-        fmt += 'B'
-        data.append(amount_of_blocks)
-
-        blocks = [0] * amount_of_blocks
-
-        for key in self.fields:
-            block = key // 32
-            index = key % 32
-            blocks[block] |= 1 << index
-
-        fmt += f'{len(blocks)}I'
-        data.extend(blocks)
-
-        for key in sorted(self.fields):
-            if isinstance(self.fields[key], float):
-                fmt += 'f'
-            else:
-                fmt += 'I'
-            data.append(self.fields[key])
-
-        return fmt, data
-
-    def size(self):
-        highest_key = max(self.fields, default=0)
-        amount_of_blocks = highest_key // 32
-
-        extra = highest_key % 32
-        if extra != 0:
-            extra = 1
-        else:
-            extra = 0
-
-        return 1 + (extra + amount_of_blocks + len(self.fields)) * 4
-"""

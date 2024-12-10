@@ -38,6 +38,16 @@ public:
         m_buf.push_back(static_cast<unsigned char>(value >> 24));
     }
 
+    void write_u48(const uint64_t value)
+    {
+        m_buf.push_back(static_cast<unsigned char>(value));
+        m_buf.push_back(static_cast<unsigned char>(value >> 8));
+        m_buf.push_back(static_cast<unsigned char>(value >> 16));
+        m_buf.push_back(static_cast<unsigned char>(value >> 24));
+        m_buf.push_back(static_cast<unsigned char>(value >> 40));
+        m_buf.push_back(static_cast<unsigned char>(value >> 32));
+    }
+
     void write_u64(const uint64_t value)
     {
         m_buf.push_back(static_cast<unsigned char>(value));
@@ -158,6 +168,22 @@ VariableItemRandomProperty wwm_read_variable_item_random_property(Reader& reader
 
 std::vector<unsigned char> compress_data(const std::vector<unsigned char>& buffer);
 std::vector<unsigned char> decompress_data(const std::vector<unsigned char>& buffer);
+
+void update_mask_set_u32(uint32_t* headers, uint32_t* values, uint32_t offset, uint32_t value);
+uint32_t update_mask_get_u32(const uint32_t* headers, const uint32_t* values, uint32_t offset);
+
+void update_mask_set_u64(uint32_t* headers, uint32_t* values, uint32_t offset, uint64_t value);
+uint64_t update_mask_get_u64(const uint32_t* headers, const uint32_t* values, uint32_t offset);
+
+void update_mask_set_float(uint32_t* headers, uint32_t* values, uint32_t offset, float value);
+float update_mask_get_float(const uint32_t* headers, const uint32_t* values, uint32_t offset);
+
+void update_mask_set_two_shorts(uint32_t* headers, uint32_t* values, uint32_t offset, std::pair<uint16_t, uint16_t> value);
+std::pair<uint16_t, uint16_t> update_mask_get_two_shorts(const uint32_t* headers, const uint32_t* values, uint32_t offset);
+
+void update_mask_set_bytes(uint32_t* headers, uint32_t* values, uint32_t offset, const std::array<uint8_t, 4>& value);
+std::array<uint8_t, 4> update_mask_get_bytes(const uint32_t* headers, const uint32_t* values, uint32_t offset);
+
 }  // namespace util
 
 } /* namespace wow_world_messages */

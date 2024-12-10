@@ -39,7 +39,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_WORLD_TELEPORT 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_WORLD_TELEPORT, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_WORLD_TELEPORT 0");
+        check_opcode(opcode.opcode, V_CMSG_WORLD_TELEPORT, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_WORLD_TELEPORT 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_WORLD_TELEPORT_write(&writer, &opcode.body.CMSG_WORLD_TELEPORT);
 
@@ -56,7 +56,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_WORLD_TELEPORT 1", "failed to read");
-        check_opcode(opcode.opcode, CMSG_WORLD_TELEPORT, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_WORLD_TELEPORT 1");
+        check_opcode(opcode.opcode, V_CMSG_WORLD_TELEPORT, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_WORLD_TELEPORT 1");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_WORLD_TELEPORT_write(&writer, &opcode.body.CMSG_WORLD_TELEPORT);
 
@@ -74,7 +74,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_TELEPORT_TO_UNIT 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_TELEPORT_TO_UNIT, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_TELEPORT_TO_UNIT 0");
+        check_opcode(opcode.opcode, V_CMSG_TELEPORT_TO_UNIT, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_TELEPORT_TO_UNIT 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_TELEPORT_TO_UNIT_write(&writer, &opcode.body.CMSG_TELEPORT_TO_UNIT);
 
@@ -93,7 +93,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_CREATE 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_CHAR_CREATE, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_CREATE 0");
+        check_opcode(opcode.opcode, V_CMSG_CHAR_CREATE, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_CREATE 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_CHAR_CREATE_write(&writer, &opcode.body.CMSG_CHAR_CREATE);
 
@@ -112,7 +112,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_ENUM 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_CHAR_ENUM, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_ENUM 0");
+        check_opcode(opcode.opcode, V_CMSG_CHAR_ENUM, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_ENUM 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_CHAR_ENUM_write(&writer);
 
@@ -130,7 +130,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_DELETE 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_CHAR_DELETE, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_DELETE 0");
+        check_opcode(opcode.opcode, V_CMSG_CHAR_DELETE, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_DELETE 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_CHAR_DELETE_write(&writer, &opcode.body.CMSG_CHAR_DELETE);
 
@@ -148,7 +148,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_CHAR_CREATE 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_CHAR_CREATE, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_CHAR_CREATE 0");
+        check_opcode(opcode.opcode, V_SMSG_CHAR_CREATE, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_CHAR_CREATE 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_SMSG_CHAR_CREATE_write(&writer, &opcode.body.SMSG_CHAR_CREATE);
 
@@ -166,7 +166,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_CHAR_ENUM 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_CHAR_ENUM, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_CHAR_ENUM 0");
+        check_opcode(opcode.opcode, V_SMSG_CHAR_ENUM, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_CHAR_ENUM 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_SMSG_CHAR_ENUM_write(&writer, &opcode.body.SMSG_CHAR_ENUM);
 
@@ -185,7 +185,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_CHAR_DELETE 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_CHAR_DELETE, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_CHAR_DELETE 0");
+        check_opcode(opcode.opcode, V_SMSG_CHAR_DELETE, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_CHAR_DELETE 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_SMSG_CHAR_DELETE_write(&writer, &opcode.body.SMSG_CHAR_DELETE);
 
@@ -203,7 +203,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PLAYER_LOGIN 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_PLAYER_LOGIN, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PLAYER_LOGIN 0");
+        check_opcode(opcode.opcode, V_CMSG_PLAYER_LOGIN, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PLAYER_LOGIN 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_PLAYER_LOGIN_write(&writer, &opcode.body.CMSG_PLAYER_LOGIN);
 
@@ -221,7 +221,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_NEW_WORLD 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_NEW_WORLD, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_NEW_WORLD 0");
+        check_opcode(opcode.opcode, V_SMSG_NEW_WORLD, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_NEW_WORLD 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_SMSG_NEW_WORLD_write(&writer, &opcode.body.SMSG_NEW_WORLD);
 
@@ -239,7 +239,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_TRANSFER_PENDING 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_TRANSFER_PENDING, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_TRANSFER_PENDING 0");
+        check_opcode(opcode.opcode, V_SMSG_TRANSFER_PENDING, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_TRANSFER_PENDING 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_SMSG_TRANSFER_PENDING_write(&writer, &opcode.body.SMSG_TRANSFER_PENDING);
 
@@ -258,7 +258,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_CHARACTER_LOGIN_FAILED 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_CHARACTER_LOGIN_FAILED, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_CHARACTER_LOGIN_FAILED 0");
+        check_opcode(opcode.opcode, V_SMSG_CHARACTER_LOGIN_FAILED, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_CHARACTER_LOGIN_FAILED 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_SMSG_CHARACTER_LOGIN_FAILED_write(&writer, &opcode.body.SMSG_CHARACTER_LOGIN_FAILED);
 
@@ -276,7 +276,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGIN_SETTIMESPEED 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_LOGIN_SETTIMESPEED, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGIN_SETTIMESPEED 0");
+        check_opcode(opcode.opcode, V_SMSG_LOGIN_SETTIMESPEED, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGIN_SETTIMESPEED 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_SMSG_LOGIN_SETTIMESPEED_write(&writer, &opcode.body.SMSG_LOGIN_SETTIMESPEED);
 
@@ -294,7 +294,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PLAYER_LOGOUT 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_PLAYER_LOGOUT, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PLAYER_LOGOUT 0");
+        check_opcode(opcode.opcode, V_CMSG_PLAYER_LOGOUT, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PLAYER_LOGOUT 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_PLAYER_LOGOUT_write(&writer);
 
@@ -312,7 +312,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_LOGOUT_REQUEST 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_LOGOUT_REQUEST, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_LOGOUT_REQUEST 0");
+        check_opcode(opcode.opcode, V_CMSG_LOGOUT_REQUEST, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_LOGOUT_REQUEST 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_LOGOUT_REQUEST_write(&writer);
 
@@ -330,7 +330,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGOUT_RESPONSE 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_LOGOUT_RESPONSE, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGOUT_RESPONSE 0");
+        check_opcode(opcode.opcode, V_SMSG_LOGOUT_RESPONSE, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGOUT_RESPONSE 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_SMSG_LOGOUT_RESPONSE_write(&writer, &opcode.body.SMSG_LOGOUT_RESPONSE);
 
@@ -348,7 +348,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGOUT_COMPLETE 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_LOGOUT_COMPLETE, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGOUT_COMPLETE 0");
+        check_opcode(opcode.opcode, V_SMSG_LOGOUT_COMPLETE, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGOUT_COMPLETE 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_SMSG_LOGOUT_COMPLETE_write(&writer);
 
@@ -366,7 +366,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_NAME_QUERY_RESPONSE 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_NAME_QUERY_RESPONSE, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_NAME_QUERY_RESPONSE 0");
+        check_opcode(opcode.opcode, V_SMSG_NAME_QUERY_RESPONSE, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_NAME_QUERY_RESPONSE 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_SMSG_NAME_QUERY_RESPONSE_write(&writer, &opcode.body.SMSG_NAME_QUERY_RESPONSE);
 
@@ -384,7 +384,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_NAME_QUERY_RESPONSE 1", "failed to read");
-        check_opcode(opcode.opcode, SMSG_NAME_QUERY_RESPONSE, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_NAME_QUERY_RESPONSE 1");
+        check_opcode(opcode.opcode, V_SMSG_NAME_QUERY_RESPONSE, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_NAME_QUERY_RESPONSE 1");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_SMSG_NAME_QUERY_RESPONSE_write(&writer, &opcode.body.SMSG_NAME_QUERY_RESPONSE);
 
@@ -403,7 +403,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PET_NAME_QUERY 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_PET_NAME_QUERY, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PET_NAME_QUERY 0");
+        check_opcode(opcode.opcode, V_CMSG_PET_NAME_QUERY, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PET_NAME_QUERY 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_PET_NAME_QUERY_write(&writer, &opcode.body.CMSG_PET_NAME_QUERY);
 
@@ -421,7 +421,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_PET_NAME_QUERY_RESPONSE 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_PET_NAME_QUERY_RESPONSE, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_PET_NAME_QUERY_RESPONSE 0");
+        check_opcode(opcode.opcode, V_SMSG_PET_NAME_QUERY_RESPONSE, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_PET_NAME_QUERY_RESPONSE 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_SMSG_PET_NAME_QUERY_RESPONSE_write(&writer, &opcode.body.SMSG_PET_NAME_QUERY_RESPONSE);
 
@@ -440,7 +440,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ITEM_QUERY_SINGLE_RESPONSE 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_ITEM_QUERY_SINGLE_RESPONSE, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ITEM_QUERY_SINGLE_RESPONSE 0");
+        check_opcode(opcode.opcode, V_SMSG_ITEM_QUERY_SINGLE_RESPONSE, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ITEM_QUERY_SINGLE_RESPONSE 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_SMSG_ITEM_QUERY_SINGLE_RESPONSE_write(&writer, &opcode.body.SMSG_ITEM_QUERY_SINGLE_RESPONSE);
 
@@ -459,7 +459,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_CREATURE_QUERY_RESPONSE 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_CREATURE_QUERY_RESPONSE, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_CREATURE_QUERY_RESPONSE 0");
+        check_opcode(opcode.opcode, V_SMSG_CREATURE_QUERY_RESPONSE, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_CREATURE_QUERY_RESPONSE 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_SMSG_CREATURE_QUERY_RESPONSE_write(&writer, &opcode.body.SMSG_CREATURE_QUERY_RESPONSE);
 
@@ -478,7 +478,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_IGNORE_LIST 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_IGNORE_LIST, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_IGNORE_LIST 0");
+        check_opcode(opcode.opcode, V_SMSG_IGNORE_LIST, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_IGNORE_LIST 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_SMSG_IGNORE_LIST_write(&writer, &opcode.body.SMSG_IGNORE_LIST);
 
@@ -496,7 +496,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_IGNORE_LIST 1", "failed to read");
-        check_opcode(opcode.opcode, SMSG_IGNORE_LIST, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_IGNORE_LIST 1");
+        check_opcode(opcode.opcode, V_SMSG_IGNORE_LIST, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_IGNORE_LIST 1");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_SMSG_IGNORE_LIST_write(&writer, &opcode.body.SMSG_IGNORE_LIST);
 
@@ -515,7 +515,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_MESSAGECHAT 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_MESSAGECHAT, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_MESSAGECHAT 0");
+        check_opcode(opcode.opcode, V_CMSG_MESSAGECHAT, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_MESSAGECHAT 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_MESSAGECHAT_write(&writer, &opcode.body.CMSG_MESSAGECHAT);
 
@@ -534,7 +534,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_MESSAGECHAT 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_MESSAGECHAT, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_MESSAGECHAT 0");
+        check_opcode(opcode.opcode, V_SMSG_MESSAGECHAT, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_MESSAGECHAT 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_SMSG_MESSAGECHAT_write(&writer, &opcode.body.SMSG_MESSAGECHAT);
 
@@ -553,7 +553,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_JOIN_CHANNEL 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_JOIN_CHANNEL, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_JOIN_CHANNEL 0");
+        check_opcode(opcode.opcode, V_CMSG_JOIN_CHANNEL, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_JOIN_CHANNEL 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_JOIN_CHANNEL_write(&writer, &opcode.body.CMSG_JOIN_CHANNEL);
 
@@ -571,7 +571,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_JOIN_CHANNEL 1", "failed to read");
-        check_opcode(opcode.opcode, CMSG_JOIN_CHANNEL, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_JOIN_CHANNEL 1");
+        check_opcode(opcode.opcode, V_CMSG_JOIN_CHANNEL, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_JOIN_CHANNEL 1");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_JOIN_CHANNEL_write(&writer, &opcode.body.CMSG_JOIN_CHANNEL);
 
@@ -590,7 +590,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_UPDATE_OBJECT 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_UPDATE_OBJECT, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_UPDATE_OBJECT 0");
+        check_opcode(opcode.opcode, V_SMSG_UPDATE_OBJECT, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_UPDATE_OBJECT 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_SMSG_UPDATE_OBJECT_write(&writer, &opcode.body.SMSG_UPDATE_OBJECT);
 
@@ -608,7 +608,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_UPDATE_OBJECT 1", "failed to read");
-        check_opcode(opcode.opcode, SMSG_UPDATE_OBJECT, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_UPDATE_OBJECT 1");
+        check_opcode(opcode.opcode, V_SMSG_UPDATE_OBJECT, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_UPDATE_OBJECT 1");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_SMSG_UPDATE_OBJECT_write(&writer, &opcode.body.SMSG_UPDATE_OBJECT);
 
@@ -627,7 +627,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_DESTROY_OBJECT 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_DESTROY_OBJECT, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_DESTROY_OBJECT 0");
+        check_opcode(opcode.opcode, V_SMSG_DESTROY_OBJECT, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_DESTROY_OBJECT 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_SMSG_DESTROY_OBJECT_write(&writer, &opcode.body.SMSG_DESTROY_OBJECT);
 
@@ -645,7 +645,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_USE_ITEM 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_USE_ITEM, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_USE_ITEM 0");
+        check_opcode(opcode.opcode, V_CMSG_USE_ITEM, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_USE_ITEM 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_USE_ITEM_write(&writer, &opcode.body.CMSG_USE_ITEM);
 
@@ -664,7 +664,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_START_FORWARD_Client 0", "failed to read");
-        check_opcode(opcode.opcode, MSG_MOVE_START_FORWARD, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_START_FORWARD_Client 0");
+        check_opcode(opcode.opcode, V_MSG_MOVE_START_FORWARD, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_START_FORWARD_Client 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_MSG_MOVE_START_FORWARD_Client_write(&writer, &opcode.body.MSG_MOVE_START_FORWARD_Client);
 
@@ -683,7 +683,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_START_FORWARD_Server 0", "failed to read");
-        check_opcode(opcode.opcode, MSG_MOVE_START_FORWARD, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_START_FORWARD_Server 0");
+        check_opcode(opcode.opcode, V_MSG_MOVE_START_FORWARD, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_START_FORWARD_Server 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_MSG_MOVE_START_FORWARD_Server_write(&writer, &opcode.body.MSG_MOVE_START_FORWARD_Server);
 
@@ -702,7 +702,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_START_BACKWARD_Client 0", "failed to read");
-        check_opcode(opcode.opcode, MSG_MOVE_START_BACKWARD, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_START_BACKWARD_Client 0");
+        check_opcode(opcode.opcode, V_MSG_MOVE_START_BACKWARD, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_START_BACKWARD_Client 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_MSG_MOVE_START_BACKWARD_Client_write(&writer, &opcode.body.MSG_MOVE_START_BACKWARD_Client);
 
@@ -721,7 +721,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_START_BACKWARD_Server 0", "failed to read");
-        check_opcode(opcode.opcode, MSG_MOVE_START_BACKWARD, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_START_BACKWARD_Server 0");
+        check_opcode(opcode.opcode, V_MSG_MOVE_START_BACKWARD, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_START_BACKWARD_Server 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_MSG_MOVE_START_BACKWARD_Server_write(&writer, &opcode.body.MSG_MOVE_START_BACKWARD_Server);
 
@@ -740,7 +740,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_STOP_Client 0", "failed to read");
-        check_opcode(opcode.opcode, MSG_MOVE_STOP, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_STOP_Client 0");
+        check_opcode(opcode.opcode, V_MSG_MOVE_STOP, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_STOP_Client 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_MSG_MOVE_STOP_Client_write(&writer, &opcode.body.MSG_MOVE_STOP_Client);
 
@@ -759,7 +759,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_STOP_Server 0", "failed to read");
-        check_opcode(opcode.opcode, MSG_MOVE_STOP, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_STOP_Server 0");
+        check_opcode(opcode.opcode, V_MSG_MOVE_STOP, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_STOP_Server 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_MSG_MOVE_STOP_Server_write(&writer, &opcode.body.MSG_MOVE_STOP_Server);
 
@@ -778,7 +778,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_START_STRAFE_LEFT_Client 0", "failed to read");
-        check_opcode(opcode.opcode, MSG_MOVE_START_STRAFE_LEFT, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_START_STRAFE_LEFT_Client 0");
+        check_opcode(opcode.opcode, V_MSG_MOVE_START_STRAFE_LEFT, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_START_STRAFE_LEFT_Client 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_MSG_MOVE_START_STRAFE_LEFT_Client_write(&writer, &opcode.body.MSG_MOVE_START_STRAFE_LEFT_Client);
 
@@ -797,7 +797,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_START_STRAFE_LEFT_Server 0", "failed to read");
-        check_opcode(opcode.opcode, MSG_MOVE_START_STRAFE_LEFT, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_START_STRAFE_LEFT_Server 0");
+        check_opcode(opcode.opcode, V_MSG_MOVE_START_STRAFE_LEFT, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_START_STRAFE_LEFT_Server 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_MSG_MOVE_START_STRAFE_LEFT_Server_write(&writer, &opcode.body.MSG_MOVE_START_STRAFE_LEFT_Server);
 
@@ -816,7 +816,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_START_STRAFE_RIGHT_Client 0", "failed to read");
-        check_opcode(opcode.opcode, MSG_MOVE_START_STRAFE_RIGHT, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_START_STRAFE_RIGHT_Client 0");
+        check_opcode(opcode.opcode, V_MSG_MOVE_START_STRAFE_RIGHT, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_START_STRAFE_RIGHT_Client 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_MSG_MOVE_START_STRAFE_RIGHT_Client_write(&writer, &opcode.body.MSG_MOVE_START_STRAFE_RIGHT_Client);
 
@@ -835,7 +835,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_START_STRAFE_RIGHT_Server 0", "failed to read");
-        check_opcode(opcode.opcode, MSG_MOVE_START_STRAFE_RIGHT, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_START_STRAFE_RIGHT_Server 0");
+        check_opcode(opcode.opcode, V_MSG_MOVE_START_STRAFE_RIGHT, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_START_STRAFE_RIGHT_Server 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_MSG_MOVE_START_STRAFE_RIGHT_Server_write(&writer, &opcode.body.MSG_MOVE_START_STRAFE_RIGHT_Server);
 
@@ -854,7 +854,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_STOP_STRAFE_Client 0", "failed to read");
-        check_opcode(opcode.opcode, MSG_MOVE_STOP_STRAFE, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_STOP_STRAFE_Client 0");
+        check_opcode(opcode.opcode, V_MSG_MOVE_STOP_STRAFE, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_STOP_STRAFE_Client 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_MSG_MOVE_STOP_STRAFE_Client_write(&writer, &opcode.body.MSG_MOVE_STOP_STRAFE_Client);
 
@@ -873,7 +873,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_STOP_STRAFE_Server 0", "failed to read");
-        check_opcode(opcode.opcode, MSG_MOVE_STOP_STRAFE, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_STOP_STRAFE_Server 0");
+        check_opcode(opcode.opcode, V_MSG_MOVE_STOP_STRAFE, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_STOP_STRAFE_Server 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_MSG_MOVE_STOP_STRAFE_Server_write(&writer, &opcode.body.MSG_MOVE_STOP_STRAFE_Server);
 
@@ -892,7 +892,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_JUMP_Client 0", "failed to read");
-        check_opcode(opcode.opcode, MSG_MOVE_JUMP, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_JUMP_Client 0");
+        check_opcode(opcode.opcode, V_MSG_MOVE_JUMP, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_JUMP_Client 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_MSG_MOVE_JUMP_Client_write(&writer, &opcode.body.MSG_MOVE_JUMP_Client);
 
@@ -911,7 +911,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_JUMP_Server 0", "failed to read");
-        check_opcode(opcode.opcode, MSG_MOVE_JUMP, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_JUMP_Server 0");
+        check_opcode(opcode.opcode, V_MSG_MOVE_JUMP, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_JUMP_Server 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_MSG_MOVE_JUMP_Server_write(&writer, &opcode.body.MSG_MOVE_JUMP_Server);
 
@@ -930,7 +930,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_START_TURN_LEFT_Client 0", "failed to read");
-        check_opcode(opcode.opcode, MSG_MOVE_START_TURN_LEFT, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_START_TURN_LEFT_Client 0");
+        check_opcode(opcode.opcode, V_MSG_MOVE_START_TURN_LEFT, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_START_TURN_LEFT_Client 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_MSG_MOVE_START_TURN_LEFT_Client_write(&writer, &opcode.body.MSG_MOVE_START_TURN_LEFT_Client);
 
@@ -949,7 +949,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_START_TURN_LEFT_Server 0", "failed to read");
-        check_opcode(opcode.opcode, MSG_MOVE_START_TURN_LEFT, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_START_TURN_LEFT_Server 0");
+        check_opcode(opcode.opcode, V_MSG_MOVE_START_TURN_LEFT, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_START_TURN_LEFT_Server 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_MSG_MOVE_START_TURN_LEFT_Server_write(&writer, &opcode.body.MSG_MOVE_START_TURN_LEFT_Server);
 
@@ -968,7 +968,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_START_TURN_RIGHT_Client 0", "failed to read");
-        check_opcode(opcode.opcode, MSG_MOVE_START_TURN_RIGHT, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_START_TURN_RIGHT_Client 0");
+        check_opcode(opcode.opcode, V_MSG_MOVE_START_TURN_RIGHT, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_START_TURN_RIGHT_Client 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_MSG_MOVE_START_TURN_RIGHT_Client_write(&writer, &opcode.body.MSG_MOVE_START_TURN_RIGHT_Client);
 
@@ -987,7 +987,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_START_TURN_RIGHT_Server 0", "failed to read");
-        check_opcode(opcode.opcode, MSG_MOVE_START_TURN_RIGHT, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_START_TURN_RIGHT_Server 0");
+        check_opcode(opcode.opcode, V_MSG_MOVE_START_TURN_RIGHT, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_START_TURN_RIGHT_Server 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_MSG_MOVE_START_TURN_RIGHT_Server_write(&writer, &opcode.body.MSG_MOVE_START_TURN_RIGHT_Server);
 
@@ -1006,7 +1006,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_STOP_TURN_Client 0", "failed to read");
-        check_opcode(opcode.opcode, MSG_MOVE_STOP_TURN, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_STOP_TURN_Client 0");
+        check_opcode(opcode.opcode, V_MSG_MOVE_STOP_TURN, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_STOP_TURN_Client 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_MSG_MOVE_STOP_TURN_Client_write(&writer, &opcode.body.MSG_MOVE_STOP_TURN_Client);
 
@@ -1025,7 +1025,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_STOP_TURN_Server 0", "failed to read");
-        check_opcode(opcode.opcode, MSG_MOVE_STOP_TURN, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_STOP_TURN_Server 0");
+        check_opcode(opcode.opcode, V_MSG_MOVE_STOP_TURN, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_STOP_TURN_Server 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_MSG_MOVE_STOP_TURN_Server_write(&writer, &opcode.body.MSG_MOVE_STOP_TURN_Server);
 
@@ -1044,7 +1044,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_SET_RUN_MODE_Client 0", "failed to read");
-        check_opcode(opcode.opcode, MSG_MOVE_SET_RUN_MODE, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_SET_RUN_MODE_Client 0");
+        check_opcode(opcode.opcode, V_MSG_MOVE_SET_RUN_MODE, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_SET_RUN_MODE_Client 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_MSG_MOVE_SET_RUN_MODE_Client_write(&writer, &opcode.body.MSG_MOVE_SET_RUN_MODE_Client);
 
@@ -1063,7 +1063,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_SET_RUN_MODE_Server 0", "failed to read");
-        check_opcode(opcode.opcode, MSG_MOVE_SET_RUN_MODE, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_SET_RUN_MODE_Server 0");
+        check_opcode(opcode.opcode, V_MSG_MOVE_SET_RUN_MODE, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_SET_RUN_MODE_Server 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_MSG_MOVE_SET_RUN_MODE_Server_write(&writer, &opcode.body.MSG_MOVE_SET_RUN_MODE_Server);
 
@@ -1082,7 +1082,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_SET_WALK_MODE_Client 0", "failed to read");
-        check_opcode(opcode.opcode, MSG_MOVE_SET_WALK_MODE, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_SET_WALK_MODE_Client 0");
+        check_opcode(opcode.opcode, V_MSG_MOVE_SET_WALK_MODE, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_SET_WALK_MODE_Client 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_MSG_MOVE_SET_WALK_MODE_Client_write(&writer, &opcode.body.MSG_MOVE_SET_WALK_MODE_Client);
 
@@ -1101,7 +1101,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_SET_WALK_MODE_Server 0", "failed to read");
-        check_opcode(opcode.opcode, MSG_MOVE_SET_WALK_MODE, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_SET_WALK_MODE_Server 0");
+        check_opcode(opcode.opcode, V_MSG_MOVE_SET_WALK_MODE, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_SET_WALK_MODE_Server 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_MSG_MOVE_SET_WALK_MODE_Server_write(&writer, &opcode.body.MSG_MOVE_SET_WALK_MODE_Server);
 
@@ -1120,7 +1120,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_TELEPORT_ACK_Client 0", "failed to read");
-        check_opcode(opcode.opcode, MSG_MOVE_TELEPORT_ACK, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_TELEPORT_ACK_Client 0");
+        check_opcode(opcode.opcode, V_MSG_MOVE_TELEPORT_ACK, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_TELEPORT_ACK_Client 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_MSG_MOVE_TELEPORT_ACK_Client_write(&writer, &opcode.body.MSG_MOVE_TELEPORT_ACK_Client);
 
@@ -1138,7 +1138,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_TELEPORT_ACK_Server 0", "failed to read");
-        check_opcode(opcode.opcode, MSG_MOVE_TELEPORT_ACK, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_TELEPORT_ACK_Server 0");
+        check_opcode(opcode.opcode, V_MSG_MOVE_TELEPORT_ACK, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_TELEPORT_ACK_Server 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_MSG_MOVE_TELEPORT_ACK_Server_write(&writer, &opcode.body.MSG_MOVE_TELEPORT_ACK_Server);
 
@@ -1157,7 +1157,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_FALL_LAND_Client 0", "failed to read");
-        check_opcode(opcode.opcode, MSG_MOVE_FALL_LAND, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_FALL_LAND_Client 0");
+        check_opcode(opcode.opcode, V_MSG_MOVE_FALL_LAND, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_FALL_LAND_Client 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_MSG_MOVE_FALL_LAND_Client_write(&writer, &opcode.body.MSG_MOVE_FALL_LAND_Client);
 
@@ -1176,7 +1176,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_FALL_LAND_Server 0", "failed to read");
-        check_opcode(opcode.opcode, MSG_MOVE_FALL_LAND, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_FALL_LAND_Server 0");
+        check_opcode(opcode.opcode, V_MSG_MOVE_FALL_LAND, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_FALL_LAND_Server 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_MSG_MOVE_FALL_LAND_Server_write(&writer, &opcode.body.MSG_MOVE_FALL_LAND_Server);
 
@@ -1195,7 +1195,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_SET_FACING_Client 0", "failed to read");
-        check_opcode(opcode.opcode, MSG_MOVE_SET_FACING, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_SET_FACING_Client 0");
+        check_opcode(opcode.opcode, V_MSG_MOVE_SET_FACING, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_SET_FACING_Client 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_MSG_MOVE_SET_FACING_Client_write(&writer, &opcode.body.MSG_MOVE_SET_FACING_Client);
 
@@ -1214,7 +1214,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_SET_FACING_Server 0", "failed to read");
-        check_opcode(opcode.opcode, MSG_MOVE_SET_FACING, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_SET_FACING_Server 0");
+        check_opcode(opcode.opcode, V_MSG_MOVE_SET_FACING, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_SET_FACING_Server 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_MSG_MOVE_SET_FACING_Server_write(&writer, &opcode.body.MSG_MOVE_SET_FACING_Server);
 
@@ -1233,7 +1233,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_FORCE_RUN_SPEED_CHANGE 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_FORCE_RUN_SPEED_CHANGE, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_FORCE_RUN_SPEED_CHANGE 0");
+        check_opcode(opcode.opcode, V_SMSG_FORCE_RUN_SPEED_CHANGE, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_FORCE_RUN_SPEED_CHANGE 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_SMSG_FORCE_RUN_SPEED_CHANGE_write(&writer, &opcode.body.SMSG_FORCE_RUN_SPEED_CHANGE);
 
@@ -1251,7 +1251,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_FORCE_RUN_SPEED_CHANGE_ACK 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_FORCE_RUN_SPEED_CHANGE_ACK, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_FORCE_RUN_SPEED_CHANGE_ACK 0");
+        check_opcode(opcode.opcode, V_CMSG_FORCE_RUN_SPEED_CHANGE_ACK, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_FORCE_RUN_SPEED_CHANGE_ACK 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_FORCE_RUN_SPEED_CHANGE_ACK_write(&writer, &opcode.body.CMSG_FORCE_RUN_SPEED_CHANGE_ACK);
 
@@ -1270,7 +1270,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_HEARTBEAT_Client 0", "failed to read");
-        check_opcode(opcode.opcode, MSG_MOVE_HEARTBEAT, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_HEARTBEAT_Client 0");
+        check_opcode(opcode.opcode, V_MSG_MOVE_HEARTBEAT, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_HEARTBEAT_Client 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_MSG_MOVE_HEARTBEAT_Client_write(&writer, &opcode.body.MSG_MOVE_HEARTBEAT_Client);
 
@@ -1289,7 +1289,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_HEARTBEAT_Server 0", "failed to read");
-        check_opcode(opcode.opcode, MSG_MOVE_HEARTBEAT, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_HEARTBEAT_Server 0");
+        check_opcode(opcode.opcode, V_MSG_MOVE_HEARTBEAT, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_HEARTBEAT_Server 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_MSG_MOVE_HEARTBEAT_Server_write(&writer, &opcode.body.MSG_MOVE_HEARTBEAT_Server);
 
@@ -1308,7 +1308,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_TUTORIAL_FLAGS 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_TUTORIAL_FLAGS, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_TUTORIAL_FLAGS 0");
+        check_opcode(opcode.opcode, V_SMSG_TUTORIAL_FLAGS, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_TUTORIAL_FLAGS 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_SMSG_TUTORIAL_FLAGS_write(&writer, &opcode.body.SMSG_TUTORIAL_FLAGS);
 
@@ -1327,7 +1327,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_STANDSTATECHANGE 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_STANDSTATECHANGE, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_STANDSTATECHANGE 0");
+        check_opcode(opcode.opcode, V_CMSG_STANDSTATECHANGE, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_STANDSTATECHANGE 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_STANDSTATECHANGE_write(&writer, &opcode.body.CMSG_STANDSTATECHANGE);
 
@@ -1345,7 +1345,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_TEXT_EMOTE 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_TEXT_EMOTE, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_TEXT_EMOTE 0");
+        check_opcode(opcode.opcode, V_CMSG_TEXT_EMOTE, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_TEXT_EMOTE 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_TEXT_EMOTE_write(&writer, &opcode.body.CMSG_TEXT_EMOTE);
 
@@ -1363,7 +1363,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_AUTOEQUIP_ITEM 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_AUTOEQUIP_ITEM, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_AUTOEQUIP_ITEM 0");
+        check_opcode(opcode.opcode, V_CMSG_AUTOEQUIP_ITEM, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_AUTOEQUIP_ITEM 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_AUTOEQUIP_ITEM_write(&writer, &opcode.body.CMSG_AUTOEQUIP_ITEM);
 
@@ -1381,7 +1381,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_INITIATE_TRADE 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_INITIATE_TRADE, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_INITIATE_TRADE 0");
+        check_opcode(opcode.opcode, V_CMSG_INITIATE_TRADE, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_INITIATE_TRADE 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_INITIATE_TRADE_write(&writer, &opcode.body.CMSG_INITIATE_TRADE);
 
@@ -1399,7 +1399,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CANCEL_TRADE 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_CANCEL_TRADE, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CANCEL_TRADE 0");
+        check_opcode(opcode.opcode, V_CMSG_CANCEL_TRADE, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CANCEL_TRADE 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_CANCEL_TRADE_write(&writer);
 
@@ -1417,7 +1417,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_INITIAL_SPELLS 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_INITIAL_SPELLS, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_INITIAL_SPELLS 0");
+        check_opcode(opcode.opcode, V_SMSG_INITIAL_SPELLS, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_INITIAL_SPELLS 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_SMSG_INITIAL_SPELLS_write(&writer, &opcode.body.SMSG_INITIAL_SPELLS);
 
@@ -1436,7 +1436,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CAST_SPELL 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_CAST_SPELL, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CAST_SPELL 0");
+        check_opcode(opcode.opcode, V_CMSG_CAST_SPELL, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CAST_SPELL 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_CAST_SPELL_write(&writer, &opcode.body.CMSG_CAST_SPELL);
 
@@ -1455,7 +1455,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CANCEL_CAST 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_CANCEL_CAST, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CANCEL_CAST 0");
+        check_opcode(opcode.opcode, V_CMSG_CANCEL_CAST, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CANCEL_CAST 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_CANCEL_CAST_write(&writer, &opcode.body.CMSG_CANCEL_CAST);
 
@@ -1472,7 +1472,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CANCEL_CAST 1", "failed to read");
-        check_opcode(opcode.opcode, CMSG_CANCEL_CAST, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CANCEL_CAST 1");
+        check_opcode(opcode.opcode, V_CMSG_CANCEL_CAST, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CANCEL_CAST 1");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_CANCEL_CAST_write(&writer, &opcode.body.CMSG_CANCEL_CAST);
 
@@ -1490,7 +1490,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_SET_SELECTION 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_SET_SELECTION, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_SET_SELECTION 0");
+        check_opcode(opcode.opcode, V_CMSG_SET_SELECTION, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_SET_SELECTION 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_SET_SELECTION_write(&writer, &opcode.body.CMSG_SET_SELECTION);
 
@@ -1508,7 +1508,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_ATTACKSWING 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_ATTACKSWING, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_ATTACKSWING 0");
+        check_opcode(opcode.opcode, V_CMSG_ATTACKSWING, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_ATTACKSWING 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_ATTACKSWING_write(&writer, &opcode.body.CMSG_ATTACKSWING);
 
@@ -1526,7 +1526,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ATTACKSTART 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_ATTACKSTART, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ATTACKSTART 0");
+        check_opcode(opcode.opcode, V_SMSG_ATTACKSTART, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ATTACKSTART 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_SMSG_ATTACKSTART_write(&writer, &opcode.body.SMSG_ATTACKSTART);
 
@@ -1544,7 +1544,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ATTACKSTOP 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_ATTACKSTOP, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ATTACKSTOP 0");
+        check_opcode(opcode.opcode, V_SMSG_ATTACKSTOP, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ATTACKSTOP 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_SMSG_ATTACKSTOP_write(&writer, &opcode.body.SMSG_ATTACKSTOP);
 
@@ -1562,7 +1562,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ATTACKERSTATEUPDATE 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_ATTACKERSTATEUPDATE, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ATTACKERSTATEUPDATE 0");
+        check_opcode(opcode.opcode, V_SMSG_ATTACKERSTATEUPDATE, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ATTACKERSTATEUPDATE 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_SMSG_ATTACKERSTATEUPDATE_write(&writer, &opcode.body.SMSG_ATTACKERSTATEUPDATE);
 
@@ -1581,7 +1581,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ITEM_PUSH_RESULT 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_ITEM_PUSH_RESULT, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ITEM_PUSH_RESULT 0");
+        check_opcode(opcode.opcode, V_SMSG_ITEM_PUSH_RESULT, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ITEM_PUSH_RESULT 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_SMSG_ITEM_PUSH_RESULT_write(&writer, &opcode.body.SMSG_ITEM_PUSH_RESULT);
 
@@ -1599,7 +1599,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_QUERY_TIME 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_QUERY_TIME, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_QUERY_TIME 0");
+        check_opcode(opcode.opcode, V_CMSG_QUERY_TIME, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_QUERY_TIME 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_QUERY_TIME_write(&writer);
 
@@ -1617,7 +1617,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_QUERY_TIME_RESPONSE 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_QUERY_TIME_RESPONSE, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_QUERY_TIME_RESPONSE 0");
+        check_opcode(opcode.opcode, V_SMSG_QUERY_TIME_RESPONSE, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_QUERY_TIME_RESPONSE 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_SMSG_QUERY_TIME_RESPONSE_write(&writer, &opcode.body.SMSG_QUERY_TIME_RESPONSE);
 
@@ -1635,7 +1635,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PING 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_PING, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PING 0");
+        check_opcode(opcode.opcode, V_CMSG_PING, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PING 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_PING_write(&writer, &opcode.body.CMSG_PING);
 
@@ -1653,7 +1653,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_PONG 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_PONG, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_PONG 0");
+        check_opcode(opcode.opcode, V_SMSG_PONG, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_PONG 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_SMSG_PONG_write(&writer, &opcode.body.SMSG_PONG);
 
@@ -1671,7 +1671,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_SETSHEATHED 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_SETSHEATHED, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_SETSHEATHED 0");
+        check_opcode(opcode.opcode, V_CMSG_SETSHEATHED, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_SETSHEATHED 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_SETSHEATHED_write(&writer, &opcode.body.CMSG_SETSHEATHED);
 
@@ -1689,7 +1689,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_AUTH_CHALLENGE 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_AUTH_CHALLENGE, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_AUTH_CHALLENGE 0");
+        check_opcode(opcode.opcode, V_SMSG_AUTH_CHALLENGE, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_AUTH_CHALLENGE 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_SMSG_AUTH_CHALLENGE_write(&writer, &opcode.body.SMSG_AUTH_CHALLENGE);
 
@@ -1710,7 +1710,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_AUTH_SESSION 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_AUTH_SESSION, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_AUTH_SESSION 0");
+        check_opcode(opcode.opcode, V_CMSG_AUTH_SESSION, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_AUTH_SESSION 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_AUTH_SESSION_write(&writer, &opcode.body.CMSG_AUTH_SESSION);
 
@@ -1720,7 +1720,7 @@ int main(void) {
 
         result = vanilla_client_opcode_read(&reader2, &opcode2);
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_AUTH_SESSION 0", "failed to read second");
-        check_opcode(opcode2.opcode, CMSG_AUTH_SESSION, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_AUTH_SESSION 0");
+        check_opcode(opcode2.opcode, V_CMSG_AUTH_SESSION, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_AUTH_SESSION 0");
 
         writer2 = wwm_create_writer(write_buffer2, sizeof(write_buffer));
         result = vanilla_client_opcode_write(&writer2, &opcode2);
@@ -1743,7 +1743,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_AUTH_RESPONSE 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_AUTH_RESPONSE, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_AUTH_RESPONSE 0");
+        check_opcode(opcode.opcode, V_SMSG_AUTH_RESPONSE, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_AUTH_RESPONSE 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_SMSG_AUTH_RESPONSE_write(&writer, &opcode.body.SMSG_AUTH_RESPONSE);
 
@@ -1761,7 +1761,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_AUTH_RESPONSE 1", "failed to read");
-        check_opcode(opcode.opcode, SMSG_AUTH_RESPONSE, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_AUTH_RESPONSE 1");
+        check_opcode(opcode.opcode, V_SMSG_AUTH_RESPONSE, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_AUTH_RESPONSE 1");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_SMSG_AUTH_RESPONSE_write(&writer, &opcode.body.SMSG_AUTH_RESPONSE);
 
@@ -1779,7 +1779,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_AUTH_RESPONSE 2", "failed to read");
-        check_opcode(opcode.opcode, SMSG_AUTH_RESPONSE, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_AUTH_RESPONSE 2");
+        check_opcode(opcode.opcode, V_SMSG_AUTH_RESPONSE, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_AUTH_RESPONSE 2");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_SMSG_AUTH_RESPONSE_write(&writer, &opcode.body.SMSG_AUTH_RESPONSE);
 
@@ -1798,7 +1798,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_ZONEUPDATE 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_ZONEUPDATE, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_ZONEUPDATE 0");
+        check_opcode(opcode.opcode, V_CMSG_ZONEUPDATE, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_ZONEUPDATE 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_ZONEUPDATE_write(&writer, &opcode.body.CMSG_ZONEUPDATE);
 
@@ -1815,7 +1815,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_ZONEUPDATE 1", "failed to read");
-        check_opcode(opcode.opcode, CMSG_ZONEUPDATE, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_ZONEUPDATE 1");
+        check_opcode(opcode.opcode, V_CMSG_ZONEUPDATE, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_ZONEUPDATE 1");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_ZONEUPDATE_write(&writer, &opcode.body.CMSG_ZONEUPDATE);
 
@@ -1836,7 +1836,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_COMPRESSED_UPDATE_OBJECT 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_COMPRESSED_UPDATE_OBJECT, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_COMPRESSED_UPDATE_OBJECT 0");
+        check_opcode(opcode.opcode, V_SMSG_COMPRESSED_UPDATE_OBJECT, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_COMPRESSED_UPDATE_OBJECT 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_SMSG_COMPRESSED_UPDATE_OBJECT_write(&writer, &opcode.body.SMSG_COMPRESSED_UPDATE_OBJECT);
 
@@ -1846,7 +1846,7 @@ int main(void) {
 
         result = vanilla_server_opcode_read(&reader2, &opcode2);
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_COMPRESSED_UPDATE_OBJECT 0", "failed to read second");
-        check_opcode(opcode2.opcode, SMSG_COMPRESSED_UPDATE_OBJECT, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_COMPRESSED_UPDATE_OBJECT 0");
+        check_opcode(opcode2.opcode, V_SMSG_COMPRESSED_UPDATE_OBJECT, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_COMPRESSED_UPDATE_OBJECT 0");
 
         writer2 = wwm_create_writer(write_buffer2, sizeof(write_buffer));
         result = vanilla_server_opcode_write(&writer2, &opcode2);
@@ -1869,7 +1869,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ACCOUNT_DATA_TIMES 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_ACCOUNT_DATA_TIMES, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ACCOUNT_DATA_TIMES 0");
+        check_opcode(opcode.opcode, V_SMSG_ACCOUNT_DATA_TIMES, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ACCOUNT_DATA_TIMES 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_SMSG_ACCOUNT_DATA_TIMES_write(&writer, &opcode.body.SMSG_ACCOUNT_DATA_TIMES);
 
@@ -1888,7 +1888,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_REQUEST_ACCOUNT_DATA 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_REQUEST_ACCOUNT_DATA, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_REQUEST_ACCOUNT_DATA 0");
+        check_opcode(opcode.opcode, V_CMSG_REQUEST_ACCOUNT_DATA, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_REQUEST_ACCOUNT_DATA 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_REQUEST_ACCOUNT_DATA_write(&writer, &opcode.body.CMSG_REQUEST_ACCOUNT_DATA);
 
@@ -1909,7 +1909,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_UPDATE_ACCOUNT_DATA, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 0");
+        check_opcode(opcode.opcode, V_CMSG_UPDATE_ACCOUNT_DATA, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_UPDATE_ACCOUNT_DATA_write(&writer, &opcode.body.CMSG_UPDATE_ACCOUNT_DATA);
 
@@ -1919,7 +1919,7 @@ int main(void) {
 
         result = vanilla_client_opcode_read(&reader2, &opcode2);
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 0", "failed to read second");
-        check_opcode(opcode2.opcode, CMSG_UPDATE_ACCOUNT_DATA, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 0");
+        check_opcode(opcode2.opcode, V_CMSG_UPDATE_ACCOUNT_DATA, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 0");
 
         writer2 = wwm_create_writer(write_buffer2, sizeof(write_buffer));
         result = vanilla_client_opcode_write(&writer2, &opcode2);
@@ -1944,7 +1944,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 1", "failed to read");
-        check_opcode(opcode.opcode, CMSG_UPDATE_ACCOUNT_DATA, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 1");
+        check_opcode(opcode.opcode, V_CMSG_UPDATE_ACCOUNT_DATA, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 1");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_UPDATE_ACCOUNT_DATA_write(&writer, &opcode.body.CMSG_UPDATE_ACCOUNT_DATA);
 
@@ -1954,7 +1954,7 @@ int main(void) {
 
         result = vanilla_client_opcode_read(&reader2, &opcode2);
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 1", "failed to read second");
-        check_opcode(opcode2.opcode, CMSG_UPDATE_ACCOUNT_DATA, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 1");
+        check_opcode(opcode2.opcode, V_CMSG_UPDATE_ACCOUNT_DATA, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 1");
 
         writer2 = wwm_create_writer(write_buffer2, sizeof(write_buffer));
         result = vanilla_client_opcode_write(&writer2, &opcode2);
@@ -1977,7 +1977,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_GMTICKET_GETTICKET 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_GMTICKET_GETTICKET, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_GMTICKET_GETTICKET 0");
+        check_opcode(opcode.opcode, V_CMSG_GMTICKET_GETTICKET, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_GMTICKET_GETTICKET 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_GMTICKET_GETTICKET_write(&writer);
 
@@ -1995,7 +1995,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGIN_VERIFY_WORLD 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_LOGIN_VERIFY_WORLD, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGIN_VERIFY_WORLD 0");
+        check_opcode(opcode.opcode, V_SMSG_LOGIN_VERIFY_WORLD, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGIN_VERIFY_WORLD 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_SMSG_LOGIN_VERIFY_WORLD_write(&writer, &opcode.body.SMSG_LOGIN_VERIFY_WORLD);
 
@@ -2013,7 +2013,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_LEARN_TALENT 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_LEARN_TALENT, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_LEARN_TALENT 0");
+        check_opcode(opcode.opcode, V_CMSG_LEARN_TALENT, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_LEARN_TALENT 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_LEARN_TALENT_write(&writer, &opcode.body.CMSG_LEARN_TALENT);
 
@@ -2031,7 +2031,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_AUCTION_HELLO_Client 0", "failed to read");
-        check_opcode(opcode.opcode, MSG_AUCTION_HELLO, __FILE__ ":" STRINGIFY(__LINE__), "MSG_AUCTION_HELLO_Client 0");
+        check_opcode(opcode.opcode, V_MSG_AUCTION_HELLO, __FILE__ ":" STRINGIFY(__LINE__), "MSG_AUCTION_HELLO_Client 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_MSG_AUCTION_HELLO_Client_write(&writer, &opcode.body.MSG_AUCTION_HELLO_Client);
 
@@ -2049,7 +2049,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_SET_ACTIVE_MOVER 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_SET_ACTIVE_MOVER, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_SET_ACTIVE_MOVER 0");
+        check_opcode(opcode.opcode, V_CMSG_SET_ACTIVE_MOVER, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_SET_ACTIVE_MOVER 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_SET_ACTIVE_MOVER_write(&writer, &opcode.body.CMSG_SET_ACTIVE_MOVER);
 
@@ -2067,7 +2067,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_QUERY_NEXT_MAIL_TIME_Client 0", "failed to read");
-        check_opcode(opcode.opcode, MSG_QUERY_NEXT_MAIL_TIME, __FILE__ ":" STRINGIFY(__LINE__), "MSG_QUERY_NEXT_MAIL_TIME_Client 0");
+        check_opcode(opcode.opcode, V_MSG_QUERY_NEXT_MAIL_TIME, __FILE__ ":" STRINGIFY(__LINE__), "MSG_QUERY_NEXT_MAIL_TIME_Client 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_MSG_QUERY_NEXT_MAIL_TIME_Client_write(&writer);
 
@@ -2085,7 +2085,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_MEETINGSTONE_INFO 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_MEETINGSTONE_INFO, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_MEETINGSTONE_INFO 0");
+        check_opcode(opcode.opcode, V_CMSG_MEETINGSTONE_INFO, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_MEETINGSTONE_INFO 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_MEETINGSTONE_INFO_write(&writer);
 
@@ -2103,7 +2103,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_RENAME 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_CHAR_RENAME, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_RENAME 0");
+        check_opcode(opcode.opcode, V_CMSG_CHAR_RENAME, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_RENAME 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_CHAR_RENAME_write(&writer, &opcode.body.CMSG_CHAR_RENAME);
 
@@ -2122,7 +2122,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_CHAR_RENAME 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_CHAR_RENAME, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_CHAR_RENAME 0");
+        check_opcode(opcode.opcode, V_SMSG_CHAR_RENAME, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_CHAR_RENAME 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_SMSG_CHAR_RENAME_write(&writer, &opcode.body.SMSG_CHAR_RENAME);
 
@@ -2140,7 +2140,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_CHAR_RENAME 1", "failed to read");
-        check_opcode(opcode.opcode, SMSG_CHAR_RENAME, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_CHAR_RENAME 1");
+        check_opcode(opcode.opcode, V_SMSG_CHAR_RENAME, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_CHAR_RENAME 1");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_SMSG_CHAR_RENAME_write(&writer, &opcode.body.SMSG_CHAR_RENAME);
 
@@ -2159,7 +2159,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_REQUEST_RAID_INFO 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_REQUEST_RAID_INFO, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_REQUEST_RAID_INFO 0");
+        check_opcode(opcode.opcode, V_CMSG_REQUEST_RAID_INFO, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_REQUEST_RAID_INFO 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_REQUEST_RAID_INFO_write(&writer);
 
@@ -2177,7 +2177,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_MOVE_TIME_SKIPPED 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_MOVE_TIME_SKIPPED, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_MOVE_TIME_SKIPPED 0");
+        check_opcode(opcode.opcode, V_CMSG_MOVE_TIME_SKIPPED, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_MOVE_TIME_SKIPPED 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_MOVE_TIME_SKIPPED_write(&writer, &opcode.body.CMSG_MOVE_TIME_SKIPPED);
 
@@ -2195,7 +2195,7 @@ int main(void) {
         result = vanilla_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_BATTLEFIELD_STATUS 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_BATTLEFIELD_STATUS, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_BATTLEFIELD_STATUS 0");
+        check_opcode(opcode.opcode, V_CMSG_BATTLEFIELD_STATUS, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_BATTLEFIELD_STATUS 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_CMSG_BATTLEFIELD_STATUS_write(&writer);
 
@@ -2216,7 +2216,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_COMPRESSED_MOVES 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_COMPRESSED_MOVES, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_COMPRESSED_MOVES 0");
+        check_opcode(opcode.opcode, V_SMSG_COMPRESSED_MOVES, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_COMPRESSED_MOVES 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_SMSG_COMPRESSED_MOVES_write(&writer, &opcode.body.SMSG_COMPRESSED_MOVES);
 
@@ -2226,7 +2226,7 @@ int main(void) {
 
         result = vanilla_server_opcode_read(&reader2, &opcode2);
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_COMPRESSED_MOVES 0", "failed to read second");
-        check_opcode(opcode2.opcode, SMSG_COMPRESSED_MOVES, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_COMPRESSED_MOVES 0");
+        check_opcode(opcode2.opcode, V_SMSG_COMPRESSED_MOVES, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_COMPRESSED_MOVES 0");
 
         writer2 = wwm_create_writer(write_buffer2, sizeof(write_buffer));
         result = vanilla_server_opcode_write(&writer2, &opcode2);
@@ -2251,7 +2251,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_COMPRESSED_MOVES 1", "failed to read");
-        check_opcode(opcode.opcode, SMSG_COMPRESSED_MOVES, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_COMPRESSED_MOVES 1");
+        check_opcode(opcode.opcode, V_SMSG_COMPRESSED_MOVES, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_COMPRESSED_MOVES 1");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_SMSG_COMPRESSED_MOVES_write(&writer, &opcode.body.SMSG_COMPRESSED_MOVES);
 
@@ -2261,7 +2261,7 @@ int main(void) {
 
         result = vanilla_server_opcode_read(&reader2, &opcode2);
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_COMPRESSED_MOVES 1", "failed to read second");
-        check_opcode(opcode2.opcode, SMSG_COMPRESSED_MOVES, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_COMPRESSED_MOVES 1");
+        check_opcode(opcode2.opcode, V_SMSG_COMPRESSED_MOVES, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_COMPRESSED_MOVES 1");
 
         writer2 = wwm_create_writer(write_buffer2, sizeof(write_buffer));
         result = vanilla_server_opcode_write(&writer2, &opcode2);
@@ -2284,7 +2284,7 @@ int main(void) {
         result = vanilla_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_SPLINE_SET_RUN_SPEED 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_SPLINE_SET_RUN_SPEED, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_SPLINE_SET_RUN_SPEED 0");
+        check_opcode(opcode.opcode, V_SMSG_SPLINE_SET_RUN_SPEED, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_SPLINE_SET_RUN_SPEED 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = vanilla_SMSG_SPLINE_SET_RUN_SPEED_write(&writer, &opcode.body.SMSG_SPLINE_SET_RUN_SPEED);
 

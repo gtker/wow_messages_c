@@ -231,22 +231,22 @@ def print_free_struct_member(s: Writer, d: model.Definition, module_name: str, e
             s.newline()
 
         case model.DataTypeEnchantMask():
-            s.wln(f"{d.name} = await EnchantMask.read(reader)")
+            pass
 
         case model.DataTypeInspectTalentGearMask():
-            s.wln(f"{d.name} = await InspectTalentGearMask.read(reader)")
+            pass
 
         case model.DataTypeCacheMask():
-            s.wln(f"{d.name} = await CacheMask.read(reader)")
+            pass
 
         case model.DataTypeAddonArray():
             s.wln(f"free({variable_name}.addons);")
 
         case model.DataTypeAchievementDoneArray():
-            s.wln(f"{d.name} = await CacheMask.read(reader)")
+            s.wln(f"{module_name}_achievement_done_array_free(&{variable_name});")
 
         case model.DataTypeAchievementInProgressArray():
-            s.wln(f"{d.name} = await CacheMask.read(reader)")
+            s.wln(f"{module_name}_achievement_in_progress_array_free(&{variable_name});")
 
         case model.DataTypeArray(inner_type=inner_type, size=size):
             extra = ""

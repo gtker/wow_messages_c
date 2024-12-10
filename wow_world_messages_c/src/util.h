@@ -56,6 +56,10 @@ WowWorldResult wwm_read_uint32(WowWorldReader* stream, uint32_t* value);
 
 #define READ_U32(variable) WWM_CHECK_RETURN_CODE(wwm_read_uint32(reader, (uint32_t*)&variable))
 
+WowWorldResult wwm_read_uint48(WowWorldReader* stream, uint64_t* value);
+
+#define READ_U48(variable) WWM_CHECK_RETURN_CODE(wwm_read_uint48(reader, (uint64_t*)&variable))
+
 WowWorldResult wwm_read_uint64(WowWorldReader* stream, uint64_t* value);
 
 #define READ_U64(variable) WWM_CHECK_RETURN_CODE(wwm_read_uint64(reader, (uint64_t*)&variable))
@@ -79,6 +83,10 @@ WowWorldResult wwm_write_uint16_be(WowWorldWriter* stream, uint16_t value);
 WowWorldResult wwm_write_uint32(WowWorldWriter* stream, uint32_t value);
 
 #define WRITE_U32(variable) WWM_CHECK_RETURN_CODE(wwm_write_uint32(writer, variable))
+
+WowWorldResult wwm_write_uint48(WowWorldWriter* stream, uint64_t value);
+
+#define WRITE_U48(variable) WWM_CHECK_RETURN_CODE(wwm_write_uint48(writer, variable))
 
 WowWorldResult wwm_write_uint64(WowWorldWriter* stream, uint64_t value);
 
@@ -177,14 +185,6 @@ WowWorldResult wwm_write_variable_item_random_property(WowWorldWriter* writer, c
 #define WRITE_VARIABLE_ITEM_RANDOM_PROPERTY(variable) WWM_CHECK_RETURN_CODE(wwm_write_variable_item_random_property(writer, &variable))
 size_t wwm_variable_item_random_property_size(const VariableItemRandomProperty* value);
 
-#define READ_ARRAY_ALLOCATE(variable, arrayLength, elementSize) \
-    do                                                          \
-    {                                                           \
-        size_t calculated_size = (elementSize * arrayLength);   \
-        variable = malloc(calculated_size);                     \
-    }                                                           \
-    while (0)
-
 #define READ_ARRAY(variable, arrayLength, readAction) \
     do                                                \
     {                                                 \
@@ -211,5 +211,20 @@ size_t wwm_variable_item_random_property_size(const VariableItemRandomProperty* 
 
 size_t wwm_compress_data(const unsigned char* src, size_t src_length, unsigned char* dst, size_t dst_length);
 size_t wwm_decompress_data(const unsigned char* src, size_t src_length, unsigned char* dst, size_t dst_length);
+
+void wwm_update_mask_set_u32(uint32_t* headers, uint32_t* values, uint32_t offset, uint32_t value);
+uint32_t wwm_update_mask_get_u32(const uint32_t* headers, const uint32_t* values, uint32_t offset);
+
+void wwm_update_mask_set_u64(uint32_t* headers, uint32_t* values, uint32_t offset, uint64_t value);
+uint64_t wwm_update_mask_get_u64(const uint32_t* headers, const uint32_t* values, uint32_t offset);
+
+void wwm_update_mask_set_float(uint32_t* headers, uint32_t* values, uint32_t offset, float value);
+float wwm_update_mask_get_float(const uint32_t* headers, const uint32_t* values, uint32_t offset);
+
+void wwm_update_mask_set_two_shorts(uint32_t* headers, uint32_t* values, uint32_t offset, WowTwoShorts value);
+WowTwoShorts wwm_update_mask_get_two_shorts(const uint32_t* headers, const uint32_t* values, uint32_t offset);
+
+void wwm_update_mask_set_bytes(uint32_t* headers, uint32_t* values, uint32_t offset, WowBytes value);
+WowBytes wwm_update_mask_get_bytes(const uint32_t* headers, const uint32_t* values, uint32_t offset);
 
 #endif

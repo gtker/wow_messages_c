@@ -3,7 +3,6 @@
 
 /* clang-format off */
 
-#include "wow_world_messages/wow_world_messages.h"
 
 #ifdef __cplusplus
 extern "C" {

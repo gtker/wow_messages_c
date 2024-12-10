@@ -71,6 +71,7 @@ static void test_utils_compare_buffers(const unsigned char* buffer,
         }
         puts("");
 
+        fflush(NULL);
         abort();
     }
 }

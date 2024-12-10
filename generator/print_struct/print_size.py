@@ -122,22 +122,28 @@ def addable_size_value(
             return 5 if is_cpp() else 4, f"{variable_name}.size()" if is_cpp() else f"STRING_SIZE({variable_name})"
         case model.DataTypePackedGUID():
             return 0, f"{namespace}wwm_packed_guid_size({variable_name})"
-        case model.DataTypeAchievementDoneArray() | model.DataTypeAchievementInProgressArray() \
-             | model.DataTypeCacheMask() \
-             | model.DataTypeInspectTalentGearMask() \
-             | model.DataTypeEnchantMask():
-            return 0, f"{extra_indirection}{name}.size()"
+        case model.DataTypeAchievementInProgressArray():
+            return 0, f"achievement_in_progress_array_size({variable_name})" if is_cpp() else f"{module_name}_achievement_in_progress_array_size(&{variable_name})"
+        case model.DataTypeAchievementDoneArray():
+            return 0, f"achievement_done_array_size({variable_name})" if is_cpp() else f"{module_name}_achievement_done_array_size(&{variable_name})"
+
         case model.DataTypeAddonArray():
             return 0, f"{variable_name}.size() * 8" if is_cpp() else f"{module_name}_addon_array_size(&{variable_name})"
         case model.DataTypeVariableItemRandomProperty():
             return 0, f"{namespace}wwm_variable_item_random_property_size({variable_name})" if is_cpp() else f"wwm_variable_item_random_property_size(&{variable_name})"
         case model.DataTypeNamedGUID():
             return 0, f"{namespace}wwm_named_guid_size({variable_name})" if is_cpp() else f"wwm_named_guid_size(&{variable_name})"
+        case model.DataTypeInspectTalentGearMask():
+            return 0, f"inspect_talent_gear_mask_size({variable_name})" if is_cpp() else f"{module_name}_inspect_talent_gear_mask_size(&{variable_name})"
         case model.DataTypeUpdateMask():
             return 0, f"{module_name}::update_mask_size({variable_name})" if is_cpp() else f"{module_name}_update_mask_size(&{variable_name})"
         case model.DataTypeMonsterMoveSpline():
             address_of = "" if is_cpp() else "&"
             return 0, f"{namespace}wwm_monster_move_spline_size({address_of}{variable_name})"
+        case model.DataTypeEnchantMask():
+            return 0, f"enchant_mask_size({variable_name})" if is_cpp() else f"{module_name}_enchant_mask_size(&{variable_name})"
+        case model.DataTypeCacheMask():
+            return 0, f"cache_mask_size({variable_name})" if is_cpp() else f"{module_name}_cache_mask_size(&{variable_name})"
         case model.DataTypeAuraMask():
             return 0, f"aura_mask_size({variable_name})" if is_cpp() else f"{module_name}_aura_mask_size(&{variable_name})"
         case model.DataTypeArray(compressed=compressed):

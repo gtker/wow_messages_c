@@ -293,15 +293,6 @@ static void wlm_free_string(WowLoginString* string)
 
 #define STRING_SIZE(s) (s.length)
 
-
-#define READ_ARRAY_ALLOCATE(variable, arrayLength, elementSize) \
-    do                                                          \
-    {                                                           \
-        size_t calculated_size = (elementSize * arrayLength);   \
-        variable = malloc(calculated_size);                     \
-    }                                                           \
-    while (0)
-
 #define READ_ARRAY(variable, arrayLength, readAction) \
     do                                                \
     {                                                 \

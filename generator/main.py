@@ -4,6 +4,8 @@ import os.path
 import pstats
 import typing
 
+from print_enchant_mask import print_enchant_mask
+from print_inspect_talent_gear_mask import print_inspect_talent_gear_mask
 from util import LOGIN_VERSION_ALL, WORLD_VERSION_ALL, is_cpp, set_cpp
 from print_struct.struct_util import container_should_have_size_function, integer_type_to_size, container_should_print
 
@@ -98,6 +100,8 @@ def sanitize_model(
                 d.name = "class_type"
             if d.name == "float":
                 d.name = "float_type"
+            if d.name == "new":
+                d.name = "new_spell"
 
         return container
 
@@ -106,6 +110,15 @@ def sanitize_model(
 
     for e in m.world.messages:
         e = containers(e)
+
+    def definers(definer: model.Definer) -> model.Definer:
+        for enumerator in definer.enumerators:
+            if enumerator.name == "SING":
+                enumerator.name = "SINGS"
+        return definer
+
+    for e in m.world.enums:
+        e = definers(e)
 
     return m
 
@@ -132,7 +145,7 @@ def print_includes(s: Writer, h: Writer, world: bool, version_name: str,
     s.wln("/* clang-format off */")
     s.newline()
 
-    if not world or version_name != "all" or not is_cpp():
+    if not world or version_name != "all" or (not is_cpp() and version_name != "all"):
         h.wln(f"#include \"{include_dir}/{include_file}.h{pp}\"")
     if world and version_name != "all":
         h.wln(f"#include \"{include_dir}/all.h{pp}\"")
@@ -234,13 +247,18 @@ def print_world(m: model.Objects, update_mask: list[model.UpdateMask], v: model.
         print_enum(h, d, module_name)
 
     print_update_mask(s, h, update_mask, module_name)
+    print_enchant_mask(s, h, v)
 
     for e in filter(should_print, m.structs):
         print_struct(s, h, e, module_name)
         if e.name == "Addon":
             print_addon_array(s, h, v)
 
+    print_achievement_in_progress_array(s, h, v)
+    print_achievement_done_array(s, h, v)
+    print_inspect_talent_gear_mask(s, h, v)
     print_aura_mask(s, h, v)
+    print_cache_mask(s, h, v)
 
     filtered_messages = list(filter(should_print, m.messages))
 

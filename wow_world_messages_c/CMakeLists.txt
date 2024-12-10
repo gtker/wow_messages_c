@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.28)
 project(wow_world_messages_c LANGUAGES C VERSION 0.1.0)
 
-add_library(wow_world_messages_c_wow_world_messages_c src/vanilla.c src/tbc.c src/all.c src/util.c)
+add_library(wow_world_messages_c_wow_world_messages_c src/vanilla.c src/tbc.c src/wrath.c src/all.c src/util.c)
 target_sources(wow_world_messages_c_wow_world_messages_c
         PUBLIC
         FILE_SET HEADERS
@@ -48,4 +48,8 @@ if (BUILD_TESTING)
     add_executable(wow_world_messages_c_tbc.test src/tbc.test.c)
     target_link_libraries(wow_world_messages_c_tbc.test PRIVATE wow_messages_test_utils)
     add_test(NAME wow_world_messages_c_tbc.test COMMAND wow_world_messages_c_tbc.test)
+
+    add_executable(wow_world_messages_c_wrath.test src/wrath.test.c)
+    target_link_libraries(wow_world_messages_c_wrath.test PRIVATE wow_messages_test_utils)
+    add_test(NAME wow_world_messages_c_wrath.test COMMAND wow_world_messages_c_wrath.test)
 endif ()

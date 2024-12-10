@@ -39,6 +39,7 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
         reader = "byte_reader"
 
     util_namespace = f"::wow_world_messages::util::" if is_cpp() else ""
+    wlm_prefix = "WWM" if is_world(container.tags) else "WLM"
 
     match d.data_type:
         case model.DataTypeInteger(integer_type=integer_type):
@@ -208,10 +209,14 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
                 s.wln(f"_size += {util_namespace}wwm_monster_move_spline_size({variable_name})")
 
         case model.DataTypeEnchantMask():
-            s.wln(f"READ_ENCHANT_MASK_{module_name}({variable_name});")
+            if is_cpp():
+                s.wln_no_indent(f"{module_name}::enchant_mask_read({reader});")
+            else:
+                s.wln(f"{module_name}_enchant_mask_read({reader}, &{variable_name});")
 
             if needs_size:
-                s.wln(f"_size += {d.name}.size();")
+                prefix = "" if is_cpp() else f"{module_name}_"
+                s.wln(f"_size += {prefix}enchant_mask_size({variable_name});")
 
         case model.DataTypeNamedGUID():
             if is_cpp():
@@ -223,10 +228,14 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
                 s.wln(f"_size += {util_namespace}wwm_named_guid_size({variable_name});")
 
         case model.DataTypeInspectTalentGearMask():
-            s.wln(f"READ_INSPECT_TALENT_GEAR_MASK({variable_name});")
+            if is_cpp():
+                s.wln_no_indent(f"{module_name}::inspect_talent_gear_mask_read({reader});")
+            else:
+                s.wln(f"{module_name}_inspect_talent_gear_mask_read({reader}, &{variable_name});")
 
             if needs_size:
-                s.wln(f"_size += {d.name}.size();")
+                prefix = "" if is_cpp() else f"{module_name}_"
+                s.wln(f"_size += {prefix}inspect_talent_gear_mask_size({variable_name});")
 
         case model.DataTypeVariableItemRandomProperty():
             if is_cpp():
@@ -238,10 +247,13 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
                 s.wln(f"_size += {util_namespace}wwm_variable_item_random_property_size({variable_name});")
 
         case model.DataTypeCacheMask():
-            s.wln(f"READ_CACHE_MASK_{module_name}({variable_name});")
+            if is_cpp():
+                s.wln_no_indent(f"{module_name}::cache_mask_read({reader});")
+            else:
+                s.wln(f"{module_name}_cache_mask_read({reader}, &{variable_name});")
 
             if needs_size:
-                s.wln(f"_size += {d.name}.size();")
+                s.wln(f"_size += {util_namespace}cache_mask_size({variable_name});")
 
         case model.DataTypeAddonArray():
             if is_cpp():
@@ -253,16 +265,22 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
                 s.wln(f"_size += {module_name}_addon_array_size({variable_name});")
 
         case model.DataTypeAchievementDoneArray():
-            s.wln(f"READ_ACHIEVEMENT_DONE_ARRAY({variable_name});")
+            if is_cpp():
+                s.wln_no_indent(f"{module_name}::achievement_done_array_read({reader});")
+            else:
+                s.wln(f"{module_name}_achievement_done_array_read({reader}, &{variable_name});")
 
             if needs_size:
-                s.wln(f"_size += {d.name}.size();")
+                s.wln(f"_size += {util_namespace}achievement_done_array_size({variable_name});")
 
         case model.DataTypeAchievementInProgressArray():
-            s.wln(f"READ_ACHIEVEMENT_IN_PROGRESS_ARRAY({variable_name});")
+            if is_cpp():
+                s.wln_no_indent(f"{module_name}::achievement_in_progress_array_read({reader});")
+            else:
+                s.wln(f"{module_name}_achievement_in_progress_array_read({reader}, &{variable_name});")
 
             if needs_size:
-                s.wln(f"_size += {d.name}.size();")
+                s.wln(f"_size += {util_namespace}achievement_in_progress_array_size({variable_name});")
 
         case model.DataTypeArray(compressed=compressed, size=array_size, inner_type=inner_type):
             if is_cpp():
@@ -407,9 +425,13 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
                     s.closing_curly()
 
                     s.wln(f"{d.name}_decompressed_data = malloc({d.name}_decompressed_size);")
+                    s.open_curly(f"if ({d.name}_decompressed_data == NULL)")
+                    s.wln("return WWM_RESULT_MALLOC_FAIL;")
+                    s.closing_curly()
                     s.newline()
 
-                    s.wln(f"{d.name}_decompressed_size = (uint32_t)wwm_decompress_data(&reader->source[reader->index], {d.name}_compressed_data_size, {d.name}_decompressed_data, {d.name}_decompressed_size);")
+                    s.wln(
+                        f"{d.name}_decompressed_size = (uint32_t)wwm_decompress_data(&reader->source[reader->index], {d.name}_compressed_data_size, {d.name}_decompressed_data, {d.name}_decompressed_size);")
                     s.open_curly(
                         f"if ({d.name}_decompressed_size == 0)")
                     s.wln("return WWM_RESULT_COMPRESSION_ERROR;")
@@ -437,7 +459,6 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
 
                     case model.ArrayTypeStruct(struct_data=e):
                         version = container_module_prefix(e.tags, module_name)
-                        wlm_prefix = "WWM" if is_world(e.tags) else "WLM"
                         inner = f"{wlm_prefix}_CHECK_RETURN_CODE({version}_{e.name}_read(reader, &{fixed_prefix}{variable_name}{fixed_suffix}[i]))"
 
                     case model.ArrayTypeCstring():
@@ -457,17 +478,25 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
                         extra = ""
                         if needs_size:
                             extra = f";_size += {array_size_inner_action(inner_type, '', '', variable_name, 'i', module_name)};"
-                        s.wln(
-                            f"READ_ARRAY_ALLOCATE({variable_name}, {array_size}, sizeof({array_type_to_c_str(inner_type, module_name)}));")
-                        s.wln(f"READ_ARRAY({variable_name}, {array_size}, {inner}{extra});")
+                        s.write_block(f"""
+                            {variable_name} = malloc(sizeof(*{variable_name}));
+                            if ({variable_name} == NULL) {{
+                                return {wlm_prefix}_RESULT_MALLOC_FAIL;
+                            }}
+                            READ_ARRAY({variable_name}, {array_size}, {inner}{extra});
+                        """)
 
                     case model.ArraySizeVariable(size=array_size):
                         extra = ""
                         if needs_size:
                             extra = f";_size += {array_size_inner_action(inner_type, '', '', variable_name, 'i', module_name)};"
-                        s.wln(
-                            f"READ_ARRAY_ALLOCATE({variable_name}, object->{extra_indirection}{array_size}, sizeof({array_type_to_c_str(inner_type, module_name)}));")
-                        s.wln(f"READ_ARRAY({variable_name}, object->{extra_indirection}{array_size}, {inner}{extra});")
+                        s.write_block(f"""
+                            {variable_name} = malloc(object->{extra_indirection}{array_size} * sizeof({array_type_to_c_str(inner_type, module_name)}));
+                            if ({variable_name} == NULL) {{
+                                return {wlm_prefix}_RESULT_MALLOC_FAIL;
+                            }}
+                            READ_ARRAY({variable_name}, object->{extra_indirection}{array_size}, {inner}{extra});
+                        """)
 
                     case model.ArraySizeEndless():
                         s.wln(f"object->amount_of_{d.name} = 0;")
@@ -476,6 +505,9 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
                         s.wln(f"size_t _current_size = 8 * sizeof(*{variable_name});")
                         s.newline()
                         s.wln(f"{variable_name} = malloc(_current_size);")
+                        s.open_curly(f"if ({variable_name} == NULL)")
+                        s.wln(f"return {wlm_prefix}_RESULT_MALLOC_FAIL;")
+                        s.closing_curly()
 
                         if compressed or container.tags.compressed:
                             s.open_curly("while (reader->index < reader->length)")
@@ -485,7 +517,8 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
 
                         if (needs_size or isinstance(array_size,
                                                      model.ArraySizeEndless)) and not compressed and not container.tags.compressed:
-                            s.wln(f"_size += {array_size_inner_action(inner_type, '', '', variable_name, 'i', module_name)};")
+                            s.wln(
+                                f"_size += {array_size_inner_action(inner_type, '', '', variable_name, 'i', module_name)};")
 
                         s.wln("++i;")
                         s.newline()
@@ -493,6 +526,10 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
                         s.open_curly(f"if (i * sizeof(*{variable_name}) >= _current_size)")
                         s.wln(f"_current_size *= 2;")
                         s.wln(f"{variable_name} = realloc({variable_name}, _current_size);")
+                        s.open_curly(f"if ({variable_name} == NULL)")
+                        s.wln(f"free({variable_name});")
+                        s.wln("return WWM_RESULT_MALLOC_FAIL;")
+                        s.closing_curly()
                         s.closing_curly()  # if (i * sizeof)
 
                         s.closing_curly()  # while
@@ -641,6 +678,9 @@ def print_read(s: Writer, container: Container, module_name: str):
                     _size += 4;
                     
                     _compressed_data = malloc(_decompressed_size);
+                    if (_compressed_data == NULL) {
+                        return WWM_RESULT_MALLOC_FAIL;
+                    }
 
                     if (!wwm_decompress_data(&reader->source[reader->index], body_size - _size, _compressed_data, _decompressed_size)) {
                         return WWM_RESULT_COMPRESSION_ERROR;
@@ -658,6 +698,9 @@ def print_read(s: Writer, container: Container, module_name: str):
             s.open_curly("if (_size < body_size)")
             s.wln(
                 f"object->{container.optional.name} = malloc(sizeof({module_name}_{container.name}_{container.optional.name}));")
+            s.open_curly(f"if (object->{container.optional.name} == NULL)")
+            s.wln("return WWM_RESULT_MALLOC_FAIL;")
+            s.closing_curly()
             s.newline()
 
             for member in container.optional.members:

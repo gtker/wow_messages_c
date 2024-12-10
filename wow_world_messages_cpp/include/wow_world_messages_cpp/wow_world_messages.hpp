@@ -45,6 +45,14 @@ public:
         return static_cast<uint32_t>(lower) | static_cast<uint32_t>(upper) << 16;
     }
 
+    virtual uint64_t read_u48()
+    {
+        const uint32_t lower = read_u32();
+        const uint16_t upper = read_u16();
+
+        return static_cast<uint64_t>(lower) | static_cast<uint64_t>(upper) << 32;
+    }
+
     virtual uint64_t read_u64()
     {
         const uint32_t lower = read_u32();

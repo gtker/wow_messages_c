@@ -36,41 +36,6 @@ def container_has_compressed_array(container: model.Container) -> bool:
 
 
 def container_should_print(container: model.Container) -> bool:
-    for member in all_members_from_container(container):
-        match member.data_type:
-            case model.DataTypeStruct(struct_data=e):
-                if not container_should_print(e):
-                    print_skip(container, f"has struct {e.name}")
-                    return False
-
-            case model.DataTypeArray(compressed=compressed, inner_type=inner_type, size=size):
-                match inner_type:
-                    case model.ArrayTypeStruct(struct_data=e):
-                        if not container_should_print(e):
-                            print_skip(container, f"has struct {e.name}")
-                            return False
-
-            # Wrath/TBC below
-            case model.DataTypeEnchantMask():
-                print_skip(container, f"has enchant mask")
-                return False
-
-            case model.DataTypeInspectTalentGearMask():
-                print_skip(container, f"has inspect talent gear mask")
-                return False
-
-            case model.DataTypeCacheMask():
-                print_skip(container, f"has cache mask")
-                return False
-
-            case model.DataTypeAchievementDoneArray():
-                print_skip(container, f"has achievement done array")
-                return False
-
-            case model.DataTypeAchievementInProgressArray():
-                print_skip(container, f"has achievement in progress array")
-                return False
-
     return True
 
 
@@ -150,6 +115,8 @@ def integer_type_to_c_str(integer_type: model.IntegerType) -> str:
     if integer_type_is_signed(integer_type):
         prefix = ""
     size = integer_type_to_size(integer_type) * 8
+    if size == 6 * 8:
+        size = 8 * 8
     return f"{prefix}int{size}_t"
 
 def container_module_prefix(tags: model.ObjectTags, module_name: str) -> str:
@@ -215,18 +182,18 @@ def type_to_c_str(ty: model.DataType, module_name: str) -> str:
             return "UpdateMask" if is_cpp() else f"{module_name}_UpdateMask"
 
         case model.DataTypeAchievementDoneArray():
-            return "AchievementDoneArray"
+            return "std::vector<AchievementDone>" if is_cpp() else f"{module_name}_AchievementDoneArray"
         case model.DataTypeAchievementInProgressArray():
-            return "AchievementInProgressArray"
+            return "std::vector<AchievementInProgress>" if is_cpp() else f"{module_name}_AchievementInProgressArray"
         case model.DataTypeAddonArray():
             return "std::vector<Addon>" if is_cpp() else f"{module_name}_AddonArray"
         case model.DataTypeAuraMask():
             return "AuraMask" if is_cpp() else f"{module_name}_AuraMask"
 
         case model.DataTypeEnchantMask():
-            return "EnchantMask"
+            return "EnchantMask" if is_cpp() else f"{module_name}_EnchantMask"
         case model.DataTypeInspectTalentGearMask():
-            return "InspectTalentGearMask"
+            return "InspectTalentGearMask" if is_cpp() else f"{module_name}_InspectTalentGearMask"
         case model.DataTypeMonsterMoveSpline():
             return "std::vector<::wow_world_messages::all::Vector3d>" if is_cpp() else "MonsterMoveSpline"
         case model.DataTypeNamedGUID():
@@ -234,7 +201,7 @@ def type_to_c_str(ty: model.DataType, module_name: str) -> str:
         case model.DataTypeVariableItemRandomProperty():
             return "VariableItemRandomProperty"
         case model.DataTypeCacheMask():
-            return "CacheMask"
+            return "CacheMask" if is_cpp() else f"{module_name}_CacheMask"
         case v:
             raise Exception(f"{v}")
 

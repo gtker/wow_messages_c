@@ -30,8 +30,8 @@ typedef struct
 
 typedef enum
 {
+    WWM_RESULT_NOT_ENOUGH_BYTES = 1,
     WWM_RESULT_SUCCESS = 0,
-    WWM_RESULT_NOT_ENOUGH_BYTES = -1,
     WWM_RESULT_MALLOC_FAIL = -2,
     WWM_RESULT_COMPRESSION_ERROR = -3
 } WowWorldResult;
@@ -59,6 +59,20 @@ typedef struct
     uint32_t item_random_property_id;
     uint32_t item_suffix_factor;
 } VariableItemRandomProperty;
+
+typedef struct
+{
+    uint16_t lower;
+    uint16_t upper;
+} WowTwoShorts;
+
+typedef struct
+{
+    uint8_t a;
+    uint8_t b;
+    uint8_t c;
+    uint8_t d;
+} WowBytes;
 
 WOW_WORLD_MESSAGES_C_EXPORT const char* wwm_error_code_to_string(WowWorldResult result);
 

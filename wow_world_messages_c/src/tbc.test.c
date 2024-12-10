@@ -39,7 +39,7 @@ int main(void) {
         result = tbc_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_TELEPORT_TO_UNIT 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_TELEPORT_TO_UNIT, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_TELEPORT_TO_UNIT 0");
+        check_opcode(opcode.opcode, T_CMSG_TELEPORT_TO_UNIT, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_TELEPORT_TO_UNIT 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_TELEPORT_TO_UNIT_write(&writer, &opcode.body.CMSG_TELEPORT_TO_UNIT);
 
@@ -58,7 +58,7 @@ int main(void) {
         result = tbc_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_ENUM 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_CHAR_ENUM, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_ENUM 0");
+        check_opcode(opcode.opcode, T_CMSG_CHAR_ENUM, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_ENUM 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_CHAR_ENUM_write(&writer);
 
@@ -76,7 +76,7 @@ int main(void) {
         result = tbc_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_DELETE 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_CHAR_DELETE, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_DELETE 0");
+        check_opcode(opcode.opcode, T_CMSG_CHAR_DELETE, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_DELETE 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_CHAR_DELETE_write(&writer, &opcode.body.CMSG_CHAR_DELETE);
 
@@ -94,7 +94,7 @@ int main(void) {
         result = tbc_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PLAYER_LOGIN 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_PLAYER_LOGIN, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PLAYER_LOGIN 0");
+        check_opcode(opcode.opcode, T_CMSG_PLAYER_LOGIN, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PLAYER_LOGIN 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_PLAYER_LOGIN_write(&writer, &opcode.body.CMSG_PLAYER_LOGIN);
 
@@ -112,7 +112,7 @@ int main(void) {
         result = tbc_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGIN_SETTIMESPEED 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_LOGIN_SETTIMESPEED, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGIN_SETTIMESPEED 0");
+        check_opcode(opcode.opcode, T_SMSG_LOGIN_SETTIMESPEED, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGIN_SETTIMESPEED 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_SMSG_LOGIN_SETTIMESPEED_write(&writer, &opcode.body.SMSG_LOGIN_SETTIMESPEED);
 
@@ -130,7 +130,7 @@ int main(void) {
         result = tbc_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PLAYER_LOGOUT 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_PLAYER_LOGOUT, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PLAYER_LOGOUT 0");
+        check_opcode(opcode.opcode, T_CMSG_PLAYER_LOGOUT, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PLAYER_LOGOUT 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_PLAYER_LOGOUT_write(&writer);
 
@@ -148,7 +148,7 @@ int main(void) {
         result = tbc_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_LOGOUT_REQUEST 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_LOGOUT_REQUEST, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_LOGOUT_REQUEST 0");
+        check_opcode(opcode.opcode, T_CMSG_LOGOUT_REQUEST, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_LOGOUT_REQUEST 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_LOGOUT_REQUEST_write(&writer);
 
@@ -166,7 +166,7 @@ int main(void) {
         result = tbc_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGOUT_RESPONSE 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_LOGOUT_RESPONSE, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGOUT_RESPONSE 0");
+        check_opcode(opcode.opcode, T_SMSG_LOGOUT_RESPONSE, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGOUT_RESPONSE 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_SMSG_LOGOUT_RESPONSE_write(&writer, &opcode.body.SMSG_LOGOUT_RESPONSE);
 
@@ -184,7 +184,7 @@ int main(void) {
         result = tbc_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGOUT_COMPLETE 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_LOGOUT_COMPLETE, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGOUT_COMPLETE 0");
+        check_opcode(opcode.opcode, T_SMSG_LOGOUT_COMPLETE, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGOUT_COMPLETE 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_SMSG_LOGOUT_COMPLETE_write(&writer);
 
@@ -202,7 +202,7 @@ int main(void) {
         result = tbc_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PET_NAME_QUERY 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_PET_NAME_QUERY, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PET_NAME_QUERY 0");
+        check_opcode(opcode.opcode, T_CMSG_PET_NAME_QUERY, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PET_NAME_QUERY 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_PET_NAME_QUERY_write(&writer, &opcode.body.CMSG_PET_NAME_QUERY);
 
@@ -220,7 +220,7 @@ int main(void) {
         result = tbc_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_DESTROY_OBJECT 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_DESTROY_OBJECT, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_DESTROY_OBJECT 0");
+        check_opcode(opcode.opcode, T_SMSG_DESTROY_OBJECT, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_DESTROY_OBJECT 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_SMSG_DESTROY_OBJECT_write(&writer, &opcode.body.SMSG_DESTROY_OBJECT);
 
@@ -238,7 +238,7 @@ int main(void) {
         result = tbc_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_TELEPORT_ACK_Client 0", "failed to read");
-        check_opcode(opcode.opcode, MSG_MOVE_TELEPORT_ACK, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_TELEPORT_ACK_Client 0");
+        check_opcode(opcode.opcode, T_MSG_MOVE_TELEPORT_ACK, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_TELEPORT_ACK_Client 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_MSG_MOVE_TELEPORT_ACK_Client_write(&writer, &opcode.body.MSG_MOVE_TELEPORT_ACK_Client);
 
@@ -256,7 +256,7 @@ int main(void) {
         result = tbc_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_TUTORIAL_FLAGS 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_TUTORIAL_FLAGS, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_TUTORIAL_FLAGS 0");
+        check_opcode(opcode.opcode, T_SMSG_TUTORIAL_FLAGS, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_TUTORIAL_FLAGS 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_SMSG_TUTORIAL_FLAGS_write(&writer, &opcode.body.SMSG_TUTORIAL_FLAGS);
 
@@ -275,7 +275,7 @@ int main(void) {
         result = tbc_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_STANDSTATECHANGE 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_STANDSTATECHANGE, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_STANDSTATECHANGE 0");
+        check_opcode(opcode.opcode, T_CMSG_STANDSTATECHANGE, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_STANDSTATECHANGE 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_STANDSTATECHANGE_write(&writer, &opcode.body.CMSG_STANDSTATECHANGE);
 
@@ -293,7 +293,7 @@ int main(void) {
         result = tbc_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_AUTOEQUIP_ITEM 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_AUTOEQUIP_ITEM, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_AUTOEQUIP_ITEM 0");
+        check_opcode(opcode.opcode, T_CMSG_AUTOEQUIP_ITEM, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_AUTOEQUIP_ITEM 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_AUTOEQUIP_ITEM_write(&writer, &opcode.body.CMSG_AUTOEQUIP_ITEM);
 
@@ -311,7 +311,7 @@ int main(void) {
         result = tbc_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_INITIATE_TRADE 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_INITIATE_TRADE, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_INITIATE_TRADE 0");
+        check_opcode(opcode.opcode, T_CMSG_INITIATE_TRADE, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_INITIATE_TRADE 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_INITIATE_TRADE_write(&writer, &opcode.body.CMSG_INITIATE_TRADE);
 
@@ -329,7 +329,7 @@ int main(void) {
         result = tbc_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CANCEL_TRADE 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_CANCEL_TRADE, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CANCEL_TRADE 0");
+        check_opcode(opcode.opcode, T_CMSG_CANCEL_TRADE, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CANCEL_TRADE 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_CANCEL_TRADE_write(&writer);
 
@@ -347,7 +347,7 @@ int main(void) {
         result = tbc_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_INITIAL_SPELLS 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_INITIAL_SPELLS, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_INITIAL_SPELLS 0");
+        check_opcode(opcode.opcode, T_SMSG_INITIAL_SPELLS, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_INITIAL_SPELLS 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_SMSG_INITIAL_SPELLS_write(&writer, &opcode.body.SMSG_INITIAL_SPELLS);
 
@@ -366,7 +366,7 @@ int main(void) {
         result = tbc_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CANCEL_CAST 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_CANCEL_CAST, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CANCEL_CAST 0");
+        check_opcode(opcode.opcode, T_CMSG_CANCEL_CAST, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CANCEL_CAST 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_CANCEL_CAST_write(&writer, &opcode.body.CMSG_CANCEL_CAST);
 
@@ -383,7 +383,7 @@ int main(void) {
         result = tbc_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CANCEL_CAST 1", "failed to read");
-        check_opcode(opcode.opcode, CMSG_CANCEL_CAST, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CANCEL_CAST 1");
+        check_opcode(opcode.opcode, T_CMSG_CANCEL_CAST, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CANCEL_CAST 1");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_CANCEL_CAST_write(&writer, &opcode.body.CMSG_CANCEL_CAST);
 
@@ -401,7 +401,7 @@ int main(void) {
         result = tbc_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_SET_SELECTION 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_SET_SELECTION, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_SET_SELECTION 0");
+        check_opcode(opcode.opcode, T_CMSG_SET_SELECTION, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_SET_SELECTION 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_SET_SELECTION_write(&writer, &opcode.body.CMSG_SET_SELECTION);
 
@@ -419,7 +419,7 @@ int main(void) {
         result = tbc_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_ATTACKSWING 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_ATTACKSWING, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_ATTACKSWING 0");
+        check_opcode(opcode.opcode, T_CMSG_ATTACKSWING, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_ATTACKSWING 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_ATTACKSWING_write(&writer, &opcode.body.CMSG_ATTACKSWING);
 
@@ -437,7 +437,7 @@ int main(void) {
         result = tbc_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ATTACKSTART 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_ATTACKSTART, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ATTACKSTART 0");
+        check_opcode(opcode.opcode, T_SMSG_ATTACKSTART, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ATTACKSTART 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_SMSG_ATTACKSTART_write(&writer, &opcode.body.SMSG_ATTACKSTART);
 
@@ -455,7 +455,7 @@ int main(void) {
         result = tbc_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ATTACKSTOP 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_ATTACKSTOP, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ATTACKSTOP 0");
+        check_opcode(opcode.opcode, T_SMSG_ATTACKSTOP, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ATTACKSTOP 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_SMSG_ATTACKSTOP_write(&writer, &opcode.body.SMSG_ATTACKSTOP);
 
@@ -473,7 +473,7 @@ int main(void) {
         result = tbc_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_QUERY_TIME 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_QUERY_TIME, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_QUERY_TIME 0");
+        check_opcode(opcode.opcode, T_CMSG_QUERY_TIME, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_QUERY_TIME 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_QUERY_TIME_write(&writer);
 
@@ -491,7 +491,7 @@ int main(void) {
         result = tbc_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PING 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_PING, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PING 0");
+        check_opcode(opcode.opcode, T_CMSG_PING, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PING 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_PING_write(&writer, &opcode.body.CMSG_PING);
 
@@ -509,7 +509,7 @@ int main(void) {
         result = tbc_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_PONG 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_PONG, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_PONG 0");
+        check_opcode(opcode.opcode, T_SMSG_PONG, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_PONG 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_SMSG_PONG_write(&writer, &opcode.body.SMSG_PONG);
 
@@ -527,7 +527,7 @@ int main(void) {
         result = tbc_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_SETSHEATHED 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_SETSHEATHED, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_SETSHEATHED 0");
+        check_opcode(opcode.opcode, T_CMSG_SETSHEATHED, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_SETSHEATHED 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_SETSHEATHED_write(&writer, &opcode.body.CMSG_SETSHEATHED);
 
@@ -545,7 +545,7 @@ int main(void) {
         result = tbc_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_AUTH_CHALLENGE 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_AUTH_CHALLENGE, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_AUTH_CHALLENGE 0");
+        check_opcode(opcode.opcode, T_SMSG_AUTH_CHALLENGE, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_AUTH_CHALLENGE 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_SMSG_AUTH_CHALLENGE_write(&writer, &opcode.body.SMSG_AUTH_CHALLENGE);
 
@@ -566,7 +566,7 @@ int main(void) {
         result = tbc_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_AUTH_SESSION 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_AUTH_SESSION, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_AUTH_SESSION 0");
+        check_opcode(opcode.opcode, T_CMSG_AUTH_SESSION, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_AUTH_SESSION 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_AUTH_SESSION_write(&writer, &opcode.body.CMSG_AUTH_SESSION);
 
@@ -576,7 +576,7 @@ int main(void) {
 
         result = tbc_client_opcode_read(&reader2, &opcode2);
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_AUTH_SESSION 0", "failed to read second");
-        check_opcode(opcode2.opcode, CMSG_AUTH_SESSION, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_AUTH_SESSION 0");
+        check_opcode(opcode2.opcode, T_CMSG_AUTH_SESSION, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_AUTH_SESSION 0");
 
         writer2 = wwm_create_writer(write_buffer2, sizeof(write_buffer));
         result = tbc_client_opcode_write(&writer2, &opcode2);
@@ -599,7 +599,7 @@ int main(void) {
         result = tbc_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ACCOUNT_DATA_TIMES 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_ACCOUNT_DATA_TIMES, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ACCOUNT_DATA_TIMES 0");
+        check_opcode(opcode.opcode, T_SMSG_ACCOUNT_DATA_TIMES, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ACCOUNT_DATA_TIMES 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_SMSG_ACCOUNT_DATA_TIMES_write(&writer, &opcode.body.SMSG_ACCOUNT_DATA_TIMES);
 
@@ -618,7 +618,7 @@ int main(void) {
         result = tbc_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_REQUEST_ACCOUNT_DATA 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_REQUEST_ACCOUNT_DATA, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_REQUEST_ACCOUNT_DATA 0");
+        check_opcode(opcode.opcode, T_CMSG_REQUEST_ACCOUNT_DATA, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_REQUEST_ACCOUNT_DATA 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_REQUEST_ACCOUNT_DATA_write(&writer, &opcode.body.CMSG_REQUEST_ACCOUNT_DATA);
 
@@ -639,7 +639,7 @@ int main(void) {
         result = tbc_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_UPDATE_ACCOUNT_DATA, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 0");
+        check_opcode(opcode.opcode, T_CMSG_UPDATE_ACCOUNT_DATA, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_UPDATE_ACCOUNT_DATA_write(&writer, &opcode.body.CMSG_UPDATE_ACCOUNT_DATA);
 
@@ -649,7 +649,7 @@ int main(void) {
 
         result = tbc_client_opcode_read(&reader2, &opcode2);
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 0", "failed to read second");
-        check_opcode(opcode2.opcode, CMSG_UPDATE_ACCOUNT_DATA, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 0");
+        check_opcode(opcode2.opcode, T_CMSG_UPDATE_ACCOUNT_DATA, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 0");
 
         writer2 = wwm_create_writer(write_buffer2, sizeof(write_buffer));
         result = tbc_client_opcode_write(&writer2, &opcode2);
@@ -674,7 +674,7 @@ int main(void) {
         result = tbc_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 1", "failed to read");
-        check_opcode(opcode.opcode, CMSG_UPDATE_ACCOUNT_DATA, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 1");
+        check_opcode(opcode.opcode, T_CMSG_UPDATE_ACCOUNT_DATA, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 1");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_UPDATE_ACCOUNT_DATA_write(&writer, &opcode.body.CMSG_UPDATE_ACCOUNT_DATA);
 
@@ -684,7 +684,7 @@ int main(void) {
 
         result = tbc_client_opcode_read(&reader2, &opcode2);
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 1", "failed to read second");
-        check_opcode(opcode2.opcode, CMSG_UPDATE_ACCOUNT_DATA, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 1");
+        check_opcode(opcode2.opcode, T_CMSG_UPDATE_ACCOUNT_DATA, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 1");
 
         writer2 = wwm_create_writer(write_buffer2, sizeof(write_buffer));
         result = tbc_client_opcode_write(&writer2, &opcode2);
@@ -707,7 +707,7 @@ int main(void) {
         result = tbc_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_GMTICKET_GETTICKET 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_GMTICKET_GETTICKET, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_GMTICKET_GETTICKET 0");
+        check_opcode(opcode.opcode, T_CMSG_GMTICKET_GETTICKET, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_GMTICKET_GETTICKET 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_GMTICKET_GETTICKET_write(&writer);
 
@@ -725,7 +725,7 @@ int main(void) {
         result = tbc_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_AUCTION_HELLO_Client 0", "failed to read");
-        check_opcode(opcode.opcode, MSG_AUCTION_HELLO, __FILE__ ":" STRINGIFY(__LINE__), "MSG_AUCTION_HELLO_Client 0");
+        check_opcode(opcode.opcode, T_MSG_AUCTION_HELLO, __FILE__ ":" STRINGIFY(__LINE__), "MSG_AUCTION_HELLO_Client 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_MSG_AUCTION_HELLO_Client_write(&writer, &opcode.body.MSG_AUCTION_HELLO_Client);
 
@@ -743,7 +743,7 @@ int main(void) {
         result = tbc_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_SET_ACTIVE_MOVER 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_SET_ACTIVE_MOVER, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_SET_ACTIVE_MOVER 0");
+        check_opcode(opcode.opcode, T_CMSG_SET_ACTIVE_MOVER, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_SET_ACTIVE_MOVER 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_SET_ACTIVE_MOVER_write(&writer, &opcode.body.CMSG_SET_ACTIVE_MOVER);
 
@@ -761,7 +761,7 @@ int main(void) {
         result = tbc_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_QUERY_NEXT_MAIL_TIME_Client 0", "failed to read");
-        check_opcode(opcode.opcode, MSG_QUERY_NEXT_MAIL_TIME, __FILE__ ":" STRINGIFY(__LINE__), "MSG_QUERY_NEXT_MAIL_TIME_Client 0");
+        check_opcode(opcode.opcode, T_MSG_QUERY_NEXT_MAIL_TIME, __FILE__ ":" STRINGIFY(__LINE__), "MSG_QUERY_NEXT_MAIL_TIME_Client 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_MSG_QUERY_NEXT_MAIL_TIME_Client_write(&writer);
 
@@ -779,7 +779,7 @@ int main(void) {
         result = tbc_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_MEETINGSTONE_INFO 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_MEETINGSTONE_INFO, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_MEETINGSTONE_INFO 0");
+        check_opcode(opcode.opcode, T_CMSG_MEETINGSTONE_INFO, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_MEETINGSTONE_INFO 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_MEETINGSTONE_INFO_write(&writer);
 
@@ -797,7 +797,7 @@ int main(void) {
         result = tbc_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_RENAME 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_CHAR_RENAME, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_RENAME 0");
+        check_opcode(opcode.opcode, T_CMSG_CHAR_RENAME, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_RENAME 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_CHAR_RENAME_write(&writer, &opcode.body.CMSG_CHAR_RENAME);
 
@@ -816,7 +816,7 @@ int main(void) {
         result = tbc_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_REQUEST_RAID_INFO 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_REQUEST_RAID_INFO, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_REQUEST_RAID_INFO 0");
+        check_opcode(opcode.opcode, T_CMSG_REQUEST_RAID_INFO, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_REQUEST_RAID_INFO 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_REQUEST_RAID_INFO_write(&writer);
 
@@ -834,7 +834,7 @@ int main(void) {
         result = tbc_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_MOVE_TIME_SKIPPED 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_MOVE_TIME_SKIPPED, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_MOVE_TIME_SKIPPED 0");
+        check_opcode(opcode.opcode, T_CMSG_MOVE_TIME_SKIPPED, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_MOVE_TIME_SKIPPED 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_MOVE_TIME_SKIPPED_write(&writer, &opcode.body.CMSG_MOVE_TIME_SKIPPED);
 
@@ -852,7 +852,7 @@ int main(void) {
         result = tbc_client_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_BATTLEFIELD_STATUS 0", "failed to read");
-        check_opcode(opcode.opcode, CMSG_BATTLEFIELD_STATUS, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_BATTLEFIELD_STATUS 0");
+        check_opcode(opcode.opcode, T_CMSG_BATTLEFIELD_STATUS, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_BATTLEFIELD_STATUS 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_BATTLEFIELD_STATUS_write(&writer);
 
@@ -870,7 +870,7 @@ int main(void) {
         result = tbc_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_SPLINE_SET_RUN_SPEED 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_SPLINE_SET_RUN_SPEED, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_SPLINE_SET_RUN_SPEED 0");
+        check_opcode(opcode.opcode, T_SMSG_SPLINE_SET_RUN_SPEED, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_SPLINE_SET_RUN_SPEED 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_SMSG_SPLINE_SET_RUN_SPEED_write(&writer, &opcode.body.SMSG_SPLINE_SET_RUN_SPEED);
 
@@ -888,7 +888,7 @@ int main(void) {
         result = tbc_server_opcode_read(&reader, &opcode);
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_MOTD 0", "failed to read");
-        check_opcode(opcode.opcode, SMSG_MOTD, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_MOTD 0");
+        check_opcode(opcode.opcode, T_SMSG_MOTD, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_MOTD 0");
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_SMSG_MOTD_write(&writer, &opcode.body.SMSG_MOTD);
 

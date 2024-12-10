@@ -7,7 +7,7 @@ from print_struct.struct_util import container_should_have_size_function, all_me
     container_has_compressed_array, container_uses_compression
 from util import first_login_version, VERSIONS, world_version_to_module_name, \
     should_print_container, container_is_unencrypted, login_version_matches, version_matches, version_to_module_name, \
-    is_world, is_cpp
+    is_world, is_cpp, world_version_is_wrath
 
 from writer import Writer
 
@@ -43,6 +43,7 @@ def print_tests_for_message(s: Writer, e: model.Container, v: typing.Union[int |
                 side = "Server"
 
         opcode_name = e.name.replace('_Client', '').replace('_Server', '')
+        opcode_name = f"{module_name[0].upper()}_{opcode_name}" if is_world(e.tags) and not is_cpp() else opcode_name
         print_individual_test(s, e, test_case, i, opcode_name, f"{module_name_pascal}{side}OpcodeContainer",
                               module_name,
                               side.lower(), library_type, library_prefix)
@@ -192,7 +193,7 @@ def print_login_test_prefix(tests: Writer, m: model.IntermediateRepresentationSc
 
     write_byte_reader(tests, False)
 
-    write_int_main(tests, False)
+    write_int_main(tests, False, False)
 
 
 def print_test_suffix(tests: Writer):
@@ -209,7 +210,7 @@ def print_world_tests(s: Writer, messages: typing.List[model.Container], v: mode
     write_includes(s)
     write_check_functions(s, True)
     write_byte_reader(s, True)
-    write_int_main(s, True)
+    write_int_main(s, True, not world_version_is_wrath(v))
 
     for e in messages:
         if len(e.tests) != 0:
@@ -227,7 +228,7 @@ def write_includes(s: Writer):
         s.newline()
 
 
-def write_int_main(s: Writer, world: bool):
+def write_int_main(s: Writer, world: bool, additional_readers: bool):
     if not is_cpp():
         s.wln("unsigned char write_buffer[1 << 16] = {0}; /* uint16_t max */")
 
@@ -243,7 +244,7 @@ def write_int_main(s: Writer, world: bool):
         s.wln(f"{type_prefix}Result result;")
         s.newline()
 
-        if world:
+        if additional_readers:
             s.wln(f"{type_prefix}Reader reader2;")
             s.wln(f"{type_prefix}Writer writer2;")
             s.newline()
