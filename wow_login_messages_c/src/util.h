@@ -173,67 +173,79 @@ static WowLoginResult wlm_write_int32(WowLoginWriter* stream, const int32_t valu
 
 #define WRITE_I32(variable) WLM_CHECK_RETURN_CODE(wlm_write_int32(writer, variable))
 
-static WowLoginResult wlm_read_string(WowLoginReader* stream, WowLoginString* string)
+static WowLoginResult wlm_read_string(WowLoginReader* stream, char** string)
 {
+    uint8_t length;
+
     size_t index = WLM_CHECK_LENGTH(1);
-    string->length = stream->source[index];
 
-    index = WLM_CHECK_LENGTH(string->length);
+    length = stream->source[index];
 
-    string->string = malloc(string->length + 1);
+    index = WLM_CHECK_LENGTH(length);
 
-    memcpy(string->string, &stream->source[index], string->length);
-    string->string[string->length] = '\0';
+    *string = malloc(length + 1);
+    if (*string == NULL)
+    {
+        return WLM_RESULT_MALLOC_FAIL;
+    }
+
+    memcpy(*string, &stream->source[index], length);
+    (*string)[length] = '\0';
 
     return WLM_RESULT_SUCCESS;
 }
 
 #define READ_STRING(variable) WLM_CHECK_RETURN_CODE(wlm_read_string(reader, &variable))
 
-static WowLoginResult wlm_write_string(WowLoginWriter* stream, const WowLoginString* string)
+static WowLoginResult wlm_write_string(WowLoginWriter* stream, const char* string)
 {
-    const size_t index = WLM_CHECK_LENGTH(1 + string->length);
+    const size_t length = strlen(string);
+    const size_t index = WLM_CHECK_LENGTH(1 + length);
 
-    stream->destination[index] = string->length;
-    memcpy(&stream->destination[index + 1], string->string, string->length);
+    stream->destination[index] = (uint8_t)length;
+    memcpy(&stream->destination[index + 1], string, length);
 
     return WLM_RESULT_SUCCESS;
 }
 
-#define WRITE_STRING(variable) WLM_CHECK_RETURN_CODE(wlm_write_string(writer, &variable))
+#define WRITE_STRING(variable) WLM_CHECK_RETURN_CODE(wlm_write_string(writer, variable))
 
-static WowLoginResult wlm_read_cstring(WowLoginReader* stream, WowLoginString* string)
+static WowLoginResult wlm_read_cstring(WowLoginReader* stream, char** string)
 {
     const unsigned char* const start = &stream->source[stream->index];
+    size_t length = 1;
     size_t index = WLM_CHECK_LENGTH(1);
-    string->length = 0;
 
     while (stream->source[index] != '\0')
     {
         index = WLM_CHECK_LENGTH(1);
-        string->length++;
+        length++;
     }
 
-    string->string = malloc(string->length + 1);
+    *string = malloc(length);
+    if (*string == NULL)
+    {
+        return WLM_RESULT_MALLOC_FAIL;
+    }
 
-    memcpy(string->string, start, string->length);
-    string->string[string->length] = '\0';
+    memcpy(*string, start, length);
 
     return WLM_RESULT_SUCCESS;
 }
 
 #define READ_CSTRING(variable) WLM_CHECK_RETURN_CODE(wlm_read_cstring(reader, &variable))
 
-static WowLoginResult wlm_write_cstring(WowLoginWriter* stream, const WowLoginString* string)
+static WowLoginResult wlm_write_cstring(WowLoginWriter* stream, const char* string)
 {
-    const size_t index = WLM_CHECK_LENGTH(1 + string->length);
+    const size_t length = strlen(string);
+    const size_t index = WLM_CHECK_LENGTH(length + 1);
 
-    memcpy(&stream->destination[index], string->string, string->length + 1);
+    memcpy(&stream->destination[index], string, length + 1);
 
     return WLM_RESULT_SUCCESS;
 }
 
-#define WRITE_CSTRING(variable) WLM_CHECK_RETURN_CODE(wlm_write_cstring(writer, &variable))
+#define WRITE_CSTRING(variable) WLM_CHECK_RETURN_CODE(wlm_write_cstring(writer, variable))
 
 static WowLoginResult wlm_read_float(WowLoginReader* stream, float* value)
 {
@@ -281,17 +293,16 @@ static WowLoginResult wlm_write_bool8(WowLoginWriter* stream, const bool value)
 
 #define WRITE_BOOL8(variable) WLM_CHECK_RETURN_CODE(wlm_write_bool8(writer, variable))
 
-static void wlm_free_string(WowLoginString* string)
+static void wlm_free_string(char** string)
 {
-    free(string->string);
+    free(*string);
 
-    string->string = NULL;
-    string->length = 0;
+    *string = NULL;
 }
 
 #define FREE_STRING(s) wlm_free_string(&s)
 
-#define STRING_SIZE(s) (s.length)
+#define STRING_SIZE(s) strlen(s)
 
 #define READ_ARRAY(variable, arrayLength, readAction) \
     do                                                \

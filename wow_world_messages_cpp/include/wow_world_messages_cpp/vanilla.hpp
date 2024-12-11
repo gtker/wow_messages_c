@@ -1783,7 +1783,7 @@ enum class CastFailureReason : uint8_t {
     TOO_MANY_OF_ITEM = 119,
     TOTEMS = 120,
     TRAINING_POINTS = 121,
-    TRY_AGAIN = 122,
+    TRY_CAST_AGAIN = 122,
     UNIT_NOT_BEHIND = 123,
     UNIT_NOT_INFRONT = 124,
     WRONG_PET_FOOD = 125,
@@ -3873,7 +3873,7 @@ enum class SpellCastResult : uint8_t {
     TOO_CLOSE = 118,
     TOO_MANY_OF_ITEM = 119,
     TRAINING_POINTS = 121,
-    TRY_AGAIN = 122,
+    TRY_CAST_AGAIN = 122,
     UNIT_NOT_BEHIND = 123,
     UNIT_NOT_INFRONT = 124,
     WRONG_PET_FOOD = 125,
@@ -5872,7 +5872,6 @@ struct BattlegroundPlayer {
     uint32_t honorable_kills;
     uint32_t deaths;
     uint32_t bonus_honor;
-    uint32_t amount_of_extra_fields;
     std::vector<uint32_t> fields;
 };
 
@@ -6104,7 +6103,6 @@ struct MovementBlock {
     uint32_t time_passed;
     uint32_t duration;
     uint32_t id;
-    uint32_t amount_of_nodes;
     std::vector<all::Vector3d> nodes;
     all::Vector3d final_node;
     all::Vector3d position;
@@ -6159,7 +6157,6 @@ struct Object {
     ObjectType object_type;
     vanilla::MovementBlock movement2;
     UpdateMask mask2;
-    uint32_t count;
     std::vector<uint64_t> guids;
 };
 
@@ -6394,7 +6391,6 @@ struct SMSG_CHAR_CREATE {
 };
 
 struct SMSG_CHAR_ENUM {
-    uint8_t amount_of_characters;
     std::vector<vanilla::Character> characters;
 
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
@@ -6721,16 +6717,13 @@ struct CMSG_WHO {
     std::string guild_name;
     uint32_t race_mask;
     uint32_t class_mask;
-    uint32_t amount_of_zones;
     std::vector<uint32_t> zones;
-    uint32_t amount_of_strings;
     std::vector<std::string> search_strings;
 
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_WHO {
-    uint32_t listed_players;
     uint32_t online_players;
     std::vector<vanilla::WhoPlayer> players;
 
@@ -6755,7 +6748,6 @@ struct CMSG_FRIEND_LIST {
 };
 
 struct SMSG_FRIEND_LIST {
-    uint8_t amount_of_friends;
     std::vector<vanilla::Friend> friends;
 
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
@@ -6781,7 +6773,6 @@ struct CMSG_DEL_FRIEND {
 };
 
 struct SMSG_IGNORE_LIST {
-    uint8_t amount_of_ignored;
     std::vector<uint64_t> ignored;
 
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
@@ -6883,7 +6874,6 @@ struct SMSG_GROUP_LIST {
 
     GroupType group_type;
     uint8_t flags;
-    uint32_t amount_of_members;
     std::vector<vanilla::GroupListMember> members;
     uint64_t leader;
     std::unique_ptr<GroupNotEmpty> group_not_empty;
@@ -6978,10 +6968,8 @@ struct CMSG_GUILD_ROSTER {
 };
 
 struct SMSG_GUILD_ROSTER {
-    uint32_t amount_of_members;
     std::string motd;
     std::string guild_info;
-    uint32_t amount_of_rights;
     std::vector<uint32_t> rights;
     std::vector<vanilla::GuildMember> members;
 
@@ -7030,7 +7018,6 @@ struct CMSG_GUILD_MOTD {
 
 struct SMSG_GUILD_EVENT {
     GuildEvent event;
-    uint8_t amount_of_events;
     std::vector<std::string> event_descriptions;
 
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
@@ -7103,7 +7090,6 @@ struct CMSG_CHANNEL_LIST {
 struct SMSG_CHANNEL_LIST {
     std::string channel_name;
     ChannelFlags channel_flags;
-    uint32_t amount_of_members;
     std::vector<vanilla::ChannelMember> members;
 
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
@@ -7198,7 +7184,6 @@ struct CMSG_CHANNEL_MODERATE {
 };
 
 struct SMSG_UPDATE_OBJECT {
-    uint32_t amount_of_objects;
     uint8_t has_transport;
     std::vector<vanilla::Object> objects;
 
@@ -7987,7 +7972,6 @@ struct SMSG_TRADE_STATUS_EXTENDED {
 };
 
 struct SMSG_INITIALIZE_FACTIONS {
-    uint32_t amount_of_factions;
     std::vector<vanilla::FactionInitializer> factions;
 
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
@@ -8000,7 +7984,6 @@ struct SMSG_SET_FACTION_VISIBLE {
 };
 
 struct SMSG_SET_FACTION_STANDING {
-    uint32_t amount_of_faction_standings;
     std::vector<vanilla::FactionStanding> faction_standings;
 
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
@@ -8037,9 +8020,7 @@ struct SMSG_ACTION_BUTTONS {
 
 struct SMSG_INITIAL_SPELLS {
     uint8_t unknown1;
-    uint16_t spell_count;
     std::vector<vanilla::InitialSpell> initial_spells;
-    uint16_t cooldown_count;
     std::vector<vanilla::CooldownSpell> cooldowns;
 
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
@@ -8102,9 +8083,7 @@ struct SMSG_SPELL_GO {
     uint64_t caster;
     uint32_t spell;
     CastFlags flags;
-    uint8_t amount_of_hits;
     std::vector<uint64_t> hits;
-    uint8_t amount_of_misses;
     std::vector<vanilla::SpellMiss> misses;
     vanilla::SpellCastTargets targets;
     uint32_t ammo_display_id;
@@ -8251,7 +8230,6 @@ struct SMSG_ATTACKERSTATEUPDATE {
     uint64_t attacker;
     uint64_t target;
     uint32_t total_damage;
-    uint8_t amount_of_damages;
     std::vector<vanilla::DamageInfo> damages;
     uint32_t damage_state;
     uint32_t unknown1;
@@ -8350,7 +8328,6 @@ struct SMSG_LOOT_RESPONSE {
     LootMethod loot_method;
     LootMethodError loot_error;
     uint32_t gold;
-    uint8_t amount_of_items;
     std::vector<vanilla::LootItem> items;
 
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
@@ -8515,9 +8492,7 @@ struct SMSG_PET_SPELLS {
         uint8_t unknown;
         PetEnabled pet_enabled;
         std::array<uint32_t, 10> action_bars;
-        uint8_t amount_of_spells;
         std::vector<uint32_t> spells;
-        uint8_t amount_of_cooldowns;
         std::vector<vanilla::PetSpellCooldown> cooldowns;
     };
 
@@ -8558,9 +8533,7 @@ struct CMSG_GOSSIP_SELECT_OPTION {
 struct SMSG_GOSSIP_MESSAGE {
     uint64_t guid;
     uint32_t title_text_id;
-    uint32_t amount_of_gossip_items;
     std::vector<vanilla::GossipItem> gossips;
-    uint32_t amount_of_quests;
     std::vector<vanilla::QuestItem> quests;
 
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
@@ -8609,7 +8582,6 @@ struct SMSG_QUESTGIVER_QUEST_LIST {
     std::string title;
     uint32_t emote_delay;
     uint32_t emote;
-    uint8_t amount_of_entries;
     std::vector<vanilla::QuestItem> quest_items;
 
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
@@ -8634,13 +8606,10 @@ struct SMSG_QUESTGIVER_QUEST_DETAILS {
     std::string details;
     std::string objectives;
     bool auto_finish;
-    uint32_t amount_of_choice_item_rewards;
     std::vector<vanilla::QuestItemReward> choice_item_rewards;
-    uint32_t amount_of_item_rewards;
     std::vector<vanilla::QuestItemReward> item_rewards;
     uint32_t money_reward;
     uint32_t reward_spell;
-    uint32_t amount_of_emotes;
     std::vector<vanilla::QuestDetailsEmote> emotes;
 
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
@@ -8669,7 +8638,6 @@ struct SMSG_QUESTGIVER_REQUEST_ITEMS {
     uint32_t emote;
     bool auto_finish;
     uint32_t required_money;
-    uint32_t amount_of_required_items;
     std::vector<vanilla::QuestItemRequirement> required_items;
     uint32_t unknown1;
     QuestCompletable completable;
@@ -8692,11 +8660,8 @@ struct SMSG_QUESTGIVER_OFFER_REWARD {
     std::string title;
     std::string offer_reward_text;
     bool auto_finish;
-    uint32_t amount_of_emotes;
     std::vector<vanilla::NpcTextUpdateEmote> emotes;
-    uint32_t amount_of_choice_item_rewards;
     std::vector<vanilla::QuestItemRequirement> choice_item_rewards;
-    uint32_t amount_of_item_rewards;
     std::vector<vanilla::QuestItemRequirement> item_rewards;
     uint32_t money_reward;
     uint32_t reward_spell;
@@ -8729,7 +8694,6 @@ struct SMSG_QUESTGIVER_QUEST_COMPLETE {
     uint32_t unknown;
     uint32_t experience_reward;
     uint32_t money_reward;
-    uint32_t amount_of_item_rewards;
     std::vector<vanilla::QuestItemReward> item_rewards;
 
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
@@ -8823,7 +8787,6 @@ struct CMSG_LIST_INVENTORY {
 
 struct SMSG_LIST_INVENTORY {
     uint64_t vendor;
-    uint8_t amount_of_items;
     std::vector<vanilla::ListInventoryItem> items;
 
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
@@ -8938,7 +8901,6 @@ struct CMSG_TRAINER_LIST {
 struct SMSG_TRAINER_LIST {
     uint64_t guid;
     uint32_t trainer_type;
-    uint32_t amount_of_spells;
     std::vector<vanilla::TrainerSpell> spells;
     std::string greeting;
 
@@ -9005,7 +8967,6 @@ struct CMSG_PETITION_SHOWLIST {
 
 struct SMSG_PETITION_SHOWLIST {
     uint64_t npc;
-    uint8_t amount_of_petitions;
     std::vector<vanilla::PetitionShowlist> petitions;
 
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
@@ -9044,7 +9005,6 @@ struct SMSG_PETITION_SHOW_SIGNATURES {
     uint64_t item;
     uint64_t owner;
     uint32_t petition;
-    uint8_t amount_of_signatures;
     std::vector<vanilla::PetitionSignature> signatures;
 
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
@@ -9406,7 +9366,6 @@ struct SMSG_PARTYKILLLOG {
 };
 
 struct SMSG_COMPRESSED_UPDATE_OBJECT {
-    uint32_t amount_of_objects;
     uint8_t has_transport;
     std::vector<vanilla::Object> objects;
 
@@ -9710,7 +9669,6 @@ struct CMSG_GET_MAIL_LIST {
 };
 
 struct SMSG_MAIL_LIST_RESULT {
-    uint8_t amount_of_mails;
     std::vector<vanilla::Mail> mails;
 
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
@@ -9726,7 +9684,6 @@ struct SMSG_BATTLEFIELD_LIST {
     uint64_t battlemaster;
     Map map;
     BattlegroundBracket bracket;
-    uint32_t number_of_battlegrounds;
     std::vector<uint32_t> battlegrounds;
 
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
@@ -9800,7 +9757,6 @@ struct SMSG_SPELLLOGMISS {
     uint32_t id;
     uint64_t caster;
     uint8_t unknown1;
-    uint32_t amount_of_targets;
     std::vector<vanilla::SpellLogMiss> targets;
 
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
@@ -9809,7 +9765,6 @@ struct SMSG_SPELLLOGMISS {
 struct SMSG_SPELLLOGEXECUTE {
     uint64_t caster;
     uint32_t spell;
-    uint32_t amount_of_effects;
     std::vector<vanilla::SpellLog> logs;
 
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
@@ -9819,7 +9774,6 @@ struct SMSG_PERIODICAURALOG {
     uint64_t target;
     uint64_t caster;
     uint32_t spell;
-    uint32_t amount_of_auras;
     std::vector<vanilla::AuraLog> auras;
 
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
@@ -9953,7 +9907,6 @@ struct SMSG_AUCTION_COMMAND_RESULT {
 };
 
 struct SMSG_AUCTION_LIST_RESULT {
-    uint32_t count;
     std::vector<vanilla::AuctionListItem> auctions;
     uint32_t total_amount_of_auctions;
 
@@ -9961,7 +9914,6 @@ struct SMSG_AUCTION_LIST_RESULT {
 };
 
 struct SMSG_AUCTION_OWNER_LIST_RESULT {
-    uint32_t count;
     std::vector<vanilla::AuctionListItem> auctions;
     uint32_t total_amount_of_auctions;
 
@@ -10021,14 +9973,12 @@ struct SMSG_SPELLORDAMAGE_IMMUNE {
 struct CMSG_AUCTION_LIST_BIDDER_ITEMS {
     uint64_t auctioneer;
     uint32_t start_from_page;
-    uint32_t amount_of_outbid_items;
     std::vector<uint32_t> outbid_item_ids;
 
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_AUCTION_BIDDER_LIST_RESULT {
-    uint32_t count;
     std::vector<vanilla::AuctionListItem> auctions;
     uint32_t total_amount_of_auctions;
 
@@ -10089,7 +10039,6 @@ struct MSG_LIST_STABLED_PETS_Client {
 
 struct MSG_LIST_STABLED_PETS_Server {
     uint64_t npc;
-    uint8_t amount_of_pets;
     uint8_t stable_slots;
     std::vector<vanilla::StabledPet> pets;
 
@@ -10163,7 +10112,6 @@ struct CMSG_FAR_SIGHT {
 struct SMSG_SPELLDISPELLOG {
     uint64_t victim;
     uint64_t caster;
-    uint32_t amount_of_spells;
     std::vector<uint32_t> spells;
 
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
@@ -10388,14 +10336,12 @@ struct CMSG_LOOT_MASTER_GIVE {
 };
 
 struct SMSG_LOOT_MASTER_LIST {
-    uint8_t amount_of_players;
     std::vector<uint64_t> guids;
 
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_SET_FORCED_REACTIONS {
-    uint32_t amount_of_reactions;
     std::vector<vanilla::ForcedReaction> reactions;
 
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
@@ -10556,7 +10502,6 @@ struct MSG_PETITION_RENAME {
 struct SMSG_INIT_WORLD_STATES {
     Map map;
     Area area;
-    uint16_t amount_of_states;
     std::vector<vanilla::WorldState> states;
 
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
@@ -10624,7 +10569,6 @@ struct SMSG_INSTANCE_SAVE_CREATED {
 };
 
 struct SMSG_RAID_INSTANCE_INFO {
-    uint32_t amount_of_raid_infos;
     std::vector<vanilla::RaidInfo> raid_infos;
 
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
@@ -10792,7 +10736,6 @@ struct MSG_PVP_LOG_DATA_Client {
 struct MSG_PVP_LOG_DATA_Server {
     BattlegroundEndStatus status;
     BattlegroundWinner winner;
-    uint32_t amount_of_players;
     std::vector<vanilla::BattlegroundPlayer> players;
 
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
@@ -10849,9 +10792,7 @@ struct MSG_BATTLEGROUND_PLAYER_POSITIONS_Client {
 };
 
 struct MSG_BATTLEGROUND_PLAYER_POSITIONS_Server {
-    uint32_t amount_of_teammates;
     std::vector<vanilla::BattlegroundPlayerPosition> teammates;
-    uint8_t amount_of_carriers;
     std::vector<vanilla::BattlegroundPlayerPosition> carriers;
 
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
@@ -11091,7 +11032,6 @@ struct SMSG_SPLINE_MOVE_SET_WALK_MODE {
 struct CMSG_ACTIVATETAXIEXPRESS {
     uint64_t guid;
     uint32_t total_cost;
-    uint32_t node_count;
     std::vector<uint32_t> nodes;
 
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
@@ -11233,14 +11173,12 @@ struct SMSG_SPELLINSTAKILLLOG {
 struct SMSG_SPELL_UPDATE_CHAIN_TARGETS {
     uint64_t caster;
     uint32_t spell;
-    uint32_t amount_of_targets;
     std::vector<uint64_t> targets;
 
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
 struct SMSG_EXPECTED_SPAM_RECORDS {
-    uint32_t amount_of_records;
     std::vector<std::string> records;
 
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
@@ -12800,6 +12738,930 @@ struct ClientOpcode {
         if (opcode == Opcode::CMSG_GMSURVEY_SUBMIT) {
             this->CMSG_GMSURVEY_SUBMIT = std::move(other.CMSG_GMSURVEY_SUBMIT);
         }
+    }
+
+    ClientOpcode operator=(ClientOpcode&& other) noexcept {
+        this->opcode = other.opcode;
+        other.opcode = Opcode::NONE;
+        if (opcode == Opcode::CMSG_BOOTME) {
+            this->CMSG_BOOTME = std::move(other.CMSG_BOOTME);
+        }
+        if (opcode == Opcode::CMSG_DBLOOKUP) {
+            this->CMSG_DBLOOKUP = std::move(other.CMSG_DBLOOKUP);
+        }
+        if (opcode == Opcode::CMSG_WORLD_TELEPORT) {
+            this->CMSG_WORLD_TELEPORT = std::move(other.CMSG_WORLD_TELEPORT);
+        }
+        if (opcode == Opcode::CMSG_TELEPORT_TO_UNIT) {
+            this->CMSG_TELEPORT_TO_UNIT = std::move(other.CMSG_TELEPORT_TO_UNIT);
+        }
+        if (opcode == Opcode::CMSG_CHAR_CREATE) {
+            this->CMSG_CHAR_CREATE = std::move(other.CMSG_CHAR_CREATE);
+        }
+        if (opcode == Opcode::CMSG_CHAR_ENUM) {
+            this->CMSG_CHAR_ENUM = std::move(other.CMSG_CHAR_ENUM);
+        }
+        if (opcode == Opcode::CMSG_CHAR_DELETE) {
+            this->CMSG_CHAR_DELETE = std::move(other.CMSG_CHAR_DELETE);
+        }
+        if (opcode == Opcode::CMSG_PLAYER_LOGIN) {
+            this->CMSG_PLAYER_LOGIN = std::move(other.CMSG_PLAYER_LOGIN);
+        }
+        if (opcode == Opcode::CMSG_PLAYER_LOGOUT) {
+            this->CMSG_PLAYER_LOGOUT = std::move(other.CMSG_PLAYER_LOGOUT);
+        }
+        if (opcode == Opcode::CMSG_LOGOUT_REQUEST) {
+            this->CMSG_LOGOUT_REQUEST = std::move(other.CMSG_LOGOUT_REQUEST);
+        }
+        if (opcode == Opcode::CMSG_LOGOUT_CANCEL) {
+            this->CMSG_LOGOUT_CANCEL = std::move(other.CMSG_LOGOUT_CANCEL);
+        }
+        if (opcode == Opcode::CMSG_NAME_QUERY) {
+            this->CMSG_NAME_QUERY = std::move(other.CMSG_NAME_QUERY);
+        }
+        if (opcode == Opcode::CMSG_PET_NAME_QUERY) {
+            this->CMSG_PET_NAME_QUERY = std::move(other.CMSG_PET_NAME_QUERY);
+        }
+        if (opcode == Opcode::CMSG_GUILD_QUERY) {
+            this->CMSG_GUILD_QUERY = std::move(other.CMSG_GUILD_QUERY);
+        }
+        if (opcode == Opcode::CMSG_ITEM_QUERY_SINGLE) {
+            this->CMSG_ITEM_QUERY_SINGLE = std::move(other.CMSG_ITEM_QUERY_SINGLE);
+        }
+        if (opcode == Opcode::CMSG_PAGE_TEXT_QUERY) {
+            this->CMSG_PAGE_TEXT_QUERY = std::move(other.CMSG_PAGE_TEXT_QUERY);
+        }
+        if (opcode == Opcode::CMSG_QUEST_QUERY) {
+            this->CMSG_QUEST_QUERY = std::move(other.CMSG_QUEST_QUERY);
+        }
+        if (opcode == Opcode::CMSG_GAMEOBJECT_QUERY) {
+            this->CMSG_GAMEOBJECT_QUERY = std::move(other.CMSG_GAMEOBJECT_QUERY);
+        }
+        if (opcode == Opcode::CMSG_CREATURE_QUERY) {
+            this->CMSG_CREATURE_QUERY = std::move(other.CMSG_CREATURE_QUERY);
+        }
+        if (opcode == Opcode::CMSG_WHO) {
+            this->CMSG_WHO = std::move(other.CMSG_WHO);
+        }
+        if (opcode == Opcode::CMSG_WHOIS) {
+            this->CMSG_WHOIS = std::move(other.CMSG_WHOIS);
+        }
+        if (opcode == Opcode::CMSG_FRIEND_LIST) {
+            this->CMSG_FRIEND_LIST = std::move(other.CMSG_FRIEND_LIST);
+        }
+        if (opcode == Opcode::CMSG_ADD_FRIEND) {
+            this->CMSG_ADD_FRIEND = std::move(other.CMSG_ADD_FRIEND);
+        }
+        if (opcode == Opcode::CMSG_DEL_FRIEND) {
+            this->CMSG_DEL_FRIEND = std::move(other.CMSG_DEL_FRIEND);
+        }
+        if (opcode == Opcode::CMSG_ADD_IGNORE) {
+            this->CMSG_ADD_IGNORE = std::move(other.CMSG_ADD_IGNORE);
+        }
+        if (opcode == Opcode::CMSG_DEL_IGNORE) {
+            this->CMSG_DEL_IGNORE = std::move(other.CMSG_DEL_IGNORE);
+        }
+        if (opcode == Opcode::CMSG_GROUP_INVITE) {
+            this->CMSG_GROUP_INVITE = std::move(other.CMSG_GROUP_INVITE);
+        }
+        if (opcode == Opcode::CMSG_GROUP_ACCEPT) {
+            this->CMSG_GROUP_ACCEPT = std::move(other.CMSG_GROUP_ACCEPT);
+        }
+        if (opcode == Opcode::CMSG_GROUP_DECLINE) {
+            this->CMSG_GROUP_DECLINE = std::move(other.CMSG_GROUP_DECLINE);
+        }
+        if (opcode == Opcode::CMSG_GROUP_UNINVITE) {
+            this->CMSG_GROUP_UNINVITE = std::move(other.CMSG_GROUP_UNINVITE);
+        }
+        if (opcode == Opcode::CMSG_GROUP_UNINVITE_GUID) {
+            this->CMSG_GROUP_UNINVITE_GUID = std::move(other.CMSG_GROUP_UNINVITE_GUID);
+        }
+        if (opcode == Opcode::CMSG_GROUP_SET_LEADER) {
+            this->CMSG_GROUP_SET_LEADER = std::move(other.CMSG_GROUP_SET_LEADER);
+        }
+        if (opcode == Opcode::CMSG_LOOT_METHOD) {
+            this->CMSG_LOOT_METHOD = std::move(other.CMSG_LOOT_METHOD);
+        }
+        if (opcode == Opcode::CMSG_GROUP_DISBAND) {
+            this->CMSG_GROUP_DISBAND = std::move(other.CMSG_GROUP_DISBAND);
+        }
+        if (opcode == Opcode::CMSG_GUILD_CREATE) {
+            this->CMSG_GUILD_CREATE = std::move(other.CMSG_GUILD_CREATE);
+        }
+        if (opcode == Opcode::CMSG_GUILD_INVITE) {
+            this->CMSG_GUILD_INVITE = std::move(other.CMSG_GUILD_INVITE);
+        }
+        if (opcode == Opcode::CMSG_GUILD_ACCEPT) {
+            this->CMSG_GUILD_ACCEPT = std::move(other.CMSG_GUILD_ACCEPT);
+        }
+        if (opcode == Opcode::CMSG_GUILD_DECLINE) {
+            this->CMSG_GUILD_DECLINE = std::move(other.CMSG_GUILD_DECLINE);
+        }
+        if (opcode == Opcode::CMSG_GUILD_INFO) {
+            this->CMSG_GUILD_INFO = std::move(other.CMSG_GUILD_INFO);
+        }
+        if (opcode == Opcode::CMSG_GUILD_ROSTER) {
+            this->CMSG_GUILD_ROSTER = std::move(other.CMSG_GUILD_ROSTER);
+        }
+        if (opcode == Opcode::CMSG_GUILD_PROMOTE) {
+            this->CMSG_GUILD_PROMOTE = std::move(other.CMSG_GUILD_PROMOTE);
+        }
+        if (opcode == Opcode::CMSG_GUILD_DEMOTE) {
+            this->CMSG_GUILD_DEMOTE = std::move(other.CMSG_GUILD_DEMOTE);
+        }
+        if (opcode == Opcode::CMSG_GUILD_LEAVE) {
+            this->CMSG_GUILD_LEAVE = std::move(other.CMSG_GUILD_LEAVE);
+        }
+        if (opcode == Opcode::CMSG_GUILD_REMOVE) {
+            this->CMSG_GUILD_REMOVE = std::move(other.CMSG_GUILD_REMOVE);
+        }
+        if (opcode == Opcode::CMSG_GUILD_DISBAND) {
+            this->CMSG_GUILD_DISBAND = std::move(other.CMSG_GUILD_DISBAND);
+        }
+        if (opcode == Opcode::CMSG_GUILD_LEADER) {
+            this->CMSG_GUILD_LEADER = std::move(other.CMSG_GUILD_LEADER);
+        }
+        if (opcode == Opcode::CMSG_GUILD_MOTD) {
+            this->CMSG_GUILD_MOTD = std::move(other.CMSG_GUILD_MOTD);
+        }
+        if (opcode == Opcode::CMSG_MESSAGECHAT) {
+            this->CMSG_MESSAGECHAT = std::move(other.CMSG_MESSAGECHAT);
+        }
+        if (opcode == Opcode::CMSG_JOIN_CHANNEL) {
+            this->CMSG_JOIN_CHANNEL = std::move(other.CMSG_JOIN_CHANNEL);
+        }
+        if (opcode == Opcode::CMSG_LEAVE_CHANNEL) {
+            this->CMSG_LEAVE_CHANNEL = std::move(other.CMSG_LEAVE_CHANNEL);
+        }
+        if (opcode == Opcode::CMSG_CHANNEL_LIST) {
+            this->CMSG_CHANNEL_LIST = std::move(other.CMSG_CHANNEL_LIST);
+        }
+        if (opcode == Opcode::CMSG_CHANNEL_PASSWORD) {
+            this->CMSG_CHANNEL_PASSWORD = std::move(other.CMSG_CHANNEL_PASSWORD);
+        }
+        if (opcode == Opcode::CMSG_CHANNEL_SET_OWNER) {
+            this->CMSG_CHANNEL_SET_OWNER = std::move(other.CMSG_CHANNEL_SET_OWNER);
+        }
+        if (opcode == Opcode::CMSG_CHANNEL_OWNER) {
+            this->CMSG_CHANNEL_OWNER = std::move(other.CMSG_CHANNEL_OWNER);
+        }
+        if (opcode == Opcode::CMSG_CHANNEL_MODERATOR) {
+            this->CMSG_CHANNEL_MODERATOR = std::move(other.CMSG_CHANNEL_MODERATOR);
+        }
+        if (opcode == Opcode::CMSG_CHANNEL_UNMODERATOR) {
+            this->CMSG_CHANNEL_UNMODERATOR = std::move(other.CMSG_CHANNEL_UNMODERATOR);
+        }
+        if (opcode == Opcode::CMSG_CHANNEL_MUTE) {
+            this->CMSG_CHANNEL_MUTE = std::move(other.CMSG_CHANNEL_MUTE);
+        }
+        if (opcode == Opcode::CMSG_CHANNEL_UNMUTE) {
+            this->CMSG_CHANNEL_UNMUTE = std::move(other.CMSG_CHANNEL_UNMUTE);
+        }
+        if (opcode == Opcode::CMSG_CHANNEL_INVITE) {
+            this->CMSG_CHANNEL_INVITE = std::move(other.CMSG_CHANNEL_INVITE);
+        }
+        if (opcode == Opcode::CMSG_CHANNEL_KICK) {
+            this->CMSG_CHANNEL_KICK = std::move(other.CMSG_CHANNEL_KICK);
+        }
+        if (opcode == Opcode::CMSG_CHANNEL_BAN) {
+            this->CMSG_CHANNEL_BAN = std::move(other.CMSG_CHANNEL_BAN);
+        }
+        if (opcode == Opcode::CMSG_CHANNEL_UNBAN) {
+            this->CMSG_CHANNEL_UNBAN = std::move(other.CMSG_CHANNEL_UNBAN);
+        }
+        if (opcode == Opcode::CMSG_CHANNEL_ANNOUNCEMENTS) {
+            this->CMSG_CHANNEL_ANNOUNCEMENTS = std::move(other.CMSG_CHANNEL_ANNOUNCEMENTS);
+        }
+        if (opcode == Opcode::CMSG_CHANNEL_MODERATE) {
+            this->CMSG_CHANNEL_MODERATE = std::move(other.CMSG_CHANNEL_MODERATE);
+        }
+        if (opcode == Opcode::CMSG_USE_ITEM) {
+            this->CMSG_USE_ITEM = std::move(other.CMSG_USE_ITEM);
+        }
+        if (opcode == Opcode::CMSG_OPEN_ITEM) {
+            this->CMSG_OPEN_ITEM = std::move(other.CMSG_OPEN_ITEM);
+        }
+        if (opcode == Opcode::CMSG_READ_ITEM) {
+            this->CMSG_READ_ITEM = std::move(other.CMSG_READ_ITEM);
+        }
+        if (opcode == Opcode::CMSG_GAMEOBJ_USE) {
+            this->CMSG_GAMEOBJ_USE = std::move(other.CMSG_GAMEOBJ_USE);
+        }
+        if (opcode == Opcode::CMSG_AREATRIGGER) {
+            this->CMSG_AREATRIGGER = std::move(other.CMSG_AREATRIGGER);
+        }
+        if (opcode == Opcode::MSG_MOVE_START_FORWARD) {
+            this->MSG_MOVE_START_FORWARD = std::move(other.MSG_MOVE_START_FORWARD);
+        }
+        if (opcode == Opcode::MSG_MOVE_START_BACKWARD) {
+            this->MSG_MOVE_START_BACKWARD = std::move(other.MSG_MOVE_START_BACKWARD);
+        }
+        if (opcode == Opcode::MSG_MOVE_STOP) {
+            this->MSG_MOVE_STOP = std::move(other.MSG_MOVE_STOP);
+        }
+        if (opcode == Opcode::MSG_MOVE_START_STRAFE_LEFT) {
+            this->MSG_MOVE_START_STRAFE_LEFT = std::move(other.MSG_MOVE_START_STRAFE_LEFT);
+        }
+        if (opcode == Opcode::MSG_MOVE_START_STRAFE_RIGHT) {
+            this->MSG_MOVE_START_STRAFE_RIGHT = std::move(other.MSG_MOVE_START_STRAFE_RIGHT);
+        }
+        if (opcode == Opcode::MSG_MOVE_STOP_STRAFE) {
+            this->MSG_MOVE_STOP_STRAFE = std::move(other.MSG_MOVE_STOP_STRAFE);
+        }
+        if (opcode == Opcode::MSG_MOVE_JUMP) {
+            this->MSG_MOVE_JUMP = std::move(other.MSG_MOVE_JUMP);
+        }
+        if (opcode == Opcode::MSG_MOVE_START_TURN_LEFT) {
+            this->MSG_MOVE_START_TURN_LEFT = std::move(other.MSG_MOVE_START_TURN_LEFT);
+        }
+        if (opcode == Opcode::MSG_MOVE_START_TURN_RIGHT) {
+            this->MSG_MOVE_START_TURN_RIGHT = std::move(other.MSG_MOVE_START_TURN_RIGHT);
+        }
+        if (opcode == Opcode::MSG_MOVE_STOP_TURN) {
+            this->MSG_MOVE_STOP_TURN = std::move(other.MSG_MOVE_STOP_TURN);
+        }
+        if (opcode == Opcode::MSG_MOVE_START_PITCH_UP) {
+            this->MSG_MOVE_START_PITCH_UP = std::move(other.MSG_MOVE_START_PITCH_UP);
+        }
+        if (opcode == Opcode::MSG_MOVE_START_PITCH_DOWN) {
+            this->MSG_MOVE_START_PITCH_DOWN = std::move(other.MSG_MOVE_START_PITCH_DOWN);
+        }
+        if (opcode == Opcode::MSG_MOVE_STOP_PITCH) {
+            this->MSG_MOVE_STOP_PITCH = std::move(other.MSG_MOVE_STOP_PITCH);
+        }
+        if (opcode == Opcode::MSG_MOVE_SET_RUN_MODE) {
+            this->MSG_MOVE_SET_RUN_MODE = std::move(other.MSG_MOVE_SET_RUN_MODE);
+        }
+        if (opcode == Opcode::MSG_MOVE_SET_WALK_MODE) {
+            this->MSG_MOVE_SET_WALK_MODE = std::move(other.MSG_MOVE_SET_WALK_MODE);
+        }
+        if (opcode == Opcode::MSG_MOVE_TELEPORT_ACK) {
+            this->MSG_MOVE_TELEPORT_ACK = std::move(other.MSG_MOVE_TELEPORT_ACK);
+        }
+        if (opcode == Opcode::MSG_MOVE_FALL_LAND) {
+            this->MSG_MOVE_FALL_LAND = std::move(other.MSG_MOVE_FALL_LAND);
+        }
+        if (opcode == Opcode::MSG_MOVE_START_SWIM) {
+            this->MSG_MOVE_START_SWIM = std::move(other.MSG_MOVE_START_SWIM);
+        }
+        if (opcode == Opcode::MSG_MOVE_STOP_SWIM) {
+            this->MSG_MOVE_STOP_SWIM = std::move(other.MSG_MOVE_STOP_SWIM);
+        }
+        if (opcode == Opcode::MSG_MOVE_SET_FACING) {
+            this->MSG_MOVE_SET_FACING = std::move(other.MSG_MOVE_SET_FACING);
+        }
+        if (opcode == Opcode::MSG_MOVE_SET_PITCH) {
+            this->MSG_MOVE_SET_PITCH = std::move(other.MSG_MOVE_SET_PITCH);
+        }
+        if (opcode == Opcode::MSG_MOVE_WORLDPORT_ACK) {
+            this->MSG_MOVE_WORLDPORT_ACK = std::move(other.MSG_MOVE_WORLDPORT_ACK);
+        }
+        if (opcode == Opcode::CMSG_MOVE_SET_RAW_POSITION) {
+            this->CMSG_MOVE_SET_RAW_POSITION = std::move(other.CMSG_MOVE_SET_RAW_POSITION);
+        }
+        if (opcode == Opcode::CMSG_FORCE_RUN_SPEED_CHANGE_ACK) {
+            this->CMSG_FORCE_RUN_SPEED_CHANGE_ACK = std::move(other.CMSG_FORCE_RUN_SPEED_CHANGE_ACK);
+        }
+        if (opcode == Opcode::CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK) {
+            this->CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK = std::move(other.CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK);
+        }
+        if (opcode == Opcode::CMSG_FORCE_SWIM_SPEED_CHANGE_ACK) {
+            this->CMSG_FORCE_SWIM_SPEED_CHANGE_ACK = std::move(other.CMSG_FORCE_SWIM_SPEED_CHANGE_ACK);
+        }
+        if (opcode == Opcode::CMSG_FORCE_MOVE_ROOT_ACK) {
+            this->CMSG_FORCE_MOVE_ROOT_ACK = std::move(other.CMSG_FORCE_MOVE_ROOT_ACK);
+        }
+        if (opcode == Opcode::CMSG_FORCE_MOVE_UNROOT_ACK) {
+            this->CMSG_FORCE_MOVE_UNROOT_ACK = std::move(other.CMSG_FORCE_MOVE_UNROOT_ACK);
+        }
+        if (opcode == Opcode::MSG_MOVE_HEARTBEAT) {
+            this->MSG_MOVE_HEARTBEAT = std::move(other.MSG_MOVE_HEARTBEAT);
+        }
+        if (opcode == Opcode::CMSG_MOVE_KNOCK_BACK_ACK) {
+            this->CMSG_MOVE_KNOCK_BACK_ACK = std::move(other.CMSG_MOVE_KNOCK_BACK_ACK);
+        }
+        if (opcode == Opcode::CMSG_MOVE_HOVER_ACK) {
+            this->CMSG_MOVE_HOVER_ACK = std::move(other.CMSG_MOVE_HOVER_ACK);
+        }
+        if (opcode == Opcode::CMSG_NEXT_CINEMATIC_CAMERA) {
+            this->CMSG_NEXT_CINEMATIC_CAMERA = std::move(other.CMSG_NEXT_CINEMATIC_CAMERA);
+        }
+        if (opcode == Opcode::CMSG_COMPLETE_CINEMATIC) {
+            this->CMSG_COMPLETE_CINEMATIC = std::move(other.CMSG_COMPLETE_CINEMATIC);
+        }
+        if (opcode == Opcode::CMSG_TUTORIAL_FLAG) {
+            this->CMSG_TUTORIAL_FLAG = std::move(other.CMSG_TUTORIAL_FLAG);
+        }
+        if (opcode == Opcode::CMSG_TUTORIAL_CLEAR) {
+            this->CMSG_TUTORIAL_CLEAR = std::move(other.CMSG_TUTORIAL_CLEAR);
+        }
+        if (opcode == Opcode::CMSG_TUTORIAL_RESET) {
+            this->CMSG_TUTORIAL_RESET = std::move(other.CMSG_TUTORIAL_RESET);
+        }
+        if (opcode == Opcode::CMSG_STANDSTATECHANGE) {
+            this->CMSG_STANDSTATECHANGE = std::move(other.CMSG_STANDSTATECHANGE);
+        }
+        if (opcode == Opcode::CMSG_EMOTE) {
+            this->CMSG_EMOTE = std::move(other.CMSG_EMOTE);
+        }
+        if (opcode == Opcode::CMSG_TEXT_EMOTE) {
+            this->CMSG_TEXT_EMOTE = std::move(other.CMSG_TEXT_EMOTE);
+        }
+        if (opcode == Opcode::CMSG_AUTOSTORE_LOOT_ITEM) {
+            this->CMSG_AUTOSTORE_LOOT_ITEM = std::move(other.CMSG_AUTOSTORE_LOOT_ITEM);
+        }
+        if (opcode == Opcode::CMSG_AUTOEQUIP_ITEM) {
+            this->CMSG_AUTOEQUIP_ITEM = std::move(other.CMSG_AUTOEQUIP_ITEM);
+        }
+        if (opcode == Opcode::CMSG_AUTOSTORE_BAG_ITEM) {
+            this->CMSG_AUTOSTORE_BAG_ITEM = std::move(other.CMSG_AUTOSTORE_BAG_ITEM);
+        }
+        if (opcode == Opcode::CMSG_SWAP_ITEM) {
+            this->CMSG_SWAP_ITEM = std::move(other.CMSG_SWAP_ITEM);
+        }
+        if (opcode == Opcode::CMSG_SWAP_INV_ITEM) {
+            this->CMSG_SWAP_INV_ITEM = std::move(other.CMSG_SWAP_INV_ITEM);
+        }
+        if (opcode == Opcode::CMSG_SPLIT_ITEM) {
+            this->CMSG_SPLIT_ITEM = std::move(other.CMSG_SPLIT_ITEM);
+        }
+        if (opcode == Opcode::CMSG_AUTOEQUIP_ITEM_SLOT) {
+            this->CMSG_AUTOEQUIP_ITEM_SLOT = std::move(other.CMSG_AUTOEQUIP_ITEM_SLOT);
+        }
+        if (opcode == Opcode::CMSG_DESTROYITEM) {
+            this->CMSG_DESTROYITEM = std::move(other.CMSG_DESTROYITEM);
+        }
+        if (opcode == Opcode::CMSG_INSPECT) {
+            this->CMSG_INSPECT = std::move(other.CMSG_INSPECT);
+        }
+        if (opcode == Opcode::CMSG_INITIATE_TRADE) {
+            this->CMSG_INITIATE_TRADE = std::move(other.CMSG_INITIATE_TRADE);
+        }
+        if (opcode == Opcode::CMSG_BEGIN_TRADE) {
+            this->CMSG_BEGIN_TRADE = std::move(other.CMSG_BEGIN_TRADE);
+        }
+        if (opcode == Opcode::CMSG_BUSY_TRADE) {
+            this->CMSG_BUSY_TRADE = std::move(other.CMSG_BUSY_TRADE);
+        }
+        if (opcode == Opcode::CMSG_IGNORE_TRADE) {
+            this->CMSG_IGNORE_TRADE = std::move(other.CMSG_IGNORE_TRADE);
+        }
+        if (opcode == Opcode::CMSG_ACCEPT_TRADE) {
+            this->CMSG_ACCEPT_TRADE = std::move(other.CMSG_ACCEPT_TRADE);
+        }
+        if (opcode == Opcode::CMSG_UNACCEPT_TRADE) {
+            this->CMSG_UNACCEPT_TRADE = std::move(other.CMSG_UNACCEPT_TRADE);
+        }
+        if (opcode == Opcode::CMSG_CANCEL_TRADE) {
+            this->CMSG_CANCEL_TRADE = std::move(other.CMSG_CANCEL_TRADE);
+        }
+        if (opcode == Opcode::CMSG_SET_TRADE_ITEM) {
+            this->CMSG_SET_TRADE_ITEM = std::move(other.CMSG_SET_TRADE_ITEM);
+        }
+        if (opcode == Opcode::CMSG_CLEAR_TRADE_ITEM) {
+            this->CMSG_CLEAR_TRADE_ITEM = std::move(other.CMSG_CLEAR_TRADE_ITEM);
+        }
+        if (opcode == Opcode::CMSG_SET_TRADE_GOLD) {
+            this->CMSG_SET_TRADE_GOLD = std::move(other.CMSG_SET_TRADE_GOLD);
+        }
+        if (opcode == Opcode::CMSG_SET_FACTION_ATWAR) {
+            this->CMSG_SET_FACTION_ATWAR = std::move(other.CMSG_SET_FACTION_ATWAR);
+        }
+        if (opcode == Opcode::CMSG_SET_ACTION_BUTTON) {
+            this->CMSG_SET_ACTION_BUTTON = std::move(other.CMSG_SET_ACTION_BUTTON);
+        }
+        if (opcode == Opcode::CMSG_CAST_SPELL) {
+            this->CMSG_CAST_SPELL = std::move(other.CMSG_CAST_SPELL);
+        }
+        if (opcode == Opcode::CMSG_CANCEL_CAST) {
+            this->CMSG_CANCEL_CAST = std::move(other.CMSG_CANCEL_CAST);
+        }
+        if (opcode == Opcode::CMSG_CANCEL_AURA) {
+            this->CMSG_CANCEL_AURA = std::move(other.CMSG_CANCEL_AURA);
+        }
+        if (opcode == Opcode::CMSG_CANCEL_CHANNELLING) {
+            this->CMSG_CANCEL_CHANNELLING = std::move(other.CMSG_CANCEL_CHANNELLING);
+        }
+        if (opcode == Opcode::CMSG_SET_SELECTION) {
+            this->CMSG_SET_SELECTION = std::move(other.CMSG_SET_SELECTION);
+        }
+        if (opcode == Opcode::CMSG_SET_TARGET_OBSOLETE) {
+            this->CMSG_SET_TARGET_OBSOLETE = std::move(other.CMSG_SET_TARGET_OBSOLETE);
+        }
+        if (opcode == Opcode::CMSG_ATTACKSWING) {
+            this->CMSG_ATTACKSWING = std::move(other.CMSG_ATTACKSWING);
+        }
+        if (opcode == Opcode::CMSG_ATTACKSTOP) {
+            this->CMSG_ATTACKSTOP = std::move(other.CMSG_ATTACKSTOP);
+        }
+        if (opcode == Opcode::CMSG_REPOP_REQUEST) {
+            this->CMSG_REPOP_REQUEST = std::move(other.CMSG_REPOP_REQUEST);
+        }
+        if (opcode == Opcode::CMSG_RESURRECT_RESPONSE) {
+            this->CMSG_RESURRECT_RESPONSE = std::move(other.CMSG_RESURRECT_RESPONSE);
+        }
+        if (opcode == Opcode::CMSG_LOOT) {
+            this->CMSG_LOOT = std::move(other.CMSG_LOOT);
+        }
+        if (opcode == Opcode::CMSG_LOOT_MONEY) {
+            this->CMSG_LOOT_MONEY = std::move(other.CMSG_LOOT_MONEY);
+        }
+        if (opcode == Opcode::CMSG_LOOT_RELEASE) {
+            this->CMSG_LOOT_RELEASE = std::move(other.CMSG_LOOT_RELEASE);
+        }
+        if (opcode == Opcode::CMSG_DUEL_ACCEPTED) {
+            this->CMSG_DUEL_ACCEPTED = std::move(other.CMSG_DUEL_ACCEPTED);
+        }
+        if (opcode == Opcode::CMSG_DUEL_CANCELLED) {
+            this->CMSG_DUEL_CANCELLED = std::move(other.CMSG_DUEL_CANCELLED);
+        }
+        if (opcode == Opcode::CMSG_MOUNTSPECIAL_ANIM) {
+            this->CMSG_MOUNTSPECIAL_ANIM = std::move(other.CMSG_MOUNTSPECIAL_ANIM);
+        }
+        if (opcode == Opcode::CMSG_PET_SET_ACTION) {
+            this->CMSG_PET_SET_ACTION = std::move(other.CMSG_PET_SET_ACTION);
+        }
+        if (opcode == Opcode::CMSG_PET_ACTION) {
+            this->CMSG_PET_ACTION = std::move(other.CMSG_PET_ACTION);
+        }
+        if (opcode == Opcode::CMSG_PET_ABANDON) {
+            this->CMSG_PET_ABANDON = std::move(other.CMSG_PET_ABANDON);
+        }
+        if (opcode == Opcode::CMSG_PET_RENAME) {
+            this->CMSG_PET_RENAME = std::move(other.CMSG_PET_RENAME);
+        }
+        if (opcode == Opcode::CMSG_GOSSIP_HELLO) {
+            this->CMSG_GOSSIP_HELLO = std::move(other.CMSG_GOSSIP_HELLO);
+        }
+        if (opcode == Opcode::CMSG_GOSSIP_SELECT_OPTION) {
+            this->CMSG_GOSSIP_SELECT_OPTION = std::move(other.CMSG_GOSSIP_SELECT_OPTION);
+        }
+        if (opcode == Opcode::CMSG_NPC_TEXT_QUERY) {
+            this->CMSG_NPC_TEXT_QUERY = std::move(other.CMSG_NPC_TEXT_QUERY);
+        }
+        if (opcode == Opcode::CMSG_QUESTGIVER_STATUS_QUERY) {
+            this->CMSG_QUESTGIVER_STATUS_QUERY = std::move(other.CMSG_QUESTGIVER_STATUS_QUERY);
+        }
+        if (opcode == Opcode::CMSG_QUESTGIVER_HELLO) {
+            this->CMSG_QUESTGIVER_HELLO = std::move(other.CMSG_QUESTGIVER_HELLO);
+        }
+        if (opcode == Opcode::CMSG_QUESTGIVER_QUERY_QUEST) {
+            this->CMSG_QUESTGIVER_QUERY_QUEST = std::move(other.CMSG_QUESTGIVER_QUERY_QUEST);
+        }
+        if (opcode == Opcode::CMSG_QUESTGIVER_QUEST_AUTOLAUNCH) {
+            this->CMSG_QUESTGIVER_QUEST_AUTOLAUNCH = std::move(other.CMSG_QUESTGIVER_QUEST_AUTOLAUNCH);
+        }
+        if (opcode == Opcode::CMSG_QUESTGIVER_ACCEPT_QUEST) {
+            this->CMSG_QUESTGIVER_ACCEPT_QUEST = std::move(other.CMSG_QUESTGIVER_ACCEPT_QUEST);
+        }
+        if (opcode == Opcode::CMSG_QUESTGIVER_COMPLETE_QUEST) {
+            this->CMSG_QUESTGIVER_COMPLETE_QUEST = std::move(other.CMSG_QUESTGIVER_COMPLETE_QUEST);
+        }
+        if (opcode == Opcode::CMSG_QUESTGIVER_REQUEST_REWARD) {
+            this->CMSG_QUESTGIVER_REQUEST_REWARD = std::move(other.CMSG_QUESTGIVER_REQUEST_REWARD);
+        }
+        if (opcode == Opcode::CMSG_QUESTGIVER_CHOOSE_REWARD) {
+            this->CMSG_QUESTGIVER_CHOOSE_REWARD = std::move(other.CMSG_QUESTGIVER_CHOOSE_REWARD);
+        }
+        if (opcode == Opcode::CMSG_QUESTGIVER_CANCEL) {
+            this->CMSG_QUESTGIVER_CANCEL = std::move(other.CMSG_QUESTGIVER_CANCEL);
+        }
+        if (opcode == Opcode::CMSG_QUESTLOG_SWAP_QUEST) {
+            this->CMSG_QUESTLOG_SWAP_QUEST = std::move(other.CMSG_QUESTLOG_SWAP_QUEST);
+        }
+        if (opcode == Opcode::CMSG_QUESTLOG_REMOVE_QUEST) {
+            this->CMSG_QUESTLOG_REMOVE_QUEST = std::move(other.CMSG_QUESTLOG_REMOVE_QUEST);
+        }
+        if (opcode == Opcode::CMSG_QUEST_CONFIRM_ACCEPT) {
+            this->CMSG_QUEST_CONFIRM_ACCEPT = std::move(other.CMSG_QUEST_CONFIRM_ACCEPT);
+        }
+        if (opcode == Opcode::CMSG_PUSHQUESTTOPARTY) {
+            this->CMSG_PUSHQUESTTOPARTY = std::move(other.CMSG_PUSHQUESTTOPARTY);
+        }
+        if (opcode == Opcode::CMSG_LIST_INVENTORY) {
+            this->CMSG_LIST_INVENTORY = std::move(other.CMSG_LIST_INVENTORY);
+        }
+        if (opcode == Opcode::CMSG_SELL_ITEM) {
+            this->CMSG_SELL_ITEM = std::move(other.CMSG_SELL_ITEM);
+        }
+        if (opcode == Opcode::CMSG_BUY_ITEM) {
+            this->CMSG_BUY_ITEM = std::move(other.CMSG_BUY_ITEM);
+        }
+        if (opcode == Opcode::CMSG_BUY_ITEM_IN_SLOT) {
+            this->CMSG_BUY_ITEM_IN_SLOT = std::move(other.CMSG_BUY_ITEM_IN_SLOT);
+        }
+        if (opcode == Opcode::CMSG_TAXINODE_STATUS_QUERY) {
+            this->CMSG_TAXINODE_STATUS_QUERY = std::move(other.CMSG_TAXINODE_STATUS_QUERY);
+        }
+        if (opcode == Opcode::CMSG_TAXIQUERYAVAILABLENODES) {
+            this->CMSG_TAXIQUERYAVAILABLENODES = std::move(other.CMSG_TAXIQUERYAVAILABLENODES);
+        }
+        if (opcode == Opcode::CMSG_ACTIVATETAXI) {
+            this->CMSG_ACTIVATETAXI = std::move(other.CMSG_ACTIVATETAXI);
+        }
+        if (opcode == Opcode::CMSG_TRAINER_LIST) {
+            this->CMSG_TRAINER_LIST = std::move(other.CMSG_TRAINER_LIST);
+        }
+        if (opcode == Opcode::CMSG_TRAINER_BUY_SPELL) {
+            this->CMSG_TRAINER_BUY_SPELL = std::move(other.CMSG_TRAINER_BUY_SPELL);
+        }
+        if (opcode == Opcode::CMSG_BINDER_ACTIVATE) {
+            this->CMSG_BINDER_ACTIVATE = std::move(other.CMSG_BINDER_ACTIVATE);
+        }
+        if (opcode == Opcode::CMSG_BANKER_ACTIVATE) {
+            this->CMSG_BANKER_ACTIVATE = std::move(other.CMSG_BANKER_ACTIVATE);
+        }
+        if (opcode == Opcode::CMSG_BUY_BANK_SLOT) {
+            this->CMSG_BUY_BANK_SLOT = std::move(other.CMSG_BUY_BANK_SLOT);
+        }
+        if (opcode == Opcode::CMSG_PETITION_SHOWLIST) {
+            this->CMSG_PETITION_SHOWLIST = std::move(other.CMSG_PETITION_SHOWLIST);
+        }
+        if (opcode == Opcode::CMSG_PETITION_BUY) {
+            this->CMSG_PETITION_BUY = std::move(other.CMSG_PETITION_BUY);
+        }
+        if (opcode == Opcode::CMSG_PETITION_SHOW_SIGNATURES) {
+            this->CMSG_PETITION_SHOW_SIGNATURES = std::move(other.CMSG_PETITION_SHOW_SIGNATURES);
+        }
+        if (opcode == Opcode::CMSG_PETITION_SIGN) {
+            this->CMSG_PETITION_SIGN = std::move(other.CMSG_PETITION_SIGN);
+        }
+        if (opcode == Opcode::MSG_PETITION_DECLINE) {
+            this->MSG_PETITION_DECLINE = std::move(other.MSG_PETITION_DECLINE);
+        }
+        if (opcode == Opcode::CMSG_OFFER_PETITION) {
+            this->CMSG_OFFER_PETITION = std::move(other.CMSG_OFFER_PETITION);
+        }
+        if (opcode == Opcode::CMSG_TURN_IN_PETITION) {
+            this->CMSG_TURN_IN_PETITION = std::move(other.CMSG_TURN_IN_PETITION);
+        }
+        if (opcode == Opcode::CMSG_PETITION_QUERY) {
+            this->CMSG_PETITION_QUERY = std::move(other.CMSG_PETITION_QUERY);
+        }
+        if (opcode == Opcode::CMSG_BUG) {
+            this->CMSG_BUG = std::move(other.CMSG_BUG);
+        }
+        if (opcode == Opcode::CMSG_PLAYED_TIME) {
+            this->CMSG_PLAYED_TIME = std::move(other.CMSG_PLAYED_TIME);
+        }
+        if (opcode == Opcode::CMSG_QUERY_TIME) {
+            this->CMSG_QUERY_TIME = std::move(other.CMSG_QUERY_TIME);
+        }
+        if (opcode == Opcode::CMSG_RECLAIM_CORPSE) {
+            this->CMSG_RECLAIM_CORPSE = std::move(other.CMSG_RECLAIM_CORPSE);
+        }
+        if (opcode == Opcode::CMSG_WRAP_ITEM) {
+            this->CMSG_WRAP_ITEM = std::move(other.CMSG_WRAP_ITEM);
+        }
+        if (opcode == Opcode::MSG_MINIMAP_PING) {
+            this->MSG_MINIMAP_PING = std::move(other.MSG_MINIMAP_PING);
+        }
+        if (opcode == Opcode::CMSG_PING) {
+            this->CMSG_PING = std::move(other.CMSG_PING);
+        }
+        if (opcode == Opcode::CMSG_SETSHEATHED) {
+            this->CMSG_SETSHEATHED = std::move(other.CMSG_SETSHEATHED);
+        }
+        if (opcode == Opcode::CMSG_AUTH_SESSION) {
+            this->CMSG_AUTH_SESSION = std::move(other.CMSG_AUTH_SESSION);
+        }
+        if (opcode == Opcode::CMSG_PET_CAST_SPELL) {
+            this->CMSG_PET_CAST_SPELL = std::move(other.CMSG_PET_CAST_SPELL);
+        }
+        if (opcode == Opcode::MSG_SAVE_GUILD_EMBLEM) {
+            this->MSG_SAVE_GUILD_EMBLEM = std::move(other.MSG_SAVE_GUILD_EMBLEM);
+        }
+        if (opcode == Opcode::MSG_TABARDVENDOR_ACTIVATE) {
+            this->MSG_TABARDVENDOR_ACTIVATE = std::move(other.MSG_TABARDVENDOR_ACTIVATE);
+        }
+        if (opcode == Opcode::CMSG_ZONEUPDATE) {
+            this->CMSG_ZONEUPDATE = std::move(other.CMSG_ZONEUPDATE);
+        }
+        if (opcode == Opcode::MSG_RANDOM_ROLL) {
+            this->MSG_RANDOM_ROLL = std::move(other.MSG_RANDOM_ROLL);
+        }
+        if (opcode == Opcode::MSG_LOOKING_FOR_GROUP) {
+            this->MSG_LOOKING_FOR_GROUP = std::move(other.MSG_LOOKING_FOR_GROUP);
+        }
+        if (opcode == Opcode::CMSG_UNLEARN_SKILL) {
+            this->CMSG_UNLEARN_SKILL = std::move(other.CMSG_UNLEARN_SKILL);
+        }
+        if (opcode == Opcode::CMSG_GMTICKET_CREATE) {
+            this->CMSG_GMTICKET_CREATE = std::move(other.CMSG_GMTICKET_CREATE);
+        }
+        if (opcode == Opcode::CMSG_GMTICKET_UPDATETEXT) {
+            this->CMSG_GMTICKET_UPDATETEXT = std::move(other.CMSG_GMTICKET_UPDATETEXT);
+        }
+        if (opcode == Opcode::CMSG_REQUEST_ACCOUNT_DATA) {
+            this->CMSG_REQUEST_ACCOUNT_DATA = std::move(other.CMSG_REQUEST_ACCOUNT_DATA);
+        }
+        if (opcode == Opcode::CMSG_UPDATE_ACCOUNT_DATA) {
+            this->CMSG_UPDATE_ACCOUNT_DATA = std::move(other.CMSG_UPDATE_ACCOUNT_DATA);
+        }
+        if (opcode == Opcode::CMSG_GMTICKET_GETTICKET) {
+            this->CMSG_GMTICKET_GETTICKET = std::move(other.CMSG_GMTICKET_GETTICKET);
+        }
+        if (opcode == Opcode::MSG_CORPSE_QUERY) {
+            this->MSG_CORPSE_QUERY = std::move(other.MSG_CORPSE_QUERY);
+        }
+        if (opcode == Opcode::CMSG_GMTICKET_DELETETICKET) {
+            this->CMSG_GMTICKET_DELETETICKET = std::move(other.CMSG_GMTICKET_DELETETICKET);
+        }
+        if (opcode == Opcode::CMSG_GMTICKET_SYSTEMSTATUS) {
+            this->CMSG_GMTICKET_SYSTEMSTATUS = std::move(other.CMSG_GMTICKET_SYSTEMSTATUS);
+        }
+        if (opcode == Opcode::CMSG_SPIRIT_HEALER_ACTIVATE) {
+            this->CMSG_SPIRIT_HEALER_ACTIVATE = std::move(other.CMSG_SPIRIT_HEALER_ACTIVATE);
+        }
+        if (opcode == Opcode::CMSG_CHAT_IGNORED) {
+            this->CMSG_CHAT_IGNORED = std::move(other.CMSG_CHAT_IGNORED);
+        }
+        if (opcode == Opcode::CMSG_GUILD_RANK) {
+            this->CMSG_GUILD_RANK = std::move(other.CMSG_GUILD_RANK);
+        }
+        if (opcode == Opcode::CMSG_GUILD_ADD_RANK) {
+            this->CMSG_GUILD_ADD_RANK = std::move(other.CMSG_GUILD_ADD_RANK);
+        }
+        if (opcode == Opcode::CMSG_GUILD_DEL_RANK) {
+            this->CMSG_GUILD_DEL_RANK = std::move(other.CMSG_GUILD_DEL_RANK);
+        }
+        if (opcode == Opcode::CMSG_GUILD_SET_PUBLIC_NOTE) {
+            this->CMSG_GUILD_SET_PUBLIC_NOTE = std::move(other.CMSG_GUILD_SET_PUBLIC_NOTE);
+        }
+        if (opcode == Opcode::CMSG_GUILD_SET_OFFICER_NOTE) {
+            this->CMSG_GUILD_SET_OFFICER_NOTE = std::move(other.CMSG_GUILD_SET_OFFICER_NOTE);
+        }
+        if (opcode == Opcode::CMSG_SEND_MAIL) {
+            this->CMSG_SEND_MAIL = std::move(other.CMSG_SEND_MAIL);
+        }
+        if (opcode == Opcode::CMSG_GET_MAIL_LIST) {
+            this->CMSG_GET_MAIL_LIST = std::move(other.CMSG_GET_MAIL_LIST);
+        }
+        if (opcode == Opcode::CMSG_BATTLEFIELD_LIST) {
+            this->CMSG_BATTLEFIELD_LIST = std::move(other.CMSG_BATTLEFIELD_LIST);
+        }
+        if (opcode == Opcode::CMSG_BATTLEFIELD_JOIN) {
+            this->CMSG_BATTLEFIELD_JOIN = std::move(other.CMSG_BATTLEFIELD_JOIN);
+        }
+        if (opcode == Opcode::CMSG_ITEM_TEXT_QUERY) {
+            this->CMSG_ITEM_TEXT_QUERY = std::move(other.CMSG_ITEM_TEXT_QUERY);
+        }
+        if (opcode == Opcode::CMSG_MAIL_TAKE_MONEY) {
+            this->CMSG_MAIL_TAKE_MONEY = std::move(other.CMSG_MAIL_TAKE_MONEY);
+        }
+        if (opcode == Opcode::CMSG_MAIL_TAKE_ITEM) {
+            this->CMSG_MAIL_TAKE_ITEM = std::move(other.CMSG_MAIL_TAKE_ITEM);
+        }
+        if (opcode == Opcode::CMSG_MAIL_MARK_AS_READ) {
+            this->CMSG_MAIL_MARK_AS_READ = std::move(other.CMSG_MAIL_MARK_AS_READ);
+        }
+        if (opcode == Opcode::CMSG_MAIL_RETURN_TO_SENDER) {
+            this->CMSG_MAIL_RETURN_TO_SENDER = std::move(other.CMSG_MAIL_RETURN_TO_SENDER);
+        }
+        if (opcode == Opcode::CMSG_MAIL_DELETE) {
+            this->CMSG_MAIL_DELETE = std::move(other.CMSG_MAIL_DELETE);
+        }
+        if (opcode == Opcode::CMSG_MAIL_CREATE_TEXT_ITEM) {
+            this->CMSG_MAIL_CREATE_TEXT_ITEM = std::move(other.CMSG_MAIL_CREATE_TEXT_ITEM);
+        }
+        if (opcode == Opcode::CMSG_LEARN_TALENT) {
+            this->CMSG_LEARN_TALENT = std::move(other.CMSG_LEARN_TALENT);
+        }
+        if (opcode == Opcode::CMSG_TOGGLE_PVP) {
+            this->CMSG_TOGGLE_PVP = std::move(other.CMSG_TOGGLE_PVP);
+        }
+        if (opcode == Opcode::MSG_AUCTION_HELLO) {
+            this->MSG_AUCTION_HELLO = std::move(other.MSG_AUCTION_HELLO);
+        }
+        if (opcode == Opcode::CMSG_AUCTION_SELL_ITEM) {
+            this->CMSG_AUCTION_SELL_ITEM = std::move(other.CMSG_AUCTION_SELL_ITEM);
+        }
+        if (opcode == Opcode::CMSG_AUCTION_REMOVE_ITEM) {
+            this->CMSG_AUCTION_REMOVE_ITEM = std::move(other.CMSG_AUCTION_REMOVE_ITEM);
+        }
+        if (opcode == Opcode::CMSG_AUCTION_LIST_ITEMS) {
+            this->CMSG_AUCTION_LIST_ITEMS = std::move(other.CMSG_AUCTION_LIST_ITEMS);
+        }
+        if (opcode == Opcode::CMSG_AUCTION_LIST_OWNER_ITEMS) {
+            this->CMSG_AUCTION_LIST_OWNER_ITEMS = std::move(other.CMSG_AUCTION_LIST_OWNER_ITEMS);
+        }
+        if (opcode == Opcode::CMSG_AUCTION_PLACE_BID) {
+            this->CMSG_AUCTION_PLACE_BID = std::move(other.CMSG_AUCTION_PLACE_BID);
+        }
+        if (opcode == Opcode::CMSG_AUCTION_LIST_BIDDER_ITEMS) {
+            this->CMSG_AUCTION_LIST_BIDDER_ITEMS = std::move(other.CMSG_AUCTION_LIST_BIDDER_ITEMS);
+        }
+        if (opcode == Opcode::CMSG_SET_AMMO) {
+            this->CMSG_SET_AMMO = std::move(other.CMSG_SET_AMMO);
+        }
+        if (opcode == Opcode::CMSG_SET_ACTIVE_MOVER) {
+            this->CMSG_SET_ACTIVE_MOVER = std::move(other.CMSG_SET_ACTIVE_MOVER);
+        }
+        if (opcode == Opcode::CMSG_PET_CANCEL_AURA) {
+            this->CMSG_PET_CANCEL_AURA = std::move(other.CMSG_PET_CANCEL_AURA);
+        }
+        if (opcode == Opcode::CMSG_CANCEL_AUTO_REPEAT_SPELL) {
+            this->CMSG_CANCEL_AUTO_REPEAT_SPELL = std::move(other.CMSG_CANCEL_AUTO_REPEAT_SPELL);
+        }
+        if (opcode == Opcode::MSG_LIST_STABLED_PETS) {
+            this->MSG_LIST_STABLED_PETS = std::move(other.MSG_LIST_STABLED_PETS);
+        }
+        if (opcode == Opcode::CMSG_STABLE_PET) {
+            this->CMSG_STABLE_PET = std::move(other.CMSG_STABLE_PET);
+        }
+        if (opcode == Opcode::CMSG_UNSTABLE_PET) {
+            this->CMSG_UNSTABLE_PET = std::move(other.CMSG_UNSTABLE_PET);
+        }
+        if (opcode == Opcode::CMSG_BUY_STABLE_SLOT) {
+            this->CMSG_BUY_STABLE_SLOT = std::move(other.CMSG_BUY_STABLE_SLOT);
+        }
+        if (opcode == Opcode::CMSG_STABLE_SWAP_PET) {
+            this->CMSG_STABLE_SWAP_PET = std::move(other.CMSG_STABLE_SWAP_PET);
+        }
+        if (opcode == Opcode::MSG_QUEST_PUSH_RESULT) {
+            this->MSG_QUEST_PUSH_RESULT = std::move(other.MSG_QUEST_PUSH_RESULT);
+        }
+        if (opcode == Opcode::CMSG_REQUEST_PET_INFO) {
+            this->CMSG_REQUEST_PET_INFO = std::move(other.CMSG_REQUEST_PET_INFO);
+        }
+        if (opcode == Opcode::CMSG_FAR_SIGHT) {
+            this->CMSG_FAR_SIGHT = std::move(other.CMSG_FAR_SIGHT);
+        }
+        if (opcode == Opcode::CMSG_GROUP_CHANGE_SUB_GROUP) {
+            this->CMSG_GROUP_CHANGE_SUB_GROUP = std::move(other.CMSG_GROUP_CHANGE_SUB_GROUP);
+        }
+        if (opcode == Opcode::CMSG_REQUEST_PARTY_MEMBER_STATS) {
+            this->CMSG_REQUEST_PARTY_MEMBER_STATS = std::move(other.CMSG_REQUEST_PARTY_MEMBER_STATS);
+        }
+        if (opcode == Opcode::CMSG_GROUP_SWAP_SUB_GROUP) {
+            this->CMSG_GROUP_SWAP_SUB_GROUP = std::move(other.CMSG_GROUP_SWAP_SUB_GROUP);
+        }
+        if (opcode == Opcode::CMSG_AUTOSTORE_BANK_ITEM) {
+            this->CMSG_AUTOSTORE_BANK_ITEM = std::move(other.CMSG_AUTOSTORE_BANK_ITEM);
+        }
+        if (opcode == Opcode::CMSG_AUTOBANK_ITEM) {
+            this->CMSG_AUTOBANK_ITEM = std::move(other.CMSG_AUTOBANK_ITEM);
+        }
+        if (opcode == Opcode::MSG_QUERY_NEXT_MAIL_TIME) {
+            this->MSG_QUERY_NEXT_MAIL_TIME = std::move(other.MSG_QUERY_NEXT_MAIL_TIME);
+        }
+        if (opcode == Opcode::CMSG_GROUP_RAID_CONVERT) {
+            this->CMSG_GROUP_RAID_CONVERT = std::move(other.CMSG_GROUP_RAID_CONVERT);
+        }
+        if (opcode == Opcode::CMSG_GROUP_ASSISTANT_LEADER) {
+            this->CMSG_GROUP_ASSISTANT_LEADER = std::move(other.CMSG_GROUP_ASSISTANT_LEADER);
+        }
+        if (opcode == Opcode::CMSG_BUYBACK_ITEM) {
+            this->CMSG_BUYBACK_ITEM = std::move(other.CMSG_BUYBACK_ITEM);
+        }
+        if (opcode == Opcode::CMSG_MEETINGSTONE_JOIN) {
+            this->CMSG_MEETINGSTONE_JOIN = std::move(other.CMSG_MEETINGSTONE_JOIN);
+        }
+        if (opcode == Opcode::CMSG_MEETINGSTONE_LEAVE) {
+            this->CMSG_MEETINGSTONE_LEAVE = std::move(other.CMSG_MEETINGSTONE_LEAVE);
+        }
+        if (opcode == Opcode::CMSG_MEETINGSTONE_INFO) {
+            this->CMSG_MEETINGSTONE_INFO = std::move(other.CMSG_MEETINGSTONE_INFO);
+        }
+        if (opcode == Opcode::CMSG_CANCEL_GROWTH_AURA) {
+            this->CMSG_CANCEL_GROWTH_AURA = std::move(other.CMSG_CANCEL_GROWTH_AURA);
+        }
+        if (opcode == Opcode::CMSG_LOOT_ROLL) {
+            this->CMSG_LOOT_ROLL = std::move(other.CMSG_LOOT_ROLL);
+        }
+        if (opcode == Opcode::CMSG_LOOT_MASTER_GIVE) {
+            this->CMSG_LOOT_MASTER_GIVE = std::move(other.CMSG_LOOT_MASTER_GIVE);
+        }
+        if (opcode == Opcode::CMSG_REPAIR_ITEM) {
+            this->CMSG_REPAIR_ITEM = std::move(other.CMSG_REPAIR_ITEM);
+        }
+        if (opcode == Opcode::MSG_TALENT_WIPE_CONFIRM) {
+            this->MSG_TALENT_WIPE_CONFIRM = std::move(other.MSG_TALENT_WIPE_CONFIRM);
+        }
+        if (opcode == Opcode::CMSG_SUMMON_RESPONSE) {
+            this->CMSG_SUMMON_RESPONSE = std::move(other.CMSG_SUMMON_RESPONSE);
+        }
+        if (opcode == Opcode::MSG_MOVE_WATER_WALK) {
+            this->MSG_MOVE_WATER_WALK = std::move(other.MSG_MOVE_WATER_WALK);
+        }
+        if (opcode == Opcode::CMSG_SELF_RES) {
+            this->CMSG_SELF_RES = std::move(other.CMSG_SELF_RES);
+        }
+        if (opcode == Opcode::CMSG_TOGGLE_HELM) {
+            this->CMSG_TOGGLE_HELM = std::move(other.CMSG_TOGGLE_HELM);
+        }
+        if (opcode == Opcode::CMSG_TOGGLE_CLOAK) {
+            this->CMSG_TOGGLE_CLOAK = std::move(other.CMSG_TOGGLE_CLOAK);
+        }
+        if (opcode == Opcode::CMSG_SET_ACTIONBAR_TOGGLES) {
+            this->CMSG_SET_ACTIONBAR_TOGGLES = std::move(other.CMSG_SET_ACTIONBAR_TOGGLES);
+        }
+        if (opcode == Opcode::MSG_PETITION_RENAME) {
+            this->MSG_PETITION_RENAME = std::move(other.MSG_PETITION_RENAME);
+        }
+        if (opcode == Opcode::CMSG_ITEM_NAME_QUERY) {
+            this->CMSG_ITEM_NAME_QUERY = std::move(other.CMSG_ITEM_NAME_QUERY);
+        }
+        if (opcode == Opcode::CMSG_CHAR_RENAME) {
+            this->CMSG_CHAR_RENAME = std::move(other.CMSG_CHAR_RENAME);
+        }
+        if (opcode == Opcode::CMSG_MOVE_SPLINE_DONE) {
+            this->CMSG_MOVE_SPLINE_DONE = std::move(other.CMSG_MOVE_SPLINE_DONE);
+        }
+        if (opcode == Opcode::CMSG_MOVE_FALL_RESET) {
+            this->CMSG_MOVE_FALL_RESET = std::move(other.CMSG_MOVE_FALL_RESET);
+        }
+        if (opcode == Opcode::CMSG_REQUEST_RAID_INFO) {
+            this->CMSG_REQUEST_RAID_INFO = std::move(other.CMSG_REQUEST_RAID_INFO);
+        }
+        if (opcode == Opcode::CMSG_MOVE_TIME_SKIPPED) {
+            this->CMSG_MOVE_TIME_SKIPPED = std::move(other.CMSG_MOVE_TIME_SKIPPED);
+        }
+        if (opcode == Opcode::CMSG_MOVE_FEATHER_FALL_ACK) {
+            this->CMSG_MOVE_FEATHER_FALL_ACK = std::move(other.CMSG_MOVE_FEATHER_FALL_ACK);
+        }
+        if (opcode == Opcode::CMSG_MOVE_WATER_WALK_ACK) {
+            this->CMSG_MOVE_WATER_WALK_ACK = std::move(other.CMSG_MOVE_WATER_WALK_ACK);
+        }
+        if (opcode == Opcode::CMSG_MOVE_NOT_ACTIVE_MOVER) {
+            this->CMSG_MOVE_NOT_ACTIVE_MOVER = std::move(other.CMSG_MOVE_NOT_ACTIVE_MOVER);
+        }
+        if (opcode == Opcode::CMSG_BATTLEFIELD_STATUS) {
+            this->CMSG_BATTLEFIELD_STATUS = std::move(other.CMSG_BATTLEFIELD_STATUS);
+        }
+        if (opcode == Opcode::CMSG_BATTLEFIELD_PORT) {
+            this->CMSG_BATTLEFIELD_PORT = std::move(other.CMSG_BATTLEFIELD_PORT);
+        }
+        if (opcode == Opcode::MSG_INSPECT_HONOR_STATS) {
+            this->MSG_INSPECT_HONOR_STATS = std::move(other.MSG_INSPECT_HONOR_STATS);
+        }
+        if (opcode == Opcode::CMSG_BATTLEMASTER_HELLO) {
+            this->CMSG_BATTLEMASTER_HELLO = std::move(other.CMSG_BATTLEMASTER_HELLO);
+        }
+        if (opcode == Opcode::CMSG_FORCE_WALK_SPEED_CHANGE_ACK) {
+            this->CMSG_FORCE_WALK_SPEED_CHANGE_ACK = std::move(other.CMSG_FORCE_WALK_SPEED_CHANGE_ACK);
+        }
+        if (opcode == Opcode::CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK) {
+            this->CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK = std::move(other.CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK);
+        }
+        if (opcode == Opcode::CMSG_FORCE_TURN_RATE_CHANGE_ACK) {
+            this->CMSG_FORCE_TURN_RATE_CHANGE_ACK = std::move(other.CMSG_FORCE_TURN_RATE_CHANGE_ACK);
+        }
+        if (opcode == Opcode::MSG_PVP_LOG_DATA) {
+            this->MSG_PVP_LOG_DATA = std::move(other.MSG_PVP_LOG_DATA);
+        }
+        if (opcode == Opcode::CMSG_LEAVE_BATTLEFIELD) {
+            this->CMSG_LEAVE_BATTLEFIELD = std::move(other.CMSG_LEAVE_BATTLEFIELD);
+        }
+        if (opcode == Opcode::CMSG_AREA_SPIRIT_HEALER_QUERY) {
+            this->CMSG_AREA_SPIRIT_HEALER_QUERY = std::move(other.CMSG_AREA_SPIRIT_HEALER_QUERY);
+        }
+        if (opcode == Opcode::CMSG_AREA_SPIRIT_HEALER_QUEUE) {
+            this->CMSG_AREA_SPIRIT_HEALER_QUEUE = std::move(other.CMSG_AREA_SPIRIT_HEALER_QUEUE);
+        }
+        if (opcode == Opcode::CMSG_WARDEN_DATA) {
+            this->CMSG_WARDEN_DATA = std::move(other.CMSG_WARDEN_DATA);
+        }
+        if (opcode == Opcode::MSG_BATTLEGROUND_PLAYER_POSITIONS) {
+            this->MSG_BATTLEGROUND_PLAYER_POSITIONS = std::move(other.MSG_BATTLEGROUND_PLAYER_POSITIONS);
+        }
+        if (opcode == Opcode::CMSG_PET_STOP_ATTACK) {
+            this->CMSG_PET_STOP_ATTACK = std::move(other.CMSG_PET_STOP_ATTACK);
+        }
+        if (opcode == Opcode::CMSG_BATTLEMASTER_JOIN) {
+            this->CMSG_BATTLEMASTER_JOIN = std::move(other.CMSG_BATTLEMASTER_JOIN);
+        }
+        if (opcode == Opcode::CMSG_PET_UNLEARN) {
+            this->CMSG_PET_UNLEARN = std::move(other.CMSG_PET_UNLEARN);
+        }
+        if (opcode == Opcode::CMSG_PET_SPELL_AUTOCAST) {
+            this->CMSG_PET_SPELL_AUTOCAST = std::move(other.CMSG_PET_SPELL_AUTOCAST);
+        }
+        if (opcode == Opcode::CMSG_GUILD_INFO_TEXT) {
+            this->CMSG_GUILD_INFO_TEXT = std::move(other.CMSG_GUILD_INFO_TEXT);
+        }
+        if (opcode == Opcode::CMSG_ACTIVATETAXIEXPRESS) {
+            this->CMSG_ACTIVATETAXIEXPRESS = std::move(other.CMSG_ACTIVATETAXIEXPRESS);
+        }
+        if (opcode == Opcode::CMSG_SET_FACTION_INACTIVE) {
+            this->CMSG_SET_FACTION_INACTIVE = std::move(other.CMSG_SET_FACTION_INACTIVE);
+        }
+        if (opcode == Opcode::CMSG_SET_WATCHED_FACTION) {
+            this->CMSG_SET_WATCHED_FACTION = std::move(other.CMSG_SET_WATCHED_FACTION);
+        }
+        if (opcode == Opcode::CMSG_RESET_INSTANCES) {
+            this->CMSG_RESET_INSTANCES = std::move(other.CMSG_RESET_INSTANCES);
+        }
+        if (opcode == Opcode::MSG_RAID_TARGET_UPDATE) {
+            this->MSG_RAID_TARGET_UPDATE = std::move(other.MSG_RAID_TARGET_UPDATE);
+        }
+        if (opcode == Opcode::MSG_RAID_READY_CHECK) {
+            this->MSG_RAID_READY_CHECK = std::move(other.MSG_RAID_READY_CHECK);
+        }
+        if (opcode == Opcode::CMSG_GMSURVEY_SUBMIT) {
+            this->CMSG_GMSURVEY_SUBMIT = std::move(other.CMSG_GMSURVEY_SUBMIT);
+        }
+        return std::move(*this);
     }
 
     ~ClientOpcode() {
@@ -17955,6 +18817,1062 @@ struct ServerOpcode {
         if (opcode == Opcode::SMSG_DEFENSE_MESSAGE) {
             this->SMSG_DEFENSE_MESSAGE = std::move(other.SMSG_DEFENSE_MESSAGE);
         }
+    }
+
+    ServerOpcode operator=(ServerOpcode&& other) noexcept {
+        this->opcode = other.opcode;
+        other.opcode = Opcode::NONE;
+        if (opcode == Opcode::SMSG_CHAR_CREATE) {
+            this->SMSG_CHAR_CREATE = std::move(other.SMSG_CHAR_CREATE);
+        }
+        if (opcode == Opcode::SMSG_CHAR_ENUM) {
+            this->SMSG_CHAR_ENUM = std::move(other.SMSG_CHAR_ENUM);
+        }
+        if (opcode == Opcode::SMSG_CHAR_DELETE) {
+            this->SMSG_CHAR_DELETE = std::move(other.SMSG_CHAR_DELETE);
+        }
+        if (opcode == Opcode::SMSG_NEW_WORLD) {
+            this->SMSG_NEW_WORLD = std::move(other.SMSG_NEW_WORLD);
+        }
+        if (opcode == Opcode::SMSG_TRANSFER_PENDING) {
+            this->SMSG_TRANSFER_PENDING = std::move(other.SMSG_TRANSFER_PENDING);
+        }
+        if (opcode == Opcode::SMSG_TRANSFER_ABORTED) {
+            this->SMSG_TRANSFER_ABORTED = std::move(other.SMSG_TRANSFER_ABORTED);
+        }
+        if (opcode == Opcode::SMSG_CHARACTER_LOGIN_FAILED) {
+            this->SMSG_CHARACTER_LOGIN_FAILED = std::move(other.SMSG_CHARACTER_LOGIN_FAILED);
+        }
+        if (opcode == Opcode::SMSG_LOGIN_SETTIMESPEED) {
+            this->SMSG_LOGIN_SETTIMESPEED = std::move(other.SMSG_LOGIN_SETTIMESPEED);
+        }
+        if (opcode == Opcode::SMSG_LOGOUT_RESPONSE) {
+            this->SMSG_LOGOUT_RESPONSE = std::move(other.SMSG_LOGOUT_RESPONSE);
+        }
+        if (opcode == Opcode::SMSG_LOGOUT_COMPLETE) {
+            this->SMSG_LOGOUT_COMPLETE = std::move(other.SMSG_LOGOUT_COMPLETE);
+        }
+        if (opcode == Opcode::SMSG_LOGOUT_CANCEL_ACK) {
+            this->SMSG_LOGOUT_CANCEL_ACK = std::move(other.SMSG_LOGOUT_CANCEL_ACK);
+        }
+        if (opcode == Opcode::SMSG_NAME_QUERY_RESPONSE) {
+            this->SMSG_NAME_QUERY_RESPONSE = std::move(other.SMSG_NAME_QUERY_RESPONSE);
+        }
+        if (opcode == Opcode::SMSG_PET_NAME_QUERY_RESPONSE) {
+            this->SMSG_PET_NAME_QUERY_RESPONSE = std::move(other.SMSG_PET_NAME_QUERY_RESPONSE);
+        }
+        if (opcode == Opcode::SMSG_GUILD_QUERY_RESPONSE) {
+            this->SMSG_GUILD_QUERY_RESPONSE = std::move(other.SMSG_GUILD_QUERY_RESPONSE);
+        }
+        if (opcode == Opcode::SMSG_ITEM_QUERY_SINGLE_RESPONSE) {
+            this->SMSG_ITEM_QUERY_SINGLE_RESPONSE = std::move(other.SMSG_ITEM_QUERY_SINGLE_RESPONSE);
+        }
+        if (opcode == Opcode::SMSG_PAGE_TEXT_QUERY_RESPONSE) {
+            this->SMSG_PAGE_TEXT_QUERY_RESPONSE = std::move(other.SMSG_PAGE_TEXT_QUERY_RESPONSE);
+        }
+        if (opcode == Opcode::SMSG_QUEST_QUERY_RESPONSE) {
+            this->SMSG_QUEST_QUERY_RESPONSE = std::move(other.SMSG_QUEST_QUERY_RESPONSE);
+        }
+        if (opcode == Opcode::SMSG_GAMEOBJECT_QUERY_RESPONSE) {
+            this->SMSG_GAMEOBJECT_QUERY_RESPONSE = std::move(other.SMSG_GAMEOBJECT_QUERY_RESPONSE);
+        }
+        if (opcode == Opcode::SMSG_CREATURE_QUERY_RESPONSE) {
+            this->SMSG_CREATURE_QUERY_RESPONSE = std::move(other.SMSG_CREATURE_QUERY_RESPONSE);
+        }
+        if (opcode == Opcode::SMSG_WHO) {
+            this->SMSG_WHO = std::move(other.SMSG_WHO);
+        }
+        if (opcode == Opcode::SMSG_WHOIS) {
+            this->SMSG_WHOIS = std::move(other.SMSG_WHOIS);
+        }
+        if (opcode == Opcode::SMSG_FRIEND_LIST) {
+            this->SMSG_FRIEND_LIST = std::move(other.SMSG_FRIEND_LIST);
+        }
+        if (opcode == Opcode::SMSG_FRIEND_STATUS) {
+            this->SMSG_FRIEND_STATUS = std::move(other.SMSG_FRIEND_STATUS);
+        }
+        if (opcode == Opcode::SMSG_IGNORE_LIST) {
+            this->SMSG_IGNORE_LIST = std::move(other.SMSG_IGNORE_LIST);
+        }
+        if (opcode == Opcode::SMSG_GROUP_INVITE) {
+            this->SMSG_GROUP_INVITE = std::move(other.SMSG_GROUP_INVITE);
+        }
+        if (opcode == Opcode::SMSG_GROUP_DECLINE) {
+            this->SMSG_GROUP_DECLINE = std::move(other.SMSG_GROUP_DECLINE);
+        }
+        if (opcode == Opcode::SMSG_GROUP_UNINVITE) {
+            this->SMSG_GROUP_UNINVITE = std::move(other.SMSG_GROUP_UNINVITE);
+        }
+        if (opcode == Opcode::SMSG_GROUP_SET_LEADER) {
+            this->SMSG_GROUP_SET_LEADER = std::move(other.SMSG_GROUP_SET_LEADER);
+        }
+        if (opcode == Opcode::SMSG_GROUP_DESTROYED) {
+            this->SMSG_GROUP_DESTROYED = std::move(other.SMSG_GROUP_DESTROYED);
+        }
+        if (opcode == Opcode::SMSG_GROUP_LIST) {
+            this->SMSG_GROUP_LIST = std::move(other.SMSG_GROUP_LIST);
+        }
+        if (opcode == Opcode::SMSG_PARTY_MEMBER_STATS) {
+            this->SMSG_PARTY_MEMBER_STATS = std::move(other.SMSG_PARTY_MEMBER_STATS);
+        }
+        if (opcode == Opcode::SMSG_PARTY_COMMAND_RESULT) {
+            this->SMSG_PARTY_COMMAND_RESULT = std::move(other.SMSG_PARTY_COMMAND_RESULT);
+        }
+        if (opcode == Opcode::SMSG_GUILD_INVITE) {
+            this->SMSG_GUILD_INVITE = std::move(other.SMSG_GUILD_INVITE);
+        }
+        if (opcode == Opcode::SMSG_GUILD_INFO) {
+            this->SMSG_GUILD_INFO = std::move(other.SMSG_GUILD_INFO);
+        }
+        if (opcode == Opcode::SMSG_GUILD_ROSTER) {
+            this->SMSG_GUILD_ROSTER = std::move(other.SMSG_GUILD_ROSTER);
+        }
+        if (opcode == Opcode::SMSG_GUILD_EVENT) {
+            this->SMSG_GUILD_EVENT = std::move(other.SMSG_GUILD_EVENT);
+        }
+        if (opcode == Opcode::SMSG_GUILD_COMMAND_RESULT) {
+            this->SMSG_GUILD_COMMAND_RESULT = std::move(other.SMSG_GUILD_COMMAND_RESULT);
+        }
+        if (opcode == Opcode::SMSG_MESSAGECHAT) {
+            this->SMSG_MESSAGECHAT = std::move(other.SMSG_MESSAGECHAT);
+        }
+        if (opcode == Opcode::SMSG_CHANNEL_NOTIFY) {
+            this->SMSG_CHANNEL_NOTIFY = std::move(other.SMSG_CHANNEL_NOTIFY);
+        }
+        if (opcode == Opcode::SMSG_CHANNEL_LIST) {
+            this->SMSG_CHANNEL_LIST = std::move(other.SMSG_CHANNEL_LIST);
+        }
+        if (opcode == Opcode::SMSG_UPDATE_OBJECT) {
+            this->SMSG_UPDATE_OBJECT = std::move(other.SMSG_UPDATE_OBJECT);
+        }
+        if (opcode == Opcode::SMSG_DESTROY_OBJECT) {
+            this->SMSG_DESTROY_OBJECT = std::move(other.SMSG_DESTROY_OBJECT);
+        }
+        if (opcode == Opcode::SMSG_READ_ITEM_OK) {
+            this->SMSG_READ_ITEM_OK = std::move(other.SMSG_READ_ITEM_OK);
+        }
+        if (opcode == Opcode::SMSG_READ_ITEM_FAILED) {
+            this->SMSG_READ_ITEM_FAILED = std::move(other.SMSG_READ_ITEM_FAILED);
+        }
+        if (opcode == Opcode::SMSG_ITEM_COOLDOWN) {
+            this->SMSG_ITEM_COOLDOWN = std::move(other.SMSG_ITEM_COOLDOWN);
+        }
+        if (opcode == Opcode::SMSG_GAMEOBJECT_CUSTOM_ANIM) {
+            this->SMSG_GAMEOBJECT_CUSTOM_ANIM = std::move(other.SMSG_GAMEOBJECT_CUSTOM_ANIM);
+        }
+        if (opcode == Opcode::MSG_MOVE_START_FORWARD) {
+            this->MSG_MOVE_START_FORWARD = std::move(other.MSG_MOVE_START_FORWARD);
+        }
+        if (opcode == Opcode::MSG_MOVE_START_BACKWARD) {
+            this->MSG_MOVE_START_BACKWARD = std::move(other.MSG_MOVE_START_BACKWARD);
+        }
+        if (opcode == Opcode::MSG_MOVE_STOP) {
+            this->MSG_MOVE_STOP = std::move(other.MSG_MOVE_STOP);
+        }
+        if (opcode == Opcode::MSG_MOVE_START_STRAFE_LEFT) {
+            this->MSG_MOVE_START_STRAFE_LEFT = std::move(other.MSG_MOVE_START_STRAFE_LEFT);
+        }
+        if (opcode == Opcode::MSG_MOVE_START_STRAFE_RIGHT) {
+            this->MSG_MOVE_START_STRAFE_RIGHT = std::move(other.MSG_MOVE_START_STRAFE_RIGHT);
+        }
+        if (opcode == Opcode::MSG_MOVE_STOP_STRAFE) {
+            this->MSG_MOVE_STOP_STRAFE = std::move(other.MSG_MOVE_STOP_STRAFE);
+        }
+        if (opcode == Opcode::MSG_MOVE_JUMP) {
+            this->MSG_MOVE_JUMP = std::move(other.MSG_MOVE_JUMP);
+        }
+        if (opcode == Opcode::MSG_MOVE_START_TURN_LEFT) {
+            this->MSG_MOVE_START_TURN_LEFT = std::move(other.MSG_MOVE_START_TURN_LEFT);
+        }
+        if (opcode == Opcode::MSG_MOVE_START_TURN_RIGHT) {
+            this->MSG_MOVE_START_TURN_RIGHT = std::move(other.MSG_MOVE_START_TURN_RIGHT);
+        }
+        if (opcode == Opcode::MSG_MOVE_STOP_TURN) {
+            this->MSG_MOVE_STOP_TURN = std::move(other.MSG_MOVE_STOP_TURN);
+        }
+        if (opcode == Opcode::MSG_MOVE_START_PITCH_UP) {
+            this->MSG_MOVE_START_PITCH_UP = std::move(other.MSG_MOVE_START_PITCH_UP);
+        }
+        if (opcode == Opcode::MSG_MOVE_START_PITCH_DOWN) {
+            this->MSG_MOVE_START_PITCH_DOWN = std::move(other.MSG_MOVE_START_PITCH_DOWN);
+        }
+        if (opcode == Opcode::MSG_MOVE_STOP_PITCH) {
+            this->MSG_MOVE_STOP_PITCH = std::move(other.MSG_MOVE_STOP_PITCH);
+        }
+        if (opcode == Opcode::MSG_MOVE_SET_RUN_MODE) {
+            this->MSG_MOVE_SET_RUN_MODE = std::move(other.MSG_MOVE_SET_RUN_MODE);
+        }
+        if (opcode == Opcode::MSG_MOVE_SET_WALK_MODE) {
+            this->MSG_MOVE_SET_WALK_MODE = std::move(other.MSG_MOVE_SET_WALK_MODE);
+        }
+        if (opcode == Opcode::MSG_MOVE_TELEPORT_ACK) {
+            this->MSG_MOVE_TELEPORT_ACK = std::move(other.MSG_MOVE_TELEPORT_ACK);
+        }
+        if (opcode == Opcode::MSG_MOVE_FALL_LAND) {
+            this->MSG_MOVE_FALL_LAND = std::move(other.MSG_MOVE_FALL_LAND);
+        }
+        if (opcode == Opcode::MSG_MOVE_START_SWIM) {
+            this->MSG_MOVE_START_SWIM = std::move(other.MSG_MOVE_START_SWIM);
+        }
+        if (opcode == Opcode::MSG_MOVE_STOP_SWIM) {
+            this->MSG_MOVE_STOP_SWIM = std::move(other.MSG_MOVE_STOP_SWIM);
+        }
+        if (opcode == Opcode::MSG_MOVE_SET_FACING) {
+            this->MSG_MOVE_SET_FACING = std::move(other.MSG_MOVE_SET_FACING);
+        }
+        if (opcode == Opcode::MSG_MOVE_SET_PITCH) {
+            this->MSG_MOVE_SET_PITCH = std::move(other.MSG_MOVE_SET_PITCH);
+        }
+        if (opcode == Opcode::MSG_MOVE_WORLDPORT_ACK) {
+            this->MSG_MOVE_WORLDPORT_ACK = std::move(other.MSG_MOVE_WORLDPORT_ACK);
+        }
+        if (opcode == Opcode::SMSG_MONSTER_MOVE) {
+            this->SMSG_MONSTER_MOVE = std::move(other.SMSG_MONSTER_MOVE);
+        }
+        if (opcode == Opcode::SMSG_MOVE_WATER_WALK) {
+            this->SMSG_MOVE_WATER_WALK = std::move(other.SMSG_MOVE_WATER_WALK);
+        }
+        if (opcode == Opcode::SMSG_MOVE_LAND_WALK) {
+            this->SMSG_MOVE_LAND_WALK = std::move(other.SMSG_MOVE_LAND_WALK);
+        }
+        if (opcode == Opcode::SMSG_FORCE_RUN_SPEED_CHANGE) {
+            this->SMSG_FORCE_RUN_SPEED_CHANGE = std::move(other.SMSG_FORCE_RUN_SPEED_CHANGE);
+        }
+        if (opcode == Opcode::SMSG_FORCE_RUN_BACK_SPEED_CHANGE) {
+            this->SMSG_FORCE_RUN_BACK_SPEED_CHANGE = std::move(other.SMSG_FORCE_RUN_BACK_SPEED_CHANGE);
+        }
+        if (opcode == Opcode::SMSG_FORCE_SWIM_SPEED_CHANGE) {
+            this->SMSG_FORCE_SWIM_SPEED_CHANGE = std::move(other.SMSG_FORCE_SWIM_SPEED_CHANGE);
+        }
+        if (opcode == Opcode::SMSG_FORCE_MOVE_ROOT) {
+            this->SMSG_FORCE_MOVE_ROOT = std::move(other.SMSG_FORCE_MOVE_ROOT);
+        }
+        if (opcode == Opcode::SMSG_FORCE_MOVE_UNROOT) {
+            this->SMSG_FORCE_MOVE_UNROOT = std::move(other.SMSG_FORCE_MOVE_UNROOT);
+        }
+        if (opcode == Opcode::MSG_MOVE_HEARTBEAT) {
+            this->MSG_MOVE_HEARTBEAT = std::move(other.MSG_MOVE_HEARTBEAT);
+        }
+        if (opcode == Opcode::SMSG_MOVE_KNOCK_BACK) {
+            this->SMSG_MOVE_KNOCK_BACK = std::move(other.SMSG_MOVE_KNOCK_BACK);
+        }
+        if (opcode == Opcode::SMSG_MOVE_FEATHER_FALL) {
+            this->SMSG_MOVE_FEATHER_FALL = std::move(other.SMSG_MOVE_FEATHER_FALL);
+        }
+        if (opcode == Opcode::SMSG_MOVE_NORMAL_FALL) {
+            this->SMSG_MOVE_NORMAL_FALL = std::move(other.SMSG_MOVE_NORMAL_FALL);
+        }
+        if (opcode == Opcode::SMSG_MOVE_SET_HOVER) {
+            this->SMSG_MOVE_SET_HOVER = std::move(other.SMSG_MOVE_SET_HOVER);
+        }
+        if (opcode == Opcode::SMSG_MOVE_UNSET_HOVER) {
+            this->SMSG_MOVE_UNSET_HOVER = std::move(other.SMSG_MOVE_UNSET_HOVER);
+        }
+        if (opcode == Opcode::SMSG_TRIGGER_CINEMATIC) {
+            this->SMSG_TRIGGER_CINEMATIC = std::move(other.SMSG_TRIGGER_CINEMATIC);
+        }
+        if (opcode == Opcode::SMSG_TUTORIAL_FLAGS) {
+            this->SMSG_TUTORIAL_FLAGS = std::move(other.SMSG_TUTORIAL_FLAGS);
+        }
+        if (opcode == Opcode::SMSG_EMOTE) {
+            this->SMSG_EMOTE = std::move(other.SMSG_EMOTE);
+        }
+        if (opcode == Opcode::SMSG_TEXT_EMOTE) {
+            this->SMSG_TEXT_EMOTE = std::move(other.SMSG_TEXT_EMOTE);
+        }
+        if (opcode == Opcode::SMSG_INVENTORY_CHANGE_FAILURE) {
+            this->SMSG_INVENTORY_CHANGE_FAILURE = std::move(other.SMSG_INVENTORY_CHANGE_FAILURE);
+        }
+        if (opcode == Opcode::SMSG_OPEN_CONTAINER) {
+            this->SMSG_OPEN_CONTAINER = std::move(other.SMSG_OPEN_CONTAINER);
+        }
+        if (opcode == Opcode::SMSG_INSPECT) {
+            this->SMSG_INSPECT = std::move(other.SMSG_INSPECT);
+        }
+        if (opcode == Opcode::SMSG_TRADE_STATUS) {
+            this->SMSG_TRADE_STATUS = std::move(other.SMSG_TRADE_STATUS);
+        }
+        if (opcode == Opcode::SMSG_TRADE_STATUS_EXTENDED) {
+            this->SMSG_TRADE_STATUS_EXTENDED = std::move(other.SMSG_TRADE_STATUS_EXTENDED);
+        }
+        if (opcode == Opcode::SMSG_INITIALIZE_FACTIONS) {
+            this->SMSG_INITIALIZE_FACTIONS = std::move(other.SMSG_INITIALIZE_FACTIONS);
+        }
+        if (opcode == Opcode::SMSG_SET_FACTION_VISIBLE) {
+            this->SMSG_SET_FACTION_VISIBLE = std::move(other.SMSG_SET_FACTION_VISIBLE);
+        }
+        if (opcode == Opcode::SMSG_SET_FACTION_STANDING) {
+            this->SMSG_SET_FACTION_STANDING = std::move(other.SMSG_SET_FACTION_STANDING);
+        }
+        if (opcode == Opcode::SMSG_SET_PROFICIENCY) {
+            this->SMSG_SET_PROFICIENCY = std::move(other.SMSG_SET_PROFICIENCY);
+        }
+        if (opcode == Opcode::SMSG_ACTION_BUTTONS) {
+            this->SMSG_ACTION_BUTTONS = std::move(other.SMSG_ACTION_BUTTONS);
+        }
+        if (opcode == Opcode::SMSG_INITIAL_SPELLS) {
+            this->SMSG_INITIAL_SPELLS = std::move(other.SMSG_INITIAL_SPELLS);
+        }
+        if (opcode == Opcode::SMSG_LEARNED_SPELL) {
+            this->SMSG_LEARNED_SPELL = std::move(other.SMSG_LEARNED_SPELL);
+        }
+        if (opcode == Opcode::SMSG_SUPERCEDED_SPELL) {
+            this->SMSG_SUPERCEDED_SPELL = std::move(other.SMSG_SUPERCEDED_SPELL);
+        }
+        if (opcode == Opcode::SMSG_CAST_RESULT) {
+            this->SMSG_CAST_RESULT = std::move(other.SMSG_CAST_RESULT);
+        }
+        if (opcode == Opcode::SMSG_SPELL_START) {
+            this->SMSG_SPELL_START = std::move(other.SMSG_SPELL_START);
+        }
+        if (opcode == Opcode::SMSG_SPELL_GO) {
+            this->SMSG_SPELL_GO = std::move(other.SMSG_SPELL_GO);
+        }
+        if (opcode == Opcode::SMSG_SPELL_FAILURE) {
+            this->SMSG_SPELL_FAILURE = std::move(other.SMSG_SPELL_FAILURE);
+        }
+        if (opcode == Opcode::SMSG_SPELL_COOLDOWN) {
+            this->SMSG_SPELL_COOLDOWN = std::move(other.SMSG_SPELL_COOLDOWN);
+        }
+        if (opcode == Opcode::SMSG_COOLDOWN_EVENT) {
+            this->SMSG_COOLDOWN_EVENT = std::move(other.SMSG_COOLDOWN_EVENT);
+        }
+        if (opcode == Opcode::SMSG_UPDATE_AURA_DURATION) {
+            this->SMSG_UPDATE_AURA_DURATION = std::move(other.SMSG_UPDATE_AURA_DURATION);
+        }
+        if (opcode == Opcode::SMSG_PET_CAST_FAILED) {
+            this->SMSG_PET_CAST_FAILED = std::move(other.SMSG_PET_CAST_FAILED);
+        }
+        if (opcode == Opcode::MSG_CHANNEL_START) {
+            this->MSG_CHANNEL_START = std::move(other.MSG_CHANNEL_START);
+        }
+        if (opcode == Opcode::MSG_CHANNEL_UPDATE) {
+            this->MSG_CHANNEL_UPDATE = std::move(other.MSG_CHANNEL_UPDATE);
+        }
+        if (opcode == Opcode::SMSG_AI_REACTION) {
+            this->SMSG_AI_REACTION = std::move(other.SMSG_AI_REACTION);
+        }
+        if (opcode == Opcode::SMSG_ATTACKSTART) {
+            this->SMSG_ATTACKSTART = std::move(other.SMSG_ATTACKSTART);
+        }
+        if (opcode == Opcode::SMSG_ATTACKSTOP) {
+            this->SMSG_ATTACKSTOP = std::move(other.SMSG_ATTACKSTOP);
+        }
+        if (opcode == Opcode::SMSG_ATTACKSWING_NOTINRANGE) {
+            this->SMSG_ATTACKSWING_NOTINRANGE = std::move(other.SMSG_ATTACKSWING_NOTINRANGE);
+        }
+        if (opcode == Opcode::SMSG_ATTACKSWING_BADFACING) {
+            this->SMSG_ATTACKSWING_BADFACING = std::move(other.SMSG_ATTACKSWING_BADFACING);
+        }
+        if (opcode == Opcode::SMSG_ATTACKSWING_NOTSTANDING) {
+            this->SMSG_ATTACKSWING_NOTSTANDING = std::move(other.SMSG_ATTACKSWING_NOTSTANDING);
+        }
+        if (opcode == Opcode::SMSG_ATTACKSWING_DEADTARGET) {
+            this->SMSG_ATTACKSWING_DEADTARGET = std::move(other.SMSG_ATTACKSWING_DEADTARGET);
+        }
+        if (opcode == Opcode::SMSG_ATTACKSWING_CANT_ATTACK) {
+            this->SMSG_ATTACKSWING_CANT_ATTACK = std::move(other.SMSG_ATTACKSWING_CANT_ATTACK);
+        }
+        if (opcode == Opcode::SMSG_ATTACKERSTATEUPDATE) {
+            this->SMSG_ATTACKERSTATEUPDATE = std::move(other.SMSG_ATTACKERSTATEUPDATE);
+        }
+        if (opcode == Opcode::SMSG_CANCEL_COMBAT) {
+            this->SMSG_CANCEL_COMBAT = std::move(other.SMSG_CANCEL_COMBAT);
+        }
+        if (opcode == Opcode::SMSG_SPELLHEALLOG) {
+            this->SMSG_SPELLHEALLOG = std::move(other.SMSG_SPELLHEALLOG);
+        }
+        if (opcode == Opcode::SMSG_SPELLENERGIZELOG) {
+            this->SMSG_SPELLENERGIZELOG = std::move(other.SMSG_SPELLENERGIZELOG);
+        }
+        if (opcode == Opcode::SMSG_BINDPOINTUPDATE) {
+            this->SMSG_BINDPOINTUPDATE = std::move(other.SMSG_BINDPOINTUPDATE);
+        }
+        if (opcode == Opcode::SMSG_PLAYERBOUND) {
+            this->SMSG_PLAYERBOUND = std::move(other.SMSG_PLAYERBOUND);
+        }
+        if (opcode == Opcode::SMSG_CLIENT_CONTROL_UPDATE) {
+            this->SMSG_CLIENT_CONTROL_UPDATE = std::move(other.SMSG_CLIENT_CONTROL_UPDATE);
+        }
+        if (opcode == Opcode::SMSG_RESURRECT_REQUEST) {
+            this->SMSG_RESURRECT_REQUEST = std::move(other.SMSG_RESURRECT_REQUEST);
+        }
+        if (opcode == Opcode::SMSG_LOOT_RESPONSE) {
+            this->SMSG_LOOT_RESPONSE = std::move(other.SMSG_LOOT_RESPONSE);
+        }
+        if (opcode == Opcode::SMSG_LOOT_RELEASE_RESPONSE) {
+            this->SMSG_LOOT_RELEASE_RESPONSE = std::move(other.SMSG_LOOT_RELEASE_RESPONSE);
+        }
+        if (opcode == Opcode::SMSG_LOOT_REMOVED) {
+            this->SMSG_LOOT_REMOVED = std::move(other.SMSG_LOOT_REMOVED);
+        }
+        if (opcode == Opcode::SMSG_LOOT_MONEY_NOTIFY) {
+            this->SMSG_LOOT_MONEY_NOTIFY = std::move(other.SMSG_LOOT_MONEY_NOTIFY);
+        }
+        if (opcode == Opcode::SMSG_LOOT_CLEAR_MONEY) {
+            this->SMSG_LOOT_CLEAR_MONEY = std::move(other.SMSG_LOOT_CLEAR_MONEY);
+        }
+        if (opcode == Opcode::SMSG_ITEM_PUSH_RESULT) {
+            this->SMSG_ITEM_PUSH_RESULT = std::move(other.SMSG_ITEM_PUSH_RESULT);
+        }
+        if (opcode == Opcode::SMSG_DUEL_REQUESTED) {
+            this->SMSG_DUEL_REQUESTED = std::move(other.SMSG_DUEL_REQUESTED);
+        }
+        if (opcode == Opcode::SMSG_DUEL_OUTOFBOUNDS) {
+            this->SMSG_DUEL_OUTOFBOUNDS = std::move(other.SMSG_DUEL_OUTOFBOUNDS);
+        }
+        if (opcode == Opcode::SMSG_DUEL_INBOUNDS) {
+            this->SMSG_DUEL_INBOUNDS = std::move(other.SMSG_DUEL_INBOUNDS);
+        }
+        if (opcode == Opcode::SMSG_DUEL_COMPLETE) {
+            this->SMSG_DUEL_COMPLETE = std::move(other.SMSG_DUEL_COMPLETE);
+        }
+        if (opcode == Opcode::SMSG_DUEL_WINNER) {
+            this->SMSG_DUEL_WINNER = std::move(other.SMSG_DUEL_WINNER);
+        }
+        if (opcode == Opcode::SMSG_MOUNTRESULT) {
+            this->SMSG_MOUNTRESULT = std::move(other.SMSG_MOUNTRESULT);
+        }
+        if (opcode == Opcode::SMSG_DISMOUNTRESULT) {
+            this->SMSG_DISMOUNTRESULT = std::move(other.SMSG_DISMOUNTRESULT);
+        }
+        if (opcode == Opcode::SMSG_MOUNTSPECIAL_ANIM) {
+            this->SMSG_MOUNTSPECIAL_ANIM = std::move(other.SMSG_MOUNTSPECIAL_ANIM);
+        }
+        if (opcode == Opcode::SMSG_PET_TAME_FAILURE) {
+            this->SMSG_PET_TAME_FAILURE = std::move(other.SMSG_PET_TAME_FAILURE);
+        }
+        if (opcode == Opcode::SMSG_PET_NAME_INVALID) {
+            this->SMSG_PET_NAME_INVALID = std::move(other.SMSG_PET_NAME_INVALID);
+        }
+        if (opcode == Opcode::SMSG_PET_SPELLS) {
+            this->SMSG_PET_SPELLS = std::move(other.SMSG_PET_SPELLS);
+        }
+        if (opcode == Opcode::SMSG_PET_MODE) {
+            this->SMSG_PET_MODE = std::move(other.SMSG_PET_MODE);
+        }
+        if (opcode == Opcode::SMSG_GOSSIP_MESSAGE) {
+            this->SMSG_GOSSIP_MESSAGE = std::move(other.SMSG_GOSSIP_MESSAGE);
+        }
+        if (opcode == Opcode::SMSG_GOSSIP_COMPLETE) {
+            this->SMSG_GOSSIP_COMPLETE = std::move(other.SMSG_GOSSIP_COMPLETE);
+        }
+        if (opcode == Opcode::SMSG_NPC_TEXT_UPDATE) {
+            this->SMSG_NPC_TEXT_UPDATE = std::move(other.SMSG_NPC_TEXT_UPDATE);
+        }
+        if (opcode == Opcode::SMSG_QUESTGIVER_STATUS) {
+            this->SMSG_QUESTGIVER_STATUS = std::move(other.SMSG_QUESTGIVER_STATUS);
+        }
+        if (opcode == Opcode::SMSG_QUESTGIVER_QUEST_LIST) {
+            this->SMSG_QUESTGIVER_QUEST_LIST = std::move(other.SMSG_QUESTGIVER_QUEST_LIST);
+        }
+        if (opcode == Opcode::SMSG_QUESTGIVER_QUEST_DETAILS) {
+            this->SMSG_QUESTGIVER_QUEST_DETAILS = std::move(other.SMSG_QUESTGIVER_QUEST_DETAILS);
+        }
+        if (opcode == Opcode::SMSG_QUESTGIVER_REQUEST_ITEMS) {
+            this->SMSG_QUESTGIVER_REQUEST_ITEMS = std::move(other.SMSG_QUESTGIVER_REQUEST_ITEMS);
+        }
+        if (opcode == Opcode::SMSG_QUESTGIVER_OFFER_REWARD) {
+            this->SMSG_QUESTGIVER_OFFER_REWARD = std::move(other.SMSG_QUESTGIVER_OFFER_REWARD);
+        }
+        if (opcode == Opcode::SMSG_QUESTGIVER_QUEST_INVALID) {
+            this->SMSG_QUESTGIVER_QUEST_INVALID = std::move(other.SMSG_QUESTGIVER_QUEST_INVALID);
+        }
+        if (opcode == Opcode::SMSG_QUESTGIVER_QUEST_COMPLETE) {
+            this->SMSG_QUESTGIVER_QUEST_COMPLETE = std::move(other.SMSG_QUESTGIVER_QUEST_COMPLETE);
+        }
+        if (opcode == Opcode::SMSG_QUESTGIVER_QUEST_FAILED) {
+            this->SMSG_QUESTGIVER_QUEST_FAILED = std::move(other.SMSG_QUESTGIVER_QUEST_FAILED);
+        }
+        if (opcode == Opcode::SMSG_QUESTLOG_FULL) {
+            this->SMSG_QUESTLOG_FULL = std::move(other.SMSG_QUESTLOG_FULL);
+        }
+        if (opcode == Opcode::SMSG_QUESTUPDATE_FAILED) {
+            this->SMSG_QUESTUPDATE_FAILED = std::move(other.SMSG_QUESTUPDATE_FAILED);
+        }
+        if (opcode == Opcode::SMSG_QUESTUPDATE_FAILEDTIMER) {
+            this->SMSG_QUESTUPDATE_FAILEDTIMER = std::move(other.SMSG_QUESTUPDATE_FAILEDTIMER);
+        }
+        if (opcode == Opcode::SMSG_QUESTUPDATE_COMPLETE) {
+            this->SMSG_QUESTUPDATE_COMPLETE = std::move(other.SMSG_QUESTUPDATE_COMPLETE);
+        }
+        if (opcode == Opcode::SMSG_QUESTUPDATE_ADD_KILL) {
+            this->SMSG_QUESTUPDATE_ADD_KILL = std::move(other.SMSG_QUESTUPDATE_ADD_KILL);
+        }
+        if (opcode == Opcode::SMSG_QUESTUPDATE_ADD_ITEM) {
+            this->SMSG_QUESTUPDATE_ADD_ITEM = std::move(other.SMSG_QUESTUPDATE_ADD_ITEM);
+        }
+        if (opcode == Opcode::SMSG_QUEST_CONFIRM_ACCEPT) {
+            this->SMSG_QUEST_CONFIRM_ACCEPT = std::move(other.SMSG_QUEST_CONFIRM_ACCEPT);
+        }
+        if (opcode == Opcode::SMSG_LIST_INVENTORY) {
+            this->SMSG_LIST_INVENTORY = std::move(other.SMSG_LIST_INVENTORY);
+        }
+        if (opcode == Opcode::SMSG_SELL_ITEM) {
+            this->SMSG_SELL_ITEM = std::move(other.SMSG_SELL_ITEM);
+        }
+        if (opcode == Opcode::SMSG_BUY_ITEM) {
+            this->SMSG_BUY_ITEM = std::move(other.SMSG_BUY_ITEM);
+        }
+        if (opcode == Opcode::SMSG_BUY_FAILED) {
+            this->SMSG_BUY_FAILED = std::move(other.SMSG_BUY_FAILED);
+        }
+        if (opcode == Opcode::SMSG_SHOWTAXINODES) {
+            this->SMSG_SHOWTAXINODES = std::move(other.SMSG_SHOWTAXINODES);
+        }
+        if (opcode == Opcode::SMSG_TAXINODE_STATUS) {
+            this->SMSG_TAXINODE_STATUS = std::move(other.SMSG_TAXINODE_STATUS);
+        }
+        if (opcode == Opcode::SMSG_ACTIVATETAXIREPLY) {
+            this->SMSG_ACTIVATETAXIREPLY = std::move(other.SMSG_ACTIVATETAXIREPLY);
+        }
+        if (opcode == Opcode::SMSG_NEW_TAXI_PATH) {
+            this->SMSG_NEW_TAXI_PATH = std::move(other.SMSG_NEW_TAXI_PATH);
+        }
+        if (opcode == Opcode::SMSG_TRAINER_LIST) {
+            this->SMSG_TRAINER_LIST = std::move(other.SMSG_TRAINER_LIST);
+        }
+        if (opcode == Opcode::SMSG_TRAINER_BUY_SUCCEEDED) {
+            this->SMSG_TRAINER_BUY_SUCCEEDED = std::move(other.SMSG_TRAINER_BUY_SUCCEEDED);
+        }
+        if (opcode == Opcode::SMSG_TRAINER_BUY_FAILED) {
+            this->SMSG_TRAINER_BUY_FAILED = std::move(other.SMSG_TRAINER_BUY_FAILED);
+        }
+        if (opcode == Opcode::SMSG_SHOW_BANK) {
+            this->SMSG_SHOW_BANK = std::move(other.SMSG_SHOW_BANK);
+        }
+        if (opcode == Opcode::SMSG_BUY_BANK_SLOT_RESULT) {
+            this->SMSG_BUY_BANK_SLOT_RESULT = std::move(other.SMSG_BUY_BANK_SLOT_RESULT);
+        }
+        if (opcode == Opcode::SMSG_PETITION_SHOWLIST) {
+            this->SMSG_PETITION_SHOWLIST = std::move(other.SMSG_PETITION_SHOWLIST);
+        }
+        if (opcode == Opcode::SMSG_PETITION_SHOW_SIGNATURES) {
+            this->SMSG_PETITION_SHOW_SIGNATURES = std::move(other.SMSG_PETITION_SHOW_SIGNATURES);
+        }
+        if (opcode == Opcode::SMSG_PETITION_SIGN_RESULTS) {
+            this->SMSG_PETITION_SIGN_RESULTS = std::move(other.SMSG_PETITION_SIGN_RESULTS);
+        }
+        if (opcode == Opcode::MSG_PETITION_DECLINE) {
+            this->MSG_PETITION_DECLINE = std::move(other.MSG_PETITION_DECLINE);
+        }
+        if (opcode == Opcode::SMSG_TURN_IN_PETITION_RESULTS) {
+            this->SMSG_TURN_IN_PETITION_RESULTS = std::move(other.SMSG_TURN_IN_PETITION_RESULTS);
+        }
+        if (opcode == Opcode::SMSG_PETITION_QUERY_RESPONSE) {
+            this->SMSG_PETITION_QUERY_RESPONSE = std::move(other.SMSG_PETITION_QUERY_RESPONSE);
+        }
+        if (opcode == Opcode::SMSG_FISH_NOT_HOOKED) {
+            this->SMSG_FISH_NOT_HOOKED = std::move(other.SMSG_FISH_NOT_HOOKED);
+        }
+        if (opcode == Opcode::SMSG_FISH_ESCAPED) {
+            this->SMSG_FISH_ESCAPED = std::move(other.SMSG_FISH_ESCAPED);
+        }
+        if (opcode == Opcode::SMSG_NOTIFICATION) {
+            this->SMSG_NOTIFICATION = std::move(other.SMSG_NOTIFICATION);
+        }
+        if (opcode == Opcode::SMSG_PLAYED_TIME) {
+            this->SMSG_PLAYED_TIME = std::move(other.SMSG_PLAYED_TIME);
+        }
+        if (opcode == Opcode::SMSG_QUERY_TIME_RESPONSE) {
+            this->SMSG_QUERY_TIME_RESPONSE = std::move(other.SMSG_QUERY_TIME_RESPONSE);
+        }
+        if (opcode == Opcode::SMSG_LOG_XPGAIN) {
+            this->SMSG_LOG_XPGAIN = std::move(other.SMSG_LOG_XPGAIN);
+        }
+        if (opcode == Opcode::SMSG_LEVELUP_INFO) {
+            this->SMSG_LEVELUP_INFO = std::move(other.SMSG_LEVELUP_INFO);
+        }
+        if (opcode == Opcode::MSG_MINIMAP_PING) {
+            this->MSG_MINIMAP_PING = std::move(other.MSG_MINIMAP_PING);
+        }
+        if (opcode == Opcode::SMSG_RESISTLOG) {
+            this->SMSG_RESISTLOG = std::move(other.SMSG_RESISTLOG);
+        }
+        if (opcode == Opcode::SMSG_ENCHANTMENTLOG) {
+            this->SMSG_ENCHANTMENTLOG = std::move(other.SMSG_ENCHANTMENTLOG);
+        }
+        if (opcode == Opcode::SMSG_START_MIRROR_TIMER) {
+            this->SMSG_START_MIRROR_TIMER = std::move(other.SMSG_START_MIRROR_TIMER);
+        }
+        if (opcode == Opcode::SMSG_PAUSE_MIRROR_TIMER) {
+            this->SMSG_PAUSE_MIRROR_TIMER = std::move(other.SMSG_PAUSE_MIRROR_TIMER);
+        }
+        if (opcode == Opcode::SMSG_STOP_MIRROR_TIMER) {
+            this->SMSG_STOP_MIRROR_TIMER = std::move(other.SMSG_STOP_MIRROR_TIMER);
+        }
+        if (opcode == Opcode::SMSG_PONG) {
+            this->SMSG_PONG = std::move(other.SMSG_PONG);
+        }
+        if (opcode == Opcode::SMSG_CLEAR_COOLDOWN) {
+            this->SMSG_CLEAR_COOLDOWN = std::move(other.SMSG_CLEAR_COOLDOWN);
+        }
+        if (opcode == Opcode::SMSG_GAMEOBJECT_PAGETEXT) {
+            this->SMSG_GAMEOBJECT_PAGETEXT = std::move(other.SMSG_GAMEOBJECT_PAGETEXT);
+        }
+        if (opcode == Opcode::SMSG_SPELL_DELAYED) {
+            this->SMSG_SPELL_DELAYED = std::move(other.SMSG_SPELL_DELAYED);
+        }
+        if (opcode == Opcode::SMSG_ITEM_TIME_UPDATE) {
+            this->SMSG_ITEM_TIME_UPDATE = std::move(other.SMSG_ITEM_TIME_UPDATE);
+        }
+        if (opcode == Opcode::SMSG_ITEM_ENCHANT_TIME_UPDATE) {
+            this->SMSG_ITEM_ENCHANT_TIME_UPDATE = std::move(other.SMSG_ITEM_ENCHANT_TIME_UPDATE);
+        }
+        if (opcode == Opcode::SMSG_AUTH_CHALLENGE) {
+            this->SMSG_AUTH_CHALLENGE = std::move(other.SMSG_AUTH_CHALLENGE);
+        }
+        if (opcode == Opcode::SMSG_AUTH_RESPONSE) {
+            this->SMSG_AUTH_RESPONSE = std::move(other.SMSG_AUTH_RESPONSE);
+        }
+        if (opcode == Opcode::MSG_SAVE_GUILD_EMBLEM) {
+            this->MSG_SAVE_GUILD_EMBLEM = std::move(other.MSG_SAVE_GUILD_EMBLEM);
+        }
+        if (opcode == Opcode::MSG_TABARDVENDOR_ACTIVATE) {
+            this->MSG_TABARDVENDOR_ACTIVATE = std::move(other.MSG_TABARDVENDOR_ACTIVATE);
+        }
+        if (opcode == Opcode::SMSG_PLAY_SPELL_VISUAL) {
+            this->SMSG_PLAY_SPELL_VISUAL = std::move(other.SMSG_PLAY_SPELL_VISUAL);
+        }
+        if (opcode == Opcode::SMSG_PARTYKILLLOG) {
+            this->SMSG_PARTYKILLLOG = std::move(other.SMSG_PARTYKILLLOG);
+        }
+        if (opcode == Opcode::SMSG_COMPRESSED_UPDATE_OBJECT) {
+            this->SMSG_COMPRESSED_UPDATE_OBJECT = std::move(other.SMSG_COMPRESSED_UPDATE_OBJECT);
+        }
+        if (opcode == Opcode::SMSG_PLAY_SPELL_IMPACT) {
+            this->SMSG_PLAY_SPELL_IMPACT = std::move(other.SMSG_PLAY_SPELL_IMPACT);
+        }
+        if (opcode == Opcode::SMSG_EXPLORATION_EXPERIENCE) {
+            this->SMSG_EXPLORATION_EXPERIENCE = std::move(other.SMSG_EXPLORATION_EXPERIENCE);
+        }
+        if (opcode == Opcode::MSG_RANDOM_ROLL) {
+            this->MSG_RANDOM_ROLL = std::move(other.MSG_RANDOM_ROLL);
+        }
+        if (opcode == Opcode::SMSG_ENVIRONMENTAL_DAMAGE_LOG) {
+            this->SMSG_ENVIRONMENTAL_DAMAGE_LOG = std::move(other.SMSG_ENVIRONMENTAL_DAMAGE_LOG);
+        }
+        if (opcode == Opcode::MSG_LOOKING_FOR_GROUP) {
+            this->MSG_LOOKING_FOR_GROUP = std::move(other.MSG_LOOKING_FOR_GROUP);
+        }
+        if (opcode == Opcode::SMSG_REMOVED_SPELL) {
+            this->SMSG_REMOVED_SPELL = std::move(other.SMSG_REMOVED_SPELL);
+        }
+        if (opcode == Opcode::SMSG_GMTICKET_CREATE) {
+            this->SMSG_GMTICKET_CREATE = std::move(other.SMSG_GMTICKET_CREATE);
+        }
+        if (opcode == Opcode::SMSG_GMTICKET_UPDATETEXT) {
+            this->SMSG_GMTICKET_UPDATETEXT = std::move(other.SMSG_GMTICKET_UPDATETEXT);
+        }
+        if (opcode == Opcode::SMSG_ACCOUNT_DATA_TIMES) {
+            this->SMSG_ACCOUNT_DATA_TIMES = std::move(other.SMSG_ACCOUNT_DATA_TIMES);
+        }
+        if (opcode == Opcode::SMSG_GMTICKET_GETTICKET) {
+            this->SMSG_GMTICKET_GETTICKET = std::move(other.SMSG_GMTICKET_GETTICKET);
+        }
+        if (opcode == Opcode::SMSG_GAMEOBJECT_SPAWN_ANIM) {
+            this->SMSG_GAMEOBJECT_SPAWN_ANIM = std::move(other.SMSG_GAMEOBJECT_SPAWN_ANIM);
+        }
+        if (opcode == Opcode::SMSG_GAMEOBJECT_DESPAWN_ANIM) {
+            this->SMSG_GAMEOBJECT_DESPAWN_ANIM = std::move(other.SMSG_GAMEOBJECT_DESPAWN_ANIM);
+        }
+        if (opcode == Opcode::MSG_CORPSE_QUERY) {
+            this->MSG_CORPSE_QUERY = std::move(other.MSG_CORPSE_QUERY);
+        }
+        if (opcode == Opcode::SMSG_GMTICKET_DELETETICKET) {
+            this->SMSG_GMTICKET_DELETETICKET = std::move(other.SMSG_GMTICKET_DELETETICKET);
+        }
+        if (opcode == Opcode::SMSG_CHAT_WRONG_FACTION) {
+            this->SMSG_CHAT_WRONG_FACTION = std::move(other.SMSG_CHAT_WRONG_FACTION);
+        }
+        if (opcode == Opcode::SMSG_GMTICKET_SYSTEMSTATUS) {
+            this->SMSG_GMTICKET_SYSTEMSTATUS = std::move(other.SMSG_GMTICKET_SYSTEMSTATUS);
+        }
+        if (opcode == Opcode::SMSG_SET_REST_START) {
+            this->SMSG_SET_REST_START = std::move(other.SMSG_SET_REST_START);
+        }
+        if (opcode == Opcode::SMSG_SPIRIT_HEALER_CONFIRM) {
+            this->SMSG_SPIRIT_HEALER_CONFIRM = std::move(other.SMSG_SPIRIT_HEALER_CONFIRM);
+        }
+        if (opcode == Opcode::SMSG_GOSSIP_POI) {
+            this->SMSG_GOSSIP_POI = std::move(other.SMSG_GOSSIP_POI);
+        }
+        if (opcode == Opcode::SMSG_LOGIN_VERIFY_WORLD) {
+            this->SMSG_LOGIN_VERIFY_WORLD = std::move(other.SMSG_LOGIN_VERIFY_WORLD);
+        }
+        if (opcode == Opcode::SMSG_SEND_MAIL_RESULT) {
+            this->SMSG_SEND_MAIL_RESULT = std::move(other.SMSG_SEND_MAIL_RESULT);
+        }
+        if (opcode == Opcode::SMSG_MAIL_LIST_RESULT) {
+            this->SMSG_MAIL_LIST_RESULT = std::move(other.SMSG_MAIL_LIST_RESULT);
+        }
+        if (opcode == Opcode::SMSG_BATTLEFIELD_LIST) {
+            this->SMSG_BATTLEFIELD_LIST = std::move(other.SMSG_BATTLEFIELD_LIST);
+        }
+        if (opcode == Opcode::SMSG_ITEM_TEXT_QUERY_RESPONSE) {
+            this->SMSG_ITEM_TEXT_QUERY_RESPONSE = std::move(other.SMSG_ITEM_TEXT_QUERY_RESPONSE);
+        }
+        if (opcode == Opcode::SMSG_SPELLLOGMISS) {
+            this->SMSG_SPELLLOGMISS = std::move(other.SMSG_SPELLLOGMISS);
+        }
+        if (opcode == Opcode::SMSG_SPELLLOGEXECUTE) {
+            this->SMSG_SPELLLOGEXECUTE = std::move(other.SMSG_SPELLLOGEXECUTE);
+        }
+        if (opcode == Opcode::SMSG_PERIODICAURALOG) {
+            this->SMSG_PERIODICAURALOG = std::move(other.SMSG_PERIODICAURALOG);
+        }
+        if (opcode == Opcode::SMSG_SPELLDAMAGESHIELD) {
+            this->SMSG_SPELLDAMAGESHIELD = std::move(other.SMSG_SPELLDAMAGESHIELD);
+        }
+        if (opcode == Opcode::SMSG_SPELLNONMELEEDAMAGELOG) {
+            this->SMSG_SPELLNONMELEEDAMAGELOG = std::move(other.SMSG_SPELLNONMELEEDAMAGELOG);
+        }
+        if (opcode == Opcode::SMSG_ZONE_UNDER_ATTACK) {
+            this->SMSG_ZONE_UNDER_ATTACK = std::move(other.SMSG_ZONE_UNDER_ATTACK);
+        }
+        if (opcode == Opcode::MSG_AUCTION_HELLO) {
+            this->MSG_AUCTION_HELLO = std::move(other.MSG_AUCTION_HELLO);
+        }
+        if (opcode == Opcode::SMSG_AUCTION_COMMAND_RESULT) {
+            this->SMSG_AUCTION_COMMAND_RESULT = std::move(other.SMSG_AUCTION_COMMAND_RESULT);
+        }
+        if (opcode == Opcode::SMSG_AUCTION_LIST_RESULT) {
+            this->SMSG_AUCTION_LIST_RESULT = std::move(other.SMSG_AUCTION_LIST_RESULT);
+        }
+        if (opcode == Opcode::SMSG_AUCTION_OWNER_LIST_RESULT) {
+            this->SMSG_AUCTION_OWNER_LIST_RESULT = std::move(other.SMSG_AUCTION_OWNER_LIST_RESULT);
+        }
+        if (opcode == Opcode::SMSG_AUCTION_BIDDER_NOTIFICATION) {
+            this->SMSG_AUCTION_BIDDER_NOTIFICATION = std::move(other.SMSG_AUCTION_BIDDER_NOTIFICATION);
+        }
+        if (opcode == Opcode::SMSG_AUCTION_OWNER_NOTIFICATION) {
+            this->SMSG_AUCTION_OWNER_NOTIFICATION = std::move(other.SMSG_AUCTION_OWNER_NOTIFICATION);
+        }
+        if (opcode == Opcode::SMSG_PROCRESIST) {
+            this->SMSG_PROCRESIST = std::move(other.SMSG_PROCRESIST);
+        }
+        if (opcode == Opcode::SMSG_DISPEL_FAILED) {
+            this->SMSG_DISPEL_FAILED = std::move(other.SMSG_DISPEL_FAILED);
+        }
+        if (opcode == Opcode::SMSG_SPELLORDAMAGE_IMMUNE) {
+            this->SMSG_SPELLORDAMAGE_IMMUNE = std::move(other.SMSG_SPELLORDAMAGE_IMMUNE);
+        }
+        if (opcode == Opcode::SMSG_AUCTION_BIDDER_LIST_RESULT) {
+            this->SMSG_AUCTION_BIDDER_LIST_RESULT = std::move(other.SMSG_AUCTION_BIDDER_LIST_RESULT);
+        }
+        if (opcode == Opcode::SMSG_SET_FLAT_SPELL_MODIFIER) {
+            this->SMSG_SET_FLAT_SPELL_MODIFIER = std::move(other.SMSG_SET_FLAT_SPELL_MODIFIER);
+        }
+        if (opcode == Opcode::SMSG_SET_PCT_SPELL_MODIFIER) {
+            this->SMSG_SET_PCT_SPELL_MODIFIER = std::move(other.SMSG_SET_PCT_SPELL_MODIFIER);
+        }
+        if (opcode == Opcode::SMSG_CORPSE_RECLAIM_DELAY) {
+            this->SMSG_CORPSE_RECLAIM_DELAY = std::move(other.SMSG_CORPSE_RECLAIM_DELAY);
+        }
+        if (opcode == Opcode::MSG_LIST_STABLED_PETS) {
+            this->MSG_LIST_STABLED_PETS = std::move(other.MSG_LIST_STABLED_PETS);
+        }
+        if (opcode == Opcode::SMSG_STABLE_RESULT) {
+            this->SMSG_STABLE_RESULT = std::move(other.SMSG_STABLE_RESULT);
+        }
+        if (opcode == Opcode::MSG_QUEST_PUSH_RESULT) {
+            this->MSG_QUEST_PUSH_RESULT = std::move(other.MSG_QUEST_PUSH_RESULT);
+        }
+        if (opcode == Opcode::SMSG_PLAY_MUSIC) {
+            this->SMSG_PLAY_MUSIC = std::move(other.SMSG_PLAY_MUSIC);
+        }
+        if (opcode == Opcode::SMSG_PLAY_OBJECT_SOUND) {
+            this->SMSG_PLAY_OBJECT_SOUND = std::move(other.SMSG_PLAY_OBJECT_SOUND);
+        }
+        if (opcode == Opcode::SMSG_SPELLDISPELLOG) {
+            this->SMSG_SPELLDISPELLOG = std::move(other.SMSG_SPELLDISPELLOG);
+        }
+        if (opcode == Opcode::MSG_QUERY_NEXT_MAIL_TIME) {
+            this->MSG_QUERY_NEXT_MAIL_TIME = std::move(other.MSG_QUERY_NEXT_MAIL_TIME);
+        }
+        if (opcode == Opcode::SMSG_RECEIVED_MAIL) {
+            this->SMSG_RECEIVED_MAIL = std::move(other.SMSG_RECEIVED_MAIL);
+        }
+        if (opcode == Opcode::SMSG_RAID_GROUP_ONLY) {
+            this->SMSG_RAID_GROUP_ONLY = std::move(other.SMSG_RAID_GROUP_ONLY);
+        }
+        if (opcode == Opcode::SMSG_PVP_CREDIT) {
+            this->SMSG_PVP_CREDIT = std::move(other.SMSG_PVP_CREDIT);
+        }
+        if (opcode == Opcode::SMSG_AUCTION_REMOVED_NOTIFICATION) {
+            this->SMSG_AUCTION_REMOVED_NOTIFICATION = std::move(other.SMSG_AUCTION_REMOVED_NOTIFICATION);
+        }
+        if (opcode == Opcode::SMSG_SERVER_MESSAGE) {
+            this->SMSG_SERVER_MESSAGE = std::move(other.SMSG_SERVER_MESSAGE);
+        }
+        if (opcode == Opcode::SMSG_MEETINGSTONE_SETQUEUE) {
+            this->SMSG_MEETINGSTONE_SETQUEUE = std::move(other.SMSG_MEETINGSTONE_SETQUEUE);
+        }
+        if (opcode == Opcode::SMSG_MEETINGSTONE_COMPLETE) {
+            this->SMSG_MEETINGSTONE_COMPLETE = std::move(other.SMSG_MEETINGSTONE_COMPLETE);
+        }
+        if (opcode == Opcode::SMSG_MEETINGSTONE_IN_PROGRESS) {
+            this->SMSG_MEETINGSTONE_IN_PROGRESS = std::move(other.SMSG_MEETINGSTONE_IN_PROGRESS);
+        }
+        if (opcode == Opcode::SMSG_MEETINGSTONE_MEMBER_ADDED) {
+            this->SMSG_MEETINGSTONE_MEMBER_ADDED = std::move(other.SMSG_MEETINGSTONE_MEMBER_ADDED);
+        }
+        if (opcode == Opcode::SMSG_CANCEL_AUTO_REPEAT) {
+            this->SMSG_CANCEL_AUTO_REPEAT = std::move(other.SMSG_CANCEL_AUTO_REPEAT);
+        }
+        if (opcode == Opcode::SMSG_STANDSTATE_UPDATE) {
+            this->SMSG_STANDSTATE_UPDATE = std::move(other.SMSG_STANDSTATE_UPDATE);
+        }
+        if (opcode == Opcode::SMSG_LOOT_ALL_PASSED) {
+            this->SMSG_LOOT_ALL_PASSED = std::move(other.SMSG_LOOT_ALL_PASSED);
+        }
+        if (opcode == Opcode::SMSG_LOOT_ROLL_WON) {
+            this->SMSG_LOOT_ROLL_WON = std::move(other.SMSG_LOOT_ROLL_WON);
+        }
+        if (opcode == Opcode::SMSG_LOOT_START_ROLL) {
+            this->SMSG_LOOT_START_ROLL = std::move(other.SMSG_LOOT_START_ROLL);
+        }
+        if (opcode == Opcode::SMSG_LOOT_ROLL) {
+            this->SMSG_LOOT_ROLL = std::move(other.SMSG_LOOT_ROLL);
+        }
+        if (opcode == Opcode::SMSG_LOOT_MASTER_LIST) {
+            this->SMSG_LOOT_MASTER_LIST = std::move(other.SMSG_LOOT_MASTER_LIST);
+        }
+        if (opcode == Opcode::SMSG_SET_FORCED_REACTIONS) {
+            this->SMSG_SET_FORCED_REACTIONS = std::move(other.SMSG_SET_FORCED_REACTIONS);
+        }
+        if (opcode == Opcode::SMSG_SPELL_FAILED_OTHER) {
+            this->SMSG_SPELL_FAILED_OTHER = std::move(other.SMSG_SPELL_FAILED_OTHER);
+        }
+        if (opcode == Opcode::SMSG_GAMEOBJECT_RESET_STATE) {
+            this->SMSG_GAMEOBJECT_RESET_STATE = std::move(other.SMSG_GAMEOBJECT_RESET_STATE);
+        }
+        if (opcode == Opcode::SMSG_CHAT_PLAYER_NOT_FOUND) {
+            this->SMSG_CHAT_PLAYER_NOT_FOUND = std::move(other.SMSG_CHAT_PLAYER_NOT_FOUND);
+        }
+        if (opcode == Opcode::MSG_TALENT_WIPE_CONFIRM) {
+            this->MSG_TALENT_WIPE_CONFIRM = std::move(other.MSG_TALENT_WIPE_CONFIRM);
+        }
+        if (opcode == Opcode::SMSG_SUMMON_REQUEST) {
+            this->SMSG_SUMMON_REQUEST = std::move(other.SMSG_SUMMON_REQUEST);
+        }
+        if (opcode == Opcode::SMSG_MONSTER_MOVE_TRANSPORT) {
+            this->SMSG_MONSTER_MOVE_TRANSPORT = std::move(other.SMSG_MONSTER_MOVE_TRANSPORT);
+        }
+        if (opcode == Opcode::SMSG_PET_BROKEN) {
+            this->SMSG_PET_BROKEN = std::move(other.SMSG_PET_BROKEN);
+        }
+        if (opcode == Opcode::MSG_MOVE_FEATHER_FALL) {
+            this->MSG_MOVE_FEATHER_FALL = std::move(other.MSG_MOVE_FEATHER_FALL);
+        }
+        if (opcode == Opcode::MSG_MOVE_WATER_WALK) {
+            this->MSG_MOVE_WATER_WALK = std::move(other.MSG_MOVE_WATER_WALK);
+        }
+        if (opcode == Opcode::SMSG_FEIGN_DEATH_RESISTED) {
+            this->SMSG_FEIGN_DEATH_RESISTED = std::move(other.SMSG_FEIGN_DEATH_RESISTED);
+        }
+        if (opcode == Opcode::SMSG_DUEL_COUNTDOWN) {
+            this->SMSG_DUEL_COUNTDOWN = std::move(other.SMSG_DUEL_COUNTDOWN);
+        }
+        if (opcode == Opcode::SMSG_AREA_TRIGGER_MESSAGE) {
+            this->SMSG_AREA_TRIGGER_MESSAGE = std::move(other.SMSG_AREA_TRIGGER_MESSAGE);
+        }
+        if (opcode == Opcode::SMSG_MEETINGSTONE_JOINFAILED) {
+            this->SMSG_MEETINGSTONE_JOINFAILED = std::move(other.SMSG_MEETINGSTONE_JOINFAILED);
+        }
+        if (opcode == Opcode::SMSG_PLAYER_SKINNED) {
+            this->SMSG_PLAYER_SKINNED = std::move(other.SMSG_PLAYER_SKINNED);
+        }
+        if (opcode == Opcode::SMSG_DURABILITY_DAMAGE_DEATH) {
+            this->SMSG_DURABILITY_DAMAGE_DEATH = std::move(other.SMSG_DURABILITY_DAMAGE_DEATH);
+        }
+        if (opcode == Opcode::MSG_PETITION_RENAME) {
+            this->MSG_PETITION_RENAME = std::move(other.MSG_PETITION_RENAME);
+        }
+        if (opcode == Opcode::SMSG_INIT_WORLD_STATES) {
+            this->SMSG_INIT_WORLD_STATES = std::move(other.SMSG_INIT_WORLD_STATES);
+        }
+        if (opcode == Opcode::SMSG_UPDATE_WORLD_STATE) {
+            this->SMSG_UPDATE_WORLD_STATE = std::move(other.SMSG_UPDATE_WORLD_STATE);
+        }
+        if (opcode == Opcode::SMSG_ITEM_NAME_QUERY_RESPONSE) {
+            this->SMSG_ITEM_NAME_QUERY_RESPONSE = std::move(other.SMSG_ITEM_NAME_QUERY_RESPONSE);
+        }
+        if (opcode == Opcode::SMSG_PET_ACTION_FEEDBACK) {
+            this->SMSG_PET_ACTION_FEEDBACK = std::move(other.SMSG_PET_ACTION_FEEDBACK);
+        }
+        if (opcode == Opcode::SMSG_CHAR_RENAME) {
+            this->SMSG_CHAR_RENAME = std::move(other.SMSG_CHAR_RENAME);
+        }
+        if (opcode == Opcode::SMSG_INSTANCE_SAVE_CREATED) {
+            this->SMSG_INSTANCE_SAVE_CREATED = std::move(other.SMSG_INSTANCE_SAVE_CREATED);
+        }
+        if (opcode == Opcode::SMSG_RAID_INSTANCE_INFO) {
+            this->SMSG_RAID_INSTANCE_INFO = std::move(other.SMSG_RAID_INSTANCE_INFO);
+        }
+        if (opcode == Opcode::SMSG_PLAY_SOUND) {
+            this->SMSG_PLAY_SOUND = std::move(other.SMSG_PLAY_SOUND);
+        }
+        if (opcode == Opcode::SMSG_BATTLEFIELD_STATUS) {
+            this->SMSG_BATTLEFIELD_STATUS = std::move(other.SMSG_BATTLEFIELD_STATUS);
+        }
+        if (opcode == Opcode::MSG_INSPECT_HONOR_STATS) {
+            this->MSG_INSPECT_HONOR_STATS = std::move(other.MSG_INSPECT_HONOR_STATS);
+        }
+        if (opcode == Opcode::SMSG_FORCE_WALK_SPEED_CHANGE) {
+            this->SMSG_FORCE_WALK_SPEED_CHANGE = std::move(other.SMSG_FORCE_WALK_SPEED_CHANGE);
+        }
+        if (opcode == Opcode::SMSG_FORCE_SWIM_BACK_SPEED_CHANGE) {
+            this->SMSG_FORCE_SWIM_BACK_SPEED_CHANGE = std::move(other.SMSG_FORCE_SWIM_BACK_SPEED_CHANGE);
+        }
+        if (opcode == Opcode::SMSG_FORCE_TURN_RATE_CHANGE) {
+            this->SMSG_FORCE_TURN_RATE_CHANGE = std::move(other.SMSG_FORCE_TURN_RATE_CHANGE);
+        }
+        if (opcode == Opcode::MSG_PVP_LOG_DATA) {
+            this->MSG_PVP_LOG_DATA = std::move(other.MSG_PVP_LOG_DATA);
+        }
+        if (opcode == Opcode::SMSG_AREA_SPIRIT_HEALER_TIME) {
+            this->SMSG_AREA_SPIRIT_HEALER_TIME = std::move(other.SMSG_AREA_SPIRIT_HEALER_TIME);
+        }
+        if (opcode == Opcode::SMSG_WARDEN_DATA) {
+            this->SMSG_WARDEN_DATA = std::move(other.SMSG_WARDEN_DATA);
+        }
+        if (opcode == Opcode::SMSG_GROUP_JOINED_BATTLEGROUND) {
+            this->SMSG_GROUP_JOINED_BATTLEGROUND = std::move(other.SMSG_GROUP_JOINED_BATTLEGROUND);
+        }
+        if (opcode == Opcode::MSG_BATTLEGROUND_PLAYER_POSITIONS) {
+            this->MSG_BATTLEGROUND_PLAYER_POSITIONS = std::move(other.MSG_BATTLEGROUND_PLAYER_POSITIONS);
+        }
+        if (opcode == Opcode::SMSG_BINDER_CONFIRM) {
+            this->SMSG_BINDER_CONFIRM = std::move(other.SMSG_BINDER_CONFIRM);
+        }
+        if (opcode == Opcode::SMSG_BATTLEGROUND_PLAYER_JOINED) {
+            this->SMSG_BATTLEGROUND_PLAYER_JOINED = std::move(other.SMSG_BATTLEGROUND_PLAYER_JOINED);
+        }
+        if (opcode == Opcode::SMSG_BATTLEGROUND_PLAYER_LEFT) {
+            this->SMSG_BATTLEGROUND_PLAYER_LEFT = std::move(other.SMSG_BATTLEGROUND_PLAYER_LEFT);
+        }
+        if (opcode == Opcode::SMSG_ADDON_INFO) {
+            this->SMSG_ADDON_INFO = std::move(other.SMSG_ADDON_INFO);
+        }
+        if (opcode == Opcode::SMSG_PET_UNLEARN_CONFIRM) {
+            this->SMSG_PET_UNLEARN_CONFIRM = std::move(other.SMSG_PET_UNLEARN_CONFIRM);
+        }
+        if (opcode == Opcode::SMSG_PARTY_MEMBER_STATS_FULL) {
+            this->SMSG_PARTY_MEMBER_STATS_FULL = std::move(other.SMSG_PARTY_MEMBER_STATS_FULL);
+        }
+        if (opcode == Opcode::SMSG_WEATHER) {
+            this->SMSG_WEATHER = std::move(other.SMSG_WEATHER);
+        }
+        if (opcode == Opcode::SMSG_RAID_INSTANCE_MESSAGE) {
+            this->SMSG_RAID_INSTANCE_MESSAGE = std::move(other.SMSG_RAID_INSTANCE_MESSAGE);
+        }
+        if (opcode == Opcode::SMSG_COMPRESSED_MOVES) {
+            this->SMSG_COMPRESSED_MOVES = std::move(other.SMSG_COMPRESSED_MOVES);
+        }
+        if (opcode == Opcode::SMSG_CHAT_RESTRICTED) {
+            this->SMSG_CHAT_RESTRICTED = std::move(other.SMSG_CHAT_RESTRICTED);
+        }
+        if (opcode == Opcode::SMSG_SPLINE_SET_RUN_SPEED) {
+            this->SMSG_SPLINE_SET_RUN_SPEED = std::move(other.SMSG_SPLINE_SET_RUN_SPEED);
+        }
+        if (opcode == Opcode::SMSG_SPLINE_SET_RUN_BACK_SPEED) {
+            this->SMSG_SPLINE_SET_RUN_BACK_SPEED = std::move(other.SMSG_SPLINE_SET_RUN_BACK_SPEED);
+        }
+        if (opcode == Opcode::SMSG_SPLINE_SET_SWIM_SPEED) {
+            this->SMSG_SPLINE_SET_SWIM_SPEED = std::move(other.SMSG_SPLINE_SET_SWIM_SPEED);
+        }
+        if (opcode == Opcode::SMSG_SPLINE_SET_WALK_SPEED) {
+            this->SMSG_SPLINE_SET_WALK_SPEED = std::move(other.SMSG_SPLINE_SET_WALK_SPEED);
+        }
+        if (opcode == Opcode::SMSG_SPLINE_SET_SWIM_BACK_SPEED) {
+            this->SMSG_SPLINE_SET_SWIM_BACK_SPEED = std::move(other.SMSG_SPLINE_SET_SWIM_BACK_SPEED);
+        }
+        if (opcode == Opcode::SMSG_SPLINE_SET_TURN_RATE) {
+            this->SMSG_SPLINE_SET_TURN_RATE = std::move(other.SMSG_SPLINE_SET_TURN_RATE);
+        }
+        if (opcode == Opcode::SMSG_SPLINE_MOVE_UNROOT) {
+            this->SMSG_SPLINE_MOVE_UNROOT = std::move(other.SMSG_SPLINE_MOVE_UNROOT);
+        }
+        if (opcode == Opcode::SMSG_SPLINE_MOVE_FEATHER_FALL) {
+            this->SMSG_SPLINE_MOVE_FEATHER_FALL = std::move(other.SMSG_SPLINE_MOVE_FEATHER_FALL);
+        }
+        if (opcode == Opcode::SMSG_SPLINE_MOVE_NORMAL_FALL) {
+            this->SMSG_SPLINE_MOVE_NORMAL_FALL = std::move(other.SMSG_SPLINE_MOVE_NORMAL_FALL);
+        }
+        if (opcode == Opcode::SMSG_SPLINE_MOVE_SET_HOVER) {
+            this->SMSG_SPLINE_MOVE_SET_HOVER = std::move(other.SMSG_SPLINE_MOVE_SET_HOVER);
+        }
+        if (opcode == Opcode::SMSG_SPLINE_MOVE_UNSET_HOVER) {
+            this->SMSG_SPLINE_MOVE_UNSET_HOVER = std::move(other.SMSG_SPLINE_MOVE_UNSET_HOVER);
+        }
+        if (opcode == Opcode::SMSG_SPLINE_MOVE_WATER_WALK) {
+            this->SMSG_SPLINE_MOVE_WATER_WALK = std::move(other.SMSG_SPLINE_MOVE_WATER_WALK);
+        }
+        if (opcode == Opcode::SMSG_SPLINE_MOVE_LAND_WALK) {
+            this->SMSG_SPLINE_MOVE_LAND_WALK = std::move(other.SMSG_SPLINE_MOVE_LAND_WALK);
+        }
+        if (opcode == Opcode::SMSG_SPLINE_MOVE_START_SWIM) {
+            this->SMSG_SPLINE_MOVE_START_SWIM = std::move(other.SMSG_SPLINE_MOVE_START_SWIM);
+        }
+        if (opcode == Opcode::SMSG_SPLINE_MOVE_STOP_SWIM) {
+            this->SMSG_SPLINE_MOVE_STOP_SWIM = std::move(other.SMSG_SPLINE_MOVE_STOP_SWIM);
+        }
+        if (opcode == Opcode::SMSG_SPLINE_MOVE_SET_RUN_MODE) {
+            this->SMSG_SPLINE_MOVE_SET_RUN_MODE = std::move(other.SMSG_SPLINE_MOVE_SET_RUN_MODE);
+        }
+        if (opcode == Opcode::SMSG_SPLINE_MOVE_SET_WALK_MODE) {
+            this->SMSG_SPLINE_MOVE_SET_WALK_MODE = std::move(other.SMSG_SPLINE_MOVE_SET_WALK_MODE);
+        }
+        if (opcode == Opcode::MSG_MOVE_TIME_SKIPPED) {
+            this->MSG_MOVE_TIME_SKIPPED = std::move(other.MSG_MOVE_TIME_SKIPPED);
+        }
+        if (opcode == Opcode::SMSG_SPLINE_MOVE_ROOT) {
+            this->SMSG_SPLINE_MOVE_ROOT = std::move(other.SMSG_SPLINE_MOVE_ROOT);
+        }
+        if (opcode == Opcode::SMSG_INVALIDATE_PLAYER) {
+            this->SMSG_INVALIDATE_PLAYER = std::move(other.SMSG_INVALIDATE_PLAYER);
+        }
+        if (opcode == Opcode::SMSG_INSTANCE_RESET) {
+            this->SMSG_INSTANCE_RESET = std::move(other.SMSG_INSTANCE_RESET);
+        }
+        if (opcode == Opcode::SMSG_INSTANCE_RESET_FAILED) {
+            this->SMSG_INSTANCE_RESET_FAILED = std::move(other.SMSG_INSTANCE_RESET_FAILED);
+        }
+        if (opcode == Opcode::SMSG_UPDATE_LAST_INSTANCE) {
+            this->SMSG_UPDATE_LAST_INSTANCE = std::move(other.SMSG_UPDATE_LAST_INSTANCE);
+        }
+        if (opcode == Opcode::MSG_RAID_TARGET_UPDATE) {
+            this->MSG_RAID_TARGET_UPDATE = std::move(other.MSG_RAID_TARGET_UPDATE);
+        }
+        if (opcode == Opcode::MSG_RAID_READY_CHECK) {
+            this->MSG_RAID_READY_CHECK = std::move(other.MSG_RAID_READY_CHECK);
+        }
+        if (opcode == Opcode::SMSG_PET_ACTION_SOUND) {
+            this->SMSG_PET_ACTION_SOUND = std::move(other.SMSG_PET_ACTION_SOUND);
+        }
+        if (opcode == Opcode::SMSG_PET_DISMISS_SOUND) {
+            this->SMSG_PET_DISMISS_SOUND = std::move(other.SMSG_PET_DISMISS_SOUND);
+        }
+        if (opcode == Opcode::SMSG_GM_TICKET_STATUS_UPDATE) {
+            this->SMSG_GM_TICKET_STATUS_UPDATE = std::move(other.SMSG_GM_TICKET_STATUS_UPDATE);
+        }
+        if (opcode == Opcode::SMSG_UPDATE_INSTANCE_OWNERSHIP) {
+            this->SMSG_UPDATE_INSTANCE_OWNERSHIP = std::move(other.SMSG_UPDATE_INSTANCE_OWNERSHIP);
+        }
+        if (opcode == Opcode::SMSG_SPELLINSTAKILLLOG) {
+            this->SMSG_SPELLINSTAKILLLOG = std::move(other.SMSG_SPELLINSTAKILLLOG);
+        }
+        if (opcode == Opcode::SMSG_SPELL_UPDATE_CHAIN_TARGETS) {
+            this->SMSG_SPELL_UPDATE_CHAIN_TARGETS = std::move(other.SMSG_SPELL_UPDATE_CHAIN_TARGETS);
+        }
+        if (opcode == Opcode::SMSG_EXPECTED_SPAM_RECORDS) {
+            this->SMSG_EXPECTED_SPAM_RECORDS = std::move(other.SMSG_EXPECTED_SPAM_RECORDS);
+        }
+        if (opcode == Opcode::SMSG_DEFENSE_MESSAGE) {
+            this->SMSG_DEFENSE_MESSAGE = std::move(other.SMSG_DEFENSE_MESSAGE);
+        }
+        return std::move(*this);
     }
 
     ~ServerOpcode() {

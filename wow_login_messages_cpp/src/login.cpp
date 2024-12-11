@@ -320,15 +320,15 @@ CMD_AUTH_LOGON_CHALLENGE_Server CMD_AUTH_LOGON_CHALLENGE_Server_read(Reader& rea
             obj.server_public_key[i] = reader.read_u8();
         }
 
-        obj.generator_length = reader.read_u8();
+        auto generator_length = reader.read_u8();
 
-        for (uint8_t i = 0; i < obj.generator_length; ++i) {
+        for (uint8_t i = 0; i < generator_length; ++i) {
             obj.generator.push_back(reader.read_u8());
         }
 
-        obj.large_safe_prime_length = reader.read_u8();
+        auto large_safe_prime_length = reader.read_u8();
 
-        for (uint8_t i = 0; i < obj.large_safe_prime_length; ++i) {
+        for (uint8_t i = 0; i < large_safe_prime_length; ++i) {
             obj.large_safe_prime.push_back(reader.read_u8());
         }
 
@@ -359,13 +359,13 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_AUTH_LOGON_CHALLENG
             writer.write_u8(v);
         }
 
-        writer.write_u8(obj.generator_length);
+        writer.write_u8(obj.generator.size());
 
         for (const auto& v : obj.generator) {
             writer.write_u8(v);
         }
 
-        writer.write_u8(obj.large_safe_prime_length);
+        writer.write_u8(obj.large_safe_prime.size());
 
         for (const auto& v : obj.large_safe_prime) {
             writer.write_u8(v);
@@ -402,9 +402,9 @@ CMD_AUTH_LOGON_PROOF_Client CMD_AUTH_LOGON_PROOF_Client_read(Reader& reader) {
         obj.crc_hash[i] = reader.read_u8();
     }
 
-    obj.number_of_telemetry_keys = reader.read_u8();
+    auto number_of_telemetry_keys = reader.read_u8();
 
-    for (uint8_t i = 0; i < obj.number_of_telemetry_keys; ++i) {
+    for (uint8_t i = 0; i < number_of_telemetry_keys; ++i) {
         obj.telemetry_keys.push_back(::wow_login_messages::version2::TelemetryKey_read(reader));
     }
 
@@ -429,7 +429,7 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_AUTH_LOGON_PROOF_Cl
         writer.write_u8(v);
     }
 
-    writer.write_u8(obj.number_of_telemetry_keys);
+    writer.write_u8(obj.telemetry_keys.size());
 
     for (const auto& v : obj.telemetry_keys) {
         TelemetryKey_write(writer, v);
@@ -611,9 +611,9 @@ CMD_REALM_LIST_Server CMD_REALM_LIST_Server_read(Reader& reader) {
 
     (void)reader.read_u32();
 
-    obj.number_of_realms = reader.read_u8();
+    auto number_of_realms = reader.read_u8();
 
-    for (uint8_t i = 0; i < obj.number_of_realms; ++i) {
+    for (uint8_t i = 0; i < number_of_realms; ++i) {
         obj.realms.push_back(::wow_login_messages::version2::Realm_read(reader));
     }
 
@@ -632,7 +632,7 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_REALM_LIST_Server::
 
     writer.write_u32(0);
 
-    writer.write_u8(obj.number_of_realms);
+    writer.write_u8(obj.realms.size());
 
     for (const auto& v : obj.realms) {
         Realm_write(writer, v);
@@ -695,9 +695,9 @@ static size_t CMD_XFER_DATA_size(const CMD_XFER_DATA& obj) {
 CMD_XFER_DATA CMD_XFER_DATA_read(Reader& reader) {
     CMD_XFER_DATA obj{};
 
-    obj.size = reader.read_u16();
+    auto size = reader.read_u16();
 
-    for (uint16_t i = 0; i < obj.size; ++i) {
+    for (uint16_t i = 0; i < size; ++i) {
         obj.data.push_back(reader.read_u8());
     }
 
@@ -710,7 +710,7 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_XFER_DATA::write() 
 
     writer.write_u8(0x31); /* opcode */
 
-    writer.write_u16(obj.size);
+    writer.write_u16(obj.data.size());
 
     for (const auto& v : obj.data) {
         writer.write_u8(v);
@@ -1122,15 +1122,15 @@ CMD_AUTH_LOGON_CHALLENGE_Server CMD_AUTH_LOGON_CHALLENGE_Server_read(Reader& rea
             obj.server_public_key[i] = reader.read_u8();
         }
 
-        obj.generator_length = reader.read_u8();
+        auto generator_length = reader.read_u8();
 
-        for (uint8_t i = 0; i < obj.generator_length; ++i) {
+        for (uint8_t i = 0; i < generator_length; ++i) {
             obj.generator.push_back(reader.read_u8());
         }
 
-        obj.large_safe_prime_length = reader.read_u8();
+        auto large_safe_prime_length = reader.read_u8();
 
-        for (uint8_t i = 0; i < obj.large_safe_prime_length; ++i) {
+        for (uint8_t i = 0; i < large_safe_prime_length; ++i) {
             obj.large_safe_prime.push_back(reader.read_u8());
         }
 
@@ -1171,13 +1171,13 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_AUTH_LOGON_CHALLENG
             writer.write_u8(v);
         }
 
-        writer.write_u8(obj.generator_length);
+        writer.write_u8(obj.generator.size());
 
         for (const auto& v : obj.generator) {
             writer.write_u8(v);
         }
 
-        writer.write_u8(obj.large_safe_prime_length);
+        writer.write_u8(obj.large_safe_prime.size());
 
         for (const auto& v : obj.large_safe_prime) {
             writer.write_u8(v);
@@ -1230,9 +1230,9 @@ CMD_AUTH_LOGON_PROOF_Client CMD_AUTH_LOGON_PROOF_Client_read(Reader& reader) {
         obj.crc_hash[i] = reader.read_u8();
     }
 
-    obj.number_of_telemetry_keys = reader.read_u8();
+    auto number_of_telemetry_keys = reader.read_u8();
 
-    for (uint8_t i = 0; i < obj.number_of_telemetry_keys; ++i) {
+    for (uint8_t i = 0; i < number_of_telemetry_keys; ++i) {
         obj.telemetry_keys.push_back(::wow_login_messages::version2::TelemetryKey_read(reader));
     }
 
@@ -1269,7 +1269,7 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_AUTH_LOGON_PROOF_Cl
         writer.write_u8(v);
     }
 
-    writer.write_u8(obj.number_of_telemetry_keys);
+    writer.write_u8(obj.telemetry_keys.size());
 
     for (const auto& v : obj.telemetry_keys) {
         TelemetryKey_write(writer, v);
@@ -1301,9 +1301,9 @@ CMD_SURVEY_RESULT CMD_SURVEY_RESULT_read(Reader& reader) {
 
     obj.error = reader.read_u8();
 
-    obj.compressed_data_length = reader.read_u16();
+    auto compressed_data_length = reader.read_u16();
 
-    for (uint16_t i = 0; i < obj.compressed_data_length; ++i) {
+    for (uint16_t i = 0; i < compressed_data_length; ++i) {
         obj.data.push_back(reader.read_u8());
     }
 
@@ -1320,7 +1320,7 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_SURVEY_RESULT::writ
 
     writer.write_u8(obj.error);
 
-    writer.write_u16(obj.compressed_data_length);
+    writer.write_u16(obj.data.size());
 
     for (const auto& v : obj.data) {
         writer.write_u8(v);
@@ -1730,15 +1730,15 @@ CMD_AUTH_LOGON_CHALLENGE_Server CMD_AUTH_LOGON_CHALLENGE_Server_read(Reader& rea
             obj.server_public_key[i] = reader.read_u8();
         }
 
-        obj.generator_length = reader.read_u8();
+        auto generator_length = reader.read_u8();
 
-        for (uint8_t i = 0; i < obj.generator_length; ++i) {
+        for (uint8_t i = 0; i < generator_length; ++i) {
             obj.generator.push_back(reader.read_u8());
         }
 
-        obj.large_safe_prime_length = reader.read_u8();
+        auto large_safe_prime_length = reader.read_u8();
 
-        for (uint8_t i = 0; i < obj.large_safe_prime_length; ++i) {
+        for (uint8_t i = 0; i < large_safe_prime_length; ++i) {
             obj.large_safe_prime.push_back(reader.read_u8());
         }
 
@@ -1791,13 +1791,13 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_AUTH_LOGON_CHALLENG
             writer.write_u8(v);
         }
 
-        writer.write_u8(obj.generator_length);
+        writer.write_u8(obj.generator.size());
 
         for (const auto& v : obj.generator) {
             writer.write_u8(v);
         }
 
-        writer.write_u8(obj.large_safe_prime_length);
+        writer.write_u8(obj.large_safe_prime.size());
 
         for (const auto& v : obj.large_safe_prime) {
             writer.write_u8(v);
@@ -1866,9 +1866,9 @@ CMD_AUTH_LOGON_PROOF_Client CMD_AUTH_LOGON_PROOF_Client_read(Reader& reader) {
         obj.crc_hash[i] = reader.read_u8();
     }
 
-    obj.number_of_telemetry_keys = reader.read_u8();
+    auto number_of_telemetry_keys = reader.read_u8();
 
-    for (uint8_t i = 0; i < obj.number_of_telemetry_keys; ++i) {
+    for (uint8_t i = 0; i < number_of_telemetry_keys; ++i) {
         obj.telemetry_keys.push_back(::wow_login_messages::version2::TelemetryKey_read(reader));
     }
 
@@ -1911,7 +1911,7 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_AUTH_LOGON_PROOF_Cl
         writer.write_u8(v);
     }
 
-    writer.write_u8(obj.number_of_telemetry_keys);
+    writer.write_u8(obj.telemetry_keys.size());
 
     for (const auto& v : obj.telemetry_keys) {
         TelemetryKey_write(writer, v);
@@ -2037,9 +2037,9 @@ CMD_REALM_LIST_Server CMD_REALM_LIST_Server_read(Reader& reader) {
 
     (void)reader.read_u32();
 
-    obj.number_of_realms = reader.read_u8();
+    auto number_of_realms = reader.read_u8();
 
-    for (uint8_t i = 0; i < obj.number_of_realms; ++i) {
+    for (uint8_t i = 0; i < number_of_realms; ++i) {
         obj.realms.push_back(::wow_login_messages::version5::Realm_read(reader));
     }
 
@@ -2058,7 +2058,7 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_REALM_LIST_Server::
 
     writer.write_u32(0);
 
-    writer.write_u8(obj.number_of_realms);
+    writer.write_u8(obj.realms.size());
 
     for (const auto& v : obj.realms) {
         Realm_write(writer, v);
@@ -2453,9 +2453,9 @@ CMD_REALM_LIST_Server CMD_REALM_LIST_Server_read(Reader& reader) {
 
     (void)reader.read_u32();
 
-    obj.number_of_realms = reader.read_u16();
+    auto number_of_realms = reader.read_u16();
 
-    for (uint16_t i = 0; i < obj.number_of_realms; ++i) {
+    for (uint16_t i = 0; i < number_of_realms; ++i) {
         obj.realms.push_back(::wow_login_messages::version5::Realm_read(reader));
     }
 
@@ -2474,7 +2474,7 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_REALM_LIST_Server::
 
     writer.write_u32(0);
 
-    writer.write_u16(obj.number_of_realms);
+    writer.write_u16(obj.realms.size());
 
     for (const auto& v : obj.realms) {
         Realm_write(writer, v);
@@ -3307,15 +3307,15 @@ CMD_AUTH_LOGON_CHALLENGE_Server CMD_AUTH_LOGON_CHALLENGE_Server_read(Reader& rea
             obj.server_public_key[i] = reader.read_u8();
         }
 
-        obj.generator_length = reader.read_u8();
+        auto generator_length = reader.read_u8();
 
-        for (uint8_t i = 0; i < obj.generator_length; ++i) {
+        for (uint8_t i = 0; i < generator_length; ++i) {
             obj.generator.push_back(reader.read_u8());
         }
 
-        obj.large_safe_prime_length = reader.read_u8();
+        auto large_safe_prime_length = reader.read_u8();
 
-        for (uint8_t i = 0; i < obj.large_safe_prime_length; ++i) {
+        for (uint8_t i = 0; i < large_safe_prime_length; ++i) {
             obj.large_safe_prime.push_back(reader.read_u8());
         }
 
@@ -3372,13 +3372,13 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_AUTH_LOGON_CHALLENG
             writer.write_u8(v);
         }
 
-        writer.write_u8(obj.generator_length);
+        writer.write_u8(obj.generator.size());
 
         for (const auto& v : obj.generator) {
             writer.write_u8(v);
         }
 
-        writer.write_u8(obj.large_safe_prime_length);
+        writer.write_u8(obj.large_safe_prime.size());
 
         for (const auto& v : obj.large_safe_prime) {
             writer.write_u8(v);
@@ -3455,9 +3455,9 @@ CMD_AUTH_LOGON_PROOF_Client CMD_AUTH_LOGON_PROOF_Client_read(Reader& reader) {
         obj.crc_hash[i] = reader.read_u8();
     }
 
-    obj.number_of_telemetry_keys = reader.read_u8();
+    auto number_of_telemetry_keys = reader.read_u8();
 
-    for (uint8_t i = 0; i < obj.number_of_telemetry_keys; ++i) {
+    for (uint8_t i = 0; i < number_of_telemetry_keys; ++i) {
         obj.telemetry_keys.push_back(::wow_login_messages::version2::TelemetryKey_read(reader));
     }
 
@@ -3504,7 +3504,7 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_AUTH_LOGON_PROOF_Cl
         writer.write_u8(v);
     }
 
-    writer.write_u8(obj.number_of_telemetry_keys);
+    writer.write_u8(obj.telemetry_keys.size());
 
     for (const auto& v : obj.telemetry_keys) {
         TelemetryKey_write(writer, v);
@@ -3698,9 +3698,9 @@ CMD_REALM_LIST_Server CMD_REALM_LIST_Server_read(Reader& reader) {
 
     (void)reader.read_u32();
 
-    obj.number_of_realms = reader.read_u16();
+    auto number_of_realms = reader.read_u16();
 
-    for (uint16_t i = 0; i < obj.number_of_realms; ++i) {
+    for (uint16_t i = 0; i < number_of_realms; ++i) {
         obj.realms.push_back(::wow_login_messages::version8::Realm_read(reader));
     }
 
@@ -3719,7 +3719,7 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_REALM_LIST_Server::
 
     writer.write_u32(0);
 
-    writer.write_u16(obj.number_of_realms);
+    writer.write_u16(obj.realms.size());
 
     for (const auto& v : obj.realms) {
         Realm_write(writer, v);

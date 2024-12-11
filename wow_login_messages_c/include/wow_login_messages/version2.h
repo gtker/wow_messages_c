@@ -64,8 +64,8 @@ typedef enum {
 typedef struct {
     version2_RealmType realm_type;
     version2_RealmFlag flag;
-    WowLoginString name;
-    WowLoginString address;
+    char* name;
+    char* address;
     float population;
     uint8_t number_of_characters_on_realm;
     version2_RealmCategory category;
@@ -78,20 +78,20 @@ typedef all_Version version2_Version;
 typedef struct {
     uint16_t unknown1;
     uint32_t unknown2;
-    uint8_t (*unknown3)[4];
-    uint8_t (*cd_key_proof)[20];
+    uint8_t unknown3[4];
+    uint8_t cd_key_proof[20];
 
 } version2_TelemetryKey;
 
 typedef struct {
     version2_LoginResult result;
-    uint8_t (*server_public_key)[32];
+    uint8_t server_public_key[32];
     uint8_t generator_length;
     uint8_t* generator;
     uint8_t large_safe_prime_length;
     uint8_t* large_safe_prime;
-    uint8_t (*salt)[32];
-    uint8_t (*crc_salt)[16];
+    uint8_t salt[32];
+    uint8_t crc_salt[16];
 
 } version2_CMD_AUTH_LOGON_CHALLENGE_Server;
 WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version2_CMD_AUTH_LOGON_CHALLENGE_Server_write(WowLoginWriter* writer, const version2_CMD_AUTH_LOGON_CHALLENGE_Server* object);
@@ -100,9 +100,9 @@ WOW_LOGIN_MESSAGES_C_EXPORT void version2_CMD_AUTH_LOGON_CHALLENGE_Server_free(v
 typedef all_CMD_AUTH_LOGON_CHALLENGE_Client version2_CMD_AUTH_LOGON_CHALLENGE_Client;
 
 typedef struct {
-    uint8_t (*client_public_key)[32];
-    uint8_t (*client_proof)[20];
-    uint8_t (*crc_hash)[20];
+    uint8_t client_public_key[32];
+    uint8_t client_proof[20];
+    uint8_t crc_hash[20];
     uint8_t number_of_telemetry_keys;
     version2_TelemetryKey* telemetry_keys;
 
@@ -112,7 +112,7 @@ WOW_LOGIN_MESSAGES_C_EXPORT void version2_CMD_AUTH_LOGON_PROOF_Client_free(versi
 
 typedef struct {
     version2_LoginResult result;
-    uint8_t (*server_proof)[20];
+    uint8_t server_proof[20];
     uint32_t hardware_survey_id;
 
 } version2_CMD_AUTH_LOGON_PROOF_Server;
@@ -121,8 +121,8 @@ WOW_LOGIN_MESSAGES_C_EXPORT void version2_CMD_AUTH_LOGON_PROOF_Server_free(versi
 
 typedef struct {
     version2_LoginResult result;
-    uint8_t (*challenge_data)[16];
-    uint8_t (*checksum_salt)[16];
+    uint8_t challenge_data[16];
+    uint8_t checksum_salt[16];
 
 } version2_CMD_AUTH_RECONNECT_CHALLENGE_Server;
 WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version2_CMD_AUTH_RECONNECT_CHALLENGE_Server_write(WowLoginWriter* writer, const version2_CMD_AUTH_RECONNECT_CHALLENGE_Server* object);
@@ -137,13 +137,12 @@ typedef struct {
 WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version2_CMD_AUTH_RECONNECT_PROOF_Server_write(WowLoginWriter* writer, const version2_CMD_AUTH_RECONNECT_PROOF_Server* object);
 
 typedef struct {
-    uint8_t (*proof_data)[16];
-    uint8_t (*client_proof)[20];
-    uint8_t (*client_checksum)[20];
+    uint8_t proof_data[16];
+    uint8_t client_proof[20];
+    uint8_t client_checksum[20];
 
 } version2_CMD_AUTH_RECONNECT_PROOF_Client;
 WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version2_CMD_AUTH_RECONNECT_PROOF_Client_write(WowLoginWriter* writer, const version2_CMD_AUTH_RECONNECT_PROOF_Client* object);
-WOW_LOGIN_MESSAGES_C_EXPORT void version2_CMD_AUTH_RECONNECT_PROOF_Client_free(version2_CMD_AUTH_RECONNECT_PROOF_Client* object);
 
 typedef struct {
     uint8_t number_of_realms;
@@ -156,9 +155,9 @@ WOW_LOGIN_MESSAGES_C_EXPORT void version2_CMD_REALM_LIST_Server_free(version2_CM
 WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version2_CMD_REALM_LIST_Client_write(WowLoginWriter* writer);
 
 typedef struct {
-    WowLoginString filename;
+    char* filename;
     uint64_t file_size;
-    uint8_t (*file_md5)[16];
+    uint8_t file_md5[16];
 
 } version2_CMD_XFER_INITIATE;
 WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version2_CMD_XFER_INITIATE_write(WowLoginWriter* writer, const version2_CMD_XFER_INITIATE* object);

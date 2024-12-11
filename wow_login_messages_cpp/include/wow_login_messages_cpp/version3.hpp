@@ -5,6 +5,8 @@
 
 #include "wow_login_messages_cpp/wow_login_messages.hpp"
 
+#include "wow_login_messages_cpp/version2.hpp"
+
 namespace wow_login_messages {
 namespace version3 {
 
@@ -38,9 +40,7 @@ typedef version2::TelemetryKey TelemetryKey;
 struct CMD_AUTH_LOGON_CHALLENGE_Server {
     LoginResult result;
     std::array<uint8_t, 32> server_public_key;
-    uint8_t generator_length;
     std::vector<uint8_t> generator;
-    uint8_t large_safe_prime_length;
     std::vector<uint8_t> large_safe_prime;
     std::array<uint8_t, 32> salt;
     std::array<uint8_t, 16> crc_salt;
@@ -59,7 +59,6 @@ struct CMD_AUTH_LOGON_PROOF_Client {
     std::array<uint8_t, 32> client_public_key;
     std::array<uint8_t, 20> client_proof;
     std::array<uint8_t, 20> crc_hash;
-    uint8_t number_of_telemetry_keys;
     std::vector<version2::TelemetryKey> telemetry_keys;
     SecurityFlag security_flag;
     std::array<uint8_t, 16> pin_salt;
@@ -73,7 +72,6 @@ typedef all::CMD_AUTH_RECONNECT_CHALLENGE_Client CMD_AUTH_RECONNECT_CHALLENGE_Cl
 struct CMD_SURVEY_RESULT {
     uint32_t survey_id;
     uint8_t error;
-    uint16_t compressed_data_length;
     std::vector<uint8_t> data;
 
     WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
@@ -149,6 +147,30 @@ struct ClientOpcode {
         if (opcode == Opcode::CMD_XFER_CANCEL) {
             this->CMD_XFER_CANCEL = std::move(other.CMD_XFER_CANCEL);
         }
+    }
+
+    ClientOpcode operator=(ClientOpcode&& other) noexcept {
+        this->opcode = other.opcode;
+        other.opcode = Opcode::NONE;
+        if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+            this->CMD_AUTH_LOGON_PROOF = std::move(other.CMD_AUTH_LOGON_PROOF);
+        }
+        if (opcode == Opcode::CMD_SURVEY_RESULT) {
+            this->CMD_SURVEY_RESULT = std::move(other.CMD_SURVEY_RESULT);
+        }
+        if (opcode == Opcode::CMD_REALM_LIST) {
+            this->CMD_REALM_LIST = std::move(other.CMD_REALM_LIST);
+        }
+        if (opcode == Opcode::CMD_XFER_ACCEPT) {
+            this->CMD_XFER_ACCEPT = std::move(other.CMD_XFER_ACCEPT);
+        }
+        if (opcode == Opcode::CMD_XFER_RESUME) {
+            this->CMD_XFER_RESUME = std::move(other.CMD_XFER_RESUME);
+        }
+        if (opcode == Opcode::CMD_XFER_CANCEL) {
+            this->CMD_XFER_CANCEL = std::move(other.CMD_XFER_CANCEL);
+        }
+        return std::move(*this);
     }
 
     ~ClientOpcode() {
@@ -279,6 +301,27 @@ struct ServerOpcode {
         if (opcode == Opcode::CMD_XFER_DATA) {
             this->CMD_XFER_DATA = std::move(other.CMD_XFER_DATA);
         }
+    }
+
+    ServerOpcode operator=(ServerOpcode&& other) noexcept {
+        this->opcode = other.opcode;
+        other.opcode = Opcode::NONE;
+        if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+            this->CMD_AUTH_LOGON_CHALLENGE = std::move(other.CMD_AUTH_LOGON_CHALLENGE);
+        }
+        if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+            this->CMD_AUTH_LOGON_PROOF = std::move(other.CMD_AUTH_LOGON_PROOF);
+        }
+        if (opcode == Opcode::CMD_REALM_LIST) {
+            this->CMD_REALM_LIST = std::move(other.CMD_REALM_LIST);
+        }
+        if (opcode == Opcode::CMD_XFER_INITIATE) {
+            this->CMD_XFER_INITIATE = std::move(other.CMD_XFER_INITIATE);
+        }
+        if (opcode == Opcode::CMD_XFER_DATA) {
+            this->CMD_XFER_DATA = std::move(other.CMD_XFER_DATA);
+        }
+        return std::move(*this);
     }
 
     ~ServerOpcode() {

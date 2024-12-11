@@ -19,7 +19,8 @@ static void check_opcode(const int opcode, const int expected, const char* locat
     }
 }
 
-unsigned char write_buffer[1 << 16] = {0}; /* uint16_t max */
+unsigned char write_buffer[(1 << 16 ) - 1] = {0}; /* uint16_t max */
+unsigned char write_buffer2[(1 << 16) - 1] = {0}; /* uint16_t max */
 int main(void) {
     WowWorldReader reader;
     WowWorldWriter writer;
@@ -262,7 +263,6 @@ int main(void) {
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_TUTORIAL_FLAGS 0", "failed to write");
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_TUTORIAL_FLAGS 0");
-        tbc_server_opcode_free(&opcode);
     }while (0);
 
     /* CMSG_STANDSTATECHANGE */
@@ -560,7 +560,6 @@ int main(void) {
         TbcClientOpcodeContainer opcode;
 
         TbcClientOpcodeContainer opcode2;
-        unsigned char* write_buffer2;
 
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_client_opcode_read(&reader, &opcode);
@@ -572,7 +571,6 @@ int main(void) {
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_AUTH_SESSION 0", "failed to write");
         reader2 = wwm_create_reader(write_buffer, sizeof(write_buffer));
-        write_buffer2 = malloc(sizeof(write_buffer));
 
         result = tbc_client_opcode_read(&reader2, &opcode2);
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_AUTH_SESSION 0", "failed to read second");
@@ -583,7 +581,6 @@ int main(void) {
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_AUTH_SESSION 0", "failed to write second");
 
         wlm_test_compare_buffers(write_buffer, write_buffer2, writer.index, __FILE__ ":" STRINGIFY(__LINE__) " CMSG_AUTH_SESSION 0");
-        free(write_buffer2);
 
         tbc_client_opcode_free(&opcode2);
         tbc_client_opcode_free(&opcode);
@@ -605,7 +602,6 @@ int main(void) {
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ACCOUNT_DATA_TIMES 0", "failed to write");
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_ACCOUNT_DATA_TIMES 0");
-        tbc_server_opcode_free(&opcode);
     }while (0);
 
     /* CMSG_REQUEST_ACCOUNT_DATA */
@@ -633,7 +629,6 @@ int main(void) {
         TbcClientOpcodeContainer opcode;
 
         TbcClientOpcodeContainer opcode2;
-        unsigned char* write_buffer2;
 
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_client_opcode_read(&reader, &opcode);
@@ -645,7 +640,6 @@ int main(void) {
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 0", "failed to write");
         reader2 = wwm_create_reader(write_buffer, sizeof(write_buffer));
-        write_buffer2 = malloc(sizeof(write_buffer));
 
         result = tbc_client_opcode_read(&reader2, &opcode2);
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 0", "failed to read second");
@@ -656,7 +650,6 @@ int main(void) {
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 0", "failed to write second");
 
         wlm_test_compare_buffers(write_buffer, write_buffer2, writer.index, __FILE__ ":" STRINGIFY(__LINE__) " CMSG_UPDATE_ACCOUNT_DATA 0");
-        free(write_buffer2);
 
         tbc_client_opcode_free(&opcode2);
         tbc_client_opcode_free(&opcode);
@@ -668,7 +661,6 @@ int main(void) {
         TbcClientOpcodeContainer opcode;
 
         TbcClientOpcodeContainer opcode2;
-        unsigned char* write_buffer2;
 
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_client_opcode_read(&reader, &opcode);
@@ -680,7 +672,6 @@ int main(void) {
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 1", "failed to write");
         reader2 = wwm_create_reader(write_buffer, sizeof(write_buffer));
-        write_buffer2 = malloc(sizeof(write_buffer));
 
         result = tbc_client_opcode_read(&reader2, &opcode2);
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 1", "failed to read second");
@@ -691,7 +682,6 @@ int main(void) {
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 1", "failed to write second");
 
         wlm_test_compare_buffers(write_buffer, write_buffer2, writer.index, __FILE__ ":" STRINGIFY(__LINE__) " CMSG_UPDATE_ACCOUNT_DATA 1");
-        free(write_buffer2);
 
         tbc_client_opcode_free(&opcode2);
         tbc_client_opcode_free(&opcode);

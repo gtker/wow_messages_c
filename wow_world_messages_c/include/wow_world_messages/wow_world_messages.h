@@ -38,12 +38,6 @@ typedef enum
 
 typedef struct
 {
-    uint32_t length;
-    char* string;
-} WowWorldString;
-
-typedef struct
-{
     uint32_t amount_of_splines;
     all_Vector3d* splines;
 } MonsterMoveSpline;
@@ -51,7 +45,7 @@ typedef struct
 typedef struct
 {
     uint64_t guid;
-    WowWorldString name;
+    char* name;
 } NamedGuid;
 
 typedef struct

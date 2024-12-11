@@ -5,6 +5,9 @@
 
 #include "wow_login_messages/wow_login_messages.h"
 
+#include "wow_login_messages/version2.h"
+#include "wow_login_messages/version3.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -37,8 +40,8 @@ typedef struct {
     version5_RealmType realm_type;
     bool locked;
     version5_RealmFlag flag;
-    WowLoginString name;
-    WowLoginString address;
+    char* name;
+    char* address;
     float population;
     uint8_t number_of_characters_on_realm;
     version5_RealmCategory category;
@@ -52,16 +55,16 @@ typedef version2_TelemetryKey version5_TelemetryKey;
 
 typedef struct {
     version5_LoginResult result;
-    uint8_t (*server_public_key)[32];
+    uint8_t server_public_key[32];
     uint8_t generator_length;
     uint8_t* generator;
     uint8_t large_safe_prime_length;
     uint8_t* large_safe_prime;
-    uint8_t (*salt)[32];
-    uint8_t (*crc_salt)[16];
+    uint8_t salt[32];
+    uint8_t crc_salt[16];
     version5_SecurityFlag security_flag;
     uint32_t pin_grid_seed;
-    uint8_t (*pin_salt)[16];
+    uint8_t pin_salt[16];
     uint8_t width;
     uint8_t height;
     uint8_t digit_count;
@@ -75,15 +78,15 @@ WOW_LOGIN_MESSAGES_C_EXPORT void version5_CMD_AUTH_LOGON_CHALLENGE_Server_free(v
 typedef all_CMD_AUTH_LOGON_CHALLENGE_Client version5_CMD_AUTH_LOGON_CHALLENGE_Client;
 
 typedef struct {
-    uint8_t (*client_public_key)[32];
-    uint8_t (*client_proof)[20];
-    uint8_t (*crc_hash)[20];
+    uint8_t client_public_key[32];
+    uint8_t client_proof[20];
+    uint8_t crc_hash[20];
     uint8_t number_of_telemetry_keys;
     version2_TelemetryKey* telemetry_keys;
     version5_SecurityFlag security_flag;
-    uint8_t (*pin_salt)[16];
-    uint8_t (*pin_hash)[20];
-    uint8_t (*matrix_card_proof)[20];
+    uint8_t pin_salt[16];
+    uint8_t pin_hash[20];
+    uint8_t matrix_card_proof[20];
 
 } version5_CMD_AUTH_LOGON_PROOF_Client;
 WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version5_CMD_AUTH_LOGON_PROOF_Client_write(WowLoginWriter* writer, const version5_CMD_AUTH_LOGON_PROOF_Client* object);
@@ -91,7 +94,7 @@ WOW_LOGIN_MESSAGES_C_EXPORT void version5_CMD_AUTH_LOGON_PROOF_Client_free(versi
 
 typedef struct {
     version5_LoginResult result;
-    uint8_t (*server_proof)[20];
+    uint8_t server_proof[20];
     uint32_t hardware_survey_id;
     uint16_t unknown;
 

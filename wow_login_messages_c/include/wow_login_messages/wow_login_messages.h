@@ -33,12 +33,6 @@ typedef enum
     WLM_RESULT_MALLOC_FAIL = -2
 } WowLoginResult;
 
-typedef struct
-{
-    uint8_t length;
-    char* string;
-} WowLoginString;
-
 typedef enum
 {
     CMD_AUTH_LOGON_CHALLENGE = 0x00,

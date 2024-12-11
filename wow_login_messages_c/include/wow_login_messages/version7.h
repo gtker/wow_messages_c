@@ -5,6 +5,11 @@
 
 #include "wow_login_messages/wow_login_messages.h"
 
+#include "wow_login_messages/version2.h"
+#include "wow_login_messages/version3.h"
+#include "wow_login_messages/version5.h"
+#include "wow_login_messages/version6.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */

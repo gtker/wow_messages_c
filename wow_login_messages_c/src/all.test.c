@@ -25,7 +25,8 @@ static void check_opcode(const int opcode, const int expected, const char* locat
     }
 }
 
-unsigned char write_buffer[1 << 16] = {0}; /* uint16_t max */
+unsigned char write_buffer[(1 << 16 ) - 1] = {0}; /* uint16_t max */
+unsigned char write_buffer2[(1 << 16) - 1] = {0}; /* uint16_t max */
 int main(void) {
     WowLoginReader reader;
     WowLoginWriter writer;
@@ -286,7 +287,6 @@ int main(void) {
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Client 0", "failed to write");
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Client 0");
-        version2_client_opcode_free(&opcode);
     }while (0);
 
     /* CMD_REALM_LIST_Server */

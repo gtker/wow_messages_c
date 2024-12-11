@@ -99,9 +99,18 @@ def print_login_utils_side(s: Writer, h: Writer, messages: list[model.Container]
         h.closing_curly()
         h.newline()
 
-        # TODO FIX CONSTRUCTORS
-        # h.wln(f"{side.capitalize()}Opcode(const {side.capitalize()}Opcode&) {{/* TODO */}}")
-        # h.newline()
+        h.open_curly(f"{side.capitalize()}Opcode operator=({side.capitalize()}Opcode&& other) noexcept")
+        h.wln("this->opcode = other.opcode;")
+        h.wln("other.opcode = Opcode::NONE;")
+        for e in filter(matches, messages):
+            ty = e.name.replace("_Client", "").replace("_Server", "")
+
+            h.open_curly(f"if (opcode == Opcode::{ty})")
+            h.wln(f"this->{ty} = std::move(other.{ty});")
+            h.closing_curly()  # if (opcode == Opcode
+        h.wln("return std::move(*this);")
+        h.closing_curly()
+        h.newline()
 
         h.open_curly(f"~{side.capitalize()}Opcode()")
         for e in filter(matches, messages):
@@ -221,7 +230,7 @@ def write_opcode_to_string(s: Writer, h: Writer, messages: list[model.Container]
         function_declaration = f"{get_export_define(messages[0].tags)} char* {module_name}_{side}_opcode_to_str({module_name_pascal}{side_pascal}OpcodeContainer* opcodes)"
         h.wln(f"{function_declaration};")
         s.open_curly(function_declaration)
-        prefix =  f"{module_name[0].upper()}_" if is_world(messages[0].tags) else ""
+        prefix = f"{module_name[0].upper()}_" if is_world(messages[0].tags) else ""
 
         s.open_curly("switch (opcodes->opcode)")
         for e in messages:
@@ -280,7 +289,7 @@ def write_opcode_write(s: Writer, h: Writer, messages: list[model.Container], v:
         s.wln("return {}; /* unreachable */")
     else:
         s.open_curly("switch (opcodes->opcode)")
-        prefix =  f"{module_name[0].upper()}_" if is_world(messages[0].tags) else ""
+        prefix = f"{module_name[0].upper()}_" if is_world(messages[0].tags) else ""
 
         wlm_prefix = "WWM" if is_world(messages[0].tags) else "WLM"
         for e in messages:
@@ -401,7 +410,7 @@ def write_opcode_read(s: Writer, h: Writer, messages: list[model.Container], v: 
         s.open_curly("switch (opcodes->opcode)")
 
         wlm_prefix = "WWM" if is_world(messages[0].tags) else "WLM"
-        prefix =  f"{module_name[0].upper()}_" if is_world(messages[0].tags) else ""
+        prefix = f"{module_name[0].upper()}_" if is_world(messages[0].tags) else ""
 
         for e in messages:
             if not version_matches(e.tags, v) \
@@ -450,7 +459,7 @@ def write_opcode_free(s: Writer, h: Writer, messages: list[model.Container], v: 
 
     s.open_curly(function_declaration)
 
-    prefix =  f"{module_name[0].upper()}_" if is_world(messages[0].tags) else ""
+    prefix = f"{module_name[0].upper()}_" if is_world(messages[0].tags) else ""
     s.open_curly("switch (opcodes->opcode)")
     for e in messages:
         if not version_matches(e.tags, v) \

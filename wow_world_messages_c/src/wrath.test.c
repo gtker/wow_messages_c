@@ -19,7 +19,8 @@ static void check_opcode(const int opcode, const int expected, const char* locat
     }
 }
 
-unsigned char write_buffer[1 << 16] = {0}; /* uint16_t max */
+unsigned char write_buffer[(1 << 16 ) - 1] = {0}; /* uint16_t max */
+unsigned char write_buffer2[(1 << 16) - 1] = {0}; /* uint16_t max */
 int main(void) {
     WowWorldReader reader;
     WowWorldWriter writer;
@@ -277,7 +278,6 @@ int main(void) {
 
         check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_TUTORIAL_FLAGS 0", "failed to write");
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_TUTORIAL_FLAGS 0");
-        wrath_server_opcode_free(&opcode);
     }while (0);
 
     /* CMSG_STANDSTATECHANGE */

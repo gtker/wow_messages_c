@@ -68,9 +68,9 @@ def main():
         print_login_test_prefix(tests, m)
 
         s = Writer()
-        print_login(m.login, s, tests, LOGIN_VERSION_ALL)
+        print_login(m.login, s, tests, LOGIN_VERSION_ALL, m.distinct_login_versions_other_than_all)
         for i, v in enumerate(m.distinct_login_versions_other_than_all):
-            print_login(m.login, s, tests, v)
+            print_login(m.login, s, tests, v, m.distinct_login_versions_other_than_all)
 
         source_dir = LOGIN_CPP_SOURCE_DIR if is_cpp() else LOGIN_C_SOURCE_DIR
         pp = "pp" if is_cpp() else ""
@@ -115,6 +115,8 @@ def sanitize_model(
         for enumerator in definer.enumerators:
             if enumerator.name == "SING":
                 enumerator.name = "SINGS"
+            if enumerator.name == "TRY_AGAIN":
+                enumerator.name = "TRY_CAST_AGAIN"
         return definer
 
     for e in m.world.enums:
@@ -124,7 +126,8 @@ def sanitize_model(
 
 
 def print_includes(s: Writer, h: Writer, world: bool, version_name: str,
-                   v: typing.Union[int | model.WorldVersion], m: model.Objects):
+                   v: typing.Union[int | model.WorldVersion], m: model.Objects,
+                   distinct_login_versions_other_than_all: typing.List[int]):
     include_dir = "wow_login_messages"
     if world:
         include_dir = "wow_world_messages"
@@ -150,6 +153,15 @@ def print_includes(s: Writer, h: Writer, world: bool, version_name: str,
     if world and version_name != "all":
         h.wln(f"#include \"{include_dir}/all.h{pp}\"")
     h.newline()
+
+    if not world and not version_name == "all":
+        should_newline = False
+        for version in distinct_login_versions_other_than_all:
+            if version < v:
+                should_newline = True
+                h.wln(f'#include "{include_dir}/version{version}.h{pp}"')
+        if should_newline:
+            h.newline()
 
     if not is_cpp():
         h.wln("#ifdef __cplusplus")
@@ -238,7 +250,7 @@ def print_world(m: model.Objects, update_mask: list[model.UpdateMask], v: model.
 
     module_name = world_version_to_module_name(v)
 
-    print_includes(s, h, True, module_name, v, m)
+    print_includes(s, h, True, module_name, v, m, [])
 
     for d in filter(should_print, m.enums):
         print_enum(h, d, module_name)
@@ -291,7 +303,8 @@ def print_world(m: model.Objects, update_mask: list[model.UpdateMask], v: model.
     struct_util.SKIPS.clear()
 
 
-def print_login(m: model.Objects, s: Writer, tests: Writer, v: int):
+def print_login(m: model.Objects, s: Writer, tests: Writer, v: int,
+                distinct_login_versions_other_than_all: typing.List[int]):
     def should_print(container_or_definer: typing.Union[model.Definer | model.Container]):
         return version_matches(container_or_definer.tags, v)
 
@@ -299,7 +312,7 @@ def print_login(m: model.Objects, s: Writer, tests: Writer, v: int):
     module_name = login_version_to_module_name(v)
 
     h_includes = Writer()
-    print_includes(s, h_includes, False, module_name, v, m)
+    print_includes(s, h_includes, False, module_name, v, m, distinct_login_versions_other_than_all)
 
     def typedef_existing(s: Writer, name: str, old_version: str, new_version: str):
         if is_cpp():

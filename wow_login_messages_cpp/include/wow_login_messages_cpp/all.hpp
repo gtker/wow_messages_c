@@ -106,6 +106,18 @@ struct ClientOpcode {
         }
     }
 
+    ClientOpcode operator=(ClientOpcode&& other) noexcept {
+        this->opcode = other.opcode;
+        other.opcode = Opcode::NONE;
+        if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+            this->CMD_AUTH_LOGON_CHALLENGE = std::move(other.CMD_AUTH_LOGON_CHALLENGE);
+        }
+        if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+            this->CMD_AUTH_RECONNECT_CHALLENGE = std::move(other.CMD_AUTH_RECONNECT_CHALLENGE);
+        }
+        return std::move(*this);
+    }
+
     ~ClientOpcode() {
         if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
             this->CMD_AUTH_LOGON_CHALLENGE.~CMD_AUTH_LOGON_CHALLENGE_Client();

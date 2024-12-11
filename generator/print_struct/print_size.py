@@ -119,7 +119,7 @@ def addable_size_value(
             return 1, f"{variable_name}.size()" if is_cpp() else f"STRING_SIZE({variable_name})"
         case model.DataTypeSizedCstring():
             # null byte is not included in cpp count
-            return 5 if is_cpp() else 4, f"{variable_name}.size()" if is_cpp() else f"STRING_SIZE({variable_name})"
+            return 5, f"{variable_name}.size()" if is_cpp() else f"STRING_SIZE({variable_name})"
         case model.DataTypePackedGUID():
             return 0, f"{namespace}wwm_packed_guid_size({variable_name})"
         case model.DataTypeAchievementInProgressArray():
@@ -287,8 +287,8 @@ def print_size_inner(s: Writer, m: model.StructMember, module_name: str, extra_i
 def print_size_for_array(s: Writer, d: model.Definition, extra_indirection: str, inner_type: model.ArrayType,
                          size: model.ArraySize, module_name: str):
     variable_name = f"obj{extra_indirection}.{d.name}" if is_cpp() else f"object{extra_indirection}->{d.name}"
-    fixed_prefix = "(*" if type(size) is model.ArraySizeFixed else ""
-    fixed_suffix = ")" if type(size) is model.ArraySizeFixed else ""
+    fixed_prefix = ""
+    fixed_suffix = ""
     match size:
         case model.ArraySizeFixed(size=ssize):
             loop_max = ssize

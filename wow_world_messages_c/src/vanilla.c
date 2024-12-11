@@ -1594,12 +1594,7 @@ static WowWorldResult vanilla_Addon_read(WowWorldReader* reader, vanilla_Addon* 
         READ_U8(object->key_version);
 
         if (object->key_version == VANILLA_KEY_VERSION_ONE|| object->key_version == VANILLA_KEY_VERSION_TWO|| object->key_version == VANILLA_KEY_VERSION_THREE|| object->key_version == VANILLA_KEY_VERSION_FOUR|| object->key_version == VANILLA_KEY_VERSION_FIVE|| object->key_version == VANILLA_KEY_VERSION_SIX|| object->key_version == VANILLA_KEY_VERSION_SEVEN|| object->key_version == VANILLA_KEY_VERSION_EIGHT|| object->key_version == VANILLA_KEY_VERSION_NINE) {
-            object->public_key = malloc(sizeof(*object->public_key));
-            if (object->public_key == NULL) {
-                return WWM_RESULT_MALLOC_FAIL;
-            }
-            READ_ARRAY(object->public_key, 256, READ_U8((*object->public_key)[i]));
-
+            READ_ARRAY(object->public_key, 256, READ_U8(object->public_key[i]));
 
         }
         READ_U32(object->update_available_flag);
@@ -1624,7 +1619,7 @@ static WowWorldResult vanilla_Addon_write(WowWorldWriter* writer, const vanilla_
         WRITE_U8(object->key_version);
 
         if (object->key_version == VANILLA_KEY_VERSION_ONE|| object->key_version == VANILLA_KEY_VERSION_TWO|| object->key_version == VANILLA_KEY_VERSION_THREE|| object->key_version == VANILLA_KEY_VERSION_FOUR|| object->key_version == VANILLA_KEY_VERSION_FIVE|| object->key_version == VANILLA_KEY_VERSION_SIX|| object->key_version == VANILLA_KEY_VERSION_SEVEN|| object->key_version == VANILLA_KEY_VERSION_EIGHT|| object->key_version == VANILLA_KEY_VERSION_NINE) {
-            WRITE_ARRAY(object->public_key, 256, WRITE_U8((*object->public_key)[i]));
+            WRITE_ARRAY(object->public_key, 256, WRITE_U8(object->public_key[i]));
 
         }
         WRITE_U32(object->update_available_flag);
@@ -1643,8 +1638,6 @@ static WowWorldResult vanilla_Addon_write(WowWorldWriter* writer, const vanilla_
 WOW_WORLD_MESSAGES_C_EXPORT void vanilla_Addon_free(vanilla_Addon* object) {
     if (object->info_block == VANILLA_INFO_BLOCK_AVAILABLE) {
         if (object->key_version == VANILLA_KEY_VERSION_ONE|| object->key_version == VANILLA_KEY_VERSION_TWO|| object->key_version == VANILLA_KEY_VERSION_THREE|| object->key_version == VANILLA_KEY_VERSION_FOUR|| object->key_version == VANILLA_KEY_VERSION_FIVE|| object->key_version == VANILLA_KEY_VERSION_SIX|| object->key_version == VANILLA_KEY_VERSION_SEVEN|| object->key_version == VANILLA_KEY_VERSION_EIGHT|| object->key_version == VANILLA_KEY_VERSION_NINE) {
-            free(object->public_key);
-            object->public_key = NULL;
         }
     }
     if (object->url_info == VANILLA_URL_INFO_AVAILABLE) {
@@ -2018,12 +2011,7 @@ static WowWorldResult vanilla_Character_read(WowWorldReader* reader, vanilla_Cha
     object->pet_family = 0;
     READ_U32(object->pet_family);
 
-    object->equipment = malloc(sizeof(*object->equipment));
-    if (object->equipment == NULL) {
-        return WWM_RESULT_MALLOC_FAIL;
-    }
-    READ_ARRAY(object->equipment, 19, WWM_CHECK_RETURN_CODE(vanilla_CharacterGear_read(reader, &(*object->equipment)[i])));
-
+    READ_ARRAY(object->equipment, 19, WWM_CHECK_RETURN_CODE(vanilla_CharacterGear_read(reader, &object->equipment[i])));
 
     SKIP_FORWARD_BYTES(4);
 
@@ -2073,7 +2061,7 @@ static WowWorldResult vanilla_Character_write(WowWorldWriter* writer, const vani
 
     WRITE_U32(object->pet_family);
 
-    WRITE_ARRAY(object->equipment, 19, WWM_CHECK_RETURN_CODE(vanilla_CharacterGear_write(writer, &(*object->equipment)[i])));
+    WRITE_ARRAY(object->equipment, 19, WWM_CHECK_RETURN_CODE(vanilla_CharacterGear_write(writer, &object->equipment[i])));
 
     WRITE_U32(0);
 
@@ -2086,8 +2074,6 @@ static WowWorldResult vanilla_Character_write(WowWorldWriter* writer, const vani
 WOW_WORLD_MESSAGES_C_EXPORT void vanilla_Character_free(vanilla_Character* object) {
     FREE_STRING(object->name);
 
-    free(object->equipment);
-    object->equipment = NULL;
 }
 
 static size_t vanilla_MonsterMove_size(const vanilla_MonsterMove* object) {
@@ -3362,7 +3348,7 @@ static size_t vanilla_NpcTextUpdate_size(const vanilla_NpcTextUpdate* object) {
     /* C89 scope to allow variable declarations */ {
         int i;
         for(i = 0; i < 2; ++i) {
-            _size += STRING_SIZE((*object->texts[i])) + 1;
+            _size += STRING_SIZE(object->texts[i]) + 1;
         }
     }
 
@@ -3372,22 +3358,12 @@ static size_t vanilla_NpcTextUpdate_size(const vanilla_NpcTextUpdate* object) {
 static WowWorldResult vanilla_NpcTextUpdate_read(WowWorldReader* reader, vanilla_NpcTextUpdate* object) {
     READ_FLOAT(object->probability);
 
-    object->texts = malloc(sizeof(*object->texts));
-    if (object->texts == NULL) {
-        return WWM_RESULT_MALLOC_FAIL;
-    }
-    READ_ARRAY(object->texts, 2, READ_CSTRING((*object->texts)[i]));
-
+    READ_ARRAY(object->texts, 2, READ_CSTRING(object->texts[i]));
 
     object->language = 0;
     READ_U32(object->language);
 
-    object->emotes = malloc(sizeof(*object->emotes));
-    if (object->emotes == NULL) {
-        return WWM_RESULT_MALLOC_FAIL;
-    }
-    READ_ARRAY(object->emotes, 3, WWM_CHECK_RETURN_CODE(vanilla_NpcTextUpdateEmote_read(reader, &(*object->emotes)[i])));
-
+    READ_ARRAY(object->emotes, 3, WWM_CHECK_RETURN_CODE(vanilla_NpcTextUpdateEmote_read(reader, &object->emotes[i])));
 
     return WWM_RESULT_SUCCESS;
 }
@@ -3395,11 +3371,11 @@ static WowWorldResult vanilla_NpcTextUpdate_read(WowWorldReader* reader, vanilla
 static WowWorldResult vanilla_NpcTextUpdate_write(WowWorldWriter* writer, const vanilla_NpcTextUpdate* object) {
     WRITE_FLOAT(object->probability);
 
-    WRITE_ARRAY(object->texts, 2, WRITE_CSTRING((*object->texts)[i]));
+    WRITE_ARRAY(object->texts, 2, WRITE_CSTRING(object->texts[i]));
 
     WRITE_U32(object->language);
 
-    WRITE_ARRAY(object->emotes, 3, WWM_CHECK_RETURN_CODE(vanilla_NpcTextUpdateEmote_write(writer, &(*object->emotes)[i])));
+    WRITE_ARRAY(object->emotes, 3, WWM_CHECK_RETURN_CODE(vanilla_NpcTextUpdateEmote_write(writer, &object->emotes[i])));
 
 
     return WWM_RESULT_SUCCESS;
@@ -3409,12 +3385,8 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_NpcTextUpdate_free(vanilla_NpcTextUpdat
     size_t i;
 
     for (i = 0; i < 2; ++i) {
-        FREE_STRING(((*object->texts)[i]));
+        FREE_STRING(((object->texts)[i]));
     }
-    free(object->texts);
-    object->texts = NULL;
-    free(object->emotes);
-    object->emotes = NULL;
 }
 
 static size_t vanilla_Object_size(const vanilla_Object* object) {
@@ -4291,12 +4263,7 @@ static WowWorldResult vanilla_TrainerSpell_read(WowWorldReader* reader, vanilla_
 
     READ_U32(object->required_skill_value);
 
-    object->required_spells = malloc(sizeof(*object->required_spells));
-    if (object->required_spells == NULL) {
-        return WWM_RESULT_MALLOC_FAIL;
-    }
-    READ_ARRAY(object->required_spells, 3, READ_U32((*object->required_spells)[i]));
-
+    READ_ARRAY(object->required_spells, 3, READ_U32(object->required_spells[i]));
 
     return WWM_RESULT_SUCCESS;
 }
@@ -4318,15 +4285,10 @@ static WowWorldResult vanilla_TrainerSpell_write(WowWorldWriter* writer, const v
 
     WRITE_U32(object->required_skill_value);
 
-    WRITE_ARRAY(object->required_spells, 3, WRITE_U32((*object->required_spells)[i]));
+    WRITE_ARRAY(object->required_spells, 3, WRITE_U32(object->required_spells[i]));
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_TrainerSpell_free(vanilla_TrainerSpell* object) {
-    free(object->required_spells);
-    object->required_spells = NULL;
 }
 
 static size_t vanilla_WhoPlayer_size(const vanilla_WhoPlayer* object) {
@@ -5091,7 +5053,7 @@ static size_t vanilla_SMSG_GUILD_QUERY_RESPONSE_size(const vanilla_SMSG_GUILD_QU
     /* C89 scope to allow variable declarations */ {
         int i;
         for(i = 0; i < 10; ++i) {
-            _size += STRING_SIZE((*object->rank_names[i])) + 1;
+            _size += STRING_SIZE(object->rank_names[i]) + 1;
         }
     }
 
@@ -5103,12 +5065,7 @@ static WowWorldResult vanilla_SMSG_GUILD_QUERY_RESPONSE_read(WowWorldReader* rea
 
     READ_CSTRING(object->name);
 
-    object->rank_names = malloc(sizeof(*object->rank_names));
-    if (object->rank_names == NULL) {
-        return WWM_RESULT_MALLOC_FAIL;
-    }
-    READ_ARRAY(object->rank_names, 10, READ_CSTRING((*object->rank_names)[i]));
-
+    READ_ARRAY(object->rank_names, 10, READ_CSTRING(object->rank_names[i]));
 
     READ_U32(object->emblem_style);
 
@@ -5132,7 +5089,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GUILD_QUERY_RESPONSE_wri
 
     WRITE_CSTRING(object->name);
 
-    WRITE_ARRAY(object->rank_names, 10, WRITE_CSTRING((*object->rank_names)[i]));
+    WRITE_ARRAY(object->rank_names, 10, WRITE_CSTRING(object->rank_names[i]));
 
     WRITE_U32(object->emblem_style);
 
@@ -5154,10 +5111,8 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GUILD_QUERY_RESPONSE_free(vanilla_
     FREE_STRING(object->name);
 
     for (i = 0; i < 10; ++i) {
-        FREE_STRING(((*object->rank_names)[i]));
+        FREE_STRING(((object->rank_names)[i]));
     }
-    free(object->rank_names);
-    object->rank_names = NULL;
 }
 
 static WowWorldResult vanilla_CMSG_ITEM_QUERY_SINGLE_read(WowWorldReader* reader, vanilla_CMSG_ITEM_QUERY_SINGLE* object) {
@@ -5262,19 +5217,9 @@ static WowWorldResult vanilla_SMSG_ITEM_QUERY_SINGLE_RESPONSE_read(WowWorldReade
 
         READ_U32(object->found->container_slots);
 
-        object->found->stats = malloc(sizeof(*object->found->stats));
-        if (object->found->stats == NULL) {
-            return WWM_RESULT_MALLOC_FAIL;
-        }
-        READ_ARRAY(object->found->stats, 10, WWM_CHECK_RETURN_CODE(vanilla_ItemStat_read(reader, &(*object->found->stats)[i])));
+        READ_ARRAY(object->found->stats, 10, WWM_CHECK_RETURN_CODE(vanilla_ItemStat_read(reader, &object->found->stats[i])));
 
-
-        object->found->damages = malloc(sizeof(*object->found->damages));
-        if (object->found->damages == NULL) {
-            return WWM_RESULT_MALLOC_FAIL;
-        }
-        READ_ARRAY(object->found->damages, 5, WWM_CHECK_RETURN_CODE(vanilla_ItemDamageType_read(reader, &(*object->found->damages)[i])));
-
+        READ_ARRAY(object->found->damages, 5, WWM_CHECK_RETURN_CODE(vanilla_ItemDamageType_read(reader, &object->found->damages[i])));
 
         READ_I32(object->found->armor);
 
@@ -5296,12 +5241,7 @@ static WowWorldResult vanilla_SMSG_ITEM_QUERY_SINGLE_RESPONSE_read(WowWorldReade
 
         READ_FLOAT(object->found->ranged_range_modification);
 
-        object->found->spells = malloc(sizeof(*object->found->spells));
-        if (object->found->spells == NULL) {
-            return WWM_RESULT_MALLOC_FAIL;
-        }
-        READ_ARRAY(object->found->spells, 5, WWM_CHECK_RETURN_CODE(vanilla_ItemSpells_read(reader, &(*object->found->spells)[i])));
-
+        READ_ARRAY(object->found->spells, 5, WWM_CHECK_RETURN_CODE(vanilla_ItemSpells_read(reader, &object->found->spells[i])));
 
         object->found->bonding = 0;
         READ_U32(object->found->bonding);
@@ -5405,9 +5345,9 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ITEM_QUERY_SINGLE_RESPON
 
         WRITE_U32(object->found->container_slots);
 
-        WRITE_ARRAY(object->found->stats, 10, WWM_CHECK_RETURN_CODE(vanilla_ItemStat_write(writer, &(*object->found->stats)[i])));
+        WRITE_ARRAY(object->found->stats, 10, WWM_CHECK_RETURN_CODE(vanilla_ItemStat_write(writer, &object->found->stats[i])));
 
-        WRITE_ARRAY(object->found->damages, 5, WWM_CHECK_RETURN_CODE(vanilla_ItemDamageType_write(writer, &(*object->found->damages)[i])));
+        WRITE_ARRAY(object->found->damages, 5, WWM_CHECK_RETURN_CODE(vanilla_ItemDamageType_write(writer, &object->found->damages[i])));
 
         WRITE_I32(object->found->armor);
 
@@ -5429,7 +5369,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ITEM_QUERY_SINGLE_RESPON
 
         WRITE_FLOAT(object->found->ranged_range_modification);
 
-        WRITE_ARRAY(object->found->spells, 5, WWM_CHECK_RETURN_CODE(vanilla_ItemSpells_write(writer, &(*object->found->spells)[i])));
+        WRITE_ARRAY(object->found->spells, 5, WWM_CHECK_RETURN_CODE(vanilla_ItemSpells_write(writer, &object->found->spells[i])));
 
         WRITE_U32(object->found->bonding);
 
@@ -5477,12 +5417,6 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_ITEM_QUERY_SINGLE_RESPONSE_free(va
 
     FREE_STRING(object->found->name4);
 
-    free(object->found->stats);
-    object->found->stats = NULL;
-    free(object->found->damages);
-    object->found->damages = NULL;
-    free(object->found->spells);
-    object->found->spells = NULL;
     FREE_STRING(object->found->description);
 
     free(object->found);
@@ -5562,7 +5496,7 @@ static size_t vanilla_SMSG_QUEST_QUERY_RESPONSE_size(const vanilla_SMSG_QUEST_QU
     /* C89 scope to allow variable declarations */ {
         int i;
         for(i = 0; i < 4; ++i) {
-            _size += STRING_SIZE((*object->objective_texts[i])) + 1;
+            _size += STRING_SIZE(object->objective_texts[i]) + 1;
         }
     }
 
@@ -5602,19 +5536,9 @@ static WowWorldResult vanilla_SMSG_QUEST_QUERY_RESPONSE_read(WowWorldReader* rea
 
     READ_U32(object->quest_flags);
 
-    object->rewards = malloc(sizeof(*object->rewards));
-    if (object->rewards == NULL) {
-        return WWM_RESULT_MALLOC_FAIL;
-    }
-    READ_ARRAY(object->rewards, 4, WWM_CHECK_RETURN_CODE(vanilla_QuestItemReward_read(reader, &(*object->rewards)[i])));
+    READ_ARRAY(object->rewards, 4, WWM_CHECK_RETURN_CODE(vanilla_QuestItemReward_read(reader, &object->rewards[i])));
 
-
-    object->choice_rewards = malloc(sizeof(*object->choice_rewards));
-    if (object->choice_rewards == NULL) {
-        return WWM_RESULT_MALLOC_FAIL;
-    }
-    READ_ARRAY(object->choice_rewards, 6, WWM_CHECK_RETURN_CODE(vanilla_QuestItemReward_read(reader, &(*object->choice_rewards)[i])));
-
+    READ_ARRAY(object->choice_rewards, 6, WWM_CHECK_RETURN_CODE(vanilla_QuestItemReward_read(reader, &object->choice_rewards[i])));
 
     READ_U32(object->point_map_id);
 
@@ -5630,19 +5554,9 @@ static WowWorldResult vanilla_SMSG_QUEST_QUERY_RESPONSE_read(WowWorldReader* rea
 
     READ_CSTRING(object->end_text);
 
-    object->objectives = malloc(sizeof(*object->objectives));
-    if (object->objectives == NULL) {
-        return WWM_RESULT_MALLOC_FAIL;
-    }
-    READ_ARRAY(object->objectives, 4, WWM_CHECK_RETURN_CODE(vanilla_QuestObjective_read(reader, &(*object->objectives)[i])));
+    READ_ARRAY(object->objectives, 4, WWM_CHECK_RETURN_CODE(vanilla_QuestObjective_read(reader, &object->objectives[i])));
 
-
-    object->objective_texts = malloc(sizeof(*object->objective_texts));
-    if (object->objective_texts == NULL) {
-        return WWM_RESULT_MALLOC_FAIL;
-    }
-    READ_ARRAY(object->objective_texts, 4, READ_CSTRING((*object->objective_texts)[i]));
-
+    READ_ARRAY(object->objective_texts, 4, READ_CSTRING(object->objective_texts[i]));
 
     return WWM_RESULT_SUCCESS;
 }
@@ -5682,9 +5596,9 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUEST_QUERY_RESPONSE_wri
 
     WRITE_U32(object->quest_flags);
 
-    WRITE_ARRAY(object->rewards, 4, WWM_CHECK_RETURN_CODE(vanilla_QuestItemReward_write(writer, &(*object->rewards)[i])));
+    WRITE_ARRAY(object->rewards, 4, WWM_CHECK_RETURN_CODE(vanilla_QuestItemReward_write(writer, &object->rewards[i])));
 
-    WRITE_ARRAY(object->choice_rewards, 6, WWM_CHECK_RETURN_CODE(vanilla_QuestItemReward_write(writer, &(*object->choice_rewards)[i])));
+    WRITE_ARRAY(object->choice_rewards, 6, WWM_CHECK_RETURN_CODE(vanilla_QuestItemReward_write(writer, &object->choice_rewards[i])));
 
     WRITE_U32(object->point_map_id);
 
@@ -5700,9 +5614,9 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUEST_QUERY_RESPONSE_wri
 
     WRITE_CSTRING(object->end_text);
 
-    WRITE_ARRAY(object->objectives, 4, WWM_CHECK_RETURN_CODE(vanilla_QuestObjective_write(writer, &(*object->objectives)[i])));
+    WRITE_ARRAY(object->objectives, 4, WWM_CHECK_RETURN_CODE(vanilla_QuestObjective_write(writer, &object->objectives[i])));
 
-    WRITE_ARRAY(object->objective_texts, 4, WRITE_CSTRING((*object->objective_texts)[i]));
+    WRITE_ARRAY(object->objective_texts, 4, WRITE_CSTRING(object->objective_texts[i]));
 
 
     return WWM_RESULT_SUCCESS;
@@ -5711,10 +5625,6 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUEST_QUERY_RESPONSE_wri
 WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_QUEST_QUERY_RESPONSE_free(vanilla_SMSG_QUEST_QUERY_RESPONSE* object) {
     size_t i;
 
-    free(object->rewards);
-    object->rewards = NULL;
-    free(object->choice_rewards);
-    object->choice_rewards = NULL;
     FREE_STRING(object->title);
 
     FREE_STRING(object->objective_text);
@@ -5723,13 +5633,9 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_QUEST_QUERY_RESPONSE_free(vanilla_
 
     FREE_STRING(object->end_text);
 
-    free(object->objectives);
-    object->objectives = NULL;
     for (i = 0; i < 4; ++i) {
-        FREE_STRING(((*object->objective_texts)[i]));
+        FREE_STRING(((object->objective_texts)[i]));
     }
-    free(object->objective_texts);
-    object->objective_texts = NULL;
 }
 
 static WowWorldResult vanilla_CMSG_GAMEOBJECT_QUERY_read(WowWorldReader* reader, vanilla_CMSG_GAMEOBJECT_QUERY* object) {
@@ -5790,12 +5696,7 @@ static WowWorldResult vanilla_SMSG_GAMEOBJECT_QUERY_RESPONSE_read(WowWorldReader
 
         READ_CSTRING(object->found->name5);
 
-        object->found->raw_data = malloc(sizeof(*object->found->raw_data));
-        if (object->found->raw_data == NULL) {
-            return WWM_RESULT_MALLOC_FAIL;
-        }
-        READ_ARRAY(object->found->raw_data, 6, READ_U32((*object->found->raw_data)[i]));
-
+        READ_ARRAY(object->found->raw_data, 6, READ_U32(object->found->raw_data[i]));
 
     }
     return WWM_RESULT_SUCCESS;
@@ -5823,7 +5724,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GAMEOBJECT_QUERY_RESPONS
 
         WRITE_CSTRING(object->found->name5);
 
-        WRITE_ARRAY(object->found->raw_data, 6, WRITE_U32((*object->found->raw_data)[i]));
+        WRITE_ARRAY(object->found->raw_data, 6, WRITE_U32(object->found->raw_data[i]));
 
     }
 
@@ -5841,8 +5742,6 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GAMEOBJECT_QUERY_RESPONSE_free(van
 
     FREE_STRING(object->found->name5);
 
-    free(object->found->raw_data);
-    object->found->raw_data = NULL;
     free(object->found);
 }
 
@@ -6015,7 +5914,7 @@ static WowWorldResult vanilla_CMSG_WHO_read(WowWorldReader* reader, vanilla_CMSG
 
     READ_U32(object->amount_of_strings);
 
-    object->search_strings = malloc(object->amount_of_strings * sizeof(WowWorldString));
+    object->search_strings = malloc(object->amount_of_strings * sizeof(char*));
     if (object->search_strings == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -7475,7 +7374,7 @@ static WowWorldResult vanilla_SMSG_GUILD_EVENT_read(WowWorldReader* reader, vani
 
     READ_U8(object->amount_of_events);
 
-    object->event_descriptions = malloc(object->amount_of_events * sizeof(WowWorldString));
+    object->event_descriptions = malloc(object->amount_of_events * sizeof(char*));
     if (object->event_descriptions == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -7616,16 +7515,16 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_MESSAGECHAT_free(vanilla_CMSG_MESS
 }
 
 static size_t vanilla_SMSG_MESSAGECHAT_size(const vanilla_SMSG_MESSAGECHAT* object) {
-    size_t _size = 10 + STRING_SIZE(object->message);
+    size_t _size = 11 + STRING_SIZE(object->message);
 
     if (object->chat_type == VANILLA_CHAT_TYPE_MONSTER_WHISPER|| object->chat_type == VANILLA_CHAT_TYPE_RAID_BOSS_EMOTE|| object->chat_type == VANILLA_CHAT_TYPE_MONSTER_EMOTE) {
-        _size += 12 + STRING_SIZE(object->monster_name);
+        _size += 13 + STRING_SIZE(object->monster_name);
     }
     else if (object->chat_type == VANILLA_CHAT_TYPE_SAY|| object->chat_type == VANILLA_CHAT_TYPE_PARTY|| object->chat_type == VANILLA_CHAT_TYPE_YELL) {
         _size += 16;
     }
     else if (object->chat_type == VANILLA_CHAT_TYPE_MONSTER_SAY|| object->chat_type == VANILLA_CHAT_TYPE_MONSTER_YELL) {
-        _size += 20 + STRING_SIZE(object->sender_name);
+        _size += 21 + STRING_SIZE(object->sender_name);
     }
     else if (object->chat_type == VANILLA_CHAT_TYPE_CHANNEL) {
         _size += 13 + STRING_SIZE(object->channel_name);
@@ -10505,12 +10404,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_COMPLETE_CINEMATIC_write
 }
 
 static WowWorldResult vanilla_SMSG_TUTORIAL_FLAGS_read(WowWorldReader* reader, vanilla_SMSG_TUTORIAL_FLAGS* object) {
-    object->tutorial_data = malloc(sizeof(*object->tutorial_data));
-    if (object->tutorial_data == NULL) {
-        return WWM_RESULT_MALLOC_FAIL;
-    }
-    READ_ARRAY(object->tutorial_data, 8, READ_U32((*object->tutorial_data)[i]));
-
+    READ_ARRAY(object->tutorial_data, 8, READ_U32(object->tutorial_data[i]));
 
     return WWM_RESULT_SUCCESS;
 }
@@ -10520,15 +10414,10 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TUTORIAL_FLAGS_write(Wow
 
     WRITE_U16(0x000000fd); /* opcode */
 
-    WRITE_ARRAY(object->tutorial_data, 8, WRITE_U32((*object->tutorial_data)[i]));
+    WRITE_ARRAY(object->tutorial_data, 8, WRITE_U32(object->tutorial_data[i]));
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_TUTORIAL_FLAGS_free(vanilla_SMSG_TUTORIAL_FLAGS* object) {
-    free(object->tutorial_data);
-    object->tutorial_data = NULL;
 }
 
 static WowWorldResult vanilla_CMSG_TUTORIAL_FLAG_read(WowWorldReader* reader, vanilla_CMSG_TUTORIAL_FLAG* object) {
@@ -10651,7 +10540,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_TEXT_EMOTE_write(WowWorl
 }
 
 static size_t vanilla_SMSG_TEXT_EMOTE_size(const vanilla_SMSG_TEXT_EMOTE* object) {
-    return 20 + STRING_SIZE(object->name);
+    return 21 + STRING_SIZE(object->name);
 }
 
 static WowWorldResult vanilla_SMSG_TEXT_EMOTE_read(WowWorldReader* reader, vanilla_SMSG_TEXT_EMOTE* object) {
@@ -11234,12 +11123,7 @@ static WowWorldResult vanilla_SMSG_TRADE_STATUS_EXTENDED_read(WowWorldReader* re
 
     READ_U32(object->spell_on_lowest_slot);
 
-    object->trade_slots = malloc(sizeof(*object->trade_slots));
-    if (object->trade_slots == NULL) {
-        return WWM_RESULT_MALLOC_FAIL;
-    }
-    READ_ARRAY(object->trade_slots, 7, WWM_CHECK_RETURN_CODE(vanilla_TradeSlot_read(reader, &(*object->trade_slots)[i])));
-
+    READ_ARRAY(object->trade_slots, 7, WWM_CHECK_RETURN_CODE(vanilla_TradeSlot_read(reader, &object->trade_slots[i])));
 
     return WWM_RESULT_SUCCESS;
 }
@@ -11259,15 +11143,10 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TRADE_STATUS_EXTENDED_wr
 
     WRITE_U32(object->spell_on_lowest_slot);
 
-    WRITE_ARRAY(object->trade_slots, 7, WWM_CHECK_RETURN_CODE(vanilla_TradeSlot_write(writer, &(*object->trade_slots)[i])));
+    WRITE_ARRAY(object->trade_slots, 7, WWM_CHECK_RETURN_CODE(vanilla_TradeSlot_write(writer, &object->trade_slots[i])));
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_TRADE_STATUS_EXTENDED_free(vanilla_SMSG_TRADE_STATUS_EXTENDED* object) {
-    free(object->trade_slots);
-    object->trade_slots = NULL;
 }
 
 static size_t vanilla_SMSG_INITIALIZE_FACTIONS_size(const vanilla_SMSG_INITIALIZE_FACTIONS* object) {
@@ -11433,12 +11312,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SET_ACTION_BUTTON_write(
 }
 
 static WowWorldResult vanilla_SMSG_ACTION_BUTTONS_read(WowWorldReader* reader, vanilla_SMSG_ACTION_BUTTONS* object) {
-    object->data = malloc(sizeof(*object->data));
-    if (object->data == NULL) {
-        return WWM_RESULT_MALLOC_FAIL;
-    }
-    READ_ARRAY(object->data, 120, READ_U32((*object->data)[i]));
-
+    READ_ARRAY(object->data, 120, READ_U32(object->data[i]));
 
     return WWM_RESULT_SUCCESS;
 }
@@ -11448,15 +11322,10 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ACTION_BUTTONS_write(Wow
 
     WRITE_U16(0x00000129); /* opcode */
 
-    WRITE_ARRAY(object->data, 120, WRITE_U32((*object->data)[i]));
+    WRITE_ARRAY(object->data, 120, WRITE_U32(object->data[i]));
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_ACTION_BUTTONS_free(vanilla_SMSG_ACTION_BUTTONS* object) {
-    free(object->data);
-    object->data = NULL;
 }
 
 static size_t vanilla_SMSG_INITIAL_SPELLS_size(const vanilla_SMSG_INITIAL_SPELLS* object) {
@@ -12488,7 +12357,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_REPOP_REQUEST_write(WowW
 }
 
 static size_t vanilla_SMSG_RESURRECT_REQUEST_size(const vanilla_SMSG_RESURRECT_REQUEST* object) {
-    return 13 + STRING_SIZE(object->name);
+    return 14 + STRING_SIZE(object->name);
 }
 
 static WowWorldResult vanilla_SMSG_RESURRECT_REQUEST_read(WowWorldReader* reader, vanilla_SMSG_RESURRECT_REQUEST* object) {
@@ -13156,12 +13025,7 @@ static WowWorldResult vanilla_SMSG_PET_SPELLS_read(WowWorldReader* reader, vanil
         object->action_bars->pet_enabled = 0;
         READ_U8(object->action_bars->pet_enabled);
 
-        object->action_bars->action_bars = malloc(sizeof(*object->action_bars->action_bars));
-        if (object->action_bars->action_bars == NULL) {
-            return WWM_RESULT_MALLOC_FAIL;
-        }
-        READ_ARRAY(object->action_bars->action_bars, 10, READ_U32((*object->action_bars->action_bars)[i]));
-
+        READ_ARRAY(object->action_bars->action_bars, 10, READ_U32(object->action_bars->action_bars[i]));
 
         READ_U8(object->action_bars->amount_of_spells);
 
@@ -13203,7 +13067,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PET_SPELLS_write(WowWorl
 
         WRITE_U8(object->action_bars->pet_enabled);
 
-        WRITE_ARRAY(object->action_bars->action_bars, 10, WRITE_U32((*object->action_bars->action_bars)[i]));
+        WRITE_ARRAY(object->action_bars->action_bars, 10, WRITE_U32(object->action_bars->action_bars[i]));
 
         WRITE_U8(object->action_bars->amount_of_spells);
 
@@ -13219,8 +13083,6 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PET_SPELLS_write(WowWorl
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_PET_SPELLS_free(vanilla_SMSG_PET_SPELLS* object) {
-    free(object->action_bars->action_bars);
-    object->action_bars->action_bars = NULL;
     free(object->action_bars->spells);
     object->action_bars->spells = NULL;
     free(object->action_bars->cooldowns);
@@ -13454,7 +13316,7 @@ static size_t vanilla_SMSG_NPC_TEXT_UPDATE_size(const vanilla_SMSG_NPC_TEXT_UPDA
     /* C89 scope to allow variable declarations */ {
         int i;
         for(i = 0; i < 8; ++i) {
-            _size += vanilla_NpcTextUpdate_size(&(*object->texts[i]));
+            _size += vanilla_NpcTextUpdate_size(&object->texts[i]);
         }
     }
 
@@ -13464,12 +13326,7 @@ static size_t vanilla_SMSG_NPC_TEXT_UPDATE_size(const vanilla_SMSG_NPC_TEXT_UPDA
 static WowWorldResult vanilla_SMSG_NPC_TEXT_UPDATE_read(WowWorldReader* reader, vanilla_SMSG_NPC_TEXT_UPDATE* object) {
     READ_U32(object->text_id);
 
-    object->texts = malloc(sizeof(*object->texts));
-    if (object->texts == NULL) {
-        return WWM_RESULT_MALLOC_FAIL;
-    }
-    READ_ARRAY(object->texts, 8, WWM_CHECK_RETURN_CODE(vanilla_NpcTextUpdate_read(reader, &(*object->texts)[i])));
-
+    READ_ARRAY(object->texts, 8, WWM_CHECK_RETURN_CODE(vanilla_NpcTextUpdate_read(reader, &object->texts[i])));
 
     return WWM_RESULT_SUCCESS;
 }
@@ -13481,7 +13338,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_NPC_TEXT_UPDATE_write(Wo
 
     WRITE_U32(object->text_id);
 
-    WRITE_ARRAY(object->texts, 8, WWM_CHECK_RETURN_CODE(vanilla_NpcTextUpdate_write(writer, &(*object->texts)[i])));
+    WRITE_ARRAY(object->texts, 8, WWM_CHECK_RETURN_CODE(vanilla_NpcTextUpdate_write(writer, &object->texts[i])));
 
 
     return WWM_RESULT_SUCCESS;
@@ -13491,10 +13348,8 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_NPC_TEXT_UPDATE_free(vanilla_SMSG_
     size_t i;
 
     for (i = 0; i < 8; ++i) {
-        vanilla_NpcTextUpdate_free(&((*object->texts)[i]));
+        vanilla_NpcTextUpdate_free(&((object->texts)[i]));
     }
-    free(object->texts);
-    object->texts = NULL;
 }
 
 static WowWorldResult vanilla_CMSG_QUESTGIVER_STATUS_QUERY_read(WowWorldReader* reader, vanilla_CMSG_QUESTGIVER_STATUS_QUERY* object) {
@@ -14809,11 +14664,6 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TRAINER_LIST_write(WowWo
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_TRAINER_LIST_free(vanilla_SMSG_TRAINER_LIST* object) {
-    size_t i;
-
-    for (i = 0; i < object->amount_of_spells; ++i) {
-        vanilla_TrainerSpell_free(&((object->spells)[i]));
-    }
     free(object->spells);
     object->spells = NULL;
     FREE_STRING(object->greeting);
@@ -15453,7 +15303,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_FISH_ESCAPED_write(WowWo
 }
 
 static size_t vanilla_CMSG_BUG_size(const vanilla_CMSG_BUG* object) {
-    return 12 + STRING_SIZE(object->content) + STRING_SIZE(object->bug_type);
+    return 14 + STRING_SIZE(object->content) + STRING_SIZE(object->bug_type);
 }
 
 static WowWorldResult vanilla_CMSG_BUG_read(WowWorldReader* reader, vanilla_CMSG_BUG* object) {
@@ -16164,12 +16014,7 @@ static WowWorldResult vanilla_CMSG_AUTH_SESSION_read(WowWorldReader* reader, van
     READ_U32(object->client_seed);
     _size += 4;
 
-    object->client_proof = malloc(sizeof(*object->client_proof));
-    if (object->client_proof == NULL) {
-        return WWM_RESULT_MALLOC_FAIL;
-    }
-    READ_ARRAY(object->client_proof, 20, READ_U8((*object->client_proof)[i]);_size += 1;);
-
+    READ_ARRAY(object->client_proof, 20, READ_U8(object->client_proof[i]);_size += 1;);
 
     if((body_size - _size) > (reader->length - reader->index)) {
         return WWM_RESULT_NOT_ENOUGH_BYTES;
@@ -16244,7 +16089,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUTH_SESSION_write(WowWo
 
     WRITE_U32(object->client_seed);
 
-    WRITE_ARRAY(object->client_proof, 20, WRITE_U8((*object->client_proof)[i]));
+    WRITE_ARRAY(object->client_proof, 20, WRITE_U8(object->client_proof[i]));
 
     /* C89 Scope for compressed */ {
         unsigned char* addon_info_uncompressed_data = NULL;
@@ -16287,8 +16132,6 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_AUTH_SESSION_free(vanilla_CMSG_AUT
 
     FREE_STRING(object->username);
 
-    free(object->client_proof);
-    object->client_proof = NULL;
     for (i = 0; i < object->amount_of_addon_info; ++i) {
         vanilla_AddonInfo_free(&((object->addon_info)[i]));
     }
@@ -17094,12 +16937,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GMTICKET_UPDATETEXT_writ
 }
 
 static WowWorldResult vanilla_SMSG_ACCOUNT_DATA_TIMES_read(WowWorldReader* reader, vanilla_SMSG_ACCOUNT_DATA_TIMES* object) {
-    object->data = malloc(sizeof(*object->data));
-    if (object->data == NULL) {
-        return WWM_RESULT_MALLOC_FAIL;
-    }
-    READ_ARRAY(object->data, 32, READ_U32((*object->data)[i]));
-
+    READ_ARRAY(object->data, 32, READ_U32(object->data[i]));
 
     return WWM_RESULT_SUCCESS;
 }
@@ -17109,15 +16947,10 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ACCOUNT_DATA_TIMES_write
 
     WRITE_U16(0x00000209); /* opcode */
 
-    WRITE_ARRAY(object->data, 32, WRITE_U32((*object->data)[i]));
+    WRITE_ARRAY(object->data, 32, WRITE_U32(object->data[i]));
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_ACCOUNT_DATA_TIMES_free(vanilla_SMSG_ACCOUNT_DATA_TIMES* object) {
-    free(object->data);
-    object->data = NULL;
 }
 
 static WowWorldResult vanilla_CMSG_REQUEST_ACCOUNT_DATA_read(WowWorldReader* reader, vanilla_CMSG_REQUEST_ACCOUNT_DATA* object) {
@@ -20917,7 +20750,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_DUEL_COUNTDOWN_write(Wow
 }
 
 static size_t vanilla_SMSG_AREA_TRIGGER_MESSAGE_size(const vanilla_SMSG_AREA_TRIGGER_MESSAGE* object) {
-    return 4 + STRING_SIZE(object->message);
+    return 5 + STRING_SIZE(object->message);
 }
 
 static WowWorldResult vanilla_SMSG_AREA_TRIGGER_MESSAGE_read(WowWorldReader* reader, vanilla_SMSG_AREA_TRIGGER_MESSAGE* object) {
@@ -23709,12 +23542,7 @@ static WowWorldResult vanilla_MSG_RAID_TARGET_UPDATE_Server_read(WowWorldReader*
     READ_U8(object->update_type);
 
     if (object->update_type == VANILLA_RAID_TARGET_UPDATE_TYPE_FULL) {
-        object->raid_targets = malloc(sizeof(*object->raid_targets));
-        if (object->raid_targets == NULL) {
-            return WWM_RESULT_MALLOC_FAIL;
-        }
-        READ_ARRAY(object->raid_targets, 8, WWM_CHECK_RETURN_CODE(vanilla_RaidTargetUpdate_read(reader, &(*object->raid_targets)[i])));
-
+        READ_ARRAY(object->raid_targets, 8, WWM_CHECK_RETURN_CODE(vanilla_RaidTargetUpdate_read(reader, &object->raid_targets[i])));
 
     }
     else if (object->update_type == VANILLA_RAID_TARGET_UPDATE_TYPE_PARTIAL) {
@@ -23732,7 +23560,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_RAID_TARGET_UPDATE_Server
     WRITE_U8(object->update_type);
 
     if (object->update_type == VANILLA_RAID_TARGET_UPDATE_TYPE_FULL) {
-        WRITE_ARRAY(object->raid_targets, 8, WWM_CHECK_RETURN_CODE(vanilla_RaidTargetUpdate_write(writer, &(*object->raid_targets)[i])));
+        WRITE_ARRAY(object->raid_targets, 8, WWM_CHECK_RETURN_CODE(vanilla_RaidTargetUpdate_write(writer, &object->raid_targets[i])));
 
     }
     else if (object->update_type == VANILLA_RAID_TARGET_UPDATE_TYPE_PARTIAL) {
@@ -23745,8 +23573,6 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_RAID_TARGET_UPDATE_Server
 
 WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_RAID_TARGET_UPDATE_Server_free(vanilla_MSG_RAID_TARGET_UPDATE_Server* object) {
     if (object->update_type == VANILLA_RAID_TARGET_UPDATE_TYPE_FULL) {
-        free(object->raid_targets);
-        object->raid_targets = NULL;
     }
     else if (object->update_type == VANILLA_RAID_TARGET_UPDATE_TYPE_PARTIAL) {
     }
@@ -23909,7 +23735,7 @@ static size_t vanilla_CMSG_GMSURVEY_SUBMIT_size(const vanilla_CMSG_GMSURVEY_SUBM
     /* C89 scope to allow variable declarations */ {
         int i;
         for(i = 0; i < 10; ++i) {
-            _size += vanilla_GmSurveyQuestion_size(&(*object->questions[i]));
+            _size += vanilla_GmSurveyQuestion_size(&object->questions[i]);
         }
     }
 
@@ -23919,12 +23745,7 @@ static size_t vanilla_CMSG_GMSURVEY_SUBMIT_size(const vanilla_CMSG_GMSURVEY_SUBM
 static WowWorldResult vanilla_CMSG_GMSURVEY_SUBMIT_read(WowWorldReader* reader, vanilla_CMSG_GMSURVEY_SUBMIT* object) {
     READ_U32(object->survey_id);
 
-    object->questions = malloc(sizeof(*object->questions));
-    if (object->questions == NULL) {
-        return WWM_RESULT_MALLOC_FAIL;
-    }
-    READ_ARRAY(object->questions, 10, WWM_CHECK_RETURN_CODE(vanilla_GmSurveyQuestion_read(reader, &(*object->questions)[i])));
-
+    READ_ARRAY(object->questions, 10, WWM_CHECK_RETURN_CODE(vanilla_GmSurveyQuestion_read(reader, &object->questions[i])));
 
     READ_CSTRING(object->answer_comment);
 
@@ -23938,7 +23759,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GMSURVEY_SUBMIT_write(Wo
 
     WRITE_U32(object->survey_id);
 
-    WRITE_ARRAY(object->questions, 10, WWM_CHECK_RETURN_CODE(vanilla_GmSurveyQuestion_write(writer, &(*object->questions)[i])));
+    WRITE_ARRAY(object->questions, 10, WWM_CHECK_RETURN_CODE(vanilla_GmSurveyQuestion_write(writer, &object->questions[i])));
 
     WRITE_CSTRING(object->answer_comment);
 
@@ -23950,10 +23771,8 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GMSURVEY_SUBMIT_free(vanilla_CMSG_
     size_t i;
 
     for (i = 0; i < 10; ++i) {
-        vanilla_GmSurveyQuestion_free(&((*object->questions)[i]));
+        vanilla_GmSurveyQuestion_free(&((object->questions)[i]));
     }
-    free(object->questions);
-    object->questions = NULL;
     FREE_STRING(object->answer_comment);
 
 }
@@ -24055,7 +23874,7 @@ static size_t vanilla_SMSG_EXPECTED_SPAM_RECORDS_size(const vanilla_SMSG_EXPECTE
 static WowWorldResult vanilla_SMSG_EXPECTED_SPAM_RECORDS_read(WowWorldReader* reader, vanilla_SMSG_EXPECTED_SPAM_RECORDS* object) {
     READ_U32(object->amount_of_records);
 
-    object->records = malloc(object->amount_of_records * sizeof(WowWorldString));
+    object->records = malloc(object->amount_of_records * sizeof(char*));
     if (object->records == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -24089,7 +23908,7 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_EXPECTED_SPAM_RECORDS_free(vanilla
 }
 
 static size_t vanilla_SMSG_DEFENSE_MESSAGE_size(const vanilla_SMSG_DEFENSE_MESSAGE* object) {
-    return 8 + STRING_SIZE(object->message);
+    return 9 + STRING_SIZE(object->message);
 }
 
 static WowWorldResult vanilla_SMSG_DEFENSE_MESSAGE_read(WowWorldReader* reader, vanilla_SMSG_DEFENSE_MESSAGE* object) {
@@ -28337,9 +28156,6 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_server_opcode_free(VanillaServerOpcodeC
         case V_MSG_MOVE_HEARTBEAT:
             vanilla_MSG_MOVE_HEARTBEAT_Server_free(&opcodes->body.MSG_MOVE_HEARTBEAT_Server);
             break;
-        case V_SMSG_TUTORIAL_FLAGS:
-            vanilla_SMSG_TUTORIAL_FLAGS_free(&opcodes->body.SMSG_TUTORIAL_FLAGS);
-            break;
         case V_SMSG_TEXT_EMOTE:
             vanilla_SMSG_TEXT_EMOTE_free(&opcodes->body.SMSG_TEXT_EMOTE);
             break;
@@ -28349,17 +28165,11 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_server_opcode_free(VanillaServerOpcodeC
         case V_SMSG_TRADE_STATUS:
             vanilla_SMSG_TRADE_STATUS_free(&opcodes->body.SMSG_TRADE_STATUS);
             break;
-        case V_SMSG_TRADE_STATUS_EXTENDED:
-            vanilla_SMSG_TRADE_STATUS_EXTENDED_free(&opcodes->body.SMSG_TRADE_STATUS_EXTENDED);
-            break;
         case V_SMSG_INITIALIZE_FACTIONS:
             vanilla_SMSG_INITIALIZE_FACTIONS_free(&opcodes->body.SMSG_INITIALIZE_FACTIONS);
             break;
         case V_SMSG_SET_FACTION_STANDING:
             vanilla_SMSG_SET_FACTION_STANDING_free(&opcodes->body.SMSG_SET_FACTION_STANDING);
-            break;
-        case V_SMSG_ACTION_BUTTONS:
-            vanilla_SMSG_ACTION_BUTTONS_free(&opcodes->body.SMSG_ACTION_BUTTONS);
             break;
         case V_SMSG_INITIAL_SPELLS:
             vanilla_SMSG_INITIAL_SPELLS_free(&opcodes->body.SMSG_INITIAL_SPELLS);
@@ -28444,9 +28254,6 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_server_opcode_free(VanillaServerOpcodeC
             break;
         case V_SMSG_COMPRESSED_UPDATE_OBJECT:
             vanilla_SMSG_COMPRESSED_UPDATE_OBJECT_free(&opcodes->body.SMSG_COMPRESSED_UPDATE_OBJECT);
-            break;
-        case V_SMSG_ACCOUNT_DATA_TIMES:
-            vanilla_SMSG_ACCOUNT_DATA_TIMES_free(&opcodes->body.SMSG_ACCOUNT_DATA_TIMES);
             break;
         case V_SMSG_GMTICKET_GETTICKET:
             vanilla_SMSG_GMTICKET_GETTICKET_free(&opcodes->body.SMSG_GMTICKET_GETTICKET);

@@ -2755,9 +2755,9 @@ GuildBankSlot GuildBankSlot_read(Reader& reader) {
 
     obj.charges = reader.read_u8();
 
-    obj.amount_of_sockets = reader.read_u8();
+    auto amount_of_sockets = reader.read_u8();
 
-    for (uint8_t i = 0; i < obj.amount_of_sockets; ++i) {
+    for (uint8_t i = 0; i < amount_of_sockets; ++i) {
         obj.sockets.push_back(::wow_world_messages::tbc::GuildBankSocket_read(reader));
     }
 
@@ -2777,7 +2777,7 @@ static void GuildBankSlot_write(Writer& writer, const GuildBankSlot& obj) {
 
     writer.write_u8(obj.charges);
 
-    writer.write_u8(obj.amount_of_sockets);
+    writer.write_u8(obj.sockets.size());
 
     for (const auto& v : obj.sockets) {
         GuildBankSocket_write(writer, v);
@@ -3118,9 +3118,9 @@ LfgPlayer LfgPlayer_read(Reader& reader) {
 
     obj.comment = reader.read_cstring();
 
-    obj.amount_of_members = reader.read_u32();
+    auto amount_of_members = reader.read_u32();
 
-    for (uint32_t i = 0; i < obj.amount_of_members; ++i) {
+    for (uint32_t i = 0; i < amount_of_members; ++i) {
         obj.members.push_back(::wow_world_messages::tbc::LfgPlayerMember_read(reader));
     }
 
@@ -3142,7 +3142,7 @@ static void LfgPlayer_write(Writer& writer, const LfgPlayer& obj) {
 
     writer.write_cstring(obj.comment);
 
-    writer.write_u32(obj.amount_of_members);
+    writer.write_u32(obj.members.size());
 
     for (const auto& v : obj.members) {
         LfgPlayerMember_write(writer, v);
@@ -3348,9 +3348,9 @@ Mail Mail_read(Reader& reader) {
 
     obj.subject = reader.read_cstring();
 
-    obj.amount_of_items = reader.read_u8();
+    auto amount_of_items = reader.read_u8();
 
-    for (uint8_t i = 0; i < obj.amount_of_items; ++i) {
+    for (uint8_t i = 0; i < amount_of_items; ++i) {
         obj.items.push_back(::wow_world_messages::tbc::MailListItem_read(reader));
     }
 
@@ -3398,7 +3398,7 @@ static void Mail_write(Writer& writer, const Mail& obj) {
 
     writer.write_cstring(obj.subject);
 
-    writer.write_u8(obj.amount_of_items);
+    writer.write_u8(obj.items.size());
 
     for (const auto& v : obj.items) {
         MailListItem_write(writer, v);
@@ -3622,9 +3622,9 @@ MovementBlock MovementBlock_read(Reader& reader) {
 
             obj.id = reader.read_u32();
 
-            obj.amount_of_nodes = reader.read_u32();
+            auto amount_of_nodes = reader.read_u32();
 
-            for (uint32_t i = 0; i < obj.amount_of_nodes; ++i) {
+            for (uint32_t i = 0; i < amount_of_nodes; ++i) {
                 obj.nodes.push_back(::wow_world_messages::all::Vector3d_read(reader));
             }
 
@@ -3738,7 +3738,7 @@ static void MovementBlock_write(Writer& writer, const MovementBlock& obj) {
 
             writer.write_u32(obj.id);
 
-            writer.write_u32(obj.amount_of_nodes);
+            writer.write_u32(obj.nodes.size());
 
             for (const auto& v : obj.nodes) {
                 Vector3d_write(writer, v);
@@ -3996,9 +3996,9 @@ Object Object_read(Reader& reader) {
 
     }
     else if (obj.update_type == UpdateType::OUT_OF_RANGE_OBJECTS|| obj.update_type == UpdateType::NEAR_OBJECTS) {
-        obj.count = reader.read_u32();
+        auto count = reader.read_u32();
 
-        for (uint32_t i = 0; i < obj.count; ++i) {
+        for (uint32_t i = 0; i < count; ++i) {
             obj.guids.push_back(reader.read_packed_guid());
         }
 
@@ -4032,7 +4032,7 @@ static void Object_write(Writer& writer, const Object& obj) {
 
     }
     else if (obj.update_type == UpdateType::OUT_OF_RANGE_OBJECTS|| obj.update_type == UpdateType::NEAR_OBJECTS) {
-        writer.write_u32(obj.count);
+        writer.write_u32(obj.guids.size());
 
         for (const auto& v : obj.guids) {
             writer.write_packed_guid(v);
@@ -5249,9 +5249,9 @@ static size_t SMSG_CHAR_ENUM_size(const SMSG_CHAR_ENUM& obj) {
 SMSG_CHAR_ENUM SMSG_CHAR_ENUM_read(Reader& reader) {
     SMSG_CHAR_ENUM obj{};
 
-    obj.amount_of_characters = reader.read_u8();
+    auto amount_of_characters = reader.read_u8();
 
-    for (uint8_t i = 0; i < obj.amount_of_characters; ++i) {
+    for (uint8_t i = 0; i < amount_of_characters; ++i) {
         obj.characters.push_back(::wow_world_messages::tbc::Character_read(reader));
     }
 
@@ -5266,7 +5266,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_CHAR_ENUM::write()
 
     writer.write_u16(0x0000003b); /* opcode */
 
-    writer.write_u8(obj.amount_of_characters);
+    writer.write_u8(obj.characters.size());
 
     for (const auto& v : obj.characters) {
         Character_write(writer, v);
@@ -6654,15 +6654,15 @@ CMSG_WHO CMSG_WHO_read(Reader& reader) {
 
     obj.class_mask = reader.read_u32();
 
-    obj.amount_of_zones = reader.read_u32();
+    auto amount_of_zones = reader.read_u32();
 
-    for (uint32_t i = 0; i < obj.amount_of_zones; ++i) {
+    for (uint32_t i = 0; i < amount_of_zones; ++i) {
         obj.zones.push_back(reader.read_u32());
     }
 
-    obj.amount_of_strings = reader.read_u32();
+    auto amount_of_strings = reader.read_u32();
 
-    for (uint32_t i = 0; i < obj.amount_of_strings; ++i) {
+    for (uint32_t i = 0; i < amount_of_strings; ++i) {
         obj.search_strings.push_back(reader.read_cstring());
     }
 
@@ -6689,13 +6689,13 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_WHO::write() const
 
     writer.write_u32(obj.class_mask);
 
-    writer.write_u32(obj.amount_of_zones);
+    writer.write_u32(obj.zones.size());
 
     for (const auto& v : obj.zones) {
         writer.write_u32(v);
     }
 
-    writer.write_u32(obj.amount_of_strings);
+    writer.write_u32(obj.search_strings.size());
 
     for (const auto& v : obj.search_strings) {
         writer.write_cstring(v);
@@ -6717,11 +6717,11 @@ static size_t SMSG_WHO_size(const SMSG_WHO& obj) {
 SMSG_WHO SMSG_WHO_read(Reader& reader) {
     SMSG_WHO obj{};
 
-    obj.listed_players = reader.read_u32();
+    auto listed_players = reader.read_u32();
 
     obj.online_players = reader.read_u32();
 
-    for (uint32_t i = 0; i < obj.listed_players; ++i) {
+    for (uint32_t i = 0; i < listed_players; ++i) {
         obj.players.push_back(::wow_world_messages::tbc::WhoPlayer_read(reader));
     }
 
@@ -6736,7 +6736,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_WHO::write() const
 
     writer.write_u16(0x00000063); /* opcode */
 
-    writer.write_u32(obj.listed_players);
+    writer.write_u32(obj.players.size());
 
     writer.write_u32(obj.online_players);
 
@@ -6833,9 +6833,9 @@ SMSG_CONTACT_LIST SMSG_CONTACT_LIST_read(Reader& reader) {
 
     obj.list_mask = static_cast<RelationType>(reader.read_u32());
 
-    obj.amount_of_relations = reader.read_u32();
+    auto amount_of_relations = reader.read_u32();
 
-    for (uint32_t i = 0; i < obj.amount_of_relations; ++i) {
+    for (uint32_t i = 0; i < amount_of_relations; ++i) {
         obj.relations.push_back(::wow_world_messages::tbc::Relation_read(reader));
     }
 
@@ -6852,7 +6852,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_CONTACT_LIST::writ
 
     writer.write_u32(static_cast<uint32_t>(obj.list_mask));
 
-    writer.write_u32(obj.amount_of_relations);
+    writer.write_u32(obj.relations.size());
 
     for (const auto& v : obj.relations) {
         Relation_write(writer, v);
@@ -7300,10 +7300,10 @@ SMSG_GROUP_LIST SMSG_GROUP_LIST_read(Reader& reader, size_t body_size) {
     obj.group = reader.read_u64();
     _size += 8;
 
-    obj.amount_of_members = reader.read_u32();
+    auto amount_of_members = reader.read_u32();
     _size += 4;
 
-    for (uint32_t i = 0; i < obj.amount_of_members; ++i) {
+    for (uint32_t i = 0; i < amount_of_members; ++i) {
         obj.members.push_back(::wow_world_messages::tbc::GroupListMember_read(reader));
         _size += tbc::GroupListMember_size(obj.members.back());
     }
@@ -7344,7 +7344,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_GROUP_LIST::write(
 
     writer.write_u64(obj.group);
 
-    writer.write_u32(obj.amount_of_members);
+    writer.write_u32(obj.members.size());
 
     for (const auto& v : obj.members) {
         GroupListMember_write(writer, v);
@@ -7863,19 +7863,19 @@ static size_t SMSG_GUILD_ROSTER_size(const SMSG_GUILD_ROSTER& obj) {
 SMSG_GUILD_ROSTER SMSG_GUILD_ROSTER_read(Reader& reader) {
     SMSG_GUILD_ROSTER obj{};
 
-    obj.amount_of_members = reader.read_u32();
+    auto amount_of_members = reader.read_u32();
 
     obj.motd = reader.read_cstring();
 
     obj.guild_info = reader.read_cstring();
 
-    obj.amount_of_rights = reader.read_u32();
+    auto amount_of_rights = reader.read_u32();
 
-    for (uint32_t i = 0; i < obj.amount_of_rights; ++i) {
+    for (uint32_t i = 0; i < amount_of_rights; ++i) {
         obj.rights.push_back(::wow_world_messages::tbc::GuildRights_read(reader));
     }
 
-    for (uint32_t i = 0; i < obj.amount_of_members; ++i) {
+    for (uint32_t i = 0; i < amount_of_members; ++i) {
         obj.members.push_back(::wow_world_messages::tbc::GuildMember_read(reader));
     }
 
@@ -7890,13 +7890,13 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_GUILD_ROSTER::writ
 
     writer.write_u16(0x0000008a); /* opcode */
 
-    writer.write_u32(obj.amount_of_members);
+    writer.write_u32(obj.members.size());
 
     writer.write_cstring(obj.motd);
 
     writer.write_cstring(obj.guild_info);
 
-    writer.write_u32(obj.amount_of_rights);
+    writer.write_u32(obj.rights.size());
 
     for (const auto& v : obj.rights) {
         GuildRights_write(writer, v);
@@ -8069,9 +8069,9 @@ SMSG_GUILD_EVENT SMSG_GUILD_EVENT_read(Reader& reader) {
 
     obj.event = static_cast<GuildEvent>(reader.read_u8());
 
-    obj.amount_of_events = reader.read_u8();
+    auto amount_of_events = reader.read_u8();
 
-    for (uint8_t i = 0; i < obj.amount_of_events; ++i) {
+    for (uint8_t i = 0; i < amount_of_events; ++i) {
         obj.event_descriptions.push_back(reader.read_cstring());
     }
 
@@ -8088,7 +8088,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_GUILD_EVENT::write
 
     writer.write_u8(static_cast<uint8_t>(obj.event));
 
-    writer.write_u8(obj.amount_of_events);
+    writer.write_u8(obj.event_descriptions.size());
 
     for (const auto& v : obj.event_descriptions) {
         writer.write_cstring(v);
@@ -8438,9 +8438,9 @@ SMSG_CHANNEL_LIST SMSG_CHANNEL_LIST_read(Reader& reader) {
 
     obj.channel_flags = static_cast<ChannelFlags>(reader.read_u8());
 
-    obj.amount_of_members = reader.read_u32();
+    auto amount_of_members = reader.read_u32();
 
-    for (uint32_t i = 0; i < obj.amount_of_members; ++i) {
+    for (uint32_t i = 0; i < amount_of_members; ++i) {
         obj.members.push_back(::wow_world_messages::tbc::ChannelMember_read(reader));
     }
 
@@ -8459,7 +8459,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_CHANNEL_LIST::writ
 
     writer.write_u8(static_cast<uint8_t>(obj.channel_flags));
 
-    writer.write_u32(obj.amount_of_members);
+    writer.write_u32(obj.members.size());
 
     for (const auto& v : obj.members) {
         ChannelMember_write(writer, v);
@@ -8846,11 +8846,11 @@ static size_t SMSG_UPDATE_OBJECT_size(const SMSG_UPDATE_OBJECT& obj) {
 SMSG_UPDATE_OBJECT SMSG_UPDATE_OBJECT_read(Reader& reader) {
     SMSG_UPDATE_OBJECT obj{};
 
-    obj.amount_of_objects = reader.read_u32();
+    auto amount_of_objects = reader.read_u32();
 
     obj.has_transport = reader.read_u8();
 
-    for (uint32_t i = 0; i < obj.amount_of_objects; ++i) {
+    for (uint32_t i = 0; i < amount_of_objects; ++i) {
         obj.objects.push_back(::wow_world_messages::tbc::Object_read(reader));
     }
 
@@ -8865,7 +8865,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_UPDATE_OBJECT::wri
 
     writer.write_u16(0x000000a9); /* opcode */
 
-    writer.write_u32(obj.amount_of_objects);
+    writer.write_u32(obj.objects.size());
 
     writer.write_u8(obj.has_transport);
 
@@ -12128,9 +12128,9 @@ static size_t SMSG_INITIALIZE_FACTIONS_size(const SMSG_INITIALIZE_FACTIONS& obj)
 SMSG_INITIALIZE_FACTIONS SMSG_INITIALIZE_FACTIONS_read(Reader& reader) {
     SMSG_INITIALIZE_FACTIONS obj{};
 
-    obj.amount_of_factions = reader.read_u32();
+    auto amount_of_factions = reader.read_u32();
 
-    for (uint32_t i = 0; i < obj.amount_of_factions; ++i) {
+    for (uint32_t i = 0; i < amount_of_factions; ++i) {
         obj.factions.push_back(::wow_world_messages::tbc::FactionInitializer_read(reader));
     }
 
@@ -12145,7 +12145,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_INITIALIZE_FACTION
 
     writer.write_u16(0x00000122); /* opcode */
 
-    writer.write_u32(obj.amount_of_factions);
+    writer.write_u32(obj.factions.size());
 
     for (const auto& v : obj.factions) {
         FactionInitializer_write(writer, v);
@@ -12184,9 +12184,9 @@ SMSG_SET_FACTION_STANDING SMSG_SET_FACTION_STANDING_read(Reader& reader) {
 
     obj.refer_a_friend_bonus = reader.read_float();
 
-    obj.amount_of_faction_standings = reader.read_u32();
+    auto amount_of_faction_standings = reader.read_u32();
 
-    for (uint32_t i = 0; i < obj.amount_of_faction_standings; ++i) {
+    for (uint32_t i = 0; i < amount_of_faction_standings; ++i) {
         obj.faction_standings.push_back(::wow_world_messages::tbc::FactionStanding_read(reader));
     }
 
@@ -12203,7 +12203,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SET_FACTION_STANDI
 
     writer.write_float(obj.refer_a_friend_bonus);
 
-    writer.write_u32(obj.amount_of_faction_standings);
+    writer.write_u32(obj.faction_standings.size());
 
     for (const auto& v : obj.faction_standings) {
         FactionStanding_write(writer, v);
@@ -12329,15 +12329,15 @@ SMSG_INITIAL_SPELLS SMSG_INITIAL_SPELLS_read(Reader& reader) {
 
     obj.unknown1 = reader.read_u8();
 
-    obj.spell_count = reader.read_u16();
+    auto spell_count = reader.read_u16();
 
-    for (uint16_t i = 0; i < obj.spell_count; ++i) {
+    for (uint16_t i = 0; i < spell_count; ++i) {
         obj.initial_spells.push_back(::wow_world_messages::tbc::InitialSpell_read(reader));
     }
 
-    obj.cooldown_count = reader.read_u16();
+    auto cooldown_count = reader.read_u16();
 
-    for (uint16_t i = 0; i < obj.cooldown_count; ++i) {
+    for (uint16_t i = 0; i < cooldown_count; ++i) {
         obj.cooldowns.push_back(::wow_world_messages::tbc::CooldownSpell_read(reader));
     }
 
@@ -12354,13 +12354,13 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_INITIAL_SPELLS::wr
 
     writer.write_u8(obj.unknown1);
 
-    writer.write_u16(obj.spell_count);
+    writer.write_u16(obj.initial_spells.size());
 
     for (const auto& v : obj.initial_spells) {
         InitialSpell_write(writer, v);
     }
 
-    writer.write_u16(obj.cooldown_count);
+    writer.write_u16(obj.cooldowns.size());
 
     for (const auto& v : obj.cooldowns) {
         CooldownSpell_write(writer, v);
@@ -12666,15 +12666,15 @@ SMSG_SPELL_GO SMSG_SPELL_GO_read(Reader& reader) {
 
     obj.timestamp = reader.read_u32();
 
-    obj.amount_of_hits = reader.read_u8();
+    auto amount_of_hits = reader.read_u8();
 
-    for (uint8_t i = 0; i < obj.amount_of_hits; ++i) {
+    for (uint8_t i = 0; i < amount_of_hits; ++i) {
         obj.hits.push_back(reader.read_u64());
     }
 
-    obj.amount_of_misses = reader.read_u8();
+    auto amount_of_misses = reader.read_u8();
 
-    for (uint8_t i = 0; i < obj.amount_of_misses; ++i) {
+    for (uint8_t i = 0; i < amount_of_misses; ++i) {
         obj.misses.push_back(::wow_world_messages::tbc::SpellMiss_read(reader));
     }
 
@@ -12707,13 +12707,13 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPELL_GO::write() 
 
     writer.write_u32(obj.timestamp);
 
-    writer.write_u8(obj.amount_of_hits);
+    writer.write_u8(obj.hits.size());
 
     for (const auto& v : obj.hits) {
         writer.write_u64(v);
     }
 
-    writer.write_u8(obj.amount_of_misses);
+    writer.write_u8(obj.misses.size());
 
     for (const auto& v : obj.misses) {
         SpellMiss_write(writer, v);
@@ -13282,9 +13282,9 @@ SMSG_ATTACKERSTATEUPDATE SMSG_ATTACKERSTATEUPDATE_read(Reader& reader) {
 
     obj.total_damage = reader.read_u32();
 
-    obj.amount_of_damages = reader.read_u8();
+    auto amount_of_damages = reader.read_u8();
 
-    for (uint8_t i = 0; i < obj.amount_of_damages; ++i) {
+    for (uint8_t i = 0; i < amount_of_damages; ++i) {
         obj.damages.push_back(::wow_world_messages::tbc::DamageInfo_read(reader));
     }
 
@@ -13315,7 +13315,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_ATTACKERSTATEUPDAT
 
     writer.write_u32(obj.total_damage);
 
-    writer.write_u8(obj.amount_of_damages);
+    writer.write_u8(obj.damages.size());
 
     for (const auto& v : obj.damages) {
         DamageInfo_write(writer, v);
@@ -13654,9 +13654,9 @@ SMSG_LOOT_RESPONSE SMSG_LOOT_RESPONSE_read(Reader& reader) {
     }
     obj.gold = reader.read_u32();
 
-    obj.amount_of_items = reader.read_u8();
+    auto amount_of_items = reader.read_u8();
 
-    for (uint8_t i = 0; i < obj.amount_of_items; ++i) {
+    for (uint8_t i = 0; i < amount_of_items; ++i) {
         obj.items.push_back(::wow_world_messages::tbc::LootItem_read(reader));
     }
 
@@ -13681,7 +13681,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_LOOT_RESPONSE::wri
     }
     writer.write_u32(obj.gold);
 
-    writer.write_u8(obj.amount_of_items);
+    writer.write_u8(obj.items.size());
 
     for (const auto& v : obj.items) {
         LootItem_write(writer, v);
@@ -14272,15 +14272,15 @@ SMSG_PET_SPELLS SMSG_PET_SPELLS_read(Reader& reader, size_t body_size) {
             obj.action_bars->action_bars[i] = reader.read_u32();
         }
 
-        obj.action_bars->amount_of_spells = reader.read_u8();
+        auto amount_of_spells = reader.read_u8();
 
-        for (uint8_t i = 0; i < obj.action_bars->amount_of_spells; ++i) {
+        for (uint8_t i = 0; i < amount_of_spells; ++i) {
             obj.action_bars->spells.push_back(reader.read_u32());
         }
 
-        obj.action_bars->amount_of_cooldowns = reader.read_u8();
+        auto amount_of_cooldowns = reader.read_u8();
 
-        for (uint8_t i = 0; i < obj.action_bars->amount_of_cooldowns; ++i) {
+        for (uint8_t i = 0; i < amount_of_cooldowns; ++i) {
             obj.action_bars->cooldowns.push_back(::wow_world_messages::tbc::PetSpellCooldown_read(reader));
         }
 
@@ -14313,13 +14313,13 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_PET_SPELLS::write(
             writer.write_u32(v);
         }
 
-        writer.write_u8(obj.action_bars->amount_of_spells);
+        writer.write_u8(obj.action_bars->spells.size());
 
         for (const auto& v : obj.action_bars->spells) {
             writer.write_u32(v);
         }
 
-        writer.write_u8(obj.action_bars->amount_of_cooldowns);
+        writer.write_u8(obj.action_bars->cooldowns.size());
 
         for (const auto& v : obj.action_bars->cooldowns) {
             PetSpellCooldown_write(writer, v);
@@ -14463,15 +14463,15 @@ SMSG_GOSSIP_MESSAGE SMSG_GOSSIP_MESSAGE_read(Reader& reader) {
 
     obj.title_text_id = reader.read_u32();
 
-    obj.amount_of_gossip_items = reader.read_u32();
+    auto amount_of_gossip_items = reader.read_u32();
 
-    for (uint32_t i = 0; i < obj.amount_of_gossip_items; ++i) {
+    for (uint32_t i = 0; i < amount_of_gossip_items; ++i) {
         obj.gossips.push_back(::wow_world_messages::tbc::GossipItem_read(reader));
     }
 
-    obj.amount_of_quests = reader.read_u32();
+    auto amount_of_quests = reader.read_u32();
 
-    for (uint32_t i = 0; i < obj.amount_of_quests; ++i) {
+    for (uint32_t i = 0; i < amount_of_quests; ++i) {
         obj.quests.push_back(::wow_world_messages::tbc::QuestItem_read(reader));
     }
 
@@ -14492,13 +14492,13 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_GOSSIP_MESSAGE::wr
 
     writer.write_u32(obj.title_text_id);
 
-    writer.write_u32(obj.amount_of_gossip_items);
+    writer.write_u32(obj.gossips.size());
 
     for (const auto& v : obj.gossips) {
         GossipItem_write(writer, v);
     }
 
-    writer.write_u32(obj.amount_of_quests);
+    writer.write_u32(obj.quests.size());
 
     for (const auto& v : obj.quests) {
         QuestItem_write(writer, v);
@@ -14669,9 +14669,9 @@ SMSG_QUESTGIVER_QUEST_LIST SMSG_QUESTGIVER_QUEST_LIST_read(Reader& reader) {
 
     obj.emote = reader.read_u32();
 
-    obj.amount_of_entries = reader.read_u8();
+    auto amount_of_entries = reader.read_u8();
 
-    for (uint8_t i = 0; i < obj.amount_of_entries; ++i) {
+    for (uint8_t i = 0; i < amount_of_entries; ++i) {
         obj.quest_items.push_back(::wow_world_messages::tbc::QuestItem_read(reader));
     }
 
@@ -14694,7 +14694,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_QUESTGIVER_QUEST_L
 
     writer.write_u32(obj.emote);
 
-    writer.write_u8(obj.amount_of_entries);
+    writer.write_u8(obj.quest_items.size());
 
     for (const auto& v : obj.quest_items) {
         QuestItem_write(writer, v);
@@ -14759,15 +14759,15 @@ SMSG_QUESTGIVER_QUEST_DETAILS SMSG_QUESTGIVER_QUEST_DETAILS_read(Reader& reader)
 
     obj.suggested_players = reader.read_u32();
 
-    obj.amount_of_choice_item_rewards = reader.read_u32();
+    auto amount_of_choice_item_rewards = reader.read_u32();
 
-    for (uint32_t i = 0; i < obj.amount_of_choice_item_rewards; ++i) {
+    for (uint32_t i = 0; i < amount_of_choice_item_rewards; ++i) {
         obj.choice_item_rewards.push_back(::wow_world_messages::tbc::QuestItemReward_read(reader));
     }
 
-    obj.amount_of_item_rewards = reader.read_u32();
+    auto amount_of_item_rewards = reader.read_u32();
 
-    for (uint32_t i = 0; i < obj.amount_of_item_rewards; ++i) {
+    for (uint32_t i = 0; i < amount_of_item_rewards; ++i) {
         obj.item_rewards.push_back(::wow_world_messages::tbc::QuestItemReward_read(reader));
     }
 
@@ -14781,9 +14781,9 @@ SMSG_QUESTGIVER_QUEST_DETAILS SMSG_QUESTGIVER_QUEST_DETAILS_read(Reader& reader)
 
     obj.title_reward = reader.read_u32();
 
-    obj.amount_of_emotes = reader.read_u32();
+    auto amount_of_emotes = reader.read_u32();
 
-    for (uint32_t i = 0; i < obj.amount_of_emotes; ++i) {
+    for (uint32_t i = 0; i < amount_of_emotes; ++i) {
         obj.emotes.push_back(::wow_world_messages::tbc::QuestDetailsEmote_read(reader));
     }
 
@@ -14812,13 +14812,13 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_QUESTGIVER_QUEST_D
 
     writer.write_u32(obj.suggested_players);
 
-    writer.write_u32(obj.amount_of_choice_item_rewards);
+    writer.write_u32(obj.choice_item_rewards.size());
 
     for (const auto& v : obj.choice_item_rewards) {
         QuestItemReward_write(writer, v);
     }
 
-    writer.write_u32(obj.amount_of_item_rewards);
+    writer.write_u32(obj.item_rewards.size());
 
     for (const auto& v : obj.item_rewards) {
         QuestItemReward_write(writer, v);
@@ -14834,7 +14834,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_QUESTGIVER_QUEST_D
 
     writer.write_u32(obj.title_reward);
 
-    writer.write_u32(obj.amount_of_emotes);
+    writer.write_u32(obj.emotes.size());
 
     for (const auto& v : obj.emotes) {
         QuestDetailsEmote_write(writer, v);
@@ -14918,9 +14918,9 @@ SMSG_QUESTGIVER_REQUEST_ITEMS SMSG_QUESTGIVER_REQUEST_ITEMS_read(Reader& reader)
 
     obj.required_money = reader.read_u32();
 
-    obj.amount_of_required_items = reader.read_u32();
+    auto amount_of_required_items = reader.read_u32();
 
-    for (uint32_t i = 0; i < obj.amount_of_required_items; ++i) {
+    for (uint32_t i = 0; i < amount_of_required_items; ++i) {
         obj.required_items.push_back(::wow_world_messages::tbc::QuestItemRequirement_read(reader));
     }
 
@@ -14961,7 +14961,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_QUESTGIVER_REQUEST
 
     writer.write_u32(obj.required_money);
 
-    writer.write_u32(obj.amount_of_required_items);
+    writer.write_u32(obj.required_items.size());
 
     for (const auto& v : obj.required_items) {
         QuestItemRequirement_write(writer, v);
@@ -15022,21 +15022,21 @@ SMSG_QUESTGIVER_OFFER_REWARD SMSG_QUESTGIVER_OFFER_REWARD_read(Reader& reader) {
 
     obj.suggested_players = reader.read_u32();
 
-    obj.amount_of_emotes = reader.read_u32();
+    auto amount_of_emotes = reader.read_u32();
 
-    for (uint32_t i = 0; i < obj.amount_of_emotes; ++i) {
+    for (uint32_t i = 0; i < amount_of_emotes; ++i) {
         obj.emotes.push_back(::wow_world_messages::tbc::NpcTextUpdateEmote_read(reader));
     }
 
-    obj.amount_of_choice_item_rewards = reader.read_u32();
+    auto amount_of_choice_item_rewards = reader.read_u32();
 
-    for (uint32_t i = 0; i < obj.amount_of_choice_item_rewards; ++i) {
+    for (uint32_t i = 0; i < amount_of_choice_item_rewards; ++i) {
         obj.choice_item_rewards.push_back(::wow_world_messages::tbc::QuestItemRequirement_read(reader));
     }
 
-    obj.amount_of_item_rewards = reader.read_u32();
+    auto amount_of_item_rewards = reader.read_u32();
 
-    for (uint32_t i = 0; i < obj.amount_of_item_rewards; ++i) {
+    for (uint32_t i = 0; i < amount_of_item_rewards; ++i) {
         obj.item_rewards.push_back(::wow_world_messages::tbc::QuestItemRequirement_read(reader));
     }
 
@@ -15075,19 +15075,19 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_QUESTGIVER_OFFER_R
 
     writer.write_u32(obj.suggested_players);
 
-    writer.write_u32(obj.amount_of_emotes);
+    writer.write_u32(obj.emotes.size());
 
     for (const auto& v : obj.emotes) {
         NpcTextUpdateEmote_write(writer, v);
     }
 
-    writer.write_u32(obj.amount_of_choice_item_rewards);
+    writer.write_u32(obj.choice_item_rewards.size());
 
     for (const auto& v : obj.choice_item_rewards) {
         QuestItemRequirement_write(writer, v);
     }
 
-    writer.write_u32(obj.amount_of_item_rewards);
+    writer.write_u32(obj.item_rewards.size());
 
     for (const auto& v : obj.item_rewards) {
         QuestItemRequirement_write(writer, v);
@@ -15185,9 +15185,9 @@ SMSG_QUESTGIVER_QUEST_COMPLETE SMSG_QUESTGIVER_QUEST_COMPLETE_read(Reader& reade
 
     obj.honor_reward = reader.read_u32();
 
-    obj.amount_of_item_rewards = reader.read_u32();
+    auto amount_of_item_rewards = reader.read_u32();
 
-    for (uint32_t i = 0; i < obj.amount_of_item_rewards; ++i) {
+    for (uint32_t i = 0; i < amount_of_item_rewards; ++i) {
         obj.item_rewards.push_back(::wow_world_messages::tbc::QuestItemReward_read(reader));
     }
 
@@ -15212,7 +15212,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_QUESTGIVER_QUEST_C
 
     writer.write_u32(obj.honor_reward);
 
-    writer.write_u32(obj.amount_of_item_rewards);
+    writer.write_u32(obj.item_rewards.size());
 
     for (const auto& v : obj.item_rewards) {
         QuestItemReward_write(writer, v);
@@ -15532,9 +15532,9 @@ SMSG_LIST_INVENTORY SMSG_LIST_INVENTORY_read(Reader& reader) {
 
     obj.vendor = reader.read_u64();
 
-    obj.amount_of_items = reader.read_u8();
+    auto amount_of_items = reader.read_u8();
 
-    for (uint8_t i = 0; i < obj.amount_of_items; ++i) {
+    for (uint8_t i = 0; i < amount_of_items; ++i) {
         obj.items.push_back(::wow_world_messages::tbc::ListInventoryItem_read(reader));
     }
 
@@ -15551,7 +15551,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_LIST_INVENTORY::wr
 
     writer.write_u64(obj.vendor);
 
-    writer.write_u8(obj.amount_of_items);
+    writer.write_u8(obj.items.size());
 
     for (const auto& v : obj.items) {
         ListInventoryItem_write(writer, v);
@@ -15955,9 +15955,9 @@ SMSG_TRAINER_LIST SMSG_TRAINER_LIST_read(Reader& reader) {
 
     obj.trainer_type = reader.read_u32();
 
-    obj.amount_of_spells = reader.read_u32();
+    auto amount_of_spells = reader.read_u32();
 
-    for (uint32_t i = 0; i < obj.amount_of_spells; ++i) {
+    for (uint32_t i = 0; i < amount_of_spells; ++i) {
         obj.spells.push_back(::wow_world_messages::tbc::TrainerSpell_read(reader));
     }
 
@@ -15978,7 +15978,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_TRAINER_LIST::writ
 
     writer.write_u32(obj.trainer_type);
 
-    writer.write_u32(obj.amount_of_spells);
+    writer.write_u32(obj.spells.size());
 
     for (const auto& v : obj.spells) {
         TrainerSpell_write(writer, v);
@@ -16203,9 +16203,9 @@ SMSG_PETITION_SHOWLIST SMSG_PETITION_SHOWLIST_read(Reader& reader) {
 
     obj.npc = reader.read_u64();
 
-    obj.amount_of_petitions = reader.read_u8();
+    auto amount_of_petitions = reader.read_u8();
 
-    for (uint8_t i = 0; i < obj.amount_of_petitions; ++i) {
+    for (uint8_t i = 0; i < amount_of_petitions; ++i) {
         obj.petitions.push_back(::wow_world_messages::tbc::PetitionShowlist_read(reader));
     }
 
@@ -16222,7 +16222,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_PETITION_SHOWLIST:
 
     writer.write_u64(obj.npc);
 
-    writer.write_u8(obj.amount_of_petitions);
+    writer.write_u8(obj.petitions.size());
 
     for (const auto& v : obj.petitions) {
         PetitionShowlist_write(writer, v);
@@ -16358,9 +16358,9 @@ SMSG_PETITION_SHOW_SIGNATURES SMSG_PETITION_SHOW_SIGNATURES_read(Reader& reader)
 
     obj.petition = reader.read_u32();
 
-    obj.amount_of_signatures = reader.read_u8();
+    auto amount_of_signatures = reader.read_u8();
 
-    for (uint8_t i = 0; i < obj.amount_of_signatures; ++i) {
+    for (uint8_t i = 0; i < amount_of_signatures; ++i) {
         obj.signatures.push_back(::wow_world_messages::tbc::PetitionSignature_read(reader));
     }
 
@@ -16381,7 +16381,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_PETITION_SHOW_SIGN
 
     writer.write_u32(obj.petition);
 
-    writer.write_u8(obj.amount_of_signatures);
+    writer.write_u8(obj.signatures.size());
 
     for (const auto& v : obj.signatures) {
         PetitionSignature_write(writer, v);
@@ -17782,13 +17782,13 @@ SMSG_COMPRESSED_UPDATE_OBJECT SMSG_COMPRESSED_UPDATE_OBJECT_read(Reader& reader,
     auto decompressed_data = ::wow_world_messages::util::decompress_data(compressed_data);
     auto byte_reader = ByteReader(decompressed_data);
 
-    obj.amount_of_objects = byte_reader.read_u32();
+    auto amount_of_objects = byte_reader.read_u32();
     _size += 4;
 
     obj.has_transport = byte_reader.read_u8();
     _size += 1;
 
-    for (uint32_t i = 0; i < obj.amount_of_objects; ++i) {
+    for (uint32_t i = 0; i < amount_of_objects; ++i) {
         obj.objects.push_back(::wow_world_messages::tbc::Object_read(byte_reader));
         _size += tbc::Object_size(obj.objects.back());
     }
@@ -17809,7 +17809,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_COMPRESSED_UPDATE_
 
     auto old_writer = writer;
     writer = Writer(0);
-    writer.write_u32(obj.amount_of_objects);
+    writer.write_u32(obj.objects.size());
 
     writer.write_u8(obj.has_transport);
 
@@ -18015,11 +18015,11 @@ MSG_LOOKING_FOR_GROUP_Server MSG_LOOKING_FOR_GROUP_Server_read(Reader& reader) {
 
     obj.entry = reader.read_u32();
 
-    obj.amount_of_players_displayed = reader.read_u32();
+    auto amount_of_players_displayed = reader.read_u32();
 
     obj.amount_of_players_found = reader.read_u32();
 
-    for (uint32_t i = 0; i < obj.amount_of_players_displayed; ++i) {
+    for (uint32_t i = 0; i < amount_of_players_displayed; ++i) {
         obj.players_displayed.push_back(::wow_world_messages::tbc::LfgPlayer_read(reader));
     }
 
@@ -18038,7 +18038,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_LOOKING_FOR_GROUP_S
 
     writer.write_u32(obj.entry);
 
-    writer.write_u32(obj.amount_of_players_displayed);
+    writer.write_u32(obj.players_displayed.size());
 
     writer.write_u32(obj.amount_of_players_found);
 
@@ -19053,9 +19053,9 @@ CMSG_SEND_MAIL CMSG_SEND_MAIL_read(Reader& reader) {
 
     obj.unknown2 = reader.read_u32();
 
-    obj.amount_of_items = reader.read_u8();
+    auto amount_of_items = reader.read_u8();
 
-    for (uint8_t i = 0; i < obj.amount_of_items; ++i) {
+    for (uint8_t i = 0; i < amount_of_items; ++i) {
         obj.items.push_back(::wow_world_messages::tbc::MailItem_read(reader));
     }
 
@@ -19090,7 +19090,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_SEND_MAIL::write()
 
     writer.write_u32(obj.unknown2);
 
-    writer.write_u8(obj.amount_of_items);
+    writer.write_u8(obj.items.size());
 
     for (const auto& v : obj.items) {
         MailItem_write(writer, v);
@@ -19236,9 +19236,9 @@ static size_t SMSG_MAIL_LIST_RESULT_size(const SMSG_MAIL_LIST_RESULT& obj) {
 SMSG_MAIL_LIST_RESULT SMSG_MAIL_LIST_RESULT_read(Reader& reader) {
     SMSG_MAIL_LIST_RESULT obj{};
 
-    obj.amount_of_mails = reader.read_u8();
+    auto amount_of_mails = reader.read_u8();
 
-    for (uint8_t i = 0; i < obj.amount_of_mails; ++i) {
+    for (uint8_t i = 0; i < amount_of_mails; ++i) {
         obj.mails.push_back(::wow_world_messages::tbc::Mail_read(reader));
     }
 
@@ -19253,7 +19253,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_MAIL_LIST_RESULT::
 
     writer.write_u16(0x0000023b); /* opcode */
 
-    writer.write_u8(obj.amount_of_mails);
+    writer.write_u8(obj.mails.size());
 
     for (const auto& v : obj.mails) {
         Mail_write(writer, v);
@@ -19294,9 +19294,9 @@ SMSG_BATTLEFIELD_LIST SMSG_BATTLEFIELD_LIST_read(Reader& reader) {
 
     obj.battleground_type = static_cast<BattlegroundType>(reader.read_u32());
 
-    obj.number_of_battlegrounds = reader.read_u32();
+    auto number_of_battlegrounds = reader.read_u32();
 
-    for (uint32_t i = 0; i < obj.number_of_battlegrounds; ++i) {
+    for (uint32_t i = 0; i < number_of_battlegrounds; ++i) {
         obj.battlegrounds.push_back(reader.read_u32());
     }
 
@@ -19315,7 +19315,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_BATTLEFIELD_LIST::
 
     writer.write_u32(static_cast<uint32_t>(obj.battleground_type));
 
-    writer.write_u32(obj.number_of_battlegrounds);
+    writer.write_u32(obj.battlegrounds.size());
 
     for (const auto& v : obj.battlegrounds) {
         writer.write_u32(v);
@@ -19557,9 +19557,9 @@ SMSG_SPELLLOGMISS SMSG_SPELLLOGMISS_read(Reader& reader) {
 
     obj.unknown1 = reader.read_u8();
 
-    obj.amount_of_targets = reader.read_u32();
+    auto amount_of_targets = reader.read_u32();
 
-    for (uint32_t i = 0; i < obj.amount_of_targets; ++i) {
+    for (uint32_t i = 0; i < amount_of_targets; ++i) {
         obj.targets.push_back(::wow_world_messages::tbc::SpellLogMiss_read(reader));
     }
 
@@ -19580,7 +19580,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPELLLOGMISS::writ
 
     writer.write_u8(obj.unknown1);
 
-    writer.write_u32(obj.amount_of_targets);
+    writer.write_u32(obj.targets.size());
 
     for (const auto& v : obj.targets) {
         SpellLogMiss_write(writer, v);
@@ -19606,9 +19606,9 @@ SMSG_SPELLLOGEXECUTE SMSG_SPELLLOGEXECUTE_read(Reader& reader) {
 
     obj.spell = reader.read_u32();
 
-    obj.amount_of_effects = reader.read_u32();
+    auto amount_of_effects = reader.read_u32();
 
-    for (uint32_t i = 0; i < obj.amount_of_effects; ++i) {
+    for (uint32_t i = 0; i < amount_of_effects; ++i) {
         obj.logs.push_back(::wow_world_messages::tbc::SpellLog_read(reader));
     }
 
@@ -19627,7 +19627,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPELLLOGEXECUTE::w
 
     writer.write_u32(obj.spell);
 
-    writer.write_u32(obj.amount_of_effects);
+    writer.write_u32(obj.logs.size());
 
     for (const auto& v : obj.logs) {
         SpellLog_write(writer, v);
@@ -19655,9 +19655,9 @@ SMSG_PERIODICAURALOG SMSG_PERIODICAURALOG_read(Reader& reader) {
 
     obj.spell = reader.read_u32();
 
-    obj.amount_of_auras = reader.read_u32();
+    auto amount_of_auras = reader.read_u32();
 
-    for (uint32_t i = 0; i < obj.amount_of_auras; ++i) {
+    for (uint32_t i = 0; i < amount_of_auras; ++i) {
         obj.auras.push_back(::wow_world_messages::tbc::AuraLog_read(reader));
     }
 
@@ -19678,7 +19678,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_PERIODICAURALOG::w
 
     writer.write_u32(obj.spell);
 
-    writer.write_u32(obj.amount_of_auras);
+    writer.write_u32(obj.auras.size());
 
     for (const auto& v : obj.auras) {
         AuraLog_write(writer, v);
@@ -20035,9 +20035,9 @@ CMSG_AUCTION_LIST_ITEMS CMSG_AUCTION_LIST_ITEMS_read(Reader& reader) {
 
     obj.is_full = reader.read_u8();
 
-    obj.amount_of_sorted_auctions = reader.read_u8();
+    auto amount_of_sorted_auctions = reader.read_u8();
 
-    for (uint8_t i = 0; i < obj.amount_of_sorted_auctions; ++i) {
+    for (uint8_t i = 0; i < amount_of_sorted_auctions; ++i) {
         obj.sorted_auctions.push_back(::wow_world_messages::tbc::AuctionSort_read(reader));
     }
 
@@ -20074,7 +20074,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_AUCTION_LIST_ITEMS
 
     writer.write_u8(obj.is_full);
 
-    writer.write_u8(obj.amount_of_sorted_auctions);
+    writer.write_u8(obj.sorted_auctions.size());
 
     for (const auto& v : obj.sorted_auctions) {
         AuctionSort_write(writer, v);
@@ -20273,9 +20273,9 @@ static size_t SMSG_AUCTION_LIST_RESULT_size(const SMSG_AUCTION_LIST_RESULT& obj)
 SMSG_AUCTION_LIST_RESULT SMSG_AUCTION_LIST_RESULT_read(Reader& reader) {
     SMSG_AUCTION_LIST_RESULT obj{};
 
-    obj.count = reader.read_u32();
+    auto count = reader.read_u32();
 
-    for (uint32_t i = 0; i < obj.count; ++i) {
+    for (uint32_t i = 0; i < count; ++i) {
         obj.auctions.push_back(::wow_world_messages::tbc::AuctionListItem_read(reader));
     }
 
@@ -20294,7 +20294,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_AUCTION_LIST_RESUL
 
     writer.write_u16(0x0000025c); /* opcode */
 
-    writer.write_u32(obj.count);
+    writer.write_u32(obj.auctions.size());
 
     for (const auto& v : obj.auctions) {
         AuctionListItem_write(writer, v);
@@ -20314,9 +20314,9 @@ static size_t SMSG_AUCTION_OWNER_LIST_RESULT_size(const SMSG_AUCTION_OWNER_LIST_
 SMSG_AUCTION_OWNER_LIST_RESULT SMSG_AUCTION_OWNER_LIST_RESULT_read(Reader& reader) {
     SMSG_AUCTION_OWNER_LIST_RESULT obj{};
 
-    obj.count = reader.read_u32();
+    auto count = reader.read_u32();
 
-    for (uint32_t i = 0; i < obj.count; ++i) {
+    for (uint32_t i = 0; i < count; ++i) {
         obj.auctions.push_back(::wow_world_messages::tbc::AuctionListItem_read(reader));
     }
 
@@ -20335,7 +20335,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_AUCTION_OWNER_LIST
 
     writer.write_u16(0x0000025d); /* opcode */
 
-    writer.write_u32(obj.count);
+    writer.write_u32(obj.auctions.size());
 
     for (const auto& v : obj.auctions) {
         AuctionListItem_write(writer, v);
@@ -20552,9 +20552,9 @@ CMSG_AUCTION_LIST_BIDDER_ITEMS CMSG_AUCTION_LIST_BIDDER_ITEMS_read(Reader& reade
 
     obj.start_from_page = reader.read_u32();
 
-    obj.amount_of_outbid_items = reader.read_u32();
+    auto amount_of_outbid_items = reader.read_u32();
 
-    for (uint32_t i = 0; i < obj.amount_of_outbid_items; ++i) {
+    for (uint32_t i = 0; i < amount_of_outbid_items; ++i) {
         obj.outbid_item_ids.push_back(reader.read_u32());
     }
 
@@ -20573,7 +20573,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_AUCTION_LIST_BIDDE
 
     writer.write_u32(obj.start_from_page);
 
-    writer.write_u32(obj.amount_of_outbid_items);
+    writer.write_u32(obj.outbid_item_ids.size());
 
     for (const auto& v : obj.outbid_item_ids) {
         writer.write_u32(v);
@@ -20589,9 +20589,9 @@ static size_t SMSG_AUCTION_BIDDER_LIST_RESULT_size(const SMSG_AUCTION_BIDDER_LIS
 SMSG_AUCTION_BIDDER_LIST_RESULT SMSG_AUCTION_BIDDER_LIST_RESULT_read(Reader& reader) {
     SMSG_AUCTION_BIDDER_LIST_RESULT obj{};
 
-    obj.count = reader.read_u32();
+    auto count = reader.read_u32();
 
-    for (uint32_t i = 0; i < obj.count; ++i) {
+    for (uint32_t i = 0; i < count; ++i) {
         obj.auctions.push_back(::wow_world_messages::tbc::AuctionListItem_read(reader));
     }
 
@@ -20610,7 +20610,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_AUCTION_BIDDER_LIS
 
     writer.write_u16(0x00000265); /* opcode */
 
-    writer.write_u32(obj.count);
+    writer.write_u32(obj.auctions.size());
 
     for (const auto& v : obj.auctions) {
         AuctionListItem_write(writer, v);
@@ -20815,11 +20815,11 @@ MSG_LIST_STABLED_PETS_Server MSG_LIST_STABLED_PETS_Server_read(Reader& reader) {
 
     obj.npc = reader.read_u64();
 
-    obj.amount_of_pets = reader.read_u8();
+    auto amount_of_pets = reader.read_u8();
 
     obj.stable_slots = reader.read_u8();
 
-    for (uint8_t i = 0; i < obj.amount_of_pets; ++i) {
+    for (uint8_t i = 0; i < amount_of_pets; ++i) {
         obj.pets.push_back(::wow_world_messages::tbc::StabledPet_read(reader));
     }
 
@@ -20836,7 +20836,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_LIST_STABLED_PETS_S
 
     writer.write_u64(obj.npc);
 
-    writer.write_u8(obj.amount_of_pets);
+    writer.write_u8(obj.pets.size());
 
     writer.write_u8(obj.stable_slots);
 
@@ -21092,9 +21092,9 @@ SMSG_SPELLDISPELLOG SMSG_SPELLDISPELLOG_read(Reader& reader) {
 
     obj.unknown = reader.read_u8();
 
-    obj.amount_of_spells = reader.read_u32();
+    auto amount_of_spells = reader.read_u32();
 
-    for (uint32_t i = 0; i < obj.amount_of_spells; ++i) {
+    for (uint32_t i = 0; i < amount_of_spells; ++i) {
         obj.spells.push_back(::wow_world_messages::tbc::DispelledSpell_read(reader));
     }
 
@@ -21117,7 +21117,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPELLDISPELLOG::wr
 
     writer.write_u8(obj.unknown);
 
-    writer.write_u32(obj.amount_of_spells);
+    writer.write_u32(obj.spells.size());
 
     for (const auto& v : obj.spells) {
         DispelledSpell_write(writer, v);
@@ -21274,9 +21274,9 @@ MSG_QUERY_NEXT_MAIL_TIME_Server MSG_QUERY_NEXT_MAIL_TIME_Server_read(Reader& rea
 
     obj.float_type = reader.read_u32();
 
-    obj.amount_of_mails = reader.read_u32();
+    auto amount_of_mails = reader.read_u32();
 
-    for (uint32_t i = 0; i < obj.amount_of_mails; ++i) {
+    for (uint32_t i = 0; i < amount_of_mails; ++i) {
         obj.mails.push_back(::wow_world_messages::tbc::ReceivedMail_read(reader));
     }
 
@@ -21293,7 +21293,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_QUERY_NEXT_MAIL_TIM
 
     writer.write_u32(obj.float_type);
 
-    writer.write_u32(obj.amount_of_mails);
+    writer.write_u32(obj.mails.size());
 
     for (const auto& v : obj.mails) {
         ReceivedMail_write(writer, v);
@@ -21826,9 +21826,9 @@ static size_t SMSG_LOOT_MASTER_LIST_size(const SMSG_LOOT_MASTER_LIST& obj) {
 SMSG_LOOT_MASTER_LIST SMSG_LOOT_MASTER_LIST_read(Reader& reader) {
     SMSG_LOOT_MASTER_LIST obj{};
 
-    obj.amount_of_players = reader.read_u8();
+    auto amount_of_players = reader.read_u8();
 
-    for (uint8_t i = 0; i < obj.amount_of_players; ++i) {
+    for (uint8_t i = 0; i < amount_of_players; ++i) {
         obj.guids.push_back(reader.read_u64());
     }
 
@@ -21843,7 +21843,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_LOOT_MASTER_LIST::
 
     writer.write_u16(0x000002a4); /* opcode */
 
-    writer.write_u8(obj.amount_of_players);
+    writer.write_u8(obj.guids.size());
 
     for (const auto& v : obj.guids) {
         writer.write_u64(v);
@@ -21859,9 +21859,9 @@ static size_t SMSG_SET_FORCED_REACTIONS_size(const SMSG_SET_FORCED_REACTIONS& ob
 SMSG_SET_FORCED_REACTIONS SMSG_SET_FORCED_REACTIONS_read(Reader& reader) {
     SMSG_SET_FORCED_REACTIONS obj{};
 
-    obj.amount_of_reactions = reader.read_u32();
+    auto amount_of_reactions = reader.read_u32();
 
-    for (uint32_t i = 0; i < obj.amount_of_reactions; ++i) {
+    for (uint32_t i = 0; i < amount_of_reactions; ++i) {
         obj.reactions.push_back(::wow_world_messages::tbc::ForcedReaction_read(reader));
     }
 
@@ -21876,7 +21876,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SET_FORCED_REACTIO
 
     writer.write_u16(0x000002a5); /* opcode */
 
-    writer.write_u32(obj.amount_of_reactions);
+    writer.write_u32(obj.reactions.size());
 
     for (const auto& v : obj.reactions) {
         ForcedReaction_write(writer, v);
@@ -22429,9 +22429,9 @@ SMSG_INIT_WORLD_STATES SMSG_INIT_WORLD_STATES_read(Reader& reader) {
 
     obj.area = static_cast<Area>(reader.read_u32());
 
-    obj.amount_of_states = reader.read_u16();
+    auto amount_of_states = reader.read_u16();
 
-    for (uint16_t i = 0; i < obj.amount_of_states; ++i) {
+    for (uint16_t i = 0; i < amount_of_states; ++i) {
         obj.states.push_back(::wow_world_messages::tbc::WorldState_read(reader));
     }
 
@@ -22450,7 +22450,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_INIT_WORLD_STATES:
 
     writer.write_u32(static_cast<uint32_t>(obj.area));
 
-    writer.write_u16(obj.amount_of_states);
+    writer.write_u16(obj.states.size());
 
     for (const auto& v : obj.states) {
         WorldState_write(writer, v);
@@ -22713,9 +22713,9 @@ static size_t SMSG_RAID_INSTANCE_INFO_size(const SMSG_RAID_INSTANCE_INFO& obj) {
 SMSG_RAID_INSTANCE_INFO SMSG_RAID_INSTANCE_INFO_read(Reader& reader) {
     SMSG_RAID_INSTANCE_INFO obj{};
 
-    obj.amount_of_raid_infos = reader.read_u32();
+    auto amount_of_raid_infos = reader.read_u32();
 
-    for (uint32_t i = 0; i < obj.amount_of_raid_infos; ++i) {
+    for (uint32_t i = 0; i < amount_of_raid_infos; ++i) {
         obj.raid_infos.push_back(::wow_world_messages::tbc::RaidInfo_read(reader));
     }
 
@@ -22730,7 +22730,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_RAID_INSTANCE_INFO
 
     writer.write_u16(0x000002cc); /* opcode */
 
-    writer.write_u32(obj.amount_of_raid_infos);
+    writer.write_u32(obj.raid_infos.size());
 
     for (const auto& v : obj.raid_infos) {
         RaidInfo_write(writer, v);
@@ -23545,15 +23545,15 @@ static size_t MSG_BATTLEGROUND_PLAYER_POSITIONS_Server_size(const MSG_BATTLEGROU
 MSG_BATTLEGROUND_PLAYER_POSITIONS_Server MSG_BATTLEGROUND_PLAYER_POSITIONS_Server_read(Reader& reader) {
     MSG_BATTLEGROUND_PLAYER_POSITIONS_Server obj{};
 
-    obj.amount_of_teammates = reader.read_u32();
+    auto amount_of_teammates = reader.read_u32();
 
-    for (uint32_t i = 0; i < obj.amount_of_teammates; ++i) {
+    for (uint32_t i = 0; i < amount_of_teammates; ++i) {
         obj.teammates.push_back(::wow_world_messages::tbc::BattlegroundPlayerPosition_read(reader));
     }
 
-    obj.amount_of_carriers = reader.read_u8();
+    auto amount_of_carriers = reader.read_u8();
 
-    for (uint8_t i = 0; i < obj.amount_of_carriers; ++i) {
+    for (uint8_t i = 0; i < amount_of_carriers; ++i) {
         obj.carriers.push_back(::wow_world_messages::tbc::BattlegroundPlayerPosition_read(reader));
     }
 
@@ -23568,13 +23568,13 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_BATTLEGROUND_PLAYER
 
     writer.write_u16(0x000002e9); /* opcode */
 
-    writer.write_u32(obj.amount_of_teammates);
+    writer.write_u32(obj.teammates.size());
 
     for (const auto& v : obj.teammates) {
         BattlegroundPlayerPosition_write(writer, v);
     }
 
-    writer.write_u8(obj.amount_of_carriers);
+    writer.write_u8(obj.carriers.size());
 
     for (const auto& v : obj.carriers) {
         BattlegroundPlayerPosition_write(writer, v);
@@ -24631,9 +24631,9 @@ CMSG_ACTIVATETAXIEXPRESS CMSG_ACTIVATETAXIEXPRESS_read(Reader& reader) {
 
     obj.total_cost = reader.read_u32();
 
-    obj.node_count = reader.read_u32();
+    auto node_count = reader.read_u32();
 
-    for (uint32_t i = 0; i < obj.node_count; ++i) {
+    for (uint32_t i = 0; i < node_count; ++i) {
         obj.nodes.push_back(reader.read_u32());
     }
 
@@ -24652,7 +24652,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_ACTIVATETAXIEXPRES
 
     writer.write_u32(obj.total_cost);
 
-    writer.write_u32(obj.node_count);
+    writer.write_u32(obj.nodes.size());
 
     for (const auto& v : obj.nodes) {
         writer.write_u32(v);
@@ -25278,9 +25278,9 @@ SMSG_SPELL_UPDATE_CHAIN_TARGETS SMSG_SPELL_UPDATE_CHAIN_TARGETS_read(Reader& rea
 
     obj.spell = reader.read_u32();
 
-    obj.amount_of_targets = reader.read_u32();
+    auto amount_of_targets = reader.read_u32();
 
-    for (uint32_t i = 0; i < obj.amount_of_targets; ++i) {
+    for (uint32_t i = 0; i < amount_of_targets; ++i) {
         obj.targets.push_back(reader.read_u64());
     }
 
@@ -25299,7 +25299,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPELL_UPDATE_CHAIN
 
     writer.write_u32(obj.spell);
 
-    writer.write_u32(obj.amount_of_targets);
+    writer.write_u32(obj.targets.size());
 
     for (const auto& v : obj.targets) {
         writer.write_u64(v);
@@ -25323,9 +25323,9 @@ SMSG_SPELLSTEALLOG SMSG_SPELLSTEALLOG_read(Reader& reader) {
 
     obj.unknown = reader.read_u8();
 
-    obj.amount_of_spell_steals = reader.read_u32();
+    auto amount_of_spell_steals = reader.read_u32();
 
-    for (uint32_t i = 0; i < obj.amount_of_spell_steals; ++i) {
+    for (uint32_t i = 0; i < amount_of_spell_steals; ++i) {
         obj.spell_steals.push_back(::wow_world_messages::tbc::SpellSteal_read(reader));
     }
 
@@ -25348,7 +25348,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SPELLSTEALLOG::wri
 
     writer.write_u8(obj.unknown);
 
-    writer.write_u32(obj.amount_of_spell_steals);
+    writer.write_u32(obj.spell_steals.size());
 
     for (const auto& v : obj.spell_steals) {
         SpellSteal_write(writer, v);
@@ -25424,9 +25424,9 @@ static size_t SMSG_MOTD_size(const SMSG_MOTD& obj) {
 SMSG_MOTD SMSG_MOTD_read(Reader& reader) {
     SMSG_MOTD obj{};
 
-    obj.amount_of_motds = reader.read_u32();
+    auto amount_of_motds = reader.read_u32();
 
-    for (uint32_t i = 0; i < obj.amount_of_motds; ++i) {
+    for (uint32_t i = 0; i < amount_of_motds; ++i) {
         obj.motds.push_back(reader.read_cstring());
     }
 
@@ -25441,7 +25441,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_MOTD::write() cons
 
     writer.write_u16(0x0000033d); /* opcode */
 
-    writer.write_u32(obj.amount_of_motds);
+    writer.write_u32(obj.motds.size());
 
     for (const auto& v : obj.motds) {
         writer.write_cstring(v);
@@ -25775,11 +25775,11 @@ SMSG_ARENA_TEAM_ROSTER SMSG_ARENA_TEAM_ROSTER_read(Reader& reader) {
 
     obj.arena_team = reader.read_u32();
 
-    obj.amount_of_members = reader.read_u32();
+    auto amount_of_members = reader.read_u32();
 
     obj.arena_type = static_cast<ArenaType>(reader.read_u8());
 
-    for (uint32_t i = 0; i < obj.amount_of_members; ++i) {
+    for (uint32_t i = 0; i < amount_of_members; ++i) {
         obj.members.push_back(::wow_world_messages::tbc::ArenaTeamMember_read(reader));
     }
 
@@ -25796,7 +25796,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_ARENA_TEAM_ROSTER:
 
     writer.write_u32(obj.arena_team);
 
-    writer.write_u32(obj.amount_of_members);
+    writer.write_u32(obj.members.size());
 
     writer.write_u8(static_cast<uint8_t>(obj.arena_type));
 
@@ -26050,9 +26050,9 @@ SMSG_ARENA_TEAM_EVENT SMSG_ARENA_TEAM_EVENT_read(Reader& reader) {
         obj.new_leader = reader.read_cstring();
 
     }
-    obj.amount_of_strings = reader.read_u8();
+    auto amount_of_strings = reader.read_u8();
 
-    for (uint8_t i = 0; i < obj.amount_of_strings; ++i) {
+    for (uint8_t i = 0; i < amount_of_strings; ++i) {
         obj.string.push_back(reader.read_cstring());
     }
 
@@ -26103,7 +26103,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_ARENA_TEAM_EVENT::
         writer.write_cstring(obj.new_leader);
 
     }
-    writer.write_u8(obj.amount_of_strings);
+    writer.write_u8(obj.string.size());
 
     for (const auto& v : obj.string) {
         writer.write_cstring(v);
@@ -28201,16 +28201,16 @@ SMSG_GUILD_BANK_LIST SMSG_GUILD_BANK_LIST_read(Reader& reader) {
     obj.tab_result = static_cast<GuildBankTabResult>(reader.read_u8());
 
     if (obj.tab_result == GuildBankTabResult::PRESENT) {
-        obj.amount_of_bank_tabs = reader.read_u8();
+        auto amount_of_bank_tabs = reader.read_u8();
 
-        for (uint8_t i = 0; i < obj.amount_of_bank_tabs; ++i) {
+        for (uint8_t i = 0; i < amount_of_bank_tabs; ++i) {
             obj.tabs.push_back(::wow_world_messages::tbc::GuildBankTab_read(reader));
         }
 
     }
-    obj.amount_of_slot_updates = reader.read_u8();
+    auto amount_of_slot_updates = reader.read_u8();
 
-    for (uint8_t i = 0; i < obj.amount_of_slot_updates; ++i) {
+    for (uint8_t i = 0; i < amount_of_slot_updates; ++i) {
         obj.slot_updates.push_back(::wow_world_messages::tbc::GuildBankSlot_read(reader));
     }
 
@@ -28234,14 +28234,14 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_GUILD_BANK_LIST::w
     writer.write_u8(static_cast<uint8_t>(obj.tab_result));
 
     if (obj.tab_result == GuildBankTabResult::PRESENT) {
-        writer.write_u8(obj.amount_of_bank_tabs);
+        writer.write_u8(obj.tabs.size());
 
         for (const auto& v : obj.tabs) {
             GuildBankTab_write(writer, v);
         }
 
     }
-    writer.write_u8(obj.amount_of_slot_updates);
+    writer.write_u8(obj.slot_updates.size());
 
     for (const auto& v : obj.slot_updates) {
         GuildBankSlot_write(writer, v);
@@ -28563,9 +28563,9 @@ MSG_GUILD_BANK_LOG_QUERY_Server MSG_GUILD_BANK_LOG_QUERY_Server_read(Reader& rea
 
     obj.slot = reader.read_u8();
 
-    obj.amount_of_money_logs = reader.read_u8();
+    auto amount_of_money_logs = reader.read_u8();
 
-    for (uint8_t i = 0; i < obj.amount_of_money_logs; ++i) {
+    for (uint8_t i = 0; i < amount_of_money_logs; ++i) {
         obj.money_logs.push_back(::wow_world_messages::tbc::MoneyLogItem_read(reader));
     }
 
@@ -28584,7 +28584,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_GUILD_BANK_LOG_QUER
 
     writer.write_u8(obj.slot);
 
-    writer.write_u8(obj.amount_of_money_logs);
+    writer.write_u8(obj.money_logs.size());
 
     for (const auto& v : obj.money_logs) {
         MoneyLogItem_write(writer, v);
@@ -28957,9 +28957,9 @@ static size_t MSG_GUILD_EVENT_LOG_QUERY_Server_size(const MSG_GUILD_EVENT_LOG_QU
 MSG_GUILD_EVENT_LOG_QUERY_Server MSG_GUILD_EVENT_LOG_QUERY_Server_read(Reader& reader) {
     MSG_GUILD_EVENT_LOG_QUERY_Server obj{};
 
-    obj.amount_of_events = reader.read_u8();
+    auto amount_of_events = reader.read_u8();
 
-    for (uint8_t i = 0; i < obj.amount_of_events; ++i) {
+    for (uint8_t i = 0; i < amount_of_events; ++i) {
         obj.events.push_back(::wow_world_messages::tbc::GuildLogEvent_read(reader));
     }
 
@@ -28974,7 +28974,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> MSG_GUILD_EVENT_LOG_QUE
 
     writer.write_u16(0x000003fe); /* opcode */
 
-    writer.write_u8(obj.amount_of_events);
+    writer.write_u8(obj.events.size());
 
     for (const auto& v : obj.events) {
         GuildLogEvent_write(writer, v);
@@ -29304,9 +29304,9 @@ static size_t SMSG_QUESTGIVER_STATUS_MULTIPLE_size(const SMSG_QUESTGIVER_STATUS_
 SMSG_QUESTGIVER_STATUS_MULTIPLE SMSG_QUESTGIVER_STATUS_MULTIPLE_read(Reader& reader) {
     SMSG_QUESTGIVER_STATUS_MULTIPLE obj{};
 
-    obj.amount_of_statuses = reader.read_u32();
+    auto amount_of_statuses = reader.read_u32();
 
-    for (uint32_t i = 0; i < obj.amount_of_statuses; ++i) {
+    for (uint32_t i = 0; i < amount_of_statuses; ++i) {
         obj.statuses.push_back(::wow_world_messages::tbc::QuestGiverStatusReport_read(reader));
     }
 
@@ -29321,7 +29321,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_QUESTGIVER_STATUS_
 
     writer.write_u16(0x00000417); /* opcode */
 
-    writer.write_u32(obj.amount_of_statuses);
+    writer.write_u32(obj.statuses.size());
 
     for (const auto& v : obj.statuses) {
         QuestGiverStatusReport_write(writer, v);
@@ -29405,9 +29405,9 @@ static size_t SMSG_SEND_UNLEARN_SPELLS_size(const SMSG_SEND_UNLEARN_SPELLS& obj)
 SMSG_SEND_UNLEARN_SPELLS SMSG_SEND_UNLEARN_SPELLS_read(Reader& reader) {
     SMSG_SEND_UNLEARN_SPELLS obj{};
 
-    obj.amount_of_spells = reader.read_u32();
+    auto amount_of_spells = reader.read_u32();
 
-    for (uint32_t i = 0; i < obj.amount_of_spells; ++i) {
+    for (uint32_t i = 0; i < amount_of_spells; ++i) {
         obj.spells.push_back(reader.read_u32());
     }
 
@@ -29422,7 +29422,7 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_SEND_UNLEARN_SPELL
 
     writer.write_u16(0x0000041d); /* opcode */
 
-    writer.write_u32(obj.amount_of_spells);
+    writer.write_u32(obj.spells.size());
 
     for (const auto& v : obj.spells) {
         writer.write_u32(v);

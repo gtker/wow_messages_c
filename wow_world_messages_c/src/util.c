@@ -157,84 +157,102 @@ WowWorldResult wwm_write_int32(WowWorldWriter* stream, const int32_t value)
     return WWM_RESULT_SUCCESS;
 }
 
-WowWorldResult wwm_read_string(WowWorldReader* stream, WowWorldString* string)
+WowWorldResult wwm_read_string(WowWorldReader* stream, char** string)
 {
-    size_t index = WWM_CHECK_LENGTH(1);
-    string->length = stream->source[index];
+    size_t index;
+    uint8_t length;
 
-    index = WWM_CHECK_LENGTH(string->length);
+    index = WWM_CHECK_LENGTH(1);
+    length = stream->source[index];
 
-    string->string = malloc(string->length + 1);
+    index = WWM_CHECK_LENGTH(length);
 
-    memcpy(string->string, &stream->source[index], string->length);
-    string->string[string->length] = '\0';
+    *string = malloc(length + 1);
+    if (*string == NULL)
+    {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
+
+    memcpy(*string, &stream->source[index], length);
+    (*string)[length] = '\0';
 
     return WWM_RESULT_SUCCESS;
 }
 
-WowWorldResult wwm_write_string(WowWorldWriter* stream, const WowWorldString* string)
+WowWorldResult wwm_write_string(WowWorldWriter* stream, const char* string)
 {
-    const size_t index = WWM_CHECK_LENGTH(1 + string->length);
+    const size_t length = strlen(string);
+    const size_t index = WWM_CHECK_LENGTH(1 + length);
 
-    stream->destination[index] = (uint8_t)string->length;
-    memcpy(&stream->destination[index + 1], string->string, string->length);
+    stream->destination[index] = (uint8_t)length;
+    memcpy(&stream->destination[index + 1], string, length);
 
     return WWM_RESULT_SUCCESS;
 }
 
-WowWorldResult wwm_read_cstring(WowWorldReader* stream, WowWorldString* string)
+WowWorldResult wwm_read_cstring(WowWorldReader* stream, char** string)
 {
     const unsigned char* const start = &stream->source[stream->index];
+    size_t length = 1;
     size_t index = WWM_CHECK_LENGTH(1);
-    string->length = 0;
 
     while (stream->source[index] != '\0')
     {
         index = WWM_CHECK_LENGTH(1);
-        string->length++;
+        length++;
     }
 
-    string->string = malloc(string->length + 1);
+    *string = malloc(length);
+    if (*string == NULL)
+    {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
 
-    memcpy(string->string, start, string->length);
-    string->string[string->length] = '\0';
+    memcpy(*string, start, length);
 
     return WWM_RESULT_SUCCESS;
 }
 
-WowWorldResult wwm_write_cstring(WowWorldWriter* stream, const WowWorldString* string)
+WowWorldResult wwm_write_cstring(WowWorldWriter* stream, const char* string)
 {
-    const size_t index = WWM_CHECK_LENGTH(1 + string->length);
+    const size_t length = strlen(string);
+    const size_t index = WWM_CHECK_LENGTH(length + 1);
 
-    memcpy(&stream->destination[index], string->string, string->length + 1);
-
-    return WWM_RESULT_SUCCESS;
-}
-
-WowWorldResult wwm_read_sized_cstring(WowWorldReader* stream, WowWorldString* string)
-{
-    size_t index;
-
-    WWM_CHECK_RETURN_CODE(wwm_read_uint32(stream, &string->length));
-
-    index = WWM_CHECK_LENGTH(string->length);
-
-    string->string = malloc(string->length + 1);
-    memcpy(string->string, &stream->source[index], string->length);
-    string->string[string->length] = '\0';
+    memcpy(&stream->destination[index], string, length + 1);
 
     return WWM_RESULT_SUCCESS;
 }
 
-WowWorldResult wwm_write_sized_cstring(WowWorldWriter* stream, const WowWorldString* string)
+WowWorldResult wwm_read_sized_cstring(WowWorldReader* stream, char** string)
 {
     size_t index;
-    WWM_CHECK_RETURN_CODE(wwm_write_uint32(stream, string->length));
+    uint32_t length;
 
-    index = WWM_CHECK_LENGTH(string->length + 1);
+    WWM_CHECK_RETURN_CODE(wwm_read_uint32(stream, &length));
 
-    memcpy(&stream->destination[index], string->string, string->length + 1);
+    index = WWM_CHECK_LENGTH(length);
 
+    *string = malloc(length);
+    if (*string == NULL)
+    {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
+
+    memcpy(*string, &stream->source[index], length);
+
+    return WWM_RESULT_SUCCESS;
+}
+
+WowWorldResult wwm_write_sized_cstring(WowWorldWriter* stream, const char* string)
+{
+    size_t index;
+    const uint32_t length = strlen(string);
+
+    WWM_CHECK_RETURN_CODE(wwm_write_uint32(stream, length + 1));
+
+    index = WWM_CHECK_LENGTH(length + 1);
+
+    memcpy(&stream->destination[index], string, length + 1);
 
     return WWM_RESULT_SUCCESS;
 }
@@ -297,12 +315,11 @@ WowWorldResult wwm_write_bool32(WowWorldWriter* stream, const bool value)
     return WWM_RESULT_SUCCESS;
 }
 
-void wwm_free_string(WowWorldString* string)
+void wwm_free_string(char** string)
 {
-    free(string->string);
+    free(*string);
 
-    string->string = NULL;
-    string->length = 0;
+    *string = NULL;
 }
 
 size_t wwm_packed_guid_size(const uint64_t value)
@@ -405,6 +422,10 @@ WowWorldResult wwm_read_monster_move_spline(WowWorldReader* stream, MonsterMoveS
     }
 
     value->splines = malloc(12 * value->amount_of_splines);
+    if (value->splines == NULL)
+    {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
 
     WWM_CHECK_RETURN_CODE(all_Vector3d_read(stream, &value->splines[0]));
 
@@ -476,7 +497,7 @@ WowWorldResult wwm_write_named_guid(WowWorldWriter* stream, const NamedGuid* val
 
     if (value->guid != 0)
     {
-        WWM_CHECK_RETURN_CODE(wwm_write_cstring(stream, &value->name));
+        WWM_CHECK_RETURN_CODE(wwm_write_cstring(stream, value->name));
     }
 
     return WWM_RESULT_SUCCESS;

@@ -126,8 +126,6 @@ def container_module_prefix(tags: model.ObjectTags, module_name: str) -> str:
 
 
 def type_to_c_str(ty: model.DataType, module_name: str) -> str:
-    is_world = module_name in {"vanilla", "tbc", "wrath"}
-
     match ty:
         case model.DataTypeInteger(integer_type=integer_type):
             return integer_type_to_c_str(integer_type)
@@ -137,11 +135,8 @@ def type_to_c_str(ty: model.DataType, module_name: str) -> str:
         case model.DataTypeString() | model.DataTypeCstring() | model.DataTypeSizedCstring():
             if is_cpp():
                 return "std::string"
-
-            if is_world:
-                return "WowWorldString"
-
-            return "WowLoginString"
+            else:
+                return "char*"
         case model.DataTypeFloatingPoint():
             return "float"
         case model.DataTypeStruct(struct_data=e):
@@ -209,7 +204,7 @@ def type_to_c_str(ty: model.DataType, module_name: str) -> str:
 def array_type_to_c_str(ty: model.ArrayType, module_name: str):
     match ty:
         case model.ArrayTypeCstring():
-            return "std::string" if is_cpp() else "WowWorldString"
+            return "std::string" if is_cpp() else "char*"
         case model.ArrayTypeGUID():
             return "uint64_t"
         case model.ArrayTypeInteger(integer_type=integer_type):

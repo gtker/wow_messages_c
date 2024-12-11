@@ -249,11 +249,9 @@ def print_free_struct_member(s: Writer, d: model.Definition, module_name: str, e
             s.wln(f"{module_name}_achievement_in_progress_array_free(&{variable_name});")
 
         case model.DataTypeArray(inner_type=inner_type, size=size):
-            extra = ""
             match size:
-                case model.ArraySizeFixed(size=size):
-                    loop_variable = size
-                    extra = "*"
+                case model.ArraySizeFixed(size=loop_size):
+                    loop_variable = loop_size
                 case model.ArraySizeVariable(size=size):
                     loop_variable = f"object->{size}"
                 case model.ArraySizeEndless():
@@ -265,12 +263,13 @@ def print_free_struct_member(s: Writer, d: model.Definition, module_name: str, e
                 case model.ArrayTypeStruct(struct_data=struct_data):
                     if container_has_free(struct_data, module_name):
                         s.open_curly(f"for (i = 0; i < {loop_variable}; ++i)")
-                        s.wln(f"{container_module_prefix(struct_data.tags, module_name)}_{struct_data.name}_free(&(({extra}{variable_name})[i]));")
+                        s.wln(f"{container_module_prefix(struct_data.tags, module_name)}_{struct_data.name}_free(&(({variable_name})[i]));")
                         s.closing_curly() # for int i
                 case model.ArrayTypeCstring():
                     s.open_curly(f"for (i = 0; i < {loop_variable}; ++i)")
-                    s.wln(f"FREE_STRING((({extra}{variable_name})[i]));")
+                    s.wln(f"FREE_STRING((({variable_name})[i]));")
                     s.closing_curly() # for int i
 
-            s.wln(f"free({variable_name});")
-            s.wln(f"{variable_name} = NULL;")
+            if type(size) is not model.ArraySizeFixed:
+                s.wln(f"free({variable_name});")
+                s.wln(f"{variable_name} = NULL;")

@@ -96,29 +96,29 @@ WowWorldResult wwm_write_int32(WowWorldWriter* stream, int32_t value);
 
 #define WRITE_I32(variable) WWM_CHECK_RETURN_CODE(wwm_write_int32(writer, variable))
 
-WowWorldResult wwm_read_string(WowWorldReader* stream, WowWorldString* string);
+WowWorldResult wwm_read_string(WowWorldReader* stream, char** string);
 
 #define READ_STRING(variable) WWM_CHECK_RETURN_CODE(wwm_read_string(reader, &variable));
 
-WowWorldResult wwm_write_string(WowWorldWriter* stream, const WowWorldString* string);
+WowWorldResult wwm_write_string(WowWorldWriter* stream, const char* string);
 
-#define WRITE_STRING(variable) WWM_CHECK_RETURN_CODE(wwm_write_string(writer, &variable))
+#define WRITE_STRING(variable) WWM_CHECK_RETURN_CODE(wwm_write_string(writer, variable))
 
-WowWorldResult wwm_read_cstring(WowWorldReader* stream, WowWorldString* string);
+WowWorldResult wwm_read_cstring(WowWorldReader* stream, char** string);
 
 #define READ_CSTRING(variable) WWM_CHECK_RETURN_CODE(wwm_read_cstring(reader, &variable));
 
-WowWorldResult wwm_write_cstring(WowWorldWriter* stream, const WowWorldString* string);
+WowWorldResult wwm_write_cstring(WowWorldWriter* stream, const char* string);
 
-#define WRITE_CSTRING(variable) WWM_CHECK_RETURN_CODE(wwm_write_cstring(writer, &variable))
+#define WRITE_CSTRING(variable) WWM_CHECK_RETURN_CODE(wwm_write_cstring(writer, variable))
 
-WowWorldResult wwm_read_sized_cstring(WowWorldReader* stream, WowWorldString* string);
+WowWorldResult wwm_read_sized_cstring(WowWorldReader* stream, char** string);
 
 #define READ_SIZED_CSTRING(variable) WWM_CHECK_RETURN_CODE(wwm_read_sized_cstring(reader, &variable));
 
-WowWorldResult wwm_write_sized_cstring(WowWorldWriter* stream, const WowWorldString* string);
+WowWorldResult wwm_write_sized_cstring(WowWorldWriter* stream, const char* string);
 
-#define WRITE_SIZED_CSTRING(variable) WWM_CHECK_RETURN_CODE(wwm_write_sized_cstring(writer, &variable))
+#define WRITE_SIZED_CSTRING(variable) WWM_CHECK_RETURN_CODE(wwm_write_sized_cstring(writer, variable))
 
 WowWorldResult wwm_read_float(WowWorldReader* stream, float* value);
 
@@ -144,11 +144,11 @@ WowWorldResult wwm_write_bool32(WowWorldWriter* stream, bool value);
 
 #define WRITE_BOOL32(variable) WWM_CHECK_RETURN_CODE(wwm_write_bool32(writer, variable))
 
-void wwm_free_string(WowWorldString* string);
+void wwm_free_string(char** string);
 
 #define FREE_STRING(s) wwm_free_string(&s)
 
-#define STRING_SIZE(s) (s.length)
+#define STRING_SIZE(s) strlen(s)
 
 size_t wwm_packed_guid_size(uint64_t);
 

@@ -128,7 +128,6 @@ def print_individual_test(s: Writer, e: model.Container, test_case: model.TestCa
 
         if container_uses_compression(e):
             s.wln(f"{opcode_type} opcode2;")
-            s.wln(f"unsigned char* write_buffer2;")
             s.newline()
 
         s.wln(f"reader = {library_prefix}_create_reader(buffer, sizeof(buffer));")
@@ -148,7 +147,6 @@ def print_individual_test(s: Writer, e: model.Container, test_case: model.TestCa
         if container_uses_compression(e):
             s.write_block(f"""
                 reader2 = {library_prefix}_create_reader(write_buffer, sizeof(write_buffer));
-                write_buffer2 = malloc(sizeof(write_buffer));
 
                 result = {function_version}_{function_side}_opcode_read(&reader2, &opcode2);
                 check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "{e.name} {i}", "failed to read second");
@@ -159,7 +157,6 @@ def print_individual_test(s: Writer, e: model.Container, test_case: model.TestCa
                 check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "{e.name} {i}", "failed to write second");
 
                 wlm_test_compare_buffers(write_buffer, write_buffer2, writer.index, __FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i}");
-                free(write_buffer2);
             """)
             if container_has_free(e, function_version):
                 s.wln(f"{function_version}_{function_side}_opcode_free(&opcode2);")
@@ -230,7 +227,8 @@ def write_includes(s: Writer):
 
 def write_int_main(s: Writer, world: bool, additional_readers: bool):
     if not is_cpp():
-        s.wln("unsigned char write_buffer[1 << 16] = {0}; /* uint16_t max */")
+        s.wln("unsigned char write_buffer[(1 << 16 ) - 1] = {0}; /* uint16_t max */")
+        s.wln("unsigned char write_buffer2[(1 << 16) - 1] = {0}; /* uint16_t max */")
 
     extra_void: str = "" if is_cpp() else "void"
     s.open_curly(f"int main({extra_void})")

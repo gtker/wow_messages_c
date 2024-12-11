@@ -61,7 +61,7 @@ typedef struct {
     all_Locale locale;
     int32_t utc_timezone_offset;
     uint32_t client_ip_address;
-    WowLoginString account_name;
+    char* account_name;
 
 } all_CMD_AUTH_LOGON_CHALLENGE_Client;
 WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult all_CMD_AUTH_LOGON_CHALLENGE_Client_write(WowLoginWriter* writer, const all_CMD_AUTH_LOGON_CHALLENGE_Client* object);
@@ -75,7 +75,7 @@ typedef struct {
     all_Locale locale;
     int32_t utc_timezone_offset;
     uint32_t client_ip_address;
-    WowLoginString account_name;
+    char* account_name;
 
 } all_CMD_AUTH_RECONNECT_CHALLENGE_Client;
 WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult all_CMD_AUTH_RECONNECT_CHALLENGE_Client_write(WowLoginWriter* writer, const all_CMD_AUTH_RECONNECT_CHALLENGE_Client* object);

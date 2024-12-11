@@ -5,6 +5,11 @@
 
 #include "wow_login_messages_cpp/wow_login_messages.hpp"
 
+#include "wow_login_messages_cpp/version2.hpp"
+#include "wow_login_messages_cpp/version3.hpp"
+#include "wow_login_messages_cpp/version5.hpp"
+#include "wow_login_messages_cpp/version6.hpp"
+
 namespace wow_login_messages {
 namespace version7 {
 
@@ -118,6 +123,30 @@ struct ClientOpcode {
         if (opcode == Opcode::CMD_XFER_CANCEL) {
             this->CMD_XFER_CANCEL = std::move(other.CMD_XFER_CANCEL);
         }
+    }
+
+    ClientOpcode operator=(ClientOpcode&& other) noexcept {
+        this->opcode = other.opcode;
+        other.opcode = Opcode::NONE;
+        if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+            this->CMD_AUTH_LOGON_PROOF = std::move(other.CMD_AUTH_LOGON_PROOF);
+        }
+        if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+            this->CMD_AUTH_RECONNECT_PROOF = std::move(other.CMD_AUTH_RECONNECT_PROOF);
+        }
+        if (opcode == Opcode::CMD_REALM_LIST) {
+            this->CMD_REALM_LIST = std::move(other.CMD_REALM_LIST);
+        }
+        if (opcode == Opcode::CMD_XFER_ACCEPT) {
+            this->CMD_XFER_ACCEPT = std::move(other.CMD_XFER_ACCEPT);
+        }
+        if (opcode == Opcode::CMD_XFER_RESUME) {
+            this->CMD_XFER_RESUME = std::move(other.CMD_XFER_RESUME);
+        }
+        if (opcode == Opcode::CMD_XFER_CANCEL) {
+            this->CMD_XFER_CANCEL = std::move(other.CMD_XFER_CANCEL);
+        }
+        return std::move(*this);
     }
 
     ~ClientOpcode() {
@@ -258,6 +287,33 @@ struct ServerOpcode {
         if (opcode == Opcode::CMD_XFER_DATA) {
             this->CMD_XFER_DATA = std::move(other.CMD_XFER_DATA);
         }
+    }
+
+    ServerOpcode operator=(ServerOpcode&& other) noexcept {
+        this->opcode = other.opcode;
+        other.opcode = Opcode::NONE;
+        if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+            this->CMD_AUTH_LOGON_CHALLENGE = std::move(other.CMD_AUTH_LOGON_CHALLENGE);
+        }
+        if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+            this->CMD_AUTH_LOGON_PROOF = std::move(other.CMD_AUTH_LOGON_PROOF);
+        }
+        if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+            this->CMD_AUTH_RECONNECT_CHALLENGE = std::move(other.CMD_AUTH_RECONNECT_CHALLENGE);
+        }
+        if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+            this->CMD_AUTH_RECONNECT_PROOF = std::move(other.CMD_AUTH_RECONNECT_PROOF);
+        }
+        if (opcode == Opcode::CMD_REALM_LIST) {
+            this->CMD_REALM_LIST = std::move(other.CMD_REALM_LIST);
+        }
+        if (opcode == Opcode::CMD_XFER_INITIATE) {
+            this->CMD_XFER_INITIATE = std::move(other.CMD_XFER_INITIATE);
+        }
+        if (opcode == Opcode::CMD_XFER_DATA) {
+            this->CMD_XFER_DATA = std::move(other.CMD_XFER_DATA);
+        }
+        return std::move(*this);
     }
 
     ~ServerOpcode() {

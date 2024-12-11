@@ -31,6 +31,8 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
 
         if d.constant_value is not None or d.size_of_fields_before_size is not None:
             s.w("(void)")
+        elif d.used_as_size_in is not None and is_cpp():
+            s.w(f"auto {d.name} = ")
         else:
             if type(d.data_type) is not model.DataTypeArray:
                 s.w(f"{variable_name} = ")
@@ -105,7 +107,7 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
                 s.wln(f"READ_SIZED_CSTRING({variable_name});")
 
             if needs_size:
-                s.wln(f"_size += STRING_SIZE({variable_name}) + 4;")
+                s.wln(f"_size += STRING_SIZE({variable_name}) + 5;")
 
         case model.DataTypeLevel32() | model.DataTypeSpell() | model.DataTypeItem() \
              | model.DataTypeDateTime() | model.DataTypeGold() | model.DataTypeSeconds() \
@@ -325,11 +327,10 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
                     case model.ArraySizeFixed(size=size_fixed_size):
                         s.open_curly(f"for (auto i = 0; i < {size_fixed_size}; ++i)")
                     case model.ArraySizeVariable(size=size_variable_size):
-                        size_var = f"obj.{extra_indirection}{size_variable_size}"
                         definition: model.Definition = container_find_definition_by_name(container, size_variable_size)
                         loop_type = integer_type_to_c_str(
                             definition.data_type.integer_type)  # type: ignore[attr-defined]
-                        s.open_curly(f"for ({loop_type} i = 0; i < {size_var}; ++i)")
+                        s.open_curly(f"for ({loop_type} i = 0; i < {size_variable_size}; ++i)")
                     case model.ArraySizeEndless():
                         if compressed:
                             s.open_curly(f"while (!{d.name}_new_reader.is_at_end())")
@@ -442,8 +443,8 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
 
                     s.newline()
 
-                fixed_prefix = "(*" if type(array_size) is model.ArraySizeFixed else ""
-                fixed_suffix = ")" if type(array_size) is model.ArraySizeFixed else ""
+                fixed_prefix = ""
+                fixed_suffix = ""
 
                 inner = ""
                 match inner_type:
@@ -478,13 +479,7 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
                         extra = ""
                         if needs_size:
                             extra = f";_size += {array_size_inner_action(inner_type, '', '', variable_name, 'i', module_name)};"
-                        s.write_block(f"""
-                            {variable_name} = malloc(sizeof(*{variable_name}));
-                            if ({variable_name} == NULL) {{
-                                return {wlm_prefix}_RESULT_MALLOC_FAIL;
-                            }}
-                            READ_ARRAY({variable_name}, {array_size}, {inner}{extra});
-                        """)
+                        s.wln(f"READ_ARRAY({variable_name}, {array_size}, {inner}{extra});")
 
                     case model.ArraySizeVariable(size=array_size):
                         extra = ""

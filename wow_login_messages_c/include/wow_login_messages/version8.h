@@ -5,6 +5,12 @@
 
 #include "wow_login_messages/wow_login_messages.h"
 
+#include "wow_login_messages/version2.h"
+#include "wow_login_messages/version3.h"
+#include "wow_login_messages/version5.h"
+#include "wow_login_messages/version6.h"
+#include "wow_login_messages/version7.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -72,8 +78,8 @@ typedef struct {
     version8_RealmType realm_type;
     bool locked;
     version8_RealmFlag flag;
-    WowLoginString name;
-    WowLoginString address;
+    char* name;
+    char* address;
     float population;
     uint8_t number_of_characters_on_realm;
     version8_RealmCategory category;
@@ -86,16 +92,16 @@ typedef version2_TelemetryKey version8_TelemetryKey;
 
 typedef struct {
     version8_LoginResult result;
-    uint8_t (*server_public_key)[32];
+    uint8_t server_public_key[32];
     uint8_t generator_length;
     uint8_t* generator;
     uint8_t large_safe_prime_length;
     uint8_t* large_safe_prime;
-    uint8_t (*salt)[32];
-    uint8_t (*crc_salt)[16];
+    uint8_t salt[32];
+    uint8_t crc_salt[16];
     version8_SecurityFlag security_flag;
     uint32_t pin_grid_seed;
-    uint8_t (*pin_salt)[16];
+    uint8_t pin_salt[16];
     uint8_t width;
     uint8_t height;
     uint8_t digit_count;
@@ -110,16 +116,16 @@ WOW_LOGIN_MESSAGES_C_EXPORT void version8_CMD_AUTH_LOGON_CHALLENGE_Server_free(v
 typedef all_CMD_AUTH_LOGON_CHALLENGE_Client version8_CMD_AUTH_LOGON_CHALLENGE_Client;
 
 typedef struct {
-    uint8_t (*client_public_key)[32];
-    uint8_t (*client_proof)[20];
-    uint8_t (*crc_hash)[20];
+    uint8_t client_public_key[32];
+    uint8_t client_proof[20];
+    uint8_t crc_hash[20];
     uint8_t number_of_telemetry_keys;
     version2_TelemetryKey* telemetry_keys;
     version8_SecurityFlag security_flag;
-    uint8_t (*pin_salt)[16];
-    uint8_t (*pin_hash)[20];
-    uint8_t (*matrix_card_proof)[20];
-    WowLoginString authenticator;
+    uint8_t pin_salt[16];
+    uint8_t pin_hash[20];
+    uint8_t matrix_card_proof[20];
+    char* authenticator;
 
 } version8_CMD_AUTH_LOGON_PROOF_Client;
 WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version8_CMD_AUTH_LOGON_PROOF_Client_write(WowLoginWriter* writer, const version8_CMD_AUTH_LOGON_PROOF_Client* object);
@@ -127,7 +133,7 @@ WOW_LOGIN_MESSAGES_C_EXPORT void version8_CMD_AUTH_LOGON_PROOF_Client_free(versi
 
 typedef struct {
     version8_LoginResult result;
-    uint8_t (*server_proof)[20];
+    uint8_t server_proof[20];
     version8_AccountFlag account_flag;
     uint32_t hardware_survey_id;
     uint16_t unknown;
@@ -138,8 +144,8 @@ WOW_LOGIN_MESSAGES_C_EXPORT void version8_CMD_AUTH_LOGON_PROOF_Server_free(versi
 
 typedef struct {
     version8_LoginResult result;
-    uint8_t (*challenge_data)[16];
-    uint8_t (*checksum_salt)[16];
+    uint8_t challenge_data[16];
+    uint8_t checksum_salt[16];
 
 } version8_CMD_AUTH_RECONNECT_CHALLENGE_Server;
 WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version8_CMD_AUTH_RECONNECT_CHALLENGE_Server_write(WowLoginWriter* writer, const version8_CMD_AUTH_RECONNECT_CHALLENGE_Server* object);

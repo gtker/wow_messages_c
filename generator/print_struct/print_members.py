@@ -21,12 +21,14 @@ def print_member_definition(non_optional: Writer, member: model.StructMember, mo
                 name=name,
                 constant_value=constant_value,
                 size_of_fields_before_size=size_of_fields_before_size,
+                used_as_size_in=used_as_size_in,
                 tags=tags,
             ),
         ):
             if (
                     size_of_fields_before_size is not None
                     or constant_value is not None
+                    or (used_as_size_in is not None and is_cpp())
             ):
                 return
 
@@ -40,7 +42,7 @@ def print_member_definition(non_optional: Writer, member: model.StructMember, mo
                         non_optional.wln(f"std::array<{type_to_c_str(data_type, module_name)}, {size}> {name};")
                     else:
                         non_optional.wln(
-                            f"{type_to_c_str(data_type, module_name)} (*{name})[{size}];")
+                            f"{type_to_c_str(data_type, module_name)} {name}[{size}];")
                 case _:
                     non_optional.wln(f"{type_to_c_str(data_type, module_name)} {name};")
 

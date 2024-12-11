@@ -19,9 +19,11 @@ void expect_version3_opcode(WowLoginReader* reader,
                             Version3ClientOpcodeContainer* opcodes,
                             WowLoginOpcode opcode)
 {
+    WowLoginResult result;
+
     reader->index = 0;
     reader->length = server_recv(sock, buffer, BUFFER_SIZE);
-    WowLoginResult result = version3_client_opcode_read(reader, opcodes);
+    result = version3_client_opcode_read(reader, opcodes);
 
     if (result != WLM_RESULT_SUCCESS)
     {
@@ -68,12 +70,13 @@ void read_opcode(WowWorldReader* reader,
                  VanillaClientOpcodeContainer* opcodes,
                  WowSrpVanillaHeaderCrypto* header_crypto)
 {
+    WowWorldResult result;
     char error = 0;
     reader->index = 0;
     reader->length = server_recv(sock, buffer, BUFFER_SIZE);
     wow_srp_vanilla_header_crypto_decrypt(header_crypto, (uint8_t*)reader->source, WOW_SRP_CLIENT_HEADER_LENGTH,
                                           &error);
-    WowWorldResult result = vanilla_client_opcode_read(reader, opcodes);
+    result = vanilla_client_opcode_read(reader, opcodes);
 
     if (result != WWM_RESULT_SUCCESS)
     {
@@ -103,9 +106,10 @@ void expect_unencrypted_opcode(WowWorldReader* reader,
                                VanillaClientOpcodeContainer* opcodes,
                                WowVanillaWorldOpcode opcode)
 {
+    WowWorldResult result;
     reader->index = 0;
     reader->length = server_recv(sock, buffer, BUFFER_SIZE);
-    WowWorldResult result = vanilla_client_opcode_read(reader, opcodes);
+    result = vanilla_client_opcode_read(reader, opcodes);
 
     if (result != WWM_RESULT_SUCCESS)
     {
@@ -122,16 +126,15 @@ void expect_unencrypted_opcode(WowWorldReader* reader,
 
 static version3_Realm realms = {VERSION2_REALM_TYPE_PLAYER_VS_ENVIRONMENT,
                                 VERSION2_REALM_FLAG_NONE,
-                                {sizeof("Test Name") - 1, "Test Name"},
-                                {sizeof("localhost:8085") - 1, "localhost:8085"},
+                                "Test Name",
+                                "localhost:8085",
                                 0.0f,
                                 2,
                                 VERSION2_REALM_CATEGORY_DEFAULT,
                                 1};
-static vanilla_CharacterGear gear[19] = {0};
 static vanilla_Character characters = {
     1,
-    {sizeof("TestChar") - 1, "TestChar"},
+    "TestChar",
     VANILLA_RACE_HUMAN,
     VANILLA_CLASS_WARRIOR,
     VANILLA_GENDER_MALE,
@@ -150,23 +153,51 @@ static vanilla_Character characters = {
     0,
     0,
     0,
-    &gear,
+    {{0}},
 };
 
 int main(void)
 {
     int ret = 0;
+    size_t bytes;
+    AllClientOpcodeContainer opcodes;
+    WowLoginReader reader;
+    WowLoginResult r;
+    char error;
+    WowSrpVerifier* verifier;
+    WowSrpProof* proof;
+    WowLoginWriter writer;
+    uint8_t server_proof[WOW_SRP_PROOF_LENGTH];
+    WowSrpServer* server;
+    unsigned char session_key[WOW_SRP_SESSION_KEY_LENGTH];
+    uint8_t* sk;
+    version3_CMD_AUTH_LOGON_CHALLENGE_Server c;
+    ServerSocket world;
+    WowSrpVanillaProofSeed* seed;
+    WowSrpVanillaHeaderCrypto* header_crypto;
+    uint32_t tutorial_data[8] = {
+        0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
+    };
+    uint8_t crc_salt[16] = {0};
+    Version3ClientOpcodeContainer v3_opcodes;
+    Version3ServerOpcodeContainer s;
+    VanillaServerOpcodeContainer server_opcode;
+    WowWorldWriter world_writer;
+    WowWorldReader world_reader;
+    VanillaClientOpcodeContainer client_opcode;
+    vanilla_Object objects = {0};
+    WowBytes bytes0 = {0x01, 0x01, 0x01, 0x01};
+    char* username;
 
     ServerSocket auth = initialize_socket("3724");
 
     server_accept(&auth);
 
-    size_t bytes = server_recv(&auth, buffer, BUFFER_SIZE);
+    bytes = server_recv(&auth, buffer, BUFFER_SIZE);
 
-    AllClientOpcodeContainer opcodes;
-    WowLoginReader reader = wlm_create_reader(buffer, bytes);
+    reader = wlm_create_reader(buffer, bytes);
 
-    WowLoginResult r = all_client_opcode_read(&reader, &opcodes);
+    r = all_client_opcode_read(&reader, &opcodes);
     if (r != WLM_RESULT_SUCCESS && opcodes.opcode != CMD_AUTH_LOGON_CHALLENGE)
     {
         puts("client opcode read failed");
@@ -181,15 +212,15 @@ int main(void)
         goto exit_goto;
     }
 
-    char error;
-    WowSrpVerifier* verifier = wow_srp_verifier_from_username_and_password("A", "A", &error);
+    username = opcodes.body.CMD_AUTH_LOGON_CHALLENGE_Client.account_name;
+    verifier = wow_srp_verifier_from_username_and_password(username, username, &error);
     if (verifier == NULL)
     {
         puts("verifier is NULL");
         ret = 1;
         goto exit_goto;
     }
-    WowSrpProof* proof = wow_srp_verifier_into_proof(verifier);
+    proof = wow_srp_verifier_into_proof(verifier);
     verifier = NULL;
     if (proof == NULL)
     {
@@ -198,32 +229,28 @@ int main(void)
         goto exit_goto;
     }
 
-    version3_CMD_AUTH_LOGON_CHALLENGE_Server c;
     c.result = VERSION2_LOGIN_RESULT_SUCCESS;
-    c.server_public_key = (uint8_t(*)[32])wow_srp_proof_server_public_key(proof);
+    memcpy(&c.server_public_key, wow_srp_proof_server_public_key(proof), WOW_SRP_KEY_LENGTH);
     c.generator_length = 1;
     c.generator = &GENERATOR;
     c.large_safe_prime_length = WOW_SRP_KEY_LENGTH;
     c.large_safe_prime = (uint8_t*)WOW_SRP_LARGE_SAFE_PRIME_LITTLE_ENDIAN;
-    c.salt = (uint8_t(*)[32])wow_srp_proof_salt(proof);
-    uint8_t crc_salt[16] = {0};
-    c.crc_salt = &crc_salt;
+    memcpy(&c.salt, wow_srp_proof_salt(proof), WOW_SRP_KEY_LENGTH);
+    memcpy(&c.crc_salt, &crc_salt, sizeof(crc_salt));
     c.security_flag = VERSION3_SECURITY_FLAG_NONE;
 
-    WowLoginWriter writer = wlm_create_writer(buffer, BUFFER_SIZE);
+    writer = wlm_create_writer(buffer, BUFFER_SIZE);
 
     version3_CMD_AUTH_LOGON_CHALLENGE_Server_write(&writer, &c);
     server_send(&auth, buffer, writer.index);
 
-    Version3ClientOpcodeContainer v3_opcodes;
     expect_version3_opcode(&reader, &auth, &v3_opcodes, CMD_AUTH_LOGON_PROOF);
 
     puts("received logon proof");
 
-    uint8_t server_proof[WOW_SRP_PROOF_LENGTH];
-    WowSrpServer* server = wow_srp_proof_into_server(
-        proof, (uint8_t*)v3_opcodes.body.CMD_AUTH_LOGON_PROOF_Client.client_public_key,
-        (uint8_t*)v3_opcodes.body.CMD_AUTH_LOGON_PROOF_Client.client_proof, server_proof, &error);
+    server = wow_srp_proof_into_server(proof, (uint8_t*)v3_opcodes.body.CMD_AUTH_LOGON_PROOF_Client.client_public_key,
+                                       (uint8_t*)v3_opcodes.body.CMD_AUTH_LOGON_PROOF_Client.client_proof, server_proof,
+                                       &error);
 
     if (server == NULL)
     {
@@ -231,15 +258,13 @@ int main(void)
         ret = 1;
         goto exit_goto;
     }
-    unsigned char session_key[WOW_SRP_SESSION_KEY_LENGTH];
-    const uint8_t* sk = wow_srp_server_session_key(server);
+    sk = (uint8_t*)wow_srp_server_session_key(server);
     memcpy(&session_key, sk, WOW_SRP_SESSION_KEY_LENGTH);
 
     puts("server is not null");
-    Version3ServerOpcodeContainer s;
     s.opcode = CMD_AUTH_LOGON_PROOF;
     s.body.CMD_AUTH_LOGON_PROOF_Server.result = VERSION2_LOGIN_RESULT_SUCCESS;
-    s.body.CMD_AUTH_LOGON_PROOF_Server.server_proof = (uint8_t(*)[20])server_proof;
+    memcpy(&s.body.CMD_AUTH_LOGON_PROOF_Server.server_proof, &server_proof, WOW_SRP_PROOF_LENGTH);
     s.body.CMD_AUTH_LOGON_PROOF_Server.hardware_survey_id = 0;
 
     write_version3_opcode(&writer, &auth, &s);
@@ -248,7 +273,7 @@ int main(void)
     expect_version3_opcode(&reader, &auth, &v3_opcodes, CMD_REALM_LIST);
     puts("Received realm list");
 
-    ServerSocket world = initialize_socket("8085");
+    world = initialize_socket("8085");
 
     s.opcode = CMD_REALM_LIST;
     s.body.CMD_REALM_LIST_Server.number_of_realms = 1;
@@ -260,26 +285,23 @@ int main(void)
     server_accept(&world);
     puts("accepted world");
 
-    WowSrpVanillaProofSeed* seed = wow_srp_vanilla_proof_seed_new();
-    char err = 0;
+    seed = wow_srp_vanilla_proof_seed_new();
 
-    VanillaServerOpcodeContainer server_opcode;
     server_opcode.opcode = V_SMSG_AUTH_CHALLENGE;
-    server_opcode.body.SMSG_AUTH_CHALLENGE.server_seed = wow_srp_vanilla_proof_seed(seed, &err);
+    server_opcode.body.SMSG_AUTH_CHALLENGE.server_seed = wow_srp_vanilla_proof_seed(seed, &error);
 
-    WowWorldWriter world_writer = wwm_create_writer(buffer, BUFFER_SIZE);
+    world_writer = wwm_create_writer(buffer, BUFFER_SIZE);
 
     write_unencrypted_opcode(&world_writer, &world, &server_opcode);
 
-    WowWorldReader world_reader = wwm_create_reader(buffer, BUFFER_SIZE);
-    VanillaClientOpcodeContainer client_opcode;
+    world_reader = wwm_create_reader(buffer, BUFFER_SIZE);
     expect_unencrypted_opcode(&world_reader, &world, &client_opcode, V_CMSG_AUTH_SESSION);
-    printf("Accepted %s\n", client_opcode.body.CMSG_AUTH_SESSION.username.string);
+    printf("Accepted %s\n", client_opcode.body.CMSG_AUTH_SESSION.username);
 
-    WowSrpVanillaHeaderCrypto* header_crypto = wow_srp_vanilla_proof_seed_into_server_header_crypto(
-        seed, client_opcode.body.CMSG_AUTH_SESSION.username.string, sk,
+    header_crypto = wow_srp_vanilla_proof_seed_into_server_header_crypto(
+        seed, client_opcode.body.CMSG_AUTH_SESSION.username, sk,
         (uint8_t*)client_opcode.body.CMSG_AUTH_SESSION.client_proof, client_opcode.body.CMSG_AUTH_SESSION.client_seed,
-        &err);
+        &error);
 
     if (header_crypto == NULL)
     {
@@ -322,25 +344,19 @@ int main(void)
     server_opcode.opcode = V_SMSG_LOGIN_VERIFY_WORLD;
     server_opcode.body.SMSG_LOGIN_VERIFY_WORLD.map = VANILLA_MAP_EASTERN_KINGDOMS;
     server_opcode.body.SMSG_LOGIN_VERIFY_WORLD.orientation = 0.0f;
-    server_opcode.body.SMSG_LOGIN_VERIFY_WORLD.position = (all_Vector3d){
-        -8949.95f,
-        -132.493f,
-        83.5312f,
-    };
+    server_opcode.body.SMSG_LOGIN_VERIFY_WORLD.position.x = -8949.95f;
+    server_opcode.body.SMSG_LOGIN_VERIFY_WORLD.position.y = -132.493f;
+    server_opcode.body.SMSG_LOGIN_VERIFY_WORLD.position.z = 83.5312f;
     write_opcode(&world_writer, &world, &server_opcode, header_crypto);
 
-    uint32_t tutorial_data[8] = {
-        0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
-    };
-
     server_opcode.opcode = V_SMSG_TUTORIAL_FLAGS;
-    server_opcode.body.SMSG_TUTORIAL_FLAGS.tutorial_data = &tutorial_data;
+    memcpy(&server_opcode.body.SMSG_TUTORIAL_FLAGS.tutorial_data, &tutorial_data, sizeof(tutorial_data));
+
     write_opcode(&world_writer, &world, &server_opcode, header_crypto);
 
     server_opcode.opcode = V_SMSG_UPDATE_OBJECT;
     server_opcode.body.SMSG_UPDATE_OBJECT.has_transport = 0;
     server_opcode.body.SMSG_UPDATE_OBJECT.amount_of_objects = 1;
-    vanilla_Object objects = {0};
     server_opcode.body.SMSG_UPDATE_OBJECT.objects = &objects;
 
     objects.update_type = VANILLA_UPDATE_TYPE_CREATE_OBJECT2;
@@ -349,11 +365,9 @@ int main(void)
     objects.movement2.update_flag = VANILLA_UPDATE_FLAG_SELF | VANILLA_UPDATE_FLAG_ALL | VANILLA_UPDATE_FLAG_LIVING;
     objects.movement2.flags = VANILLA_MOVEMENT_FLAGS_NONE;
     objects.movement2.timestamp = 0;
-    objects.movement2.living_position = (all_Vector3d){
-        -8949.95f,
-        -132.493f,
-        83.5312f,
-    };
+    objects.movement2.living_position.x = -8949.95f;
+    objects.movement2.living_position.y = -132.493f;
+    objects.movement2.living_position.z = 83.5312f;
     objects.movement2.living_orientation = 0.0f;
     objects.movement2.fall_time = 0.0f;
     objects.movement2.walking_speed = 1.0f;
@@ -365,22 +379,22 @@ int main(void)
     objects.movement2.unknown1 = 0;
 
 
-    vanilla_update_mask_object_guid_set(&objects.mask2,  1);
+    vanilla_update_mask_object_guid_set(&objects.mask2, 1);
 
-    vanilla_update_mask_object_scale_x_set(&objects.mask2,  1.0f);
-    vanilla_update_mask_object_type_set(&objects.mask2,  25);
-    WowBytes bytes0 = {0x01, 0x01, 0x01, 0x01};
-    vanilla_update_mask_unit_bytes_0_set(&objects.mask2,  bytes0);
-    vanilla_update_mask_unit_displayid_set(&objects.mask2,  50);
-    vanilla_update_mask_unit_factiontemplate_set(&objects.mask2,  1);
-    vanilla_update_mask_unit_health_set(&objects.mask2,  100);
-    vanilla_update_mask_unit_level_set(&objects.mask2,  1);
-    vanilla_update_mask_unit_nativedisplayid_set(&objects.mask2,  50);
+    vanilla_update_mask_object_scale_x_set(&objects.mask2, 1.0f);
+    vanilla_update_mask_object_type_set(&objects.mask2, 25);
+    vanilla_update_mask_unit_bytes_0_set(&objects.mask2, bytes0);
+    vanilla_update_mask_unit_displayid_set(&objects.mask2, 50);
+    vanilla_update_mask_unit_factiontemplate_set(&objects.mask2, 1);
+    vanilla_update_mask_unit_health_set(&objects.mask2, 100);
+    vanilla_update_mask_unit_level_set(&objects.mask2, 1);
+    vanilla_update_mask_unit_nativedisplayid_set(&objects.mask2, 50);
 
     write_opcode(&world_writer, &world, &server_opcode, header_crypto);
 
     while (true)
     {
+        /* Just keep the connection alive. The client will be able to move around in the world. */
     }
 
 exit_goto:

@@ -44,8 +44,9 @@ typedef struct
 ServerSocket initialize_socket(const char* const port)
 {
     ServerSocket sock;
+    socket_opt_type one = 1;
 
-    struct addrinfo hints = {0};
+    struct addrinfo hints = {0, 0, 0, 0, 0, 0, 0, 0};
     struct addrinfo* res = NULL;
     fd_type result = 0;
 
@@ -68,9 +69,9 @@ ServerSocket initialize_socket(const char* const port)
     }
 #endif
 
-    hints.ai_family = AF_UNSPEC;  // use IPv4 or IPv6, whichever
+    hints.ai_family = AF_UNSPEC; /* use IPv4 or IPv6, whichever */
     hints.ai_socktype = SOCK_STREAM;
-    hints.ai_flags = AI_PASSIVE;  // fill in my IP for me
+    hints.ai_flags = AI_PASSIVE; /* fill in my IP for me */
 
     result = getaddrinfo(NULL, port, &hints, &res);
     if (result == -1)
@@ -88,7 +89,6 @@ ServerSocket initialize_socket(const char* const port)
         abort();
     }
 
-    socket_opt_type one = 1;
     setsockopt(sock.server_fd, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(one));
 
     result = bind(sock.server_fd, res->ai_addr, WINDOWS_INT_CAST res->ai_addrlen);

@@ -27,6 +27,8 @@ def print_write_struct_member(s: Writer, d: model.Definition, module_name: str, 
                 variable_name = f"({c_type}){module_name}_{container_name}_size(object)"
                 if is_cpp():
                     variable_name = f"static_cast<{c_type}>({container_name}_size(obj))"
+            if d.used_as_size_in is not None and is_cpp():
+                variable_name = f"obj.{extra_indirection}{d.used_as_size_in}.size()"
 
             short = integer_type_to_short(integer_type)
 
@@ -165,7 +167,6 @@ def print_write_struct_member(s: Writer, d: model.Definition, module_name: str, 
             else:
                 s.wln(f"{module_name}_cache_mask_write(writer, &{variable_name});")
 
-
         case model.DataTypeAddonArray():
             if is_cpp():
                 s.wln(f"{module_name}::addon_array_write(writer, {variable_name});")
@@ -177,7 +178,6 @@ def print_write_struct_member(s: Writer, d: model.Definition, module_name: str, 
                 s.wln(f"{module_name}::achievement_done_array_write(writer, {variable_name});")
             else:
                 s.wln(f"{module_name}_achievement_done_array_write(writer, &{variable_name});")
-
 
         case model.DataTypeAchievementInProgressArray():
             if is_cpp():
@@ -248,15 +248,16 @@ def print_write_struct_member(s: Writer, d: model.Definition, module_name: str, 
                     s.wln(f"new_writer = wwm_create_writer({d.name}_uncompressed_data, _size);")
                     s.wln("writer = &new_writer;")
 
-                fixed_prefix = "(*" if type(size) is model.ArraySizeFixed else ""
-                fixed_suffix = ")" if type(size) is model.ArraySizeFixed else ""
+                fixed_prefix = ""
+                fixed_suffix = ""
 
                 print_array_inner_write(d, extra_indirection, fixed_prefix, fixed_suffix, inner_type, s, size,
                                         variable_name, module_name)
 
                 if compressed:
                     s.newline()
-                    s.wln(f"{d.name}_compressed_data_size = wwm_compress_data({d.name}_uncompressed_data, _size, &old_writer->destination[old_writer->index], old_writer->length - old_writer->index);")
+                    s.wln(
+                        f"{d.name}_compressed_data_size = wwm_compress_data({d.name}_uncompressed_data, _size, &old_writer->destination[old_writer->index], old_writer->length - old_writer->index);")
                     s.open_curly(
                         f"if ({d.name}_compressed_data_size == 0)")
                     s.wln("return WWM_RESULT_COMPRESSION_ERROR;")
@@ -296,7 +297,8 @@ def array_size_inner_action(inner_type: model.ArrayType, fixed_prefix: str, fixe
 
 
 def print_array_inner_write(d: model.Definition, extra_indirection: str, fixed_prefix: str, fixed_suffix: str,
-                            inner_type: model.ArrayType, s: Writer, size: model.ArraySize, variable_name: str, module_name: str):
+                            inner_type: model.ArrayType, s: Writer, size: model.ArraySize, variable_name: str,
+                            module_name: str):
     if is_cpp():
         match inner_type:
             case model.ArrayTypeInteger(integer_type=integer_type):
@@ -506,7 +508,8 @@ def print_write(s: Writer, h: Writer, container: Container, object_type: model.O
         if type(object_type) is not model.ObjectTypeStruct:
             if container.tags.compressed:
                 s.wln("const auto compressed_data = ::wow_world_messages::util::compress_data(writer.m_buf);")
-                s.wln(f"old_writer.write_u16_be_at_first_index(static_cast<uint16_t>(compressed_data.size() + 4 + {opcode_size}));")
+                s.wln(
+                    f"old_writer.write_u16_be_at_first_index(static_cast<uint16_t>(compressed_data.size() + 4 + {opcode_size}));")
                 s.wln(
                     "old_writer.m_buf.insert(old_writer.m_buf.end(), compressed_data.begin(), compressed_data.end());")
                 s.newline()

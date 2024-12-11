@@ -5,6 +5,8 @@
 
 #include "wow_login_messages/wow_login_messages.h"
 
+#include "wow_login_messages/version2.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -40,16 +42,16 @@ typedef version2_TelemetryKey version3_TelemetryKey;
 
 typedef struct {
     version3_LoginResult result;
-    uint8_t (*server_public_key)[32];
+    uint8_t server_public_key[32];
     uint8_t generator_length;
     uint8_t* generator;
     uint8_t large_safe_prime_length;
     uint8_t* large_safe_prime;
-    uint8_t (*salt)[32];
-    uint8_t (*crc_salt)[16];
+    uint8_t salt[32];
+    uint8_t crc_salt[16];
     version3_SecurityFlag security_flag;
     uint32_t pin_grid_seed;
-    uint8_t (*pin_salt)[16];
+    uint8_t pin_salt[16];
 
 } version3_CMD_AUTH_LOGON_CHALLENGE_Server;
 WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version3_CMD_AUTH_LOGON_CHALLENGE_Server_write(WowLoginWriter* writer, const version3_CMD_AUTH_LOGON_CHALLENGE_Server* object);
@@ -60,14 +62,14 @@ typedef all_CMD_AUTH_LOGON_CHALLENGE_Client version3_CMD_AUTH_LOGON_CHALLENGE_Cl
 typedef version2_CMD_AUTH_LOGON_PROOF_Server version3_CMD_AUTH_LOGON_PROOF_Server;
 
 typedef struct {
-    uint8_t (*client_public_key)[32];
-    uint8_t (*client_proof)[20];
-    uint8_t (*crc_hash)[20];
+    uint8_t client_public_key[32];
+    uint8_t client_proof[20];
+    uint8_t crc_hash[20];
     uint8_t number_of_telemetry_keys;
     version2_TelemetryKey* telemetry_keys;
     version3_SecurityFlag security_flag;
-    uint8_t (*pin_salt)[16];
-    uint8_t (*pin_hash)[20];
+    uint8_t pin_salt[16];
+    uint8_t pin_hash[20];
 
 } version3_CMD_AUTH_LOGON_PROOF_Client;
 WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version3_CMD_AUTH_LOGON_PROOF_Client_write(WowLoginWriter* writer, const version3_CMD_AUTH_LOGON_PROOF_Client* object);
