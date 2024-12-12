@@ -19,10 +19,9 @@ public:
 
     void send(std::vector<unsigned char>&& data) { server_send(&m_socket, data.data(), data.size()); }
 
-    void send_encrypted(std::vector<unsigned char>&& data, wow_srp::VanillaHeaderCrypto& header)
+    void send_encrypted(const wow_world_messages::vanilla::ServerOpcode& opcode, wow_srp::VanillaHeaderCrypto& header)
     {
-        header.encrypt(data.data(), 4);
-        send(std::move(data));
+        send(opcode.write([&header](auto data, auto length) { header.encrypt(data, length); }));
     }
 
 private:
@@ -41,7 +40,7 @@ void auth_flow(NetworkReader& auth, NetworkReader& world)
 {
     namespace all = wow_login_messages::all;
 
-    auto all_client = all::read_client_opcode(auth);
+    auto all_client = all::ClientOpcode::read(auth);
     auto challenge = all_client.get<all::CMD_AUTH_LOGON_CHALLENGE_Client>();
 
     auto verifier =
@@ -61,7 +60,7 @@ void auth_flow(NetworkReader& auth, NetworkReader& world)
 
     auth.send(s.write());
 
-    auto client = v3::read_client_opcode(auth);
+    auto client = v3::ClientOpcode::read(auth);
     auto c = client.get<v3::CMD_AUTH_LOGON_PROOF_Client>();
 
     auto server = proof.into_server(c.client_public_key, c.client_proof);
@@ -71,7 +70,7 @@ void auth_flow(NetworkReader& auth, NetworkReader& world)
     p.server_proof = server.server_proof();
 
     auth.send(p.write());
-    (void)v3::read_client_opcode(auth).get<v3::CMD_REALM_LIST_Client>();
+    (void)v3::ClientOpcode::read(auth).get<v3::CMD_REALM_LIST_Client>();
 
     v3::CMD_REALM_LIST_Server realms;
     realms.realms = {v3::Realm{v3::RealmType::PLAYER_VS_ENVIRONMENT, v3::RealmFlag::REALM_FLAG_NONE, "Test Realm",
@@ -83,21 +82,22 @@ void auth_flow(NetworkReader& auth, NetworkReader& world)
     auto seed = wow_srp::VanillaProofSeed();
 
     namespace vanilla = wow_world_messages::vanilla;
-    world.send(vanilla::SMSG_AUTH_CHALLENGE{seed.proof_seed()}.write());
+    world.send(vanilla::SMSG_AUTH_CHALLENGE{seed.proof_seed()}.write([](auto, auto) {}));
 
-    auto opcode = vanilla::read_client_opcode(world);
+    auto opcode = vanilla::ClientOpcode::read(world, [](unsigned char*, size_t) {});
     auto session = opcode.get<vanilla::CMSG_AUTH_SESSION>();
 
     auto header_crypto = seed.into_server_header_crypto(challenge.account_name, server.session_key(),
                                                         session.client_proof, session.client_seed);
 
-    world.send_encrypted(vanilla::SMSG_AUTH_RESPONSE{vanilla::WorldResult::AUTH_OK, 0, 0, 0, 0}.write(), header_crypto);
+    world.send_encrypted(vanilla::SMSG_AUTH_RESPONSE{vanilla::WorldResult::AUTH_OK, 0, 0, 0, 0}, header_crypto);
 
     constexpr uint64_t GUID = 1;
 
     while (opcode.get_if<vanilla::CMSG_PLAYER_LOGIN>() == nullptr)
     {
-        opcode = vanilla::read_client_opcode(world);
+        opcode = vanilla::ClientOpcode::read(
+            world, [&header_crypto](unsigned char* data, const size_t length) { header_crypto.decrypt(data, length); });
 
         printf("%s\n", opcode.to_string());
 
@@ -124,40 +124,38 @@ void auth_flow(NetworkReader& auth, NetworkReader& world)
                                                 0,
                                                 vanilla::CreatureFamily::NONE,
                                                 std::array<vanilla::CharacterGear, 19>()};
-            world.send_encrypted(vanilla::SMSG_CHAR_ENUM{std::vector{character}}.write(), header_crypto);
+            world.send_encrypted(vanilla::SMSG_CHAR_ENUM{std::vector{character}}, header_crypto);
         };
     }
     printf("Logging into %lu\n", (unsigned long)opcode.get<vanilla::CMSG_PLAYER_LOGIN>().guid);
 
     auto verify_world =
         vanilla::SMSG_LOGIN_VERIFY_WORLD{vanilla::Map::EASTERN_KINGDOMS, {-8949.95f, -132.493f, 83.5312f}, 0.0f};
-    world.send_encrypted(verify_world.write(), header_crypto);
+    world.send_encrypted(std::move(verify_world), header_crypto);
 
     world.send_encrypted(vanilla::SMSG_TUTORIAL_FLAGS{{
-                                                          0xffffffff,
-                                                          0xffffffff,
-                                                          0xffffffff,
-                                                          0xffffffff,
-                                                          0xffffffff,
-                                                          0xffffffff,
-                                                          0xffffffff,
-                                                          0xffffffff,
-                                                      }}
-                             .write(),
+                             0xffffffff,
+                             0xffffffff,
+                             0xffffffff,
+                             0xffffffff,
+                             0xffffffff,
+                             0xffffffff,
+                             0xffffffff,
+                             0xffffffff,
+                         }},
                          header_crypto);
 
-    vanilla::UpdateMask update_mask{};
-    update_mask.object_guid_set(GUID);
-    update_mask.object_scale_x_set(1.0f);
-    update_mask.object_type_set(25);
-    update_mask.unit_bytes_0_set({1, 1, 1, 1});
-    update_mask.game_object_displayid_set(50);
-    update_mask.unit_factiontemplate_set(1);
-    update_mask.unit_health_set(1);
-    update_mask.unit_level_set(1);
-    update_mask.unit_nativedisplayid_set(50);
-
     vanilla::Object object;
+    object.mask2.object_guid(GUID);
+    object.mask2.object_scale_x(1.0f);
+    object.mask2.object_type(25);
+    object.mask2.unit_bytes_0({1, 1, 1, 1});
+    object.mask2.game_object_displayid(50);
+    object.mask2.unit_factiontemplate(1);
+    object.mask2.unit_health(1);
+    object.mask2.unit_level(1);
+    object.mask2.unit_nativedisplayid(50);
+
 
     object.update_type = vanilla::UpdateType::CREATE_OBJECT2;
     object.guid3 = 1;
@@ -179,7 +177,7 @@ void auth_flow(NetworkReader& auth, NetworkReader& world)
     object.movement2.turn_rate = 3.1415f;
     object.movement2.unknown1 = 0;
 
-    world.send_encrypted(vanilla::SMSG_UPDATE_OBJECT{0, {object}}.write(), header_crypto);
+    world.send_encrypted(vanilla::SMSG_UPDATE_OBJECT{0, {object}}, header_crypto);
 }
 
 int main()

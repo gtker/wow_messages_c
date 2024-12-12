@@ -51,33 +51,47 @@ struct Version {
     uint16_t build;
 };
 
+/* First message sent by the client when attempting to connect. The server will respond with [CMD_AUTH_LOGON_CHALLENGE_Server].
+Has the exact same layout as [CMD_AUTH_RECONNECT_CHALLENGE_Client]. */
 struct CMD_AUTH_LOGON_CHALLENGE_Client {
+    /* Determines which version of messages are used for further communication. */
     ProtocolVersion protocol_version;
     all::Version version;
     Platform platform;
     Os os;
     Locale locale;
+    /* Offset in minutes from UTC time. 180 would be UTC+3 */
     int32_t utc_timezone_offset;
     uint32_t client_ip_address;
+    /* Real clients can send a maximum of 16 UTF-8 characters. This is not necessarily 16 bytes since one character can be more than one byte.
+Real clients will send a fully uppercased username, and will perform authentication calculations on the uppercased version.
+Uppercasing in regards to non-ASCII values is little weird. See `https://docs.rs/wow_srp/latest/wow_srp/normalized_string/index.html` for more info. */
     std::string account_name;
 
     WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
+/* First message sent by the client when attempting to reconnect. The server will respond with [CMD_AUTH_RECONNECT_CHALLENGE_Server].
+Has the exact same layout as [CMD_AUTH_LOGON_CHALLENGE_Client]. */
 struct CMD_AUTH_RECONNECT_CHALLENGE_Client {
+    /* Determines which version of messages are used for further communication. */
     ProtocolVersion protocol_version;
     all::Version version;
     Platform platform;
     Os os;
     Locale locale;
+    /* Offset in minutes from UTC time. 180 would be UTC+3 */
     int32_t utc_timezone_offset;
     uint32_t client_ip_address;
+    /* Real clients can send a maximum of 16 UTF-8 characters. This is not necessarily 16 bytes since one character can be more than one byte.
+Real clients will send a fully uppercased username, and will perform authentication calculations on the uppercased version.
+Uppercasing in regards to non-ASCII values is little weird. See `https://docs.rs/wow_srp/latest/wow_srp/normalized_string/index.html` for more info. */
     std::string account_name;
 
     WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
-struct ClientOpcode {
+class ClientOpcode {
     enum class Opcode {
         NONE = 0xFF,
         CMD_AUTH_LOGON_CHALLENGE = 0,
@@ -89,52 +103,32 @@ struct ClientOpcode {
         all::CMD_AUTH_RECONNECT_CHALLENGE_Client CMD_AUTH_RECONNECT_CHALLENGE;
     };
 
-    bool is_none() const noexcept {
+public:
+    WOW_LOGIN_MESSAGES_CPP_EXPORT bool is_none() const noexcept {
         return opcode == Opcode::NONE;
     }
+    WOW_LOGIN_MESSAGES_CPP_EXPORT static ClientOpcode read(Reader& reader);
 
-    explicit ClientOpcode() : opcode(Opcode::NONE), CMD_AUTH_LOGON_CHALLENGE() {}
+    WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 
-    ClientOpcode(ClientOpcode&& other) noexcept {
-        this->opcode = other.opcode;
-        other.opcode = Opcode::NONE;
-        if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
-            this->CMD_AUTH_LOGON_CHALLENGE = std::move(other.CMD_AUTH_LOGON_CHALLENGE);
-        }
-        if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
-            this->CMD_AUTH_RECONNECT_CHALLENGE = std::move(other.CMD_AUTH_RECONNECT_CHALLENGE);
-        }
-    }
 
-    ClientOpcode operator=(ClientOpcode&& other) noexcept {
-        this->opcode = other.opcode;
-        other.opcode = Opcode::NONE;
-        if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
-            this->CMD_AUTH_LOGON_CHALLENGE = std::move(other.CMD_AUTH_LOGON_CHALLENGE);
-        }
-        if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
-            this->CMD_AUTH_RECONNECT_CHALLENGE = std::move(other.CMD_AUTH_RECONNECT_CHALLENGE);
-        }
-        return std::move(*this);
-    }
+    WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode() : opcode(Opcode::NONE), CMD_AUTH_LOGON_CHALLENGE() {}
 
-    ~ClientOpcode() {
-        if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
-            this->CMD_AUTH_LOGON_CHALLENGE.~CMD_AUTH_LOGON_CHALLENGE_Client();
-        }
-        if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
-            this->CMD_AUTH_RECONNECT_CHALLENGE.~CMD_AUTH_RECONNECT_CHALLENGE_Client();
-        }
-    }
+    /* 1 destructor */
+    WOW_LOGIN_MESSAGES_CPP_EXPORT ~ClientOpcode();
 
-    explicit ClientOpcode(all::CMD_AUTH_LOGON_CHALLENGE_Client&& obj) {
-        opcode = Opcode::CMD_AUTH_LOGON_CHALLENGE;
-        new (&this->CMD_AUTH_LOGON_CHALLENGE) all::CMD_AUTH_LOGON_CHALLENGE_Client (std::move(obj));
-    }
-    explicit ClientOpcode(all::CMD_AUTH_RECONNECT_CHALLENGE_Client&& obj) {
-        opcode = Opcode::CMD_AUTH_RECONNECT_CHALLENGE;
-        new (&this->CMD_AUTH_RECONNECT_CHALLENGE) all::CMD_AUTH_RECONNECT_CHALLENGE_Client (std::move(obj));
-    }
+    /* 2 copy constructor */
+    WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode(const ClientOpcode& other);
+    /* 3 copy assignment */
+    WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode& operator=(const ClientOpcode& other);
+    /* 4 move constructor */
+    WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode(ClientOpcode&& other) noexcept;
+
+    /* 5 move assignment */
+    WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode& operator=(ClientOpcode&& other) noexcept;
+
+    WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode(all::CMD_AUTH_LOGON_CHALLENGE_Client&& obj);
+    WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode(all::CMD_AUTH_RECONNECT_CHALLENGE_Client&& obj);
 
     template<typename T>
     // NOLINTNEXTLINE
@@ -155,10 +149,6 @@ template<>
 WOW_LOGIN_MESSAGES_CPP_EXPORT all::CMD_AUTH_RECONNECT_CHALLENGE_Client* ClientOpcode::get_if();
 template<>
 WOW_LOGIN_MESSAGES_CPP_EXPORT all::CMD_AUTH_RECONNECT_CHALLENGE_Client& ClientOpcode::get();
-
-WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const ClientOpcode& opcode);
-
-WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode read_client_opcode(Reader& reader);
 
 } // namespace all
 } // namespace wow_login_messages

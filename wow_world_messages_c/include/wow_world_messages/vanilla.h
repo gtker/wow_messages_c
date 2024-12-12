@@ -5863,10 +5863,13 @@ typedef struct {
     uint32_t damage1;
     vanilla_SpellSchool school;
     uint32_t absorbed;
+    /* vmangos: Sent as int32 */
     uint32_t resisted;
     uint32_t damage2;
+    /* vmangos: A miscvalue that is dependent on what the aura will do, this is usually decided by the AuraType, ie: with AuraType::SPELL_AURA_MOD_BASE_RESISTANCE_PCT this value could be SpellSchoolMask::SPELL_SCHOOL_MASK_NORMAL which would tell the aura that it should change armor.  If Modifier::m_auraname would have been AuraType::SPELL_AURA_MOUNTED then m_miscvalue would have decided which model the mount should have */
     uint32_t misc_value1;
     uint32_t damage3;
+    /* vmangos: A miscvalue that is dependent on what the aura will do, this is usually decided by the AuraType, ie: with AuraType::SPELL_AURA_MOD_BASE_RESISTANCE_PCT this value could be SpellSchoolMask::SPELL_SCHOOL_MASK_NORMAL which would tell the aura that it should change armor.  If Modifier::m_auraname would have been AuraType::SPELL_AURA_MOUNTED then m_miscvalue would have decided which model the mount should have */
     uint32_t misc_value2;
     uint32_t damage;
     float gain_multiplier;
@@ -5881,6 +5884,9 @@ typedef struct {
     uint32_t deaths;
     uint32_t bonus_honor;
     uint32_t amount_of_extra_fields;
+    /* This depends on the BG in question. AV expects 7: Graveyards Assaulted, Graveyards Defended, Towers Assaulted, Towers Defended, Secondary Objectives, LieutenantCount, SecondaryNpc
+WSG expects 2: Flag captures and flag returns
+AB expects 2: Bases assaulted and bases defended */
     uint32_t* fields;
 
 } vanilla_BattlegroundPlayer;
@@ -5954,6 +5960,7 @@ typedef struct {
 
 typedef struct {
     uint16_t spell_id;
+    /* cmangos/mangoszero: cast item id */
     uint16_t item_id;
     uint16_t spell_category;
     uint32_t cooldown;
@@ -5963,7 +5970,9 @@ typedef struct {
 
 typedef struct {
     uint32_t spell_school_mask;
+    /* vmangos sends the same data in `damage_uint`. */
     float damage_float;
+    /* vmangos sends the same data in `damage_float`. */
     uint32_t damage_uint;
     uint32_t absorb;
     uint32_t resist;
@@ -5998,15 +6007,22 @@ typedef struct {
 } vanilla_Friend;
 
 typedef struct {
+    /* cmangos: questions found in GMSurveyQuestions.dbc
+ref to i'th GMSurveySurveys.dbc field (all fields in that dbc point to fields in GMSurveyQuestions.dbc) */
     uint32_t question_id;
+    /* Rating: hardcoded limit of 0-5 in pre-Wrath, ranges defined in GMSurveyAnswers.dbc Wrath+ */
     uint8_t answer;
+    /* Usage: `GMSurveyAnswerSubmit(question, rank, comment)`
+cmangos: Unused in stock UI, can be only set by calling Lua function */
     char* comment;
 
 } vanilla_GmSurveyQuestion;
 
 typedef struct {
+    /* vmangos: sets to loop index */
     uint32_t id;
     uint8_t item_icon;
+    /* vmangos: makes pop up box password */
     bool coded;
     char* message;
 
@@ -6016,6 +6032,7 @@ typedef struct {
     char* name;
     uint64_t guid;
     bool is_online;
+    /* mangoszero/cmangos/vmangos: own flags (groupid | (assistant?0x80:0)) */
     uint8_t flags;
 
 } vanilla_GroupListMember;
@@ -6035,7 +6052,10 @@ typedef struct {
 } vanilla_GuildMember;
 
 typedef struct {
+    /* cmangos/mangoszero: only send 'first' part of spell */
     uint16_t spell_id;
+    /* cmangos/mangoszero: sets to 0
+cmangos/mangoszero: it's not slot id */
     uint16_t unknown1;
 
 } vanilla_InitialSpell;
@@ -6050,6 +6070,7 @@ typedef struct {
 typedef struct {
     uint32_t spell;
     vanilla_SpellTriggerType spell_trigger;
+    /* let the database control the sign here. negative means that the item should be consumed once the charges are consumed. */
     int32_t spell_charges;
     int32_t spell_cooldown;
     uint32_t spell_category;
@@ -6067,6 +6088,7 @@ typedef struct {
     uint32_t item_stack_count;
     uint32_t item;
     uint32_t item_display_id;
+    /* cmangos: 0 for infinity item amount, although they send 0xFFFFFFFF in that case */
     uint32_t max_items;
     uint32_t price;
     uint32_t max_durability;
@@ -6089,7 +6111,9 @@ typedef struct {
     uint32_t auction_id;
     char* subject;
     uint32_t item_text_id;
+    /* cmangos/vmangos/mangoszero: set to 0 */
     uint32_t unknown1;
+    /* cmangos/vmangos/mangoszero: stationery (Stationery.dbc) */
     uint32_t stationery;
     uint32_t item;
     uint32_t item_enchant_id;
@@ -6101,8 +6125,10 @@ typedef struct {
     uint32_t durability;
     uint32_t money;
     uint32_t cash_on_delivery_amount;
+    /* cmangos/vmangos/mangoszero: All have a comment with 'flags' but send the timestamp from the item. */
     uint32_t checked_timestamp;
     float expiration_time;
+    /* cmangos/vmangos/mangoszero: mail template (MailTemplate.dbc) */
     uint32_t mail_template_id;
 
 } vanilla_Mail;
@@ -6141,7 +6167,9 @@ typedef struct {
     all_Vector3d final_node;
     all_Vector3d position;
     float orientation;
+    /* vmangos statically sets to 0 */
     uint32_t unknown0;
+    /* vmangos sets statically to 1 */
     uint32_t unknown1;
     uint64_t guid;
     uint32_t transport_progress_in_ms;
@@ -6203,6 +6231,7 @@ typedef struct {
 
 typedef struct {
     uint16_t spell;
+    /* mangoszero: sets to 0 */
     uint16_t spell_category;
     uint32_t cooldown;
     uint32_t category_cooldown;
@@ -6211,9 +6240,13 @@ typedef struct {
 
 typedef struct {
     uint32_t index;
+    /* cmangos/vmangos/mangoszero: statically sets to guild charter item id (5863) and arena charter ids. */
     uint32_t charter_entry;
+    /* cmangos/vmangos/mangoszero: statically sets to guild charter display id (16161) and arena charter ids. */
     uint32_t charter_display_id;
+    /* cmangos/vmangos/mangoszero: statically set to 1000 (10 silver) for guild charters and the cost of arena charters for that. */
     uint32_t guild_charter_cost;
+    /* cmangos/vmangos/mangoszero: statically set to 1 */
     uint32_t unknown1;
 
 } vanilla_PetitionShowlist;
@@ -6234,6 +6267,7 @@ typedef struct {
     uint32_t quest_id;
     uint32_t quest_icon;
     uint32_t level;
+    /* vmangos/cmangos/mangoszero: max 0x200 */
     char* title;
 
 } vanilla_QuestItem;
@@ -6252,6 +6286,7 @@ typedef struct {
 } vanilla_QuestItemReward;
 
 typedef struct {
+    /* cmangos: client expected gameobject template id in form (id|0x80000000) */
     uint32_t creature_id;
     uint32_t kill_count;
     uint32_t required_item_id;
@@ -6336,11 +6371,13 @@ typedef struct {
     uint32_t level;
     char* name;
     uint32_t loyalty;
+    /* vmangos/mangoszero/cmangos: client slot 1 == current pet (0) */
     uint8_t slot;
 
 } vanilla_StabledPet;
 
 typedef struct {
+    /* cmangos/vmangos/mangoszero: sets to index of array */
     uint8_t trade_slot_number;
     uint32_t item;
     uint32_t display_id;
@@ -6359,10 +6396,15 @@ typedef struct {
 } vanilla_TradeSlot;
 
 typedef struct {
+    /* cmangos: learned spell (or cast-spell in profession case) */
     uint32_t spell;
     vanilla_TrainerSpellState state;
     uint32_t spell_cost;
+    /* cmangos: spells don't cost talent points
+cmangos: set to 0 */
     uint32_t talent_point_cost;
+    /* cmangos: must be equal prev. field to have learn button in enabled state
+cmangos: 1 for true 0 for false */
     uint32_t first_rank;
     uint8_t required_level;
     vanilla_Skill required_skill;
@@ -6395,6 +6437,8 @@ typedef struct {
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BOOTME_write(WowWorldWriter* writer);
 
+/* Executes a query directly on the world server.
+Not implemented on any major emulator. */
 typedef struct {
     char* query;
 
@@ -6402,6 +6446,7 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_DBLOOKUP_write(WowWorldWriter* writer, const vanilla_CMSG_DBLOOKUP* object);
 WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_DBLOOKUP_free(vanilla_CMSG_DBLOOKUP* object);
 
+/* Sent when using the `worldport` console command. */
 typedef struct {
     uint32_t time;
     vanilla_Map map;
@@ -6411,6 +6456,7 @@ typedef struct {
 } vanilla_CMSG_WORLD_TELEPORT;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_WORLD_TELEPORT_write(WowWorldWriter* writer, const vanilla_CMSG_WORLD_TELEPORT* object);
 
+/* Sent when using the `port` console command. */
 typedef struct {
     char* name;
 
@@ -6418,6 +6464,7 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_TELEPORT_TO_UNIT_write(WowWorldWriter* writer, const vanilla_CMSG_TELEPORT_TO_UNIT* object);
 WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_TELEPORT_TO_UNIT_free(vanilla_CMSG_TELEPORT_TO_UNIT* object);
 
+/* Sent after the client presses 'Create Character'. The client will then wait for [SMSG_CHAR_CREATE]. */
 typedef struct {
     char* name;
     vanilla_Race race;
@@ -6435,19 +6482,25 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHAR_CREATE_free(vanilla_CMSG_CHAR
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHAR_ENUM_write(WowWorldWriter* writer);
 
+/* Command to delete a character from the clients account. Can be sent after the client has received [SMSG_CHAR_ENUM].
+Sent after the client has confirmed the character deletion. */
 typedef struct {
     uint64_t guid;
 
 } vanilla_CMSG_CHAR_DELETE;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHAR_DELETE_write(WowWorldWriter* writer, const vanilla_CMSG_CHAR_DELETE* object);
 
+/* Response to [CMSG_CHAR_CREATE].
+Every [WorldResult] except `CHAR_CREATE_SUCCESS` will lead to a popup showing. `CHAR_CREATE_SUCCESS` will cause the client to send a [CMSG_CHAR_ENUM]. */
 typedef struct {
     vanilla_WorldResult result;
 
 } vanilla_SMSG_CHAR_CREATE;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CHAR_CREATE_write(WowWorldWriter* writer, const vanilla_SMSG_CHAR_CREATE* object);
 
+/* Response to [CMSG_CHAR_ENUM]. */
 typedef struct {
+    /* Client can not handle values larger than 10 */
     uint8_t amount_of_characters;
     vanilla_Character* characters;
 
@@ -6455,12 +6508,17 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CHAR_ENUM_write(WowWorldWriter* writer, const vanilla_SMSG_CHAR_ENUM* object);
 WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_CHAR_ENUM_free(vanilla_SMSG_CHAR_ENUM* object);
 
+/* Response to [CMSG_CHAR_DELETE].
+The result of this message will update the client character screen without them sending another [CMSG_CHAR_ENUM]. */
 typedef struct {
     vanilla_WorldResult result;
 
 } vanilla_SMSG_CHAR_DELETE;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CHAR_DELETE_write(WowWorldWriter* writer, const vanilla_SMSG_CHAR_DELETE* object);
 
+/* Command to log into the specified character.
+This is sent after the client has been authenticated and served the character list with [SMSG_CHAR_ENUM].
+If the player receives a [SMSG_CHARACTER_LOGIN_FAILED] it will return to the character screen and send a [CMSG_CHAR_ENUM]. */
 typedef struct {
     uint64_t guid;
 
@@ -6491,19 +6549,29 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_TRANSFER_PENDING_free(vanilla_SMSG
 typedef struct {
     vanilla_Map map;
     vanilla_TransferAbortReason reason;
+    /* Possibly not needed. */
     uint8_t argument;
 
 } vanilla_SMSG_TRANSFER_ABORTED;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TRANSFER_ABORTED_write(WowWorldWriter* writer, const vanilla_SMSG_TRANSFER_ABORTED* object);
 
+/* Response if [CMSG_PLAYER_LOGIN] fails. If successful it should instead be [SMSG_LOGIN_VERIFY_WORLD].
+Client seems to always send a [CMSG_CANCEL_TRADE] after receiving this message, for unknown reasons. */
 typedef struct {
     vanilla_WorldResult result;
 
 } vanilla_SMSG_CHARACTER_LOGIN_FAILED;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CHARACTER_LOGIN_FAILED_write(WowWorldWriter* writer, const vanilla_SMSG_CHARACTER_LOGIN_FAILED* object);
 
+/* Tells the client what the datetime is and how fast time passes.
+The client also asks for the datetime with [CMSG_QUERY_TIME] and gets a reply from [SMSG_QUERY_TIME_RESPONSE], but this does not appear to change anything in the client.
+Despite sending this as the very first message after the client logs in it will still send a [CMSG_QUERY_TIME]. */
 typedef struct {
+    /* Current server datetime.
+Running the client with `-console` verifies that this message in this format sets the correct datetime. [SMSG_QUERY_TIME_RESPONSE] will not set this. */
     uint32_t datetime;
+    /* How many minutes should pass by every second.
+vmangos/cmangos/mangoszero set this to 0.01666667. This means that 1/60 minutes pass every second (one second passes every second). Setting this to 1.0 will make the client advance one minute every second. */
     float timescale;
 
 } vanilla_SMSG_LOGIN_SETTIMESPEED;
@@ -6513,6 +6581,8 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PLAYER_LOGOUT_write(WowW
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_LOGOUT_REQUEST_write(WowWorldWriter* writer);
 
+/* Reply to [CMSG_LOGOUT_REQUEST].
+The client expects to get an [SMSG_LOGOUT_COMPLETE] when logout is complete. */
 typedef struct {
     vanilla_LogoutResult result;
     vanilla_LogoutSpeed speed;
@@ -6532,9 +6602,11 @@ typedef struct {
 } vanilla_CMSG_NAME_QUERY;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_NAME_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_NAME_QUERY* object);
 
+/* Response to [CMSG_NAME_QUERY]. */
 typedef struct {
     uint64_t guid;
     char* character_name;
+    /* Used for showing cross realm realm names. If this is an empty string it is shown like a regular player on the same realm. */
     char* realm_name;
     vanilla_Race race;
     vanilla_Gender gender;
@@ -6593,6 +6665,7 @@ typedef struct {
     char* name2;
     char* name3;
     char* name4;
+    /* id from ItemDisplayInfo.dbc */
     uint32_t display_id;
     vanilla_ItemQuality quality;
     vanilla_ItemFlag flags;
@@ -6609,6 +6682,7 @@ typedef struct {
     uint32_t required_honor_rank;
     uint32_t required_city_rank;
     vanilla_Faction required_faction;
+    /* cmangos/vmangos/mangoszero: send value only if reputation faction id setted ( needed for some items) */
     uint32_t required_faction_rank;
     uint32_t max_count;
     uint32_t stackable;
@@ -6631,10 +6705,13 @@ typedef struct {
     uint32_t page_text;
     vanilla_Language language;
     vanilla_PageTextMaterial page_text_material;
+    /* cmangos/vmangos/mangoszero: id from QuestCache.wdb */
     uint32_t start_quest;
     uint32_t lock_id;
+    /* cmangos/vmangos/mangoszero: id from Material.dbc */
     uint32_t material;
     vanilla_SheatheType sheathe_type;
+    /* cmangos/vmangos/mangoszero: id from ItemRandomProperties.dbc */
     uint32_t random_property;
     uint32_t block;
     vanilla_ItemSet item_set;
@@ -6675,17 +6752,24 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUEST_QUERY_write(WowWor
 
 typedef struct {
     uint32_t quest_id;
+    /* Accepted values: 0, 1 or 2. 0==IsAutoComplete() (skip objectives/details) */
     uint32_t quest_method;
     uint32_t quest_level;
     uint32_t zone_or_sort;
     uint32_t quest_type;
+    /* cmangos: shown in quest log as part of quest objective */
     vanilla_Faction reputation_objective_faction;
+    /* cmangos: shown in quest log as part of quest objective */
     uint32_t reputation_objective_value;
+    /* cmangos: RequiredOpositeRepFaction, required faction value with another (oposite) faction (objective). cmangos sets to 0 */
     vanilla_Faction required_opposite_faction;
+    /* cmangos: RequiredOpositeRepValue, required faction value with another (oposite) faction (objective). cmangos sets to 0 */
     uint32_t required_opposite_reputation_value;
     uint32_t next_quest_in_chain;
     uint32_t money_reward;
+    /* cmangos: used in XP calculation at client */
     uint32_t max_level_money_reward;
+    /* cmangos: reward spell, this spell will display (icon) (casted if RewSpellCast==0) */
     uint32_t reward_spell;
     uint32_t source_item_id;
     uint32_t quest_flags;
@@ -6724,6 +6808,7 @@ typedef struct {
 } vanilla_SMSG_GAMEOBJECT_QUERY_RESPONSE_found;
 
 typedef struct {
+    /* When the `found` optional is not present all emulators bitwise OR the entry with `0x80000000`.`` */
     uint32_t entry_id;
 
     vanilla_SMSG_GAMEOBJECT_QUERY_RESPONSE_found* found;
@@ -6745,17 +6830,24 @@ typedef struct {
     char* name4;
     char* sub_name;
     uint32_t type_flags;
+    /* cmangos: CreatureType.dbc   wdbFeild8 */
     uint32_t creature_type;
     vanilla_CreatureFamily creature_family;
+    /* cmangos: Creature Rank (elite, boss, etc) */
     uint32_t creature_rank;
+    /* cmangos: wdbFeild11 */
     uint32_t unknown0;
+    /* cmangos: Id from CreatureSpellData.dbc wdbField12 */
     uint32_t spell_data_id;
+    /* cmangos: DisplayID      wdbFeild13 and workaround, way to manage models must be fixed */
     uint32_t display_id;
+    /* cmangos: wdbFeild14 */
     uint8_t civilian;
     uint8_t racial_leader;
 } vanilla_SMSG_CREATURE_QUERY_RESPONSE_found;
 
 typedef struct {
+    /* When the `found` optional is not present all emulators bitwise OR the entry with `0x80000000`.`` */
     uint32_t creature_entry;
 
     vanilla_SMSG_CREATURE_QUERY_RESPONSE_found* found;
@@ -6796,6 +6888,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_WHOIS_write(WowWorldWrit
 WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_WHOIS_free(vanilla_CMSG_WHOIS* object);
 
 typedef struct {
+    /* vmangos: max CString length allowed: 256 */
     char* message;
 
 } vanilla_SMSG_WHOIS;
@@ -6920,12 +7013,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GROUP_DESTROYED_write(Wo
 
 typedef struct {
     vanilla_GroupLootSetting loot_setting;
+    /* Zero if loot_setting is not MASTER_LOOT */
     uint64_t master_loot;
     vanilla_ItemQuality loot_threshold;
 } vanilla_SMSG_GROUP_LIST_group_not_empty;
 
 typedef struct {
     vanilla_GroupType group_type;
+    /* mangoszero/cmangos/vmangos: own flags (groupid | (assistant?0x80:0)) */
     uint8_t flags;
     uint32_t amount_of_members;
     vanilla_GroupListMember* members;
@@ -6947,8 +7042,11 @@ typedef struct {
     uint16_t max_power;
     uint16_t level;
     vanilla_Area area;
+    /* cmangos: float cast to u16 */
     uint16_t position_x;
+    /* cmangos: float cast to u16 */
     uint16_t position_y;
+    /* cmangos: In all checked pre-2.x data of packets included only positive auras */
     vanilla_AuraMask auras;
     vanilla_AuraMask negative_auras;
     uint64_t pet;
@@ -7101,7 +7199,13 @@ typedef struct {
     vanilla_Language language;
     char* monster_name;
     uint64_t monster;
+    /* This character will have the speech bubble above their head.
+0 value credits same as `chat_credit`. Invalid value credits no one.
+cmangos/vmangos/mangoszero: `chat_credit` and `speech_bubble_credit` are the same */
     uint64_t speech_bubble_credit;
+    /* This character will be appear to say this in the chat box.
+0 value credits no name.
+cmangos/vmangos/mangoszero: `chat_credit` and `speech_bubble_credit` are the same */
     uint64_t chat_credit;
     uint64_t sender1;
     char* sender_name;
@@ -7267,6 +7371,8 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_UPDATE_OBJECT_write(WowWorldWriter* writer, const vanilla_SMSG_UPDATE_OBJECT* object);
 WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_UPDATE_OBJECT_free(vanilla_SMSG_UPDATE_OBJECT* object);
 
+/* Immediately removes an object from the presence of the player.
+Used by vmangos for logout. */
 typedef struct {
     uint64_t guid;
 
@@ -7303,6 +7409,7 @@ typedef struct {
 } vanilla_SMSG_READ_ITEM_OK;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_READ_ITEM_OK_write(WowWorldWriter* writer, const vanilla_SMSG_READ_ITEM_OK* object);
 
+/* vmangos has extra u8 with comment `0..2, read failure reason? if == 1, use next command`. */
 typedef struct {
     uint64_t guid;
 
@@ -7560,6 +7667,7 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_SET_WALK_MODE_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_SET_WALK_MODE_Server* object);
 WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_SET_WALK_MODE_Server_free(vanilla_MSG_MOVE_SET_WALK_MODE_Server* object);
 
+/* Response to [MSG_MOVE_TELEPORT_ACK_Server], at which point [MSG_MOVE_TELEPORT_ACK_Server] should be sent to observing players. */
 typedef struct {
     uint64_t guid;
     uint32_t movement_counter;
@@ -7568,6 +7676,8 @@ typedef struct {
 } vanilla_MSG_MOVE_TELEPORT_ACK_Client;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_TELEPORT_ACK_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_TELEPORT_ACK_Client* object);
 
+/* Can be response to [CMSG_TELEPORT_TO_UNIT].
+Can also be a response to [MSG_MOVE_TELEPORT_ACK_Client] after being sent. */
 typedef struct {
     uint64_t guid;
     uint32_t movement_counter;
@@ -7685,6 +7795,7 @@ typedef struct {
 } vanilla_SMSG_MOVE_LAND_WALK;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MOVE_LAND_WALK_write(WowWorldWriter* writer, const vanilla_SMSG_MOVE_LAND_WALK* object);
 
+/* vmangos/mangoszero: write in client console: setrawpos x y z o. For now, it is implemented like worldport but on the same map. Consider using [MSG_MOVE_SET_RAW_POSITION_ACK]. */
 typedef struct {
     all_Vector3d position;
     float orientation;
@@ -7692,14 +7803,20 @@ typedef struct {
 } vanilla_CMSG_MOVE_SET_RAW_POSITION;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MOVE_SET_RAW_POSITION_write(WowWorldWriter* writer, const vanilla_CMSG_MOVE_SET_RAW_POSITION* object);
 
+/* Tells the client that the running speed has changed.
+Client replies with [CMSG_FORCE_RUN_SPEED_CHANGE_ACK].
+vmangos sends this message to the client being changed and [SMSG_SPLINE_SET_RUN_SPEED] to others. */
 typedef struct {
     uint64_t guid;
+    /* cmangos/mangoszero/vmangos: set to 0
+cmangos/mangoszero/vmangos: moveEvent, NUM_PMOVE_EVTS = 0x39 */
     uint32_t move_event;
     float speed;
 
 } vanilla_SMSG_FORCE_RUN_SPEED_CHANGE;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_FORCE_RUN_SPEED_CHANGE_write(WowWorldWriter* writer, const vanilla_SMSG_FORCE_RUN_SPEED_CHANGE* object);
 
+/* Sent to acknowledge the new speed. Reply to [SMSG_FORCE_RUN_SPEED_CHANGE]. */
 typedef struct {
     uint64_t guid;
     uint32_t counter;
@@ -7712,6 +7829,8 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_FORCE_RUN_SPEED_CHANGE_ACK_free(va
 
 typedef struct {
     uint64_t guid;
+    /* cmangos/mangoszero/vmangos: set to 0
+cmangos/mangoszero/vmangos: moveEvent, NUM_PMOVE_EVTS = 0x39 */
     uint32_t move_event;
     float speed;
 
@@ -7730,6 +7849,8 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK_fr
 
 typedef struct {
     uint64_t guid;
+    /* cmangos/mangoszero/vmangos: set to 0
+cmangos/mangoszero/vmangos: moveEvent, NUM_PMOVE_EVTS = 0x39 */
     uint32_t move_event;
     float speed;
 
@@ -7795,10 +7916,16 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_HEARTBEAT_Server_free(vanilla_
 
 typedef struct {
     uint64_t guid;
+    /* mangoszero: Sequence
+mangoszero sets to 0 */
     uint32_t movement_counter;
+    /* cmangos/mangoszero/vmangos: x direction */
     float v_cos;
+    /* cmangos/mangoszero/vmangos: y direction */
     float v_sin;
+    /* cmangos/mangoszero/vmangos: Horizontal speed */
     float horizontal_speed;
+    /* cmangos/mangoszero/vmangos: Z Movement speed (vertical) */
     float vertical_speed;
 
 } vanilla_SMSG_MOVE_KNOCK_BACK;
@@ -7861,6 +7988,9 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_NEXT_CINEMATIC_CAMERA_wr
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_COMPLETE_CINEMATIC_write(WowWorldWriter* writer);
 
+/* Data for which tutorials the client has passed.
+All bits set means that all tutorials have been passed.
+Must be sent after [SMSG_LOGIN_VERIFY_WORLD] otherwise the client will SEGFAULT. */
 typedef struct {
     uint32_t tutorial_data[8];
 
@@ -7868,6 +7998,7 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TUTORIAL_FLAGS_write(WowWorldWriter* writer, const vanilla_SMSG_TUTORIAL_FLAGS* object);
 
 typedef struct {
+    /* arcemu indexes into the tutorials by dividing by 32 and modulo 32. */
     uint32_t tutorial_flag;
 
 } vanilla_CMSG_TUTORIAL_FLAG;
@@ -7877,6 +8008,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_TUTORIAL_CLEAR_write(Wow
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_TUTORIAL_RESET_write(WowWorldWriter* writer);
 
+/* Automatically sent by the client when it goes AFK. */
 typedef struct {
     vanilla_UnitStandState animation_state;
 
@@ -7896,9 +8028,12 @@ typedef struct {
 } vanilla_SMSG_EMOTE;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_EMOTE_write(WowWorldWriter* writer, const vanilla_SMSG_EMOTE* object);
 
+/* Sent to notify the server that the client wants to perform an emote like /dance or /cry.
+Server responds with [SMSG_TEXT_EMOTE] and [SMSG_EMOTE]. */
 typedef struct {
     vanilla_TextEmote text_emote;
     uint32_t emote;
+    /* Guid targeted by the client. */
     uint64_t target;
 
 } vanilla_CMSG_TEXT_EMOTE;
@@ -7984,6 +8119,8 @@ typedef struct {
     uint32_t required_level;
     uint64_t item1;
     uint64_t item2;
+    /* cmangos: bag type subclass, used with EQUIP_ERR_EVENT_AUTOEQUIP_BIND_CONFIRM and EQUIP_ERR_ITEM_DOESNT_GO_INTO_BAG2
+vmangos sets to 0 */
     uint8_t bag_type_subclass;
 
 } vanilla_SMSG_INVENTORY_CHANGE_FAILURE;
@@ -8021,6 +8158,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BUSY_TRADE_write(WowWorl
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_IGNORE_TRADE_write(WowWorldWriter* writer);
 
 typedef struct {
+    /* Skipped in vmangos and set to 1 for bots */
     uint32_t unknown1;
 
 } vanilla_CMSG_ACCEPT_TRADE;
@@ -8052,10 +8190,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SET_TRADE_GOLD_write(Wow
 
 typedef struct {
     vanilla_TradeStatus status;
+    /* Set to 0 in vmangos. */
     uint64_t unknown1;
     vanilla_InventoryResult inventory_result;
+    /* used for: EQUIP_ERR_BAG_FULL, EQUIP_ERR_CANT_CARRY_MORE_OF_THIS, EQUIP_ERR_MISSING_REAGENT, EQUIP_ERR_ITEM_MAX_LIMIT_CATEGORY_COUNT_EXCEEDED */
     bool target_error;
+    /* ItemLimitCategory.dbc entry */
     uint32_t item_limit_category_id;
+    /* Trade slot -1 here clears CGTradeInfo::m_tradeMoney */
     uint8_t slot;
 
 } vanilla_SMSG_TRADE_STATUS;
@@ -8063,17 +8205,25 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TRADE_STATUS_write(WowWo
 WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_TRADE_STATUS_free(vanilla_SMSG_TRADE_STATUS* object);
 
 typedef struct {
+    /* cmangos/vmangos/mangoszero: send trader or own trade windows state (last need for proper show spell apply to non-trade slot) */
     bool self_player;
+    /* cmangos/vmangos/mangoszero: sets to 7
+cmangos/vmangos/mangoszero: trade slots count/number?, = next field in most cases */
     uint32_t trade_slot_count1;
+    /* cmangos/vmangos/mangoszero: sets to 7
+cmangos/vmangos/mangoszero: trade slots count/number?, = prev field in most cases */
     uint32_t trade_slot_count2;
     uint32_t money_in_trade;
     uint32_t spell_on_lowest_slot;
+    /* vmangos/cmangos/mangoszero: All set to same as trade_slot_count* (7), unsure which determines how big this is. Unused slots are 0. */
     vanilla_TradeSlot trade_slots[7];
 
 } vanilla_SMSG_TRADE_STATUS_EXTENDED;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TRADE_STATUS_EXTENDED_write(WowWorldWriter* writer, const vanilla_SMSG_TRADE_STATUS_EXTENDED* object);
 
 typedef struct {
+    /* vmangos/cmangos/mangoszero: sets to 0x00000040 (64)
+mangostwo (wrath) sets this to 0x00000080 (128) */
     uint32_t amount_of_factions;
     vanilla_FactionInitializer* factions;
 
@@ -8125,6 +8275,7 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ACTION_BUTTONS_write(WowWorldWriter* writer, const vanilla_SMSG_ACTION_BUTTONS* object);
 
 typedef struct {
+    /* cmangos/mangoszero: sets to 0 */
     uint8_t unknown1;
     uint16_t spell_count;
     vanilla_InitialSpell* initial_spells;
@@ -8177,6 +8328,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CAST_RESULT_write(WowWor
 WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_CAST_RESULT_free(vanilla_SMSG_CAST_RESULT* object);
 
 typedef struct {
+    /* cmangos/vmangos/mangoszero: if cast item is used, set this to guid of cast item, otherwise set it to same as caster. */
     uint64_t cast_item;
     uint64_t caster;
     uint32_t spell;
@@ -8191,6 +8343,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELL_START_write(WowWor
 WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_SPELL_START_free(vanilla_SMSG_SPELL_START* object);
 
 typedef struct {
+    /* cmangos/vmangos/mangoszero: if cast item is used, set this to guid of cast item, otherwise set it to same as caster. */
     uint64_t cast_item;
     uint64_t caster;
     uint32_t spell;
@@ -8246,6 +8399,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_UPDATE_AURA_DURATION_wri
 
 typedef struct {
     uint32_t id;
+    /* vmangos sets to 2 and cmangos sets to 0. */
     uint8_t unknown1;
     vanilla_SpellCastResult result;
 
@@ -8278,6 +8432,7 @@ typedef struct {
 } vanilla_SMSG_AI_REACTION;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_AI_REACTION_write(WowWorldWriter* writer, const vanilla_SMSG_AI_REACTION* object);
 
+/* Sets the current target. */
 typedef struct {
     uint64_t target;
 
@@ -8290,6 +8445,8 @@ typedef struct {
 } vanilla_CMSG_SET_TARGET_OBSOLETE;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SET_TARGET_OBSOLETE_write(WowWorldWriter* writer, const vanilla_CMSG_SET_TARGET_OBSOLETE* object);
 
+/* Signals that client has right clicked an opponent and is in the attack stance.
+Server should reply with [SMSG_ATTACKSTART]. */
 typedef struct {
     uint64_t guid;
 
@@ -8308,6 +8465,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ATTACKSTART_write(WowWor
 typedef struct {
     uint64_t player;
     uint64_t enemy;
+    /* cmangos/vmangos/mangoszero/arcemu/azerothcore/mangostwo: set to 0 with comment: unk, can be 1 also */
     uint32_t unknown1;
 
 } vanilla_SMSG_ATTACKSTOP;
@@ -8332,6 +8490,7 @@ typedef struct {
     vanilla_DamageInfo* damages;
     uint32_t damage_state;
     uint32_t unknown1;
+    /* vmangos: spell id, seen with heroic strike and disarm as examples */
     uint32_t spell_id;
     uint32_t blocked_amount;
 
@@ -8361,6 +8520,7 @@ typedef struct {
 } vanilla_SMSG_SPELLENERGIZELOG;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELLENERGIZELOG_write(WowWorldWriter* writer, const vanilla_SMSG_SPELLENERGIZELOG* object);
 
+/* Inform the client of a their hearthstone location. */
 typedef struct {
     all_Vector3d position;
     vanilla_Map map;
@@ -8429,11 +8589,13 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_LOOT_RESPONSE_free(vanilla_SMSG_LO
 
 typedef struct {
     uint64_t guid;
+    /* Set to 1 on mangoszero/vmangos/cmangos/azerothcraft/mangosone/mangostwo/arcemu */
     uint8_t unknown1;
 
 } vanilla_SMSG_LOOT_RELEASE_RESPONSE;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOOT_RELEASE_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_LOOT_RELEASE_RESPONSE* object);
 
+/* Notify a looting player that an item has been taken. */
 typedef struct {
     uint8_t slot;
 
@@ -8454,9 +8616,12 @@ typedef struct {
     vanilla_NewItemCreationType creation_type;
     vanilla_NewItemChatAlert alert_chat;
     uint8_t bag_slot;
+    /* mangoszero: item slot, but when added to stack: 0xFFFFFFFF */
     uint32_t item_slot;
     uint32_t item;
+    /* mangoszero: SuffixFactor */
     uint32_t item_suffix_factor;
+    /* mangoszero: random item property id */
     uint32_t item_random_property_id;
     uint32_t item_count;
 
@@ -8501,6 +8666,7 @@ typedef struct {
 } vanilla_CMSG_DUEL_CANCELLED;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_DUEL_CANCELLED_write(WowWorldWriter* writer, const vanilla_CMSG_DUEL_CANCELLED* object);
 
+/* This is not used in any TBC emulator, but trinitycore has it implemented so it is assumed to be valid for TBC as well. */
 typedef struct {
     vanilla_MountResult result;
 
@@ -8570,6 +8736,7 @@ typedef struct {
     uint32_t duration;
     vanilla_PetReactState react;
     vanilla_PetCommandState command;
+    /* mangoszero: set to 0 */
     uint8_t unknown;
     vanilla_PetEnabled pet_enabled;
     uint32_t action_bars[10];
@@ -8591,6 +8758,7 @@ typedef struct {
     uint64_t guid;
     vanilla_PetReactState react_state;
     vanilla_PetCommandState command_state;
+    /* vmangos sets to 0. */
     uint8_t unknown1;
     vanilla_PetEnabled pet_enabled;
 
@@ -8604,6 +8772,7 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GOSSIP_HELLO_write(WowWorldWriter* writer, const vanilla_CMSG_GOSSIP_HELLO* object);
 
 typedef struct {
+    /* vmangos: if (_player->PlayerTalkClass->GossipOptionCoded(gossipListId)) */
     char* code;
 } vanilla_CMSG_GOSSIP_SELECT_OPTION_unknown;
 
@@ -8667,7 +8836,9 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUESTGIVER_HELLO_write(W
 typedef struct {
     uint64_t npc;
     char* title;
+    /* mangoszero: player emote */
     uint32_t emote_delay;
+    /* mangoszero: NPC emote */
     uint32_t emote;
     uint8_t amount_of_entries;
     vanilla_QuestItem* quest_items;
@@ -8719,6 +8890,7 @@ typedef struct {
 } vanilla_CMSG_QUESTGIVER_COMPLETE_QUEST;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUESTGIVER_COMPLETE_QUEST_write(WowWorldWriter* writer, const vanilla_CMSG_QUESTGIVER_COMPLETE_QUEST* object);
 
+/* mangoszero/vmangos: Quests that don't require items use the `RequestItemsText` field to store the text that is shown when you talk to the quest giver while the quest is incomplete. Therefore the text should not be shown for them when the quest is complete. For quests that do require items, it is self explanatory. */
 typedef struct {
     uint64_t npc;
     uint32_t quest_id;
@@ -8730,9 +8902,12 @@ typedef struct {
     uint32_t required_money;
     uint32_t amount_of_required_items;
     vanilla_QuestItemRequirement* required_items;
+    /* cmangos/vmangos/mangoszero: All emulators set to 0x02 */
     uint32_t unknown1;
     vanilla_QuestCompletable completable;
+    /* cmangos/vmangos/mangoszero: set to 0x04 */
     uint32_t flags2;
+    /* cmangos/vmangos/mangoszero: set to 0x08 */
     uint32_t flags3;
 
 } vanilla_SMSG_QUESTGIVER_REQUEST_ITEMS;
@@ -8760,6 +8935,7 @@ typedef struct {
     vanilla_QuestItemRequirement* item_rewards;
     uint32_t money_reward;
     uint32_t reward_spell;
+    /* mangoszero and cmangos disagree about which field is _cast, although they both agree that the _cast field should not be in zero (vanilla). They still both include both fields in the code though. */
     uint32_t reward_spell_cast;
 
 } vanilla_SMSG_QUESTGIVER_OFFER_REWARD;
@@ -8784,6 +8960,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUESTGIVER_CANCEL_write(
 
 typedef struct {
     uint32_t quest_id;
+    /* cmangos/vmangos/mangoszero: set to 0x03 */
     uint32_t unknown;
     uint32_t experience_reward;
     uint32_t money_reward;
@@ -8836,6 +9013,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTUPDATE_COMPLETE_wri
 
 typedef struct {
     uint32_t quest_id;
+    /* Unsure of name */
     uint32_t creature_id;
     uint32_t kill_count;
     uint32_t required_kill_count;
@@ -8878,8 +9056,10 @@ typedef struct {
 } vanilla_CMSG_LIST_INVENTORY;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_LIST_INVENTORY_write(WowWorldWriter* writer, const vanilla_CMSG_LIST_INVENTORY* object);
 
+/* if `amount_of_items` is 0 it is supposedly followed by a single u8 with 0 to say that vendor has no items. */
 typedef struct {
     uint64_t vendor;
+    /* cmangos: 0 displays Vendor has no inventory */
     uint8_t amount_of_items;
     vanilla_ListInventoryItem* items;
 
@@ -8907,6 +9087,7 @@ typedef struct {
     uint64_t vendor;
     uint32_t item;
     uint8_t amount;
+    /* cmangos says this is hardcoded to 1 in the TBC client. */
     uint8_t unknown1;
 
 } vanilla_CMSG_BUY_ITEM;
@@ -8924,6 +9105,8 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BUY_ITEM_IN_SLOT_write(W
 
 typedef struct {
     uint64_t guid;
+    /* Starts at index 1.
+arcemu has this field as milliseconds since something instead. */
     uint32_t vendor_slot;
     uint32_t amount_for_sale;
     uint32_t amount_bought;
@@ -8931,6 +9114,7 @@ typedef struct {
 } vanilla_SMSG_BUY_ITEM;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_BUY_ITEM_write(WowWorldWriter* writer, const vanilla_SMSG_BUY_ITEM* object);
 
+/* Some TBC and Wrath emus have a u32 before `result` that is only included if the value is > 0, but the emus never call it with anything other than 0. */
 typedef struct {
     uint64_t guid;
     uint32_t item;
@@ -8940,6 +9124,7 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_BUY_FAILED_write(WowWorldWriter* writer, const vanilla_SMSG_BUY_FAILED* object);
 
 typedef struct {
+    /* Set to 1 in mangoszero */
     uint32_t unknown1;
     uint64_t guid;
     uint32_t nearest_node;
@@ -9016,6 +9201,7 @@ typedef struct {
 } vanilla_SMSG_TRAINER_BUY_SUCCEEDED;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TRAINER_BUY_SUCCEEDED_write(WowWorldWriter* writer, const vanilla_SMSG_TRAINER_BUY_SUCCEEDED* object);
 
+/* No TBC emulators implement this. */
 typedef struct {
     uint64_t guid;
     uint32_t id;
@@ -9069,6 +9255,7 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PETITION_SHOWLIST_write(WowWorldWriter* writer, const vanilla_SMSG_PETITION_SHOWLIST* object);
 WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_PETITION_SHOWLIST_free(vanilla_SMSG_PETITION_SHOWLIST* object);
 
+/* cmangos/vmangos/mangoszero: All fields with 'skip' are completely unused */
 typedef struct {
     uint64_t npc;
     uint32_t unknown1;
@@ -9086,6 +9273,7 @@ typedef struct {
     uint32_t unknown12;
     uint16_t unknown13;
     uint8_t unknown14;
+    /* cmangos/vmangos/mangoszero: Named but never used */
     uint32_t index;
     uint32_t unknown15;
 
@@ -9162,19 +9350,34 @@ typedef struct {
     uint32_t petition_id;
     uint64_t charter_owner;
     char* guild_name;
+    /* cmangos/vmangos/mangoszero: Set to 0, only info is comment from vmangos */
     char* body_text;
+    /* cmangos/vmangos/mangoszero: Set to 1, only info is comment from vmangos */
     uint32_t unknown_flags;
+    /* cmangos/vmangos/mangoszero: Set to 9, only info is comment from vmangos */
     uint32_t minimum_signatures;
+    /* cmangos/vmangos/mangoszero: Set to 9, only info is comment from vmangos */
     uint32_t maximum_signatures;
+    /* cmangos/vmangos/mangoszero: Set to 0, only info is comment from vmangos */
     uint32_t deadline;
+    /* cmangos/vmangos/mangoszero: Set to 0, only info is comment from vmangos */
     uint32_t issue_date;
+    /* cmangos/vmangos/mangoszero: Set to 0, only info is comment from vmangos */
     uint32_t allowed_guild_id;
+    /* cmangos/vmangos/mangoszero: Set to 0, only info is comment from vmangos */
     vanilla_AllowedClass allowed_class;
+    /* cmangos/vmangos/mangoszero: Set to 0, only info is comment from vmangos */
     vanilla_AllowedRace allowed_race;
+    /* cmangos/vmangos/mangoszero: Set to 0, only info is comment from vmangos */
     uint16_t allowed_genders;
+    /* cmangos/vmangos/mangoszero: Set to 0, only info is comment from vmangos */
     uint32_t allowed_minimum_level;
+    /* cmangos/vmangos/mangoszero: Set to 0, only info is comment from vmangos */
     uint32_t allowed_maximum_level;
+    /* cmangos/vmangos/mangoszero: Set to 0, only info is comment from vmangos
+vmangos: char m_choicetext[10][64] */
     uint32_t todo_amount_of_signers;
+    /* cmangos/vmangos/mangoszero: Set to 0, only info is comment from vmangos */
     uint32_t number_of_choices;
 
 } vanilla_SMSG_PETITION_QUERY_RESPONSE;
@@ -9186,6 +9389,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_FISH_NOT_HOOKED_write(Wo
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_FISH_ESCAPED_write(WowWorldWriter* writer);
 
 typedef struct {
+    /* cmangos/vmangos/mangoszero: If 0 received bug report, else received suggestion */
     uint32_t suggestion;
     char* content;
     char* bug_type;
@@ -9212,7 +9416,10 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PLAYED_TIME_write(WowWor
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUERY_TIME_write(WowWorldWriter* writer);
 
+/* Reply to [CMSG_QUERY_TIME].
+[CMSG_QUERY_TIME] and this reply does not actually appear to set the time. Instead [SMSG_LOGIN_SETTIMESPEED] seems to correctly set the time. Running the client with `-console` will print the date when [SMSG_LOGIN_SETTIMESPEED] is received, but not when this message is received. */
 typedef struct {
+    /* Seconds since 1970, 1st of January (Unix Time). */
     uint32_t time;
 
 } vanilla_SMSG_QUERY_TIME_RESPONSE;
@@ -9223,6 +9430,7 @@ typedef struct {
     uint32_t total_exp;
     vanilla_ExperienceAwardType exp_type;
     uint32_t experience_without_rested;
+    /* mangoszero sets to 1 and comments: 1 - none 0 - 100% group bonus output */
     float exp_group_bonus;
 
 } vanilla_SMSG_LOG_XPGAIN;
@@ -9276,6 +9484,8 @@ typedef struct {
 } vanilla_MSG_MINIMAP_PING_Server;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MINIMAP_PING_Server_write(WowWorldWriter* writer, const vanilla_MSG_MINIMAP_PING_Server* object);
 
+/* Structure as comment on `https://github1s.com/mangoszero/server/blob/HEAD/src/game/Server/Opcodes.h#L525`.
+Not used in azerothcore/trinitycore/mangostwo/arcemu. */
 typedef struct {
     uint64_t guid1;
     uint64_t guid2;
@@ -9288,11 +9498,14 @@ typedef struct {
 } vanilla_SMSG_RESISTLOG;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_RESISTLOG_write(WowWorldWriter* writer, const vanilla_SMSG_RESISTLOG* object);
 
+/* cmangos and vmangos/mangoszero disagree about packed and extra u8 */
 typedef struct {
     uint64_t target;
+    /* vmangos: message says enchant has faded if empty */
     uint64_t caster;
     uint32_t item;
     uint32_t spell;
+    /* vmangos: Only used if `caster` is not 0. */
     bool show_affiliation;
 
 } vanilla_SMSG_ENCHANTMENTLOG;
@@ -9309,6 +9522,7 @@ typedef struct {
 } vanilla_SMSG_START_MIRROR_TIMER;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_START_MIRROR_TIMER_write(WowWorldWriter* writer, const vanilla_SMSG_START_MIRROR_TIMER* object);
 
+/* According to cmangos: 'Default UI handler for this is bugged, args dont match. Gotta do a full update with `SMSG_START_MIRROR_TIMER` to avoid lua errors. */
 typedef struct {
     vanilla_TimerType timer;
     bool is_frozen;
@@ -9348,6 +9562,7 @@ typedef struct {
 } vanilla_SMSG_GAMEOBJECT_PAGETEXT;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GAMEOBJECT_PAGETEXT_write(WowWorldWriter* writer, const vanilla_SMSG_GAMEOBJECT_PAGETEXT* object);
 
+/* Says which weapon the client pulls out. */
 typedef struct {
     vanilla_SheathState sheathed;
 
@@ -9370,6 +9585,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ITEM_TIME_UPDATE_write(W
 
 typedef struct {
     uint64_t item;
+    /* Possibly used with EnchantmentSlot enum. */
     uint32_t slot;
     uint32_t duration;
     uint64_t player;
@@ -9377,14 +9593,21 @@ typedef struct {
 } vanilla_SMSG_ITEM_ENCHANT_TIME_UPDATE;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ITEM_ENCHANT_TIME_UPDATE_write(WowWorldWriter* writer, const vanilla_SMSG_ITEM_ENCHANT_TIME_UPDATE* object);
 
+/* Seed used by the client to prove in [CMSG_AUTH_SESSION] that it has authenticated with the auth server.
+First thing sent when a client connects to the world server.
+This message is always unencrypted. */
 typedef struct {
     uint32_t server_seed;
 
 } vanilla_SMSG_AUTH_CHALLENGE;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_AUTH_CHALLENGE_write(WowWorldWriter* writer, const vanilla_SMSG_AUTH_CHALLENGE* object);
 
+/* Sent after receiving [SMSG_AUTH_CHALLENGE].
+Followed by [SMSG_AUTH_RESPONSE].
+This message is never encrypted. */
 typedef struct {
     uint32_t build;
+    /* This is sent to the client in [CMD_REALM_LIST_Server]. */
     uint32_t server_id;
     char* username;
     uint32_t client_seed;
@@ -9396,6 +9619,9 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUTH_SESSION_write(WowWorldWriter* writer, const vanilla_CMSG_AUTH_SESSION* object);
 WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_AUTH_SESSION_free(vanilla_CMSG_AUTH_SESSION* object);
 
+/* Response to [CMSG_AUTH_SESSION].
+Usually followed by [CMSG_CHAR_ENUM] if login was successful (`AUTH_OK`).
+vmangos/cmangos/mangoszero all have a variant of this message that contains fields from `AUTH_OK` for `AUTH_WAIT_QUEUE` as well (`https://github.com/vmangos/core/blob/cd896d43712ceafecdbd8f005846d7f676e55b4f/src/game/World.cpp#L322`) but this does not seem to be actually be a real thing. */
 typedef struct {
     vanilla_WorldResult result;
     uint32_t billing_time;
@@ -9442,11 +9668,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_TABARDVENDOR_ACTIVATE_sms
 
 typedef struct {
     uint64_t guid;
+    /* mangoszero/mangosone: index from SpellVisualKit.dbc. Set to 0xB3 when buying spells. */
     uint32_t spell_art_kit;
 
 } vanilla_SMSG_PLAY_SPELL_VISUAL;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PLAY_SPELL_VISUAL_write(WowWorldWriter* writer, const vanilla_SMSG_PLAY_SPELL_VISUAL* object);
 
+/* Sent by the client whenever it reaches a new area.
+The client does not send an accurate area. For example when going to Sen'jin Village, the client will send `DUROTAR` (0x0E) and not `SENJIN_VILLAGE` (0x16F). */
 typedef struct {
     vanilla_Area area;
 
@@ -9460,6 +9689,7 @@ typedef struct {
 } vanilla_SMSG_PARTYKILLLOG;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PARTYKILLLOG_write(WowWorldWriter* writer, const vanilla_SMSG_PARTYKILLLOG* object);
 
+/* Compressed version of [SMSG_UPDATE_OBJECT]. Has the same fields when uncompressed */
 typedef struct {
     uint32_t amount_of_objects;
     uint8_t has_transport;
@@ -9471,6 +9701,7 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_COMPRESSED_UPDATE_OBJECT_free(vani
 
 typedef struct {
     uint64_t guid;
+    /* mangoszero/mangosone/azerothcore: index from SpellVisualKit.dbc. Used for visual effect on player with 0x016A */
     uint32_t spell_visual_kit;
 
 } vanilla_SMSG_PLAY_SPELL_IMPACT;
@@ -9512,6 +9743,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ENVIRONMENTAL_DAMAGE_LOG
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_LOOKING_FOR_GROUP_Client_write(WowWorldWriter* writer);
 
 typedef struct {
+    /* vmangos sets to 0. cmangos/mangoszero don't implement */
     uint32_t unknown1;
 
 } vanilla_MSG_LOOKING_FOR_GROUP_Server;
@@ -9534,6 +9766,8 @@ typedef struct {
     vanilla_Map map;
     all_Vector3d position;
     char* message;
+    /* cmangos/vmangos/mangoszero: Pre-TBC: 'Reserved for future use'
+cmangos/vmangos/mangoszero: Unused */
     char* reserved_for_future_use;
     uint32_t chat_data_line_count;
     uint32_t amount_of_compressed_chat_data;
@@ -9550,6 +9784,7 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GMTICKET_CREATE_write(WowWorldWriter* writer, const vanilla_SMSG_GMTICKET_CREATE* object);
 
 typedef struct {
+    /* cmangos does not have this field, vmangos does. */
     vanilla_GmTicketType ticket_type;
     char* message;
 
@@ -9563,19 +9798,27 @@ typedef struct {
 } vanilla_SMSG_GMTICKET_UPDATETEXT;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GMTICKET_UPDATETEXT_write(WowWorldWriter* writer, const vanilla_SMSG_GMTICKET_UPDATETEXT* object);
 
+/* The purpose of this message is unknown, but it is required in order to prevent the chat box from being a white rectangle that is unable to show text.
+Sending this causes the client to send [CMSG_UPDATE_ACCOUNT_DATA] messages.
+[CMSG_UPDATE_ACCOUNT_DATA] and [CMSG_REQUEST_ACCOUNT_DATA] act on blocks numbered 0 to 7. The 32 u32s in this message could possibly actually be 8 sets of u8[16] but it could also be a variable sized message. */
 typedef struct {
+    /* cmangos/vmangos/mangoszero sets to all zeros */
     uint32_t data[32];
 
 } vanilla_SMSG_ACCOUNT_DATA_TIMES;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ACCOUNT_DATA_TIMES_write(WowWorldWriter* writer, const vanilla_SMSG_ACCOUNT_DATA_TIMES* object);
 
+/* Respond with [SMSG_UPDATE_ACCOUNT_DATA] */
 typedef struct {
+    /* The type of account data being requested. You can check this against the [CacheMask] to know if this is character-specific data or account-wide data. */
     uint32_t data_type;
 
 } vanilla_CMSG_REQUEST_ACCOUNT_DATA;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_REQUEST_ACCOUNT_DATA_write(WowWorldWriter* writer, const vanilla_CMSG_REQUEST_ACCOUNT_DATA* object);
 
+/* This is sent by the client after receiving [SMSG_ACCOUNT_DATA_TIMES]. Client can also request a block through [CMSG_REQUEST_ACCOUNT_DATA]. */
 typedef struct {
+    /* Exact meaning unknown. Seems to be between 0 and 7. Block 6 is changed when changing `layout-cache.txt` inside the WTF folder. */
     vanilla_AccountDataType data_type;
     uint32_t amount_of_compressed_data;
     uint8_t* compressed_data;
@@ -9588,6 +9831,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GMTICKET_GETTICKET_write
 
 typedef struct {
     vanilla_GmTicketStatus status;
+    /* cmangos: Ticket text: data, should never exceed 1999 bytes */
     char* text;
     vanilla_GmTicketType ticket_type;
     float days_since_ticket_creation;
@@ -9637,6 +9881,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CHAT_WRONG_FACTION_write
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GMTICKET_SYSTEMSTATUS_write(WowWorldWriter* writer);
 
 typedef struct {
+    /* vmangos: This only disables the ticket UI at client side and is not fully reliable are we sure this is a uint32? Should ask Zor */
     vanilla_GmTicketQueueStatus will_accept_tickets;
 
 } vanilla_SMSG_GMTICKET_SYSTEMSTATUS;
@@ -9649,6 +9894,7 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SPIRIT_HEALER_ACTIVATE_write(WowWorldWriter* writer, const vanilla_CMSG_SPIRIT_HEALER_ACTIVATE* object);
 
 typedef struct {
+    /* cmangos/mangoszero: unknown, may be rest state time or experience */
     uint32_t unknown1;
 
 } vanilla_SMSG_SET_REST_START;
@@ -9705,12 +9951,15 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GUILD_SET_PUBLIC_NOTE_free(vanilla
 
 typedef struct {
     char* player_name;
+    /* vmangos: Max length 31 */
     char* note;
 
 } vanilla_CMSG_GUILD_SET_OFFICER_NOTE;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_SET_OFFICER_NOTE_write(WowWorldWriter* writer, const vanilla_CMSG_GUILD_SET_OFFICER_NOTE* object);
 WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GUILD_SET_OFFICER_NOTE_free(vanilla_CMSG_GUILD_SET_OFFICER_NOTE* object);
 
+/* Message to the client that is has successfully logged into the world and that it should load the map and coordinates.
+The positions and orientations do not matter since they can be overwritten in the [SMSG_UPDATE_OBJECT], but the map determines which map the client loads and this is not changeable in [SMSG_UPDATE_OBJECT]. */
 typedef struct {
     vanilla_Map map;
     all_Vector3d position;
@@ -9724,12 +9973,16 @@ typedef struct {
     char* receiver;
     char* subject;
     char* body;
+    /* cmangos: stationery? */
     uint32_t unknown1;
+    /* cmangos: 0x00000000 */
     uint32_t unknown2;
     uint64_t item;
     uint32_t money;
     uint32_t cash_on_delivery_amount;
+    /* cmangos: const 0 */
     uint32_t unknown3;
+    /* cmangos: const 0 */
     uint32_t unknown4;
 
 } vanilla_CMSG_SEND_MAIL;
@@ -9741,6 +9994,7 @@ typedef struct {
     vanilla_MailAction action;
     vanilla_MailResult result;
     uint32_t equip_error;
+    /* cmangos/vmangos: item guid low? */
     uint32_t item;
     uint32_t item_count;
     vanilla_MailResultTwo result2;
@@ -9789,7 +10043,9 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BATTLEFIELD_JOIN_write(W
 
 typedef struct {
     uint32_t item_text_id;
+    /* vmangos/cmangos/mangoszero: this value can be item id in bag, but it is also mail id */
     uint32_t mail_id;
+    /* vmangos/cmangos/mangoszero: maybe something like state - 0x70000000 */
     uint32_t unknown1;
 
 } vanilla_CMSG_ITEM_TEXT_QUERY;
@@ -9797,6 +10053,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_ITEM_TEXT_QUERY_write(Wo
 
 typedef struct {
     uint32_t item_text_id;
+    /* mangoszero: CString TODO max length 8000 */
     char* text;
 
 } vanilla_SMSG_ITEM_TEXT_QUERY_RESPONSE;
@@ -9841,6 +10098,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MAIL_DELETE_write(WowWor
 typedef struct {
     uint64_t mailbox;
     uint32_t mail_id;
+    /* mangoszero/cmangos/vmangos: mailTemplateId, non need, Mail store own 100% correct value anyway */
     uint32_t mail_template_id;
 
 } vanilla_CMSG_MAIL_CREATE_TEXT_ITEM;
@@ -9849,6 +10107,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MAIL_CREATE_TEXT_ITEM_wr
 typedef struct {
     uint32_t id;
     uint64_t caster;
+    /* cmangos/mangoszero: can be 0 or 1 */
     uint8_t unknown1;
     uint32_t amount_of_targets;
     vanilla_SpellLogMiss* targets;
@@ -9894,11 +10153,14 @@ typedef struct {
     uint32_t damage;
     vanilla_SpellSchool school;
     uint32_t absorbed_damage;
+    /* cmangos/mangoszero/vmangos: sent as int32 */
     uint32_t resisted;
+    /* cmangos/mangoszero/vmangos: if 1, then client show spell name (example: %s's ranged shot hit %s for %u school or %s suffers %u school damage from %s's spell_name */
     bool periodic_log;
     uint8_t unused;
     uint32_t blocked;
     vanilla_HitInfo hit_info;
+    /* cmangos has some that might be correct `https://github.com/cmangos/mangos-classic/blob/524a39412dae7946d06e4b8f319f45b615075815/src/game/Entities/Unit.cpp#L5497`. */
     uint8_t extend_flag;
 
 } vanilla_SMSG_SPELLNONMELEEDAMAGELOG;
@@ -9915,6 +10177,7 @@ typedef struct {
     bool enable_pvp;
 } vanilla_CMSG_TOGGLE_PVP_set;
 
+/* vmangos: this opcode can be used in two ways: Either set explicit new status or toggle old status */
 typedef struct {
 
     vanilla_CMSG_TOGGLE_PVP_set* set;
@@ -10030,6 +10293,7 @@ typedef struct {
     vanilla_AuctionHouse auction_house;
     uint32_t auction_id;
     uint64_t bidder;
+    /* vmangos/cmangos: if 0, client shows ERR_AUCTION_WON_S, else ERR_AUCTION_OUTBID_S */
     uint32_t won;
     uint32_t out_bid;
     uint32_t item_template;
@@ -10038,8 +10302,10 @@ typedef struct {
 } vanilla_SMSG_AUCTION_BIDDER_NOTIFICATION;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_AUCTION_BIDDER_NOTIFICATION_write(WowWorldWriter* writer, const vanilla_SMSG_AUCTION_BIDDER_NOTIFICATION* object);
 
+/* vmangos/cmangos/mangoszero: this message causes on client to display: 'Your auction sold' */
 typedef struct {
     uint32_t auction_id;
+    /* vmangos/cmangos/mangoszero: if 0, client shows ERR_AUCTION_EXPIRED_S, else ERR_AUCTION_SOLD_S (works only when guid==0) */
     uint32_t bid;
     uint32_t auction_out_bid;
     uint64_t bidder;
@@ -10049,6 +10315,7 @@ typedef struct {
 } vanilla_SMSG_AUCTION_OWNER_NOTIFICATION;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_AUCTION_OWNER_NOTIFICATION_write(WowWorldWriter* writer, const vanilla_SMSG_AUCTION_OWNER_NOTIFICATION* object);
 
+/* According to cmangos/azerothcore/trinitycore/mangostwo. Not present in vmangos. */
 typedef struct {
     uint64_t caster;
     uint64_t target;
@@ -10124,6 +10391,7 @@ typedef struct {
 } vanilla_SMSG_CORPSE_RECLAIM_DELAY;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CORPSE_RECLAIM_DELAY_write(WowWorldWriter* writer, const vanilla_SMSG_CORPSE_RECLAIM_DELAY* object);
 
+/* Sent when the client enters the world. */
 typedef struct {
     uint64_t guid;
 
@@ -10201,6 +10469,7 @@ typedef struct {
 } vanilla_SMSG_PLAY_MUSIC;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PLAY_MUSIC_write(WowWorldWriter* writer, const vanilla_SMSG_PLAY_MUSIC* object);
 
+/* vmangos: Nostalrius: ignored by client if unit is not loaded */
 typedef struct {
     uint32_t sound_id;
     uint64_t guid;
@@ -10262,7 +10531,11 @@ typedef struct {
 } vanilla_CMSG_AUTOBANK_ITEM;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUTOBANK_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_AUTOBANK_ITEM* object);
 
+/* mangoszero/vmangos: No idea when this is called. */
 typedef struct {
+    /* mangoszero sets 0 if has unread mail, -86400.0f (0xC7A8C000) if not
+vmangos sets 0 if has unread mail, -1.0f if not
+cmangos has the behavior of mangoszero except when there are unread mails. This is TODO. */
     float unread_mails;
 
 } vanilla_MSG_QUERY_NEXT_MAIL_TIME_Server;
@@ -10270,12 +10543,15 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_QUERY_NEXT_MAIL_TIME_Serv
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_QUERY_NEXT_MAIL_TIME_Client_write(WowWorldWriter* writer);
 
+/* cmangos/vmangos/mangoszero: deliver undelivered mail */
 typedef struct {
+    /* cmangos/vmangos sends 0 as u32, mangoszero sends 0 as f32 */
     uint32_t unknown1;
 
 } vanilla_SMSG_RECEIVED_MAIL;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_RECEIVED_MAIL_write(WowWorldWriter* writer, const vanilla_SMSG_RECEIVED_MAIL* object);
 
+/* used when player leaves raid group inside instance */
 typedef struct {
     uint32_t homebind_timer;
     vanilla_RaidGroupError error;
@@ -10365,6 +10641,7 @@ typedef struct {
     uint32_t loot_slot;
     uint32_t item;
     uint32_t item_random_property_id;
+    /* vmangos/mangoszero: Always set to 0. */
     uint32_t item_random_suffix_id;
 
 } vanilla_SMSG_LOOT_ALL_PASSED;
@@ -10374,10 +10651,13 @@ typedef struct {
     uint64_t looted_target;
     uint32_t loot_slot;
     uint32_t item;
+    /* vmangos/mangoszero: not used ? */
     uint32_t item_random_suffix;
     uint32_t item_random_property_id;
     uint64_t winning_player;
+    /* rollnumber related to SMSG_LOOT_ROLL */
     uint8_t winning_roll;
+    /* Rolltype related to SMSG_LOOT_ROLL */
     vanilla_RollVote vote;
 
 } vanilla_SMSG_LOOT_ROLL_WON;
@@ -10395,6 +10675,7 @@ typedef struct {
     uint64_t creature;
     uint32_t loot_slot;
     uint32_t item;
+    /* vmangos/mangoszero: not used ? */
     uint32_t item_random_suffix;
     uint32_t item_random_property_id;
     uint32_t countdown_time;
@@ -10407,8 +10688,10 @@ typedef struct {
     uint32_t loot_slot;
     uint64_t player;
     uint32_t item;
+    /* vmangos/mangoszero: not used ? */
     uint32_t item_random_suffix;
     uint32_t item_random_property_id;
+    /* vmangos/cmangos/mangoszero: 0: Need for: `item_name` > 127: you passed on: `item_name`      Roll number */
     uint8_t roll_number;
     vanilla_RollVote vote;
 
@@ -10472,6 +10755,8 @@ typedef struct {
 } vanilla_MSG_TALENT_WIPE_CONFIRM_Client;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_TALENT_WIPE_CONFIRM_Client_write(WowWorldWriter* writer, const vanilla_MSG_TALENT_WIPE_CONFIRM_Client* object);
 
+/* cmangos/vmangos/mangoszero returns guid 0 and unknown 0 when talents can not be reset
+cmangos/vmangos/mangoszero casts spell 14876 when resetting */
 typedef struct {
     uint64_t wiping_npc;
     uint32_t cost_in_copper;
@@ -10565,6 +10850,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PLAYER_SKINNED_write(Wow
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_DURABILITY_DAMAGE_DEATH_write(WowWorldWriter* writer);
 
 typedef struct {
+    /* Emulators set PLAYER_FIELD_BYTES[2] to this unless it's 0. */
     uint8_t action_bar;
 
 } vanilla_CMSG_SET_ACTIONBAR_TOGGLES;
@@ -10616,6 +10902,7 @@ typedef struct {
 } vanilla_SMSG_PET_ACTION_FEEDBACK;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PET_ACTION_FEEDBACK_write(WowWorldWriter* writer, const vanilla_SMSG_PET_ACTION_FEEDBACK* object);
 
+/* Request of new name for character. This is only sent by the client if RENAME is set in the [CharacterFlags] of [SMSG_CHAR_ENUM] and the client tries to login. */
 typedef struct {
     uint64_t character;
     char* new_name;
@@ -10624,6 +10911,7 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHAR_RENAME_write(WowWorldWriter* writer, const vanilla_CMSG_CHAR_RENAME* object);
 WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHAR_RENAME_free(vanilla_CMSG_CHAR_RENAME* object);
 
+/* Response to [CMSG_CHAR_RENAME]. */
 typedef struct {
     vanilla_WorldResult result;
     uint64_t character;
@@ -10650,6 +10938,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MOVE_FALL_RESET_write(Wo
 WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_MOVE_FALL_RESET_free(vanilla_CMSG_MOVE_FALL_RESET* object);
 
 typedef struct {
+    /* All emulators across all versions set to 0 */
     uint32_t unknown;
 
 } vanilla_SMSG_INSTANCE_SAVE_CREATED;
@@ -10709,6 +10998,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PLAY_SOUND_write(WowWorl
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BATTLEFIELD_STATUS_write(WowWorldWriter* writer);
 
 typedef struct {
+    /* vmangos: players can be in 3 queues at the same time (0..2) */
     uint32_t queue_slot;
     vanilla_Map map;
     vanilla_BattlegroundBracket bracket;
@@ -10742,10 +11032,13 @@ typedef struct {
     vanilla_PvpRank highest_rank;
     uint32_t today_honorable_and_dishonorable;
     uint16_t yesterday_honorable;
+    /* vmangos: Unknown (deprecated, yesterday dishonourable?) */
     uint16_t unknown1;
     uint16_t last_week_honorable;
+    /* vmangos: Unknown (deprecated, last week dishonourable?) */
     uint16_t unknown2;
     uint16_t this_week_honorable;
+    /* vmangos: Unknown (deprecated, this week dishonourable?) */
     uint16_t unknown3;
     uint32_t lifetime_honorable;
     uint32_t lifetime_dishonorable;
@@ -10766,6 +11059,8 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BATTLEMASTER_HELLO_write
 
 typedef struct {
     uint64_t guid;
+    /* cmangos/mangoszero/vmangos: set to 0
+cmangos/mangoszero/vmangos: moveEvent, NUM_PMOVE_EVTS = 0x39 */
     uint32_t move_event;
     float speed;
 
@@ -10784,6 +11079,8 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_FORCE_WALK_SPEED_CHANGE_ACK_free(v
 
 typedef struct {
     uint64_t guid;
+    /* cmangos/mangoszero/vmangos: set to 0
+cmangos/mangoszero/vmangos: moveEvent, NUM_PMOVE_EVTS = 0x39 */
     uint32_t move_event;
     float speed;
 
@@ -10802,6 +11099,8 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK_f
 
 typedef struct {
     uint64_t guid;
+    /* cmangos/mangoszero/vmangos: set to 0
+cmangos/mangoszero/vmangos: moveEvent, NUM_PMOVE_EVTS = 0x39 */
     uint32_t move_event;
     float speed;
 
@@ -10823,6 +11122,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_PVP_LOG_DATA_Client_write
 typedef struct {
     vanilla_BattlegroundEndStatus status;
     vanilla_BattlegroundWinner winner;
+    /* vmangos: Client has a hard limit to 80. If we go beyond (but it should not happen ?!), WoW Error (happening !) */
     uint32_t amount_of_players;
     vanilla_BattlegroundPlayer* players;
 
@@ -10882,6 +11182,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_BATTLEGROUND_PLAYER_POSIT
 typedef struct {
     uint32_t amount_of_teammates;
     vanilla_BattlegroundPlayerPosition* teammates;
+    /* vmangos only sends the carrier of the player team. No emu ever sends more than 2. */
     uint8_t amount_of_carriers;
     vanilla_BattlegroundPlayerPosition* carriers;
 
@@ -10914,8 +11215,10 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_BATTLEGROUND_PLAYER_LEFT_write(WowWorldWriter* writer, const vanilla_SMSG_BATTLEGROUND_PLAYER_LEFT* object);
 
 typedef struct {
+    /* vmangos: battlemaster guid, or player guid if joining queue from BG portal */
     uint64_t guid;
     vanilla_Map map;
+    /* vmangos: 0 if First Available selected */
     uint32_t instance_id;
     bool join_as_group;
 
@@ -10954,8 +11257,11 @@ typedef struct {
     uint16_t max_power;
     uint16_t level;
     vanilla_Area area;
+    /* cmangos: float cast to u16 */
     uint16_t position_x;
+    /* cmangos: float cast to u16 */
     uint16_t position_y;
+    /* cmangos: In all checked pre-2.x data of packets included only positive auras */
     vanilla_AuraMask auras;
     uint64_t pet;
     char* pet_name;
@@ -11013,6 +11319,8 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GUILD_INFO_TEXT_free(vanilla_CMSG_
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CHAT_RESTRICTED_write(WowWorldWriter* writer);
 
+/* Informs the client that the run speed of a unit has changed.
+Mangos sends this to third parties that aren't having their speed changed and [SMSG_FORCE_RUN_SPEED_CHANGE] to the client that has their run speed changed. */
 typedef struct {
     uint64_t guid;
     float speed;
@@ -11123,6 +11431,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_SET_WALK_MOD
 
 typedef struct {
     uint64_t guid;
+    /* vmangos/mangosone: Never used. */
     uint32_t total_cost;
     uint32_t node_count;
     uint32_t* nodes;
@@ -11231,6 +11540,7 @@ typedef struct {
 } vanilla_SMSG_PET_ACTION_SOUND;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PET_ACTION_SOUND_write(WowWorldWriter* writer, const vanilla_SMSG_PET_ACTION_SOUND* object);
 
+/* Not implemented in any Wrath emulators. */
 typedef struct {
     uint32_t sound_id;
     all_Vector3d position;
@@ -11245,8 +11555,11 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GM_TICKET_STATUS_UPDATE_write(WowWorldWriter* writer, const vanilla_SMSG_GM_TICKET_STATUS_UPDATE* object);
 
 typedef struct {
+    /* cmangos: Survey ID: found in GMSurveySurveys.dbc */
     uint32_t survey_id;
     vanilla_GmSurveyQuestion questions[10];
+    /* cmangos: Answer comment: Unused in stock UI, can be only set by calling Lua function
+cmangos: Answer comment max sizes in bytes: Vanilla - 8106:8110, TBC - 11459:11463, Wrath - 582:586 */
     char* answer_comment;
 
 } vanilla_CMSG_GMSURVEY_SUBMIT;
@@ -11276,6 +11589,7 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELL_UPDATE_CHAIN_TARGETS_write(WowWorldWriter* writer, const vanilla_SMSG_SPELL_UPDATE_CHAIN_TARGETS* object);
 WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_SPELL_UPDATE_CHAIN_TARGETS_free(vanilla_SMSG_SPELL_UPDATE_CHAIN_TARGETS* object);
 
+/* Not implemented in Wrath or TBC emus. Only implemented in cmangos. */
 typedef struct {
     uint32_t amount_of_records;
     char** records;

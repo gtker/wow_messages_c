@@ -104,7 +104,7 @@ def print_aura_mask_c(s: Writer, h: Writer, v: model.WorldVersion):
         static WowWorldResult {module_name}_aura_mask_read(WowWorldReader* reader, {module_name}_AuraMask* mask) {{
             uint{header_size * 8}_t header;
             uint{header_size * 8}_t i;
-            WWM_CHECK_RETURN_CODE(wwm_read_uint{header_size * 8}(reader, &header));
+            WWM_CHECK_RETURN_CODE(wwm_read_u{header_size * 8}(reader, &header));
             
             for(i = 0; i < {module_name.upper()}_AURA_MASK_SIZE; ++i) {{
                 mask->auras[i]{init_field} = 0; /* initialize to 0 */
@@ -127,7 +127,7 @@ def print_aura_mask_c(s: Writer, h: Writer, v: model.WorldVersion):
                 }}
             }}
             
-            WWM_CHECK_RETURN_CODE(wwm_write_uint{header_size * 8}(writer, header));
+            WWM_CHECK_RETURN_CODE(wwm_write_u{header_size * 8}(writer, header));
             
             for(i = 0; i < {module_name.upper()}_AURA_MASK_SIZE; ++i) {{
                 if (mask->auras[i]{not_set}) {{
@@ -155,8 +155,8 @@ def version_parameters(v: model.WorldVersion) -> typing.Tuple[str, int, int, str
         header_size = 4
         member_size = 2
         not_set = " != 0"
-        write_aura = "writer.write_u16(mask.auras[i])" if is_cpp() else "wwm_write_uint16"
-        read_aura = "reader.read_u16()" if is_cpp() else "wwm_read_uint16"
+        write_aura = "writer.write_u16(mask.auras[i])" if is_cpp() else "wwm_write_u16"
+        read_aura = "reader.read_u16()" if is_cpp() else "wwm_read_u16"
         init_field = ""
         write_prefix = ""
     elif world_version_is_tbc(v):

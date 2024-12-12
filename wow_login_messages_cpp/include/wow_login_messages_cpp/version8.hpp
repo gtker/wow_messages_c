@@ -5,12 +5,8 @@
 
 #include "wow_login_messages_cpp/wow_login_messages.hpp"
 
-#include "wow_login_messages_cpp/version2.hpp"
-#include "wow_login_messages_cpp/version3.hpp"
-#include "wow_login_messages_cpp/version5.hpp"
-#include "wow_login_messages_cpp/version6.hpp"
-#include "wow_login_messages_cpp/version7.hpp"
-
+#include "wow_login_messages_cpp/all.hpp" /* type include */
+#include "wow_login_messages_cpp/version2.hpp" /* type include */
 namespace wow_login_messages {
 namespace version8 {
 
@@ -72,6 +68,7 @@ enum SecurityFlag : uint8_t {
 typedef all::Version Version;
 
 struct Realm {
+    /* vmangos: this is the second column in `Cfg_Configs.dbc` */
     RealmType realm_type;
     bool locked;
     RealmFlag flag;
@@ -92,15 +89,23 @@ struct CMD_AUTH_LOGON_CHALLENGE_Server {
     std::vector<uint8_t> generator;
     std::vector<uint8_t> large_safe_prime;
     std::array<uint8_t, 32> salt;
+    /* Used for the `crc_hash` in [CMD_AUTH_LOGON_PROOF_Client]. */
     std::array<uint8_t, 16> crc_salt;
     SecurityFlag security_flag;
+    /* Used to randomize the layout of the PIN keypad. */
     uint32_t pin_grid_seed;
     std::array<uint8_t, 16> pin_salt;
+    /* Number of columns to display. */
     uint8_t width;
+    /* Number of rows to display. */
     uint8_t height;
+    /* Number of digits to be entered for each cell. */
     uint8_t digit_count;
+    /* Number of cells to complete. */
     uint8_t challenge_count;
+    /* Seed value used to randomize cell selection. */
     uint64_t seed;
+    /* Dictates if the authenticator is in use and not just assigned to the account. */
     uint8_t required;
 
     WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
@@ -108,6 +113,7 @@ struct CMD_AUTH_LOGON_CHALLENGE_Server {
 
 typedef all::CMD_AUTH_LOGON_CHALLENGE_Client CMD_AUTH_LOGON_CHALLENGE_Client;
 
+/* Reply after successful [CMD_AUTH_LOGON_CHALLENGE_Server]. */
 struct CMD_AUTH_LOGON_PROOF_Client {
     std::array<uint8_t, 32> client_public_key;
     std::array<uint8_t, 20> client_proof;
@@ -116,7 +122,12 @@ struct CMD_AUTH_LOGON_PROOF_Client {
     SecurityFlag security_flag;
     std::array<uint8_t, 16> pin_salt;
     std::array<uint8_t, 20> pin_hash;
+    /* Client proof of matrix input.
+Implementation details at `https://gist.github.com/barncastle/979c12a9c5e64d810a28ad1728e7e0f9`. */
     std::array<uint8_t, 20> matrix_card_proof;
+    /* String entered by the user in the "Authenticator" popup.
+Can be empty and up to 16 characters.
+Is not used by the client in any way but just sent directly, so this could in theory be used for anything. */
     std::string authenticator;
 
     WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
@@ -132,6 +143,7 @@ struct CMD_AUTH_LOGON_PROOF_Server {
     WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
+/* Reply to [CMD_AUTH_RECONNECT_CHALLENGE_Client]. */
 struct CMD_AUTH_RECONNECT_CHALLENGE_Server {
     LoginResult result;
     std::array<uint8_t, 16> challenge_data;
@@ -144,6 +156,7 @@ typedef all::CMD_AUTH_RECONNECT_CHALLENGE_Client CMD_AUTH_RECONNECT_CHALLENGE_Cl
 
 typedef version2::CMD_AUTH_RECONNECT_PROOF_Client CMD_AUTH_RECONNECT_PROOF_Client;
 
+/* Reply to [CMD_AUTH_RECONNECT_PROOF_Client]. */
 struct CMD_AUTH_RECONNECT_PROOF_Server {
     LoginResult result;
 
@@ -177,7 +190,7 @@ struct CMD_XFER_CANCEL {
     WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 };
 
-struct ClientOpcode {
+class ClientOpcode {
     enum class Opcode {
         NONE = 0xFF,
         CMD_AUTH_LOGON_PROOF = 1,
@@ -197,104 +210,36 @@ struct ClientOpcode {
         version8::CMD_XFER_CANCEL CMD_XFER_CANCEL;
     };
 
-    bool is_none() const noexcept {
+public:
+    WOW_LOGIN_MESSAGES_CPP_EXPORT bool is_none() const noexcept {
         return opcode == Opcode::NONE;
     }
+    WOW_LOGIN_MESSAGES_CPP_EXPORT static ClientOpcode read(Reader& reader);
 
-    explicit ClientOpcode() : opcode(Opcode::NONE), CMD_AUTH_LOGON_PROOF() {}
+    WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 
-    ClientOpcode(ClientOpcode&& other) noexcept {
-        this->opcode = other.opcode;
-        other.opcode = Opcode::NONE;
-        if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
-            this->CMD_AUTH_LOGON_PROOF = std::move(other.CMD_AUTH_LOGON_PROOF);
-        }
-        if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
-            this->CMD_AUTH_RECONNECT_PROOF = std::move(other.CMD_AUTH_RECONNECT_PROOF);
-        }
-        if (opcode == Opcode::CMD_REALM_LIST) {
-            this->CMD_REALM_LIST = std::move(other.CMD_REALM_LIST);
-        }
-        if (opcode == Opcode::CMD_XFER_ACCEPT) {
-            this->CMD_XFER_ACCEPT = std::move(other.CMD_XFER_ACCEPT);
-        }
-        if (opcode == Opcode::CMD_XFER_RESUME) {
-            this->CMD_XFER_RESUME = std::move(other.CMD_XFER_RESUME);
-        }
-        if (opcode == Opcode::CMD_XFER_CANCEL) {
-            this->CMD_XFER_CANCEL = std::move(other.CMD_XFER_CANCEL);
-        }
-    }
 
-    ClientOpcode operator=(ClientOpcode&& other) noexcept {
-        this->opcode = other.opcode;
-        other.opcode = Opcode::NONE;
-        if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
-            this->CMD_AUTH_LOGON_PROOF = std::move(other.CMD_AUTH_LOGON_PROOF);
-        }
-        if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
-            this->CMD_AUTH_RECONNECT_PROOF = std::move(other.CMD_AUTH_RECONNECT_PROOF);
-        }
-        if (opcode == Opcode::CMD_REALM_LIST) {
-            this->CMD_REALM_LIST = std::move(other.CMD_REALM_LIST);
-        }
-        if (opcode == Opcode::CMD_XFER_ACCEPT) {
-            this->CMD_XFER_ACCEPT = std::move(other.CMD_XFER_ACCEPT);
-        }
-        if (opcode == Opcode::CMD_XFER_RESUME) {
-            this->CMD_XFER_RESUME = std::move(other.CMD_XFER_RESUME);
-        }
-        if (opcode == Opcode::CMD_XFER_CANCEL) {
-            this->CMD_XFER_CANCEL = std::move(other.CMD_XFER_CANCEL);
-        }
-        return std::move(*this);
-    }
+    WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode() : opcode(Opcode::NONE), CMD_AUTH_LOGON_PROOF() {}
 
-    ~ClientOpcode() {
-        if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
-            this->CMD_AUTH_LOGON_PROOF.~CMD_AUTH_LOGON_PROOF_Client();
-        }
-        if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
-            this->CMD_AUTH_RECONNECT_PROOF.~CMD_AUTH_RECONNECT_PROOF_Client();
-        }
-        if (opcode == Opcode::CMD_REALM_LIST) {
-            this->CMD_REALM_LIST.~CMD_REALM_LIST_Client();
-        }
-        if (opcode == Opcode::CMD_XFER_ACCEPT) {
-            this->CMD_XFER_ACCEPT.~CMD_XFER_ACCEPT();
-        }
-        if (opcode == Opcode::CMD_XFER_RESUME) {
-            this->CMD_XFER_RESUME.~CMD_XFER_RESUME();
-        }
-        if (opcode == Opcode::CMD_XFER_CANCEL) {
-            this->CMD_XFER_CANCEL.~CMD_XFER_CANCEL();
-        }
-    }
+    /* 1 destructor */
+    WOW_LOGIN_MESSAGES_CPP_EXPORT ~ClientOpcode();
 
-    explicit ClientOpcode(version8::CMD_AUTH_LOGON_PROOF_Client&& obj) {
-        opcode = Opcode::CMD_AUTH_LOGON_PROOF;
-        new (&this->CMD_AUTH_LOGON_PROOF) version8::CMD_AUTH_LOGON_PROOF_Client (std::move(obj));
-    }
-    explicit ClientOpcode(version8::CMD_AUTH_RECONNECT_PROOF_Client&& obj) {
-        opcode = Opcode::CMD_AUTH_RECONNECT_PROOF;
-        new (&this->CMD_AUTH_RECONNECT_PROOF) version8::CMD_AUTH_RECONNECT_PROOF_Client (std::move(obj));
-    }
-    explicit ClientOpcode(version8::CMD_REALM_LIST_Client&& obj) {
-        opcode = Opcode::CMD_REALM_LIST;
-        new (&this->CMD_REALM_LIST) version8::CMD_REALM_LIST_Client (std::move(obj));
-    }
-    explicit ClientOpcode(version8::CMD_XFER_ACCEPT&& obj) {
-        opcode = Opcode::CMD_XFER_ACCEPT;
-        new (&this->CMD_XFER_ACCEPT) version8::CMD_XFER_ACCEPT (std::move(obj));
-    }
-    explicit ClientOpcode(version8::CMD_XFER_RESUME&& obj) {
-        opcode = Opcode::CMD_XFER_RESUME;
-        new (&this->CMD_XFER_RESUME) version8::CMD_XFER_RESUME (std::move(obj));
-    }
-    explicit ClientOpcode(version8::CMD_XFER_CANCEL&& obj) {
-        opcode = Opcode::CMD_XFER_CANCEL;
-        new (&this->CMD_XFER_CANCEL) version8::CMD_XFER_CANCEL (std::move(obj));
-    }
+    /* 2 copy constructor */
+    WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode(const ClientOpcode& other);
+    /* 3 copy assignment */
+    WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode& operator=(const ClientOpcode& other);
+    /* 4 move constructor */
+    WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode(ClientOpcode&& other) noexcept;
+
+    /* 5 move assignment */
+    WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode& operator=(ClientOpcode&& other) noexcept;
+
+    WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode(version8::CMD_AUTH_LOGON_PROOF_Client&& obj);
+    WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode(version8::CMD_AUTH_RECONNECT_PROOF_Client&& obj);
+    WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode(version8::CMD_REALM_LIST_Client&& obj);
+    WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode(version8::CMD_XFER_ACCEPT&& obj);
+    WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode(version8::CMD_XFER_RESUME&& obj);
+    WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode(version8::CMD_XFER_CANCEL&& obj);
 
     template<typename T>
     // NOLINTNEXTLINE
@@ -332,11 +277,7 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT version8::CMD_XFER_CANCEL* ClientOpcode::get_if();
 template<>
 WOW_LOGIN_MESSAGES_CPP_EXPORT version8::CMD_XFER_CANCEL& ClientOpcode::get();
 
-WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const ClientOpcode& opcode);
-
-WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode read_client_opcode(Reader& reader);
-
-struct ServerOpcode {
+class ServerOpcode {
     enum class Opcode {
         NONE = 0xFF,
         CMD_AUTH_LOGON_CHALLENGE = 0,
@@ -358,117 +299,37 @@ struct ServerOpcode {
         version8::CMD_XFER_DATA CMD_XFER_DATA;
     };
 
-    bool is_none() const noexcept {
+public:
+    WOW_LOGIN_MESSAGES_CPP_EXPORT bool is_none() const noexcept {
         return opcode == Opcode::NONE;
     }
+    WOW_LOGIN_MESSAGES_CPP_EXPORT static ServerOpcode read(Reader& reader);
 
-    explicit ServerOpcode() : opcode(Opcode::NONE), CMD_AUTH_LOGON_CHALLENGE() {}
+    WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write() const;
 
-    ServerOpcode(ServerOpcode&& other) noexcept {
-        this->opcode = other.opcode;
-        other.opcode = Opcode::NONE;
-        if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
-            this->CMD_AUTH_LOGON_CHALLENGE = std::move(other.CMD_AUTH_LOGON_CHALLENGE);
-        }
-        if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
-            this->CMD_AUTH_LOGON_PROOF = std::move(other.CMD_AUTH_LOGON_PROOF);
-        }
-        if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
-            this->CMD_AUTH_RECONNECT_CHALLENGE = std::move(other.CMD_AUTH_RECONNECT_CHALLENGE);
-        }
-        if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
-            this->CMD_AUTH_RECONNECT_PROOF = std::move(other.CMD_AUTH_RECONNECT_PROOF);
-        }
-        if (opcode == Opcode::CMD_REALM_LIST) {
-            this->CMD_REALM_LIST = std::move(other.CMD_REALM_LIST);
-        }
-        if (opcode == Opcode::CMD_XFER_INITIATE) {
-            this->CMD_XFER_INITIATE = std::move(other.CMD_XFER_INITIATE);
-        }
-        if (opcode == Opcode::CMD_XFER_DATA) {
-            this->CMD_XFER_DATA = std::move(other.CMD_XFER_DATA);
-        }
-    }
 
-    ServerOpcode operator=(ServerOpcode&& other) noexcept {
-        this->opcode = other.opcode;
-        other.opcode = Opcode::NONE;
-        if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
-            this->CMD_AUTH_LOGON_CHALLENGE = std::move(other.CMD_AUTH_LOGON_CHALLENGE);
-        }
-        if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
-            this->CMD_AUTH_LOGON_PROOF = std::move(other.CMD_AUTH_LOGON_PROOF);
-        }
-        if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
-            this->CMD_AUTH_RECONNECT_CHALLENGE = std::move(other.CMD_AUTH_RECONNECT_CHALLENGE);
-        }
-        if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
-            this->CMD_AUTH_RECONNECT_PROOF = std::move(other.CMD_AUTH_RECONNECT_PROOF);
-        }
-        if (opcode == Opcode::CMD_REALM_LIST) {
-            this->CMD_REALM_LIST = std::move(other.CMD_REALM_LIST);
-        }
-        if (opcode == Opcode::CMD_XFER_INITIATE) {
-            this->CMD_XFER_INITIATE = std::move(other.CMD_XFER_INITIATE);
-        }
-        if (opcode == Opcode::CMD_XFER_DATA) {
-            this->CMD_XFER_DATA = std::move(other.CMD_XFER_DATA);
-        }
-        return std::move(*this);
-    }
+    WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode() : opcode(Opcode::NONE), CMD_AUTH_LOGON_CHALLENGE() {}
 
-    ~ServerOpcode() {
-        if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
-            this->CMD_AUTH_LOGON_CHALLENGE.~CMD_AUTH_LOGON_CHALLENGE_Server();
-        }
-        if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
-            this->CMD_AUTH_LOGON_PROOF.~CMD_AUTH_LOGON_PROOF_Server();
-        }
-        if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
-            this->CMD_AUTH_RECONNECT_CHALLENGE.~CMD_AUTH_RECONNECT_CHALLENGE_Server();
-        }
-        if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
-            this->CMD_AUTH_RECONNECT_PROOF.~CMD_AUTH_RECONNECT_PROOF_Server();
-        }
-        if (opcode == Opcode::CMD_REALM_LIST) {
-            this->CMD_REALM_LIST.~CMD_REALM_LIST_Server();
-        }
-        if (opcode == Opcode::CMD_XFER_INITIATE) {
-            this->CMD_XFER_INITIATE.~CMD_XFER_INITIATE();
-        }
-        if (opcode == Opcode::CMD_XFER_DATA) {
-            this->CMD_XFER_DATA.~CMD_XFER_DATA();
-        }
-    }
+    /* 1 destructor */
+    WOW_LOGIN_MESSAGES_CPP_EXPORT ~ServerOpcode();
 
-    explicit ServerOpcode(version8::CMD_AUTH_LOGON_CHALLENGE_Server&& obj) {
-        opcode = Opcode::CMD_AUTH_LOGON_CHALLENGE;
-        new (&this->CMD_AUTH_LOGON_CHALLENGE) version8::CMD_AUTH_LOGON_CHALLENGE_Server (std::move(obj));
-    }
-    explicit ServerOpcode(version8::CMD_AUTH_LOGON_PROOF_Server&& obj) {
-        opcode = Opcode::CMD_AUTH_LOGON_PROOF;
-        new (&this->CMD_AUTH_LOGON_PROOF) version8::CMD_AUTH_LOGON_PROOF_Server (std::move(obj));
-    }
-    explicit ServerOpcode(version8::CMD_AUTH_RECONNECT_CHALLENGE_Server&& obj) {
-        opcode = Opcode::CMD_AUTH_RECONNECT_CHALLENGE;
-        new (&this->CMD_AUTH_RECONNECT_CHALLENGE) version8::CMD_AUTH_RECONNECT_CHALLENGE_Server (std::move(obj));
-    }
-    explicit ServerOpcode(version8::CMD_AUTH_RECONNECT_PROOF_Server&& obj) {
-        opcode = Opcode::CMD_AUTH_RECONNECT_PROOF;
-        new (&this->CMD_AUTH_RECONNECT_PROOF) version8::CMD_AUTH_RECONNECT_PROOF_Server (std::move(obj));
-    }
-    explicit ServerOpcode(version8::CMD_REALM_LIST_Server&& obj) {
-        opcode = Opcode::CMD_REALM_LIST;
-        new (&this->CMD_REALM_LIST) version8::CMD_REALM_LIST_Server (std::move(obj));
-    }
-    explicit ServerOpcode(version8::CMD_XFER_INITIATE&& obj) {
-        opcode = Opcode::CMD_XFER_INITIATE;
-        new (&this->CMD_XFER_INITIATE) version8::CMD_XFER_INITIATE (std::move(obj));
-    }
-    explicit ServerOpcode(version8::CMD_XFER_DATA&& obj) {
-        opcode = Opcode::CMD_XFER_DATA;
-        new (&this->CMD_XFER_DATA) version8::CMD_XFER_DATA (std::move(obj));
-    }
+    /* 2 copy constructor */
+    WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode(const ServerOpcode& other);
+    /* 3 copy assignment */
+    WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode& operator=(const ServerOpcode& other);
+    /* 4 move constructor */
+    WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode(ServerOpcode&& other) noexcept;
+
+    /* 5 move assignment */
+    WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode& operator=(ServerOpcode&& other) noexcept;
+
+    WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode(version8::CMD_AUTH_LOGON_CHALLENGE_Server&& obj);
+    WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode(version8::CMD_AUTH_LOGON_PROOF_Server&& obj);
+    WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode(version8::CMD_AUTH_RECONNECT_CHALLENGE_Server&& obj);
+    WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode(version8::CMD_AUTH_RECONNECT_PROOF_Server&& obj);
+    WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode(version8::CMD_REALM_LIST_Server&& obj);
+    WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode(version8::CMD_XFER_INITIATE&& obj);
+    WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode(version8::CMD_XFER_DATA&& obj);
 
     template<typename T>
     // NOLINTNEXTLINE
@@ -509,10 +370,6 @@ template<>
 WOW_LOGIN_MESSAGES_CPP_EXPORT version8::CMD_XFER_DATA* ServerOpcode::get_if();
 template<>
 WOW_LOGIN_MESSAGES_CPP_EXPORT version8::CMD_XFER_DATA& ServerOpcode::get();
-
-WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const ServerOpcode& opcode);
-
-WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode read_server_opcode(Reader& reader);
 
 } // namespace version8
 } // namespace wow_login_messages

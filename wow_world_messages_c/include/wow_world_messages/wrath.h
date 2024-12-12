@@ -9032,12 +9032,14 @@ typedef struct {
     uint16_t values[WRATH_ENCHANT_MASK_LENGTH];
 } wrath_EnchantMask;
 
+/* Used in the `AchievementDoneArray` built-in type. */
 typedef struct {
     uint32_t achievement;
     uint32_t time;
 
 } wrath_AchievementDone;
 
+/* Used in the `AchievementInProgressArray` built-in type. */
 typedef struct {
     uint32_t achievement;
     uint64_t counter;
@@ -9057,10 +9059,14 @@ typedef struct {
 } wrath_ActionButton;
 
 typedef struct {
+    /* Other emus hardcode this to 2. More research is required */
     uint8_t addon_type;
+    /* Other emus hardcode this to 1. */
     uint8_t uses_crc;
     bool uses_diffent_public_key;
+    /* Other emus hardcode this to 0 */
     uint32_t unknown1;
+    /* Other emus hardcode this to 0 */
     uint8_t unknown2;
 
 } wrath_Addon;
@@ -9107,6 +9113,7 @@ typedef struct {
     uint32_t item_suffix_factor;
     uint32_t item_count;
     uint32_t item_charges;
+    /* mangosone: item flags (dynamic?) (0x04 no lockId?) */
     uint32_t item_flags;
     uint64_t item_owner;
     uint32_t start_bid;
@@ -9136,14 +9143,19 @@ typedef struct {
     uint32_t overkill_damage;
     wrath_SpellSchool school;
     uint32_t absorb1;
+    /* vmangos: Sent as int32 */
     uint32_t resisted;
+    /* new 3.1.2 critical tick */
     bool critical1;
     uint32_t damage2;
     uint32_t over_damage;
     uint32_t absorb2;
+    /* new 3.1.2 critical tick */
     bool critical2;
+    /* vmangos: A miscvalue that is dependent on what the aura will do, this is usually decided by the AuraType, ie: with AuraType::SPELL_AURA_MOD_BASE_RESISTANCE_PCT this value could be SpellSchoolMask::SPELL_SCHOOL_MASK_NORMAL which would tell the aura that it should change armor.  If Modifier::m_auraname would have been AuraType::SPELL_AURA_MOUNTED then m_miscvalue would have decided which model the mount should have */
     uint32_t misc_value1;
     uint32_t damage3;
+    /* vmangos: A miscvalue that is dependent on what the aura will do, this is usually decided by the AuraType, ie: with AuraType::SPELL_AURA_MOD_BASE_RESISTANCE_PCT this value could be SpellSchoolMask::SPELL_SCHOOL_MASK_NORMAL which would tell the aura that it should change armor.  If Modifier::m_auraname would have been AuraType::SPELL_AURA_MOUNTED then m_miscvalue would have decided which model the mount should have */
     uint32_t misc_value2;
     uint32_t damage4;
     float gain_multiplier;
@@ -9241,6 +9253,7 @@ typedef struct {
 
 typedef struct {
     uint16_t spell_id;
+    /* cmangos/mangoszero: cast item id */
     uint16_t item_id;
     uint16_t spell_category;
     uint32_t cooldown;
@@ -9250,7 +9263,9 @@ typedef struct {
 
 typedef struct {
     uint32_t spell_school_mask;
+    /* arcemu sends the same data in `damage_uint`. */
     float damage_float;
+    /* arcemu sends the same data in `damage_float`. */
     uint32_t damage_uint;
 
 } wrath_DamageInfo;
@@ -9295,18 +9310,27 @@ typedef struct {
 } wrath_ForcedReaction;
 
 typedef struct {
+    /* cmangos: questions found in GMSurveyQuestions.dbc
+ref to i'th GMSurveySurveys.dbc field (all fields in that dbc point to fields in GMSurveyQuestions.dbc) */
     uint32_t question_id;
+    /* Rating: hardcoded limit of 0-5 in pre-Wrath, ranges defined in GMSurveyAnswers.dbc Wrath+ */
     uint8_t answer;
+    /* Usage: `GMSurveyAnswerSubmit(question, rank, comment)`
+cmangos: Unused in stock UI, can be only set by calling Lua function */
     char* comment;
 
 } wrath_GmSurveyQuestion;
 
 typedef struct {
+    /* vmangos: sets to loop index */
     uint32_t id;
     uint8_t item_icon;
+    /* vmangos: makes pop up box password */
     bool coded;
+    /* mangosone: 2.0.3 */
     uint32_t money_required;
     char* message;
+    /* mangosone: related to money pop up box, 2.0.3, max 0x800 */
     char* accept_text;
 
 } wrath_GossipItem;
@@ -9316,6 +9340,7 @@ typedef struct {
     uint64_t guid;
     bool is_online;
     uint8_t group_id;
+    /* mangosone: 0x2 main assist, 0x4 main tank */
     uint8_t flags;
     uint8_t lfg_roles;
 
@@ -9336,6 +9361,7 @@ typedef struct {
 typedef struct {
     uint8_t slot;
     uint32_t item;
+    /* 3.3.0 (0x8000, 0x8020) */
     uint32_t unknown1;
     VariableItemRandomProperty item_random_property_id;
     uint32_t amount_of_items;
@@ -9363,6 +9389,7 @@ typedef struct {
 
 typedef struct {
     uint64_t guid;
+    /* arcemu: high guid */
     uint32_t unknown;
     wrath_GuildMemberStatus status;
     char* name;
@@ -9385,7 +9412,10 @@ typedef struct {
 } wrath_GuildRights;
 
 typedef struct {
+    /* cmangos/mangoszero: only send 'first' part of spell */
     uint32_t spell_id;
+    /* cmangos/mangoszero: sets to 0
+cmangos/mangoszero: it's not slot id */
     uint16_t unknown1;
 
 } wrath_InitialSpell;
@@ -9433,6 +9463,7 @@ typedef struct {
 typedef struct {
     uint32_t spell;
     wrath_SpellTriggerType spell_trigger;
+    /* let the database control the sign here. negative means that the item should be consumed once the charges are consumed. */
     int32_t spell_charges;
     int32_t spell_cooldown;
     uint32_t spell_category;
@@ -9482,6 +9513,7 @@ typedef struct {
     uint64_t group;
     wrath_LfgUpdateFlag flags;
     char* comment;
+    /* Emu just sets all to 0. */
     uint8_t roles[3];
     uint64_t instance;
     uint32_t encounter_mask;
@@ -9509,6 +9541,7 @@ typedef struct {
     uint32_t agility;
     uint32_t health;
     uint32_t mana;
+    /* azerothcore: talentpoints, used as online/offline marker :D */
     bool online;
     uint32_t average_item_level;
     uint32_t defense_skill;
@@ -9518,10 +9551,12 @@ typedef struct {
     uint32_t haste_rating;
     uint32_t expertise_rating;
     char* comment;
+    /* emu sets to true. */
     bool is_looking_for_more;
     uint64_t group;
     uint8_t roles;
     wrath_Area area;
+    /* Emus set to 0. */
     uint8_t unknown1;
     uint64_t instance;
     uint32_t encounter_mask;
@@ -9557,6 +9592,7 @@ typedef struct {
     uint32_t item_stack_count;
     uint32_t item;
     uint32_t item_display_id;
+    /* cmangos: 0 for infinity item amount, although they send 0xFFFFFFFF in that case */
     uint32_t max_items;
     uint32_t price;
     uint32_t max_durability;
@@ -9607,6 +9643,7 @@ typedef struct {
     uint32_t money;
     uint32_t flags;
     float expiration_time;
+    /* cmangos/vmangos/mangoszero: mail template (MailTemplate.dbc) */
     uint32_t mail_template_id;
     char* subject;
     char* message;
@@ -9694,12 +9731,14 @@ typedef struct {
     float corpse_orientation;
     all_Vector3d position2;
     float orientation2;
+    /* vmangos statically sets to 0 */
     uint32_t unknown0;
     uint32_t unknown1;
     uint64_t guid;
     uint32_t transport_progress_in_ms;
     uint32_t vehicle_id;
     float vehicle_orientation;
+    /* AzerothCore deliberately casts to i64 */
     uint64_t packed_local_rotation;
 
 } wrath_MovementBlock;
@@ -9754,9 +9793,13 @@ typedef struct {
 } wrath_Object;
 
 typedef struct {
+    /* mangostwo: string '%d:%d:%d:%d:%d' -> itemId, ItemRandomPropertyId, 2, auctionId, unk1 (stack size?, unused) */
     char* string1;
+    /* mangostwo: string '%16I64X:%d:%d:%d:%d' -> bidderGuid, bid, buyout, deposit, auctionCut */
     char* string2;
+    /* mangostwo sets to 97250. */
     uint32_t unknown1;
+    /* mangostwo sets to 68. */
     uint32_t unknown2;
     float time_left;
 
@@ -9764,6 +9807,7 @@ typedef struct {
 
 typedef struct {
     uint32_t spell;
+    /* mangoszero: sets to 0 */
     uint16_t spell_category;
     uint32_t cooldown;
     uint32_t category_cooldown;
@@ -9772,9 +9816,14 @@ typedef struct {
 
 typedef struct {
     uint32_t index;
+    /* cmangos/vmangos/mangoszero: statically sets to guild charter item id (5863). */
     uint32_t charter_entry;
+    /* cmangos/vmangos/mangoszero: statically sets to guild charter display id (16161). */
     uint32_t charter_display_id;
+    /* cmangos/vmangos/mangoszero: statically set to 1000 (10 silver). */
     uint32_t guild_charter_cost;
+    /* cmangos/vmangos/mangoszero: statically set to 1
+arcemu: charter type? seems to be 0x0 for guilds and 0x1 for arena charters */
     uint32_t unknown1;
     uint32_t signatures_required;
 
@@ -9817,6 +9866,7 @@ typedef struct {
     uint32_t level;
     uint32_t flags;
     bool repeatable;
+    /* vmangos/cmangos/mangoszero: max 0x200 */
     char* title;
 
 } wrath_QuestItem;
@@ -9835,6 +9885,7 @@ typedef struct {
 } wrath_QuestItemReward;
 
 typedef struct {
+    /* cmangos: client expected gameobject template id in form (id|0x80000000) */
     uint32_t creature_id;
     uint32_t kill_count;
     uint32_t required_item_id;
@@ -9873,6 +9924,7 @@ typedef struct {
     uint64_t instance_id;
     bool expired;
     bool extended;
+    /* Seems to be in seconds */
     uint32_t time_until_reset;
 
 } wrath_RaidInfo;
@@ -9888,6 +9940,8 @@ typedef struct {
     wrath_AuctionHouse auction_house;
     wrath_MailMessageType message_type;
     uint32_t stationery;
+    /* mangosone sets to `0xC6000000`
+mangosone: float unk, time or something */
     float time;
 
 } wrath_ReceivedMail;
@@ -10026,6 +10080,7 @@ typedef struct {
     uint32_t level;
     char* name;
     uint32_t loyalty;
+    /* vmangos/mangoszero/cmangos: client slot 1 == current pet (0) */
     uint8_t slot;
 
 } wrath_StabledPet;
@@ -10045,6 +10100,7 @@ typedef struct {
 } wrath_ThreatUpdateUnit;
 
 typedef struct {
+    /* cmangos/vmangos/mangoszero: sets to index of array */
     uint8_t trade_slot_number;
     uint32_t item;
     uint32_t display_id;
@@ -10064,10 +10120,15 @@ typedef struct {
 } wrath_TradeSlot;
 
 typedef struct {
+    /* cmangos: learned spell (or cast-spell in profession case) */
     uint32_t spell;
     wrath_TrainerSpellState state;
     uint32_t spell_cost;
+    /* cmangos: spells don't cost talent points
+cmangos: set to 0 */
     uint32_t talent_point_cost;
+    /* cmangos: must be equal prev. field to have learn button in enabled state
+cmangos: 1 for true 0 for false */
     uint32_t first_rank;
     uint8_t required_level;
     wrath_Skill required_skill;
@@ -10122,6 +10183,8 @@ typedef struct {
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_BOOTME_write(WowWorldWriter* writer);
 
+/* Executes a query directly on the world server.
+Not implemented on any major emulator. */
 typedef struct {
     char* query;
 
@@ -10129,6 +10192,8 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_DBLOOKUP_write(WowWorldWriter* writer, const wrath_CMSG_DBLOOKUP* object);
 WOW_WORLD_MESSAGES_C_EXPORT void wrath_CMSG_DBLOOKUP_free(wrath_CMSG_DBLOOKUP* object);
 
+/* Sent when using the `worldport` console command.
+The 3.3.5 client includes some extra padding. */
 typedef struct {
     uint32_t time;
     wrath_Map map;
@@ -10139,6 +10204,7 @@ typedef struct {
 } wrath_CMSG_WORLD_TELEPORT;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_WORLD_TELEPORT_write(WowWorldWriter* writer, const wrath_CMSG_WORLD_TELEPORT* object);
 
+/* Sent when using the `port` console command. */
 typedef struct {
     char* name;
 
@@ -10146,6 +10212,7 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_TELEPORT_TO_UNIT_write(WowWorldWriter* writer, const wrath_CMSG_TELEPORT_TO_UNIT* object);
 WOW_WORLD_MESSAGES_C_EXPORT void wrath_CMSG_TELEPORT_TO_UNIT_free(wrath_CMSG_TELEPORT_TO_UNIT* object);
 
+/* Sent after the client presses 'Create Character'. The client will then wait for [SMSG_CHAR_CREATE]. */
 typedef struct {
     char* name;
     wrath_Race race;
@@ -10163,12 +10230,16 @@ WOW_WORLD_MESSAGES_C_EXPORT void wrath_CMSG_CHAR_CREATE_free(wrath_CMSG_CHAR_CRE
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_CHAR_ENUM_write(WowWorldWriter* writer);
 
+/* Command to delete a character from the clients account. Can be sent after the client has received [SMSG_CHAR_ENUM].
+Sent after the client has confirmed the character deletion. */
 typedef struct {
     uint64_t guid;
 
 } wrath_CMSG_CHAR_DELETE;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_CHAR_DELETE_write(WowWorldWriter* writer, const wrath_CMSG_CHAR_DELETE* object);
 
+/* Response to [CMSG_CHAR_CREATE].
+Every [WorldResult] except `CHAR_CREATE_SUCCESS` will lead to a popup showing. `CHAR_CREATE_SUCCESS` will cause the client to send a [CMSG_CHAR_ENUM]. */
 typedef struct {
     wrath_WorldResult result;
 
@@ -10183,12 +10254,17 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_CHAR_ENUM_write(WowWorldWriter* writer, const wrath_SMSG_CHAR_ENUM* object);
 WOW_WORLD_MESSAGES_C_EXPORT void wrath_SMSG_CHAR_ENUM_free(wrath_SMSG_CHAR_ENUM* object);
 
+/* Response to [CMSG_CHAR_DELETE].
+The result of this message will update the client character screen without them sending another [CMSG_CHAR_ENUM]. */
 typedef struct {
     wrath_WorldResult result;
 
 } wrath_SMSG_CHAR_DELETE;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_CHAR_DELETE_write(WowWorldWriter* writer, const wrath_SMSG_CHAR_DELETE* object);
 
+/* Command to log into the specified character.
+This is sent after the client has been authenticated and served the character list with [SMSG_CHAR_ENUM].
+If the player receives a [SMSG_CHARACTER_LOGIN_FAILED] it will return to the character screen and send a [CMSG_CHAR_ENUM]. */
 typedef struct {
     uint64_t guid;
 
@@ -10225,6 +10301,8 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_TRANSFER_ABORTED_write(WowWorldWriter* writer, const wrath_SMSG_TRANSFER_ABORTED* object);
 WOW_WORLD_MESSAGES_C_EXPORT void wrath_SMSG_TRANSFER_ABORTED_free(wrath_SMSG_TRANSFER_ABORTED* object);
 
+/* Response if [CMSG_PLAYER_LOGIN] fails. If successful it should instead be [SMSG_LOGIN_VERIFY_WORLD].
+Client seems to always send a [CMSG_CANCEL_TRADE] after receiving this message, for unknown reasons. */
 typedef struct {
     wrath_WorldResult result;
 
@@ -10232,8 +10310,13 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_CHARACTER_LOGIN_FAILED_write(WowWorldWriter* writer, const wrath_SMSG_CHARACTER_LOGIN_FAILED* object);
 
 typedef struct {
+    /* Current server datetime.
+Running the client with `-console` verifies that this message in this format sets the correct datetime. [SMSG_QUERY_TIME_RESPONSE] will not set this. */
     uint32_t datetime;
+    /* How many minutes should pass by every second.
+vmangos/cmangos/mangoszero set this to 0.01666667. This means that 1/60 minutes pass every second (one second passes every second). Setting this to 1.0 will make the client advance one minute every second. */
     float timescale;
+    /* arcemu/azerothcore/mangostwo: Set to 0. */
     uint32_t unknown1;
 
 } wrath_SMSG_LOGIN_SETTIMESPEED;
@@ -10243,6 +10326,8 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_PLAYER_LOGOUT_write(WowWor
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_LOGOUT_REQUEST_write(WowWorldWriter* writer);
 
+/* Reply to [CMSG_LOGOUT_REQUEST].
+The client expects to get an [SMSG_LOGOUT_COMPLETE] when logout is complete. */
 typedef struct {
     wrath_LogoutResult result;
     wrath_LogoutSpeed speed;
@@ -10262,9 +10347,11 @@ typedef struct {
 } wrath_CMSG_NAME_QUERY;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_NAME_QUERY_write(WowWorldWriter* writer, const wrath_CMSG_NAME_QUERY* object);
 
+/* Response to [CMSG_NAME_QUERY]. */
 typedef struct {
     uint64_t guid;
     char* character_name;
+    /* Used for showing cross realm realm names. If this is an empty string it is shown like a regular player on the same realm. */
     char* realm_name;
     wrath_Race race;
     wrath_Gender gender;
@@ -10322,11 +10409,15 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_ITEM_QUERY_SINGLE_write(Wo
 
 typedef struct {
     wrath_ItemClassAndSubClass class_and_sub_class;
+    /* mangosone: new 2.0.3, not exist in wdb cache?
+mangosone sets to -1.
+azerothcore: < 0: id from ItemSubClass.dbc, used to override weapon sound from actual sub class */
     uint32_t sound_override_sub_class;
     char* name1;
     char* name2;
     char* name3;
     char* name4;
+    /* id from ItemDisplayInfo.dbc */
     uint32_t display_id;
     wrath_ItemQuality quality;
     wrath_ItemFlag flags;
@@ -10344,6 +10435,7 @@ typedef struct {
     uint32_t required_honor_rank;
     uint32_t required_city_rank;
     wrath_Faction required_faction;
+    /* cmangos/vmangos/mangoszero: send value only if reputation faction id setted ( needed for some items) */
     uint32_t required_faction_rank;
     uint32_t max_count;
     uint32_t stackable;
@@ -10369,10 +10461,13 @@ typedef struct {
     uint32_t page_text;
     wrath_Language language;
     wrath_PageTextMaterial page_text_material;
+    /* cmangos/vmangos/mangoszero: id from QuestCache.wdb */
     uint32_t start_quest;
     uint32_t lock_id;
+    /* cmangos/vmangos/mangoszero: id from Material.dbc */
     uint32_t material;
     wrath_SheatheType sheathe_type;
+    /* cmangos/vmangos/mangoszero: id from ItemRandomProperties.dbc */
     uint32_t random_property;
     uint32_t random_suffix;
     uint32_t block;
@@ -10381,14 +10476,17 @@ typedef struct {
     wrath_Area area;
     wrath_Map map;
     wrath_BagFamily bag_family;
+    /* mangosone: id from TotemCategory.dbc */
     uint32_t totem_category;
     wrath_ItemSocket sockets[3];
     uint32_t socket_bonus;
     uint32_t gem_properties;
     uint32_t required_disenchant_skill;
     float armor_damage_modifier;
+    /* mangosone: added in 2.4.2.8209, duration (seconds) */
     uint32_t duration;
     uint32_t item_limit_category;
+    /* mangosone: HolidayId - points to HolidayNames.dbc */
     uint32_t holiday_id;
 } wrath_SMSG_ITEM_QUERY_SINGLE_RESPONSE_found;
 
@@ -10424,25 +10522,37 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_QUEST_QUERY_write(WowWorld
 
 typedef struct {
     uint32_t quest_id;
+    /* Accepted values: 0, 1 or 2. 0==IsAutoComplete() (skip objectives/details) */
     uint32_t quest_method;
     uint32_t quest_level;
+    /* min required level to obtain (added for 3.3).
+Assumed allowed (database) range is -1 to 255 (still using uint32, since negative value would not be of any known use for client) */
     uint32_t minimum_quest_level;
     uint32_t zone_or_sort;
     uint32_t quest_type;
     uint32_t suggest_player_amount;
+    /* cmangos: shown in quest log as part of quest objective */
     wrath_Faction reputation_objective_faction;
+    /* cmangos: shown in quest log as part of quest objective */
     uint32_t reputation_objective_value;
+    /* cmangos: RequiredOpositeRepFaction, required faction value with another (oposite) faction (objective). cmangos sets to 0 */
     wrath_Faction required_opposite_faction;
+    /* cmangos: RequiredOpositeRepValue, required faction value with another (oposite) faction (objective). cmangos sets to 0 */
     uint32_t required_opposite_reputation_value;
     uint32_t next_quest_in_chain;
     uint32_t money_reward;
+    /* cmangos: used in XP calculation at client */
     uint32_t max_level_money_reward;
+    /* cmangos: reward spell, this spell will display (icon) (casted if RewSpellCast==0) */
     uint32_t reward_spell;
+    /* mangosone: casted spell */
     uint32_t casted_reward_spell;
     uint32_t honor_reward;
+    /* new reward honor (multiplied by around 62 at client side) */
     float honor_reward_multiplier;
     uint32_t source_item_id;
     uint32_t quest_flags;
+    /* CharTitleId, new 2.4.0, player gets this title (id from CharTitles) */
     uint32_t title_reward;
     uint32_t players_slain;
     uint32_t bonus_talents;
@@ -10492,6 +10602,7 @@ typedef struct {
 } wrath_SMSG_GAMEOBJECT_QUERY_RESPONSE_found;
 
 typedef struct {
+    /* When the `found` optional is not present all emulators bitwise OR the entry with `0x80000000`.`` */
     uint32_t entry_id;
 
     wrath_SMSG_GAMEOBJECT_QUERY_RESPONSE_found* found;
@@ -10512,22 +10623,29 @@ typedef struct {
     char* name3;
     char* name4;
     char* sub_name;
+    /* mangosone: 'Directions' for guard, string for Icons 2.3.0 */
     char* description;
     uint32_t type_flags;
+    /* mangosone: CreatureType.dbc   wdbFeild8 */
     uint32_t creature_type;
     wrath_CreatureFamily creature_family;
+    /* mangosone: Creature Rank (elite, boss, etc) */
     uint32_t creature_rank;
+    /* mangosone: new in 3.1 */
     uint32_t kill_credit1;
+    /* mangosone: new in 3.1 */
     uint32_t kill_credit2;
     uint32_t display_ids[4];
     float health_multiplier;
     float mana_multiplier;
     uint8_t racial_leader;
     uint32_t quest_items[6];
+    /* mangosone: CreatureMovementInfo.dbc */
     uint32_t movement_id;
 } wrath_SMSG_CREATURE_QUERY_RESPONSE_found;
 
 typedef struct {
+    /* When the `found` optional is not present all emulators bitwise OR the entry with `0x80000000`.`` */
     uint32_t creature_entry;
 
     wrath_SMSG_CREATURE_QUERY_RESPONSE_found* found;
@@ -10568,6 +10686,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_WHOIS_write(WowWorldWriter
 WOW_WORLD_MESSAGES_C_EXPORT void wrath_CMSG_WHOIS_free(wrath_CMSG_WHOIS* object);
 
 typedef struct {
+    /* vmangos: max CString length allowed: 256 */
     char* message;
 
 } wrath_SMSG_WHOIS;
@@ -10575,12 +10694,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_WHOIS_write(WowWorldWriter
 WOW_WORLD_MESSAGES_C_EXPORT void wrath_SMSG_WHOIS_free(wrath_SMSG_WHOIS* object);
 
 typedef struct {
+    /* Sent back in [SMSG_CONTACT_LIST]. */
     uint32_t flags;
 
 } wrath_CMSG_CONTACT_LIST;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_CONTACT_LIST_write(WowWorldWriter* writer, const wrath_CMSG_CONTACT_LIST* object);
 
 typedef struct {
+    /* Indicates which kinds of relations are being sent in this list */
     wrath_RelationType list_mask;
     uint32_t amount_of_relations;
     wrath_Relation* relations;
@@ -10640,8 +10761,11 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_GROUP_INVITE_write(WowWorl
 WOW_WORLD_MESSAGES_C_EXPORT void wrath_CMSG_GROUP_INVITE_free(wrath_CMSG_GROUP_INVITE* object);
 
 typedef struct {
+    /* All emulators set entire optional to 0. */
     uint32_t unknown1;
+    /* All emulators set entire optional to 0. */
     uint8_t count;
+    /* All emulators set entire optional to 0. */
     uint32_t unknown2;
 } wrath_SMSG_GROUP_INVITE_unknown;
 
@@ -10711,6 +10835,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_GROUP_DESTROYED_write(WowW
 
 typedef struct {
     wrath_GroupLootSetting loot_setting;
+    /* Zero if loot_setting is not MASTER_LOOT */
     uint64_t master_loot;
     wrath_ItemQuality loot_threshold;
     wrath_DungeonDifficulty difficulty;
@@ -10721,9 +10846,11 @@ typedef struct {
 typedef struct {
     uint8_t group_type;
     uint8_t group_id;
+    /* mangoszero/cmangos/vmangos: own flags (groupid | (assistant?0x80:0)) */
     uint8_t flags;
     uint8_t roles;
     uint64_t group;
+    /* azerothcore: 3.3, value increases every time this packet gets sent */
     uint32_t counter;
     uint32_t amount_of_members;
     wrath_GroupListMember* members;
@@ -10745,8 +10872,11 @@ typedef struct {
     uint16_t max_power;
     uint16_t level;
     wrath_Area area;
+    /* cmangos: float cast to u16 */
     uint16_t position_x;
+    /* cmangos: float cast to u16 */
     uint16_t position_y;
+    /* cmangos: In all checked pre-2.x data of packets included only positive auras */
     wrath_AuraMask auras;
     uint64_t pet;
     char* pet_name;
@@ -10903,6 +11033,7 @@ typedef struct {
     wrath_ChatType chat_type;
     wrath_Language language;
     uint64_t sender;
+    /* azerothcore sets to 0. */
     uint32_t flags;
     char* sender1;
     NamedGuid target1;
@@ -11080,6 +11211,9 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_UPDATE_OBJECT_write(WowWorldWriter* writer, const wrath_SMSG_UPDATE_OBJECT* object);
 WOW_WORLD_MESSAGES_C_EXPORT void wrath_SMSG_UPDATE_OBJECT_free(wrath_SMSG_UPDATE_OBJECT* object);
 
+/* Immediately removes an object from the presence of the player.
+Used by vmangos for logout.
+azerothcore: If the following bool is true, the client will call `void CGUnit_C::OnDeath()` for this object. `OnDeath()` does for eg trigger death animation and interrupts certain spells/missiles/auras/sounds... */
 typedef struct {
     uint64_t guid;
     bool target_died;
@@ -11091,6 +11225,7 @@ typedef struct {
     uint8_t bag_index;
     uint8_t bag_slot;
     uint8_t spell_index;
+    /* mangosone: next cast if exists (single or not) */
     uint8_t cast_count;
     uint32_t spell;
     uint64_t item;
@@ -11128,6 +11263,7 @@ typedef struct {
 } wrath_SMSG_READ_ITEM_OK;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_READ_ITEM_OK_write(WowWorldWriter* writer, const wrath_SMSG_READ_ITEM_OK* object);
 
+/* vmangos has extra u8 with comment `0..2, read failure reason? if == 1, use next command`. */
 typedef struct {
     uint64_t guid;
 
@@ -11295,6 +11431,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_MSG_MOVE_SET_WALK_MODE_cmsg_wri
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_MSG_MOVE_SET_WALK_MODE_smsg_write(WowWorldWriter* writer, const wrath_MSG_MOVE_SET_WALK_MODE* object);
 WOW_WORLD_MESSAGES_C_EXPORT void wrath_MSG_MOVE_SET_WALK_MODE_free(wrath_MSG_MOVE_SET_WALK_MODE* object);
 
+/* There does not appear to be a client version of this MSG. */
 typedef struct {
     uint64_t player;
     wrath_MovementInfo info;
@@ -11303,6 +11440,7 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_MSG_MOVE_TELEPORT_Server_write(WowWorldWriter* writer, const wrath_MSG_MOVE_TELEPORT_Server* object);
 WOW_WORLD_MESSAGES_C_EXPORT void wrath_MSG_MOVE_TELEPORT_Server_free(wrath_MSG_MOVE_TELEPORT_Server* object);
 
+/* There does not appear to be a CMSG version of this MSG. */
 typedef struct {
     all_Vector3d position;
     float orientation;
@@ -11310,6 +11448,7 @@ typedef struct {
 } wrath_MSG_MOVE_TELEPORT_CHEAT_Server;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_MSG_MOVE_TELEPORT_CHEAT_Server_write(WowWorldWriter* writer, const wrath_MSG_MOVE_TELEPORT_CHEAT_Server* object);
 
+/* Response to [MSG_MOVE_TELEPORT_ACK_Server], at which point [MSG_MOVE_TELEPORT_ACK_Server] should be sent to observing players. */
 typedef struct {
     uint64_t guid;
     uint32_t movement_counter;
@@ -11318,6 +11457,8 @@ typedef struct {
 } wrath_MSG_MOVE_TELEPORT_ACK_Client;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_MSG_MOVE_TELEPORT_ACK_Client_write(WowWorldWriter* writer, const wrath_MSG_MOVE_TELEPORT_ACK_Client* object);
 
+/* Can be response to [CMSG_TELEPORT_TO_UNIT].
+Can also be a response to [MSG_MOVE_TELEPORT_ACK_Client] after being sent. */
 typedef struct {
     uint64_t guid;
     uint32_t movement_counter;
@@ -11377,6 +11518,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_MSG_MOVE_WORLDPORT_ACK_smsg_wri
 
 typedef struct {
     uint64_t guid;
+    /* cmangos-wotlk sets to 0 */
     uint8_t unknown;
     all_Vector3d spline_point;
     uint32_t spline_id;
@@ -11410,6 +11552,7 @@ typedef struct {
 } wrath_SMSG_MOVE_LAND_WALK;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_MOVE_LAND_WALK_write(WowWorldWriter* writer, const wrath_SMSG_MOVE_LAND_WALK* object);
 
+/* vmangos/mangoszero: write in client console: setrawpos x y z o. For now, it is implemented like worldport but on the same map. Consider using [MSG_MOVE_SET_RAW_POSITION_ACK]. */
 typedef struct {
     all_Vector3d position;
     float orientation;
@@ -11417,15 +11560,23 @@ typedef struct {
 } wrath_CMSG_MOVE_SET_RAW_POSITION;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_MOVE_SET_RAW_POSITION_write(WowWorldWriter* writer, const wrath_CMSG_MOVE_SET_RAW_POSITION* object);
 
+/* Tells the client that the running speed has changed.
+Client replies with [CMSG_FORCE_RUN_SPEED_CHANGE_ACK].
+vmangos sends this message to the client being changed and [SMSG_SPLINE_SET_RUN_SPEED] to others. */
 typedef struct {
     uint64_t guid;
+    /* cmangos/mangoszero/vmangos: set to 0
+cmangos/mangoszero/vmangos: moveEvent, NUM_PMOVE_EVTS = 0x39 */
     uint32_t move_event;
+    /* mangosone sets to 0
+mangosone: new 2.1.0 */
     uint8_t unknown;
     float speed;
 
 } wrath_SMSG_FORCE_RUN_SPEED_CHANGE;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_FORCE_RUN_SPEED_CHANGE_write(WowWorldWriter* writer, const wrath_SMSG_FORCE_RUN_SPEED_CHANGE* object);
 
+/* Sent to acknowledge the new speed. Reply to [SMSG_FORCE_RUN_SPEED_CHANGE]. */
 typedef struct {
     uint64_t guid;
     uint32_t counter;
@@ -11438,6 +11589,8 @@ WOW_WORLD_MESSAGES_C_EXPORT void wrath_CMSG_FORCE_RUN_SPEED_CHANGE_ACK_free(wrat
 
 typedef struct {
     uint64_t guid;
+    /* cmangos/mangoszero/vmangos: set to 0
+cmangos/mangoszero/vmangos: moveEvent, NUM_PMOVE_EVTS = 0x39 */
     uint32_t move_event;
     float speed;
 
@@ -11456,6 +11609,8 @@ WOW_WORLD_MESSAGES_C_EXPORT void wrath_CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK_free
 
 typedef struct {
     uint64_t guid;
+    /* cmangos/mangoszero/vmangos: set to 0
+cmangos/mangoszero/vmangos: moveEvent, NUM_PMOVE_EVTS = 0x39 */
     uint32_t move_event;
     float speed;
 
@@ -11504,6 +11659,7 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_FORCE_MOVE_UNROOT_ACK_write(WowWorldWriter* writer, const wrath_CMSG_FORCE_MOVE_UNROOT_ACK* object);
 WOW_WORLD_MESSAGES_C_EXPORT void wrath_CMSG_FORCE_MOVE_UNROOT_ACK_free(wrath_CMSG_FORCE_MOVE_UNROOT_ACK* object);
 
+/* There does not appear to be a CMSG version of this MSG. */
 typedef struct {
     wrath_MovementInfo info;
 
@@ -11529,10 +11685,16 @@ WOW_WORLD_MESSAGES_C_EXPORT void wrath_MSG_MOVE_HEARTBEAT_free(wrath_MSG_MOVE_HE
 
 typedef struct {
     uint64_t guid;
+    /* mangoszero: Sequence
+mangoszero sets to 0 */
     uint32_t movement_counter;
+    /* cmangos/mangoszero/vmangos: x direction */
     float v_cos;
+    /* cmangos/mangoszero/vmangos: y direction */
     float v_sin;
+    /* cmangos/mangoszero/vmangos: Horizontal speed */
     float horizontal_speed;
+    /* cmangos/mangoszero/vmangos: Z Movement speed (vertical) */
     float vertical_speed;
 
 } wrath_SMSG_MOVE_KNOCK_BACK;
@@ -11616,6 +11778,9 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_NEXT_CINEMATIC_CAMERA_writ
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_COMPLETE_CINEMATIC_write(WowWorldWriter* writer);
 
+/* Data for which tutorials the client has passed.
+All bits set means that all tutorials have been passed.
+Must be sent after [SMSG_LOGIN_VERIFY_WORLD] otherwise the client will SEGFAULT. */
 typedef struct {
     uint32_t tutorial_data[8];
 
@@ -11623,6 +11788,7 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_TUTORIAL_FLAGS_write(WowWorldWriter* writer, const wrath_SMSG_TUTORIAL_FLAGS* object);
 
 typedef struct {
+    /* arcemu indexes into the tutorials by dividing by 32 and modulo 32. */
     uint32_t tutorial_flag;
 
 } wrath_CMSG_TUTORIAL_FLAG;
@@ -11632,6 +11798,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_TUTORIAL_CLEAR_write(WowWo
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_TUTORIAL_RESET_write(WowWorldWriter* writer);
 
+/* Automatically sent by the client when it goes AFK. */
 typedef struct {
     wrath_UnitStandState animation_state;
 
@@ -11651,9 +11818,12 @@ typedef struct {
 } wrath_SMSG_EMOTE;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_EMOTE_write(WowWorldWriter* writer, const wrath_SMSG_EMOTE* object);
 
+/* Sent to notify the server that the client wants to perform an emote like /dance or /cry.
+Server responds with [SMSG_TEXT_EMOTE] and [SMSG_EMOTE]. */
 typedef struct {
     wrath_TextEmote text_emote;
     uint32_t emote;
+    /* Guid targeted by the client. */
     uint64_t target;
 
 } wrath_CMSG_TEXT_EMOTE;
@@ -11738,6 +11908,8 @@ typedef struct {
     wrath_InventoryResult result;
     uint64_t item1;
     uint64_t item2;
+    /* cmangos: bag type subclass, used with EQUIP_ERR_EVENT_AUTOEQUIP_BIND_CONFIRM and EQUIP_ERR_ITEM_DOESNT_GO_INTO_BAG2
+vmangos sets to 0 */
     uint8_t bag_type_subclass;
     uint32_t required_level;
 
@@ -11764,6 +11936,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_BUSY_TRADE_write(WowWorldW
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_IGNORE_TRADE_write(WowWorldWriter* writer);
 
 typedef struct {
+    /* Skipped in vmangos and set to 1 for bots */
     uint32_t unknown1;
 
 } wrath_CMSG_ACCEPT_TRADE;
@@ -11795,10 +11968,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_SET_TRADE_GOLD_write(WowWo
 
 typedef struct {
     wrath_TradeStatus status;
+    /* Set to 0 in vmangos. */
     uint64_t unknown1;
     wrath_InventoryResult inventory_result;
+    /* used for: EQUIP_ERR_BAG_FULL, EQUIP_ERR_CANT_CARRY_MORE_OF_THIS, EQUIP_ERR_MISSING_REAGENT, EQUIP_ERR_ITEM_MAX_LIMIT_CATEGORY_COUNT_EXCEEDED */
     bool target_error;
+    /* ItemLimitCategory.dbc entry */
     uint32_t item_limit_category_id;
+    /* Trade slot -1 here clears CGTradeInfo::m_tradeMoney */
     uint8_t slot;
 
 } wrath_SMSG_TRADE_STATUS;
@@ -11806,18 +11983,27 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_TRADE_STATUS_write(WowWorl
 WOW_WORLD_MESSAGES_C_EXPORT void wrath_SMSG_TRADE_STATUS_free(wrath_SMSG_TRADE_STATUS* object);
 
 typedef struct {
+    /* cmangos/vmangos/mangoszero: send trader or own trade windows state (last need for proper show spell apply to non-trade slot) */
     bool self_player;
+    /* added in 2.4.0, this value must be equal to value from TRADE_STATUS_OPEN_WINDOW status packet (different value for different players to block multiple trades?) */
     uint32_t trade_id;
+    /* cmangos/vmangos/mangoszero: sets to 7
+cmangos/vmangos/mangoszero: trade slots count/number?, = next field in most cases */
     uint32_t trade_slot_count1;
+    /* cmangos/vmangos/mangoszero: sets to 7
+cmangos/vmangos/mangoszero: trade slots count/number?, = prev field in most cases */
     uint32_t trade_slot_count2;
     uint32_t money_in_trade;
     uint32_t spell_on_lowest_slot;
+    /* vmangos/cmangos/mangoszero: All set to same as trade_slot_count* (7), unsure which determines how big this is. Unused slots are 0. */
     wrath_TradeSlot trade_slots[7];
 
 } wrath_SMSG_TRADE_STATUS_EXTENDED;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_TRADE_STATUS_EXTENDED_write(WowWorldWriter* writer, const wrath_SMSG_TRADE_STATUS_EXTENDED* object);
 
 typedef struct {
+    /* vmangos/cmangos/mangoszero: sets to 0x00000040 (64)
+mangostwo (wrath) sets this to 0x00000080 (128) */
     uint32_t amount_of_factions;
     wrath_FactionInitializer* factions;
 
@@ -11832,7 +12018,9 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_SET_FACTION_VISIBLE_write(WowWorldWriter* writer, const wrath_SMSG_SET_FACTION_VISIBLE* object);
 
 typedef struct {
+    /* All emus set to 0. */
     float refer_a_friend_bonus;
+    /* mangostwo: display visual effect */
     bool any_rank_increased;
     uint32_t amount_of_faction_standings;
     wrath_FactionStanding* faction_standings;
@@ -11873,6 +12061,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_ACTION_BUTTONS_write(WowWo
 WOW_WORLD_MESSAGES_C_EXPORT void wrath_SMSG_ACTION_BUTTONS_free(wrath_SMSG_ACTION_BUTTONS* object);
 
 typedef struct {
+    /* cmangos/mangoszero: sets to 0 */
     uint8_t unknown1;
     uint16_t spell_count;
     wrath_InitialSpell* initial_spells;
@@ -11885,6 +12074,7 @@ WOW_WORLD_MESSAGES_C_EXPORT void wrath_SMSG_INITIAL_SPELLS_free(wrath_SMSG_INITI
 
 typedef struct {
     uint32_t id;
+    /* mangostwo: 3.3.3 unk */
     uint16_t unknown;
 
 } wrath_SMSG_LEARNED_SPELL;
@@ -11946,6 +12136,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_CAST_FAILED_write(WowWorld
 WOW_WORLD_MESSAGES_C_EXPORT void wrath_SMSG_CAST_FAILED_free(wrath_SMSG_CAST_FAILED* object);
 
 typedef struct {
+    /* cmangos/vmangos/mangoszero: if cast item is used, set this to guid of cast item, otherwise set it to same as caster. */
     uint64_t cast_item;
     uint64_t caster;
     uint8_t cast_count;
@@ -11964,6 +12155,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_SPELL_START_write(WowWorld
 WOW_WORLD_MESSAGES_C_EXPORT void wrath_SMSG_SPELL_START_free(wrath_SMSG_SPELL_START* object);
 
 typedef struct {
+    /* cmangos/vmangos/mangoszero: if cast item is used, set this to guid of cast item, otherwise set it to same as caster. */
     uint64_t cast_item;
     uint64_t caster;
     uint8_t extra_casts;
@@ -12077,6 +12269,7 @@ typedef struct {
 } wrath_SMSG_AI_REACTION;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_AI_REACTION_write(WowWorldWriter* writer, const wrath_SMSG_AI_REACTION* object);
 
+/* Sets the current target. */
 typedef struct {
     uint64_t target;
 
@@ -12095,6 +12288,8 @@ typedef struct {
 } wrath_CMSG_INSTANCE_LOCK_RESPONSE;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_INSTANCE_LOCK_RESPONSE_write(WowWorldWriter* writer, const wrath_CMSG_INSTANCE_LOCK_RESPONSE* object);
 
+/* Signals that client has right clicked an opponent and is in the attack stance.
+Server should reply with [SMSG_ATTACKSTART]. */
 typedef struct {
     uint64_t guid;
 
@@ -12113,6 +12308,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_ATTACKSTART_write(WowWorld
 typedef struct {
     uint64_t player;
     uint64_t enemy;
+    /* cmangos/vmangos/mangoszero/arcemu/azerothcore/mangostwo: set to 0 with comment: unk, can be 1 also */
     uint32_t unknown1;
 
 } wrath_SMSG_ATTACKSTOP;
@@ -12145,6 +12341,7 @@ typedef struct {
     uint32_t absorb;
     uint32_t resist;
     wrath_VictimState victim_state;
+    /* arcemu: can be 0,1000 or -1 */
     uint32_t unknown1;
     uint32_t unknown2;
     uint32_t blocked_amount;
@@ -12176,6 +12373,7 @@ typedef struct {
     uint32_t overheal;
     uint32_t absorb;
     bool critical;
+    /* mangostwo: unused in client? */
     uint8_t unknown;
 
 } wrath_SMSG_SPELLHEALLOG;
@@ -12197,6 +12395,7 @@ typedef struct {
 } wrath_SMSG_BREAK_TARGET;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_BREAK_TARGET_write(WowWorldWriter* writer, const wrath_SMSG_BREAK_TARGET* object);
 
+/* Inform the client of a their hearthstone location. */
 typedef struct {
     all_Vector3d position;
     wrath_Map map;
@@ -12265,11 +12464,13 @@ WOW_WORLD_MESSAGES_C_EXPORT void wrath_SMSG_LOOT_RESPONSE_free(wrath_SMSG_LOOT_R
 
 typedef struct {
     uint64_t guid;
+    /* Set to 1 on mangoszero/vmangos/cmangos/azerothcraft/mangosone/mangostwo/arcemu */
     uint8_t unknown1;
 
 } wrath_SMSG_LOOT_RELEASE_RESPONSE;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_LOOT_RELEASE_RESPONSE_write(WowWorldWriter* writer, const wrath_SMSG_LOOT_RELEASE_RESPONSE* object);
 
+/* Notify a looting player that an item has been taken. */
 typedef struct {
     uint8_t slot;
 
@@ -12278,6 +12479,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_LOOT_REMOVED_write(WowWorl
 
 typedef struct {
     uint32_t amount;
+    /* Controls the text displayed in chat. False is 'Your share is...' and true is 'You loot...' */
     bool alone;
 
 } wrath_SMSG_LOOT_MONEY_NOTIFY;
@@ -12291,9 +12493,12 @@ typedef struct {
     wrath_NewItemCreationType creation_type;
     wrath_NewItemChatAlert alert_chat;
     uint8_t bag_slot;
+    /* mangoszero: item slot, but when added to stack: 0xFFFFFFFF */
     uint32_t item_slot;
     uint32_t item;
+    /* mangoszero: SuffixFactor */
     uint32_t item_suffix_factor;
+    /* mangoszero: random item property id */
     uint32_t item_random_property_id;
     uint32_t item_count;
     uint32_t item_count_in_inventory;
@@ -12339,6 +12544,7 @@ typedef struct {
 } wrath_CMSG_DUEL_CANCELLED;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_DUEL_CANCELLED_write(WowWorldWriter* writer, const wrath_CMSG_DUEL_CANCELLED* object);
 
+/* This is not used in any TBC emulator, but trinitycore has it implemented so it is assumed to be valid for TBC as well. */
 typedef struct {
     wrath_MountResult result;
 
@@ -12397,6 +12603,7 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_PET_RENAME_write(WowWorldWriter* writer, const wrath_CMSG_PET_RENAME* object);
 WOW_WORLD_MESSAGES_C_EXPORT void wrath_CMSG_PET_RENAME_free(wrath_CMSG_PET_RENAME* object);
 
+/* Some emulators have this with fields, but it has been verified to be empty on 1.12 through reverse engineering. */
 typedef struct {
     wrath_PetNameInvalidReason reason;
     char* name;
@@ -12412,6 +12619,7 @@ typedef struct {
     uint32_t duration;
     wrath_PetReactState react;
     wrath_PetCommandState command;
+    /* mangoszero: set to 0 */
     uint8_t unknown;
     wrath_PetEnabled pet_enabled;
     uint32_t action_bars[10];
@@ -12433,6 +12641,7 @@ typedef struct {
     uint64_t guid;
     wrath_PetReactState react_state;
     wrath_PetCommandState command_state;
+    /* vmangos sets to 0. */
     uint8_t unknown1;
     wrath_PetEnabled pet_enabled;
 
@@ -12446,6 +12655,7 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_GOSSIP_HELLO_write(WowWorldWriter* writer, const wrath_CMSG_GOSSIP_HELLO* object);
 
 typedef struct {
+    /* vmangos: if (_player->PlayerTalkClass->GossipOptionCoded(gossipListId)) */
     char* code;
 } wrath_CMSG_GOSSIP_SELECT_OPTION_unknown;
 
@@ -12461,6 +12671,7 @@ WOW_WORLD_MESSAGES_C_EXPORT void wrath_CMSG_GOSSIP_SELECT_OPTION_free(wrath_CMSG
 
 typedef struct {
     uint64_t guid;
+    /* mangosone: new 2.4.0 */
     uint32_t menu_id;
     uint32_t title_text_id;
     uint32_t amount_of_gossip_items;
@@ -12511,7 +12722,9 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_QUESTGIVER_HELLO_write(Wow
 typedef struct {
     uint64_t npc;
     char* title;
+    /* mangoszero: player emote */
     uint32_t emote_delay;
+    /* mangoszero: NPC emote */
     uint32_t emote;
     uint8_t amount_of_entries;
     wrath_QuestItem* quest_items;
@@ -12532,6 +12745,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_QUESTGIVER_QUEST_AUTOLAUNC
 
 typedef struct {
     uint64_t guid;
+    /* arcemu also sends guid2 if guid is a player. Otherwise sends 0. */
     uint64_t guid2;
     uint32_t quest_id;
     char* title;
@@ -12540,23 +12754,31 @@ typedef struct {
     bool auto_finish;
     uint32_t quest_flags;
     uint32_t suggested_players;
+    /* arcemu: MANGOS: IsFinished? value is sent back to server in quest accept packet */
     uint8_t is_finished;
     uint32_t amount_of_choice_item_rewards;
     wrath_QuestGiverReward* choice_item_rewards;
     uint32_t amount_of_item_rewards;
     wrath_QuestGiverReward* item_rewards;
     uint32_t money_reward;
+    /* arcemu: New 3.3 - this is the XP you'll see on the quest reward panel too, but I think it is fine not to show it, because it can change if the player levels up before completing the quest. */
     uint32_t experience_reward;
     uint32_t honor_reward;
+    /* arcemu: new 3.3 */
     float honor_reward_multiplier;
+    /* mangosone: reward spell, this spell will display (icon) (casted if RewSpellCast==0) */
     uint32_t reward_spell;
     uint32_t casted_spell;
+    /* mangosone: CharTitle, new 2.4.0, player gets this title (bit index from CharTitles) */
     uint32_t title_reward;
     uint32_t talent_reward;
     uint32_t arena_point_reward;
+    /* arcemu: new 3.3.0 */
     uint32_t unknown2;
     uint32_t reward_factions[5];
+    /* mangostwo: columnid in QuestFactionReward.dbc (if negative, from second row) */
     uint32_t reward_reputations[5];
+    /* mangostwo: reward reputation override. No diplomacy bonus is expected given, reward also does not display in chat window */
     uint32_t reward_reputations_override[5];
     uint32_t amount_of_emotes;
     wrath_QuestDetailsEmote* emotes;
@@ -12579,6 +12801,7 @@ typedef struct {
 } wrath_CMSG_QUESTGIVER_COMPLETE_QUEST;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_QUESTGIVER_COMPLETE_QUEST_write(WowWorldWriter* writer, const wrath_CMSG_QUESTGIVER_COMPLETE_QUEST* object);
 
+/* mangoszero/vmangos: Quests that don't require items use the `RequestItemsText` field to store the text that is shown when you talk to the quest giver while the quest is incomplete. Therefore the text should not be shown for them when the quest is complete. For quests that do require items, it is self explanatory. */
 typedef struct {
     uint64_t npc;
     uint32_t quest_id;
@@ -12587,14 +12810,18 @@ typedef struct {
     uint32_t emote_delay;
     uint32_t emote;
     bool auto_finish;
+    /* mangostwo: 3.3.3 questFlags */
     uint32_t flags1;
     uint32_t suggested_players;
     uint32_t required_money;
     uint32_t amount_of_required_items;
     wrath_QuestItemRequirement* required_items;
     wrath_QuestCompletable completable;
+    /* mangostwo: set to 0x04 */
     uint32_t flags2;
+    /* mangostwo: set to 0x08 */
     uint32_t flags3;
+    /* mangostwo: set to 0x10 */
     uint32_t flags4;
 
 } wrath_SMSG_QUESTGIVER_REQUEST_ITEMS;
@@ -12626,15 +12853,20 @@ typedef struct {
     uint32_t experience_reward;
     uint32_t honor_reward;
     float honor_reward_multiplier;
+    /* mangostwo: unused by client?
+mangostwo sets to 0x08. */
     uint32_t unknown1;
     uint32_t reward_spell;
+    /* mangoszero and cmangos disagree about which field is _cast, although they both agree that the _cast field should not be in zero (vanilla). They still both include both fields in the code though. */
     uint32_t reward_spell_cast;
     uint32_t title_reward;
     uint32_t reward_talents;
     uint32_t reward_arena_points;
     uint32_t reward_reputation_mask;
     uint32_t reward_factions[5];
+    /* mangostwo: columnid in QuestFactionReward.dbc (if negative, from second row) */
     uint32_t reward_reputations[5];
+    /* mangostwo: reward reputation override. No diplomacy bonus is expected given, reward also does not display in chat window */
     uint32_t reward_reputations_override[5];
 
 } wrath_SMSG_QUESTGIVER_OFFER_REWARD;
@@ -12659,6 +12891,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_QUESTGIVER_CANCEL_write(Wo
 
 typedef struct {
     uint32_t quest_id;
+    /* cmangos/vmangos/mangoszero: set to 0x03 */
     uint32_t unknown;
     uint32_t experience_reward;
     uint32_t money_reward;
@@ -12714,6 +12947,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_QUESTUPDATE_COMPLETE_write
 
 typedef struct {
     uint32_t quest_id;
+    /* Unsure of name */
     uint32_t creature_id;
     uint32_t kill_count;
     uint32_t required_kill_count;
@@ -12756,8 +12990,10 @@ typedef struct {
 } wrath_CMSG_LIST_INVENTORY;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_LIST_INVENTORY_write(WowWorldWriter* writer, const wrath_CMSG_LIST_INVENTORY* object);
 
+/* if `amount_of_items` is 0 it is supposedly followed by a single u8 with 0 to say that vendor has no items. */
 typedef struct {
     uint64_t vendor;
+    /* cmangos: 0 displays Vendor has no inventory */
     uint8_t amount_of_items;
     wrath_ListInventoryItem* items;
 
@@ -12793,6 +13029,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_BUY_ITEM_write(WowWorldWri
 typedef struct {
     uint64_t vendor;
     uint32_t item;
+    /* arcemu: VLack: 3.1.2 This is the slot's number on the vendor's panel, starts from 1 */
     uint32_t vendor_slot;
     uint64_t bag;
     uint8_t bag_slot;
@@ -12803,6 +13040,8 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_BUY_ITEM_IN_SLOT_write(Wow
 
 typedef struct {
     uint64_t guid;
+    /* Starts at index 1.
+arcemu has this field as milliseconds since something instead. */
     uint32_t vendor_slot;
     uint32_t amount_for_sale;
     uint32_t amount_bought;
@@ -12810,6 +13049,7 @@ typedef struct {
 } wrath_SMSG_BUY_ITEM;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_BUY_ITEM_write(WowWorldWriter* writer, const wrath_SMSG_BUY_ITEM* object);
 
+/* Some TBC and Wrath emus have a u32 before `result` that is only included if the value is > 0, but the emus never call it with anything other than 0. */
 typedef struct {
     uint64_t guid;
     uint32_t item;
@@ -12819,6 +13059,7 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_BUY_FAILED_write(WowWorldWriter* writer, const wrath_SMSG_BUY_FAILED* object);
 
 typedef struct {
+    /* Set to 1 in mangoszero */
     uint32_t unknown1;
     uint64_t guid;
     uint32_t nearest_node;
@@ -12895,6 +13136,7 @@ typedef struct {
 } wrath_SMSG_TRAINER_BUY_SUCCEEDED;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_TRAINER_BUY_SUCCEEDED_write(WowWorldWriter* writer, const wrath_SMSG_TRAINER_BUY_SUCCEEDED* object);
 
+/* No TBC emulators implement this. */
 typedef struct {
     uint64_t guid;
     uint32_t id;
@@ -12948,6 +13190,7 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_PETITION_SHOWLIST_write(WowWorldWriter* writer, const wrath_SMSG_PETITION_SHOWLIST* object);
 WOW_WORLD_MESSAGES_C_EXPORT void wrath_SMSG_PETITION_SHOWLIST_free(wrath_SMSG_PETITION_SHOWLIST* object);
 
+/* cmangos/vmangos/mangoszero: All fields with 'skip' are completely unused */
 typedef struct {
     uint64_t npc;
     uint32_t unknown1;
@@ -13043,9 +13286,13 @@ typedef struct {
     uint32_t petition_id;
     uint64_t charter_owner;
     char* guild_name;
+    /* cmangos/vmangos/mangoszero: Set to 0, only info is comment from vmangos */
     char* body_text;
+    /* cmangos/vmangos/mangoszero: Set to 9, only info is comment from vmangos */
     uint32_t minimum_signatures;
+    /* cmangos/vmangos/mangoszero: Set to 9, only info is comment from vmangos */
     uint32_t maximum_signatures;
+    /* mangosone: bypass client - side limitation, a different value is needed here for each petition */
     uint32_t unknown1;
     uint32_t unknown2;
     uint32_t unknown3;
@@ -13068,6 +13315,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_FISH_NOT_HOOKED_write(WowW
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_FISH_ESCAPED_write(WowWorldWriter* writer);
 
 typedef struct {
+    /* cmangos/vmangos/mangoszero: If 0 received bug report, else received suggestion */
     uint32_t suggestion;
     char* content;
     char* bug_type;
@@ -13084,14 +13332,19 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_NOTIFICATION_write(WowWorl
 WOW_WORLD_MESSAGES_C_EXPORT void wrath_SMSG_NOTIFICATION_free(wrath_SMSG_NOTIFICATION* object);
 
 typedef struct {
+    /* Whether the clients wants it shown on the UI. Just ping it back in [SMSG_PLAYED_TIME] */
     bool show_on_ui;
 
 } wrath_CMSG_PLAYED_TIME;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_PLAYED_TIME_write(WowWorldWriter* writer, const wrath_CMSG_PLAYED_TIME* object);
 
 typedef struct {
+    /* Time played in total (seconds) */
     uint32_t total_played_time;
+    /* Time played on this level (seconds) */
     uint32_t level_played_time;
+    /* Whether this is a silent query or the client should show it on the UI (chat box).
+Send back the value received in [CMSG_PLAYED_TIME] */
     bool show_on_ui;
 
 } wrath_SMSG_PLAYED_TIME;
@@ -13099,8 +13352,12 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_PLAYED_TIME_write(WowWorld
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_QUERY_TIME_write(WowWorldWriter* writer);
 
+/* Reply to [CMSG_QUERY_TIME].
+[CMSG_QUERY_TIME] and this reply does not actually appear to set the time. Instead [SMSG_LOGIN_SETTIMESPEED] seems to correctly set the time. Running the client with `-console` will print the date when [SMSG_LOGIN_SETTIMESPEED] is received, but not when this message is received. */
 typedef struct {
+    /* Seconds since 1970, 1st of January (Unix Time). */
     uint32_t time;
+    /* Units need confirmation, but it's likely in seconds, since many other time related things are also seconds. */
     uint32_t time_until_daily_quest_reset;
 
 } wrath_SMSG_QUERY_TIME_RESPONSE;
@@ -13111,6 +13368,7 @@ typedef struct {
     uint32_t total_exp;
     wrath_ExperienceAwardType exp_type;
     uint32_t experience_without_rested;
+    /* mangoszero sets to 1 and comments: 1 - none 0 - 100% group bonus output */
     float exp_group_bonus;
     bool exp_includes_recruit_a_friend_bonus;
 
@@ -13167,11 +13425,14 @@ typedef struct {
 } wrath_MSG_MINIMAP_PING_Server;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_MSG_MINIMAP_PING_Server_write(WowWorldWriter* writer, const wrath_MSG_MINIMAP_PING_Server* object);
 
+/* Some emulators have the guids as not packed. */
 typedef struct {
     uint64_t target;
+    /* vmangos: message says enchant has faded if empty */
     uint64_t caster;
     uint32_t item;
     uint32_t spell;
+    /* vmangos: Only used if `caster` is not 0. */
     bool show_affiliation;
 
 } wrath_SMSG_ENCHANTMENTLOG;
@@ -13188,6 +13449,7 @@ typedef struct {
 } wrath_SMSG_START_MIRROR_TIMER;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_START_MIRROR_TIMER_write(WowWorldWriter* writer, const wrath_SMSG_START_MIRROR_TIMER* object);
 
+/* According to cmangos: 'Default UI handler for this is bugged, args dont match. Gotta do a full update with `SMSG_START_MIRROR_TIMER` to avoid lua errors. */
 typedef struct {
     wrath_TimerType timer;
     bool is_frozen;
@@ -13227,6 +13489,7 @@ typedef struct {
 } wrath_SMSG_GAMEOBJECT_PAGETEXT;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_GAMEOBJECT_PAGETEXT_write(WowWorldWriter* writer, const wrath_SMSG_GAMEOBJECT_PAGETEXT* object);
 
+/* Says which weapon the client pulls out. */
 typedef struct {
     wrath_SheathState sheathed;
 
@@ -13265,6 +13528,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_ITEM_TIME_UPDATE_write(Wow
 
 typedef struct {
     uint64_t item;
+    /* Possibly used with EnchantmentSlot enum. */
     uint32_t slot;
     uint32_t duration;
     uint64_t player;
@@ -13273,13 +13537,18 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_ITEM_ENCHANT_TIME_UPDATE_write(WowWorldWriter* writer, const wrath_SMSG_ITEM_ENCHANT_TIME_UPDATE* object);
 
 typedef struct {
+    /* TrinityCore/ArcEmu/mangostwo always set to 1.
+TrinityCore/mangostwo: 1...31 */
     uint32_t unknown1;
     uint32_t server_seed;
+    /* Randomized values. Is not used at all by TrinityCore/mangostwo/ArcEmu. */
     uint8_t seed[32];
 
 } wrath_SMSG_AUTH_CHALLENGE;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_AUTH_CHALLENGE_write(WowWorldWriter* writer, const wrath_SMSG_AUTH_CHALLENGE* object);
 
+/* Sent after receiving [SMSG_AUTH_CHALLENGE].
+This message is never encrypted. */
 typedef struct {
     uint32_t client_build;
     uint32_t login_server_id;
@@ -13289,6 +13558,8 @@ typedef struct {
     uint32_t region_id;
     uint32_t battleground_id;
     uint32_t realm_id;
+    /* Purpose and exact meaning of name unknown.
+TrinityCore has this name but never uses the variable afterwards. */
     uint64_t dos_response;
     uint8_t client_proof[20];
     uint32_t amount_of_addon_info;
@@ -13298,6 +13569,9 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_AUTH_SESSION_write(WowWorldWriter* writer, const wrath_CMSG_AUTH_SESSION* object);
 WOW_WORLD_MESSAGES_C_EXPORT void wrath_CMSG_AUTH_SESSION_free(wrath_CMSG_AUTH_SESSION* object);
 
+/* Response to [CMSG_AUTH_SESSION].
+Usually followed by [CMSG_CHAR_ENUM] if login was successful (`AUTH_OK`).
+vmangos/cmangos/mangoszero all have a variant of this message that contains fields from `AUTH_OK` for `AUTH_WAIT_QUEUE` as well (`https://github.com/vmangos/core/blob/cd896d43712ceafecdbd8f005846d7f676e55b4f/src/game/World.cpp#L322`) but this does not seem to be actually be a real thing. */
 typedef struct {
     wrath_WorldResult result;
     uint32_t billing_time;
@@ -13354,11 +13628,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_MSG_TABARDVENDOR_ACTIVATE_smsg_
 
 typedef struct {
     uint64_t guid;
+    /* mangoszero/mangosone: index from SpellVisualKit.dbc. Set to 0xB3 when buying spells. */
     uint32_t spell_art_kit;
 
 } wrath_SMSG_PLAY_SPELL_VISUAL;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_PLAY_SPELL_VISUAL_write(WowWorldWriter* writer, const wrath_SMSG_PLAY_SPELL_VISUAL* object);
 
+/* Sent by the client whenever it reaches a new area.
+The client does not send an accurate area. For example when going to Sen'jin Village, the client will send `DUROTAR` (0x0E) and not `SENJIN_VILLAGE` (0x16F). */
 typedef struct {
     wrath_Area area;
 
@@ -13372,6 +13649,7 @@ typedef struct {
 } wrath_SMSG_PARTYKILLLOG;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_PARTYKILLLOG_write(WowWorldWriter* writer, const wrath_SMSG_PARTYKILLLOG* object);
 
+/* Compressed version of [SMSG_UPDATE_OBJECT]. Has the same fields when uncompressed */
 typedef struct {
     uint32_t amount_of_objects;
     wrath_Object* objects;
@@ -13382,6 +13660,7 @@ WOW_WORLD_MESSAGES_C_EXPORT void wrath_SMSG_COMPRESSED_UPDATE_OBJECT_free(wrath_
 
 typedef struct {
     uint64_t guid;
+    /* mangoszero/mangosone/azerothcore: index from SpellVisualKit.dbc. Used for visual effect on player with 0x016A */
     uint32_t spell_visual_kit;
 
 } wrath_SMSG_PLAY_SPELL_IMPACT;
@@ -13424,10 +13703,13 @@ typedef struct {
     uint32_t random_dungeon_entry;
     uint32_t dungeon_finished_entry;
     bool done;
+    /* emus set to 1. */
     uint32_t unknown1;
     uint32_t money_reward;
     uint32_t experience_reward;
+    /* emus set to 0. */
     uint32_t unknown2;
+    /* emus set to 0. */
     uint32_t unknown3;
     uint8_t amount_of_rewards;
     wrath_QuestGiverReward* rewards;
@@ -13475,6 +13757,7 @@ typedef struct {
 } wrath_SMSG_GMTICKET_CREATE;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_GMTICKET_CREATE_write(WowWorldWriter* writer, const wrath_SMSG_GMTICKET_CREATE* object);
 
+/* No TBC/Wrath emulator has a `GmTicketType` field before `message`, but vmangos does. */
 typedef struct {
     char* message;
 
@@ -13488,30 +13771,40 @@ typedef struct {
 } wrath_SMSG_GMTICKET_UPDATETEXT;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_GMTICKET_UPDATETEXT_write(WowWorldWriter* writer, const wrath_SMSG_GMTICKET_UPDATETEXT* object);
 
+/* Indicate when each piece of account data was last updated by a [CMSG_UPDATE_ACCOUNT_DATA]. The client can check this against its own times to detect that more recent account data was written from a different client. */
 typedef struct {
+    /* Seconds since Unix Epoch */
     uint32_t unix_time;
+    /* Both mangostwo and arcemu hardcode this to 1 */
     uint8_t unknown1;
     wrath_CacheMask mask;
 
 } wrath_SMSG_ACCOUNT_DATA_TIMES;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_ACCOUNT_DATA_TIMES_write(WowWorldWriter* writer, const wrath_SMSG_ACCOUNT_DATA_TIMES* object);
 
+/* Respond with [SMSG_UPDATE_ACCOUNT_DATA] */
 typedef struct {
+    /* The type of account data being requested. You can check this against the [CacheMask] to know if this is character-specific data or account-wide data. */
     uint32_t data_type;
 
 } wrath_CMSG_REQUEST_ACCOUNT_DATA;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_REQUEST_ACCOUNT_DATA_write(WowWorldWriter* writer, const wrath_CMSG_REQUEST_ACCOUNT_DATA* object);
 
+/* Respond with [SMSG_UPDATE_ACCOUNT_DATA_COMPLETE] */
 typedef struct {
+    /* You can check this against the [CacheMask] to find out if this is character-specific data or account-wide data */
     uint32_t data_type;
+    /* Seconds since unix epoch. The client wants this number back when it requests the ACCOUNT_DATA_TIMES */
     uint32_t unix_time;
     uint32_t amount_of_compressed_data;
+    /* Compressed account data (macros, keybinds, etc). The server does not actually care about the uncompressed contents. It only needs to send this back to the client. The server acts as a cross-device storage */
     uint8_t* compressed_data;
 
 } wrath_CMSG_UPDATE_ACCOUNT_DATA;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_UPDATE_ACCOUNT_DATA_write(WowWorldWriter* writer, const wrath_CMSG_UPDATE_ACCOUNT_DATA* object);
 WOW_WORLD_MESSAGES_C_EXPORT void wrath_CMSG_UPDATE_ACCOUNT_DATA_free(wrath_CMSG_UPDATE_ACCOUNT_DATA* object);
 
+/* Sent as response to [CMSG_REQUEST_ACCOUNT_DATA] */
 typedef struct {
     uint32_t data_type;
     uint32_t decompressed_size;
@@ -13527,6 +13820,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_GMTICKET_GETTICKET_write(W
 typedef struct {
     wrath_GmTicketStatus status;
     uint32_t id;
+    /* cmangos: Ticket text: data, should never exceed 1999 bytes */
     char* text;
     bool need_more_help;
     float days_since_ticket_creation;
@@ -13585,6 +13879,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_CHAT_WRONG_FACTION_write(W
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_GMTICKET_SYSTEMSTATUS_write(WowWorldWriter* writer);
 
 typedef struct {
+    /* vmangos: This only disables the ticket UI at client side and is not fully reliable are we sure this is a uint32? Should ask Zor */
     wrath_GmTicketQueueStatus will_accept_tickets;
 
 } wrath_SMSG_GMTICKET_SYSTEMSTATUS;
@@ -13621,6 +13916,7 @@ WOW_WORLD_MESSAGES_C_EXPORT void wrath_SMSG_GOSSIP_POI_free(wrath_SMSG_GOSSIP_PO
 
 typedef struct {
     uint64_t guid;
+    /* mangosone/arcemu/trinitycore/azerothcore: probably related to spam reporting */
     uint8_t unknown;
 
 } wrath_CMSG_CHAT_IGNORED;
@@ -13656,12 +13952,15 @@ WOW_WORLD_MESSAGES_C_EXPORT void wrath_CMSG_GUILD_SET_PUBLIC_NOTE_free(wrath_CMS
 
 typedef struct {
     char* player_name;
+    /* vmangos: Max length 31 */
     char* note;
 
 } wrath_CMSG_GUILD_SET_OFFICER_NOTE;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_GUILD_SET_OFFICER_NOTE_write(WowWorldWriter* writer, const wrath_CMSG_GUILD_SET_OFFICER_NOTE* object);
 WOW_WORLD_MESSAGES_C_EXPORT void wrath_CMSG_GUILD_SET_OFFICER_NOTE_free(wrath_CMSG_GUILD_SET_OFFICER_NOTE* object);
 
+/* Message to the client that is has successfully logged into the world and that it should load the map and coordinates.
+The positions and orientations do not matter since they can be overwritten in the [SMSG_UPDATE_OBJECT], but the map determines which map the client loads and this is not changeable in [SMSG_UPDATE_OBJECT]. */
 typedef struct {
     wrath_Map map;
     all_Vector3d position;
@@ -13675,13 +13974,17 @@ typedef struct {
     char* receiver;
     char* subject;
     char* body;
+    /* cmangos: stationery? */
     uint32_t unknown1;
+    /* cmangos: 0x00000000 */
     uint32_t unknown2;
     uint8_t amount_of_items;
     wrath_MailItem* items;
     uint32_t money;
     uint32_t cash_on_delivery_amount;
+    /* mangosone: const 0 */
     uint32_t unknown3;
+    /* mangosone: const 0 */
     uint32_t unknown4;
 
 } wrath_CMSG_SEND_MAIL;
@@ -13693,6 +13996,7 @@ typedef struct {
     wrath_MailAction action;
     wrath_MailResult result;
     uint32_t equip_error;
+    /* cmangos/vmangos: item guid low? */
     uint32_t item;
     uint32_t item_count;
     wrath_MailResultTwo result2;
@@ -13709,6 +14013,7 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_GET_MAIL_LIST_write(WowWorldWriter* writer, const wrath_CMSG_GET_MAIL_LIST* object);
 
 typedef struct {
+    /* azerothcore: this will display warning about undelivered mail to player if realCount > mailsCount */
     uint32_t real_mail_amount;
     uint8_t amount_of_mails;
     wrath_Mail* mails;
@@ -13720,6 +14025,7 @@ WOW_WORLD_MESSAGES_C_EXPORT void wrath_SMSG_MAIL_LIST_RESULT_free(wrath_SMSG_MAI
 typedef struct {
     wrath_BattlegroundType battleground_type;
     wrath_BattlefieldListLocation location;
+    /* azerothcore: players with locked xp have their own bg queue on retail */
     bool can_gain_exp;
 
 } wrath_CMSG_BATTLEFIELD_LIST;
@@ -13808,6 +14114,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_MAIL_CREATE_TEXT_ITEM_writ
 typedef struct {
     uint32_t id;
     uint64_t caster;
+    /* cmangos/mangoszero: can be 0 or 1 */
     uint8_t unknown1;
     uint32_t amount_of_targets;
     wrath_SpellLogMiss* targets;
@@ -13856,11 +14163,14 @@ typedef struct {
     uint32_t overkill;
     wrath_SpellSchool school;
     uint32_t absorbed_damage;
+    /* cmangos/mangoszero/vmangos: sent as int32 */
     uint32_t resisted;
+    /* cmangos/mangoszero/vmangos: if 1, then client show spell name (example: %s's ranged shot hit %s for %u school or %s suffers %u school damage from %s's spell_name */
     bool periodic_log;
     uint8_t unused;
     uint32_t blocked;
     wrath_HitInfo hit_info;
+    /* cmangos has some that might be correct `https://github.com/cmangos/mangos-classic/blob/524a39412dae7946d06e4b8f319f45b615075815/src/game/Entities/Unit.cpp#L5497`. */
     uint8_t extend_flag;
 
 } wrath_SMSG_SPELLNONMELEEDAMAGELOG;
@@ -13874,6 +14184,8 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_LEARN_TALENT_write(WowWorldWriter* writer, const wrath_CMSG_LEARN_TALENT* object);
 
 typedef struct {
+    /* arcemu is the only emulator that has this.
+arcemu sets to 1. */
     uint32_t unknown;
 
 } wrath_SMSG_RESURRECT_FAILED;
@@ -13883,6 +14195,7 @@ typedef struct {
     bool enable_pvp;
 } wrath_CMSG_TOGGLE_PVP_set;
 
+/* vmangos: this opcode can be used in two ways: Either set explicit new status or toggle old status */
 typedef struct {
 
     wrath_CMSG_TOGGLE_PVP_set* set;
@@ -14006,8 +14319,10 @@ typedef struct {
 } wrath_SMSG_AUCTION_BIDDER_NOTIFICATION;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_AUCTION_BIDDER_NOTIFICATION_write(WowWorldWriter* writer, const wrath_SMSG_AUCTION_BIDDER_NOTIFICATION* object);
 
+/* vmangos/cmangos/mangoszero: this message causes on client to display: 'Your auction sold' */
 typedef struct {
     uint32_t auction_id;
+    /* vmangos/cmangos/mangoszero: if 0, client shows ERR_AUCTION_EXPIRED_S, else ERR_AUCTION_SOLD_S (works only when guid==0) */
     uint32_t bid;
     uint32_t auction_out_bid;
     uint64_t bidder;
@@ -14018,6 +14333,7 @@ typedef struct {
 } wrath_SMSG_AUCTION_OWNER_NOTIFICATION;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_AUCTION_OWNER_NOTIFICATION_write(WowWorldWriter* writer, const wrath_SMSG_AUCTION_OWNER_NOTIFICATION* object);
 
+/* According to cmangos/azerothcore/trinitycore/mangostwo. Not present in vmangos. */
 typedef struct {
     uint64_t caster;
     uint64_t target;
@@ -14094,6 +14410,7 @@ typedef struct {
 } wrath_SMSG_CORPSE_RECLAIM_DELAY;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_CORPSE_RECLAIM_DELAY_write(WowWorldWriter* writer, const wrath_SMSG_CORPSE_RECLAIM_DELAY* object);
 
+/* Sent when the client enters the world. */
 typedef struct {
     uint64_t guid;
 
@@ -14171,6 +14488,7 @@ typedef struct {
 } wrath_SMSG_PLAY_MUSIC;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_PLAY_MUSIC_write(WowWorldWriter* writer, const wrath_SMSG_PLAY_MUSIC* object);
 
+/* vmangos: Nostalrius: ignored by client if unit is not loaded */
 typedef struct {
     uint32_t sound_id;
     uint64_t guid;
@@ -14190,6 +14508,7 @@ typedef struct {
     uint64_t victim;
     uint64_t caster;
     uint32_t dispell_spell;
+    /* mangosone: unused */
     uint8_t unknown;
     uint32_t amount_of_spells;
     wrath_DispelledSpell* spells;
@@ -14245,12 +14564,15 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_MSG_QUERY_NEXT_MAIL_TIME_Server_write(WowWorldWriter* writer, const wrath_MSG_QUERY_NEXT_MAIL_TIME_Server* object);
 WOW_WORLD_MESSAGES_C_EXPORT void wrath_MSG_QUERY_NEXT_MAIL_TIME_Server_free(wrath_MSG_QUERY_NEXT_MAIL_TIME_Server* object);
 
+/* cmangos/vmangos/mangoszero: deliver undelivered mail */
 typedef struct {
+    /* cmangos/vmangos sends 0 as u32, mangoszero sends 0 as f32 */
     uint32_t unknown1;
 
 } wrath_SMSG_RECEIVED_MAIL;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_RECEIVED_MAIL_write(WowWorldWriter* writer, const wrath_SMSG_RECEIVED_MAIL* object);
 
+/* used when player leaves raid group inside instance */
 typedef struct {
     uint32_t homebind_timer;
     wrath_RaidGroupError error;
@@ -14341,6 +14663,7 @@ typedef struct {
     uint32_t loot_slot;
     uint32_t item;
     uint32_t item_random_property_id;
+    /* vmangos/mangoszero: Always set to 0. */
     uint32_t item_random_suffix_id;
 
 } wrath_SMSG_LOOT_ALL_PASSED;
@@ -14350,10 +14673,13 @@ typedef struct {
     uint64_t looted_target;
     uint32_t loot_slot;
     uint32_t item;
+    /* vmangos/mangoszero: not used ? */
     uint32_t item_random_suffix;
     uint32_t item_random_property_id;
     uint64_t winning_player;
+    /* rollnumber related to SMSG_LOOT_ROLL */
     uint8_t winning_roll;
+    /* Rolltype related to SMSG_LOOT_ROLL */
     wrath_RollVote vote;
 
 } wrath_SMSG_LOOT_ROLL_WON;
@@ -14372,6 +14698,7 @@ typedef struct {
     wrath_Map map;
     uint32_t loot_slot;
     uint32_t item;
+    /* vmangos/mangoszero: not used ? */
     uint32_t item_random_suffix;
     uint32_t item_random_property_id;
     uint32_t countdown_time;
@@ -14385,10 +14712,16 @@ typedef struct {
     uint32_t loot_slot;
     uint64_t player;
     uint32_t item;
+    /* vmangos/mangoszero: not used ? */
     uint32_t item_random_suffix;
     uint32_t item_random_property_id;
+    /* vmangos/cmangos/mangoszero: 0: Need for: `item_name` > 127: you passed on: `item_name`      Roll number */
     uint8_t roll_number;
     wrath_RollVote vote;
+    /* mangosone/arcemu sets to 0.
+mangosone: auto pass on loot
+arcemu: possibly related to disenchanting of loot
+azerothcore: 1: 'You automatically passed on: %s because you cannot loot that item.' - Possibly used in need before greed */
     uint8_t auto_pass;
 
 } wrath_SMSG_LOOT_ROLL;
@@ -14446,6 +14779,8 @@ typedef struct {
 } wrath_MSG_TALENT_WIPE_CONFIRM_Client;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_MSG_TALENT_WIPE_CONFIRM_Client_write(WowWorldWriter* writer, const wrath_MSG_TALENT_WIPE_CONFIRM_Client* object);
 
+/* cmangos/vmangos/mangoszero returns guid 0 and unknown 0 when talents can not be reset
+cmangos/vmangos/mangoszero casts spell 14876 when resetting */
 typedef struct {
     uint64_t wiping_npc;
     uint32_t cost_in_copper;
@@ -14471,6 +14806,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_SUMMON_RESPONSE_write(WowW
 typedef struct {
     uint64_t guid;
     uint64_t transport;
+    /* cmangos-wotlk sets to 0 */
     uint8_t unknown;
     all_Vector3d spline_point;
     uint32_t spline_id;
@@ -14547,6 +14883,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_PLAYER_SKINNED_write(WowWo
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_DURABILITY_DAMAGE_DEATH_write(WowWorldWriter* writer);
 
 typedef struct {
+    /* Emulators set PLAYER_FIELD_BYTES[2] to this unless it's 0. */
     uint8_t action_bar;
 
 } wrath_CMSG_SET_ACTIONBAR_TOGGLES;
@@ -14600,6 +14937,7 @@ typedef struct {
 } wrath_SMSG_PET_ACTION_FEEDBACK;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_PET_ACTION_FEEDBACK_write(WowWorldWriter* writer, const wrath_SMSG_PET_ACTION_FEEDBACK* object);
 
+/* Request of new name for character. This is only sent by the client if RENAME is set in the [CharacterFlags] of [SMSG_CHAR_ENUM] and the client tries to login. */
 typedef struct {
     uint64_t character;
     char* new_name;
@@ -14608,6 +14946,7 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_CHAR_RENAME_write(WowWorldWriter* writer, const wrath_CMSG_CHAR_RENAME* object);
 WOW_WORLD_MESSAGES_C_EXPORT void wrath_CMSG_CHAR_RENAME_free(wrath_CMSG_CHAR_RENAME* object);
 
+/* Response to [CMSG_CHAR_RENAME]. */
 typedef struct {
     wrath_WorldResult result;
     uint64_t character;
@@ -14633,6 +14972,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_MOVE_FALL_RESET_write(WowW
 WOW_WORLD_MESSAGES_C_EXPORT void wrath_CMSG_MOVE_FALL_RESET_free(wrath_CMSG_MOVE_FALL_RESET* object);
 
 typedef struct {
+    /* All emulators across all versions set to 0 */
     uint32_t unknown;
 
 } wrath_SMSG_INSTANCE_SAVE_CREATED;
@@ -14691,11 +15031,15 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_PLAY_SOUND_write(WowWorldW
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_BATTLEFIELD_STATUS_write(WowWorldWriter* writer);
 
+/* mangosone treats `arena_type`, `unknown1`, `battleground_type_id`, and `unknown2` as one big u64 and does not send any fields after these if all fields are 0. */
 typedef struct {
+    /* vmangos: players can be in 3 queues at the same time (0..2) */
     uint32_t queue_slot;
     wrath_ArenaType arena_type;
+    /* azerothcore sets to 0x0E if it is arena, 0 otherwise. */
     uint8_t is_arena;
     wrath_BattlegroundType battleground_type;
+    /* azerothcore sets to 0x1F90 */
     uint16_t unknown1;
     uint8_t minimum_level;
     uint8_t maximum_level;
@@ -14705,9 +15049,11 @@ typedef struct {
     uint32_t average_wait_time_in_ms;
     uint32_t time_in_queue_in_ms;
     wrath_Map map1;
+    /* azerothcore: 3.3.5 unknown */
     uint64_t unknown2;
     uint32_t time_to_remove_in_queue_in_ms;
     wrath_Map map2;
+    /* azerothcore: 3.3.5 unknown */
     uint64_t unknown3;
     uint32_t time_to_bg_autoleave_in_ms;
     uint32_t time_to_bg_start_in_ms;
@@ -14718,9 +15064,13 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_BATTLEFIELD_STATUS_write(W
 WOW_WORLD_MESSAGES_C_EXPORT void wrath_SMSG_BATTLEFIELD_STATUS_free(wrath_SMSG_BATTLEFIELD_STATUS* object);
 
 typedef struct {
+    /* mangosone/mangos-tbc/azerothcore: arenatype if arena */
     uint8_t arena_type;
+    /* mangosone/mangos-tbc/azerothcore: unk, can be 0x0 (may be if was invited?) and 0x1 */
     uint8_t unknown1;
+    /* mangosone/mangos-tbc/azerothcore: type id from dbc */
     uint32_t bg_type_id;
+    /* mangosone/mangos-tbc/azerothcore: 0x1F90 constant? */
     uint16_t unknown2;
     wrath_BattlefieldPortAction action;
 
@@ -14752,6 +15102,8 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_BATTLEMASTER_HELLO_write(W
 
 typedef struct {
     uint64_t guid;
+    /* cmangos/mangoszero/vmangos: set to 0
+cmangos/mangoszero/vmangos: moveEvent, NUM_PMOVE_EVTS = 0x39 */
     uint32_t move_event;
     float speed;
 
@@ -14770,6 +15122,8 @@ WOW_WORLD_MESSAGES_C_EXPORT void wrath_CMSG_FORCE_WALK_SPEED_CHANGE_ACK_free(wra
 
 typedef struct {
     uint64_t guid;
+    /* cmangos/mangoszero/vmangos: set to 0
+cmangos/mangoszero/vmangos: moveEvent, NUM_PMOVE_EVTS = 0x39 */
     uint32_t move_event;
     float speed;
 
@@ -14788,6 +15142,8 @@ WOW_WORLD_MESSAGES_C_EXPORT void wrath_CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK_fre
 
 typedef struct {
     uint64_t guid;
+    /* cmangos/mangoszero/vmangos: set to 0
+cmangos/mangoszero/vmangos: moveEvent, NUM_PMOVE_EVTS = 0x39 */
     uint32_t move_event;
     float speed;
 
@@ -14861,6 +15217,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_MSG_BATTLEGROUND_PLAYER_POSITIO
 typedef struct {
     uint32_t amount_of_teammates;
     wrath_BattlegroundPlayerPosition* teammates;
+    /* vmangos only sends the carrier of the player team. No emu ever sends more than 2. */
     uint8_t amount_of_carriers;
     wrath_BattlegroundPlayerPosition* carriers;
 
@@ -14876,6 +15233,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_PET_STOP_ATTACK_write(WowW
 
 typedef struct {
     uint64_t guid;
+    /* arcemu has this field while other emus do not. */
     wrath_Area area;
 
 } wrath_SMSG_BINDER_CONFIRM;
@@ -14894,14 +15252,17 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_BATTLEGROUND_PLAYER_LEFT_write(WowWorldWriter* writer, const wrath_SMSG_BATTLEGROUND_PLAYER_LEFT* object);
 
 typedef struct {
+    /* vmangos: battlemaster guid, or player guid if joining queue from BG portal */
     uint64_t guid;
     wrath_Map map;
+    /* vmangos: 0 if First Available selected */
     uint32_t instance_id;
     bool join_as_group;
 
 } wrath_CMSG_BATTLEMASTER_JOIN;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_BATTLEMASTER_JOIN_write(WowWorldWriter* writer, const wrath_CMSG_BATTLEMASTER_JOIN* object);
 
+/* Banned addons are not properly implemented in the wowm. Sending any number other than 0 means that the packet is incomplete and thus invalid */
 typedef struct {
     wrath_AddonArray addons;
 
@@ -14933,8 +15294,11 @@ typedef struct {
     uint16_t max_power;
     uint16_t level;
     wrath_Area area;
+    /* cmangos: float cast to u16 */
     uint16_t position_x;
+    /* cmangos: float cast to u16 */
     uint16_t position_y;
+    /* cmangos: In all checked pre-2.x data of packets included only positive auras */
     wrath_AuraMask auras;
     uint64_t pet;
     char* pet_name;
@@ -14997,6 +15361,8 @@ typedef struct {
 } wrath_SMSG_CHAT_RESTRICTED;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_CHAT_RESTRICTED_write(WowWorldWriter* writer, const wrath_SMSG_CHAT_RESTRICTED* object);
 
+/* Informs the client that the run speed of a unit has changed.
+Mangos sends this to third parties that aren't having their speed changed and [SMSG_FORCE_RUN_SPEED_CHANGE] to the client that has their run speed changed. */
 typedef struct {
     uint64_t guid;
     float speed;
@@ -15214,6 +15580,7 @@ typedef struct {
 } wrath_SMSG_PET_ACTION_SOUND;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_PET_ACTION_SOUND_write(WowWorldWriter* writer, const wrath_SMSG_PET_ACTION_SOUND* object);
 
+/* Not implemented in any Wrath emulators. */
 typedef struct {
     uint32_t sound_id;
     all_Vector3d position;
@@ -15235,6 +15602,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_MSG_SET_DUNGEON_DIFFICULTY_Clie
 
 typedef struct {
     wrath_DungeonDifficulty difficulty;
+    /* ArcEmu hardcodes this to 1 */
     uint32_t unknown1;
     bool is_in_group;
 
@@ -15242,8 +15610,11 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_MSG_SET_DUNGEON_DIFFICULTY_Server_write(WowWorldWriter* writer, const wrath_MSG_SET_DUNGEON_DIFFICULTY_Server* object);
 
 typedef struct {
+    /* cmangos: Survey ID: found in GMSurveySurveys.dbc */
     uint32_t survey_id;
     wrath_GmSurveyQuestion questions[10];
+    /* cmangos: Answer comment: Unused in stock UI, can be only set by calling Lua function
+cmangos: Answer comment max sizes in bytes: Vanilla - 8106:8110, TBC - 11459:11463, Wrath - 582:586 */
     char* answer_comment;
 
 } wrath_CMSG_GMSURVEY_SUBMIT;
@@ -15256,6 +15627,7 @@ typedef struct {
 } wrath_SMSG_UPDATE_INSTANCE_OWNERSHIP;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_UPDATE_INSTANCE_OWNERSHIP_write(WowWorldWriter* writer, const wrath_SMSG_UPDATE_INSTANCE_OWNERSHIP* object);
 
+/* Never actually sent in any emulator. */
 typedef struct {
     char* player;
 
@@ -15396,6 +15768,8 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_ARENA_TEAM_ROSTER_write(Wo
 
 typedef struct {
     uint32_t arena_team;
+    /* arcemu: new 3.0.8.
+arcemu sets to 0. */
     uint8_t unknown;
     uint32_t amount_of_members;
     wrath_ArenaType arena_type;
@@ -15548,9 +15922,11 @@ typedef struct {
     uint32_t amount_of_deleted_guids;
     uint64_t* deleted_guids;
     uint32_t amount_of_groups;
+    /* emus set to 0. */
     uint32_t unknown1;
     wrath_LfgListGroup* groups;
     uint32_t amount_of_players;
+    /* emus set to 0. */
     uint32_t unknown2;
     wrath_LfgListPlayer* players;
 
@@ -15584,6 +15960,7 @@ typedef struct {
     uint8_t amount_of_dungeon_entries;
     uint32_t* dungeon_entries;
     uint8_t amount_of_roles;
+    /* azerothcore: Leader info MUST be sent first. */
     wrath_LfgRole* roles;
 
 } wrath_SMSG_LFG_ROLE_CHECK_UPDATE;
@@ -15789,6 +16166,8 @@ WOW_WORLD_MESSAGES_C_EXPORT void wrath_MSG_MOVE_SET_FLIGHT_BACK_SPEED_free(wrath
 
 typedef struct {
     uint64_t guid;
+    /* cmangos/mangoszero/vmangos: set to 0
+cmangos/mangoszero/vmangos: moveEvent, NUM_PMOVE_EVTS = 0x39 */
     uint32_t move_event;
     float speed;
 
@@ -15807,6 +16186,8 @@ WOW_WORLD_MESSAGES_C_EXPORT void wrath_CMSG_FORCE_FLIGHT_SPEED_CHANGE_ACK_free(w
 
 typedef struct {
     uint64_t guid;
+    /* cmangos/mangoszero/vmangos: set to 0
+cmangos/mangoszero/vmangos: moveEvent, NUM_PMOVE_EVTS = 0x39 */
     uint32_t move_event;
     float speed;
 
@@ -15844,6 +16225,7 @@ typedef struct {
 } wrath_SMSG_FLIGHT_SPLINE_SYNC;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_FLIGHT_SPLINE_SYNC_write(WowWorldWriter* writer, const wrath_SMSG_FLIGHT_SPLINE_SYNC* object);
 
+/* Sent when the client runs `/timetest 1`. */
 typedef struct {
     uint8_t mode;
 
@@ -15851,8 +16233,10 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_SET_TAXI_BENCHMARK_MODE_write(WowWorldWriter* writer, const wrath_CMSG_SET_TAXI_BENCHMARK_MODE* object);
 
 typedef struct {
+    /* ArcEmu/TrinityCore/mangosthree send realm_id from [CMSG_REALM_SPLIT] back. */
     uint32_t realm_id;
     wrath_RealmSplitState state;
+    /* Seems to be slash separated string, like '01/01/01'. */
     char* split_date;
 
 } wrath_SMSG_REALM_SPLIT;
@@ -15860,6 +16244,8 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_REALM_SPLIT_write(WowWorld
 WOW_WORLD_MESSAGES_C_EXPORT void wrath_SMSG_REALM_SPLIT_free(wrath_SMSG_REALM_SPLIT* object);
 
 typedef struct {
+    /* Realm ID that was sent earlier by the Auth Server
+ArcEmu/TriniyCore/mangosthree send back in [SMSG_REALM_SPLIT]. */
     uint32_t realm_id;
 
 } wrath_CMSG_REALM_SPLIT;
@@ -15887,7 +16273,10 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_TIME_SYNC_REQ_write(WowWorldWriter* writer, const wrath_SMSG_TIME_SYNC_REQ* object);
 
 typedef struct {
+    /* Can be used to check if the client is still properly in sync
+This should be the same as the counter sent in [SMSG_TIME_SYNC_REQ]. */
     uint32_t time_sync;
+    /* You can check this against expected values to estimate client latency */
     uint32_t client_ticks;
 
 } wrath_CMSG_TIME_SYNC_RESP;
@@ -15960,6 +16349,7 @@ typedef struct {
     wrath_ChatType chat_type;
     wrath_Language language;
     uint64_t sender;
+    /* azerothcore sets to 0. */
     uint32_t flags;
     char* sender1;
     NamedGuid target1;
@@ -15999,6 +16389,7 @@ typedef struct {
 } wrath_SMSG_CROSSED_INEBRIATION_THRESHOLD;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_CROSSED_INEBRIATION_THRESHOLD_write(WowWorldWriter* writer, const wrath_SMSG_CROSSED_INEBRIATION_THRESHOLD* object);
 
+/* All that exists of this is an implementation in cmangos-tbc. */
 typedef struct {
     uint8_t reason;
     char* text;
@@ -16026,6 +16417,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_COMPLAIN_write(WowWorldWri
 WOW_WORLD_MESSAGES_C_EXPORT void wrath_CMSG_COMPLAIN_free(wrath_CMSG_COMPLAIN* object);
 
 typedef struct {
+    /* All emulators set to 0. */
     uint8_t unknown;
     wrath_ComplainResultWindow window_result;
 
@@ -16131,6 +16523,7 @@ typedef struct {
     bool bank_to_character_transfer;
     uint32_t split_amount;
     uint32_t amount_of_unknown5;
+    /* cmangos-tbc/mangosone has extra */
     uint8_t* unknown5;
 
 } wrath_CMSG_GUILD_BANK_SWAP_ITEMS;
@@ -16306,6 +16699,7 @@ typedef struct {
     uint8_t hair_color;
     uint8_t facial_hair;
     uint32_t guild_id;
+    /* This array contains the: HEAD, SHOULDERS, BODY, CHEST, WAIST, LEGS, FEET, WRISTS, HANDS, BACK, and TABARD. */
     uint32_t display_ids[11];
 
 } wrath_SMSG_MIRRORIMAGE_DATA;
@@ -16660,7 +17054,9 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_CALENDAR_EVENT_STATUS_write(WowWorldWriter* writer, const wrath_SMSG_CALENDAR_EVENT_STATUS* object);
 
 typedef struct {
+    /* All emus set to 0. */
     uint32_t unknown1;
+    /* All emus set to 0. */
     uint8_t unknown2;
     char* name;
     uint32_t result;
@@ -16760,7 +17156,9 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_CALENDAR_COMPLAIN_write(Wo
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_CALENDAR_GET_NUM_PENDING_cmsg_write(WowWorldWriter* writer);
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_CALENDAR_GET_NUM_PENDING_smsg_write(WowWorldWriter* writer);
 
+/* Sent as response to [CMSG_CALENDAR_GET_NUM_PENDING] */
 typedef struct {
+    /* Number of calendar items that require attention, e.g. pending invites */
     uint32_t pending_events;
 
 } wrath_SMSG_CALENDAR_SEND_NUM_PENDING;
@@ -16777,12 +17175,15 @@ WOW_WORLD_MESSAGES_C_EXPORT void wrath_MSG_MOVE_SET_PITCH_RATE_Server_free(wrath
 
 typedef struct {
     uint64_t guid;
+    /* cmangos/mangoszero/vmangos: set to 0
+cmangos/mangoszero/vmangos: moveEvent, NUM_PMOVE_EVTS = 0x39 */
     uint32_t move_event;
     float speed;
 
 } wrath_SMSG_FORCE_PITCH_RATE_CHANGE;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_FORCE_PITCH_RATE_CHANGE_write(WowWorldWriter* writer, const wrath_SMSG_FORCE_PITCH_RATE_CHANGE* object);
 
+/* This message only exists as a coment in trinitycore. */
 typedef struct {
     uint64_t invitee;
     uint64_t invite_id;
@@ -16793,6 +17194,7 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_CALENDAR_EVENT_INVITE_NOTES_write(WowWorldWriter* writer, const wrath_SMSG_CALENDAR_EVENT_INVITE_NOTES* object);
 WOW_WORLD_MESSAGES_C_EXPORT void wrath_SMSG_CALENDAR_EVENT_INVITE_NOTES_free(wrath_SMSG_CALENDAR_EVENT_INVITE_NOTES* object);
 
+/* This message only exists as a comment in trinitycore. */
 typedef struct {
     uint64_t invite_id;
     char* text;
@@ -16814,6 +17216,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_UPDATE_MISSILE_TRAJECTORY_
 
 typedef struct {
     uint32_t data_type;
+    /* mangostwo hardcodes this to 0 */
     uint32_t unknown1;
 
 } wrath_SMSG_UPDATE_ACCOUNT_DATA_COMPLETE;
@@ -16831,6 +17234,7 @@ typedef struct {
     uint64_t player;
     uint32_t achievement;
     uint32_t earn_time;
+    /* All emus set to 0. */
     uint32_t unknown;
 
 } wrath_SMSG_ACHIEVEMENT_EARNED;
@@ -16838,8 +17242,10 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_ACHIEVEMENT_EARNED_write(W
 
 typedef struct {
     uint32_t achievement;
+    /* trinitycore/azerothcore: This is a u32 passed to the `appendPackGUID` function which promotes it to u64. */
     uint64_t progress_counter;
     uint64_t player;
+    /* trinitycore: this are some flags, 1 is for keeping the counter at 0 in client */
     uint32_t flags;
     uint32_t time;
     uint32_t time_elapsed;
@@ -17009,6 +17415,8 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_RESYNC_RUNES_write(WowWorl
 WOW_WORLD_MESSAGES_C_EXPORT void wrath_SMSG_RESYNC_RUNES_free(wrath_SMSG_RESYNC_RUNES* object);
 
 typedef struct {
+    /* Emus bitshifts 1 by the rune index instead of directly sending the index.
+mangostwo: mask (0x00-0x3F probably) */
     uint32_t rune;
 
 } wrath_SMSG_ADD_RUNE_POWER;
@@ -17174,6 +17582,7 @@ typedef struct {
     uint32_t honor_point_cost;
     uint32_t arena_point_cost;
     wrath_ItemRefundExtra extra_items[5];
+    /* Emus set to 0. */
     uint32_t unknown1;
     uint32_t time_since_loss;
 
@@ -17210,6 +17619,7 @@ typedef struct {
 } wrath_CMSG_CORPSE_MAP_POSITION_QUERY;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_CORPSE_MAP_POSITION_QUERY_write(WowWorldWriter* writer, const wrath_CMSG_CORPSE_MAP_POSITION_QUERY* object);
 
+/* Emus just set all values to 0. */
 typedef struct {
     float unknown1;
     float unknown2;
@@ -17300,6 +17710,7 @@ typedef struct {
 } wrath_SMSG_ARENA_UNIT_DESTROYED;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_ARENA_UNIT_DESTROYED_write(WowWorldWriter* writer, const wrath_SMSG_ARENA_UNIT_DESTROYED* object);
 
+/* This message only exists as a comment in azerothcore/trinitycore. */
 typedef struct {
     uint32_t unknown;
 
@@ -17427,6 +17838,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_BATTLEFIELD_MGR_ENTERED_wr
 
 typedef struct {
     uint32_t battle_id;
+    /* Possibly not used. */
     uint8_t warmup;
 
 } wrath_SMSG_BATTLEFIELD_MGR_QUEUE_INVITE;
@@ -17449,6 +17861,7 @@ typedef struct {
 } wrath_SMSG_BATTLEFIELD_MGR_QUEUE_REQUEST_RESPONSE;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_BATTLEFIELD_MGR_QUEUE_REQUEST_RESPONSE_write(WowWorldWriter* writer, const wrath_SMSG_BATTLEFIELD_MGR_QUEUE_REQUEST_RESPONSE* object);
 
+/* Only exists as a comment in azerothcore/trinitycore. */
 typedef struct {
     uint32_t unknown;
 
@@ -17470,6 +17883,7 @@ typedef struct {
 } wrath_CMSG_BATTLEFIELD_MGR_EXIT_REQUEST;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_BATTLEFIELD_MGR_EXIT_REQUEST_write(WowWorldWriter* writer, const wrath_CMSG_BATTLEFIELD_MGR_EXIT_REQUEST* object);
 
+/* Only exists as comment in azerothcore/trinitycore. */
 typedef struct {
     uint32_t unknown1;
     uint32_t unknown2;
@@ -17485,6 +17899,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_MSG_SET_RAID_DIFFICULTY_Client_
 
 typedef struct {
     wrath_RaidDifficulty difficulty;
+    /* Emus set to 1. */
     uint32_t unknown1;
     bool in_group;
 
@@ -17516,6 +17931,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_GMRESPONSE_STATUS_UPDATE_w
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_WORLD_STATE_UI_TIMER_UPDATE_write(WowWorldWriter* writer);
 
 typedef struct {
+    /* Seconds since Unix Epoch */
     uint32_t time;
 
 } wrath_SMSG_WORLD_STATE_UI_TIMER_UPDATE;
@@ -17536,6 +17952,7 @@ typedef struct {
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_CHAR_RACE_CHANGE_write(WowWorldWriter* writer, const wrath_CMSG_CHAR_RACE_CHANGE* object);
 WOW_WORLD_MESSAGES_C_EXPORT void wrath_CMSG_CHAR_RACE_CHANGE_free(wrath_CMSG_CHAR_RACE_CHANGE* object);
 
+/* Only exists as comment in azerothcore/trinitycore. */
 typedef struct {
     uint8_t unknown;
 
@@ -17564,7 +17981,9 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_CMSG_GM_REPORT_LAG_write(WowWor
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_CORPSE_NOT_IN_INSTANCE_write(WowWorldWriter* writer);
 
+/* Only exists as a comment in trinitycore/azerothcore. */
 typedef struct {
+    /* SpellEffectCameraShakes.dbc */
     uint32_t camera_shake_id;
     uint32_t unknown;
 
@@ -17578,10 +17997,12 @@ typedef struct {
 } wrath_SMSG_SOCKET_GEMS_RESULT;
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_SOCKET_GEMS_RESULT_write(WowWorldWriter* writer, const wrath_SMSG_SOCKET_GEMS_RESULT* object);
 
+/* Only exists as a comment in azerothcore/trinitycore. */
 typedef struct {
     uint32_t ip_address;
     uint16_t port;
     uint32_t unknown;
+    /* azerothcore: ip + port, seed = sessionkey */
     uint8_t hash[20];
 
 } wrath_SMSG_REDIRECT_CLIENT;

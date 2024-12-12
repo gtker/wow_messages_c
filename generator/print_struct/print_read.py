@@ -443,54 +443,51 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
 
                     s.newline()
 
-                fixed_prefix = ""
-                fixed_suffix = ""
-
                 inner = ""
                 match inner_type:
                     case model.ArrayTypeInteger(integer_type=integer_type):
                         short = integer_type_to_short(integer_type).upper()
-                        inner = f"READ_{short}({fixed_prefix}{variable_name}{fixed_suffix}[i])"
+                        inner = f"READ_{short}({variable_name}[i])"
 
                     case model.ArrayTypeSpell():
-                        inner = f"READ_U32({fixed_prefix}{variable_name}{fixed_suffix}[i])"
+                        inner = f"READ_U32({variable_name}[i])"
 
                     case model.ArrayTypeGUID():
-                        inner = f"READ_U64({fixed_prefix}{variable_name}{fixed_suffix}[i])"
+                        inner = f"READ_U64({variable_name}[i])"
 
                     case model.ArrayTypeStruct(struct_data=e):
                         version = container_module_prefix(e.tags, module_name)
-                        inner = f"{wlm_prefix}_CHECK_RETURN_CODE({version}_{e.name}_read(reader, &{fixed_prefix}{variable_name}{fixed_suffix}[i]))"
+                        inner = f"{wlm_prefix}_CHECK_RETURN_CODE({version}_{e.name}_read(reader, &{variable_name}[i]))"
 
                     case model.ArrayTypeCstring():
-                        inner = f"READ_CSTRING({fixed_prefix}{variable_name}{fixed_suffix}[i])"
+                        inner = f"READ_CSTRING({variable_name}[i])"
 
                     case model.ArrayTypePackedGUID():
                         if is_cpp():
                             inner = f"reader.read_packed_guid()"
                         else:
-                            inner = f"READ_PACKED_GUID({fixed_prefix}{variable_name}{fixed_suffix}[i])"
+                            inner = f"READ_PACKED_GUID({variable_name}[i])"
 
                     case v2:
                         raise Exception(f"{v2}")
 
                 match array_size:
-                    case model.ArraySizeFixed(size=array_size):
+                    case model.ArraySizeFixed(size=fixed_size):
                         extra = ""
                         if needs_size:
-                            extra = f";_size += {array_size_inner_action(inner_type, '', '', variable_name, 'i', module_name)};"
-                        s.wln(f"READ_ARRAY({variable_name}, {array_size}, {inner}{extra});")
+                            extra = f";_size += {array_size_inner_action(inner_type, variable_name, 'i', module_name)};"
+                        s.wln(f"READ_ARRAY({variable_name}, {fixed_size}, {inner}{extra});")
 
-                    case model.ArraySizeVariable(size=array_size):
+                    case model.ArraySizeVariable(size=variable_size):
                         extra = ""
                         if needs_size:
-                            extra = f";_size += {array_size_inner_action(inner_type, '', '', variable_name, 'i', module_name)};"
+                            extra = f";_size += {array_size_inner_action(inner_type, variable_name, 'i', module_name)};"
                         s.write_block(f"""
-                            {variable_name} = malloc(object->{extra_indirection}{array_size} * sizeof({array_type_to_c_str(inner_type, module_name)}));
+                            {variable_name} = malloc(object->{extra_indirection}{variable_size} * sizeof({array_type_to_c_str(inner_type, module_name)}));
                             if ({variable_name} == NULL) {{
                                 return {wlm_prefix}_RESULT_MALLOC_FAIL;
                             }}
-                            READ_ARRAY({variable_name}, object->{extra_indirection}{array_size}, {inner}{extra});
+                            READ_ARRAY({variable_name}, object->{extra_indirection}{variable_size}, {inner}{extra});
                         """)
 
                     case model.ArraySizeEndless():
@@ -513,7 +510,7 @@ def print_read_struct_member(s: Writer, d: model.Definition, needs_size: bool, c
                         if (needs_size or isinstance(array_size,
                                                      model.ArraySizeEndless)) and not compressed and not container.tags.compressed:
                             s.wln(
-                                f"_size += {array_size_inner_action(inner_type, '', '', variable_name, 'i', module_name)};")
+                                f"_size += {array_size_inner_action(inner_type, variable_name, 'i', module_name)};")
 
                         s.wln("++i;")
                         s.newline()
@@ -621,7 +618,7 @@ def print_read(s: Writer, container: Container, module_name: str):
             s.open_curly("if (_size < body_size)")
             ty = f"{module_name}::{container.name}::{snake_case_to_pascal_case(container.optional.name)}"
             s.wln(
-                f"obj.{container.optional.name} = std::unique_ptr<{ty}>(new {ty}());")
+                f"obj.{container.optional.name} = std::shared_ptr<{ty}>(new {ty}());")
             s.newline()
 
             for member in container.optional.members:
@@ -661,29 +658,27 @@ def print_read(s: Writer, container: Container, module_name: str):
             s.wln("WowWorldReader new_reader;")
             s.newline()
 
-        if container.tags.compressed:
-            if is_cpp():
-                pass
-            else:
-                s.write_block("""
-                    WowWorldReader stack_reader;
-                    unsigned char* _compressed_data = NULL;
-                    uint32_t _decompressed_size;
-                    READ_U32(_decompressed_size);
-                    _size += 4;
-                    
-                    _compressed_data = malloc(_decompressed_size);
-                    if (_compressed_data == NULL) {
-                        return WWM_RESULT_MALLOC_FAIL;
-                    }
+        if container.tags.compressed and not is_cpp():
+            s.write_block("""
+                WowWorldReader stack_reader;
+                unsigned char* _compressed_data = NULL;
+                uint32_t _decompressed_size;
 
-                    if (!wwm_decompress_data(&reader->source[reader->index], body_size - _size, _compressed_data, _decompressed_size)) {
-                        return WWM_RESULT_COMPRESSION_ERROR;
-                    }
-                    
-                    stack_reader = wwm_create_reader(_compressed_data, _decompressed_size);
-                    reader = &stack_reader;
-                """)
+                READ_U32(_decompressed_size);
+                _size += 4;
+
+                _compressed_data = malloc(_decompressed_size);
+                if (_compressed_data == NULL) {
+                    return WWM_RESULT_MALLOC_FAIL;
+                }
+
+                if (!wwm_decompress_data(&reader->source[reader->index], body_size - _size, _compressed_data, _decompressed_size)) {
+                    return WWM_RESULT_COMPRESSION_ERROR;
+                }
+
+                stack_reader = wwm_create_reader(_compressed_data, _decompressed_size);
+                reader = &stack_reader;
+            """)
 
         for m in container.members:
             print_read_member(s, m, container, needs_size, module_name, "")

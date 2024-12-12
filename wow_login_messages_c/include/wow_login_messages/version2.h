@@ -79,18 +79,23 @@ typedef struct {
     uint16_t unknown1;
     uint32_t unknown2;
     uint8_t unknown3[4];
+    /* SHA1 hash of the session key, server public key, and an unknown 20 byte value. */
     uint8_t cd_key_proof[20];
 
 } version2_TelemetryKey;
 
+/* Reply to [CMD_AUTH_LOGON_CHALLENGE_Client]. */
 typedef struct {
     version2_LoginResult result;
     uint8_t server_public_key[32];
+    /* The only realistic values for the generator are well below 255, so there's no reason for this to anything other than 1. */
     uint8_t generator_length;
     uint8_t* generator;
+    /* Client can not handle arrays greater than 32. */
     uint8_t large_safe_prime_length;
     uint8_t* large_safe_prime;
     uint8_t salt[32];
+    /* Used for the `crc_hash` in [CMD_AUTH_LOGON_PROOF_Client]. */
     uint8_t crc_salt[16];
 
 } version2_CMD_AUTH_LOGON_CHALLENGE_Server;
@@ -99,6 +104,7 @@ WOW_LOGIN_MESSAGES_C_EXPORT void version2_CMD_AUTH_LOGON_CHALLENGE_Server_free(v
 
 typedef all_CMD_AUTH_LOGON_CHALLENGE_Client version2_CMD_AUTH_LOGON_CHALLENGE_Client;
 
+/* Reply after successful [CMD_AUTH_LOGON_CHALLENGE_Server]. */
 typedef struct {
     uint8_t client_public_key[32];
     uint8_t client_proof[20];
@@ -110,6 +116,7 @@ typedef struct {
 WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version2_CMD_AUTH_LOGON_PROOF_Client_write(WowLoginWriter* writer, const version2_CMD_AUTH_LOGON_PROOF_Client* object);
 WOW_LOGIN_MESSAGES_C_EXPORT void version2_CMD_AUTH_LOGON_PROOF_Client_free(version2_CMD_AUTH_LOGON_PROOF_Client* object);
 
+/* Reply to [CMD_AUTH_LOGON_PROOF_Client]. */
 typedef struct {
     version2_LoginResult result;
     uint8_t server_proof[20];
@@ -119,6 +126,7 @@ typedef struct {
 WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version2_CMD_AUTH_LOGON_PROOF_Server_write(WowLoginWriter* writer, const version2_CMD_AUTH_LOGON_PROOF_Server* object);
 WOW_LOGIN_MESSAGES_C_EXPORT void version2_CMD_AUTH_LOGON_PROOF_Server_free(version2_CMD_AUTH_LOGON_PROOF_Server* object);
 
+/* Reply to [CMD_AUTH_RECONNECT_CHALLENGE_Client]. */
 typedef struct {
     version2_LoginResult result;
     uint8_t challenge_data[16];
@@ -130,12 +138,14 @@ WOW_LOGIN_MESSAGES_C_EXPORT void version2_CMD_AUTH_RECONNECT_CHALLENGE_Server_fr
 
 typedef all_CMD_AUTH_RECONNECT_CHALLENGE_Client version2_CMD_AUTH_RECONNECT_CHALLENGE_Client;
 
+/* Reply to [CMD_AUTH_RECONNECT_PROOF_Client]. */
 typedef struct {
     version2_LoginResult result;
 
 } version2_CMD_AUTH_RECONNECT_PROOF_Server;
 WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version2_CMD_AUTH_RECONNECT_PROOF_Server_write(WowLoginWriter* writer, const version2_CMD_AUTH_RECONNECT_PROOF_Server* object);
 
+/* Reply to [CMD_AUTH_RECONNECT_CHALLENGE_Server]. */
 typedef struct {
     uint8_t proof_data[16];
     uint8_t client_proof[20];

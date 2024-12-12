@@ -29,6 +29,14 @@ public:
         return static_cast<uint16_t>(lower) | static_cast<uint16_t>(upper) << 8;
     }
 
+    virtual void read_bytes(unsigned char* destination, size_t length)
+    {
+        for (size_t i = 0; i < length; ++i)
+        {
+            destination[i] = read_u8();
+        }
+    }
+
     virtual uint16_t read_u16_be()
     {
         const uint8_t upper = read_u8();

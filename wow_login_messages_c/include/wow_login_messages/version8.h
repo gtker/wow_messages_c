@@ -5,12 +5,6 @@
 
 #include "wow_login_messages/wow_login_messages.h"
 
-#include "wow_login_messages/version2.h"
-#include "wow_login_messages/version3.h"
-#include "wow_login_messages/version5.h"
-#include "wow_login_messages/version6.h"
-#include "wow_login_messages/version7.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -75,6 +69,7 @@ typedef enum {
 typedef all_Version version8_Version;
 
 typedef struct {
+    /* vmangos: this is the second column in `Cfg_Configs.dbc` */
     version8_RealmType realm_type;
     bool locked;
     version8_RealmFlag flag;
@@ -93,20 +88,30 @@ typedef version2_TelemetryKey version8_TelemetryKey;
 typedef struct {
     version8_LoginResult result;
     uint8_t server_public_key[32];
+    /* The only realistic values for the generator are well below 255, so there's no reason for this to anything other than 1. */
     uint8_t generator_length;
     uint8_t* generator;
+    /* Client can not handle arrays greater than 32. */
     uint8_t large_safe_prime_length;
     uint8_t* large_safe_prime;
     uint8_t salt[32];
+    /* Used for the `crc_hash` in [CMD_AUTH_LOGON_PROOF_Client]. */
     uint8_t crc_salt[16];
     version8_SecurityFlag security_flag;
+    /* Used to randomize the layout of the PIN keypad. */
     uint32_t pin_grid_seed;
     uint8_t pin_salt[16];
+    /* Number of columns to display. */
     uint8_t width;
+    /* Number of rows to display. */
     uint8_t height;
+    /* Number of digits to be entered for each cell. */
     uint8_t digit_count;
+    /* Number of cells to complete. */
     uint8_t challenge_count;
+    /* Seed value used to randomize cell selection. */
     uint64_t seed;
+    /* Dictates if the authenticator is in use and not just assigned to the account. */
     uint8_t required;
 
 } version8_CMD_AUTH_LOGON_CHALLENGE_Server;
@@ -115,6 +120,7 @@ WOW_LOGIN_MESSAGES_C_EXPORT void version8_CMD_AUTH_LOGON_CHALLENGE_Server_free(v
 
 typedef all_CMD_AUTH_LOGON_CHALLENGE_Client version8_CMD_AUTH_LOGON_CHALLENGE_Client;
 
+/* Reply after successful [CMD_AUTH_LOGON_CHALLENGE_Server]. */
 typedef struct {
     uint8_t client_public_key[32];
     uint8_t client_proof[20];
@@ -124,7 +130,12 @@ typedef struct {
     version8_SecurityFlag security_flag;
     uint8_t pin_salt[16];
     uint8_t pin_hash[20];
+    /* Client proof of matrix input.
+Implementation details at `https://gist.github.com/barncastle/979c12a9c5e64d810a28ad1728e7e0f9`. */
     uint8_t matrix_card_proof[20];
+    /* String entered by the user in the "Authenticator" popup.
+Can be empty and up to 16 characters.
+Is not used by the client in any way but just sent directly, so this could in theory be used for anything. */
     char* authenticator;
 
 } version8_CMD_AUTH_LOGON_PROOF_Client;
@@ -142,6 +153,7 @@ typedef struct {
 WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version8_CMD_AUTH_LOGON_PROOF_Server_write(WowLoginWriter* writer, const version8_CMD_AUTH_LOGON_PROOF_Server* object);
 WOW_LOGIN_MESSAGES_C_EXPORT void version8_CMD_AUTH_LOGON_PROOF_Server_free(version8_CMD_AUTH_LOGON_PROOF_Server* object);
 
+/* Reply to [CMD_AUTH_RECONNECT_CHALLENGE_Client]. */
 typedef struct {
     version8_LoginResult result;
     uint8_t challenge_data[16];
@@ -155,6 +167,7 @@ typedef all_CMD_AUTH_RECONNECT_CHALLENGE_Client version8_CMD_AUTH_RECONNECT_CHAL
 
 typedef version2_CMD_AUTH_RECONNECT_PROOF_Client version8_CMD_AUTH_RECONNECT_PROOF_Client;
 
+/* Reply to [CMD_AUTH_RECONNECT_PROOF_Client]. */
 typedef struct {
     version8_LoginResult result;
 

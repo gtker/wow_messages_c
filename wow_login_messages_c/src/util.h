@@ -9,6 +9,7 @@
 #include <malloc.h>
 #include <memory.h>
 #include <stdint.h>
+#include <string.h> /* strlen */
 
 #define WLM_CHECK_RETURN_CODE(action)                    \
     do                                                   \
@@ -44,7 +45,7 @@
     }                                                     \
     while (0)
 
-static WowLoginResult wlm_read_uint8(WowLoginReader* stream, uint8_t* value)
+static WowLoginResult wlm_read_u8(WowLoginReader* stream, uint8_t* value)
 {
     const size_t index = WLM_CHECK_LENGTH(1);
 
@@ -53,9 +54,9 @@ static WowLoginResult wlm_read_uint8(WowLoginReader* stream, uint8_t* value)
     return WLM_RESULT_SUCCESS;
 }
 
-#define READ_U8(variable) WLM_CHECK_RETURN_CODE(wlm_read_uint8(reader, (uint8_t*)&variable))
+#define READ_U8(variable) WLM_CHECK_RETURN_CODE(wlm_read_u8(reader, (uint8_t*)&variable))
 
-static WowLoginResult wlm_read_uint16(WowLoginReader* stream, uint16_t* value)
+static WowLoginResult wlm_read_u16(WowLoginReader* stream, uint16_t* value)
 {
     const size_t index = WLM_CHECK_LENGTH(2);
 
@@ -64,9 +65,9 @@ static WowLoginResult wlm_read_uint16(WowLoginReader* stream, uint16_t* value)
     return WLM_RESULT_SUCCESS;
 }
 
-#define READ_U16(variable) WLM_CHECK_RETURN_CODE(wlm_read_uint16(reader, (uint16_t*)&variable))
+#define READ_U16(variable) WLM_CHECK_RETURN_CODE(wlm_read_u16(reader, (uint16_t*)&variable))
 
-static WowLoginResult wlm_read_uint32(WowLoginReader* stream, uint32_t* value)
+static WowLoginResult wlm_read_u32(WowLoginReader* stream, uint32_t* value)
 {
     const size_t index = WLM_CHECK_LENGTH(4);
 
@@ -76,9 +77,9 @@ static WowLoginResult wlm_read_uint32(WowLoginReader* stream, uint32_t* value)
     return WLM_RESULT_SUCCESS;
 }
 
-#define READ_U32(variable) WLM_CHECK_RETURN_CODE(wlm_read_uint32(reader, (uint32_t*)&variable))
+#define READ_U32(variable) WLM_CHECK_RETURN_CODE(wlm_read_u32(reader, (uint32_t*)&variable))
 
-static WowLoginResult wlm_read_uint64(WowLoginReader* stream, uint64_t* value)
+static WowLoginResult wlm_read_u64(WowLoginReader* stream, uint64_t* value)
 {
     const size_t index = WLM_CHECK_LENGTH(8);
 
@@ -90,9 +91,9 @@ static WowLoginResult wlm_read_uint64(WowLoginReader* stream, uint64_t* value)
     return WLM_RESULT_SUCCESS;
 }
 
-#define READ_U64(variable) WLM_CHECK_RETURN_CODE(wlm_read_uint64(reader, (uint64_t*)&variable))
+#define READ_U64(variable) WLM_CHECK_RETURN_CODE(wlm_read_u64(reader, (uint64_t*)&variable))
 
-static WowLoginResult wlm_read_int32(WowLoginReader* stream, int32_t* value)
+static WowLoginResult wlm_read_i32(WowLoginReader* stream, int32_t* value)
 {
     const size_t index = WLM_CHECK_LENGTH(4);
 
@@ -102,9 +103,9 @@ static WowLoginResult wlm_read_int32(WowLoginReader* stream, int32_t* value)
     return WLM_RESULT_SUCCESS;
 }
 
-#define READ_I32(variable) WLM_CHECK_RETURN_CODE(wlm_read_int32(reader, (int32_t*)&variable))
+#define READ_I32(variable) WLM_CHECK_RETURN_CODE(wlm_read_i32(reader, (int32_t*)&variable))
 
-static WowLoginResult wlm_write_uint8(WowLoginWriter* stream, const uint8_t value)
+static WowLoginResult wlm_write_u8(WowLoginWriter* stream, const uint8_t value)
 {
     const size_t index = WLM_CHECK_LENGTH(1);
 
@@ -113,9 +114,9 @@ static WowLoginResult wlm_write_uint8(WowLoginWriter* stream, const uint8_t valu
     return WLM_RESULT_SUCCESS;
 }
 
-#define WRITE_U8(variable) WLM_CHECK_RETURN_CODE(wlm_write_uint8(writer, variable))
+#define WRITE_U8(variable) WLM_CHECK_RETURN_CODE(wlm_write_u8(writer, variable))
 
-static WowLoginResult wlm_write_uint16(WowLoginWriter* stream, const uint16_t value)
+static WowLoginResult wlm_write_u16(WowLoginWriter* stream, const uint16_t value)
 {
     const size_t index = WLM_CHECK_LENGTH(2);
 
@@ -125,9 +126,9 @@ static WowLoginResult wlm_write_uint16(WowLoginWriter* stream, const uint16_t va
     return WLM_RESULT_SUCCESS;
 }
 
-#define WRITE_U16(variable) WLM_CHECK_RETURN_CODE(wlm_write_uint16(writer, variable))
+#define WRITE_U16(variable) WLM_CHECK_RETURN_CODE(wlm_write_u16(writer, variable))
 
-static WowLoginResult wlm_write_uint32(WowLoginWriter* stream, const uint32_t value)
+static WowLoginResult wlm_write_u32(WowLoginWriter* stream, const uint32_t value)
 {
     const size_t index = WLM_CHECK_LENGTH(4);
 
@@ -139,9 +140,9 @@ static WowLoginResult wlm_write_uint32(WowLoginWriter* stream, const uint32_t va
     return WLM_RESULT_SUCCESS;
 }
 
-#define WRITE_U32(variable) WLM_CHECK_RETURN_CODE(wlm_write_uint32(writer, variable))
+#define WRITE_U32(variable) WLM_CHECK_RETURN_CODE(wlm_write_u32(writer, variable))
 
-static WowLoginResult wlm_write_uint64(WowLoginWriter* stream, const uint64_t value)
+static WowLoginResult wlm_write_u64(WowLoginWriter* stream, const uint64_t value)
 {
     const size_t index = WLM_CHECK_LENGTH(8);
 
@@ -157,9 +158,9 @@ static WowLoginResult wlm_write_uint64(WowLoginWriter* stream, const uint64_t va
     return WLM_RESULT_SUCCESS;
 }
 
-#define WRITE_U64(variable) WLM_CHECK_RETURN_CODE(wlm_write_uint64(writer, variable))
+#define WRITE_U64(variable) WLM_CHECK_RETURN_CODE(wlm_write_u64(writer, variable))
 
-static WowLoginResult wlm_write_int32(WowLoginWriter* stream, const int32_t value)
+static WowLoginResult wlm_write_i32(WowLoginWriter* stream, const int32_t value)
 {
     const size_t index = WLM_CHECK_LENGTH(4);
 
@@ -171,7 +172,7 @@ static WowLoginResult wlm_write_int32(WowLoginWriter* stream, const int32_t valu
     return WLM_RESULT_SUCCESS;
 }
 
-#define WRITE_I32(variable) WLM_CHECK_RETURN_CODE(wlm_write_int32(writer, variable))
+#define WRITE_I32(variable) WLM_CHECK_RETURN_CODE(wlm_write_i32(writer, variable))
 
 static WowLoginResult wlm_read_string(WowLoginReader* stream, char** string)
 {
@@ -250,7 +251,7 @@ static WowLoginResult wlm_write_cstring(WowLoginWriter* stream, const char* stri
 static WowLoginResult wlm_read_float(WowLoginReader* stream, float* value)
 {
     uint32_t v;
-    const WowLoginResult result = wlm_read_uint32(stream, &v);
+    const WowLoginResult result = wlm_read_u32(stream, &v);
 
     memcpy(value, &v, sizeof(uint32_t));
 
@@ -264,7 +265,7 @@ static WowLoginResult wlm_write_float(WowLoginWriter* stream, const float value)
     uint32_t v;
     memcpy(&v, &value, sizeof(uint32_t));
 
-    return wlm_write_uint32(stream, v);
+    return wlm_write_u32(stream, v);
 }
 
 #define WRITE_FLOAT(variable) WLM_CHECK_RETURN_CODE(wlm_write_float(writer, variable))
@@ -273,7 +274,7 @@ static WowLoginResult wlm_read_bool8(WowLoginReader* stream, bool* value)
 {
     uint8_t v;
 
-    WLM_CHECK_RETURN_CODE(wlm_read_uint8(stream, &v));
+    WLM_CHECK_RETURN_CODE(wlm_read_u8(stream, &v));
 
     *value = v == 1 ? true : false;
 
@@ -286,7 +287,7 @@ static WowLoginResult wlm_write_bool8(WowLoginWriter* stream, const bool value)
 {
     const uint8_t v = value ? 1 : 0;
 
-    WLM_CHECK_RETURN_CODE(wlm_write_uint8(stream, v));
+    WLM_CHECK_RETURN_CODE(wlm_write_u8(stream, v));
 
     return WLM_RESULT_SUCCESS;
 }

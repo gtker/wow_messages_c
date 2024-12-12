@@ -1,21 +1,15 @@
-* free arrays/strings if failure
+# Both
 * ZLIB support
-* Remove "none" state for C++ opcodes
-* Rename UpdateMask *_set to set_*
-* Add ability to decode header in opcode read
-
-* C++ example
-
-* API Improvements
-  * AuraMask?
-  * UpdateMask?
-  * Opcode?
-  * Allocations?
-  * Reader/Writer?
-  * restrict/expected/etc?
-
-* Malloc fail in size function
-
 * clang-tidy lints/compiler warnings
-* Optimize headers
+* API Improvements
+    * AuraMask?
+    * UpdateMask?
+    * Opcode?
+    * Allocations?
+
+# C
+* free arrays/strings if failure
+* Malloc fail in size function
 * Return amount of bytes required
+* Guard with if of minimum size
+

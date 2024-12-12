@@ -2,16 +2,17 @@ import typing
 
 
 class Writer:
-    __inner: str = ""
-    __indentation: int = 0
+    def __init__(self):
+        self.__inner_bytes: bytearray = bytearray()
+        self.__indentation: int = 0
 
     def w(self, s: str):
         for _ in range(0, self.__indentation):
-            self.__inner += "    "
+            self.__inner_bytes += b"    "
 
-        self.__inner += s
+        self.__inner_bytes += s.encode("utf-8")
 
-    def wln(self, s):
+    def wln(self, s: str):
         self.w(s)
         self.newline()
 
@@ -45,11 +46,11 @@ class Writer:
             self.wln(line[prefix_spaces:])
 
     def column(self) -> int:
-        for i, ch in enumerate(reversed(self.__inner)):
-            if ch == "\n":
+        for i, ch in enumerate(reversed(self.__inner_bytes)):
+            if ch == b"\n":
                 return i
 
-        return len(self.__inner)
+        return len(self.__inner_bytes)
 
     def w_break_at(self, s: str):
         if self.column() >= 80:
@@ -61,25 +62,25 @@ class Writer:
         self.newline()
 
     def w_no_indent(self, s):
-        self.__inner += s
+        self.__inner_bytes += s.encode("utf-8")
 
     def newline(self):
-        self.__inner += "\n"
+        self.__inner_bytes += b"\n"
 
     def double_newline(self):
         self.newline()
         self.newline()
 
-    def prepend(self, s):
-        s.__inner += self.__inner
-        self.__inner = s.__inner
+    def prepend(self, s: "Writer"):
+        s.__inner_bytes.extend(self.__inner_bytes)
+        self.__inner_bytes = s.__inner_bytes
 
-    def append(self, s):
-        self.__inner += s.__inner
+    def append(self, s: "Writer"):
+        self.__inner_bytes.extend(s.__inner_bytes)
 
     def inner(self) -> str:
         assert self.__indentation == 0
-        return self.__inner
+        return self.__inner_bytes.decode('utf-8')
 
     def inc_indent(self):
         if self.__indentation == 255:

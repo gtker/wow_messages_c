@@ -1,10 +1,11 @@
 #include "util.h"
 
 #include <memory.h>
+#include <string.h> /* strlen */
 
 #include "puff.c"
 
-WowWorldResult wwm_read_uint8(WowWorldReader* stream, uint8_t* value)
+WowWorldResult wwm_read_u8(WowWorldReader* stream, uint8_t* value)
 {
     const size_t index = WWM_CHECK_LENGTH(1);
 
@@ -13,7 +14,7 @@ WowWorldResult wwm_read_uint8(WowWorldReader* stream, uint8_t* value)
     return WWM_RESULT_SUCCESS;
 }
 
-WowWorldResult wwm_read_uint16(WowWorldReader* stream, uint16_t* value)
+WowWorldResult wwm_read_u16(WowWorldReader* stream, uint16_t* value)
 {
     const size_t index = WWM_CHECK_LENGTH(2);
 
@@ -22,7 +23,7 @@ WowWorldResult wwm_read_uint16(WowWorldReader* stream, uint16_t* value)
     return WWM_RESULT_SUCCESS;
 }
 
-WowWorldResult wwm_read_uint16_be(WowWorldReader* stream, uint16_t* value)
+WowWorldResult wwm_read_u16_be(WowWorldReader* stream, uint16_t* value)
 {
     const size_t index = WWM_CHECK_LENGTH(2);
 
@@ -31,7 +32,7 @@ WowWorldResult wwm_read_uint16_be(WowWorldReader* stream, uint16_t* value)
     return WWM_RESULT_SUCCESS;
 }
 
-WowWorldResult wwm_read_uint32(WowWorldReader* stream, uint32_t* value)
+WowWorldResult wwm_read_u32(WowWorldReader* stream, uint32_t* value)
 {
     const size_t index = WWM_CHECK_LENGTH(4);
 
@@ -41,7 +42,7 @@ WowWorldResult wwm_read_uint32(WowWorldReader* stream, uint32_t* value)
     return WWM_RESULT_SUCCESS;
 }
 
-WowWorldResult wwm_read_uint48(WowWorldReader* stream, uint64_t* value)
+WowWorldResult wwm_read_u48(WowWorldReader* stream, uint64_t* value)
 {
     const size_t index = WWM_CHECK_LENGTH(6);
 
@@ -52,7 +53,7 @@ WowWorldResult wwm_read_uint48(WowWorldReader* stream, uint64_t* value)
     return WWM_RESULT_SUCCESS;
 }
 
-WowWorldResult wwm_read_uint64(WowWorldReader* stream, uint64_t* value)
+WowWorldResult wwm_read_u64(WowWorldReader* stream, uint64_t* value)
 {
     const size_t index = WWM_CHECK_LENGTH(8);
 
@@ -64,7 +65,7 @@ WowWorldResult wwm_read_uint64(WowWorldReader* stream, uint64_t* value)
     return WWM_RESULT_SUCCESS;
 }
 
-WowWorldResult wwm_read_int32(WowWorldReader* stream, int32_t* value)
+WowWorldResult wwm_read_i32(WowWorldReader* stream, int32_t* value)
 {
     const size_t index = WWM_CHECK_LENGTH(4);
 
@@ -74,7 +75,7 @@ WowWorldResult wwm_read_int32(WowWorldReader* stream, int32_t* value)
     return WWM_RESULT_SUCCESS;
 }
 
-WowWorldResult wwm_write_uint8(WowWorldWriter* stream, const uint8_t value)
+WowWorldResult wwm_write_u8(WowWorldWriter* stream, const uint8_t value)
 {
     const size_t index = WWM_CHECK_LENGTH(1);
 
@@ -83,7 +84,7 @@ WowWorldResult wwm_write_uint8(WowWorldWriter* stream, const uint8_t value)
     return WWM_RESULT_SUCCESS;
 }
 
-WowWorldResult wwm_write_uint16(WowWorldWriter* stream, const uint16_t value)
+WowWorldResult wwm_write_u16(WowWorldWriter* stream, const uint16_t value)
 {
     const size_t index = WWM_CHECK_LENGTH(2);
 
@@ -93,7 +94,7 @@ WowWorldResult wwm_write_uint16(WowWorldWriter* stream, const uint16_t value)
     return WWM_RESULT_SUCCESS;
 }
 
-WowWorldResult wwm_write_uint16_be(WowWorldWriter* stream, const uint16_t value)
+WowWorldResult wwm_write_u16_be(WowWorldWriter* stream, const uint16_t value)
 {
     const size_t index = WWM_CHECK_LENGTH(2);
 
@@ -103,7 +104,7 @@ WowWorldResult wwm_write_uint16_be(WowWorldWriter* stream, const uint16_t value)
     return WWM_RESULT_SUCCESS;
 }
 
-WowWorldResult wwm_write_uint32(WowWorldWriter* stream, const uint32_t value)
+WowWorldResult wwm_write_u32(WowWorldWriter* stream, const uint32_t value)
 {
     const size_t index = WWM_CHECK_LENGTH(4);
 
@@ -115,7 +116,7 @@ WowWorldResult wwm_write_uint32(WowWorldWriter* stream, const uint32_t value)
     return WWM_RESULT_SUCCESS;
 }
 
-WowWorldResult wwm_write_uint48(WowWorldWriter* stream, const uint64_t value)
+WowWorldResult wwm_write_u48(WowWorldWriter* stream, const uint64_t value)
 {
     const size_t index = WWM_CHECK_LENGTH(6);
 
@@ -129,7 +130,7 @@ WowWorldResult wwm_write_uint48(WowWorldWriter* stream, const uint64_t value)
     return WWM_RESULT_SUCCESS;
 }
 
-WowWorldResult wwm_write_uint64(WowWorldWriter* stream, const uint64_t value)
+WowWorldResult wwm_write_u64(WowWorldWriter* stream, const uint64_t value)
 {
     const size_t index = WWM_CHECK_LENGTH(8);
 
@@ -145,7 +146,7 @@ WowWorldResult wwm_write_uint64(WowWorldWriter* stream, const uint64_t value)
     return WWM_RESULT_SUCCESS;
 }
 
-WowWorldResult wwm_write_int32(WowWorldWriter* stream, const int32_t value)
+WowWorldResult wwm_write_i32(WowWorldWriter* stream, const int32_t value)
 {
     const size_t index = WWM_CHECK_LENGTH(4);
 
@@ -228,7 +229,7 @@ WowWorldResult wwm_read_sized_cstring(WowWorldReader* stream, char** string)
     size_t index;
     uint32_t length;
 
-    WWM_CHECK_RETURN_CODE(wwm_read_uint32(stream, &length));
+    WWM_CHECK_RETURN_CODE(wwm_read_u32(stream, &length));
 
     index = WWM_CHECK_LENGTH(length);
 
@@ -246,9 +247,9 @@ WowWorldResult wwm_read_sized_cstring(WowWorldReader* stream, char** string)
 WowWorldResult wwm_write_sized_cstring(WowWorldWriter* stream, const char* string)
 {
     size_t index;
-    const uint32_t length = strlen(string);
+    const uint32_t length = (uint32_t)strlen(string);
 
-    WWM_CHECK_RETURN_CODE(wwm_write_uint32(stream, length + 1));
+    WWM_CHECK_RETURN_CODE(wwm_write_u32(stream, length + 1));
 
     index = WWM_CHECK_LENGTH(length + 1);
 
@@ -260,7 +261,7 @@ WowWorldResult wwm_write_sized_cstring(WowWorldWriter* stream, const char* strin
 WowWorldResult wwm_read_float(WowWorldReader* stream, float* value)
 {
     uint32_t v;
-    const WowWorldResult result = wwm_read_uint32(stream, &v);
+    const WowWorldResult result = wwm_read_u32(stream, &v);
 
     memcpy(value, &v, sizeof(uint32_t));
 
@@ -272,14 +273,14 @@ WowWorldResult wwm_write_float(WowWorldWriter* stream, const float value)
     uint32_t v;
     memcpy(&v, &value, sizeof(uint32_t));
 
-    return wwm_write_uint32(stream, v);
+    return wwm_write_u32(stream, v);
 }
 
 WowWorldResult wwm_read_bool8(WowWorldReader* stream, bool* value)
 {
     uint8_t v;
 
-    WWM_CHECK_RETURN_CODE(wwm_read_uint8(stream, &v));
+    WWM_CHECK_RETURN_CODE(wwm_read_u8(stream, &v));
 
     *value = v == 1 ? true : false;
 
@@ -290,7 +291,7 @@ WowWorldResult wwm_write_bool8(WowWorldWriter* stream, const bool value)
 {
     const uint8_t v = value ? 1 : 0;
 
-    WWM_CHECK_RETURN_CODE(wwm_write_uint8(stream, v));
+    WWM_CHECK_RETURN_CODE(wwm_write_u8(stream, v));
 
     return WWM_RESULT_SUCCESS;
 }
@@ -299,7 +300,7 @@ WowWorldResult wwm_read_bool32(WowWorldReader* stream, bool* value)
 {
     uint32_t v;
 
-    WWM_CHECK_RETURN_CODE(wwm_read_uint32(stream, &v));
+    WWM_CHECK_RETURN_CODE(wwm_read_u32(stream, &v));
 
     *value = v == 1 ? true : false;
 
@@ -310,7 +311,7 @@ WowWorldResult wwm_write_bool32(WowWorldWriter* stream, const bool value)
 {
     const uint32_t v = value ? 1 : 0;
 
-    WWM_CHECK_RETURN_CODE(wwm_write_uint32(stream, v));
+    WWM_CHECK_RETURN_CODE(wwm_write_u32(stream, v));
 
     return WWM_RESULT_SUCCESS;
 }
@@ -413,7 +414,7 @@ WowWorldResult all_Vector3d_write(WowWorldWriter* writer, const all_Vector3d* ob
 WowWorldResult wwm_read_monster_move_spline(WowWorldReader* stream, MonsterMoveSpline* value)
 {
     uint32_t i;
-    WWM_CHECK_RETURN_CODE(wwm_read_uint32(stream, &value->amount_of_splines));
+    WWM_CHECK_RETURN_CODE(wwm_read_u32(stream, &value->amount_of_splines));
 
     if (value->amount_of_splines == 0)
     {
@@ -432,7 +433,7 @@ WowWorldResult wwm_read_monster_move_spline(WowWorldReader* stream, MonsterMoveS
     for (i = 1; i < value->amount_of_splines; ++i)
     {
         uint32_t packed;
-        WWM_CHECK_RETURN_CODE(wwm_read_uint32(stream, &packed));
+        WWM_CHECK_RETURN_CODE(wwm_read_u32(stream, &packed));
         from_packed(packed, &value->splines[i]);
     }
 
@@ -443,7 +444,7 @@ WowWorldResult wwm_write_monster_move_spline(WowWorldWriter* stream, const Monst
 {
     uint32_t i;
 
-    WWM_CHECK_RETURN_CODE(wwm_write_uint32(stream, value->amount_of_splines));
+    WWM_CHECK_RETURN_CODE(wwm_write_u32(stream, value->amount_of_splines));
 
     if (value->amount_of_splines == 0)
     {
@@ -455,7 +456,7 @@ WowWorldResult wwm_write_monster_move_spline(WowWorldWriter* stream, const Monst
     for (i = 1; i < value->amount_of_splines; ++i)
     {
         const uint32_t packed = to_packed_vector3d(&value->splines[i]);
-        WWM_CHECK_RETURN_CODE(wwm_write_uint32(stream, packed));
+        WWM_CHECK_RETURN_CODE(wwm_write_u32(stream, packed));
     }
 
     return WWM_RESULT_SUCCESS;
@@ -481,7 +482,7 @@ void wwm_monster_move_spline_free(const MonsterMoveSpline* value)
 
 WowWorldResult wwm_read_named_guid(WowWorldReader* stream, NamedGuid* value)
 {
-    WWM_CHECK_RETURN_CODE(wwm_read_uint64(stream, &value->guid));
+    WWM_CHECK_RETURN_CODE(wwm_read_u64(stream, &value->guid));
 
     if (value->guid != 0)
     {
@@ -493,7 +494,7 @@ WowWorldResult wwm_read_named_guid(WowWorldReader* stream, NamedGuid* value)
 
 WowWorldResult wwm_write_named_guid(WowWorldWriter* stream, const NamedGuid* value)
 {
-    WWM_CHECK_RETURN_CODE(wwm_write_uint64(stream, value->guid));
+    WWM_CHECK_RETURN_CODE(wwm_write_u64(stream, value->guid));
 
     if (value->guid != 0)
     {

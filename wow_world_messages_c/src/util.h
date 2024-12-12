@@ -40,61 +40,61 @@
     }                                                     \
     while (0)
 
-WowWorldResult wwm_read_uint8(WowWorldReader* stream, uint8_t* value);
+WowWorldResult wwm_read_u8(WowWorldReader* stream, uint8_t* value);
 
-#define READ_U8(variable) WWM_CHECK_RETURN_CODE(wwm_read_uint8(reader, (uint8_t*)&variable))
+#define READ_U8(variable) WWM_CHECK_RETURN_CODE(wwm_read_u8(reader, (uint8_t*)&variable))
 
-WowWorldResult wwm_read_uint16(WowWorldReader* stream, uint16_t* value);
+WowWorldResult wwm_read_u16(WowWorldReader* stream, uint16_t* value);
 
-#define READ_U16(variable) WWM_CHECK_RETURN_CODE(wwm_read_uint16(reader, (uint16_t*)&variable))
+#define READ_U16(variable) WWM_CHECK_RETURN_CODE(wwm_read_u16(reader, (uint16_t*)&variable))
 
-WowWorldResult wwm_read_uint16_be(WowWorldReader* stream, uint16_t* value);
+WowWorldResult wwm_read_u16_be(WowWorldReader* stream, uint16_t* value);
 
-#define READ_U16_BE(variable) WWM_CHECK_RETURN_CODE(wwm_read_uint16_be(reader, (uint16_t*)&variable))
+#define READ_U16_BE(variable) WWM_CHECK_RETURN_CODE(wwm_read_u16_be(reader, (uint16_t*)&variable))
 
-WowWorldResult wwm_read_uint32(WowWorldReader* stream, uint32_t* value);
+WowWorldResult wwm_read_u32(WowWorldReader* stream, uint32_t* value);
 
-#define READ_U32(variable) WWM_CHECK_RETURN_CODE(wwm_read_uint32(reader, (uint32_t*)&variable))
+#define READ_U32(variable) WWM_CHECK_RETURN_CODE(wwm_read_u32(reader, (uint32_t*)&variable))
 
-WowWorldResult wwm_read_uint48(WowWorldReader* stream, uint64_t* value);
+WowWorldResult wwm_read_u48(WowWorldReader* stream, uint64_t* value);
 
-#define READ_U48(variable) WWM_CHECK_RETURN_CODE(wwm_read_uint48(reader, (uint64_t*)&variable))
+#define READ_U48(variable) WWM_CHECK_RETURN_CODE(wwm_read_u48(reader, (uint64_t*)&variable))
 
-WowWorldResult wwm_read_uint64(WowWorldReader* stream, uint64_t* value);
+WowWorldResult wwm_read_u64(WowWorldReader* stream, uint64_t* value);
 
-#define READ_U64(variable) WWM_CHECK_RETURN_CODE(wwm_read_uint64(reader, (uint64_t*)&variable))
+#define READ_U64(variable) WWM_CHECK_RETURN_CODE(wwm_read_u64(reader, (uint64_t*)&variable))
 
-WowWorldResult wwm_read_int32(WowWorldReader* stream, int32_t* value);
+WowWorldResult wwm_read_i32(WowWorldReader* stream, int32_t* value);
 
-#define READ_I32(variable) WWM_CHECK_RETURN_CODE(wwm_read_int32(reader, (int32_t*)&variable))
+#define READ_I32(variable) WWM_CHECK_RETURN_CODE(wwm_read_i32(reader, (int32_t*)&variable))
 
-WowWorldResult wwm_write_uint8(WowWorldWriter* stream, uint8_t value);
+WowWorldResult wwm_write_u8(WowWorldWriter* stream, uint8_t value);
 
-#define WRITE_U8(variable) WWM_CHECK_RETURN_CODE(wwm_write_uint8(writer, variable))
+#define WRITE_U8(variable) WWM_CHECK_RETURN_CODE(wwm_write_u8(writer, variable))
 
-WowWorldResult wwm_write_uint16(WowWorldWriter* stream, uint16_t value);
+WowWorldResult wwm_write_u16(WowWorldWriter* stream, uint16_t value);
 
-#define WRITE_U16(variable) WWM_CHECK_RETURN_CODE(wwm_write_uint16(writer, variable))
+#define WRITE_U16(variable) WWM_CHECK_RETURN_CODE(wwm_write_u16(writer, variable))
 
-WowWorldResult wwm_write_uint16_be(WowWorldWriter* stream, uint16_t value);
+WowWorldResult wwm_write_u16_be(WowWorldWriter* stream, uint16_t value);
 
-#define WRITE_U16_BE(variable) WWM_CHECK_RETURN_CODE(wwm_write_uint16_be(writer, variable))
+#define WRITE_U16_BE(variable) WWM_CHECK_RETURN_CODE(wwm_write_u16_be(writer, variable))
 
-WowWorldResult wwm_write_uint32(WowWorldWriter* stream, uint32_t value);
+WowWorldResult wwm_write_u32(WowWorldWriter* stream, uint32_t value);
 
-#define WRITE_U32(variable) WWM_CHECK_RETURN_CODE(wwm_write_uint32(writer, variable))
+#define WRITE_U32(variable) WWM_CHECK_RETURN_CODE(wwm_write_u32(writer, variable))
 
-WowWorldResult wwm_write_uint48(WowWorldWriter* stream, uint64_t value);
+WowWorldResult wwm_write_u48(WowWorldWriter* stream, uint64_t value);
 
-#define WRITE_U48(variable) WWM_CHECK_RETURN_CODE(wwm_write_uint48(writer, variable))
+#define WRITE_U48(variable) WWM_CHECK_RETURN_CODE(wwm_write_u48(writer, variable))
 
-WowWorldResult wwm_write_uint64(WowWorldWriter* stream, uint64_t value);
+WowWorldResult wwm_write_u64(WowWorldWriter* stream, uint64_t value);
 
-#define WRITE_U64(variable) WWM_CHECK_RETURN_CODE(wwm_write_uint64(writer, variable))
+#define WRITE_U64(variable) WWM_CHECK_RETURN_CODE(wwm_write_u64(writer, variable))
 
-WowWorldResult wwm_write_int32(WowWorldWriter* stream, int32_t value);
+WowWorldResult wwm_write_i32(WowWorldWriter* stream, int32_t value);
 
-#define WRITE_I32(variable) WWM_CHECK_RETURN_CODE(wwm_write_int32(writer, variable))
+#define WRITE_I32(variable) WWM_CHECK_RETURN_CODE(wwm_write_i32(writer, variable))
 
 WowWorldResult wwm_read_string(WowWorldReader* stream, char** string);
 

@@ -20,15 +20,15 @@ def print_write_struct_member(s: Writer, d: model.Definition, module_name: str, 
 
     match d.data_type:
         case model.DataTypeInteger(integer_type=integer_type):
+            c_type = integer_type_to_c_str(integer_type)
             if d.constant_value is not None:
                 variable_name = d.constant_value.value
             if d.size_of_fields_before_size is not None:
-                c_type = integer_type_to_c_str(integer_type)
                 variable_name = f"({c_type}){module_name}_{container_name}_size(object)"
                 if is_cpp():
                     variable_name = f"static_cast<{c_type}>({container_name}_size(obj))"
             if d.used_as_size_in is not None and is_cpp():
-                variable_name = f"obj.{extra_indirection}{d.used_as_size_in}.size()"
+                variable_name = f"static_cast<{c_type}>(obj.{extra_indirection}{d.used_as_size_in}.size())"
 
             short = integer_type_to_short(integer_type)
 
@@ -193,8 +193,7 @@ def print_write_struct_member(s: Writer, d: model.Definition, module_name: str, 
                     s.newline()
 
                 s.open_curly(f"for (const auto& v : {variable_name})")
-                print_array_inner_write(d, extra_indirection, "", "", inner_type, s, size,
-                                        variable_name, module_name)
+                print_array_inner_write(d, extra_indirection, inner_type, s, size, variable_name, module_name)
                 s.closing_curly()  # for (const auto& v
 
                 if compressed:
@@ -232,7 +231,7 @@ def print_write_struct_member(s: Writer, d: model.Definition, module_name: str, 
                     s.open_curly(
                         f"for(compressed_i = 0; compressed_i < object->amount_of_{extra_indirection}{d.name}; ++compressed_i)")
                     s.wln(
-                        f"_size += {array_size_inner_action(inner_type, '', '', f'object->{extra_indirection}{d.name}', 'compressed_i', module_name)};")
+                        f"_size += {array_size_inner_action(inner_type, f'object->{extra_indirection}{d.name}', 'compressed_i', module_name)};")
                     s.closing_curly()  # for
 
                     s.open_curly("if (_size)")
@@ -248,11 +247,7 @@ def print_write_struct_member(s: Writer, d: model.Definition, module_name: str, 
                     s.wln(f"new_writer = wwm_create_writer({d.name}_uncompressed_data, _size);")
                     s.wln("writer = &new_writer;")
 
-                fixed_prefix = ""
-                fixed_suffix = ""
-
-                print_array_inner_write(d, extra_indirection, fixed_prefix, fixed_suffix, inner_type, s, size,
-                                        variable_name, module_name)
+                print_array_inner_write(d, extra_indirection, inner_type, s, size, variable_name, module_name)
 
                 if compressed:
                     s.newline()
@@ -271,8 +266,7 @@ def print_write_struct_member(s: Writer, d: model.Definition, module_name: str, 
     s.newline()
 
 
-def array_size_inner_action(inner_type: model.ArrayType, fixed_prefix: str, fixed_suffix: str,
-                            variable_name: str, index_variable: str, module_name) -> str:
+def array_size_inner_action(inner_type: model.ArrayType, variable_name: str, index_variable: str, module_name) -> str:
     match inner_type:
         case model.ArrayTypeInteger(integer_type=integer_type):
             return f"{integer_type_to_size(integer_type)}"
@@ -282,23 +276,22 @@ def array_size_inner_action(inner_type: model.ArrayType, fixed_prefix: str, fixe
 
         case model.ArrayTypeStruct(struct_data=e):
             version = container_module_prefix(e.tags, module_name)
-            size = f"{version}_{e.name}_size(&{fixed_prefix}{variable_name}[{index_variable}]{fixed_suffix})" if not e.sizes.constant_sized else str(
+            size = f"{version}_{e.name}_size(&{variable_name}[{index_variable}])" if not e.sizes.constant_sized else str(
                 e.sizes.maximum_size)
             return f"{e.name}_size(v)" if is_cpp() and not e.sizes.constant_sized else size
 
         case model.ArrayTypeCstring():
-            return f"v.size() + 1" if is_cpp() else f"STRING_SIZE({fixed_prefix}{variable_name}[{index_variable}]{fixed_suffix}) + 1"
+            return f"v.size() + 1" if is_cpp() else f"STRING_SIZE({variable_name}[{index_variable}]) + 1"
 
         case model.ArrayTypePackedGUID():
-            return f"wow_world_messages::util::wwm_packed_guid_size(v)" if is_cpp() else f"wwm_packed_guid_size({fixed_prefix}{variable_name}[{index_variable}]{fixed_suffix})"
+            return f"wow_world_messages::util::wwm_packed_guid_size(v)" if is_cpp() else f"wwm_packed_guid_size({variable_name}[{index_variable}])"
 
         case _:
             raise Exception(f"array size unknown type {inner_type}")
 
 
-def print_array_inner_write(d: model.Definition, extra_indirection: str, fixed_prefix: str, fixed_suffix: str,
-                            inner_type: model.ArrayType, s: Writer, size: model.ArraySize, variable_name: str,
-                            module_name: str):
+def print_array_inner_write(d: model.Definition, extra_indirection: str, inner_type: model.ArrayType, s: Writer,
+                            size: model.ArraySize, variable_name: str, module_name: str):
     if is_cpp():
         match inner_type:
             case model.ArrayTypeInteger(integer_type=integer_type):
@@ -328,24 +321,24 @@ def print_array_inner_write(d: model.Definition, extra_indirection: str, fixed_p
         match inner_type:
             case model.ArrayTypeInteger(integer_type=integer_type):
                 short = integer_type_to_short(integer_type).upper()
-                inner = f"WRITE_{short}({fixed_prefix}{variable_name}{fixed_suffix}[i])"
+                inner = f"WRITE_{short}({variable_name}[i])"
 
             case model.ArrayTypeSpell():
-                inner = f"WRITE_U32({fixed_prefix}{variable_name}{fixed_suffix}[i])"
+                inner = f"WRITE_U32({variable_name}[i])"
 
             case model.ArrayTypeGUID():
-                inner = f"WRITE_U64({fixed_prefix}{variable_name}{fixed_suffix}[i])"
+                inner = f"WRITE_U64({variable_name}[i])"
 
             case model.ArrayTypeStruct(struct_data=e):
                 version = container_module_prefix(e.tags, module_name)
                 wlm_prefix = "WWM" if is_world(e.tags) else "WLM"
-                inner = f"{wlm_prefix}_CHECK_RETURN_CODE({version}_{e.name}_write(writer, &{fixed_prefix}{variable_name}{fixed_suffix}[i]))"
+                inner = f"{wlm_prefix}_CHECK_RETURN_CODE({version}_{e.name}_write(writer, &{variable_name}[i]))"
 
             case model.ArrayTypeCstring():
-                inner = f"WRITE_CSTRING({fixed_prefix}{variable_name}{fixed_suffix}[i])"
+                inner = f"WRITE_CSTRING({variable_name}[i])"
 
             case model.ArrayTypePackedGUID():
-                inner = f"WWM_CHECK_RETURN_CODE(wwm_write_packed_guid(writer, {fixed_prefix}{variable_name}{fixed_suffix}[i]))"
+                inner = f"WWM_CHECK_RETURN_CODE(wwm_write_packed_guid(writer, {variable_name}[i]))"
 
             case v2:
                 raise Exception(f"{v2}")
@@ -376,7 +369,8 @@ def print_write(s: Writer, h: Writer, container: Container, object_type: model.O
         if type(object_type) is model.ObjectTypeStruct:
             function_declaration = f"{export}void {container.name}_write{function_suffix}(Writer& writer, const {container.name}& obj)"
         else:
-            function_declaration = f"{export}std::vector<unsigned char> {container.name}::write{function_suffix}() const"
+            extra = "const std::function<void(unsigned char*, size_t)>& encrypt" if is_world(container.tags) else ""
+            function_declaration = f"{export}std::vector<unsigned char> {container.name}::write{function_suffix}({extra}) const"
 
     s.open_curly(function_declaration)
     if type(object_type) is not model.ObjectTypeStruct:
@@ -423,6 +417,10 @@ def print_write(s: Writer, h: Writer, container: Container, object_type: model.O
                 s.wln(f"writer.write_u32(0x{opcode:08x}); /* opcode */")
                 s.newline()
                 opcode_size = 4
+
+        if is_world(container.tags) and not type(object_type) is model.ObjectTypeStruct:
+            s.wln("encrypt(writer.m_buf.data(), writer.m_buf.size());")
+            s.newline()
 
         if container.tags.compressed:
             s.wln(f"writer.write_u32(static_cast<uint32_t>({container.name}_size(obj)));")

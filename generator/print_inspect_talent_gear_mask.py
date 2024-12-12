@@ -22,7 +22,7 @@ def print_inspect_talent_gear_mask_c(s: Writer, h: Writer):
                 }}
             }}
 
-            WWM_CHECK_RETURN_CODE(wwm_write_uint32(stream, header));
+            WWM_CHECK_RETURN_CODE(wwm_write_u32(stream, header));
 
             for (i = 0; i < WRATH_INSPECT_TALENT_GEAR_MASK_LENGTH; ++i) {{
                 if (mask->values[i].item != 0) {{
@@ -36,7 +36,7 @@ def print_inspect_talent_gear_mask_c(s: Writer, h: Writer):
         static WowWorldResult wrath_inspect_talent_gear_mask_read(WowWorldReader* stream, wrath_InspectTalentGearMask* mask) {{
             int i = 0;
             uint32_t header = 0;
-            WWM_CHECK_RETURN_CODE(wwm_read_uint32(stream, &header));
+            WWM_CHECK_RETURN_CODE(wwm_read_u32(stream, &header));
 
             for (i = 0; i < WRATH_INSPECT_TALENT_GEAR_MASK_LENGTH; ++i) {{
                 if ((header & (uint32_t)1 << i) != 0) {{

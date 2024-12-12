@@ -1498,17 +1498,17 @@ static WowWorldResult vanilla_update_mask_write(WowWorldWriter* stream, const va
         }
     }
 
-    WWM_CHECK_RETURN_CODE(wwm_write_uint8(stream, amount_of_headers));
+    WWM_CHECK_RETURN_CODE(wwm_write_u8(stream, amount_of_headers));
 
     for (i = 0; i < amount_of_headers; ++i) {
-        WWM_CHECK_RETURN_CODE(wwm_write_uint32(stream, mask->headers[i]));
+        WWM_CHECK_RETURN_CODE(wwm_write_u32(stream, mask->headers[i]));
     }
 
     for (i = 0; i < amount_of_headers; ++i) {
         uint32_t header = mask->headers[i];
         for (j = 0; j < 32; ++j) {
             if ((header & ((uint32_t)1 << j)) != 0) {
-                WWM_CHECK_RETURN_CODE(wwm_write_uint32(stream, mask->values[i * 32 + j]));
+                WWM_CHECK_RETURN_CODE(wwm_write_u32(stream, mask->values[i * 32 + j]));
             }
         }
     }
@@ -1525,17 +1525,17 @@ static WowWorldResult vanilla_update_mask_read(WowWorldReader* stream, vanilla_U
     memset(mask->headers, 0, sizeof(mask->headers));
     memset(mask->values, 0, sizeof(mask->values));
 
-    WWM_CHECK_RETURN_CODE(wwm_read_uint8(stream, &amount_of_headers));
+    WWM_CHECK_RETURN_CODE(wwm_read_u8(stream, &amount_of_headers));
 
     for (i = 0; i < amount_of_headers; ++i) {
-        WWM_CHECK_RETURN_CODE(wwm_read_uint32(stream, &mask->headers[i]));
+        WWM_CHECK_RETURN_CODE(wwm_read_u32(stream, &mask->headers[i]));
     }
 
     for (i = 0; i < amount_of_headers; ++i) {
         uint32_t header = mask->headers[i];
         for (j = 0; j < 32; ++j) {
             if ((header & ((uint32_t)1 << j)) != 0) {
-                WWM_CHECK_RETURN_CODE(wwm_read_uint32(stream, &mask->values[i * 32 + j]));
+                WWM_CHECK_RETURN_CODE(wwm_read_u32(stream, &mask->values[i * 32 + j]));
             }
         }
     }
@@ -4375,13 +4375,13 @@ static size_t vanilla_aura_mask_size(const vanilla_AuraMask* object) {
 static WowWorldResult vanilla_aura_mask_read(WowWorldReader* reader, vanilla_AuraMask* mask) {
     uint32_t header;
     uint32_t i;
-    WWM_CHECK_RETURN_CODE(wwm_read_uint32(reader, &header));
+    WWM_CHECK_RETURN_CODE(wwm_read_u32(reader, &header));
 
     for(i = 0; i < VANILLA_AURA_MASK_SIZE; ++i) {
         mask->auras[i] = 0; /* initialize to 0 */
 
         if ((header & (1 << i)) != 0) {
-            WWM_CHECK_RETURN_CODE(wwm_read_uint16(reader, &mask->auras[i]));
+            WWM_CHECK_RETURN_CODE(wwm_read_u16(reader, &mask->auras[i]));
         }
     }
 
@@ -4398,11 +4398,11 @@ static WowWorldResult vanilla_aura_mask_write(WowWorldWriter* writer, const vani
         }
     }
 
-    WWM_CHECK_RETURN_CODE(wwm_write_uint32(writer, header));
+    WWM_CHECK_RETURN_CODE(wwm_write_u32(writer, header));
 
     for(i = 0; i < VANILLA_AURA_MASK_SIZE; ++i) {
         if (mask->auras[i] != 0) {
-            WWM_CHECK_RETURN_CODE(wwm_write_uint16(writer, mask->auras[i]));
+            WWM_CHECK_RETURN_CODE(wwm_write_u16(writer, mask->auras[i]));
         }
     }
 
@@ -16396,6 +16396,7 @@ static WowWorldResult vanilla_SMSG_COMPRESSED_UPDATE_OBJECT_read(WowWorldReader*
     WowWorldReader stack_reader;
     unsigned char* _compressed_data = NULL;
     uint32_t _decompressed_size;
+
     READ_U32(_decompressed_size);
     _size += 4;
 
@@ -22758,6 +22759,7 @@ static WowWorldResult vanilla_SMSG_COMPRESSED_MOVES_read(WowWorldReader* reader,
     WowWorldReader stack_reader;
     unsigned char* _compressed_data = NULL;
     uint32_t _decompressed_size;
+
     READ_U32(_decompressed_size);
     _size += 4;
 

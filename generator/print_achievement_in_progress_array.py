@@ -17,7 +17,7 @@ def print_achievement_in_progress_array_c(s: Writer, h: Writer):
                 WWM_CHECK_RETURN_CODE(wrath_AchievementInProgress_write(stream, &mask->achievements[i]));
             }}
 
-            WWM_CHECK_RETURN_CODE(wwm_write_uint32(stream, 0xFFFFFFFF));
+            WWM_CHECK_RETURN_CODE(wwm_write_u32(stream, 0xFFFFFFFF));
 
             return WWM_RESULT_SUCCESS;
         }}
@@ -26,7 +26,7 @@ def print_achievement_in_progress_array_c(s: Writer, h: Writer):
             uint32_t achievement;
             size_t array_size = 8;
 
-            WWM_CHECK_RETURN_CODE(wwm_read_uint32(stream, &achievement));
+            WWM_CHECK_RETURN_CODE(wwm_read_u32(stream, &achievement));
             stream->index -= 4; /* we're just checking achievement */
 
             mask->achievements = malloc(array_size * sizeof(wrath_AchievementInProgress));
@@ -39,7 +39,7 @@ def print_achievement_in_progress_array_c(s: Writer, h: Writer):
                 mask->achievements[mask->amount_of_achievements].achievement = achievement;
                 WWM_CHECK_RETURN_CODE(wrath_AchievementInProgress_read(stream, &mask->achievements[mask->amount_of_achievements]));
 
-                WWM_CHECK_RETURN_CODE(wwm_read_uint32(stream, &achievement));
+                WWM_CHECK_RETURN_CODE(wwm_read_u32(stream, &achievement));
                 stream->index -= 4; /* we're just checking achievement */
                 ++mask->amount_of_achievements;
 

@@ -4,7 +4,7 @@ import model
 from print_struct.struct_util import container_has_c_members, container_module_prefix
 from util import first_version_as_module, \
     get_type_prefix, is_world, version_to_module_name, version_matches, get_export_define, container_needs_size_in_read, \
-    is_cpp, library_type
+    is_cpp, library_type, world_version_is_wrath
 from writer import Writer
 import print_struct
 
@@ -50,7 +50,7 @@ def print_login_utils_side(s: Writer, h: Writer, messages: list[model.Container]
     export_define = get_export_define(messages[0].tags)
 
     if is_cpp():
-        h.open_curly(f"struct {side.capitalize()}Opcode")
+        h.open_curly(f"class {side.capitalize()}Opcode")
         h.open_curly("enum class Opcode")
 
         if is_world(messages[0].tags):
@@ -79,58 +79,235 @@ def print_login_utils_side(s: Writer, h: Writer, messages: list[model.Container]
         h.closing_curly(";")  # union
         h.newline()
 
-        h.open_curly("bool is_none() const noexcept")
+        h.wln_no_indent("public:")
+
+        h.open_curly(f"{export_define} bool is_none() const noexcept")
         h.wln("return opcode == Opcode::NONE;")
         h.closing_curly()
 
-        h.newline()
-        h.wln(f"explicit {side.capitalize()}Opcode() : opcode(Opcode::NONE), {first_opcode}() {{}}")
+        size_field_size = 2 if side == "server" else 4
+        world = type(v) is model.WorldVersion
+
+        extra = ", const std::function<void(unsigned char*, size_t)>& decrypt" if world else ""
+        h.wln(f"{export_define} static {side.capitalize()}Opcode read(Reader& reader{extra});")
         h.newline()
 
-        h.open_curly(f"{side.capitalize()}Opcode({side.capitalize()}Opcode&& other) noexcept")
-        h.wln("this->opcode = other.opcode;")
-        h.wln("other.opcode = Opcode::NONE;")
+        s.open_curly(
+            f"{export_define} {side.capitalize()}Opcode {side.capitalize()}Opcode::read(Reader& reader{extra})")
+
+        if type(v) is model.WorldVersion:
+            if side == "server":
+                opcode_type = "uint16_t"
+                header_size = 4 if not world_version_is_wrath(v) else 5
+            else:
+                opcode_type = "uint32_t"
+                header_size = 6
+
+            s.write_block(f"""
+                constexpr size_t HEADER_SIZE = {header_size};
+                unsigned char header[HEADER_SIZE];
+            """)
+
+            if world_version_is_wrath(v) and side == "server":
+                s.write_block(f"""
+                    reader.read_bytes(header, HEADER_SIZE - 1);
+                    decrypt(header, HEADER_SIZE - 1);
+
+                    uint32_t _size;
+                    uint16_t opcode;
+
+                    if((header[0] &0x80) != 0) {{
+                        reader.read_bytes(header + 4, 1);
+                        decrypt(header + 4, 1);
+
+                        _size = static_cast<uint32_t>(header[0]) << 16 | static_cast<uint32_t>(header[1]) << 8 | static_cast<uint32_t>(header[2]);
+                        opcode = static_cast<uint16_t>(header[3]) | static_cast<uint16_t>(header[4]) << 8;
+                    }} else {{
+                        _size = static_cast<uint32_t>(header[0]) << 8 | static_cast<uint32_t>(header[1]);
+                        opcode = static_cast<uint16_t>(header[2]) | static_cast<uint16_t>(header[3]) << 8;
+                    }}
+                """)
+            else:
+                s.write_block(f"""
+                    reader.read_bytes(header, HEADER_SIZE);
+                    decrypt(header, HEADER_SIZE);
+
+                    const uint16_t _size = static_cast<uint16_t>(header[0]) << 8 | static_cast<uint16_t>(header[1]);
+                """)
+
+                if side == "server":
+                    s.wln(
+                        "const uint16_t opcode = static_cast<uint16_t>(header[2]) | static_cast<uint16_t>(header[3]) << 8;")
+                else:
+                    s.wln(
+                        "const uint32_t opcode = static_cast<uint32_t>(header[2]) | static_cast<uint32_t>(header[3]) << 8 | static_cast<uint32_t>(header[4]) << 16 | static_cast<uint32_t>(header[5]) << 24 ;")
+        else:
+            opcode_type = "uint8_t"
+            s.wln("const uint8_t opcode = reader.read_u8();")
+
+        s.newline()
+        s.wln(f"{side.capitalize()}Opcode op;")
+        s.newline()
+
+        for e in messages:
+            if not version_matches(e.tags, v) \
+                    or side_matches(e, side) == INVALID_OPCODE \
+                    or (first_version_as_module(e.tags) == "all" and version_to_module_name(v) != "all"):
+                continue
+            name = e.name.replace('_Client', '').replace('_Server', '')
+            s.open_curly(f"if (opcode == static_cast<{opcode_type}>({side.capitalize()}Opcode::Opcode::{name}))")
+            module = library_type(e.tags)
+            if not container_has_c_members(e):
+                s.wln(f"return {side.capitalize()}Opcode(::wow_{module}_messages::{module_name}::{e.name}{{}});")
+            else:
+                body_size = f", _size - {size_field_size}" if container_needs_size_in_read(e) else ""
+
+                module_prefix = container_module_prefix(e.tags, module_name)
+                s.wln(
+                    f"return {side.capitalize()}Opcode(::wow_{module}_messages::{module_prefix}::{e.name}_read(reader{body_size}));")
+
+            s.closing_curly()  # if opcode == opcode
+
+        s.newline()
+        s.wln("return op;")
+
+        s.closing_curly()  # function decl
+        extra = "const std::function<void(unsigned char*, size_t)>& encrypt" if world else ""
+        h.wln(f"{export_define} std::vector<unsigned char> write({extra}) const;")
+        h.newline()
+
+        s.open_curly(f"{export_define} std::vector<unsigned char> {side.capitalize()}Opcode::write({extra}) const")
+        extra = "encrypt" if world else ""
+
+        for e in messages:
+            if not version_matches(e.tags, v) \
+                    or side_matches(e, side) == INVALID_OPCODE \
+                    or (first_version_as_module(e.tags) == "all" and version_to_module_name(v) != "all"):
+                continue
+            name = e.name.replace('_Client', '').replace('_Server', '')
+            s.open_curly(f"if (this->opcode == {side.capitalize()}Opcode::Opcode::{name})")
+
+            function_suffix: str = ""
+            if type(e.object_type) is model.ObjectTypeMsg:
+                first_char = side[0].lower()
+                function_suffix = f"_{first_char}msg"
+            s.wln(f"return this->{name}.write{function_suffix}({extra});;")
+            s.closing_curly()  # if
+
+        s.newline()
+        s.wln("return {}; /* unreachable */")
+        s.closing_curly()  # write_opcode
+
+        h.newline()
+        h.wln(f"{export_define} {side.capitalize()}Opcode() : opcode(Opcode::NONE), {first_opcode}() {{}}")
+        h.newline()
+
+        h.wln("/* 1 destructor */")
+        h.wln(f"{export_define} ~{side.capitalize()}Opcode();")
+        h.newline()
+
+        s.wln("/* 1 destructor */")
+        s.open_curly(f"{export_define} {side.capitalize()}Opcode::~{side.capitalize()}Opcode()")
         for e in filter(matches, messages):
             ty = e.name.replace("_Client", "").replace("_Server", "")
 
-            h.open_curly(f"if (opcode == Opcode::{ty})")
-            h.wln(f"this->{ty} = std::move(other.{ty});")
-            h.closing_curly()  # if (opcode == Opcode
-        h.closing_curly()
-        h.newline()
+            s.open_curly(f"if (opcode == Opcode::{ty})")
+            s.wln(f"this->{ty}.~{e.name}();")
+            s.closing_curly()  # if (opcode == Opcode
 
-        h.open_curly(f"{side.capitalize()}Opcode operator=({side.capitalize()}Opcode&& other) noexcept")
-        h.wln("this->opcode = other.opcode;")
-        h.wln("other.opcode = Opcode::NONE;")
+        s.closing_curly()  # destructor
+        s.newline()
+
+        h.wln("/* 2 copy constructor */")
+        h.wln(f"{export_define} {side.capitalize()}Opcode(const {side.capitalize()}Opcode& other);")
+
+        s.wln("/* 2 copy constructor */")
+        s.open_curly(
+            f"{export_define} {side.capitalize()}Opcode::{side.capitalize()}Opcode(const {side.capitalize()}Opcode& other)")
+        s.wln("this->opcode = other.opcode;")
         for e in filter(matches, messages):
             ty = e.name.replace("_Client", "").replace("_Server", "")
 
-            h.open_curly(f"if (opcode == Opcode::{ty})")
-            h.wln(f"this->{ty} = std::move(other.{ty});")
-            h.closing_curly()  # if (opcode == Opcode
-        h.wln("return std::move(*this);")
-        h.closing_curly()
-        h.newline()
+            s.open_curly(f"if (opcode == Opcode::{ty})")
+            s.wln(f"new (&{ty}) auto(other.{ty});")
+            s.closing_curly()  # if (opcode == Opcode
+        s.closing_curly()
+        s.newline()
 
-        h.open_curly(f"~{side.capitalize()}Opcode()")
+        h.wln("/* 3 copy assignment */")
+        h.wln(f"{export_define} {side.capitalize()}Opcode& operator=(const {side.capitalize()}Opcode& other);")
+
+        s.wln("/* 3 copy assignment */")
+        s.open_curly(
+            f"{export_define} {side.capitalize()}Opcode& {side.capitalize()}Opcode::operator=(const {side.capitalize()}Opcode& other)")
+        s.open_curly("if (this == &other)")
+        s.wln("return *this;")
+        s.closing_curly()
+        s.newline()
+
+        s.wln("this->opcode = other.opcode;")
         for e in filter(matches, messages):
             ty = e.name.replace("_Client", "").replace("_Server", "")
 
-            h.open_curly(f"if (opcode == Opcode::{ty})")
-            h.wln(f"this->{ty}.~{e.name}();")
-            h.closing_curly()  # if (opcode == Opcode
+            s.open_curly(f"if (opcode == Opcode::{ty})")
+            s.wln(f"{module_name}::{e.name} {ty}swap(other.{ty});")
+            s.wln(f"std::swap(this->{ty}, {ty}swap);")
+            s.closing_curly()  # if (opcode == Opcode
 
-        h.closing_curly()  # destructor
+        s.wln("return *this;")
+        s.closing_curly()
+        s.newline()
+
+        h.wln("/* 4 move constructor */")
+        h.wln(f"{export_define} {side.capitalize()}Opcode({side.capitalize()}Opcode&& other) noexcept;")
         h.newline()
+
+        s.wln("/* 4 move constructor */")
+        s.open_curly(
+            f"{export_define} {side.capitalize()}Opcode::{side.capitalize()}Opcode({side.capitalize()}Opcode&& other) noexcept")
+        s.wln("this->opcode = other.opcode;")
+        s.wln("other.opcode = Opcode::NONE;")
+        for e in filter(matches, messages):
+            ty = e.name.replace("_Client", "").replace("_Server", "")
+
+            s.open_curly(f"if (opcode == Opcode::{ty})")
+            s.wln(f"this->{ty} = std::move(other.{ty});")
+            s.closing_curly()  # if (opcode == Opcode
+        s.closing_curly()
+        s.newline()
+
+        h.wln("/* 5 move assignment */")
+        h.wln(f"{export_define} {side.capitalize()}Opcode& operator=({side.capitalize()}Opcode&& other) noexcept;")
+        h.newline()
+
+        s.wln("/* 5 move assignment */")
+        s.open_curly(
+            f"{export_define} {side.capitalize()}Opcode& {side.capitalize()}Opcode::operator=({side.capitalize()}Opcode&& other) noexcept")
+        s.wln("this->opcode = other.opcode;")
+        s.wln("other.opcode = Opcode::NONE;")
+        for e in filter(matches, messages):
+            ty = e.name.replace("_Client", "").replace("_Server", "")
+
+            s.open_curly(f"if (opcode == Opcode::{ty})")
+            s.wln(f"{module_name}::{e.name} {ty}swap(std::move(other.{ty}));")
+            s.wln(f"std::swap(this->{ty}, {ty}swap);")
+            s.closing_curly()  # if (opcode == Opcode
+        s.wln("return *this;")
+        s.closing_curly()
+        s.newline()
 
         for e in filter(matches, messages):
             ty = e.name.replace("_Client", "").replace("_Server", "")
 
-            h.open_curly(f"explicit {side.capitalize()}Opcode({module_name}::{e.name}&& obj)")
-            h.wln(f"opcode = Opcode::{ty};")
-            h.wln(f"new (&this->{ty}) {module_name}::{e.name} (std::move(obj));")
-            h.closing_curly()  # constructor
+            h.wln(f"{export_define} {side.capitalize()}Opcode({module_name}::{e.name}&& obj);")
+
+            s.open_curly(
+                f"{export_define} {side.capitalize()}Opcode::{side.capitalize()}Opcode({module_name}::{e.name}&& obj)")
+            s.wln(f"opcode = Opcode::{ty};")
+            s.wln(f"new (&this->{ty}) {module_name}::{e.name} (std::move(obj));")
+            s.closing_curly()  # constructor
         h.newline()
+        s.newline()
 
         h.wln("template<typename T>")
         h.wln("// NOLINTNEXTLINE")
@@ -142,9 +319,9 @@ def print_login_utils_side(s: Writer, h: Writer, messages: list[model.Container]
         h.wln(f"{export_define} T* get_if(); // All possible types have been specialized")
 
         h.newline()
-        function_declaration = f""
         h.wln(f"{export_define} const char* to_string() const;")
         s.open_curly(f"{export_define} const char* {side.capitalize()}Opcode::to_string() const")
+        s.wln('if (opcode == Opcode::NONE) {{ return "NONE"; }}')
         for e in filter(matches, messages):
             ty = e.name.replace("_Client", "").replace("_Server", "")
             s.wln(f'if (opcode == Opcode::{ty}) {{ return "{e.name}"; }}')
@@ -212,9 +389,9 @@ def print_login_utils_side(s: Writer, h: Writer, messages: list[model.Container]
         h.closing_curly(f" {module_name_pascal}{side_pascal}OpcodeContainer;")  # struct
         h.newline()
 
-    write_opcode_write(s, h, messages, v, side, module_name, module_name_pascal, side_pascal)
+    write_opcode_write(s, h, messages, v, side, module_name, module_name_pascal)
 
-    write_opcode_read(s, h, messages, v, side, module_name, module_name_pascal, side_pascal, opcodes)
+    write_opcode_read(s, h, messages, v, side, module_name, module_name_pascal, side_pascal)
 
     if not is_cpp():
         write_opcode_free(s, h, messages, v, side, module_name, module_name_pascal, side_pascal)
@@ -257,128 +434,62 @@ def write_opcode_to_string(s: Writer, h: Writer, messages: list[model.Container]
 
 
 def write_opcode_write(s: Writer, h: Writer, messages: list[model.Container], v: typing.Union[int | model.WorldVersion],
-                       side: str, module_name: str,
-                       module_name_pascal: str, side_pascal: str):
+                       side: str, module_name: str, module_name_pascal: str):
+    if is_cpp():
+        return
+
     export = get_export_define(messages[0].tags)
-    function_declaration = f"{export} std::vector<unsigned char> write_opcode(const {side.capitalize()}Opcode& opcode)"
-    if not is_cpp():
-        result_type = get_type_prefix(messages[0].tags)
-        function_declaration = f"{export} {result_type}Result {module_name}_{side}_opcode_write({result_type}Writer* writer, const {module_name_pascal}{side.capitalize()}OpcodeContainer* opcodes)"
+    result_type = get_type_prefix(messages[0].tags)
+    function_declaration = f"{export} {result_type}Result {module_name}_{side}_opcode_write({result_type}Writer* writer, const {module_name_pascal}{side.capitalize()}OpcodeContainer* opcodes)"
+
     h.wln(f"{function_declaration};")
     h.newline()
 
     s.open_curly(function_declaration)
 
-    if is_cpp():
-        for e in messages:
-            if not version_matches(e.tags, v) \
-                    or side_matches(e, side) == INVALID_OPCODE \
-                    or (first_version_as_module(e.tags) == "all" and version_to_module_name(v) != "all"):
-                continue
-            name = e.name.replace('_Client', '').replace('_Server', '')
-            s.open_curly(f"if (opcode.opcode == {side.capitalize()}Opcode::Opcode::{name})")
+    s.open_curly("switch (opcodes->opcode)")
+    prefix = f"{module_name[0].upper()}_" if is_world(messages[0].tags) else ""
 
-            function_suffix: str = ""
-            if type(e.object_type) is model.ObjectTypeMsg:
-                first_char = side[0].lower()
-                function_suffix = f"_{first_char}msg"
-            s.wln(f"return opcode.{name}.write{function_suffix}();;")
-            s.closing_curly()  # if
+    wlm_prefix = "WWM" if is_world(messages[0].tags) else "WLM"
+    for e in messages:
+        if not version_matches(e.tags, v) \
+                or side_matches(e, side) == INVALID_OPCODE \
+                or (first_version_as_module(e.tags) == "all" and version_to_module_name(v) != "all"):
+            continue
+        if not container_has_c_members(e):
+            continue
 
-        s.newline()
-        s.wln("return {}; /* unreachable */")
-    else:
-        s.open_curly("switch (opcodes->opcode)")
-        prefix = f"{module_name[0].upper()}_" if is_world(messages[0].tags) else ""
-
-        wlm_prefix = "WWM" if is_world(messages[0].tags) else "WLM"
-        for e in messages:
-            if not version_matches(e.tags, v) \
-                    or side_matches(e, side) == INVALID_OPCODE \
-                    or (first_version_as_module(e.tags) == "all" and version_to_module_name(v) != "all"):
-                continue
-            if not container_has_c_members(e):
-                continue
-
-            s.wln(f"case {prefix}{e.name.replace('_Client', '').replace('_Server', '')}:")
-            s.inc_indent()
-
-            version = container_module_prefix(e.tags, module_name)
-            extra_msg = "" if not type(e.object_type) is model.ObjectTypeMsg else f"_{side[0]}msg"
-            s.wln(
-                f"{wlm_prefix}_CHECK_RETURN_CODE({version}_{e.name}{extra_msg}_write(writer, &opcodes->body.{e.name}));")
-
-            s.wln("break;")
-            s.dec_indent()
-
-        s.wln("default:")
+        s.wln(f"case {prefix}{e.name.replace('_Client', '').replace('_Server', '')}:")
         s.inc_indent()
+
+        version = container_module_prefix(e.tags, module_name)
+        extra_msg = "" if not type(e.object_type) is model.ObjectTypeMsg else f"_{side[0]}msg"
+        s.wln(
+            f"{wlm_prefix}_CHECK_RETURN_CODE({version}_{e.name}{extra_msg}_write(writer, &opcodes->body.{e.name}));")
+
         s.wln("break;")
         s.dec_indent()
 
-        s.closing_curly()  # switch
-        s.newline()
-        s.wln(f"return {wlm_prefix}_RESULT_SUCCESS;")
+    s.wln("default:")
+    s.inc_indent()
+    s.wln("break;")
+    s.dec_indent()
+
+    s.closing_curly()  # switch
+    s.newline()
+    s.wln(f"return {wlm_prefix}_RESULT_SUCCESS;")
     s.closing_curly()  # function decl
     s.newline()
 
 
 def write_opcode_read(s: Writer, h: Writer, messages: list[model.Container], v: typing.Union[int | model.WorldVersion],
-                      side: str, module_name: str,
-                      module_name_pascal: str, side_pascal: str, opcodes: dict[str, int]):
+                      side: str, module_name: str, module_name_pascal: str, side_pascal: str):
     export = get_export_define(messages[0].tags)
+    world = is_world(messages[0].tags)
     result_type = get_type_prefix(messages[0].tags)
     size_field_size = 2 if side == "server" else 4
 
-    if is_cpp():
-        function_declaration = f"{export} {side.capitalize()}Opcode read_{side}_opcode(Reader& reader)"
-        h.wln(f"{function_declaration};")
-        h.newline()
-
-        s.open_curly(function_declaration)
-
-        opcode_type = None
-        if is_world(messages[0].tags):
-            if side == "server":
-                s.wln("const uint16_t _size = reader.read_u16_be();")
-                s.wln("const uint16_t opcode = reader.read_u16();")
-                opcode_type = "uint16_t"
-            else:
-                s.wln("const uint16_t _size = reader.read_u16_be();")
-                s.wln("const uint32_t opcode = reader.read_u32();")
-                opcode_type = "uint32_t"
-        else:
-            opcode_type = "uint8_t"
-            s.wln("const uint8_t opcode = reader.read_u8();")
-
-        s.newline()
-        s.wln(f"{side.capitalize()}Opcode op;")
-        s.newline()
-
-        for e in messages:
-            if not version_matches(e.tags, v) \
-                    or side_matches(e, side) == INVALID_OPCODE \
-                    or (first_version_as_module(e.tags) == "all" and version_to_module_name(v) != "all"):
-                continue
-            name = e.name.replace('_Client', '').replace('_Server', '')
-            s.open_curly(f"if (opcode == static_cast<{opcode_type}>({side.capitalize()}Opcode::Opcode::{name}))")
-            module = library_type(e.tags)
-            if not container_has_c_members(e):
-                s.wln(f"return {side.capitalize()}Opcode(::wow_{module}_messages::{module_name}::{e.name}{{}});")
-            else:
-                body_size = f", _size - {size_field_size}" if container_needs_size_in_read(e) else ""
-
-                module_prefix = container_module_prefix(e.tags, module_name)
-                s.wln(
-                    f"return {side.capitalize()}Opcode(::wow_{module}_messages::{module_prefix}::{e.name}_read(reader{body_size}));")
-
-            s.closing_curly()  # if opcode == opcode
-
-        s.newline()
-        s.wln("return op;")
-
-        s.closing_curly()  # function decl
-    else:
+    if not is_cpp():
         function_declaration = f"{export} {result_type}Result {module_name}_{side}_opcode_read({result_type}Reader* reader, {module_name_pascal}{side_pascal}OpcodeContainer* opcodes)"
 
         h.wln(f"{function_declaration};")

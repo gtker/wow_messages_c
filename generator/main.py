@@ -119,16 +119,15 @@ def sanitize_model(
                 enumerator.name = "TRY_CAST_AGAIN"
         return definer
 
-    for e in m.world.enums:
-        e = definers(e)
+    for d in m.world.enums:
+        d = definers(d)
 
     return m
 
 
-def print_includes(s: Writer, h: Writer, world: bool, version_name: str,
-                   v: typing.Union[int | model.WorldVersion], m: model.Objects,
-                   distinct_login_versions_other_than_all: typing.List[int]):
+def print_includes(s: Writer, h: Writer, version_name: str, v: typing.Union[int | model.WorldVersion], m: model.Objects):
     include_dir = "wow_login_messages"
+    world = type(v) is model.WorldVersion
     if world:
         include_dir = "wow_world_messages"
 
@@ -154,14 +153,9 @@ def print_includes(s: Writer, h: Writer, world: bool, version_name: str,
         h.wln(f"#include \"{include_dir}/all.h{pp}\"")
     h.newline()
 
-    if not world and not version_name == "all":
-        should_newline = False
-        for version in distinct_login_versions_other_than_all:
-            if version < v:
-                should_newline = True
-                h.wln(f'#include "{include_dir}/version{version}.h{pp}"')
-        if should_newline:
-            h.newline()
+    if world and is_cpp() and not version_name == "all":
+        h.wln("#include <functional> /* std::function */")
+        h.newline()
 
     if not is_cpp():
         h.wln("#ifdef __cplusplus")
@@ -181,7 +175,7 @@ def print_includes(s: Writer, h: Writer, world: bool, version_name: str,
             s.wln("#include <stdlib.h> /* abort for AddonArray read */")
         s.newline()
 
-    if world and not world_version_is_all(v):
+    if type(v) is model.WorldVersion and not world_version_is_all(v):
         if is_cpp():
             s.open_curly("namespace wow_world_messages")
             s.open_curly("namespace all")
@@ -201,10 +195,11 @@ def print_includes(s: Writer, h: Writer, world: bool, version_name: str,
         s.newline()
 
     if is_cpp():
-        h.wln(f"namespace {include_file} {{")
-        h.wln(f"namespace {version_name} {{")
         s.wln(f"namespace {include_file} {{")
         s.wln(f"namespace {version_name} {{")
+        if world:
+            h.wln(f"namespace {include_file} {{")
+            h.wln(f"namespace {version_name} {{")
 
 
 def print_footer(s: Writer, h: Writer, world: typing.Optional[model.WorldVersion], version_name: str):
@@ -236,6 +231,7 @@ def print_world(m: model.Objects, update_mask: list[model.UpdateMask], v: model.
         if type(container_or_definer) is model.Definer:
             return version_matches(container_or_definer.tags, v)
 
+        assert isinstance(container_or_definer, model.Container)
         match container_or_definer.tags.version:
             case model.ObjectVersionsWorld(version_type=version_type):
                 match version_type:
@@ -250,7 +246,7 @@ def print_world(m: model.Objects, update_mask: list[model.UpdateMask], v: model.
 
     module_name = world_version_to_module_name(v)
 
-    print_includes(s, h, True, module_name, v, m, [])
+    print_includes(s, h, module_name, v, m)
 
     for d in filter(should_print, m.enums):
         print_enum(h, d, module_name)
@@ -312,7 +308,7 @@ def print_login(m: model.Objects, s: Writer, tests: Writer, v: int,
     module_name = login_version_to_module_name(v)
 
     h_includes = Writer()
-    print_includes(s, h_includes, False, module_name, v, m, distinct_login_versions_other_than_all)
+    print_includes(s, h_includes, module_name, v, m)
 
     def typedef_existing(s: Writer, name: str, old_version: str, new_version: str):
         if is_cpp():
@@ -323,23 +319,20 @@ def print_login(m: model.Objects, s: Writer, tests: Writer, v: int,
                 f"typedef {old_version}_{name} {new_version}_{name};")
         s.newline()
 
-    type_includes = {}
+    type_includes: typing.Dict[int, None] = {}
     for d in filter(should_print, m.enums):
         version = first_login_version(d.tags)
         if version != v:
-            type_includes[version] = {}
+            type_includes[version] = None
             typedef_existing(h, d.name, login_version_to_module_name(version), module_name)
             continue
 
         print_enum(h, d, module_name)
 
     for d in filter(should_print, m.flags):
-        if not version_matches(d.tags, v):
-            continue
-
         version = first_login_version(d.tags)
         if version != v:
-            type_includes[version] = {}
+            type_includes[version] = None
             typedef_existing(h, d.name, login_version_to_module_name(version), module_name)
             continue
 
@@ -348,7 +341,7 @@ def print_login(m: model.Objects, s: Writer, tests: Writer, v: int,
     for e in filter(should_print, m.structs):
         version = first_login_version(e.tags)
         if version != v:
-            type_includes[version] = {}
+            type_includes[version] = None
             if container_has_c_members(e):
                 typedef_existing(h, e.name, login_version_to_module_name(version), module_name)
             continue
@@ -359,17 +352,20 @@ def print_login(m: model.Objects, s: Writer, tests: Writer, v: int,
     for e in filter(should_print, m.messages):
         version = first_login_version(e.tags)
         if version != v:
-            type_includes[version] = {}
+            type_includes[version] = None
             if container_has_c_members(e):
                 typedef_existing(h, e.name, login_version_to_module_name(version), module_name)
                 continue
 
         print_struct(s, h, e, module_name)
 
-    if not is_cpp():
-        for inc in type_includes:
-            name = login_version_to_module_name(inc)
-            h_includes.wln(f"#include \"wow_login_messages/{name}.h\" /* type include */")
+    for inc in type_includes:
+        name = login_version_to_module_name(inc)
+        h_includes.wln(f"#include \"wow_login_messages{'_cpp' if is_cpp() else ''}/{name}.h{'pp' if is_cpp() else ''}\" /* type include */")
+
+    if is_cpp():
+        h_includes.wln("namespace wow_login_messages {")
+        h_includes.wln(f"namespace {module_name} {{")
 
     h_includes.newline()
     h.prepend(h_includes)

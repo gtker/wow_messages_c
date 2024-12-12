@@ -2009,17 +2009,17 @@ static WowWorldResult wrath_update_mask_write(WowWorldWriter* stream, const wrat
         }
     }
 
-    WWM_CHECK_RETURN_CODE(wwm_write_uint8(stream, amount_of_headers));
+    WWM_CHECK_RETURN_CODE(wwm_write_u8(stream, amount_of_headers));
 
     for (i = 0; i < amount_of_headers; ++i) {
-        WWM_CHECK_RETURN_CODE(wwm_write_uint32(stream, mask->headers[i]));
+        WWM_CHECK_RETURN_CODE(wwm_write_u32(stream, mask->headers[i]));
     }
 
     for (i = 0; i < amount_of_headers; ++i) {
         uint32_t header = mask->headers[i];
         for (j = 0; j < 32; ++j) {
             if ((header & ((uint32_t)1 << j)) != 0) {
-                WWM_CHECK_RETURN_CODE(wwm_write_uint32(stream, mask->values[i * 32 + j]));
+                WWM_CHECK_RETURN_CODE(wwm_write_u32(stream, mask->values[i * 32 + j]));
             }
         }
     }
@@ -2036,17 +2036,17 @@ static WowWorldResult wrath_update_mask_read(WowWorldReader* stream, wrath_Updat
     memset(mask->headers, 0, sizeof(mask->headers));
     memset(mask->values, 0, sizeof(mask->values));
 
-    WWM_CHECK_RETURN_CODE(wwm_read_uint8(stream, &amount_of_headers));
+    WWM_CHECK_RETURN_CODE(wwm_read_u8(stream, &amount_of_headers));
 
     for (i = 0; i < amount_of_headers; ++i) {
-        WWM_CHECK_RETURN_CODE(wwm_read_uint32(stream, &mask->headers[i]));
+        WWM_CHECK_RETURN_CODE(wwm_read_u32(stream, &mask->headers[i]));
     }
 
     for (i = 0; i < amount_of_headers; ++i) {
         uint32_t header = mask->headers[i];
         for (j = 0; j < 32; ++j) {
             if ((header & ((uint32_t)1 << j)) != 0) {
-                WWM_CHECK_RETURN_CODE(wwm_read_uint32(stream, &mask->values[i * 32 + j]));
+                WWM_CHECK_RETURN_CODE(wwm_read_u32(stream, &mask->values[i * 32 + j]));
             }
         }
     }
@@ -2084,11 +2084,11 @@ static WowWorldResult wrath_enchant_mask_write(WowWorldWriter* stream, const wra
         }
     }
 
-    WWM_CHECK_RETURN_CODE(wwm_write_uint16(stream, header));
+    WWM_CHECK_RETURN_CODE(wwm_write_u16(stream, header));
 
     for (i = 0; i < WRATH_ENCHANT_MASK_LENGTH; ++i) {
         if (mask->values[i] != 0) {
-            WWM_CHECK_RETURN_CODE(wwm_write_uint16(stream, mask->values[i]));
+            WWM_CHECK_RETURN_CODE(wwm_write_u16(stream, mask->values[i]));
         }
     }
 
@@ -2098,11 +2098,11 @@ static WowWorldResult wrath_enchant_mask_write(WowWorldWriter* stream, const wra
 static WowWorldResult wrath_enchant_mask_read(WowWorldReader* stream, wrath_EnchantMask* mask) {
     int i = 0;
     uint16_t header = 0;
-    WWM_CHECK_RETURN_CODE(wwm_read_uint16(stream, &header));
+    WWM_CHECK_RETURN_CODE(wwm_read_u16(stream, &header));
 
     for (i = 0; i < WRATH_ENCHANT_MASK_LENGTH; ++i) {
         if ((header & (uint16_t)1 << i) != 0) {
-            WWM_CHECK_RETURN_CODE(wwm_read_uint16(stream, &mask->values[i]));
+            WWM_CHECK_RETURN_CODE(wwm_read_u16(stream, &mask->values[i]));
         } else {
             mask->values[i] = 0;
         }
@@ -6902,7 +6902,7 @@ static WowWorldResult wrath_achievement_in_progress_array_write(WowWorldWriter* 
         WWM_CHECK_RETURN_CODE(wrath_AchievementInProgress_write(stream, &mask->achievements[i]));
     }
 
-    WWM_CHECK_RETURN_CODE(wwm_write_uint32(stream, 0xFFFFFFFF));
+    WWM_CHECK_RETURN_CODE(wwm_write_u32(stream, 0xFFFFFFFF));
 
     return WWM_RESULT_SUCCESS;
 }
@@ -6911,7 +6911,7 @@ static WowWorldResult wrath_achievement_in_progress_array_read(WowWorldReader* s
     uint32_t achievement;
     size_t array_size = 8;
 
-    WWM_CHECK_RETURN_CODE(wwm_read_uint32(stream, &achievement));
+    WWM_CHECK_RETURN_CODE(wwm_read_u32(stream, &achievement));
     stream->index -= 4; /* we're just checking achievement */
 
     mask->achievements = malloc(array_size * sizeof(wrath_AchievementInProgress));
@@ -6924,7 +6924,7 @@ static WowWorldResult wrath_achievement_in_progress_array_read(WowWorldReader* s
         mask->achievements[mask->amount_of_achievements].achievement = achievement;
         WWM_CHECK_RETURN_CODE(wrath_AchievementInProgress_read(stream, &mask->achievements[mask->amount_of_achievements]));
 
-        WWM_CHECK_RETURN_CODE(wwm_read_uint32(stream, &achievement));
+        WWM_CHECK_RETURN_CODE(wwm_read_u32(stream, &achievement));
         stream->index -= 4; /* we're just checking achievement */
         ++mask->amount_of_achievements;
 
@@ -6960,7 +6960,7 @@ static WowWorldResult wrath_achievement_done_array_write(WowWorldWriter* stream,
         WWM_CHECK_RETURN_CODE(wrath_AchievementDone_write(stream, &mask->achievements[i]));
     }
 
-    WWM_CHECK_RETURN_CODE(wwm_write_uint32(stream, 0xFFFFFFFF));
+    WWM_CHECK_RETURN_CODE(wwm_write_u32(stream, 0xFFFFFFFF));
 
     return WWM_RESULT_SUCCESS;
 }
@@ -6969,7 +6969,7 @@ static WowWorldResult wrath_achievement_done_array_read(WowWorldReader* stream, 
     uint32_t achievement;
     size_t array_size = 8;
 
-    WWM_CHECK_RETURN_CODE(wwm_read_uint32(stream, &achievement));
+    WWM_CHECK_RETURN_CODE(wwm_read_u32(stream, &achievement));
     stream->index -= 4; /* we're just checking achievement */
 
     mask->achievements = malloc(array_size * sizeof(wrath_AchievementDone));
@@ -6982,7 +6982,7 @@ static WowWorldResult wrath_achievement_done_array_read(WowWorldReader* stream, 
         mask->achievements[mask->amount_of_achievements].achievement = achievement;
         WWM_CHECK_RETURN_CODE(wrath_AchievementDone_read(stream, &mask->achievements[mask->amount_of_achievements]));
 
-        WWM_CHECK_RETURN_CODE(wwm_read_uint32(stream, &achievement));
+        WWM_CHECK_RETURN_CODE(wwm_read_u32(stream, &achievement));
         ++mask->amount_of_achievements;
         stream->index -= 4; /* we're just checking achievement */
 
@@ -7017,7 +7017,7 @@ static WowWorldResult wrath_inspect_talent_gear_mask_write(WowWorldWriter* strea
         }
     }
 
-    WWM_CHECK_RETURN_CODE(wwm_write_uint32(stream, header));
+    WWM_CHECK_RETURN_CODE(wwm_write_u32(stream, header));
 
     for (i = 0; i < WRATH_INSPECT_TALENT_GEAR_MASK_LENGTH; ++i) {
         if (mask->values[i].item != 0) {
@@ -7031,7 +7031,7 @@ static WowWorldResult wrath_inspect_talent_gear_mask_write(WowWorldWriter* strea
 static WowWorldResult wrath_inspect_talent_gear_mask_read(WowWorldReader* stream, wrath_InspectTalentGearMask* mask) {
     int i = 0;
     uint32_t header = 0;
-    WWM_CHECK_RETURN_CODE(wwm_read_uint32(stream, &header));
+    WWM_CHECK_RETURN_CODE(wwm_read_u32(stream, &header));
 
     for (i = 0; i < WRATH_INSPECT_TALENT_GEAR_MASK_LENGTH; ++i) {
         if ((header & (uint32_t)1 << i) != 0) {
@@ -7072,7 +7072,7 @@ static size_t wrath_aura_mask_size(const wrath_AuraMask* object) {
 static WowWorldResult wrath_aura_mask_read(WowWorldReader* reader, wrath_AuraMask* mask) {
     uint64_t header;
     uint64_t i;
-    WWM_CHECK_RETURN_CODE(wwm_read_uint64(reader, &header));
+    WWM_CHECK_RETURN_CODE(wwm_read_u64(reader, &header));
 
     for(i = 0; i < WRATH_AURA_MASK_SIZE; ++i) {
         mask->auras[i].aura = 0; /* initialize to 0 */
@@ -7095,7 +7095,7 @@ static WowWorldResult wrath_aura_mask_write(WowWorldWriter* writer, const wrath_
         }
     }
 
-    WWM_CHECK_RETURN_CODE(wwm_write_uint64(writer, header));
+    WWM_CHECK_RETURN_CODE(wwm_write_u64(writer, header));
 
     for(i = 0; i < WRATH_AURA_MASK_SIZE; ++i) {
         if (mask->auras[i].aura != 0) {
@@ -7116,11 +7116,11 @@ static WowWorldResult wrath_cache_mask_write(WowWorldWriter* stream, const wrath
         }
     }
 
-    WWM_CHECK_RETURN_CODE(wwm_write_uint32(stream, header));
+    WWM_CHECK_RETURN_CODE(wwm_write_u32(stream, header));
 
     for (i = 0; i < WRATH_CACHE_MASK_LENGTH; ++i) {
         if (mask->values[i] != 0) {
-            WWM_CHECK_RETURN_CODE(wwm_write_uint32(stream, mask->values[i]));
+            WWM_CHECK_RETURN_CODE(wwm_write_u32(stream, mask->values[i]));
         }
     }
 
@@ -7130,11 +7130,11 @@ static WowWorldResult wrath_cache_mask_write(WowWorldWriter* stream, const wrath
 static WowWorldResult wrath_cache_mask_read(WowWorldReader* stream, wrath_CacheMask* mask) {
     int i = 0;
     uint32_t header = 0;
-    WWM_CHECK_RETURN_CODE(wwm_read_uint32(stream, &header));
+    WWM_CHECK_RETURN_CODE(wwm_read_u32(stream, &header));
 
     for (i = 0; i < WRATH_CACHE_MASK_LENGTH; ++i) {
         if ((header & (uint32_t)1 << i) != 0) {
-            WWM_CHECK_RETURN_CODE(wwm_read_uint32(stream, &mask->values[i]));
+            WWM_CHECK_RETURN_CODE(wwm_read_u32(stream, &mask->values[i]));
         } else {
             mask->values[i] = 0;
         }
@@ -20779,6 +20779,7 @@ static WowWorldResult wrath_SMSG_COMPRESSED_UPDATE_OBJECT_read(WowWorldReader* r
     WowWorldReader stack_reader;
     unsigned char* _compressed_data = NULL;
     uint32_t _decompressed_size;
+
     READ_U32(_decompressed_size);
     _size += 4;
 
@@ -27423,6 +27424,7 @@ static WowWorldResult wrath_SMSG_COMPRESSED_MOVES_read(WowWorldReader* reader, w
     WowWorldReader stack_reader;
     unsigned char* _compressed_data = NULL;
     uint32_t _decompressed_size;
+
     READ_U32(_decompressed_size);
     _size += 4;
 

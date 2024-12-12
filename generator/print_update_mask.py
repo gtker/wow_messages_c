@@ -27,13 +27,13 @@ def print_update_mask_cpp(s: Writer, h: Writer, update_mask: list[model.UpdateMa
             case model.UpdateMaskDataTypeGUIDArrayUsingEnum(content=content):
                 offset = f"{value.offset} + (static_cast<uint32_t>(def) * 2)"
 
-                h.wln(f"{export_define} void {name}_set({content.definer.name} def, uint64_t value);")
-                s.open_curly(f"{export_define} void UpdateMask::{name}_set({content.definer.name} def, uint64_t value)")
+                h.wln(f"{export_define} void {name}({content.definer.name} def, uint64_t value);")
+                s.open_curly(f"{export_define} void UpdateMask::{name}({content.definer.name} def, uint64_t value)")
                 s.wln(f"::wow_world_messages::util::update_mask_set_u64(headers, values, {offset}, value);")
                 s.closing_curly()
 
-                h.wln(f"{export_define} uint64_t {name}_get({content.definer.name} def);")
-                s.open_curly(f"{export_define} uint64_t UpdateMask::{name}_get({content.definer.name} def)")
+                h.wln(f"{export_define} uint64_t {name}({content.definer.name} def) const;")
+                s.open_curly(f"{export_define} uint64_t UpdateMask::{name}({content.definer.name} def) const")
                 s.wln(f"return ::wow_world_messages::util::update_mask_get_u64(headers, values, {offset});")
                 s.closing_curly()
 
@@ -55,13 +55,13 @@ def print_update_mask_cpp(s: Writer, h: Writer, update_mask: list[model.UpdateMa
                             value_type = "uint32_t"
                             function_type = "u32"
 
-                        h.wln(f"{export_define} void {name}_{member.member.name}_set(uint32_t index, {value_type} value);")
-                        s.open_curly(f"{export_define} void UpdateMask::{name}_{member.member.name}_set(uint32_t index, {value_type} value)")
+                        h.wln(f"{export_define} void {name}_{member.member.name}(uint32_t index, {value_type} value);")
+                        s.open_curly(f"{export_define} void UpdateMask::{name}_{member.member.name}(uint32_t index, {value_type} value)")
                         s.wln(f"::wow_world_messages::util::update_mask_set_{function_type}(headers, values, {value.offset} + index * {content.size} + {word_index}, value);")
                         s.closing_curly()
 
-                        h.wln(f"{export_define} {value_type} {name}_{member.member.name}_get(uint32_t index);")
-                        s.open_curly(f"{export_define} {value_type} UpdateMask::{name}_{member.member.name}_get(uint32_t index)")
+                        h.wln(f"{export_define} {value_type} {name}_{member.member.name}(uint32_t index) const;")
+                        s.open_curly(f"{export_define} {value_type} UpdateMask::{name}_{member.member.name}(uint32_t index) const")
                         s.wln(f"return ::wow_world_messages::util::update_mask_get_{function_type}(headers, values, {value.offset} + index * {content.size} + {word_index});")
                         s.closing_curly()
                 continue
@@ -89,13 +89,13 @@ def print_update_mask_cpp(s: Writer, h: Writer, update_mask: list[model.UpdateMa
             case _:
                 raise Exception(f"unknown update mask type {value.data_type}")
 
-        h.wln(f"{export_define} void {name}_set({value_type} value);")
-        s.open_curly(f"{export_define} void UpdateMask::{name}_set({value_type} value)")
+        h.wln(f"{export_define} void {name}({value_type} value);")
+        s.open_curly(f"{export_define} void UpdateMask::{name}({value_type} value)")
         s.wln(f"::wow_world_messages::util::update_mask_set_{function_type}(headers, values, {value.offset}, value);")
         s.closing_curly()
 
-        h.wln(f"{export_define} {value_type} {name}_get();")
-        s.open_curly(f"{export_define} {value_type} UpdateMask::{name}_get()")
+        h.wln(f"{export_define} {value_type} {name}() const;")
+        s.open_curly(f"{export_define} {value_type} UpdateMask::{name}() const")
         s.wln(f"return ::wow_world_messages::util::update_mask_get_{function_type}(headers, values, {value.offset});")
         s.closing_curly()
 
@@ -307,17 +307,17 @@ static WowWorldResult {module_name}_update_mask_write(WowWorldWriter* stream, co
         }}
     }}
 
-    WWM_CHECK_RETURN_CODE(wwm_write_uint8(stream, amount_of_headers));
+    WWM_CHECK_RETURN_CODE(wwm_write_u8(stream, amount_of_headers));
 
     for (i = 0; i < amount_of_headers; ++i) {{
-        WWM_CHECK_RETURN_CODE(wwm_write_uint32(stream, mask->headers[i]));
+        WWM_CHECK_RETURN_CODE(wwm_write_u32(stream, mask->headers[i]));
     }}
     
     for (i = 0; i < amount_of_headers; ++i) {{
         uint32_t header = mask->headers[i];
         for (j = 0; j < 32; ++j) {{
             if ((header & ({one} << j)) != 0) {{
-                WWM_CHECK_RETURN_CODE(wwm_write_uint32(stream, mask->values[i * 32 + j]));
+                WWM_CHECK_RETURN_CODE(wwm_write_u32(stream, mask->values[i * 32 + j]));
             }}
         }}
     }}
@@ -334,17 +334,17 @@ static WowWorldResult {module_name}_update_mask_read(WowWorldReader* stream, {mo
     memset(mask->headers, 0, sizeof(mask->headers));
     memset(mask->values, 0, sizeof(mask->values));
 
-    WWM_CHECK_RETURN_CODE(wwm_read_uint8(stream, &amount_of_headers));
+    WWM_CHECK_RETURN_CODE(wwm_read_u8(stream, &amount_of_headers));
 
     for (i = 0; i < amount_of_headers; ++i) {{
-        WWM_CHECK_RETURN_CODE(wwm_read_uint32(stream, &mask->headers[i]));
+        WWM_CHECK_RETURN_CODE(wwm_read_u32(stream, &mask->headers[i]));
     }}
 
     for (i = 0; i < amount_of_headers; ++i) {{
         uint32_t header = mask->headers[i];
         for (j = 0; j < 32; ++j) {{
             if ((header & ({one} << j)) != 0) {{
-                WWM_CHECK_RETURN_CODE(wwm_read_uint32(stream, &mask->values[i * 32 + j]));
+                WWM_CHECK_RETURN_CODE(wwm_read_u32(stream, &mask->values[i * 32 + j]));
             }}
         }}
     }}

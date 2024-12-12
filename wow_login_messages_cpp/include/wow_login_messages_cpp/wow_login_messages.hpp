@@ -1,5 +1,5 @@
-#ifndef WOW_LOGIN_MESSAGES_H
-#define WOW_LOGIN_MESSAGES_H
+#ifndef WOW_LOGIN_MESSAGES_CPP_H
+#define WOW_LOGIN_MESSAGES_CPP_H
 
 #include <array>
 #include <stddef.h>
@@ -93,4 +93,4 @@ public:
 struct bad_opcode_access final : std::exception {};
 
 } /* namespace wow_login_messages */
-#endif /* WOW_LOGIN_MESSAGES_H */
+#endif /* WOW_LOGIN_MESSAGES_CPP_H */

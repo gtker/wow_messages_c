@@ -2,6 +2,7 @@
 
 #if defined(_MSC_VER)
 #define WIN32_LEAN_AND_MEAN
+#define NOGDI
 #include <basetsd.h>
 #include <windows.h>
 #include <winsock2.h>

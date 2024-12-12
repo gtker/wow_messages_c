@@ -22,11 +22,11 @@ def print_cache_mask_c(s: Writer, h: Writer):
                 }}
             }}
 
-            WWM_CHECK_RETURN_CODE(wwm_write_uint32(stream, header));
+            WWM_CHECK_RETURN_CODE(wwm_write_u32(stream, header));
 
             for (i = 0; i < WRATH_CACHE_MASK_LENGTH; ++i) {{
                 if (mask->values[i] != 0) {{
-                    WWM_CHECK_RETURN_CODE(wwm_write_uint32(stream, mask->values[i]));
+                    WWM_CHECK_RETURN_CODE(wwm_write_u32(stream, mask->values[i]));
                 }}
             }}
 
@@ -36,11 +36,11 @@ def print_cache_mask_c(s: Writer, h: Writer):
         static WowWorldResult wrath_cache_mask_read(WowWorldReader* stream, wrath_CacheMask* mask) {{
             int i = 0;
             uint32_t header = 0;
-            WWM_CHECK_RETURN_CODE(wwm_read_uint32(stream, &header));
+            WWM_CHECK_RETURN_CODE(wwm_read_u32(stream, &header));
 
             for (i = 0; i < WRATH_CACHE_MASK_LENGTH; ++i) {{
                 if ((header & (uint32_t)1 << i) != 0) {{
-                    WWM_CHECK_RETURN_CODE(wwm_read_uint32(stream, &mask->values[i]));
+                    WWM_CHECK_RETURN_CODE(wwm_read_u32(stream, &mask->values[i]));
                 }} else {{
                     mask->values[i] = 0;
                 }}

@@ -63,20 +63,22 @@ def print_individual_test(s: Writer, e: model.Container, test_case: model.TestCa
         s.wln("auto reader = ByteReader(buffer);")
         s.newline()
 
+        extra_opcode_read = ", [](unsigned char*, size_t){}" if is_world(e.tags) else ""
         s.wln(
-            f"auto opcode = ::wow_{library_type.lower()}_messages::{function_version}::read_{function_side}_opcode(reader);")
+            f"auto opcode = ::wow_{library_type.lower()}_messages::{function_version}::{function_side.capitalize()}Opcode::read(reader{extra_opcode_read});")
 
         s.open_curly(
             f"if (opcode.get_if<::wow_{library_type.lower()}_messages::{function_version}::{e.name}>() == nullptr)")
         s.wln(
-            f'printf(__FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i} read invalid opcode");')
+            f'printf(__FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i} read invalid opcode %s\\n", opcode.to_string());')
         s.wln(f"fflush({'nullptr' if is_cpp() else 'NULL'});")
         s.wln("abort();")
         s.closing_curly()  # if (opcode.get_if())
         s.newline()
 
+        extra = "[](unsigned char*, size_t){}" if is_world(e.tags) else ""
         s.wln(
-            f"const std::vector<unsigned char> write_buffer = ::wow_{library_type.lower()}_messages::{function_version}::write_opcode(opcode);")
+            f"const std::vector<unsigned char> write_buffer = opcode.write({extra});")
         s.newline()
 
         if container_uses_compression(e):
@@ -84,27 +86,19 @@ def print_individual_test(s: Writer, e: model.Container, test_case: model.TestCa
             s.newline()
 
             s.wln(
-                f"const auto opcode2 = ::wow_{library_type.lower()}_messages::{function_version}::read_{function_side}_opcode(reader2);")
-
-            s.open_curly("if (opcode2.is_none())")
-            s.wln(
-                f'printf(__FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i} read invalid second opcode");')
-            s.wln(f"fflush({'nullptr' if is_cpp() else 'NULL'});")
-            s.wln("abort();")
-            s.closing_curly()  # if (opcode2.is_none())
-            s.newline()
+                f"auto opcode2 = ::wow_{library_type.lower()}_messages::{function_version}::{function_side.capitalize()}Opcode::read(reader2{extra_opcode_read});")
 
             s.open_curly(
-                f"if (opcode2.opcode != ::wow_{library_type.lower()}_messages::{function_version}::{function_side.capitalize()}Opcode::Opcode::{opcode_id})")
+                f"if (opcode2.get_if<::wow_{library_type.lower()}_messages::{function_version}::{e.name}>() == nullptr)")
             s.wln(
-                f'printf(__FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i} read invalid second opcode");')
+                f'printf(__FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i} read invalid second opcode %s\\n", opcode2.to_string());')
             s.wln(f"fflush({'nullptr' if is_cpp() else 'NULL'});")
             s.wln("abort();")
-            s.closing_curly()  # if (opcode.opcode)
+            s.closing_curly()  # if (opcode2.get_if)
             s.newline()
 
             s.wln(
-                f"const std::vector<unsigned char> write_buffer2 = ::wow_{library_type.lower()}_messages::{function_version}::write_opcode(opcode2);")
+                f"const std::vector<unsigned char> write_buffer2 = opcode2.write({extra});")
             s.newline()
             s.wln(
                 f'world_test_compare_buffers(write_buffer.data(), write_buffer2.data(), write_buffer2.size(),  __FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i}", TEST_UTILS_SIDE_{function_side.upper()});')

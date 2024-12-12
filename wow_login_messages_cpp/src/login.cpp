@@ -149,7 +149,107 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_AUTH_RECONNECT_CHAL
     return writer.m_buf;
 }
 
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode ClientOpcode::read(Reader& reader) {
+    const uint8_t opcode = reader.read_u8();
+
+    ClientOpcode op;
+
+    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE)) {
+        return ClientOpcode(::wow_login_messages::all::CMD_AUTH_LOGON_CHALLENGE_Client_read(reader));
+    }
+    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_AUTH_RECONNECT_CHALLENGE)) {
+        return ClientOpcode(::wow_login_messages::all::CMD_AUTH_RECONNECT_CHALLENGE_Client_read(reader));
+    }
+
+    return op;
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> ClientOpcode::write() const {
+    if (this->opcode == ClientOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        return this->CMD_AUTH_LOGON_CHALLENGE.write();;
+    }
+    if (this->opcode == ClientOpcode::Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        return this->CMD_AUTH_RECONNECT_CHALLENGE.write();;
+    }
+
+    return {}; /* unreachable */
+}
+/* 1 destructor */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::~ClientOpcode() {
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        this->CMD_AUTH_LOGON_CHALLENGE.~CMD_AUTH_LOGON_CHALLENGE_Client();
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        this->CMD_AUTH_RECONNECT_CHALLENGE.~CMD_AUTH_RECONNECT_CHALLENGE_Client();
+    }
+}
+
+/* 2 copy constructor */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(const ClientOpcode& other) {
+    this->opcode = other.opcode;
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        new (&CMD_AUTH_LOGON_CHALLENGE) auto(other.CMD_AUTH_LOGON_CHALLENGE);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        new (&CMD_AUTH_RECONNECT_CHALLENGE) auto(other.CMD_AUTH_RECONNECT_CHALLENGE);
+    }
+}
+
+/* 3 copy assignment */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode& ClientOpcode::operator=(const ClientOpcode& other) {
+    if (this == &other) {
+        return *this;
+    }
+
+    this->opcode = other.opcode;
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        all::CMD_AUTH_LOGON_CHALLENGE_Client CMD_AUTH_LOGON_CHALLENGEswap(other.CMD_AUTH_LOGON_CHALLENGE);
+        std::swap(this->CMD_AUTH_LOGON_CHALLENGE, CMD_AUTH_LOGON_CHALLENGEswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        all::CMD_AUTH_RECONNECT_CHALLENGE_Client CMD_AUTH_RECONNECT_CHALLENGEswap(other.CMD_AUTH_RECONNECT_CHALLENGE);
+        std::swap(this->CMD_AUTH_RECONNECT_CHALLENGE, CMD_AUTH_RECONNECT_CHALLENGEswap);
+    }
+    return *this;
+}
+
+/* 4 move constructor */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(ClientOpcode&& other) noexcept {
+    this->opcode = other.opcode;
+    other.opcode = Opcode::NONE;
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        this->CMD_AUTH_LOGON_CHALLENGE = std::move(other.CMD_AUTH_LOGON_CHALLENGE);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        this->CMD_AUTH_RECONNECT_CHALLENGE = std::move(other.CMD_AUTH_RECONNECT_CHALLENGE);
+    }
+}
+
+/* 5 move assignment */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode& ClientOpcode::operator=(ClientOpcode&& other) noexcept {
+    this->opcode = other.opcode;
+    other.opcode = Opcode::NONE;
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        all::CMD_AUTH_LOGON_CHALLENGE_Client CMD_AUTH_LOGON_CHALLENGEswap(std::move(other.CMD_AUTH_LOGON_CHALLENGE));
+        std::swap(this->CMD_AUTH_LOGON_CHALLENGE, CMD_AUTH_LOGON_CHALLENGEswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        all::CMD_AUTH_RECONNECT_CHALLENGE_Client CMD_AUTH_RECONNECT_CHALLENGEswap(std::move(other.CMD_AUTH_RECONNECT_CHALLENGE));
+        std::swap(this->CMD_AUTH_RECONNECT_CHALLENGE, CMD_AUTH_RECONNECT_CHALLENGEswap);
+    }
+    return *this;
+}
+
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(all::CMD_AUTH_LOGON_CHALLENGE_Client&& obj) {
+    opcode = Opcode::CMD_AUTH_LOGON_CHALLENGE;
+    new (&this->CMD_AUTH_LOGON_CHALLENGE) all::CMD_AUTH_LOGON_CHALLENGE_Client (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(all::CMD_AUTH_RECONNECT_CHALLENGE_Client&& obj) {
+    opcode = Opcode::CMD_AUTH_RECONNECT_CHALLENGE;
+    new (&this->CMD_AUTH_RECONNECT_CHALLENGE) all::CMD_AUTH_RECONNECT_CHALLENGE_Client (std::move(obj));
+}
+
 WOW_LOGIN_MESSAGES_CPP_EXPORT const char* ClientOpcode::to_string() const {
+    if (opcode == Opcode::NONE) {{ return "NONE"; }}
     if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) { return "CMD_AUTH_LOGON_CHALLENGE_Client"; }
     if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) { return "CMD_AUTH_RECONNECT_CHALLENGE_Client"; }
     return nullptr;
@@ -187,31 +287,6 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT all::CMD_AUTH_RECONNECT_CHALLENGE_Client& ClientOp
 }
 
 
-WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const ClientOpcode& opcode) {
-    if (opcode.opcode == ClientOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE) {
-        return opcode.CMD_AUTH_LOGON_CHALLENGE.write();;
-    }
-    if (opcode.opcode == ClientOpcode::Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
-        return opcode.CMD_AUTH_RECONNECT_CHALLENGE.write();;
-    }
-
-    return {}; /* unreachable */
-}
-
-WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode read_client_opcode(Reader& reader) {
-    const uint8_t opcode = reader.read_u8();
-
-    ClientOpcode op;
-
-    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE)) {
-        return ClientOpcode(::wow_login_messages::all::CMD_AUTH_LOGON_CHALLENGE_Client_read(reader));
-    }
-    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_AUTH_RECONNECT_CHALLENGE)) {
-        return ClientOpcode(::wow_login_messages::all::CMD_AUTH_RECONNECT_CHALLENGE_Client_read(reader));
-    }
-
-    return op;
-}
 } // namespace all
 } // namespace wow_login_messages
 /* clang-format off */
@@ -359,13 +434,13 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_AUTH_LOGON_CHALLENG
             writer.write_u8(v);
         }
 
-        writer.write_u8(obj.generator.size());
+        writer.write_u8(static_cast<uint8_t>(obj.generator.size()));
 
         for (const auto& v : obj.generator) {
             writer.write_u8(v);
         }
 
-        writer.write_u8(obj.large_safe_prime.size());
+        writer.write_u8(static_cast<uint8_t>(obj.large_safe_prime.size()));
 
         for (const auto& v : obj.large_safe_prime) {
             writer.write_u8(v);
@@ -429,7 +504,7 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_AUTH_LOGON_PROOF_Cl
         writer.write_u8(v);
     }
 
-    writer.write_u8(obj.telemetry_keys.size());
+    writer.write_u8(static_cast<uint8_t>(obj.telemetry_keys.size()));
 
     for (const auto& v : obj.telemetry_keys) {
         TelemetryKey_write(writer, v);
@@ -632,7 +707,7 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_REALM_LIST_Server::
 
     writer.write_u32(0);
 
-    writer.write_u8(obj.realms.size());
+    writer.write_u8(static_cast<uint8_t>(obj.realms.size()));
 
     for (const auto& v : obj.realms) {
         Realm_write(writer, v);
@@ -710,7 +785,7 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_XFER_DATA::write() 
 
     writer.write_u8(0x31); /* opcode */
 
-    writer.write_u16(obj.data.size());
+    writer.write_u16(static_cast<uint16_t>(obj.data.size()));
 
     for (const auto& v : obj.data) {
         writer.write_u8(v);
@@ -754,7 +829,215 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_XFER_CANCEL::write(
     return writer.m_buf;
 }
 
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode ClientOpcode::read(Reader& reader) {
+    const uint8_t opcode = reader.read_u8();
+
+    ClientOpcode op;
+
+    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF)) {
+        return ClientOpcode(::wow_login_messages::version2::CMD_AUTH_LOGON_PROOF_Client_read(reader));
+    }
+    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF)) {
+        return ClientOpcode(::wow_login_messages::version2::CMD_AUTH_RECONNECT_PROOF_Client_read(reader));
+    }
+    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_REALM_LIST)) {
+        return ClientOpcode(::wow_login_messages::version2::CMD_REALM_LIST_Client{});
+    }
+    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_XFER_ACCEPT)) {
+        return ClientOpcode(::wow_login_messages::version2::CMD_XFER_ACCEPT{});
+    }
+    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_XFER_RESUME)) {
+        return ClientOpcode(::wow_login_messages::version2::CMD_XFER_RESUME_read(reader));
+    }
+    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_XFER_CANCEL)) {
+        return ClientOpcode(::wow_login_messages::version2::CMD_XFER_CANCEL{});
+    }
+
+    return op;
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> ClientOpcode::write() const {
+    if (this->opcode == ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
+        return this->CMD_AUTH_LOGON_PROOF.write();;
+    }
+    if (this->opcode == ClientOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        return this->CMD_AUTH_RECONNECT_PROOF.write();;
+    }
+    if (this->opcode == ClientOpcode::Opcode::CMD_REALM_LIST) {
+        return this->CMD_REALM_LIST.write();;
+    }
+    if (this->opcode == ClientOpcode::Opcode::CMD_XFER_ACCEPT) {
+        return this->CMD_XFER_ACCEPT.write();;
+    }
+    if (this->opcode == ClientOpcode::Opcode::CMD_XFER_RESUME) {
+        return this->CMD_XFER_RESUME.write();;
+    }
+    if (this->opcode == ClientOpcode::Opcode::CMD_XFER_CANCEL) {
+        return this->CMD_XFER_CANCEL.write();;
+    }
+
+    return {}; /* unreachable */
+}
+/* 1 destructor */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::~ClientOpcode() {
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        this->CMD_AUTH_LOGON_PROOF.~CMD_AUTH_LOGON_PROOF_Client();
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        this->CMD_AUTH_RECONNECT_PROOF.~CMD_AUTH_RECONNECT_PROOF_Client();
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        this->CMD_REALM_LIST.~CMD_REALM_LIST_Client();
+    }
+    if (opcode == Opcode::CMD_XFER_ACCEPT) {
+        this->CMD_XFER_ACCEPT.~CMD_XFER_ACCEPT();
+    }
+    if (opcode == Opcode::CMD_XFER_RESUME) {
+        this->CMD_XFER_RESUME.~CMD_XFER_RESUME();
+    }
+    if (opcode == Opcode::CMD_XFER_CANCEL) {
+        this->CMD_XFER_CANCEL.~CMD_XFER_CANCEL();
+    }
+}
+
+/* 2 copy constructor */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(const ClientOpcode& other) {
+    this->opcode = other.opcode;
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        new (&CMD_AUTH_LOGON_PROOF) auto(other.CMD_AUTH_LOGON_PROOF);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        new (&CMD_AUTH_RECONNECT_PROOF) auto(other.CMD_AUTH_RECONNECT_PROOF);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        new (&CMD_REALM_LIST) auto(other.CMD_REALM_LIST);
+    }
+    if (opcode == Opcode::CMD_XFER_ACCEPT) {
+        new (&CMD_XFER_ACCEPT) auto(other.CMD_XFER_ACCEPT);
+    }
+    if (opcode == Opcode::CMD_XFER_RESUME) {
+        new (&CMD_XFER_RESUME) auto(other.CMD_XFER_RESUME);
+    }
+    if (opcode == Opcode::CMD_XFER_CANCEL) {
+        new (&CMD_XFER_CANCEL) auto(other.CMD_XFER_CANCEL);
+    }
+}
+
+/* 3 copy assignment */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode& ClientOpcode::operator=(const ClientOpcode& other) {
+    if (this == &other) {
+        return *this;
+    }
+
+    this->opcode = other.opcode;
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        version2::CMD_AUTH_LOGON_PROOF_Client CMD_AUTH_LOGON_PROOFswap(other.CMD_AUTH_LOGON_PROOF);
+        std::swap(this->CMD_AUTH_LOGON_PROOF, CMD_AUTH_LOGON_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        version2::CMD_AUTH_RECONNECT_PROOF_Client CMD_AUTH_RECONNECT_PROOFswap(other.CMD_AUTH_RECONNECT_PROOF);
+        std::swap(this->CMD_AUTH_RECONNECT_PROOF, CMD_AUTH_RECONNECT_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        version2::CMD_REALM_LIST_Client CMD_REALM_LISTswap(other.CMD_REALM_LIST);
+        std::swap(this->CMD_REALM_LIST, CMD_REALM_LISTswap);
+    }
+    if (opcode == Opcode::CMD_XFER_ACCEPT) {
+        version2::CMD_XFER_ACCEPT CMD_XFER_ACCEPTswap(other.CMD_XFER_ACCEPT);
+        std::swap(this->CMD_XFER_ACCEPT, CMD_XFER_ACCEPTswap);
+    }
+    if (opcode == Opcode::CMD_XFER_RESUME) {
+        version2::CMD_XFER_RESUME CMD_XFER_RESUMEswap(other.CMD_XFER_RESUME);
+        std::swap(this->CMD_XFER_RESUME, CMD_XFER_RESUMEswap);
+    }
+    if (opcode == Opcode::CMD_XFER_CANCEL) {
+        version2::CMD_XFER_CANCEL CMD_XFER_CANCELswap(other.CMD_XFER_CANCEL);
+        std::swap(this->CMD_XFER_CANCEL, CMD_XFER_CANCELswap);
+    }
+    return *this;
+}
+
+/* 4 move constructor */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(ClientOpcode&& other) noexcept {
+    this->opcode = other.opcode;
+    other.opcode = Opcode::NONE;
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        this->CMD_AUTH_LOGON_PROOF = std::move(other.CMD_AUTH_LOGON_PROOF);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        this->CMD_AUTH_RECONNECT_PROOF = std::move(other.CMD_AUTH_RECONNECT_PROOF);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        this->CMD_REALM_LIST = std::move(other.CMD_REALM_LIST);
+    }
+    if (opcode == Opcode::CMD_XFER_ACCEPT) {
+        this->CMD_XFER_ACCEPT = std::move(other.CMD_XFER_ACCEPT);
+    }
+    if (opcode == Opcode::CMD_XFER_RESUME) {
+        this->CMD_XFER_RESUME = std::move(other.CMD_XFER_RESUME);
+    }
+    if (opcode == Opcode::CMD_XFER_CANCEL) {
+        this->CMD_XFER_CANCEL = std::move(other.CMD_XFER_CANCEL);
+    }
+}
+
+/* 5 move assignment */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode& ClientOpcode::operator=(ClientOpcode&& other) noexcept {
+    this->opcode = other.opcode;
+    other.opcode = Opcode::NONE;
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        version2::CMD_AUTH_LOGON_PROOF_Client CMD_AUTH_LOGON_PROOFswap(std::move(other.CMD_AUTH_LOGON_PROOF));
+        std::swap(this->CMD_AUTH_LOGON_PROOF, CMD_AUTH_LOGON_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        version2::CMD_AUTH_RECONNECT_PROOF_Client CMD_AUTH_RECONNECT_PROOFswap(std::move(other.CMD_AUTH_RECONNECT_PROOF));
+        std::swap(this->CMD_AUTH_RECONNECT_PROOF, CMD_AUTH_RECONNECT_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        version2::CMD_REALM_LIST_Client CMD_REALM_LISTswap(std::move(other.CMD_REALM_LIST));
+        std::swap(this->CMD_REALM_LIST, CMD_REALM_LISTswap);
+    }
+    if (opcode == Opcode::CMD_XFER_ACCEPT) {
+        version2::CMD_XFER_ACCEPT CMD_XFER_ACCEPTswap(std::move(other.CMD_XFER_ACCEPT));
+        std::swap(this->CMD_XFER_ACCEPT, CMD_XFER_ACCEPTswap);
+    }
+    if (opcode == Opcode::CMD_XFER_RESUME) {
+        version2::CMD_XFER_RESUME CMD_XFER_RESUMEswap(std::move(other.CMD_XFER_RESUME));
+        std::swap(this->CMD_XFER_RESUME, CMD_XFER_RESUMEswap);
+    }
+    if (opcode == Opcode::CMD_XFER_CANCEL) {
+        version2::CMD_XFER_CANCEL CMD_XFER_CANCELswap(std::move(other.CMD_XFER_CANCEL));
+        std::swap(this->CMD_XFER_CANCEL, CMD_XFER_CANCELswap);
+    }
+    return *this;
+}
+
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(version2::CMD_AUTH_LOGON_PROOF_Client&& obj) {
+    opcode = Opcode::CMD_AUTH_LOGON_PROOF;
+    new (&this->CMD_AUTH_LOGON_PROOF) version2::CMD_AUTH_LOGON_PROOF_Client (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(version2::CMD_AUTH_RECONNECT_PROOF_Client&& obj) {
+    opcode = Opcode::CMD_AUTH_RECONNECT_PROOF;
+    new (&this->CMD_AUTH_RECONNECT_PROOF) version2::CMD_AUTH_RECONNECT_PROOF_Client (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(version2::CMD_REALM_LIST_Client&& obj) {
+    opcode = Opcode::CMD_REALM_LIST;
+    new (&this->CMD_REALM_LIST) version2::CMD_REALM_LIST_Client (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(version2::CMD_XFER_ACCEPT&& obj) {
+    opcode = Opcode::CMD_XFER_ACCEPT;
+    new (&this->CMD_XFER_ACCEPT) version2::CMD_XFER_ACCEPT (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(version2::CMD_XFER_RESUME&& obj) {
+    opcode = Opcode::CMD_XFER_RESUME;
+    new (&this->CMD_XFER_RESUME) version2::CMD_XFER_RESUME (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(version2::CMD_XFER_CANCEL&& obj) {
+    opcode = Opcode::CMD_XFER_CANCEL;
+    new (&this->CMD_XFER_CANCEL) version2::CMD_XFER_CANCEL (std::move(obj));
+}
+
 WOW_LOGIN_MESSAGES_CPP_EXPORT const char* ClientOpcode::to_string() const {
+    if (opcode == Opcode::NONE) {{ return "NONE"; }}
     if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) { return "CMD_AUTH_LOGON_PROOF_Client"; }
     if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) { return "CMD_AUTH_RECONNECT_PROOF_Client"; }
     if (opcode == Opcode::CMD_REALM_LIST) { return "CMD_REALM_LIST_Client"; }
@@ -860,56 +1143,242 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT version2::CMD_XFER_CANCEL& ClientOpcode::get<CMD_X
 }
 
 
-WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const ClientOpcode& opcode) {
-    if (opcode.opcode == ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
-        return opcode.CMD_AUTH_LOGON_PROOF.write();;
-    }
-    if (opcode.opcode == ClientOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF) {
-        return opcode.CMD_AUTH_RECONNECT_PROOF.write();;
-    }
-    if (opcode.opcode == ClientOpcode::Opcode::CMD_REALM_LIST) {
-        return opcode.CMD_REALM_LIST.write();;
-    }
-    if (opcode.opcode == ClientOpcode::Opcode::CMD_XFER_ACCEPT) {
-        return opcode.CMD_XFER_ACCEPT.write();;
-    }
-    if (opcode.opcode == ClientOpcode::Opcode::CMD_XFER_RESUME) {
-        return opcode.CMD_XFER_RESUME.write();;
-    }
-    if (opcode.opcode == ClientOpcode::Opcode::CMD_XFER_CANCEL) {
-        return opcode.CMD_XFER_CANCEL.write();;
-    }
-
-    return {}; /* unreachable */
-}
-
-WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode read_client_opcode(Reader& reader) {
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode ServerOpcode::read(Reader& reader) {
     const uint8_t opcode = reader.read_u8();
 
-    ClientOpcode op;
+    ServerOpcode op;
 
-    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF)) {
-        return ClientOpcode(::wow_login_messages::version2::CMD_AUTH_LOGON_PROOF_Client_read(reader));
+    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE)) {
+        return ServerOpcode(::wow_login_messages::version2::CMD_AUTH_LOGON_CHALLENGE_Server_read(reader));
     }
-    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF)) {
-        return ClientOpcode(::wow_login_messages::version2::CMD_AUTH_RECONNECT_PROOF_Client_read(reader));
+    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_LOGON_PROOF)) {
+        return ServerOpcode(::wow_login_messages::version2::CMD_AUTH_LOGON_PROOF_Server_read(reader));
     }
-    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_REALM_LIST)) {
-        return ClientOpcode(::wow_login_messages::version2::CMD_REALM_LIST_Client{});
+    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_RECONNECT_CHALLENGE)) {
+        return ServerOpcode(::wow_login_messages::version2::CMD_AUTH_RECONNECT_CHALLENGE_Server_read(reader));
     }
-    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_XFER_ACCEPT)) {
-        return ClientOpcode(::wow_login_messages::version2::CMD_XFER_ACCEPT{});
+    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF)) {
+        return ServerOpcode(::wow_login_messages::version2::CMD_AUTH_RECONNECT_PROOF_Server_read(reader));
     }
-    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_XFER_RESUME)) {
-        return ClientOpcode(::wow_login_messages::version2::CMD_XFER_RESUME_read(reader));
+    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_REALM_LIST)) {
+        return ServerOpcode(::wow_login_messages::version2::CMD_REALM_LIST_Server_read(reader));
     }
-    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_XFER_CANCEL)) {
-        return ClientOpcode(::wow_login_messages::version2::CMD_XFER_CANCEL{});
+    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_XFER_INITIATE)) {
+        return ServerOpcode(::wow_login_messages::version2::CMD_XFER_INITIATE_read(reader));
+    }
+    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_XFER_DATA)) {
+        return ServerOpcode(::wow_login_messages::version2::CMD_XFER_DATA_read(reader));
     }
 
     return op;
 }
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> ServerOpcode::write() const {
+    if (this->opcode == ServerOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        return this->CMD_AUTH_LOGON_CHALLENGE.write();;
+    }
+    if (this->opcode == ServerOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
+        return this->CMD_AUTH_LOGON_PROOF.write();;
+    }
+    if (this->opcode == ServerOpcode::Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        return this->CMD_AUTH_RECONNECT_CHALLENGE.write();;
+    }
+    if (this->opcode == ServerOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        return this->CMD_AUTH_RECONNECT_PROOF.write();;
+    }
+    if (this->opcode == ServerOpcode::Opcode::CMD_REALM_LIST) {
+        return this->CMD_REALM_LIST.write();;
+    }
+    if (this->opcode == ServerOpcode::Opcode::CMD_XFER_INITIATE) {
+        return this->CMD_XFER_INITIATE.write();;
+    }
+    if (this->opcode == ServerOpcode::Opcode::CMD_XFER_DATA) {
+        return this->CMD_XFER_DATA.write();;
+    }
+
+    return {}; /* unreachable */
+}
+/* 1 destructor */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::~ServerOpcode() {
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        this->CMD_AUTH_LOGON_CHALLENGE.~CMD_AUTH_LOGON_CHALLENGE_Server();
+    }
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        this->CMD_AUTH_LOGON_PROOF.~CMD_AUTH_LOGON_PROOF_Server();
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        this->CMD_AUTH_RECONNECT_CHALLENGE.~CMD_AUTH_RECONNECT_CHALLENGE_Server();
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        this->CMD_AUTH_RECONNECT_PROOF.~CMD_AUTH_RECONNECT_PROOF_Server();
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        this->CMD_REALM_LIST.~CMD_REALM_LIST_Server();
+    }
+    if (opcode == Opcode::CMD_XFER_INITIATE) {
+        this->CMD_XFER_INITIATE.~CMD_XFER_INITIATE();
+    }
+    if (opcode == Opcode::CMD_XFER_DATA) {
+        this->CMD_XFER_DATA.~CMD_XFER_DATA();
+    }
+}
+
+/* 2 copy constructor */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(const ServerOpcode& other) {
+    this->opcode = other.opcode;
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        new (&CMD_AUTH_LOGON_CHALLENGE) auto(other.CMD_AUTH_LOGON_CHALLENGE);
+    }
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        new (&CMD_AUTH_LOGON_PROOF) auto(other.CMD_AUTH_LOGON_PROOF);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        new (&CMD_AUTH_RECONNECT_CHALLENGE) auto(other.CMD_AUTH_RECONNECT_CHALLENGE);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        new (&CMD_AUTH_RECONNECT_PROOF) auto(other.CMD_AUTH_RECONNECT_PROOF);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        new (&CMD_REALM_LIST) auto(other.CMD_REALM_LIST);
+    }
+    if (opcode == Opcode::CMD_XFER_INITIATE) {
+        new (&CMD_XFER_INITIATE) auto(other.CMD_XFER_INITIATE);
+    }
+    if (opcode == Opcode::CMD_XFER_DATA) {
+        new (&CMD_XFER_DATA) auto(other.CMD_XFER_DATA);
+    }
+}
+
+/* 3 copy assignment */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode& ServerOpcode::operator=(const ServerOpcode& other) {
+    if (this == &other) {
+        return *this;
+    }
+
+    this->opcode = other.opcode;
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        version2::CMD_AUTH_LOGON_CHALLENGE_Server CMD_AUTH_LOGON_CHALLENGEswap(other.CMD_AUTH_LOGON_CHALLENGE);
+        std::swap(this->CMD_AUTH_LOGON_CHALLENGE, CMD_AUTH_LOGON_CHALLENGEswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        version2::CMD_AUTH_LOGON_PROOF_Server CMD_AUTH_LOGON_PROOFswap(other.CMD_AUTH_LOGON_PROOF);
+        std::swap(this->CMD_AUTH_LOGON_PROOF, CMD_AUTH_LOGON_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        version2::CMD_AUTH_RECONNECT_CHALLENGE_Server CMD_AUTH_RECONNECT_CHALLENGEswap(other.CMD_AUTH_RECONNECT_CHALLENGE);
+        std::swap(this->CMD_AUTH_RECONNECT_CHALLENGE, CMD_AUTH_RECONNECT_CHALLENGEswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        version2::CMD_AUTH_RECONNECT_PROOF_Server CMD_AUTH_RECONNECT_PROOFswap(other.CMD_AUTH_RECONNECT_PROOF);
+        std::swap(this->CMD_AUTH_RECONNECT_PROOF, CMD_AUTH_RECONNECT_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        version2::CMD_REALM_LIST_Server CMD_REALM_LISTswap(other.CMD_REALM_LIST);
+        std::swap(this->CMD_REALM_LIST, CMD_REALM_LISTswap);
+    }
+    if (opcode == Opcode::CMD_XFER_INITIATE) {
+        version2::CMD_XFER_INITIATE CMD_XFER_INITIATEswap(other.CMD_XFER_INITIATE);
+        std::swap(this->CMD_XFER_INITIATE, CMD_XFER_INITIATEswap);
+    }
+    if (opcode == Opcode::CMD_XFER_DATA) {
+        version2::CMD_XFER_DATA CMD_XFER_DATAswap(other.CMD_XFER_DATA);
+        std::swap(this->CMD_XFER_DATA, CMD_XFER_DATAswap);
+    }
+    return *this;
+}
+
+/* 4 move constructor */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(ServerOpcode&& other) noexcept {
+    this->opcode = other.opcode;
+    other.opcode = Opcode::NONE;
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        this->CMD_AUTH_LOGON_CHALLENGE = std::move(other.CMD_AUTH_LOGON_CHALLENGE);
+    }
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        this->CMD_AUTH_LOGON_PROOF = std::move(other.CMD_AUTH_LOGON_PROOF);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        this->CMD_AUTH_RECONNECT_CHALLENGE = std::move(other.CMD_AUTH_RECONNECT_CHALLENGE);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        this->CMD_AUTH_RECONNECT_PROOF = std::move(other.CMD_AUTH_RECONNECT_PROOF);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        this->CMD_REALM_LIST = std::move(other.CMD_REALM_LIST);
+    }
+    if (opcode == Opcode::CMD_XFER_INITIATE) {
+        this->CMD_XFER_INITIATE = std::move(other.CMD_XFER_INITIATE);
+    }
+    if (opcode == Opcode::CMD_XFER_DATA) {
+        this->CMD_XFER_DATA = std::move(other.CMD_XFER_DATA);
+    }
+}
+
+/* 5 move assignment */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode& ServerOpcode::operator=(ServerOpcode&& other) noexcept {
+    this->opcode = other.opcode;
+    other.opcode = Opcode::NONE;
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        version2::CMD_AUTH_LOGON_CHALLENGE_Server CMD_AUTH_LOGON_CHALLENGEswap(std::move(other.CMD_AUTH_LOGON_CHALLENGE));
+        std::swap(this->CMD_AUTH_LOGON_CHALLENGE, CMD_AUTH_LOGON_CHALLENGEswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        version2::CMD_AUTH_LOGON_PROOF_Server CMD_AUTH_LOGON_PROOFswap(std::move(other.CMD_AUTH_LOGON_PROOF));
+        std::swap(this->CMD_AUTH_LOGON_PROOF, CMD_AUTH_LOGON_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        version2::CMD_AUTH_RECONNECT_CHALLENGE_Server CMD_AUTH_RECONNECT_CHALLENGEswap(std::move(other.CMD_AUTH_RECONNECT_CHALLENGE));
+        std::swap(this->CMD_AUTH_RECONNECT_CHALLENGE, CMD_AUTH_RECONNECT_CHALLENGEswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        version2::CMD_AUTH_RECONNECT_PROOF_Server CMD_AUTH_RECONNECT_PROOFswap(std::move(other.CMD_AUTH_RECONNECT_PROOF));
+        std::swap(this->CMD_AUTH_RECONNECT_PROOF, CMD_AUTH_RECONNECT_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        version2::CMD_REALM_LIST_Server CMD_REALM_LISTswap(std::move(other.CMD_REALM_LIST));
+        std::swap(this->CMD_REALM_LIST, CMD_REALM_LISTswap);
+    }
+    if (opcode == Opcode::CMD_XFER_INITIATE) {
+        version2::CMD_XFER_INITIATE CMD_XFER_INITIATEswap(std::move(other.CMD_XFER_INITIATE));
+        std::swap(this->CMD_XFER_INITIATE, CMD_XFER_INITIATEswap);
+    }
+    if (opcode == Opcode::CMD_XFER_DATA) {
+        version2::CMD_XFER_DATA CMD_XFER_DATAswap(std::move(other.CMD_XFER_DATA));
+        std::swap(this->CMD_XFER_DATA, CMD_XFER_DATAswap);
+    }
+    return *this;
+}
+
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(version2::CMD_AUTH_LOGON_CHALLENGE_Server&& obj) {
+    opcode = Opcode::CMD_AUTH_LOGON_CHALLENGE;
+    new (&this->CMD_AUTH_LOGON_CHALLENGE) version2::CMD_AUTH_LOGON_CHALLENGE_Server (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(version2::CMD_AUTH_LOGON_PROOF_Server&& obj) {
+    opcode = Opcode::CMD_AUTH_LOGON_PROOF;
+    new (&this->CMD_AUTH_LOGON_PROOF) version2::CMD_AUTH_LOGON_PROOF_Server (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(version2::CMD_AUTH_RECONNECT_CHALLENGE_Server&& obj) {
+    opcode = Opcode::CMD_AUTH_RECONNECT_CHALLENGE;
+    new (&this->CMD_AUTH_RECONNECT_CHALLENGE) version2::CMD_AUTH_RECONNECT_CHALLENGE_Server (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(version2::CMD_AUTH_RECONNECT_PROOF_Server&& obj) {
+    opcode = Opcode::CMD_AUTH_RECONNECT_PROOF;
+    new (&this->CMD_AUTH_RECONNECT_PROOF) version2::CMD_AUTH_RECONNECT_PROOF_Server (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(version2::CMD_REALM_LIST_Server&& obj) {
+    opcode = Opcode::CMD_REALM_LIST;
+    new (&this->CMD_REALM_LIST) version2::CMD_REALM_LIST_Server (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(version2::CMD_XFER_INITIATE&& obj) {
+    opcode = Opcode::CMD_XFER_INITIATE;
+    new (&this->CMD_XFER_INITIATE) version2::CMD_XFER_INITIATE (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(version2::CMD_XFER_DATA&& obj) {
+    opcode = Opcode::CMD_XFER_DATA;
+    new (&this->CMD_XFER_DATA) version2::CMD_XFER_DATA (std::move(obj));
+}
+
 WOW_LOGIN_MESSAGES_CPP_EXPORT const char* ServerOpcode::to_string() const {
+    if (opcode == Opcode::NONE) {{ return "NONE"; }}
     if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) { return "CMD_AUTH_LOGON_CHALLENGE_Server"; }
     if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) { return "CMD_AUTH_LOGON_PROOF_Server"; }
     if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) { return "CMD_AUTH_RECONNECT_CHALLENGE_Server"; }
@@ -1032,61 +1501,6 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT version2::CMD_XFER_DATA& ServerOpcode::get<CMD_XFE
 }
 
 
-WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const ServerOpcode& opcode) {
-    if (opcode.opcode == ServerOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE) {
-        return opcode.CMD_AUTH_LOGON_CHALLENGE.write();;
-    }
-    if (opcode.opcode == ServerOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
-        return opcode.CMD_AUTH_LOGON_PROOF.write();;
-    }
-    if (opcode.opcode == ServerOpcode::Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
-        return opcode.CMD_AUTH_RECONNECT_CHALLENGE.write();;
-    }
-    if (opcode.opcode == ServerOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF) {
-        return opcode.CMD_AUTH_RECONNECT_PROOF.write();;
-    }
-    if (opcode.opcode == ServerOpcode::Opcode::CMD_REALM_LIST) {
-        return opcode.CMD_REALM_LIST.write();;
-    }
-    if (opcode.opcode == ServerOpcode::Opcode::CMD_XFER_INITIATE) {
-        return opcode.CMD_XFER_INITIATE.write();;
-    }
-    if (opcode.opcode == ServerOpcode::Opcode::CMD_XFER_DATA) {
-        return opcode.CMD_XFER_DATA.write();;
-    }
-
-    return {}; /* unreachable */
-}
-
-WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode read_server_opcode(Reader& reader) {
-    const uint8_t opcode = reader.read_u8();
-
-    ServerOpcode op;
-
-    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE)) {
-        return ServerOpcode(::wow_login_messages::version2::CMD_AUTH_LOGON_CHALLENGE_Server_read(reader));
-    }
-    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_LOGON_PROOF)) {
-        return ServerOpcode(::wow_login_messages::version2::CMD_AUTH_LOGON_PROOF_Server_read(reader));
-    }
-    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_RECONNECT_CHALLENGE)) {
-        return ServerOpcode(::wow_login_messages::version2::CMD_AUTH_RECONNECT_CHALLENGE_Server_read(reader));
-    }
-    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF)) {
-        return ServerOpcode(::wow_login_messages::version2::CMD_AUTH_RECONNECT_PROOF_Server_read(reader));
-    }
-    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_REALM_LIST)) {
-        return ServerOpcode(::wow_login_messages::version2::CMD_REALM_LIST_Server_read(reader));
-    }
-    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_XFER_INITIATE)) {
-        return ServerOpcode(::wow_login_messages::version2::CMD_XFER_INITIATE_read(reader));
-    }
-    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_XFER_DATA)) {
-        return ServerOpcode(::wow_login_messages::version2::CMD_XFER_DATA_read(reader));
-    }
-
-    return op;
-}
 } // namespace version2
 } // namespace wow_login_messages
 /* clang-format off */
@@ -1171,13 +1585,13 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_AUTH_LOGON_CHALLENG
             writer.write_u8(v);
         }
 
-        writer.write_u8(obj.generator.size());
+        writer.write_u8(static_cast<uint8_t>(obj.generator.size()));
 
         for (const auto& v : obj.generator) {
             writer.write_u8(v);
         }
 
-        writer.write_u8(obj.large_safe_prime.size());
+        writer.write_u8(static_cast<uint8_t>(obj.large_safe_prime.size()));
 
         for (const auto& v : obj.large_safe_prime) {
             writer.write_u8(v);
@@ -1269,7 +1683,7 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_AUTH_LOGON_PROOF_Cl
         writer.write_u8(v);
     }
 
-    writer.write_u8(obj.telemetry_keys.size());
+    writer.write_u8(static_cast<uint8_t>(obj.telemetry_keys.size()));
 
     for (const auto& v : obj.telemetry_keys) {
         TelemetryKey_write(writer, v);
@@ -1320,7 +1734,7 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_SURVEY_RESULT::writ
 
     writer.write_u8(obj.error);
 
-    writer.write_u16(obj.data.size());
+    writer.write_u16(static_cast<uint16_t>(obj.data.size()));
 
     for (const auto& v : obj.data) {
         writer.write_u8(v);
@@ -1355,7 +1769,215 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_XFER_CANCEL::write(
     return writer.m_buf;
 }
 
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode ClientOpcode::read(Reader& reader) {
+    const uint8_t opcode = reader.read_u8();
+
+    ClientOpcode op;
+
+    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF)) {
+        return ClientOpcode(::wow_login_messages::version3::CMD_AUTH_LOGON_PROOF_Client_read(reader));
+    }
+    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_SURVEY_RESULT)) {
+        return ClientOpcode(::wow_login_messages::version3::CMD_SURVEY_RESULT_read(reader));
+    }
+    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_REALM_LIST)) {
+        return ClientOpcode(::wow_login_messages::version3::CMD_REALM_LIST_Client{});
+    }
+    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_XFER_ACCEPT)) {
+        return ClientOpcode(::wow_login_messages::version3::CMD_XFER_ACCEPT{});
+    }
+    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_XFER_RESUME)) {
+        return ClientOpcode(::wow_login_messages::version2::CMD_XFER_RESUME_read(reader));
+    }
+    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_XFER_CANCEL)) {
+        return ClientOpcode(::wow_login_messages::version3::CMD_XFER_CANCEL{});
+    }
+
+    return op;
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> ClientOpcode::write() const {
+    if (this->opcode == ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
+        return this->CMD_AUTH_LOGON_PROOF.write();;
+    }
+    if (this->opcode == ClientOpcode::Opcode::CMD_SURVEY_RESULT) {
+        return this->CMD_SURVEY_RESULT.write();;
+    }
+    if (this->opcode == ClientOpcode::Opcode::CMD_REALM_LIST) {
+        return this->CMD_REALM_LIST.write();;
+    }
+    if (this->opcode == ClientOpcode::Opcode::CMD_XFER_ACCEPT) {
+        return this->CMD_XFER_ACCEPT.write();;
+    }
+    if (this->opcode == ClientOpcode::Opcode::CMD_XFER_RESUME) {
+        return this->CMD_XFER_RESUME.write();;
+    }
+    if (this->opcode == ClientOpcode::Opcode::CMD_XFER_CANCEL) {
+        return this->CMD_XFER_CANCEL.write();;
+    }
+
+    return {}; /* unreachable */
+}
+/* 1 destructor */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::~ClientOpcode() {
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        this->CMD_AUTH_LOGON_PROOF.~CMD_AUTH_LOGON_PROOF_Client();
+    }
+    if (opcode == Opcode::CMD_SURVEY_RESULT) {
+        this->CMD_SURVEY_RESULT.~CMD_SURVEY_RESULT();
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        this->CMD_REALM_LIST.~CMD_REALM_LIST_Client();
+    }
+    if (opcode == Opcode::CMD_XFER_ACCEPT) {
+        this->CMD_XFER_ACCEPT.~CMD_XFER_ACCEPT();
+    }
+    if (opcode == Opcode::CMD_XFER_RESUME) {
+        this->CMD_XFER_RESUME.~CMD_XFER_RESUME();
+    }
+    if (opcode == Opcode::CMD_XFER_CANCEL) {
+        this->CMD_XFER_CANCEL.~CMD_XFER_CANCEL();
+    }
+}
+
+/* 2 copy constructor */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(const ClientOpcode& other) {
+    this->opcode = other.opcode;
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        new (&CMD_AUTH_LOGON_PROOF) auto(other.CMD_AUTH_LOGON_PROOF);
+    }
+    if (opcode == Opcode::CMD_SURVEY_RESULT) {
+        new (&CMD_SURVEY_RESULT) auto(other.CMD_SURVEY_RESULT);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        new (&CMD_REALM_LIST) auto(other.CMD_REALM_LIST);
+    }
+    if (opcode == Opcode::CMD_XFER_ACCEPT) {
+        new (&CMD_XFER_ACCEPT) auto(other.CMD_XFER_ACCEPT);
+    }
+    if (opcode == Opcode::CMD_XFER_RESUME) {
+        new (&CMD_XFER_RESUME) auto(other.CMD_XFER_RESUME);
+    }
+    if (opcode == Opcode::CMD_XFER_CANCEL) {
+        new (&CMD_XFER_CANCEL) auto(other.CMD_XFER_CANCEL);
+    }
+}
+
+/* 3 copy assignment */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode& ClientOpcode::operator=(const ClientOpcode& other) {
+    if (this == &other) {
+        return *this;
+    }
+
+    this->opcode = other.opcode;
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        version3::CMD_AUTH_LOGON_PROOF_Client CMD_AUTH_LOGON_PROOFswap(other.CMD_AUTH_LOGON_PROOF);
+        std::swap(this->CMD_AUTH_LOGON_PROOF, CMD_AUTH_LOGON_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_SURVEY_RESULT) {
+        version3::CMD_SURVEY_RESULT CMD_SURVEY_RESULTswap(other.CMD_SURVEY_RESULT);
+        std::swap(this->CMD_SURVEY_RESULT, CMD_SURVEY_RESULTswap);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        version3::CMD_REALM_LIST_Client CMD_REALM_LISTswap(other.CMD_REALM_LIST);
+        std::swap(this->CMD_REALM_LIST, CMD_REALM_LISTswap);
+    }
+    if (opcode == Opcode::CMD_XFER_ACCEPT) {
+        version3::CMD_XFER_ACCEPT CMD_XFER_ACCEPTswap(other.CMD_XFER_ACCEPT);
+        std::swap(this->CMD_XFER_ACCEPT, CMD_XFER_ACCEPTswap);
+    }
+    if (opcode == Opcode::CMD_XFER_RESUME) {
+        version3::CMD_XFER_RESUME CMD_XFER_RESUMEswap(other.CMD_XFER_RESUME);
+        std::swap(this->CMD_XFER_RESUME, CMD_XFER_RESUMEswap);
+    }
+    if (opcode == Opcode::CMD_XFER_CANCEL) {
+        version3::CMD_XFER_CANCEL CMD_XFER_CANCELswap(other.CMD_XFER_CANCEL);
+        std::swap(this->CMD_XFER_CANCEL, CMD_XFER_CANCELswap);
+    }
+    return *this;
+}
+
+/* 4 move constructor */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(ClientOpcode&& other) noexcept {
+    this->opcode = other.opcode;
+    other.opcode = Opcode::NONE;
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        this->CMD_AUTH_LOGON_PROOF = std::move(other.CMD_AUTH_LOGON_PROOF);
+    }
+    if (opcode == Opcode::CMD_SURVEY_RESULT) {
+        this->CMD_SURVEY_RESULT = std::move(other.CMD_SURVEY_RESULT);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        this->CMD_REALM_LIST = std::move(other.CMD_REALM_LIST);
+    }
+    if (opcode == Opcode::CMD_XFER_ACCEPT) {
+        this->CMD_XFER_ACCEPT = std::move(other.CMD_XFER_ACCEPT);
+    }
+    if (opcode == Opcode::CMD_XFER_RESUME) {
+        this->CMD_XFER_RESUME = std::move(other.CMD_XFER_RESUME);
+    }
+    if (opcode == Opcode::CMD_XFER_CANCEL) {
+        this->CMD_XFER_CANCEL = std::move(other.CMD_XFER_CANCEL);
+    }
+}
+
+/* 5 move assignment */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode& ClientOpcode::operator=(ClientOpcode&& other) noexcept {
+    this->opcode = other.opcode;
+    other.opcode = Opcode::NONE;
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        version3::CMD_AUTH_LOGON_PROOF_Client CMD_AUTH_LOGON_PROOFswap(std::move(other.CMD_AUTH_LOGON_PROOF));
+        std::swap(this->CMD_AUTH_LOGON_PROOF, CMD_AUTH_LOGON_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_SURVEY_RESULT) {
+        version3::CMD_SURVEY_RESULT CMD_SURVEY_RESULTswap(std::move(other.CMD_SURVEY_RESULT));
+        std::swap(this->CMD_SURVEY_RESULT, CMD_SURVEY_RESULTswap);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        version3::CMD_REALM_LIST_Client CMD_REALM_LISTswap(std::move(other.CMD_REALM_LIST));
+        std::swap(this->CMD_REALM_LIST, CMD_REALM_LISTswap);
+    }
+    if (opcode == Opcode::CMD_XFER_ACCEPT) {
+        version3::CMD_XFER_ACCEPT CMD_XFER_ACCEPTswap(std::move(other.CMD_XFER_ACCEPT));
+        std::swap(this->CMD_XFER_ACCEPT, CMD_XFER_ACCEPTswap);
+    }
+    if (opcode == Opcode::CMD_XFER_RESUME) {
+        version3::CMD_XFER_RESUME CMD_XFER_RESUMEswap(std::move(other.CMD_XFER_RESUME));
+        std::swap(this->CMD_XFER_RESUME, CMD_XFER_RESUMEswap);
+    }
+    if (opcode == Opcode::CMD_XFER_CANCEL) {
+        version3::CMD_XFER_CANCEL CMD_XFER_CANCELswap(std::move(other.CMD_XFER_CANCEL));
+        std::swap(this->CMD_XFER_CANCEL, CMD_XFER_CANCELswap);
+    }
+    return *this;
+}
+
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(version3::CMD_AUTH_LOGON_PROOF_Client&& obj) {
+    opcode = Opcode::CMD_AUTH_LOGON_PROOF;
+    new (&this->CMD_AUTH_LOGON_PROOF) version3::CMD_AUTH_LOGON_PROOF_Client (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(version3::CMD_SURVEY_RESULT&& obj) {
+    opcode = Opcode::CMD_SURVEY_RESULT;
+    new (&this->CMD_SURVEY_RESULT) version3::CMD_SURVEY_RESULT (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(version3::CMD_REALM_LIST_Client&& obj) {
+    opcode = Opcode::CMD_REALM_LIST;
+    new (&this->CMD_REALM_LIST) version3::CMD_REALM_LIST_Client (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(version3::CMD_XFER_ACCEPT&& obj) {
+    opcode = Opcode::CMD_XFER_ACCEPT;
+    new (&this->CMD_XFER_ACCEPT) version3::CMD_XFER_ACCEPT (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(version3::CMD_XFER_RESUME&& obj) {
+    opcode = Opcode::CMD_XFER_RESUME;
+    new (&this->CMD_XFER_RESUME) version3::CMD_XFER_RESUME (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(version3::CMD_XFER_CANCEL&& obj) {
+    opcode = Opcode::CMD_XFER_CANCEL;
+    new (&this->CMD_XFER_CANCEL) version3::CMD_XFER_CANCEL (std::move(obj));
+}
+
 WOW_LOGIN_MESSAGES_CPP_EXPORT const char* ClientOpcode::to_string() const {
+    if (opcode == Opcode::NONE) {{ return "NONE"; }}
     if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) { return "CMD_AUTH_LOGON_PROOF_Client"; }
     if (opcode == Opcode::CMD_SURVEY_RESULT) { return "CMD_SURVEY_RESULT"; }
     if (opcode == Opcode::CMD_REALM_LIST) { return "CMD_REALM_LIST_Client"; }
@@ -1461,56 +2083,188 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_XFER_CANCEL& ClientOpcode::get<CMD_X
 }
 
 
-WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const ClientOpcode& opcode) {
-    if (opcode.opcode == ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
-        return opcode.CMD_AUTH_LOGON_PROOF.write();;
-    }
-    if (opcode.opcode == ClientOpcode::Opcode::CMD_SURVEY_RESULT) {
-        return opcode.CMD_SURVEY_RESULT.write();;
-    }
-    if (opcode.opcode == ClientOpcode::Opcode::CMD_REALM_LIST) {
-        return opcode.CMD_REALM_LIST.write();;
-    }
-    if (opcode.opcode == ClientOpcode::Opcode::CMD_XFER_ACCEPT) {
-        return opcode.CMD_XFER_ACCEPT.write();;
-    }
-    if (opcode.opcode == ClientOpcode::Opcode::CMD_XFER_RESUME) {
-        return opcode.CMD_XFER_RESUME.write();;
-    }
-    if (opcode.opcode == ClientOpcode::Opcode::CMD_XFER_CANCEL) {
-        return opcode.CMD_XFER_CANCEL.write();;
-    }
-
-    return {}; /* unreachable */
-}
-
-WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode read_client_opcode(Reader& reader) {
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode ServerOpcode::read(Reader& reader) {
     const uint8_t opcode = reader.read_u8();
 
-    ClientOpcode op;
+    ServerOpcode op;
 
-    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF)) {
-        return ClientOpcode(::wow_login_messages::version3::CMD_AUTH_LOGON_PROOF_Client_read(reader));
+    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE)) {
+        return ServerOpcode(::wow_login_messages::version3::CMD_AUTH_LOGON_CHALLENGE_Server_read(reader));
     }
-    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_SURVEY_RESULT)) {
-        return ClientOpcode(::wow_login_messages::version3::CMD_SURVEY_RESULT_read(reader));
+    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_LOGON_PROOF)) {
+        return ServerOpcode(::wow_login_messages::version2::CMD_AUTH_LOGON_PROOF_Server_read(reader));
     }
-    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_REALM_LIST)) {
-        return ClientOpcode(::wow_login_messages::version3::CMD_REALM_LIST_Client{});
+    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_REALM_LIST)) {
+        return ServerOpcode(::wow_login_messages::version2::CMD_REALM_LIST_Server_read(reader));
     }
-    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_XFER_ACCEPT)) {
-        return ClientOpcode(::wow_login_messages::version3::CMD_XFER_ACCEPT{});
+    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_XFER_INITIATE)) {
+        return ServerOpcode(::wow_login_messages::version2::CMD_XFER_INITIATE_read(reader));
     }
-    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_XFER_RESUME)) {
-        return ClientOpcode(::wow_login_messages::version2::CMD_XFER_RESUME_read(reader));
-    }
-    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_XFER_CANCEL)) {
-        return ClientOpcode(::wow_login_messages::version3::CMD_XFER_CANCEL{});
+    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_XFER_DATA)) {
+        return ServerOpcode(::wow_login_messages::version2::CMD_XFER_DATA_read(reader));
     }
 
     return op;
 }
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> ServerOpcode::write() const {
+    if (this->opcode == ServerOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        return this->CMD_AUTH_LOGON_CHALLENGE.write();;
+    }
+    if (this->opcode == ServerOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
+        return this->CMD_AUTH_LOGON_PROOF.write();;
+    }
+    if (this->opcode == ServerOpcode::Opcode::CMD_REALM_LIST) {
+        return this->CMD_REALM_LIST.write();;
+    }
+    if (this->opcode == ServerOpcode::Opcode::CMD_XFER_INITIATE) {
+        return this->CMD_XFER_INITIATE.write();;
+    }
+    if (this->opcode == ServerOpcode::Opcode::CMD_XFER_DATA) {
+        return this->CMD_XFER_DATA.write();;
+    }
+
+    return {}; /* unreachable */
+}
+/* 1 destructor */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::~ServerOpcode() {
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        this->CMD_AUTH_LOGON_CHALLENGE.~CMD_AUTH_LOGON_CHALLENGE_Server();
+    }
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        this->CMD_AUTH_LOGON_PROOF.~CMD_AUTH_LOGON_PROOF_Server();
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        this->CMD_REALM_LIST.~CMD_REALM_LIST_Server();
+    }
+    if (opcode == Opcode::CMD_XFER_INITIATE) {
+        this->CMD_XFER_INITIATE.~CMD_XFER_INITIATE();
+    }
+    if (opcode == Opcode::CMD_XFER_DATA) {
+        this->CMD_XFER_DATA.~CMD_XFER_DATA();
+    }
+}
+
+/* 2 copy constructor */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(const ServerOpcode& other) {
+    this->opcode = other.opcode;
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        new (&CMD_AUTH_LOGON_CHALLENGE) auto(other.CMD_AUTH_LOGON_CHALLENGE);
+    }
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        new (&CMD_AUTH_LOGON_PROOF) auto(other.CMD_AUTH_LOGON_PROOF);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        new (&CMD_REALM_LIST) auto(other.CMD_REALM_LIST);
+    }
+    if (opcode == Opcode::CMD_XFER_INITIATE) {
+        new (&CMD_XFER_INITIATE) auto(other.CMD_XFER_INITIATE);
+    }
+    if (opcode == Opcode::CMD_XFER_DATA) {
+        new (&CMD_XFER_DATA) auto(other.CMD_XFER_DATA);
+    }
+}
+
+/* 3 copy assignment */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode& ServerOpcode::operator=(const ServerOpcode& other) {
+    if (this == &other) {
+        return *this;
+    }
+
+    this->opcode = other.opcode;
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        version3::CMD_AUTH_LOGON_CHALLENGE_Server CMD_AUTH_LOGON_CHALLENGEswap(other.CMD_AUTH_LOGON_CHALLENGE);
+        std::swap(this->CMD_AUTH_LOGON_CHALLENGE, CMD_AUTH_LOGON_CHALLENGEswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        version3::CMD_AUTH_LOGON_PROOF_Server CMD_AUTH_LOGON_PROOFswap(other.CMD_AUTH_LOGON_PROOF);
+        std::swap(this->CMD_AUTH_LOGON_PROOF, CMD_AUTH_LOGON_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        version3::CMD_REALM_LIST_Server CMD_REALM_LISTswap(other.CMD_REALM_LIST);
+        std::swap(this->CMD_REALM_LIST, CMD_REALM_LISTswap);
+    }
+    if (opcode == Opcode::CMD_XFER_INITIATE) {
+        version3::CMD_XFER_INITIATE CMD_XFER_INITIATEswap(other.CMD_XFER_INITIATE);
+        std::swap(this->CMD_XFER_INITIATE, CMD_XFER_INITIATEswap);
+    }
+    if (opcode == Opcode::CMD_XFER_DATA) {
+        version3::CMD_XFER_DATA CMD_XFER_DATAswap(other.CMD_XFER_DATA);
+        std::swap(this->CMD_XFER_DATA, CMD_XFER_DATAswap);
+    }
+    return *this;
+}
+
+/* 4 move constructor */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(ServerOpcode&& other) noexcept {
+    this->opcode = other.opcode;
+    other.opcode = Opcode::NONE;
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        this->CMD_AUTH_LOGON_CHALLENGE = std::move(other.CMD_AUTH_LOGON_CHALLENGE);
+    }
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        this->CMD_AUTH_LOGON_PROOF = std::move(other.CMD_AUTH_LOGON_PROOF);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        this->CMD_REALM_LIST = std::move(other.CMD_REALM_LIST);
+    }
+    if (opcode == Opcode::CMD_XFER_INITIATE) {
+        this->CMD_XFER_INITIATE = std::move(other.CMD_XFER_INITIATE);
+    }
+    if (opcode == Opcode::CMD_XFER_DATA) {
+        this->CMD_XFER_DATA = std::move(other.CMD_XFER_DATA);
+    }
+}
+
+/* 5 move assignment */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode& ServerOpcode::operator=(ServerOpcode&& other) noexcept {
+    this->opcode = other.opcode;
+    other.opcode = Opcode::NONE;
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        version3::CMD_AUTH_LOGON_CHALLENGE_Server CMD_AUTH_LOGON_CHALLENGEswap(std::move(other.CMD_AUTH_LOGON_CHALLENGE));
+        std::swap(this->CMD_AUTH_LOGON_CHALLENGE, CMD_AUTH_LOGON_CHALLENGEswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        version3::CMD_AUTH_LOGON_PROOF_Server CMD_AUTH_LOGON_PROOFswap(std::move(other.CMD_AUTH_LOGON_PROOF));
+        std::swap(this->CMD_AUTH_LOGON_PROOF, CMD_AUTH_LOGON_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        version3::CMD_REALM_LIST_Server CMD_REALM_LISTswap(std::move(other.CMD_REALM_LIST));
+        std::swap(this->CMD_REALM_LIST, CMD_REALM_LISTswap);
+    }
+    if (opcode == Opcode::CMD_XFER_INITIATE) {
+        version3::CMD_XFER_INITIATE CMD_XFER_INITIATEswap(std::move(other.CMD_XFER_INITIATE));
+        std::swap(this->CMD_XFER_INITIATE, CMD_XFER_INITIATEswap);
+    }
+    if (opcode == Opcode::CMD_XFER_DATA) {
+        version3::CMD_XFER_DATA CMD_XFER_DATAswap(std::move(other.CMD_XFER_DATA));
+        std::swap(this->CMD_XFER_DATA, CMD_XFER_DATAswap);
+    }
+    return *this;
+}
+
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(version3::CMD_AUTH_LOGON_CHALLENGE_Server&& obj) {
+    opcode = Opcode::CMD_AUTH_LOGON_CHALLENGE;
+    new (&this->CMD_AUTH_LOGON_CHALLENGE) version3::CMD_AUTH_LOGON_CHALLENGE_Server (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(version3::CMD_AUTH_LOGON_PROOF_Server&& obj) {
+    opcode = Opcode::CMD_AUTH_LOGON_PROOF;
+    new (&this->CMD_AUTH_LOGON_PROOF) version3::CMD_AUTH_LOGON_PROOF_Server (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(version3::CMD_REALM_LIST_Server&& obj) {
+    opcode = Opcode::CMD_REALM_LIST;
+    new (&this->CMD_REALM_LIST) version3::CMD_REALM_LIST_Server (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(version3::CMD_XFER_INITIATE&& obj) {
+    opcode = Opcode::CMD_XFER_INITIATE;
+    new (&this->CMD_XFER_INITIATE) version3::CMD_XFER_INITIATE (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(version3::CMD_XFER_DATA&& obj) {
+    opcode = Opcode::CMD_XFER_DATA;
+    new (&this->CMD_XFER_DATA) version3::CMD_XFER_DATA (std::move(obj));
+}
+
 WOW_LOGIN_MESSAGES_CPP_EXPORT const char* ServerOpcode::to_string() const {
+    if (opcode == Opcode::NONE) {{ return "NONE"; }}
     if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) { return "CMD_AUTH_LOGON_CHALLENGE_Server"; }
     if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) { return "CMD_AUTH_LOGON_PROOF_Server"; }
     if (opcode == Opcode::CMD_REALM_LIST) { return "CMD_REALM_LIST_Server"; }
@@ -1599,49 +2353,6 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT version3::CMD_XFER_DATA& ServerOpcode::get<CMD_XFE
 }
 
 
-WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const ServerOpcode& opcode) {
-    if (opcode.opcode == ServerOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE) {
-        return opcode.CMD_AUTH_LOGON_CHALLENGE.write();;
-    }
-    if (opcode.opcode == ServerOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
-        return opcode.CMD_AUTH_LOGON_PROOF.write();;
-    }
-    if (opcode.opcode == ServerOpcode::Opcode::CMD_REALM_LIST) {
-        return opcode.CMD_REALM_LIST.write();;
-    }
-    if (opcode.opcode == ServerOpcode::Opcode::CMD_XFER_INITIATE) {
-        return opcode.CMD_XFER_INITIATE.write();;
-    }
-    if (opcode.opcode == ServerOpcode::Opcode::CMD_XFER_DATA) {
-        return opcode.CMD_XFER_DATA.write();;
-    }
-
-    return {}; /* unreachable */
-}
-
-WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode read_server_opcode(Reader& reader) {
-    const uint8_t opcode = reader.read_u8();
-
-    ServerOpcode op;
-
-    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE)) {
-        return ServerOpcode(::wow_login_messages::version3::CMD_AUTH_LOGON_CHALLENGE_Server_read(reader));
-    }
-    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_LOGON_PROOF)) {
-        return ServerOpcode(::wow_login_messages::version2::CMD_AUTH_LOGON_PROOF_Server_read(reader));
-    }
-    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_REALM_LIST)) {
-        return ServerOpcode(::wow_login_messages::version2::CMD_REALM_LIST_Server_read(reader));
-    }
-    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_XFER_INITIATE)) {
-        return ServerOpcode(::wow_login_messages::version2::CMD_XFER_INITIATE_read(reader));
-    }
-    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_XFER_DATA)) {
-        return ServerOpcode(::wow_login_messages::version2::CMD_XFER_DATA_read(reader));
-    }
-
-    return op;
-}
 } // namespace version3
 } // namespace wow_login_messages
 /* clang-format off */
@@ -1791,13 +2502,13 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_AUTH_LOGON_CHALLENG
             writer.write_u8(v);
         }
 
-        writer.write_u8(obj.generator.size());
+        writer.write_u8(static_cast<uint8_t>(obj.generator.size()));
 
         for (const auto& v : obj.generator) {
             writer.write_u8(v);
         }
 
-        writer.write_u8(obj.large_safe_prime.size());
+        writer.write_u8(static_cast<uint8_t>(obj.large_safe_prime.size()));
 
         for (const auto& v : obj.large_safe_prime) {
             writer.write_u8(v);
@@ -1911,7 +2622,7 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_AUTH_LOGON_PROOF_Cl
         writer.write_u8(v);
     }
 
-    writer.write_u8(obj.telemetry_keys.size());
+    writer.write_u8(static_cast<uint8_t>(obj.telemetry_keys.size()));
 
     for (const auto& v : obj.telemetry_keys) {
         TelemetryKey_write(writer, v);
@@ -2058,7 +2769,7 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_REALM_LIST_Server::
 
     writer.write_u32(0);
 
-    writer.write_u8(obj.realms.size());
+    writer.write_u8(static_cast<uint8_t>(obj.realms.size()));
 
     for (const auto& v : obj.realms) {
         Realm_write(writer, v);
@@ -2085,7 +2796,215 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_XFER_CANCEL::write(
     return writer.m_buf;
 }
 
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode ClientOpcode::read(Reader& reader) {
+    const uint8_t opcode = reader.read_u8();
+
+    ClientOpcode op;
+
+    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF)) {
+        return ClientOpcode(::wow_login_messages::version5::CMD_AUTH_LOGON_PROOF_Client_read(reader));
+    }
+    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF)) {
+        return ClientOpcode(::wow_login_messages::version2::CMD_AUTH_RECONNECT_PROOF_Client_read(reader));
+    }
+    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_REALM_LIST)) {
+        return ClientOpcode(::wow_login_messages::version5::CMD_REALM_LIST_Client{});
+    }
+    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_XFER_ACCEPT)) {
+        return ClientOpcode(::wow_login_messages::version5::CMD_XFER_ACCEPT{});
+    }
+    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_XFER_RESUME)) {
+        return ClientOpcode(::wow_login_messages::version2::CMD_XFER_RESUME_read(reader));
+    }
+    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_XFER_CANCEL)) {
+        return ClientOpcode(::wow_login_messages::version5::CMD_XFER_CANCEL{});
+    }
+
+    return op;
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> ClientOpcode::write() const {
+    if (this->opcode == ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
+        return this->CMD_AUTH_LOGON_PROOF.write();;
+    }
+    if (this->opcode == ClientOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        return this->CMD_AUTH_RECONNECT_PROOF.write();;
+    }
+    if (this->opcode == ClientOpcode::Opcode::CMD_REALM_LIST) {
+        return this->CMD_REALM_LIST.write();;
+    }
+    if (this->opcode == ClientOpcode::Opcode::CMD_XFER_ACCEPT) {
+        return this->CMD_XFER_ACCEPT.write();;
+    }
+    if (this->opcode == ClientOpcode::Opcode::CMD_XFER_RESUME) {
+        return this->CMD_XFER_RESUME.write();;
+    }
+    if (this->opcode == ClientOpcode::Opcode::CMD_XFER_CANCEL) {
+        return this->CMD_XFER_CANCEL.write();;
+    }
+
+    return {}; /* unreachable */
+}
+/* 1 destructor */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::~ClientOpcode() {
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        this->CMD_AUTH_LOGON_PROOF.~CMD_AUTH_LOGON_PROOF_Client();
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        this->CMD_AUTH_RECONNECT_PROOF.~CMD_AUTH_RECONNECT_PROOF_Client();
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        this->CMD_REALM_LIST.~CMD_REALM_LIST_Client();
+    }
+    if (opcode == Opcode::CMD_XFER_ACCEPT) {
+        this->CMD_XFER_ACCEPT.~CMD_XFER_ACCEPT();
+    }
+    if (opcode == Opcode::CMD_XFER_RESUME) {
+        this->CMD_XFER_RESUME.~CMD_XFER_RESUME();
+    }
+    if (opcode == Opcode::CMD_XFER_CANCEL) {
+        this->CMD_XFER_CANCEL.~CMD_XFER_CANCEL();
+    }
+}
+
+/* 2 copy constructor */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(const ClientOpcode& other) {
+    this->opcode = other.opcode;
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        new (&CMD_AUTH_LOGON_PROOF) auto(other.CMD_AUTH_LOGON_PROOF);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        new (&CMD_AUTH_RECONNECT_PROOF) auto(other.CMD_AUTH_RECONNECT_PROOF);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        new (&CMD_REALM_LIST) auto(other.CMD_REALM_LIST);
+    }
+    if (opcode == Opcode::CMD_XFER_ACCEPT) {
+        new (&CMD_XFER_ACCEPT) auto(other.CMD_XFER_ACCEPT);
+    }
+    if (opcode == Opcode::CMD_XFER_RESUME) {
+        new (&CMD_XFER_RESUME) auto(other.CMD_XFER_RESUME);
+    }
+    if (opcode == Opcode::CMD_XFER_CANCEL) {
+        new (&CMD_XFER_CANCEL) auto(other.CMD_XFER_CANCEL);
+    }
+}
+
+/* 3 copy assignment */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode& ClientOpcode::operator=(const ClientOpcode& other) {
+    if (this == &other) {
+        return *this;
+    }
+
+    this->opcode = other.opcode;
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        version5::CMD_AUTH_LOGON_PROOF_Client CMD_AUTH_LOGON_PROOFswap(other.CMD_AUTH_LOGON_PROOF);
+        std::swap(this->CMD_AUTH_LOGON_PROOF, CMD_AUTH_LOGON_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        version5::CMD_AUTH_RECONNECT_PROOF_Client CMD_AUTH_RECONNECT_PROOFswap(other.CMD_AUTH_RECONNECT_PROOF);
+        std::swap(this->CMD_AUTH_RECONNECT_PROOF, CMD_AUTH_RECONNECT_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        version5::CMD_REALM_LIST_Client CMD_REALM_LISTswap(other.CMD_REALM_LIST);
+        std::swap(this->CMD_REALM_LIST, CMD_REALM_LISTswap);
+    }
+    if (opcode == Opcode::CMD_XFER_ACCEPT) {
+        version5::CMD_XFER_ACCEPT CMD_XFER_ACCEPTswap(other.CMD_XFER_ACCEPT);
+        std::swap(this->CMD_XFER_ACCEPT, CMD_XFER_ACCEPTswap);
+    }
+    if (opcode == Opcode::CMD_XFER_RESUME) {
+        version5::CMD_XFER_RESUME CMD_XFER_RESUMEswap(other.CMD_XFER_RESUME);
+        std::swap(this->CMD_XFER_RESUME, CMD_XFER_RESUMEswap);
+    }
+    if (opcode == Opcode::CMD_XFER_CANCEL) {
+        version5::CMD_XFER_CANCEL CMD_XFER_CANCELswap(other.CMD_XFER_CANCEL);
+        std::swap(this->CMD_XFER_CANCEL, CMD_XFER_CANCELswap);
+    }
+    return *this;
+}
+
+/* 4 move constructor */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(ClientOpcode&& other) noexcept {
+    this->opcode = other.opcode;
+    other.opcode = Opcode::NONE;
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        this->CMD_AUTH_LOGON_PROOF = std::move(other.CMD_AUTH_LOGON_PROOF);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        this->CMD_AUTH_RECONNECT_PROOF = std::move(other.CMD_AUTH_RECONNECT_PROOF);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        this->CMD_REALM_LIST = std::move(other.CMD_REALM_LIST);
+    }
+    if (opcode == Opcode::CMD_XFER_ACCEPT) {
+        this->CMD_XFER_ACCEPT = std::move(other.CMD_XFER_ACCEPT);
+    }
+    if (opcode == Opcode::CMD_XFER_RESUME) {
+        this->CMD_XFER_RESUME = std::move(other.CMD_XFER_RESUME);
+    }
+    if (opcode == Opcode::CMD_XFER_CANCEL) {
+        this->CMD_XFER_CANCEL = std::move(other.CMD_XFER_CANCEL);
+    }
+}
+
+/* 5 move assignment */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode& ClientOpcode::operator=(ClientOpcode&& other) noexcept {
+    this->opcode = other.opcode;
+    other.opcode = Opcode::NONE;
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        version5::CMD_AUTH_LOGON_PROOF_Client CMD_AUTH_LOGON_PROOFswap(std::move(other.CMD_AUTH_LOGON_PROOF));
+        std::swap(this->CMD_AUTH_LOGON_PROOF, CMD_AUTH_LOGON_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        version5::CMD_AUTH_RECONNECT_PROOF_Client CMD_AUTH_RECONNECT_PROOFswap(std::move(other.CMD_AUTH_RECONNECT_PROOF));
+        std::swap(this->CMD_AUTH_RECONNECT_PROOF, CMD_AUTH_RECONNECT_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        version5::CMD_REALM_LIST_Client CMD_REALM_LISTswap(std::move(other.CMD_REALM_LIST));
+        std::swap(this->CMD_REALM_LIST, CMD_REALM_LISTswap);
+    }
+    if (opcode == Opcode::CMD_XFER_ACCEPT) {
+        version5::CMD_XFER_ACCEPT CMD_XFER_ACCEPTswap(std::move(other.CMD_XFER_ACCEPT));
+        std::swap(this->CMD_XFER_ACCEPT, CMD_XFER_ACCEPTswap);
+    }
+    if (opcode == Opcode::CMD_XFER_RESUME) {
+        version5::CMD_XFER_RESUME CMD_XFER_RESUMEswap(std::move(other.CMD_XFER_RESUME));
+        std::swap(this->CMD_XFER_RESUME, CMD_XFER_RESUMEswap);
+    }
+    if (opcode == Opcode::CMD_XFER_CANCEL) {
+        version5::CMD_XFER_CANCEL CMD_XFER_CANCELswap(std::move(other.CMD_XFER_CANCEL));
+        std::swap(this->CMD_XFER_CANCEL, CMD_XFER_CANCELswap);
+    }
+    return *this;
+}
+
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(version5::CMD_AUTH_LOGON_PROOF_Client&& obj) {
+    opcode = Opcode::CMD_AUTH_LOGON_PROOF;
+    new (&this->CMD_AUTH_LOGON_PROOF) version5::CMD_AUTH_LOGON_PROOF_Client (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(version5::CMD_AUTH_RECONNECT_PROOF_Client&& obj) {
+    opcode = Opcode::CMD_AUTH_RECONNECT_PROOF;
+    new (&this->CMD_AUTH_RECONNECT_PROOF) version5::CMD_AUTH_RECONNECT_PROOF_Client (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(version5::CMD_REALM_LIST_Client&& obj) {
+    opcode = Opcode::CMD_REALM_LIST;
+    new (&this->CMD_REALM_LIST) version5::CMD_REALM_LIST_Client (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(version5::CMD_XFER_ACCEPT&& obj) {
+    opcode = Opcode::CMD_XFER_ACCEPT;
+    new (&this->CMD_XFER_ACCEPT) version5::CMD_XFER_ACCEPT (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(version5::CMD_XFER_RESUME&& obj) {
+    opcode = Opcode::CMD_XFER_RESUME;
+    new (&this->CMD_XFER_RESUME) version5::CMD_XFER_RESUME (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(version5::CMD_XFER_CANCEL&& obj) {
+    opcode = Opcode::CMD_XFER_CANCEL;
+    new (&this->CMD_XFER_CANCEL) version5::CMD_XFER_CANCEL (std::move(obj));
+}
+
 WOW_LOGIN_MESSAGES_CPP_EXPORT const char* ClientOpcode::to_string() const {
+    if (opcode == Opcode::NONE) {{ return "NONE"; }}
     if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) { return "CMD_AUTH_LOGON_PROOF_Client"; }
     if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) { return "CMD_AUTH_RECONNECT_PROOF_Client"; }
     if (opcode == Opcode::CMD_REALM_LIST) { return "CMD_REALM_LIST_Client"; }
@@ -2191,56 +3110,242 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT version5::CMD_XFER_CANCEL& ClientOpcode::get<CMD_X
 }
 
 
-WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const ClientOpcode& opcode) {
-    if (opcode.opcode == ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
-        return opcode.CMD_AUTH_LOGON_PROOF.write();;
-    }
-    if (opcode.opcode == ClientOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF) {
-        return opcode.CMD_AUTH_RECONNECT_PROOF.write();;
-    }
-    if (opcode.opcode == ClientOpcode::Opcode::CMD_REALM_LIST) {
-        return opcode.CMD_REALM_LIST.write();;
-    }
-    if (opcode.opcode == ClientOpcode::Opcode::CMD_XFER_ACCEPT) {
-        return opcode.CMD_XFER_ACCEPT.write();;
-    }
-    if (opcode.opcode == ClientOpcode::Opcode::CMD_XFER_RESUME) {
-        return opcode.CMD_XFER_RESUME.write();;
-    }
-    if (opcode.opcode == ClientOpcode::Opcode::CMD_XFER_CANCEL) {
-        return opcode.CMD_XFER_CANCEL.write();;
-    }
-
-    return {}; /* unreachable */
-}
-
-WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode read_client_opcode(Reader& reader) {
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode ServerOpcode::read(Reader& reader) {
     const uint8_t opcode = reader.read_u8();
 
-    ClientOpcode op;
+    ServerOpcode op;
 
-    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF)) {
-        return ClientOpcode(::wow_login_messages::version5::CMD_AUTH_LOGON_PROOF_Client_read(reader));
+    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE)) {
+        return ServerOpcode(::wow_login_messages::version5::CMD_AUTH_LOGON_CHALLENGE_Server_read(reader));
     }
-    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF)) {
-        return ClientOpcode(::wow_login_messages::version2::CMD_AUTH_RECONNECT_PROOF_Client_read(reader));
+    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_LOGON_PROOF)) {
+        return ServerOpcode(::wow_login_messages::version5::CMD_AUTH_LOGON_PROOF_Server_read(reader));
     }
-    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_REALM_LIST)) {
-        return ClientOpcode(::wow_login_messages::version5::CMD_REALM_LIST_Client{});
+    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_RECONNECT_CHALLENGE)) {
+        return ServerOpcode(::wow_login_messages::version2::CMD_AUTH_RECONNECT_CHALLENGE_Server_read(reader));
     }
-    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_XFER_ACCEPT)) {
-        return ClientOpcode(::wow_login_messages::version5::CMD_XFER_ACCEPT{});
+    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF)) {
+        return ServerOpcode(::wow_login_messages::version5::CMD_AUTH_RECONNECT_PROOF_Server_read(reader));
     }
-    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_XFER_RESUME)) {
-        return ClientOpcode(::wow_login_messages::version2::CMD_XFER_RESUME_read(reader));
+    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_REALM_LIST)) {
+        return ServerOpcode(::wow_login_messages::version5::CMD_REALM_LIST_Server_read(reader));
     }
-    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_XFER_CANCEL)) {
-        return ClientOpcode(::wow_login_messages::version5::CMD_XFER_CANCEL{});
+    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_XFER_INITIATE)) {
+        return ServerOpcode(::wow_login_messages::version2::CMD_XFER_INITIATE_read(reader));
+    }
+    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_XFER_DATA)) {
+        return ServerOpcode(::wow_login_messages::version2::CMD_XFER_DATA_read(reader));
     }
 
     return op;
 }
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> ServerOpcode::write() const {
+    if (this->opcode == ServerOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        return this->CMD_AUTH_LOGON_CHALLENGE.write();;
+    }
+    if (this->opcode == ServerOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
+        return this->CMD_AUTH_LOGON_PROOF.write();;
+    }
+    if (this->opcode == ServerOpcode::Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        return this->CMD_AUTH_RECONNECT_CHALLENGE.write();;
+    }
+    if (this->opcode == ServerOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        return this->CMD_AUTH_RECONNECT_PROOF.write();;
+    }
+    if (this->opcode == ServerOpcode::Opcode::CMD_REALM_LIST) {
+        return this->CMD_REALM_LIST.write();;
+    }
+    if (this->opcode == ServerOpcode::Opcode::CMD_XFER_INITIATE) {
+        return this->CMD_XFER_INITIATE.write();;
+    }
+    if (this->opcode == ServerOpcode::Opcode::CMD_XFER_DATA) {
+        return this->CMD_XFER_DATA.write();;
+    }
+
+    return {}; /* unreachable */
+}
+/* 1 destructor */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::~ServerOpcode() {
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        this->CMD_AUTH_LOGON_CHALLENGE.~CMD_AUTH_LOGON_CHALLENGE_Server();
+    }
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        this->CMD_AUTH_LOGON_PROOF.~CMD_AUTH_LOGON_PROOF_Server();
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        this->CMD_AUTH_RECONNECT_CHALLENGE.~CMD_AUTH_RECONNECT_CHALLENGE_Server();
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        this->CMD_AUTH_RECONNECT_PROOF.~CMD_AUTH_RECONNECT_PROOF_Server();
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        this->CMD_REALM_LIST.~CMD_REALM_LIST_Server();
+    }
+    if (opcode == Opcode::CMD_XFER_INITIATE) {
+        this->CMD_XFER_INITIATE.~CMD_XFER_INITIATE();
+    }
+    if (opcode == Opcode::CMD_XFER_DATA) {
+        this->CMD_XFER_DATA.~CMD_XFER_DATA();
+    }
+}
+
+/* 2 copy constructor */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(const ServerOpcode& other) {
+    this->opcode = other.opcode;
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        new (&CMD_AUTH_LOGON_CHALLENGE) auto(other.CMD_AUTH_LOGON_CHALLENGE);
+    }
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        new (&CMD_AUTH_LOGON_PROOF) auto(other.CMD_AUTH_LOGON_PROOF);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        new (&CMD_AUTH_RECONNECT_CHALLENGE) auto(other.CMD_AUTH_RECONNECT_CHALLENGE);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        new (&CMD_AUTH_RECONNECT_PROOF) auto(other.CMD_AUTH_RECONNECT_PROOF);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        new (&CMD_REALM_LIST) auto(other.CMD_REALM_LIST);
+    }
+    if (opcode == Opcode::CMD_XFER_INITIATE) {
+        new (&CMD_XFER_INITIATE) auto(other.CMD_XFER_INITIATE);
+    }
+    if (opcode == Opcode::CMD_XFER_DATA) {
+        new (&CMD_XFER_DATA) auto(other.CMD_XFER_DATA);
+    }
+}
+
+/* 3 copy assignment */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode& ServerOpcode::operator=(const ServerOpcode& other) {
+    if (this == &other) {
+        return *this;
+    }
+
+    this->opcode = other.opcode;
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        version5::CMD_AUTH_LOGON_CHALLENGE_Server CMD_AUTH_LOGON_CHALLENGEswap(other.CMD_AUTH_LOGON_CHALLENGE);
+        std::swap(this->CMD_AUTH_LOGON_CHALLENGE, CMD_AUTH_LOGON_CHALLENGEswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        version5::CMD_AUTH_LOGON_PROOF_Server CMD_AUTH_LOGON_PROOFswap(other.CMD_AUTH_LOGON_PROOF);
+        std::swap(this->CMD_AUTH_LOGON_PROOF, CMD_AUTH_LOGON_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        version5::CMD_AUTH_RECONNECT_CHALLENGE_Server CMD_AUTH_RECONNECT_CHALLENGEswap(other.CMD_AUTH_RECONNECT_CHALLENGE);
+        std::swap(this->CMD_AUTH_RECONNECT_CHALLENGE, CMD_AUTH_RECONNECT_CHALLENGEswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        version5::CMD_AUTH_RECONNECT_PROOF_Server CMD_AUTH_RECONNECT_PROOFswap(other.CMD_AUTH_RECONNECT_PROOF);
+        std::swap(this->CMD_AUTH_RECONNECT_PROOF, CMD_AUTH_RECONNECT_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        version5::CMD_REALM_LIST_Server CMD_REALM_LISTswap(other.CMD_REALM_LIST);
+        std::swap(this->CMD_REALM_LIST, CMD_REALM_LISTswap);
+    }
+    if (opcode == Opcode::CMD_XFER_INITIATE) {
+        version5::CMD_XFER_INITIATE CMD_XFER_INITIATEswap(other.CMD_XFER_INITIATE);
+        std::swap(this->CMD_XFER_INITIATE, CMD_XFER_INITIATEswap);
+    }
+    if (opcode == Opcode::CMD_XFER_DATA) {
+        version5::CMD_XFER_DATA CMD_XFER_DATAswap(other.CMD_XFER_DATA);
+        std::swap(this->CMD_XFER_DATA, CMD_XFER_DATAswap);
+    }
+    return *this;
+}
+
+/* 4 move constructor */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(ServerOpcode&& other) noexcept {
+    this->opcode = other.opcode;
+    other.opcode = Opcode::NONE;
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        this->CMD_AUTH_LOGON_CHALLENGE = std::move(other.CMD_AUTH_LOGON_CHALLENGE);
+    }
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        this->CMD_AUTH_LOGON_PROOF = std::move(other.CMD_AUTH_LOGON_PROOF);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        this->CMD_AUTH_RECONNECT_CHALLENGE = std::move(other.CMD_AUTH_RECONNECT_CHALLENGE);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        this->CMD_AUTH_RECONNECT_PROOF = std::move(other.CMD_AUTH_RECONNECT_PROOF);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        this->CMD_REALM_LIST = std::move(other.CMD_REALM_LIST);
+    }
+    if (opcode == Opcode::CMD_XFER_INITIATE) {
+        this->CMD_XFER_INITIATE = std::move(other.CMD_XFER_INITIATE);
+    }
+    if (opcode == Opcode::CMD_XFER_DATA) {
+        this->CMD_XFER_DATA = std::move(other.CMD_XFER_DATA);
+    }
+}
+
+/* 5 move assignment */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode& ServerOpcode::operator=(ServerOpcode&& other) noexcept {
+    this->opcode = other.opcode;
+    other.opcode = Opcode::NONE;
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        version5::CMD_AUTH_LOGON_CHALLENGE_Server CMD_AUTH_LOGON_CHALLENGEswap(std::move(other.CMD_AUTH_LOGON_CHALLENGE));
+        std::swap(this->CMD_AUTH_LOGON_CHALLENGE, CMD_AUTH_LOGON_CHALLENGEswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        version5::CMD_AUTH_LOGON_PROOF_Server CMD_AUTH_LOGON_PROOFswap(std::move(other.CMD_AUTH_LOGON_PROOF));
+        std::swap(this->CMD_AUTH_LOGON_PROOF, CMD_AUTH_LOGON_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        version5::CMD_AUTH_RECONNECT_CHALLENGE_Server CMD_AUTH_RECONNECT_CHALLENGEswap(std::move(other.CMD_AUTH_RECONNECT_CHALLENGE));
+        std::swap(this->CMD_AUTH_RECONNECT_CHALLENGE, CMD_AUTH_RECONNECT_CHALLENGEswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        version5::CMD_AUTH_RECONNECT_PROOF_Server CMD_AUTH_RECONNECT_PROOFswap(std::move(other.CMD_AUTH_RECONNECT_PROOF));
+        std::swap(this->CMD_AUTH_RECONNECT_PROOF, CMD_AUTH_RECONNECT_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        version5::CMD_REALM_LIST_Server CMD_REALM_LISTswap(std::move(other.CMD_REALM_LIST));
+        std::swap(this->CMD_REALM_LIST, CMD_REALM_LISTswap);
+    }
+    if (opcode == Opcode::CMD_XFER_INITIATE) {
+        version5::CMD_XFER_INITIATE CMD_XFER_INITIATEswap(std::move(other.CMD_XFER_INITIATE));
+        std::swap(this->CMD_XFER_INITIATE, CMD_XFER_INITIATEswap);
+    }
+    if (opcode == Opcode::CMD_XFER_DATA) {
+        version5::CMD_XFER_DATA CMD_XFER_DATAswap(std::move(other.CMD_XFER_DATA));
+        std::swap(this->CMD_XFER_DATA, CMD_XFER_DATAswap);
+    }
+    return *this;
+}
+
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(version5::CMD_AUTH_LOGON_CHALLENGE_Server&& obj) {
+    opcode = Opcode::CMD_AUTH_LOGON_CHALLENGE;
+    new (&this->CMD_AUTH_LOGON_CHALLENGE) version5::CMD_AUTH_LOGON_CHALLENGE_Server (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(version5::CMD_AUTH_LOGON_PROOF_Server&& obj) {
+    opcode = Opcode::CMD_AUTH_LOGON_PROOF;
+    new (&this->CMD_AUTH_LOGON_PROOF) version5::CMD_AUTH_LOGON_PROOF_Server (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(version5::CMD_AUTH_RECONNECT_CHALLENGE_Server&& obj) {
+    opcode = Opcode::CMD_AUTH_RECONNECT_CHALLENGE;
+    new (&this->CMD_AUTH_RECONNECT_CHALLENGE) version5::CMD_AUTH_RECONNECT_CHALLENGE_Server (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(version5::CMD_AUTH_RECONNECT_PROOF_Server&& obj) {
+    opcode = Opcode::CMD_AUTH_RECONNECT_PROOF;
+    new (&this->CMD_AUTH_RECONNECT_PROOF) version5::CMD_AUTH_RECONNECT_PROOF_Server (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(version5::CMD_REALM_LIST_Server&& obj) {
+    opcode = Opcode::CMD_REALM_LIST;
+    new (&this->CMD_REALM_LIST) version5::CMD_REALM_LIST_Server (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(version5::CMD_XFER_INITIATE&& obj) {
+    opcode = Opcode::CMD_XFER_INITIATE;
+    new (&this->CMD_XFER_INITIATE) version5::CMD_XFER_INITIATE (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(version5::CMD_XFER_DATA&& obj) {
+    opcode = Opcode::CMD_XFER_DATA;
+    new (&this->CMD_XFER_DATA) version5::CMD_XFER_DATA (std::move(obj));
+}
+
 WOW_LOGIN_MESSAGES_CPP_EXPORT const char* ServerOpcode::to_string() const {
+    if (opcode == Opcode::NONE) {{ return "NONE"; }}
     if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) { return "CMD_AUTH_LOGON_CHALLENGE_Server"; }
     if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) { return "CMD_AUTH_LOGON_PROOF_Server"; }
     if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) { return "CMD_AUTH_RECONNECT_CHALLENGE_Server"; }
@@ -2363,61 +3468,6 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT version5::CMD_XFER_DATA& ServerOpcode::get<CMD_XFE
 }
 
 
-WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const ServerOpcode& opcode) {
-    if (opcode.opcode == ServerOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE) {
-        return opcode.CMD_AUTH_LOGON_CHALLENGE.write();;
-    }
-    if (opcode.opcode == ServerOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
-        return opcode.CMD_AUTH_LOGON_PROOF.write();;
-    }
-    if (opcode.opcode == ServerOpcode::Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
-        return opcode.CMD_AUTH_RECONNECT_CHALLENGE.write();;
-    }
-    if (opcode.opcode == ServerOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF) {
-        return opcode.CMD_AUTH_RECONNECT_PROOF.write();;
-    }
-    if (opcode.opcode == ServerOpcode::Opcode::CMD_REALM_LIST) {
-        return opcode.CMD_REALM_LIST.write();;
-    }
-    if (opcode.opcode == ServerOpcode::Opcode::CMD_XFER_INITIATE) {
-        return opcode.CMD_XFER_INITIATE.write();;
-    }
-    if (opcode.opcode == ServerOpcode::Opcode::CMD_XFER_DATA) {
-        return opcode.CMD_XFER_DATA.write();;
-    }
-
-    return {}; /* unreachable */
-}
-
-WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode read_server_opcode(Reader& reader) {
-    const uint8_t opcode = reader.read_u8();
-
-    ServerOpcode op;
-
-    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE)) {
-        return ServerOpcode(::wow_login_messages::version5::CMD_AUTH_LOGON_CHALLENGE_Server_read(reader));
-    }
-    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_LOGON_PROOF)) {
-        return ServerOpcode(::wow_login_messages::version5::CMD_AUTH_LOGON_PROOF_Server_read(reader));
-    }
-    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_RECONNECT_CHALLENGE)) {
-        return ServerOpcode(::wow_login_messages::version2::CMD_AUTH_RECONNECT_CHALLENGE_Server_read(reader));
-    }
-    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF)) {
-        return ServerOpcode(::wow_login_messages::version5::CMD_AUTH_RECONNECT_PROOF_Server_read(reader));
-    }
-    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_REALM_LIST)) {
-        return ServerOpcode(::wow_login_messages::version5::CMD_REALM_LIST_Server_read(reader));
-    }
-    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_XFER_INITIATE)) {
-        return ServerOpcode(::wow_login_messages::version2::CMD_XFER_INITIATE_read(reader));
-    }
-    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_XFER_DATA)) {
-        return ServerOpcode(::wow_login_messages::version2::CMD_XFER_DATA_read(reader));
-    }
-
-    return op;
-}
 } // namespace version5
 } // namespace wow_login_messages
 /* clang-format off */
@@ -2474,7 +3524,7 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_REALM_LIST_Server::
 
     writer.write_u32(0);
 
-    writer.write_u16(obj.realms.size());
+    writer.write_u16(static_cast<uint16_t>(obj.realms.size()));
 
     for (const auto& v : obj.realms) {
         Realm_write(writer, v);
@@ -2501,7 +3551,215 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_XFER_CANCEL::write(
     return writer.m_buf;
 }
 
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode ClientOpcode::read(Reader& reader) {
+    const uint8_t opcode = reader.read_u8();
+
+    ClientOpcode op;
+
+    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF)) {
+        return ClientOpcode(::wow_login_messages::version5::CMD_AUTH_LOGON_PROOF_Client_read(reader));
+    }
+    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF)) {
+        return ClientOpcode(::wow_login_messages::version2::CMD_AUTH_RECONNECT_PROOF_Client_read(reader));
+    }
+    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_REALM_LIST)) {
+        return ClientOpcode(::wow_login_messages::version6::CMD_REALM_LIST_Client{});
+    }
+    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_XFER_ACCEPT)) {
+        return ClientOpcode(::wow_login_messages::version6::CMD_XFER_ACCEPT{});
+    }
+    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_XFER_RESUME)) {
+        return ClientOpcode(::wow_login_messages::version2::CMD_XFER_RESUME_read(reader));
+    }
+    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_XFER_CANCEL)) {
+        return ClientOpcode(::wow_login_messages::version6::CMD_XFER_CANCEL{});
+    }
+
+    return op;
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> ClientOpcode::write() const {
+    if (this->opcode == ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
+        return this->CMD_AUTH_LOGON_PROOF.write();;
+    }
+    if (this->opcode == ClientOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        return this->CMD_AUTH_RECONNECT_PROOF.write();;
+    }
+    if (this->opcode == ClientOpcode::Opcode::CMD_REALM_LIST) {
+        return this->CMD_REALM_LIST.write();;
+    }
+    if (this->opcode == ClientOpcode::Opcode::CMD_XFER_ACCEPT) {
+        return this->CMD_XFER_ACCEPT.write();;
+    }
+    if (this->opcode == ClientOpcode::Opcode::CMD_XFER_RESUME) {
+        return this->CMD_XFER_RESUME.write();;
+    }
+    if (this->opcode == ClientOpcode::Opcode::CMD_XFER_CANCEL) {
+        return this->CMD_XFER_CANCEL.write();;
+    }
+
+    return {}; /* unreachable */
+}
+/* 1 destructor */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::~ClientOpcode() {
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        this->CMD_AUTH_LOGON_PROOF.~CMD_AUTH_LOGON_PROOF_Client();
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        this->CMD_AUTH_RECONNECT_PROOF.~CMD_AUTH_RECONNECT_PROOF_Client();
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        this->CMD_REALM_LIST.~CMD_REALM_LIST_Client();
+    }
+    if (opcode == Opcode::CMD_XFER_ACCEPT) {
+        this->CMD_XFER_ACCEPT.~CMD_XFER_ACCEPT();
+    }
+    if (opcode == Opcode::CMD_XFER_RESUME) {
+        this->CMD_XFER_RESUME.~CMD_XFER_RESUME();
+    }
+    if (opcode == Opcode::CMD_XFER_CANCEL) {
+        this->CMD_XFER_CANCEL.~CMD_XFER_CANCEL();
+    }
+}
+
+/* 2 copy constructor */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(const ClientOpcode& other) {
+    this->opcode = other.opcode;
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        new (&CMD_AUTH_LOGON_PROOF) auto(other.CMD_AUTH_LOGON_PROOF);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        new (&CMD_AUTH_RECONNECT_PROOF) auto(other.CMD_AUTH_RECONNECT_PROOF);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        new (&CMD_REALM_LIST) auto(other.CMD_REALM_LIST);
+    }
+    if (opcode == Opcode::CMD_XFER_ACCEPT) {
+        new (&CMD_XFER_ACCEPT) auto(other.CMD_XFER_ACCEPT);
+    }
+    if (opcode == Opcode::CMD_XFER_RESUME) {
+        new (&CMD_XFER_RESUME) auto(other.CMD_XFER_RESUME);
+    }
+    if (opcode == Opcode::CMD_XFER_CANCEL) {
+        new (&CMD_XFER_CANCEL) auto(other.CMD_XFER_CANCEL);
+    }
+}
+
+/* 3 copy assignment */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode& ClientOpcode::operator=(const ClientOpcode& other) {
+    if (this == &other) {
+        return *this;
+    }
+
+    this->opcode = other.opcode;
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        version6::CMD_AUTH_LOGON_PROOF_Client CMD_AUTH_LOGON_PROOFswap(other.CMD_AUTH_LOGON_PROOF);
+        std::swap(this->CMD_AUTH_LOGON_PROOF, CMD_AUTH_LOGON_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        version6::CMD_AUTH_RECONNECT_PROOF_Client CMD_AUTH_RECONNECT_PROOFswap(other.CMD_AUTH_RECONNECT_PROOF);
+        std::swap(this->CMD_AUTH_RECONNECT_PROOF, CMD_AUTH_RECONNECT_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        version6::CMD_REALM_LIST_Client CMD_REALM_LISTswap(other.CMD_REALM_LIST);
+        std::swap(this->CMD_REALM_LIST, CMD_REALM_LISTswap);
+    }
+    if (opcode == Opcode::CMD_XFER_ACCEPT) {
+        version6::CMD_XFER_ACCEPT CMD_XFER_ACCEPTswap(other.CMD_XFER_ACCEPT);
+        std::swap(this->CMD_XFER_ACCEPT, CMD_XFER_ACCEPTswap);
+    }
+    if (opcode == Opcode::CMD_XFER_RESUME) {
+        version6::CMD_XFER_RESUME CMD_XFER_RESUMEswap(other.CMD_XFER_RESUME);
+        std::swap(this->CMD_XFER_RESUME, CMD_XFER_RESUMEswap);
+    }
+    if (opcode == Opcode::CMD_XFER_CANCEL) {
+        version6::CMD_XFER_CANCEL CMD_XFER_CANCELswap(other.CMD_XFER_CANCEL);
+        std::swap(this->CMD_XFER_CANCEL, CMD_XFER_CANCELswap);
+    }
+    return *this;
+}
+
+/* 4 move constructor */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(ClientOpcode&& other) noexcept {
+    this->opcode = other.opcode;
+    other.opcode = Opcode::NONE;
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        this->CMD_AUTH_LOGON_PROOF = std::move(other.CMD_AUTH_LOGON_PROOF);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        this->CMD_AUTH_RECONNECT_PROOF = std::move(other.CMD_AUTH_RECONNECT_PROOF);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        this->CMD_REALM_LIST = std::move(other.CMD_REALM_LIST);
+    }
+    if (opcode == Opcode::CMD_XFER_ACCEPT) {
+        this->CMD_XFER_ACCEPT = std::move(other.CMD_XFER_ACCEPT);
+    }
+    if (opcode == Opcode::CMD_XFER_RESUME) {
+        this->CMD_XFER_RESUME = std::move(other.CMD_XFER_RESUME);
+    }
+    if (opcode == Opcode::CMD_XFER_CANCEL) {
+        this->CMD_XFER_CANCEL = std::move(other.CMD_XFER_CANCEL);
+    }
+}
+
+/* 5 move assignment */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode& ClientOpcode::operator=(ClientOpcode&& other) noexcept {
+    this->opcode = other.opcode;
+    other.opcode = Opcode::NONE;
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        version6::CMD_AUTH_LOGON_PROOF_Client CMD_AUTH_LOGON_PROOFswap(std::move(other.CMD_AUTH_LOGON_PROOF));
+        std::swap(this->CMD_AUTH_LOGON_PROOF, CMD_AUTH_LOGON_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        version6::CMD_AUTH_RECONNECT_PROOF_Client CMD_AUTH_RECONNECT_PROOFswap(std::move(other.CMD_AUTH_RECONNECT_PROOF));
+        std::swap(this->CMD_AUTH_RECONNECT_PROOF, CMD_AUTH_RECONNECT_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        version6::CMD_REALM_LIST_Client CMD_REALM_LISTswap(std::move(other.CMD_REALM_LIST));
+        std::swap(this->CMD_REALM_LIST, CMD_REALM_LISTswap);
+    }
+    if (opcode == Opcode::CMD_XFER_ACCEPT) {
+        version6::CMD_XFER_ACCEPT CMD_XFER_ACCEPTswap(std::move(other.CMD_XFER_ACCEPT));
+        std::swap(this->CMD_XFER_ACCEPT, CMD_XFER_ACCEPTswap);
+    }
+    if (opcode == Opcode::CMD_XFER_RESUME) {
+        version6::CMD_XFER_RESUME CMD_XFER_RESUMEswap(std::move(other.CMD_XFER_RESUME));
+        std::swap(this->CMD_XFER_RESUME, CMD_XFER_RESUMEswap);
+    }
+    if (opcode == Opcode::CMD_XFER_CANCEL) {
+        version6::CMD_XFER_CANCEL CMD_XFER_CANCELswap(std::move(other.CMD_XFER_CANCEL));
+        std::swap(this->CMD_XFER_CANCEL, CMD_XFER_CANCELswap);
+    }
+    return *this;
+}
+
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(version6::CMD_AUTH_LOGON_PROOF_Client&& obj) {
+    opcode = Opcode::CMD_AUTH_LOGON_PROOF;
+    new (&this->CMD_AUTH_LOGON_PROOF) version6::CMD_AUTH_LOGON_PROOF_Client (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(version6::CMD_AUTH_RECONNECT_PROOF_Client&& obj) {
+    opcode = Opcode::CMD_AUTH_RECONNECT_PROOF;
+    new (&this->CMD_AUTH_RECONNECT_PROOF) version6::CMD_AUTH_RECONNECT_PROOF_Client (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(version6::CMD_REALM_LIST_Client&& obj) {
+    opcode = Opcode::CMD_REALM_LIST;
+    new (&this->CMD_REALM_LIST) version6::CMD_REALM_LIST_Client (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(version6::CMD_XFER_ACCEPT&& obj) {
+    opcode = Opcode::CMD_XFER_ACCEPT;
+    new (&this->CMD_XFER_ACCEPT) version6::CMD_XFER_ACCEPT (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(version6::CMD_XFER_RESUME&& obj) {
+    opcode = Opcode::CMD_XFER_RESUME;
+    new (&this->CMD_XFER_RESUME) version6::CMD_XFER_RESUME (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(version6::CMD_XFER_CANCEL&& obj) {
+    opcode = Opcode::CMD_XFER_CANCEL;
+    new (&this->CMD_XFER_CANCEL) version6::CMD_XFER_CANCEL (std::move(obj));
+}
+
 WOW_LOGIN_MESSAGES_CPP_EXPORT const char* ClientOpcode::to_string() const {
+    if (opcode == Opcode::NONE) {{ return "NONE"; }}
     if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) { return "CMD_AUTH_LOGON_PROOF_Client"; }
     if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) { return "CMD_AUTH_RECONNECT_PROOF_Client"; }
     if (opcode == Opcode::CMD_REALM_LIST) { return "CMD_REALM_LIST_Client"; }
@@ -2607,56 +3865,242 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT version6::CMD_XFER_CANCEL& ClientOpcode::get<CMD_X
 }
 
 
-WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const ClientOpcode& opcode) {
-    if (opcode.opcode == ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
-        return opcode.CMD_AUTH_LOGON_PROOF.write();;
-    }
-    if (opcode.opcode == ClientOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF) {
-        return opcode.CMD_AUTH_RECONNECT_PROOF.write();;
-    }
-    if (opcode.opcode == ClientOpcode::Opcode::CMD_REALM_LIST) {
-        return opcode.CMD_REALM_LIST.write();;
-    }
-    if (opcode.opcode == ClientOpcode::Opcode::CMD_XFER_ACCEPT) {
-        return opcode.CMD_XFER_ACCEPT.write();;
-    }
-    if (opcode.opcode == ClientOpcode::Opcode::CMD_XFER_RESUME) {
-        return opcode.CMD_XFER_RESUME.write();;
-    }
-    if (opcode.opcode == ClientOpcode::Opcode::CMD_XFER_CANCEL) {
-        return opcode.CMD_XFER_CANCEL.write();;
-    }
-
-    return {}; /* unreachable */
-}
-
-WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode read_client_opcode(Reader& reader) {
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode ServerOpcode::read(Reader& reader) {
     const uint8_t opcode = reader.read_u8();
 
-    ClientOpcode op;
+    ServerOpcode op;
 
-    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF)) {
-        return ClientOpcode(::wow_login_messages::version5::CMD_AUTH_LOGON_PROOF_Client_read(reader));
+    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE)) {
+        return ServerOpcode(::wow_login_messages::version5::CMD_AUTH_LOGON_CHALLENGE_Server_read(reader));
     }
-    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF)) {
-        return ClientOpcode(::wow_login_messages::version2::CMD_AUTH_RECONNECT_PROOF_Client_read(reader));
+    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_LOGON_PROOF)) {
+        return ServerOpcode(::wow_login_messages::version5::CMD_AUTH_LOGON_PROOF_Server_read(reader));
     }
-    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_REALM_LIST)) {
-        return ClientOpcode(::wow_login_messages::version6::CMD_REALM_LIST_Client{});
+    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_RECONNECT_CHALLENGE)) {
+        return ServerOpcode(::wow_login_messages::version2::CMD_AUTH_RECONNECT_CHALLENGE_Server_read(reader));
     }
-    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_XFER_ACCEPT)) {
-        return ClientOpcode(::wow_login_messages::version6::CMD_XFER_ACCEPT{});
+    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF)) {
+        return ServerOpcode(::wow_login_messages::version5::CMD_AUTH_RECONNECT_PROOF_Server_read(reader));
     }
-    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_XFER_RESUME)) {
-        return ClientOpcode(::wow_login_messages::version2::CMD_XFER_RESUME_read(reader));
+    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_REALM_LIST)) {
+        return ServerOpcode(::wow_login_messages::version6::CMD_REALM_LIST_Server_read(reader));
     }
-    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_XFER_CANCEL)) {
-        return ClientOpcode(::wow_login_messages::version6::CMD_XFER_CANCEL{});
+    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_XFER_INITIATE)) {
+        return ServerOpcode(::wow_login_messages::version2::CMD_XFER_INITIATE_read(reader));
+    }
+    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_XFER_DATA)) {
+        return ServerOpcode(::wow_login_messages::version2::CMD_XFER_DATA_read(reader));
     }
 
     return op;
 }
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> ServerOpcode::write() const {
+    if (this->opcode == ServerOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        return this->CMD_AUTH_LOGON_CHALLENGE.write();;
+    }
+    if (this->opcode == ServerOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
+        return this->CMD_AUTH_LOGON_PROOF.write();;
+    }
+    if (this->opcode == ServerOpcode::Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        return this->CMD_AUTH_RECONNECT_CHALLENGE.write();;
+    }
+    if (this->opcode == ServerOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        return this->CMD_AUTH_RECONNECT_PROOF.write();;
+    }
+    if (this->opcode == ServerOpcode::Opcode::CMD_REALM_LIST) {
+        return this->CMD_REALM_LIST.write();;
+    }
+    if (this->opcode == ServerOpcode::Opcode::CMD_XFER_INITIATE) {
+        return this->CMD_XFER_INITIATE.write();;
+    }
+    if (this->opcode == ServerOpcode::Opcode::CMD_XFER_DATA) {
+        return this->CMD_XFER_DATA.write();;
+    }
+
+    return {}; /* unreachable */
+}
+/* 1 destructor */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::~ServerOpcode() {
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        this->CMD_AUTH_LOGON_CHALLENGE.~CMD_AUTH_LOGON_CHALLENGE_Server();
+    }
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        this->CMD_AUTH_LOGON_PROOF.~CMD_AUTH_LOGON_PROOF_Server();
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        this->CMD_AUTH_RECONNECT_CHALLENGE.~CMD_AUTH_RECONNECT_CHALLENGE_Server();
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        this->CMD_AUTH_RECONNECT_PROOF.~CMD_AUTH_RECONNECT_PROOF_Server();
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        this->CMD_REALM_LIST.~CMD_REALM_LIST_Server();
+    }
+    if (opcode == Opcode::CMD_XFER_INITIATE) {
+        this->CMD_XFER_INITIATE.~CMD_XFER_INITIATE();
+    }
+    if (opcode == Opcode::CMD_XFER_DATA) {
+        this->CMD_XFER_DATA.~CMD_XFER_DATA();
+    }
+}
+
+/* 2 copy constructor */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(const ServerOpcode& other) {
+    this->opcode = other.opcode;
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        new (&CMD_AUTH_LOGON_CHALLENGE) auto(other.CMD_AUTH_LOGON_CHALLENGE);
+    }
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        new (&CMD_AUTH_LOGON_PROOF) auto(other.CMD_AUTH_LOGON_PROOF);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        new (&CMD_AUTH_RECONNECT_CHALLENGE) auto(other.CMD_AUTH_RECONNECT_CHALLENGE);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        new (&CMD_AUTH_RECONNECT_PROOF) auto(other.CMD_AUTH_RECONNECT_PROOF);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        new (&CMD_REALM_LIST) auto(other.CMD_REALM_LIST);
+    }
+    if (opcode == Opcode::CMD_XFER_INITIATE) {
+        new (&CMD_XFER_INITIATE) auto(other.CMD_XFER_INITIATE);
+    }
+    if (opcode == Opcode::CMD_XFER_DATA) {
+        new (&CMD_XFER_DATA) auto(other.CMD_XFER_DATA);
+    }
+}
+
+/* 3 copy assignment */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode& ServerOpcode::operator=(const ServerOpcode& other) {
+    if (this == &other) {
+        return *this;
+    }
+
+    this->opcode = other.opcode;
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        version6::CMD_AUTH_LOGON_CHALLENGE_Server CMD_AUTH_LOGON_CHALLENGEswap(other.CMD_AUTH_LOGON_CHALLENGE);
+        std::swap(this->CMD_AUTH_LOGON_CHALLENGE, CMD_AUTH_LOGON_CHALLENGEswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        version6::CMD_AUTH_LOGON_PROOF_Server CMD_AUTH_LOGON_PROOFswap(other.CMD_AUTH_LOGON_PROOF);
+        std::swap(this->CMD_AUTH_LOGON_PROOF, CMD_AUTH_LOGON_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        version6::CMD_AUTH_RECONNECT_CHALLENGE_Server CMD_AUTH_RECONNECT_CHALLENGEswap(other.CMD_AUTH_RECONNECT_CHALLENGE);
+        std::swap(this->CMD_AUTH_RECONNECT_CHALLENGE, CMD_AUTH_RECONNECT_CHALLENGEswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        version6::CMD_AUTH_RECONNECT_PROOF_Server CMD_AUTH_RECONNECT_PROOFswap(other.CMD_AUTH_RECONNECT_PROOF);
+        std::swap(this->CMD_AUTH_RECONNECT_PROOF, CMD_AUTH_RECONNECT_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        version6::CMD_REALM_LIST_Server CMD_REALM_LISTswap(other.CMD_REALM_LIST);
+        std::swap(this->CMD_REALM_LIST, CMD_REALM_LISTswap);
+    }
+    if (opcode == Opcode::CMD_XFER_INITIATE) {
+        version6::CMD_XFER_INITIATE CMD_XFER_INITIATEswap(other.CMD_XFER_INITIATE);
+        std::swap(this->CMD_XFER_INITIATE, CMD_XFER_INITIATEswap);
+    }
+    if (opcode == Opcode::CMD_XFER_DATA) {
+        version6::CMD_XFER_DATA CMD_XFER_DATAswap(other.CMD_XFER_DATA);
+        std::swap(this->CMD_XFER_DATA, CMD_XFER_DATAswap);
+    }
+    return *this;
+}
+
+/* 4 move constructor */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(ServerOpcode&& other) noexcept {
+    this->opcode = other.opcode;
+    other.opcode = Opcode::NONE;
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        this->CMD_AUTH_LOGON_CHALLENGE = std::move(other.CMD_AUTH_LOGON_CHALLENGE);
+    }
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        this->CMD_AUTH_LOGON_PROOF = std::move(other.CMD_AUTH_LOGON_PROOF);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        this->CMD_AUTH_RECONNECT_CHALLENGE = std::move(other.CMD_AUTH_RECONNECT_CHALLENGE);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        this->CMD_AUTH_RECONNECT_PROOF = std::move(other.CMD_AUTH_RECONNECT_PROOF);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        this->CMD_REALM_LIST = std::move(other.CMD_REALM_LIST);
+    }
+    if (opcode == Opcode::CMD_XFER_INITIATE) {
+        this->CMD_XFER_INITIATE = std::move(other.CMD_XFER_INITIATE);
+    }
+    if (opcode == Opcode::CMD_XFER_DATA) {
+        this->CMD_XFER_DATA = std::move(other.CMD_XFER_DATA);
+    }
+}
+
+/* 5 move assignment */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode& ServerOpcode::operator=(ServerOpcode&& other) noexcept {
+    this->opcode = other.opcode;
+    other.opcode = Opcode::NONE;
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        version6::CMD_AUTH_LOGON_CHALLENGE_Server CMD_AUTH_LOGON_CHALLENGEswap(std::move(other.CMD_AUTH_LOGON_CHALLENGE));
+        std::swap(this->CMD_AUTH_LOGON_CHALLENGE, CMD_AUTH_LOGON_CHALLENGEswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        version6::CMD_AUTH_LOGON_PROOF_Server CMD_AUTH_LOGON_PROOFswap(std::move(other.CMD_AUTH_LOGON_PROOF));
+        std::swap(this->CMD_AUTH_LOGON_PROOF, CMD_AUTH_LOGON_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        version6::CMD_AUTH_RECONNECT_CHALLENGE_Server CMD_AUTH_RECONNECT_CHALLENGEswap(std::move(other.CMD_AUTH_RECONNECT_CHALLENGE));
+        std::swap(this->CMD_AUTH_RECONNECT_CHALLENGE, CMD_AUTH_RECONNECT_CHALLENGEswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        version6::CMD_AUTH_RECONNECT_PROOF_Server CMD_AUTH_RECONNECT_PROOFswap(std::move(other.CMD_AUTH_RECONNECT_PROOF));
+        std::swap(this->CMD_AUTH_RECONNECT_PROOF, CMD_AUTH_RECONNECT_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        version6::CMD_REALM_LIST_Server CMD_REALM_LISTswap(std::move(other.CMD_REALM_LIST));
+        std::swap(this->CMD_REALM_LIST, CMD_REALM_LISTswap);
+    }
+    if (opcode == Opcode::CMD_XFER_INITIATE) {
+        version6::CMD_XFER_INITIATE CMD_XFER_INITIATEswap(std::move(other.CMD_XFER_INITIATE));
+        std::swap(this->CMD_XFER_INITIATE, CMD_XFER_INITIATEswap);
+    }
+    if (opcode == Opcode::CMD_XFER_DATA) {
+        version6::CMD_XFER_DATA CMD_XFER_DATAswap(std::move(other.CMD_XFER_DATA));
+        std::swap(this->CMD_XFER_DATA, CMD_XFER_DATAswap);
+    }
+    return *this;
+}
+
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(version6::CMD_AUTH_LOGON_CHALLENGE_Server&& obj) {
+    opcode = Opcode::CMD_AUTH_LOGON_CHALLENGE;
+    new (&this->CMD_AUTH_LOGON_CHALLENGE) version6::CMD_AUTH_LOGON_CHALLENGE_Server (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(version6::CMD_AUTH_LOGON_PROOF_Server&& obj) {
+    opcode = Opcode::CMD_AUTH_LOGON_PROOF;
+    new (&this->CMD_AUTH_LOGON_PROOF) version6::CMD_AUTH_LOGON_PROOF_Server (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(version6::CMD_AUTH_RECONNECT_CHALLENGE_Server&& obj) {
+    opcode = Opcode::CMD_AUTH_RECONNECT_CHALLENGE;
+    new (&this->CMD_AUTH_RECONNECT_CHALLENGE) version6::CMD_AUTH_RECONNECT_CHALLENGE_Server (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(version6::CMD_AUTH_RECONNECT_PROOF_Server&& obj) {
+    opcode = Opcode::CMD_AUTH_RECONNECT_PROOF;
+    new (&this->CMD_AUTH_RECONNECT_PROOF) version6::CMD_AUTH_RECONNECT_PROOF_Server (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(version6::CMD_REALM_LIST_Server&& obj) {
+    opcode = Opcode::CMD_REALM_LIST;
+    new (&this->CMD_REALM_LIST) version6::CMD_REALM_LIST_Server (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(version6::CMD_XFER_INITIATE&& obj) {
+    opcode = Opcode::CMD_XFER_INITIATE;
+    new (&this->CMD_XFER_INITIATE) version6::CMD_XFER_INITIATE (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(version6::CMD_XFER_DATA&& obj) {
+    opcode = Opcode::CMD_XFER_DATA;
+    new (&this->CMD_XFER_DATA) version6::CMD_XFER_DATA (std::move(obj));
+}
+
 WOW_LOGIN_MESSAGES_CPP_EXPORT const char* ServerOpcode::to_string() const {
+    if (opcode == Opcode::NONE) {{ return "NONE"; }}
     if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) { return "CMD_AUTH_LOGON_CHALLENGE_Server"; }
     if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) { return "CMD_AUTH_LOGON_PROOF_Server"; }
     if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) { return "CMD_AUTH_RECONNECT_CHALLENGE_Server"; }
@@ -2779,61 +4223,6 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT version6::CMD_XFER_DATA& ServerOpcode::get<CMD_XFE
 }
 
 
-WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const ServerOpcode& opcode) {
-    if (opcode.opcode == ServerOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE) {
-        return opcode.CMD_AUTH_LOGON_CHALLENGE.write();;
-    }
-    if (opcode.opcode == ServerOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
-        return opcode.CMD_AUTH_LOGON_PROOF.write();;
-    }
-    if (opcode.opcode == ServerOpcode::Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
-        return opcode.CMD_AUTH_RECONNECT_CHALLENGE.write();;
-    }
-    if (opcode.opcode == ServerOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF) {
-        return opcode.CMD_AUTH_RECONNECT_PROOF.write();;
-    }
-    if (opcode.opcode == ServerOpcode::Opcode::CMD_REALM_LIST) {
-        return opcode.CMD_REALM_LIST.write();;
-    }
-    if (opcode.opcode == ServerOpcode::Opcode::CMD_XFER_INITIATE) {
-        return opcode.CMD_XFER_INITIATE.write();;
-    }
-    if (opcode.opcode == ServerOpcode::Opcode::CMD_XFER_DATA) {
-        return opcode.CMD_XFER_DATA.write();;
-    }
-
-    return {}; /* unreachable */
-}
-
-WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode read_server_opcode(Reader& reader) {
-    const uint8_t opcode = reader.read_u8();
-
-    ServerOpcode op;
-
-    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE)) {
-        return ServerOpcode(::wow_login_messages::version5::CMD_AUTH_LOGON_CHALLENGE_Server_read(reader));
-    }
-    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_LOGON_PROOF)) {
-        return ServerOpcode(::wow_login_messages::version5::CMD_AUTH_LOGON_PROOF_Server_read(reader));
-    }
-    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_RECONNECT_CHALLENGE)) {
-        return ServerOpcode(::wow_login_messages::version2::CMD_AUTH_RECONNECT_CHALLENGE_Server_read(reader));
-    }
-    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF)) {
-        return ServerOpcode(::wow_login_messages::version5::CMD_AUTH_RECONNECT_PROOF_Server_read(reader));
-    }
-    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_REALM_LIST)) {
-        return ServerOpcode(::wow_login_messages::version6::CMD_REALM_LIST_Server_read(reader));
-    }
-    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_XFER_INITIATE)) {
-        return ServerOpcode(::wow_login_messages::version2::CMD_XFER_INITIATE_read(reader));
-    }
-    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_XFER_DATA)) {
-        return ServerOpcode(::wow_login_messages::version2::CMD_XFER_DATA_read(reader));
-    }
-
-    return op;
-}
 } // namespace version6
 } // namespace wow_login_messages
 /* clang-format off */
@@ -2868,7 +4257,215 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_XFER_CANCEL::write(
     return writer.m_buf;
 }
 
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode ClientOpcode::read(Reader& reader) {
+    const uint8_t opcode = reader.read_u8();
+
+    ClientOpcode op;
+
+    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF)) {
+        return ClientOpcode(::wow_login_messages::version5::CMD_AUTH_LOGON_PROOF_Client_read(reader));
+    }
+    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF)) {
+        return ClientOpcode(::wow_login_messages::version2::CMD_AUTH_RECONNECT_PROOF_Client_read(reader));
+    }
+    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_REALM_LIST)) {
+        return ClientOpcode(::wow_login_messages::version7::CMD_REALM_LIST_Client{});
+    }
+    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_XFER_ACCEPT)) {
+        return ClientOpcode(::wow_login_messages::version7::CMD_XFER_ACCEPT{});
+    }
+    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_XFER_RESUME)) {
+        return ClientOpcode(::wow_login_messages::version2::CMD_XFER_RESUME_read(reader));
+    }
+    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_XFER_CANCEL)) {
+        return ClientOpcode(::wow_login_messages::version7::CMD_XFER_CANCEL{});
+    }
+
+    return op;
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> ClientOpcode::write() const {
+    if (this->opcode == ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
+        return this->CMD_AUTH_LOGON_PROOF.write();;
+    }
+    if (this->opcode == ClientOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        return this->CMD_AUTH_RECONNECT_PROOF.write();;
+    }
+    if (this->opcode == ClientOpcode::Opcode::CMD_REALM_LIST) {
+        return this->CMD_REALM_LIST.write();;
+    }
+    if (this->opcode == ClientOpcode::Opcode::CMD_XFER_ACCEPT) {
+        return this->CMD_XFER_ACCEPT.write();;
+    }
+    if (this->opcode == ClientOpcode::Opcode::CMD_XFER_RESUME) {
+        return this->CMD_XFER_RESUME.write();;
+    }
+    if (this->opcode == ClientOpcode::Opcode::CMD_XFER_CANCEL) {
+        return this->CMD_XFER_CANCEL.write();;
+    }
+
+    return {}; /* unreachable */
+}
+/* 1 destructor */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::~ClientOpcode() {
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        this->CMD_AUTH_LOGON_PROOF.~CMD_AUTH_LOGON_PROOF_Client();
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        this->CMD_AUTH_RECONNECT_PROOF.~CMD_AUTH_RECONNECT_PROOF_Client();
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        this->CMD_REALM_LIST.~CMD_REALM_LIST_Client();
+    }
+    if (opcode == Opcode::CMD_XFER_ACCEPT) {
+        this->CMD_XFER_ACCEPT.~CMD_XFER_ACCEPT();
+    }
+    if (opcode == Opcode::CMD_XFER_RESUME) {
+        this->CMD_XFER_RESUME.~CMD_XFER_RESUME();
+    }
+    if (opcode == Opcode::CMD_XFER_CANCEL) {
+        this->CMD_XFER_CANCEL.~CMD_XFER_CANCEL();
+    }
+}
+
+/* 2 copy constructor */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(const ClientOpcode& other) {
+    this->opcode = other.opcode;
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        new (&CMD_AUTH_LOGON_PROOF) auto(other.CMD_AUTH_LOGON_PROOF);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        new (&CMD_AUTH_RECONNECT_PROOF) auto(other.CMD_AUTH_RECONNECT_PROOF);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        new (&CMD_REALM_LIST) auto(other.CMD_REALM_LIST);
+    }
+    if (opcode == Opcode::CMD_XFER_ACCEPT) {
+        new (&CMD_XFER_ACCEPT) auto(other.CMD_XFER_ACCEPT);
+    }
+    if (opcode == Opcode::CMD_XFER_RESUME) {
+        new (&CMD_XFER_RESUME) auto(other.CMD_XFER_RESUME);
+    }
+    if (opcode == Opcode::CMD_XFER_CANCEL) {
+        new (&CMD_XFER_CANCEL) auto(other.CMD_XFER_CANCEL);
+    }
+}
+
+/* 3 copy assignment */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode& ClientOpcode::operator=(const ClientOpcode& other) {
+    if (this == &other) {
+        return *this;
+    }
+
+    this->opcode = other.opcode;
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        version7::CMD_AUTH_LOGON_PROOF_Client CMD_AUTH_LOGON_PROOFswap(other.CMD_AUTH_LOGON_PROOF);
+        std::swap(this->CMD_AUTH_LOGON_PROOF, CMD_AUTH_LOGON_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        version7::CMD_AUTH_RECONNECT_PROOF_Client CMD_AUTH_RECONNECT_PROOFswap(other.CMD_AUTH_RECONNECT_PROOF);
+        std::swap(this->CMD_AUTH_RECONNECT_PROOF, CMD_AUTH_RECONNECT_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        version7::CMD_REALM_LIST_Client CMD_REALM_LISTswap(other.CMD_REALM_LIST);
+        std::swap(this->CMD_REALM_LIST, CMD_REALM_LISTswap);
+    }
+    if (opcode == Opcode::CMD_XFER_ACCEPT) {
+        version7::CMD_XFER_ACCEPT CMD_XFER_ACCEPTswap(other.CMD_XFER_ACCEPT);
+        std::swap(this->CMD_XFER_ACCEPT, CMD_XFER_ACCEPTswap);
+    }
+    if (opcode == Opcode::CMD_XFER_RESUME) {
+        version7::CMD_XFER_RESUME CMD_XFER_RESUMEswap(other.CMD_XFER_RESUME);
+        std::swap(this->CMD_XFER_RESUME, CMD_XFER_RESUMEswap);
+    }
+    if (opcode == Opcode::CMD_XFER_CANCEL) {
+        version7::CMD_XFER_CANCEL CMD_XFER_CANCELswap(other.CMD_XFER_CANCEL);
+        std::swap(this->CMD_XFER_CANCEL, CMD_XFER_CANCELswap);
+    }
+    return *this;
+}
+
+/* 4 move constructor */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(ClientOpcode&& other) noexcept {
+    this->opcode = other.opcode;
+    other.opcode = Opcode::NONE;
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        this->CMD_AUTH_LOGON_PROOF = std::move(other.CMD_AUTH_LOGON_PROOF);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        this->CMD_AUTH_RECONNECT_PROOF = std::move(other.CMD_AUTH_RECONNECT_PROOF);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        this->CMD_REALM_LIST = std::move(other.CMD_REALM_LIST);
+    }
+    if (opcode == Opcode::CMD_XFER_ACCEPT) {
+        this->CMD_XFER_ACCEPT = std::move(other.CMD_XFER_ACCEPT);
+    }
+    if (opcode == Opcode::CMD_XFER_RESUME) {
+        this->CMD_XFER_RESUME = std::move(other.CMD_XFER_RESUME);
+    }
+    if (opcode == Opcode::CMD_XFER_CANCEL) {
+        this->CMD_XFER_CANCEL = std::move(other.CMD_XFER_CANCEL);
+    }
+}
+
+/* 5 move assignment */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode& ClientOpcode::operator=(ClientOpcode&& other) noexcept {
+    this->opcode = other.opcode;
+    other.opcode = Opcode::NONE;
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        version7::CMD_AUTH_LOGON_PROOF_Client CMD_AUTH_LOGON_PROOFswap(std::move(other.CMD_AUTH_LOGON_PROOF));
+        std::swap(this->CMD_AUTH_LOGON_PROOF, CMD_AUTH_LOGON_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        version7::CMD_AUTH_RECONNECT_PROOF_Client CMD_AUTH_RECONNECT_PROOFswap(std::move(other.CMD_AUTH_RECONNECT_PROOF));
+        std::swap(this->CMD_AUTH_RECONNECT_PROOF, CMD_AUTH_RECONNECT_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        version7::CMD_REALM_LIST_Client CMD_REALM_LISTswap(std::move(other.CMD_REALM_LIST));
+        std::swap(this->CMD_REALM_LIST, CMD_REALM_LISTswap);
+    }
+    if (opcode == Opcode::CMD_XFER_ACCEPT) {
+        version7::CMD_XFER_ACCEPT CMD_XFER_ACCEPTswap(std::move(other.CMD_XFER_ACCEPT));
+        std::swap(this->CMD_XFER_ACCEPT, CMD_XFER_ACCEPTswap);
+    }
+    if (opcode == Opcode::CMD_XFER_RESUME) {
+        version7::CMD_XFER_RESUME CMD_XFER_RESUMEswap(std::move(other.CMD_XFER_RESUME));
+        std::swap(this->CMD_XFER_RESUME, CMD_XFER_RESUMEswap);
+    }
+    if (opcode == Opcode::CMD_XFER_CANCEL) {
+        version7::CMD_XFER_CANCEL CMD_XFER_CANCELswap(std::move(other.CMD_XFER_CANCEL));
+        std::swap(this->CMD_XFER_CANCEL, CMD_XFER_CANCELswap);
+    }
+    return *this;
+}
+
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(version7::CMD_AUTH_LOGON_PROOF_Client&& obj) {
+    opcode = Opcode::CMD_AUTH_LOGON_PROOF;
+    new (&this->CMD_AUTH_LOGON_PROOF) version7::CMD_AUTH_LOGON_PROOF_Client (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(version7::CMD_AUTH_RECONNECT_PROOF_Client&& obj) {
+    opcode = Opcode::CMD_AUTH_RECONNECT_PROOF;
+    new (&this->CMD_AUTH_RECONNECT_PROOF) version7::CMD_AUTH_RECONNECT_PROOF_Client (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(version7::CMD_REALM_LIST_Client&& obj) {
+    opcode = Opcode::CMD_REALM_LIST;
+    new (&this->CMD_REALM_LIST) version7::CMD_REALM_LIST_Client (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(version7::CMD_XFER_ACCEPT&& obj) {
+    opcode = Opcode::CMD_XFER_ACCEPT;
+    new (&this->CMD_XFER_ACCEPT) version7::CMD_XFER_ACCEPT (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(version7::CMD_XFER_RESUME&& obj) {
+    opcode = Opcode::CMD_XFER_RESUME;
+    new (&this->CMD_XFER_RESUME) version7::CMD_XFER_RESUME (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(version7::CMD_XFER_CANCEL&& obj) {
+    opcode = Opcode::CMD_XFER_CANCEL;
+    new (&this->CMD_XFER_CANCEL) version7::CMD_XFER_CANCEL (std::move(obj));
+}
+
 WOW_LOGIN_MESSAGES_CPP_EXPORT const char* ClientOpcode::to_string() const {
+    if (opcode == Opcode::NONE) {{ return "NONE"; }}
     if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) { return "CMD_AUTH_LOGON_PROOF_Client"; }
     if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) { return "CMD_AUTH_RECONNECT_PROOF_Client"; }
     if (opcode == Opcode::CMD_REALM_LIST) { return "CMD_REALM_LIST_Client"; }
@@ -2974,56 +4571,242 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT version7::CMD_XFER_CANCEL& ClientOpcode::get<CMD_X
 }
 
 
-WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const ClientOpcode& opcode) {
-    if (opcode.opcode == ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
-        return opcode.CMD_AUTH_LOGON_PROOF.write();;
-    }
-    if (opcode.opcode == ClientOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF) {
-        return opcode.CMD_AUTH_RECONNECT_PROOF.write();;
-    }
-    if (opcode.opcode == ClientOpcode::Opcode::CMD_REALM_LIST) {
-        return opcode.CMD_REALM_LIST.write();;
-    }
-    if (opcode.opcode == ClientOpcode::Opcode::CMD_XFER_ACCEPT) {
-        return opcode.CMD_XFER_ACCEPT.write();;
-    }
-    if (opcode.opcode == ClientOpcode::Opcode::CMD_XFER_RESUME) {
-        return opcode.CMD_XFER_RESUME.write();;
-    }
-    if (opcode.opcode == ClientOpcode::Opcode::CMD_XFER_CANCEL) {
-        return opcode.CMD_XFER_CANCEL.write();;
-    }
-
-    return {}; /* unreachable */
-}
-
-WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode read_client_opcode(Reader& reader) {
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode ServerOpcode::read(Reader& reader) {
     const uint8_t opcode = reader.read_u8();
 
-    ClientOpcode op;
+    ServerOpcode op;
 
-    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF)) {
-        return ClientOpcode(::wow_login_messages::version5::CMD_AUTH_LOGON_PROOF_Client_read(reader));
+    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE)) {
+        return ServerOpcode(::wow_login_messages::version5::CMD_AUTH_LOGON_CHALLENGE_Server_read(reader));
     }
-    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF)) {
-        return ClientOpcode(::wow_login_messages::version2::CMD_AUTH_RECONNECT_PROOF_Client_read(reader));
+    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_LOGON_PROOF)) {
+        return ServerOpcode(::wow_login_messages::version5::CMD_AUTH_LOGON_PROOF_Server_read(reader));
     }
-    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_REALM_LIST)) {
-        return ClientOpcode(::wow_login_messages::version7::CMD_REALM_LIST_Client{});
+    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_RECONNECT_CHALLENGE)) {
+        return ServerOpcode(::wow_login_messages::version2::CMD_AUTH_RECONNECT_CHALLENGE_Server_read(reader));
     }
-    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_XFER_ACCEPT)) {
-        return ClientOpcode(::wow_login_messages::version7::CMD_XFER_ACCEPT{});
+    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF)) {
+        return ServerOpcode(::wow_login_messages::version5::CMD_AUTH_RECONNECT_PROOF_Server_read(reader));
     }
-    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_XFER_RESUME)) {
-        return ClientOpcode(::wow_login_messages::version2::CMD_XFER_RESUME_read(reader));
+    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_REALM_LIST)) {
+        return ServerOpcode(::wow_login_messages::version6::CMD_REALM_LIST_Server_read(reader));
     }
-    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_XFER_CANCEL)) {
-        return ClientOpcode(::wow_login_messages::version7::CMD_XFER_CANCEL{});
+    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_XFER_INITIATE)) {
+        return ServerOpcode(::wow_login_messages::version2::CMD_XFER_INITIATE_read(reader));
+    }
+    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_XFER_DATA)) {
+        return ServerOpcode(::wow_login_messages::version2::CMD_XFER_DATA_read(reader));
     }
 
     return op;
 }
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> ServerOpcode::write() const {
+    if (this->opcode == ServerOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        return this->CMD_AUTH_LOGON_CHALLENGE.write();;
+    }
+    if (this->opcode == ServerOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
+        return this->CMD_AUTH_LOGON_PROOF.write();;
+    }
+    if (this->opcode == ServerOpcode::Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        return this->CMD_AUTH_RECONNECT_CHALLENGE.write();;
+    }
+    if (this->opcode == ServerOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        return this->CMD_AUTH_RECONNECT_PROOF.write();;
+    }
+    if (this->opcode == ServerOpcode::Opcode::CMD_REALM_LIST) {
+        return this->CMD_REALM_LIST.write();;
+    }
+    if (this->opcode == ServerOpcode::Opcode::CMD_XFER_INITIATE) {
+        return this->CMD_XFER_INITIATE.write();;
+    }
+    if (this->opcode == ServerOpcode::Opcode::CMD_XFER_DATA) {
+        return this->CMD_XFER_DATA.write();;
+    }
+
+    return {}; /* unreachable */
+}
+/* 1 destructor */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::~ServerOpcode() {
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        this->CMD_AUTH_LOGON_CHALLENGE.~CMD_AUTH_LOGON_CHALLENGE_Server();
+    }
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        this->CMD_AUTH_LOGON_PROOF.~CMD_AUTH_LOGON_PROOF_Server();
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        this->CMD_AUTH_RECONNECT_CHALLENGE.~CMD_AUTH_RECONNECT_CHALLENGE_Server();
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        this->CMD_AUTH_RECONNECT_PROOF.~CMD_AUTH_RECONNECT_PROOF_Server();
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        this->CMD_REALM_LIST.~CMD_REALM_LIST_Server();
+    }
+    if (opcode == Opcode::CMD_XFER_INITIATE) {
+        this->CMD_XFER_INITIATE.~CMD_XFER_INITIATE();
+    }
+    if (opcode == Opcode::CMD_XFER_DATA) {
+        this->CMD_XFER_DATA.~CMD_XFER_DATA();
+    }
+}
+
+/* 2 copy constructor */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(const ServerOpcode& other) {
+    this->opcode = other.opcode;
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        new (&CMD_AUTH_LOGON_CHALLENGE) auto(other.CMD_AUTH_LOGON_CHALLENGE);
+    }
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        new (&CMD_AUTH_LOGON_PROOF) auto(other.CMD_AUTH_LOGON_PROOF);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        new (&CMD_AUTH_RECONNECT_CHALLENGE) auto(other.CMD_AUTH_RECONNECT_CHALLENGE);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        new (&CMD_AUTH_RECONNECT_PROOF) auto(other.CMD_AUTH_RECONNECT_PROOF);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        new (&CMD_REALM_LIST) auto(other.CMD_REALM_LIST);
+    }
+    if (opcode == Opcode::CMD_XFER_INITIATE) {
+        new (&CMD_XFER_INITIATE) auto(other.CMD_XFER_INITIATE);
+    }
+    if (opcode == Opcode::CMD_XFER_DATA) {
+        new (&CMD_XFER_DATA) auto(other.CMD_XFER_DATA);
+    }
+}
+
+/* 3 copy assignment */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode& ServerOpcode::operator=(const ServerOpcode& other) {
+    if (this == &other) {
+        return *this;
+    }
+
+    this->opcode = other.opcode;
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        version7::CMD_AUTH_LOGON_CHALLENGE_Server CMD_AUTH_LOGON_CHALLENGEswap(other.CMD_AUTH_LOGON_CHALLENGE);
+        std::swap(this->CMD_AUTH_LOGON_CHALLENGE, CMD_AUTH_LOGON_CHALLENGEswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        version7::CMD_AUTH_LOGON_PROOF_Server CMD_AUTH_LOGON_PROOFswap(other.CMD_AUTH_LOGON_PROOF);
+        std::swap(this->CMD_AUTH_LOGON_PROOF, CMD_AUTH_LOGON_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        version7::CMD_AUTH_RECONNECT_CHALLENGE_Server CMD_AUTH_RECONNECT_CHALLENGEswap(other.CMD_AUTH_RECONNECT_CHALLENGE);
+        std::swap(this->CMD_AUTH_RECONNECT_CHALLENGE, CMD_AUTH_RECONNECT_CHALLENGEswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        version7::CMD_AUTH_RECONNECT_PROOF_Server CMD_AUTH_RECONNECT_PROOFswap(other.CMD_AUTH_RECONNECT_PROOF);
+        std::swap(this->CMD_AUTH_RECONNECT_PROOF, CMD_AUTH_RECONNECT_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        version7::CMD_REALM_LIST_Server CMD_REALM_LISTswap(other.CMD_REALM_LIST);
+        std::swap(this->CMD_REALM_LIST, CMD_REALM_LISTswap);
+    }
+    if (opcode == Opcode::CMD_XFER_INITIATE) {
+        version7::CMD_XFER_INITIATE CMD_XFER_INITIATEswap(other.CMD_XFER_INITIATE);
+        std::swap(this->CMD_XFER_INITIATE, CMD_XFER_INITIATEswap);
+    }
+    if (opcode == Opcode::CMD_XFER_DATA) {
+        version7::CMD_XFER_DATA CMD_XFER_DATAswap(other.CMD_XFER_DATA);
+        std::swap(this->CMD_XFER_DATA, CMD_XFER_DATAswap);
+    }
+    return *this;
+}
+
+/* 4 move constructor */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(ServerOpcode&& other) noexcept {
+    this->opcode = other.opcode;
+    other.opcode = Opcode::NONE;
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        this->CMD_AUTH_LOGON_CHALLENGE = std::move(other.CMD_AUTH_LOGON_CHALLENGE);
+    }
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        this->CMD_AUTH_LOGON_PROOF = std::move(other.CMD_AUTH_LOGON_PROOF);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        this->CMD_AUTH_RECONNECT_CHALLENGE = std::move(other.CMD_AUTH_RECONNECT_CHALLENGE);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        this->CMD_AUTH_RECONNECT_PROOF = std::move(other.CMD_AUTH_RECONNECT_PROOF);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        this->CMD_REALM_LIST = std::move(other.CMD_REALM_LIST);
+    }
+    if (opcode == Opcode::CMD_XFER_INITIATE) {
+        this->CMD_XFER_INITIATE = std::move(other.CMD_XFER_INITIATE);
+    }
+    if (opcode == Opcode::CMD_XFER_DATA) {
+        this->CMD_XFER_DATA = std::move(other.CMD_XFER_DATA);
+    }
+}
+
+/* 5 move assignment */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode& ServerOpcode::operator=(ServerOpcode&& other) noexcept {
+    this->opcode = other.opcode;
+    other.opcode = Opcode::NONE;
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        version7::CMD_AUTH_LOGON_CHALLENGE_Server CMD_AUTH_LOGON_CHALLENGEswap(std::move(other.CMD_AUTH_LOGON_CHALLENGE));
+        std::swap(this->CMD_AUTH_LOGON_CHALLENGE, CMD_AUTH_LOGON_CHALLENGEswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        version7::CMD_AUTH_LOGON_PROOF_Server CMD_AUTH_LOGON_PROOFswap(std::move(other.CMD_AUTH_LOGON_PROOF));
+        std::swap(this->CMD_AUTH_LOGON_PROOF, CMD_AUTH_LOGON_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        version7::CMD_AUTH_RECONNECT_CHALLENGE_Server CMD_AUTH_RECONNECT_CHALLENGEswap(std::move(other.CMD_AUTH_RECONNECT_CHALLENGE));
+        std::swap(this->CMD_AUTH_RECONNECT_CHALLENGE, CMD_AUTH_RECONNECT_CHALLENGEswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        version7::CMD_AUTH_RECONNECT_PROOF_Server CMD_AUTH_RECONNECT_PROOFswap(std::move(other.CMD_AUTH_RECONNECT_PROOF));
+        std::swap(this->CMD_AUTH_RECONNECT_PROOF, CMD_AUTH_RECONNECT_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        version7::CMD_REALM_LIST_Server CMD_REALM_LISTswap(std::move(other.CMD_REALM_LIST));
+        std::swap(this->CMD_REALM_LIST, CMD_REALM_LISTswap);
+    }
+    if (opcode == Opcode::CMD_XFER_INITIATE) {
+        version7::CMD_XFER_INITIATE CMD_XFER_INITIATEswap(std::move(other.CMD_XFER_INITIATE));
+        std::swap(this->CMD_XFER_INITIATE, CMD_XFER_INITIATEswap);
+    }
+    if (opcode == Opcode::CMD_XFER_DATA) {
+        version7::CMD_XFER_DATA CMD_XFER_DATAswap(std::move(other.CMD_XFER_DATA));
+        std::swap(this->CMD_XFER_DATA, CMD_XFER_DATAswap);
+    }
+    return *this;
+}
+
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(version7::CMD_AUTH_LOGON_CHALLENGE_Server&& obj) {
+    opcode = Opcode::CMD_AUTH_LOGON_CHALLENGE;
+    new (&this->CMD_AUTH_LOGON_CHALLENGE) version7::CMD_AUTH_LOGON_CHALLENGE_Server (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(version7::CMD_AUTH_LOGON_PROOF_Server&& obj) {
+    opcode = Opcode::CMD_AUTH_LOGON_PROOF;
+    new (&this->CMD_AUTH_LOGON_PROOF) version7::CMD_AUTH_LOGON_PROOF_Server (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(version7::CMD_AUTH_RECONNECT_CHALLENGE_Server&& obj) {
+    opcode = Opcode::CMD_AUTH_RECONNECT_CHALLENGE;
+    new (&this->CMD_AUTH_RECONNECT_CHALLENGE) version7::CMD_AUTH_RECONNECT_CHALLENGE_Server (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(version7::CMD_AUTH_RECONNECT_PROOF_Server&& obj) {
+    opcode = Opcode::CMD_AUTH_RECONNECT_PROOF;
+    new (&this->CMD_AUTH_RECONNECT_PROOF) version7::CMD_AUTH_RECONNECT_PROOF_Server (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(version7::CMD_REALM_LIST_Server&& obj) {
+    opcode = Opcode::CMD_REALM_LIST;
+    new (&this->CMD_REALM_LIST) version7::CMD_REALM_LIST_Server (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(version7::CMD_XFER_INITIATE&& obj) {
+    opcode = Opcode::CMD_XFER_INITIATE;
+    new (&this->CMD_XFER_INITIATE) version7::CMD_XFER_INITIATE (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(version7::CMD_XFER_DATA&& obj) {
+    opcode = Opcode::CMD_XFER_DATA;
+    new (&this->CMD_XFER_DATA) version7::CMD_XFER_DATA (std::move(obj));
+}
+
 WOW_LOGIN_MESSAGES_CPP_EXPORT const char* ServerOpcode::to_string() const {
+    if (opcode == Opcode::NONE) {{ return "NONE"; }}
     if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) { return "CMD_AUTH_LOGON_CHALLENGE_Server"; }
     if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) { return "CMD_AUTH_LOGON_PROOF_Server"; }
     if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) { return "CMD_AUTH_RECONNECT_CHALLENGE_Server"; }
@@ -3146,61 +4929,6 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT version7::CMD_XFER_DATA& ServerOpcode::get<CMD_XFE
 }
 
 
-WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const ServerOpcode& opcode) {
-    if (opcode.opcode == ServerOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE) {
-        return opcode.CMD_AUTH_LOGON_CHALLENGE.write();;
-    }
-    if (opcode.opcode == ServerOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
-        return opcode.CMD_AUTH_LOGON_PROOF.write();;
-    }
-    if (opcode.opcode == ServerOpcode::Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
-        return opcode.CMD_AUTH_RECONNECT_CHALLENGE.write();;
-    }
-    if (opcode.opcode == ServerOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF) {
-        return opcode.CMD_AUTH_RECONNECT_PROOF.write();;
-    }
-    if (opcode.opcode == ServerOpcode::Opcode::CMD_REALM_LIST) {
-        return opcode.CMD_REALM_LIST.write();;
-    }
-    if (opcode.opcode == ServerOpcode::Opcode::CMD_XFER_INITIATE) {
-        return opcode.CMD_XFER_INITIATE.write();;
-    }
-    if (opcode.opcode == ServerOpcode::Opcode::CMD_XFER_DATA) {
-        return opcode.CMD_XFER_DATA.write();;
-    }
-
-    return {}; /* unreachable */
-}
-
-WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode read_server_opcode(Reader& reader) {
-    const uint8_t opcode = reader.read_u8();
-
-    ServerOpcode op;
-
-    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE)) {
-        return ServerOpcode(::wow_login_messages::version5::CMD_AUTH_LOGON_CHALLENGE_Server_read(reader));
-    }
-    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_LOGON_PROOF)) {
-        return ServerOpcode(::wow_login_messages::version5::CMD_AUTH_LOGON_PROOF_Server_read(reader));
-    }
-    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_RECONNECT_CHALLENGE)) {
-        return ServerOpcode(::wow_login_messages::version2::CMD_AUTH_RECONNECT_CHALLENGE_Server_read(reader));
-    }
-    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF)) {
-        return ServerOpcode(::wow_login_messages::version5::CMD_AUTH_RECONNECT_PROOF_Server_read(reader));
-    }
-    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_REALM_LIST)) {
-        return ServerOpcode(::wow_login_messages::version6::CMD_REALM_LIST_Server_read(reader));
-    }
-    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_XFER_INITIATE)) {
-        return ServerOpcode(::wow_login_messages::version2::CMD_XFER_INITIATE_read(reader));
-    }
-    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_XFER_DATA)) {
-        return ServerOpcode(::wow_login_messages::version2::CMD_XFER_DATA_read(reader));
-    }
-
-    return op;
-}
 } // namespace version7
 } // namespace wow_login_messages
 /* clang-format off */
@@ -3372,13 +5100,13 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_AUTH_LOGON_CHALLENG
             writer.write_u8(v);
         }
 
-        writer.write_u8(obj.generator.size());
+        writer.write_u8(static_cast<uint8_t>(obj.generator.size()));
 
         for (const auto& v : obj.generator) {
             writer.write_u8(v);
         }
 
-        writer.write_u8(obj.large_safe_prime.size());
+        writer.write_u8(static_cast<uint8_t>(obj.large_safe_prime.size()));
 
         for (const auto& v : obj.large_safe_prime) {
             writer.write_u8(v);
@@ -3504,7 +5232,7 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_AUTH_LOGON_PROOF_Cl
         writer.write_u8(v);
     }
 
-    writer.write_u8(obj.telemetry_keys.size());
+    writer.write_u8(static_cast<uint8_t>(obj.telemetry_keys.size()));
 
     for (const auto& v : obj.telemetry_keys) {
         TelemetryKey_write(writer, v);
@@ -3719,7 +5447,7 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_REALM_LIST_Server::
 
     writer.write_u32(0);
 
-    writer.write_u16(obj.realms.size());
+    writer.write_u16(static_cast<uint16_t>(obj.realms.size()));
 
     for (const auto& v : obj.realms) {
         Realm_write(writer, v);
@@ -3746,7 +5474,215 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMD_XFER_CANCEL::write(
     return writer.m_buf;
 }
 
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode ClientOpcode::read(Reader& reader) {
+    const uint8_t opcode = reader.read_u8();
+
+    ClientOpcode op;
+
+    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF)) {
+        return ClientOpcode(::wow_login_messages::version8::CMD_AUTH_LOGON_PROOF_Client_read(reader));
+    }
+    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF)) {
+        return ClientOpcode(::wow_login_messages::version2::CMD_AUTH_RECONNECT_PROOF_Client_read(reader));
+    }
+    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_REALM_LIST)) {
+        return ClientOpcode(::wow_login_messages::version8::CMD_REALM_LIST_Client{});
+    }
+    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_XFER_ACCEPT)) {
+        return ClientOpcode(::wow_login_messages::version8::CMD_XFER_ACCEPT{});
+    }
+    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_XFER_RESUME)) {
+        return ClientOpcode(::wow_login_messages::version2::CMD_XFER_RESUME_read(reader));
+    }
+    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_XFER_CANCEL)) {
+        return ClientOpcode(::wow_login_messages::version8::CMD_XFER_CANCEL{});
+    }
+
+    return op;
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> ClientOpcode::write() const {
+    if (this->opcode == ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
+        return this->CMD_AUTH_LOGON_PROOF.write();;
+    }
+    if (this->opcode == ClientOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        return this->CMD_AUTH_RECONNECT_PROOF.write();;
+    }
+    if (this->opcode == ClientOpcode::Opcode::CMD_REALM_LIST) {
+        return this->CMD_REALM_LIST.write();;
+    }
+    if (this->opcode == ClientOpcode::Opcode::CMD_XFER_ACCEPT) {
+        return this->CMD_XFER_ACCEPT.write();;
+    }
+    if (this->opcode == ClientOpcode::Opcode::CMD_XFER_RESUME) {
+        return this->CMD_XFER_RESUME.write();;
+    }
+    if (this->opcode == ClientOpcode::Opcode::CMD_XFER_CANCEL) {
+        return this->CMD_XFER_CANCEL.write();;
+    }
+
+    return {}; /* unreachable */
+}
+/* 1 destructor */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::~ClientOpcode() {
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        this->CMD_AUTH_LOGON_PROOF.~CMD_AUTH_LOGON_PROOF_Client();
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        this->CMD_AUTH_RECONNECT_PROOF.~CMD_AUTH_RECONNECT_PROOF_Client();
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        this->CMD_REALM_LIST.~CMD_REALM_LIST_Client();
+    }
+    if (opcode == Opcode::CMD_XFER_ACCEPT) {
+        this->CMD_XFER_ACCEPT.~CMD_XFER_ACCEPT();
+    }
+    if (opcode == Opcode::CMD_XFER_RESUME) {
+        this->CMD_XFER_RESUME.~CMD_XFER_RESUME();
+    }
+    if (opcode == Opcode::CMD_XFER_CANCEL) {
+        this->CMD_XFER_CANCEL.~CMD_XFER_CANCEL();
+    }
+}
+
+/* 2 copy constructor */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(const ClientOpcode& other) {
+    this->opcode = other.opcode;
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        new (&CMD_AUTH_LOGON_PROOF) auto(other.CMD_AUTH_LOGON_PROOF);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        new (&CMD_AUTH_RECONNECT_PROOF) auto(other.CMD_AUTH_RECONNECT_PROOF);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        new (&CMD_REALM_LIST) auto(other.CMD_REALM_LIST);
+    }
+    if (opcode == Opcode::CMD_XFER_ACCEPT) {
+        new (&CMD_XFER_ACCEPT) auto(other.CMD_XFER_ACCEPT);
+    }
+    if (opcode == Opcode::CMD_XFER_RESUME) {
+        new (&CMD_XFER_RESUME) auto(other.CMD_XFER_RESUME);
+    }
+    if (opcode == Opcode::CMD_XFER_CANCEL) {
+        new (&CMD_XFER_CANCEL) auto(other.CMD_XFER_CANCEL);
+    }
+}
+
+/* 3 copy assignment */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode& ClientOpcode::operator=(const ClientOpcode& other) {
+    if (this == &other) {
+        return *this;
+    }
+
+    this->opcode = other.opcode;
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        version8::CMD_AUTH_LOGON_PROOF_Client CMD_AUTH_LOGON_PROOFswap(other.CMD_AUTH_LOGON_PROOF);
+        std::swap(this->CMD_AUTH_LOGON_PROOF, CMD_AUTH_LOGON_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        version8::CMD_AUTH_RECONNECT_PROOF_Client CMD_AUTH_RECONNECT_PROOFswap(other.CMD_AUTH_RECONNECT_PROOF);
+        std::swap(this->CMD_AUTH_RECONNECT_PROOF, CMD_AUTH_RECONNECT_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        version8::CMD_REALM_LIST_Client CMD_REALM_LISTswap(other.CMD_REALM_LIST);
+        std::swap(this->CMD_REALM_LIST, CMD_REALM_LISTswap);
+    }
+    if (opcode == Opcode::CMD_XFER_ACCEPT) {
+        version8::CMD_XFER_ACCEPT CMD_XFER_ACCEPTswap(other.CMD_XFER_ACCEPT);
+        std::swap(this->CMD_XFER_ACCEPT, CMD_XFER_ACCEPTswap);
+    }
+    if (opcode == Opcode::CMD_XFER_RESUME) {
+        version8::CMD_XFER_RESUME CMD_XFER_RESUMEswap(other.CMD_XFER_RESUME);
+        std::swap(this->CMD_XFER_RESUME, CMD_XFER_RESUMEswap);
+    }
+    if (opcode == Opcode::CMD_XFER_CANCEL) {
+        version8::CMD_XFER_CANCEL CMD_XFER_CANCELswap(other.CMD_XFER_CANCEL);
+        std::swap(this->CMD_XFER_CANCEL, CMD_XFER_CANCELswap);
+    }
+    return *this;
+}
+
+/* 4 move constructor */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(ClientOpcode&& other) noexcept {
+    this->opcode = other.opcode;
+    other.opcode = Opcode::NONE;
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        this->CMD_AUTH_LOGON_PROOF = std::move(other.CMD_AUTH_LOGON_PROOF);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        this->CMD_AUTH_RECONNECT_PROOF = std::move(other.CMD_AUTH_RECONNECT_PROOF);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        this->CMD_REALM_LIST = std::move(other.CMD_REALM_LIST);
+    }
+    if (opcode == Opcode::CMD_XFER_ACCEPT) {
+        this->CMD_XFER_ACCEPT = std::move(other.CMD_XFER_ACCEPT);
+    }
+    if (opcode == Opcode::CMD_XFER_RESUME) {
+        this->CMD_XFER_RESUME = std::move(other.CMD_XFER_RESUME);
+    }
+    if (opcode == Opcode::CMD_XFER_CANCEL) {
+        this->CMD_XFER_CANCEL = std::move(other.CMD_XFER_CANCEL);
+    }
+}
+
+/* 5 move assignment */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode& ClientOpcode::operator=(ClientOpcode&& other) noexcept {
+    this->opcode = other.opcode;
+    other.opcode = Opcode::NONE;
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        version8::CMD_AUTH_LOGON_PROOF_Client CMD_AUTH_LOGON_PROOFswap(std::move(other.CMD_AUTH_LOGON_PROOF));
+        std::swap(this->CMD_AUTH_LOGON_PROOF, CMD_AUTH_LOGON_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        version8::CMD_AUTH_RECONNECT_PROOF_Client CMD_AUTH_RECONNECT_PROOFswap(std::move(other.CMD_AUTH_RECONNECT_PROOF));
+        std::swap(this->CMD_AUTH_RECONNECT_PROOF, CMD_AUTH_RECONNECT_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        version8::CMD_REALM_LIST_Client CMD_REALM_LISTswap(std::move(other.CMD_REALM_LIST));
+        std::swap(this->CMD_REALM_LIST, CMD_REALM_LISTswap);
+    }
+    if (opcode == Opcode::CMD_XFER_ACCEPT) {
+        version8::CMD_XFER_ACCEPT CMD_XFER_ACCEPTswap(std::move(other.CMD_XFER_ACCEPT));
+        std::swap(this->CMD_XFER_ACCEPT, CMD_XFER_ACCEPTswap);
+    }
+    if (opcode == Opcode::CMD_XFER_RESUME) {
+        version8::CMD_XFER_RESUME CMD_XFER_RESUMEswap(std::move(other.CMD_XFER_RESUME));
+        std::swap(this->CMD_XFER_RESUME, CMD_XFER_RESUMEswap);
+    }
+    if (opcode == Opcode::CMD_XFER_CANCEL) {
+        version8::CMD_XFER_CANCEL CMD_XFER_CANCELswap(std::move(other.CMD_XFER_CANCEL));
+        std::swap(this->CMD_XFER_CANCEL, CMD_XFER_CANCELswap);
+    }
+    return *this;
+}
+
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(version8::CMD_AUTH_LOGON_PROOF_Client&& obj) {
+    opcode = Opcode::CMD_AUTH_LOGON_PROOF;
+    new (&this->CMD_AUTH_LOGON_PROOF) version8::CMD_AUTH_LOGON_PROOF_Client (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(version8::CMD_AUTH_RECONNECT_PROOF_Client&& obj) {
+    opcode = Opcode::CMD_AUTH_RECONNECT_PROOF;
+    new (&this->CMD_AUTH_RECONNECT_PROOF) version8::CMD_AUTH_RECONNECT_PROOF_Client (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(version8::CMD_REALM_LIST_Client&& obj) {
+    opcode = Opcode::CMD_REALM_LIST;
+    new (&this->CMD_REALM_LIST) version8::CMD_REALM_LIST_Client (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(version8::CMD_XFER_ACCEPT&& obj) {
+    opcode = Opcode::CMD_XFER_ACCEPT;
+    new (&this->CMD_XFER_ACCEPT) version8::CMD_XFER_ACCEPT (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(version8::CMD_XFER_RESUME&& obj) {
+    opcode = Opcode::CMD_XFER_RESUME;
+    new (&this->CMD_XFER_RESUME) version8::CMD_XFER_RESUME (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode::ClientOpcode(version8::CMD_XFER_CANCEL&& obj) {
+    opcode = Opcode::CMD_XFER_CANCEL;
+    new (&this->CMD_XFER_CANCEL) version8::CMD_XFER_CANCEL (std::move(obj));
+}
+
 WOW_LOGIN_MESSAGES_CPP_EXPORT const char* ClientOpcode::to_string() const {
+    if (opcode == Opcode::NONE) {{ return "NONE"; }}
     if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) { return "CMD_AUTH_LOGON_PROOF_Client"; }
     if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) { return "CMD_AUTH_RECONNECT_PROOF_Client"; }
     if (opcode == Opcode::CMD_REALM_LIST) { return "CMD_REALM_LIST_Client"; }
@@ -3852,56 +5788,242 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT version8::CMD_XFER_CANCEL& ClientOpcode::get<CMD_X
 }
 
 
-WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const ClientOpcode& opcode) {
-    if (opcode.opcode == ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
-        return opcode.CMD_AUTH_LOGON_PROOF.write();;
-    }
-    if (opcode.opcode == ClientOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF) {
-        return opcode.CMD_AUTH_RECONNECT_PROOF.write();;
-    }
-    if (opcode.opcode == ClientOpcode::Opcode::CMD_REALM_LIST) {
-        return opcode.CMD_REALM_LIST.write();;
-    }
-    if (opcode.opcode == ClientOpcode::Opcode::CMD_XFER_ACCEPT) {
-        return opcode.CMD_XFER_ACCEPT.write();;
-    }
-    if (opcode.opcode == ClientOpcode::Opcode::CMD_XFER_RESUME) {
-        return opcode.CMD_XFER_RESUME.write();;
-    }
-    if (opcode.opcode == ClientOpcode::Opcode::CMD_XFER_CANCEL) {
-        return opcode.CMD_XFER_CANCEL.write();;
-    }
-
-    return {}; /* unreachable */
-}
-
-WOW_LOGIN_MESSAGES_CPP_EXPORT ClientOpcode read_client_opcode(Reader& reader) {
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode ServerOpcode::read(Reader& reader) {
     const uint8_t opcode = reader.read_u8();
 
-    ClientOpcode op;
+    ServerOpcode op;
 
-    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_AUTH_LOGON_PROOF)) {
-        return ClientOpcode(::wow_login_messages::version8::CMD_AUTH_LOGON_PROOF_Client_read(reader));
+    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE)) {
+        return ServerOpcode(::wow_login_messages::version8::CMD_AUTH_LOGON_CHALLENGE_Server_read(reader));
     }
-    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF)) {
-        return ClientOpcode(::wow_login_messages::version2::CMD_AUTH_RECONNECT_PROOF_Client_read(reader));
+    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_LOGON_PROOF)) {
+        return ServerOpcode(::wow_login_messages::version8::CMD_AUTH_LOGON_PROOF_Server_read(reader));
     }
-    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_REALM_LIST)) {
-        return ClientOpcode(::wow_login_messages::version8::CMD_REALM_LIST_Client{});
+    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_RECONNECT_CHALLENGE)) {
+        return ServerOpcode(::wow_login_messages::version8::CMD_AUTH_RECONNECT_CHALLENGE_Server_read(reader));
     }
-    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_XFER_ACCEPT)) {
-        return ClientOpcode(::wow_login_messages::version8::CMD_XFER_ACCEPT{});
+    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF)) {
+        return ServerOpcode(::wow_login_messages::version8::CMD_AUTH_RECONNECT_PROOF_Server_read(reader));
     }
-    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_XFER_RESUME)) {
-        return ClientOpcode(::wow_login_messages::version2::CMD_XFER_RESUME_read(reader));
+    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_REALM_LIST)) {
+        return ServerOpcode(::wow_login_messages::version8::CMD_REALM_LIST_Server_read(reader));
     }
-    if (opcode == static_cast<uint8_t>(ClientOpcode::Opcode::CMD_XFER_CANCEL)) {
-        return ClientOpcode(::wow_login_messages::version8::CMD_XFER_CANCEL{});
+    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_XFER_INITIATE)) {
+        return ServerOpcode(::wow_login_messages::version2::CMD_XFER_INITIATE_read(reader));
+    }
+    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_XFER_DATA)) {
+        return ServerOpcode(::wow_login_messages::version2::CMD_XFER_DATA_read(reader));
     }
 
     return op;
 }
+WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> ServerOpcode::write() const {
+    if (this->opcode == ServerOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        return this->CMD_AUTH_LOGON_CHALLENGE.write();;
+    }
+    if (this->opcode == ServerOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
+        return this->CMD_AUTH_LOGON_PROOF.write();;
+    }
+    if (this->opcode == ServerOpcode::Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        return this->CMD_AUTH_RECONNECT_CHALLENGE.write();;
+    }
+    if (this->opcode == ServerOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        return this->CMD_AUTH_RECONNECT_PROOF.write();;
+    }
+    if (this->opcode == ServerOpcode::Opcode::CMD_REALM_LIST) {
+        return this->CMD_REALM_LIST.write();;
+    }
+    if (this->opcode == ServerOpcode::Opcode::CMD_XFER_INITIATE) {
+        return this->CMD_XFER_INITIATE.write();;
+    }
+    if (this->opcode == ServerOpcode::Opcode::CMD_XFER_DATA) {
+        return this->CMD_XFER_DATA.write();;
+    }
+
+    return {}; /* unreachable */
+}
+/* 1 destructor */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::~ServerOpcode() {
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        this->CMD_AUTH_LOGON_CHALLENGE.~CMD_AUTH_LOGON_CHALLENGE_Server();
+    }
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        this->CMD_AUTH_LOGON_PROOF.~CMD_AUTH_LOGON_PROOF_Server();
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        this->CMD_AUTH_RECONNECT_CHALLENGE.~CMD_AUTH_RECONNECT_CHALLENGE_Server();
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        this->CMD_AUTH_RECONNECT_PROOF.~CMD_AUTH_RECONNECT_PROOF_Server();
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        this->CMD_REALM_LIST.~CMD_REALM_LIST_Server();
+    }
+    if (opcode == Opcode::CMD_XFER_INITIATE) {
+        this->CMD_XFER_INITIATE.~CMD_XFER_INITIATE();
+    }
+    if (opcode == Opcode::CMD_XFER_DATA) {
+        this->CMD_XFER_DATA.~CMD_XFER_DATA();
+    }
+}
+
+/* 2 copy constructor */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(const ServerOpcode& other) {
+    this->opcode = other.opcode;
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        new (&CMD_AUTH_LOGON_CHALLENGE) auto(other.CMD_AUTH_LOGON_CHALLENGE);
+    }
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        new (&CMD_AUTH_LOGON_PROOF) auto(other.CMD_AUTH_LOGON_PROOF);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        new (&CMD_AUTH_RECONNECT_CHALLENGE) auto(other.CMD_AUTH_RECONNECT_CHALLENGE);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        new (&CMD_AUTH_RECONNECT_PROOF) auto(other.CMD_AUTH_RECONNECT_PROOF);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        new (&CMD_REALM_LIST) auto(other.CMD_REALM_LIST);
+    }
+    if (opcode == Opcode::CMD_XFER_INITIATE) {
+        new (&CMD_XFER_INITIATE) auto(other.CMD_XFER_INITIATE);
+    }
+    if (opcode == Opcode::CMD_XFER_DATA) {
+        new (&CMD_XFER_DATA) auto(other.CMD_XFER_DATA);
+    }
+}
+
+/* 3 copy assignment */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode& ServerOpcode::operator=(const ServerOpcode& other) {
+    if (this == &other) {
+        return *this;
+    }
+
+    this->opcode = other.opcode;
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        version8::CMD_AUTH_LOGON_CHALLENGE_Server CMD_AUTH_LOGON_CHALLENGEswap(other.CMD_AUTH_LOGON_CHALLENGE);
+        std::swap(this->CMD_AUTH_LOGON_CHALLENGE, CMD_AUTH_LOGON_CHALLENGEswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        version8::CMD_AUTH_LOGON_PROOF_Server CMD_AUTH_LOGON_PROOFswap(other.CMD_AUTH_LOGON_PROOF);
+        std::swap(this->CMD_AUTH_LOGON_PROOF, CMD_AUTH_LOGON_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        version8::CMD_AUTH_RECONNECT_CHALLENGE_Server CMD_AUTH_RECONNECT_CHALLENGEswap(other.CMD_AUTH_RECONNECT_CHALLENGE);
+        std::swap(this->CMD_AUTH_RECONNECT_CHALLENGE, CMD_AUTH_RECONNECT_CHALLENGEswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        version8::CMD_AUTH_RECONNECT_PROOF_Server CMD_AUTH_RECONNECT_PROOFswap(other.CMD_AUTH_RECONNECT_PROOF);
+        std::swap(this->CMD_AUTH_RECONNECT_PROOF, CMD_AUTH_RECONNECT_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        version8::CMD_REALM_LIST_Server CMD_REALM_LISTswap(other.CMD_REALM_LIST);
+        std::swap(this->CMD_REALM_LIST, CMD_REALM_LISTswap);
+    }
+    if (opcode == Opcode::CMD_XFER_INITIATE) {
+        version8::CMD_XFER_INITIATE CMD_XFER_INITIATEswap(other.CMD_XFER_INITIATE);
+        std::swap(this->CMD_XFER_INITIATE, CMD_XFER_INITIATEswap);
+    }
+    if (opcode == Opcode::CMD_XFER_DATA) {
+        version8::CMD_XFER_DATA CMD_XFER_DATAswap(other.CMD_XFER_DATA);
+        std::swap(this->CMD_XFER_DATA, CMD_XFER_DATAswap);
+    }
+    return *this;
+}
+
+/* 4 move constructor */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(ServerOpcode&& other) noexcept {
+    this->opcode = other.opcode;
+    other.opcode = Opcode::NONE;
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        this->CMD_AUTH_LOGON_CHALLENGE = std::move(other.CMD_AUTH_LOGON_CHALLENGE);
+    }
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        this->CMD_AUTH_LOGON_PROOF = std::move(other.CMD_AUTH_LOGON_PROOF);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        this->CMD_AUTH_RECONNECT_CHALLENGE = std::move(other.CMD_AUTH_RECONNECT_CHALLENGE);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        this->CMD_AUTH_RECONNECT_PROOF = std::move(other.CMD_AUTH_RECONNECT_PROOF);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        this->CMD_REALM_LIST = std::move(other.CMD_REALM_LIST);
+    }
+    if (opcode == Opcode::CMD_XFER_INITIATE) {
+        this->CMD_XFER_INITIATE = std::move(other.CMD_XFER_INITIATE);
+    }
+    if (opcode == Opcode::CMD_XFER_DATA) {
+        this->CMD_XFER_DATA = std::move(other.CMD_XFER_DATA);
+    }
+}
+
+/* 5 move assignment */
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode& ServerOpcode::operator=(ServerOpcode&& other) noexcept {
+    this->opcode = other.opcode;
+    other.opcode = Opcode::NONE;
+    if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) {
+        version8::CMD_AUTH_LOGON_CHALLENGE_Server CMD_AUTH_LOGON_CHALLENGEswap(std::move(other.CMD_AUTH_LOGON_CHALLENGE));
+        std::swap(this->CMD_AUTH_LOGON_CHALLENGE, CMD_AUTH_LOGON_CHALLENGEswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) {
+        version8::CMD_AUTH_LOGON_PROOF_Server CMD_AUTH_LOGON_PROOFswap(std::move(other.CMD_AUTH_LOGON_PROOF));
+        std::swap(this->CMD_AUTH_LOGON_PROOF, CMD_AUTH_LOGON_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
+        version8::CMD_AUTH_RECONNECT_CHALLENGE_Server CMD_AUTH_RECONNECT_CHALLENGEswap(std::move(other.CMD_AUTH_RECONNECT_CHALLENGE));
+        std::swap(this->CMD_AUTH_RECONNECT_CHALLENGE, CMD_AUTH_RECONNECT_CHALLENGEswap);
+    }
+    if (opcode == Opcode::CMD_AUTH_RECONNECT_PROOF) {
+        version8::CMD_AUTH_RECONNECT_PROOF_Server CMD_AUTH_RECONNECT_PROOFswap(std::move(other.CMD_AUTH_RECONNECT_PROOF));
+        std::swap(this->CMD_AUTH_RECONNECT_PROOF, CMD_AUTH_RECONNECT_PROOFswap);
+    }
+    if (opcode == Opcode::CMD_REALM_LIST) {
+        version8::CMD_REALM_LIST_Server CMD_REALM_LISTswap(std::move(other.CMD_REALM_LIST));
+        std::swap(this->CMD_REALM_LIST, CMD_REALM_LISTswap);
+    }
+    if (opcode == Opcode::CMD_XFER_INITIATE) {
+        version8::CMD_XFER_INITIATE CMD_XFER_INITIATEswap(std::move(other.CMD_XFER_INITIATE));
+        std::swap(this->CMD_XFER_INITIATE, CMD_XFER_INITIATEswap);
+    }
+    if (opcode == Opcode::CMD_XFER_DATA) {
+        version8::CMD_XFER_DATA CMD_XFER_DATAswap(std::move(other.CMD_XFER_DATA));
+        std::swap(this->CMD_XFER_DATA, CMD_XFER_DATAswap);
+    }
+    return *this;
+}
+
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(version8::CMD_AUTH_LOGON_CHALLENGE_Server&& obj) {
+    opcode = Opcode::CMD_AUTH_LOGON_CHALLENGE;
+    new (&this->CMD_AUTH_LOGON_CHALLENGE) version8::CMD_AUTH_LOGON_CHALLENGE_Server (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(version8::CMD_AUTH_LOGON_PROOF_Server&& obj) {
+    opcode = Opcode::CMD_AUTH_LOGON_PROOF;
+    new (&this->CMD_AUTH_LOGON_PROOF) version8::CMD_AUTH_LOGON_PROOF_Server (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(version8::CMD_AUTH_RECONNECT_CHALLENGE_Server&& obj) {
+    opcode = Opcode::CMD_AUTH_RECONNECT_CHALLENGE;
+    new (&this->CMD_AUTH_RECONNECT_CHALLENGE) version8::CMD_AUTH_RECONNECT_CHALLENGE_Server (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(version8::CMD_AUTH_RECONNECT_PROOF_Server&& obj) {
+    opcode = Opcode::CMD_AUTH_RECONNECT_PROOF;
+    new (&this->CMD_AUTH_RECONNECT_PROOF) version8::CMD_AUTH_RECONNECT_PROOF_Server (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(version8::CMD_REALM_LIST_Server&& obj) {
+    opcode = Opcode::CMD_REALM_LIST;
+    new (&this->CMD_REALM_LIST) version8::CMD_REALM_LIST_Server (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(version8::CMD_XFER_INITIATE&& obj) {
+    opcode = Opcode::CMD_XFER_INITIATE;
+    new (&this->CMD_XFER_INITIATE) version8::CMD_XFER_INITIATE (std::move(obj));
+}
+WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode::ServerOpcode(version8::CMD_XFER_DATA&& obj) {
+    opcode = Opcode::CMD_XFER_DATA;
+    new (&this->CMD_XFER_DATA) version8::CMD_XFER_DATA (std::move(obj));
+}
+
 WOW_LOGIN_MESSAGES_CPP_EXPORT const char* ServerOpcode::to_string() const {
+    if (opcode == Opcode::NONE) {{ return "NONE"; }}
     if (opcode == Opcode::CMD_AUTH_LOGON_CHALLENGE) { return "CMD_AUTH_LOGON_CHALLENGE_Server"; }
     if (opcode == Opcode::CMD_AUTH_LOGON_PROOF) { return "CMD_AUTH_LOGON_PROOF_Server"; }
     if (opcode == Opcode::CMD_AUTH_RECONNECT_CHALLENGE) { return "CMD_AUTH_RECONNECT_CHALLENGE_Server"; }
@@ -4024,60 +6146,5 @@ WOW_LOGIN_MESSAGES_CPP_EXPORT version8::CMD_XFER_DATA& ServerOpcode::get<CMD_XFE
 }
 
 
-WOW_LOGIN_MESSAGES_CPP_EXPORT std::vector<unsigned char> write_opcode(const ServerOpcode& opcode) {
-    if (opcode.opcode == ServerOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE) {
-        return opcode.CMD_AUTH_LOGON_CHALLENGE.write();;
-    }
-    if (opcode.opcode == ServerOpcode::Opcode::CMD_AUTH_LOGON_PROOF) {
-        return opcode.CMD_AUTH_LOGON_PROOF.write();;
-    }
-    if (opcode.opcode == ServerOpcode::Opcode::CMD_AUTH_RECONNECT_CHALLENGE) {
-        return opcode.CMD_AUTH_RECONNECT_CHALLENGE.write();;
-    }
-    if (opcode.opcode == ServerOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF) {
-        return opcode.CMD_AUTH_RECONNECT_PROOF.write();;
-    }
-    if (opcode.opcode == ServerOpcode::Opcode::CMD_REALM_LIST) {
-        return opcode.CMD_REALM_LIST.write();;
-    }
-    if (opcode.opcode == ServerOpcode::Opcode::CMD_XFER_INITIATE) {
-        return opcode.CMD_XFER_INITIATE.write();;
-    }
-    if (opcode.opcode == ServerOpcode::Opcode::CMD_XFER_DATA) {
-        return opcode.CMD_XFER_DATA.write();;
-    }
-
-    return {}; /* unreachable */
-}
-
-WOW_LOGIN_MESSAGES_CPP_EXPORT ServerOpcode read_server_opcode(Reader& reader) {
-    const uint8_t opcode = reader.read_u8();
-
-    ServerOpcode op;
-
-    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_LOGON_CHALLENGE)) {
-        return ServerOpcode(::wow_login_messages::version8::CMD_AUTH_LOGON_CHALLENGE_Server_read(reader));
-    }
-    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_LOGON_PROOF)) {
-        return ServerOpcode(::wow_login_messages::version8::CMD_AUTH_LOGON_PROOF_Server_read(reader));
-    }
-    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_RECONNECT_CHALLENGE)) {
-        return ServerOpcode(::wow_login_messages::version8::CMD_AUTH_RECONNECT_CHALLENGE_Server_read(reader));
-    }
-    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_AUTH_RECONNECT_PROOF)) {
-        return ServerOpcode(::wow_login_messages::version8::CMD_AUTH_RECONNECT_PROOF_Server_read(reader));
-    }
-    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_REALM_LIST)) {
-        return ServerOpcode(::wow_login_messages::version8::CMD_REALM_LIST_Server_read(reader));
-    }
-    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_XFER_INITIATE)) {
-        return ServerOpcode(::wow_login_messages::version2::CMD_XFER_INITIATE_read(reader));
-    }
-    if (opcode == static_cast<uint8_t>(ServerOpcode::Opcode::CMD_XFER_DATA)) {
-        return ServerOpcode(::wow_login_messages::version2::CMD_XFER_DATA_read(reader));
-    }
-
-    return op;
-}
 } // namespace version8
 } // namespace wow_login_messages

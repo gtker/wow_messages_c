@@ -12,7 +12,7 @@ def print_members_definitions(s: Writer, container: Container, module_name: str)
     s.newline()
 
 
-def print_member_definition(non_optional: Writer, member: model.StructMember, module_name: str):
+def print_member_definition(s: Writer, member: model.StructMember, module_name: str):
     match member:
         case model.StructMemberDefinition(
             _tag,
@@ -34,20 +34,23 @@ def print_member_definition(non_optional: Writer, member: model.StructMember, mo
 
             match data_type:
                 case model.DataTypeArray(size=model.ArraySizeEndless()):
-                    non_optional.wln(f"uint32_t amount_of_{name};")
+                    s.wln(f"uint32_t amount_of_{name};")
+
+            if tags.comment is not None:
+                s.wln(f"/* {tags.comment} */")
 
             match data_type:
                 case model.DataTypeArray(size=model.ArraySizeFixed(size=size)):
                     if is_cpp():
-                        non_optional.wln(f"std::array<{type_to_c_str(data_type, module_name)}, {size}> {name};")
+                        s.wln(f"std::array<{type_to_c_str(data_type, module_name)}, {size}> {name};")
                     else:
-                        non_optional.wln(
+                        s.wln(
                             f"{type_to_c_str(data_type, module_name)} {name}[{size}];")
                 case _:
-                    non_optional.wln(f"{type_to_c_str(data_type, module_name)} {name};")
+                    s.wln(f"{type_to_c_str(data_type, module_name)} {name};")
 
         case model.StructMemberIfStatement(_tag, struct_member_content=statement):
-            print_member_if_statement(non_optional, statement, module_name)
+            print_member_if_statement(s, statement, module_name)
 
         case _:
             raise Exception("invalid struct member")

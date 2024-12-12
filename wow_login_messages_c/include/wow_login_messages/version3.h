@@ -5,8 +5,6 @@
 
 #include "wow_login_messages/wow_login_messages.h"
 
-#include "wow_login_messages/version2.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -40,16 +38,21 @@ typedef all_Version version3_Version;
 
 typedef version2_TelemetryKey version3_TelemetryKey;
 
+/* Reply to [CMD_AUTH_LOGON_CHALLENGE_Client]. */
 typedef struct {
     version3_LoginResult result;
     uint8_t server_public_key[32];
+    /* The only realistic values for the generator are well below 255, so there's no reason for this to anything other than 1. */
     uint8_t generator_length;
     uint8_t* generator;
+    /* Client can not handle arrays greater than 32. */
     uint8_t large_safe_prime_length;
     uint8_t* large_safe_prime;
     uint8_t salt[32];
+    /* Used for the `crc_hash` in [CMD_AUTH_LOGON_PROOF_Client]. */
     uint8_t crc_salt[16];
     version3_SecurityFlag security_flag;
+    /* Used to randomize the layout of the PIN keypad. */
     uint32_t pin_grid_seed;
     uint8_t pin_salt[16];
 
@@ -61,6 +64,7 @@ typedef all_CMD_AUTH_LOGON_CHALLENGE_Client version3_CMD_AUTH_LOGON_CHALLENGE_Cl
 
 typedef version2_CMD_AUTH_LOGON_PROOF_Server version3_CMD_AUTH_LOGON_PROOF_Server;
 
+/* Reply after successful [CMD_AUTH_LOGON_CHALLENGE_Server]. */
 typedef struct {
     uint8_t client_public_key[32];
     uint8_t client_proof[20];

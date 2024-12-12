@@ -1,6 +1,6 @@
 from print_struct.struct_util import print_if_statement_header, container_has_c_members, all_members_from_container, \
     container_module_prefix
-from util import get_export_define, is_cpp, snake_case_to_pascal_case
+from util import get_export_define, is_cpp, snake_case_to_pascal_case, is_world
 
 import model
 from print_struct.print_members import print_members_definitions, print_member_definition
@@ -13,6 +13,9 @@ from writer import Writer
 def print_struct(s: Writer, h: Writer, container: model.Container, module_name: str):
     if container_has_c_members(container) or is_cpp():
         if is_cpp():
+            if container.tags.comment is not None:
+                h.wln(f"/* {container.tags.comment} */")
+
             h.open_curly(f"struct {container.name}")
             if container.optional is not None:
                 h.open_curly(f"struct {snake_case_to_pascal_case(container.optional.name)}")
@@ -25,18 +28,20 @@ def print_struct(s: Writer, h: Writer, container: model.Container, module_name: 
                 print_member_definition(h, member, module_name)
 
             if container.optional is not None:
-                h.wln(f"std::unique_ptr<{snake_case_to_pascal_case(container.optional.name)}> {container.optional.name};")
+                h.wln(
+                    f"std::shared_ptr<{snake_case_to_pascal_case(container.optional.name)}> {container.optional.name};")
 
             if type(container.object_type) is not model.ObjectTypeStruct:
                 h.newline()
+                extra = "const std::function<void(unsigned char*, size_t)>& encrypt" if is_world(container.tags) else ""
                 export = get_export_define(container.tags)
                 if type(container.object_type) is model.ObjectTypeMsg:
-                    h.wln(f"{export} std::vector<unsigned char> write_smsg() const;")
-                    h.wln(f"{export} std::vector<unsigned char> write_cmsg() const;")
+                    h.wln(f"{export} std::vector<unsigned char> write_smsg({extra}) const;")
+                    h.wln(f"{export} std::vector<unsigned char> write_cmsg({extra}) const;")
                 else:
-                    h.wln(f"{export} std::vector<unsigned char> write() const;")
+                    h.wln(f"{export} std::vector<unsigned char> write({extra}) const;")
 
-            h.closing_curly(";") # struct
+            h.closing_curly(";")  # struct
         else:
             if container.optional is not None:
                 h.open_curly("typedef struct")
@@ -44,6 +49,9 @@ def print_struct(s: Writer, h: Writer, container: model.Container, module_name: 
                     print_member_definition(h, member, module_name)
                 h.closing_curly(f" {module_name}_{container.name}_{container.optional.name};")
                 h.newline()
+
+            if container.tags.comment is not None:
+                h.wln(f"/* {container.tags.comment} */")
 
             h.open_curly(f"typedef struct")
             print_members_definitions(h, container, module_name)
@@ -140,7 +148,8 @@ def print_free_member(s: Writer, m: model.StructMember, module_name: str, extra_
             raise Exception("invalid struct member")
 
 
-def print_free_if_statement(s: Writer, statement: model.IfStatement, is_else_if: bool, module_name: str, extra_indirection: str):
+def print_free_if_statement(s: Writer, statement: model.IfStatement, is_else_if: bool, module_name: str,
+                            extra_indirection: str):
     extra_elseif = ""
     if is_else_if:
         extra_elseif = "else "
@@ -157,6 +166,7 @@ def print_free_if_statement(s: Writer, statement: model.IfStatement, is_else_if:
 
 
 IS_INSIDE_FIXED_ARRAY = False
+
 
 def print_free_struct_member(s: Writer, d: model.Definition, module_name: str, extra_indirection: str):
     variable_name = f"object->{extra_indirection}{d.name}"
@@ -252,8 +262,8 @@ def print_free_struct_member(s: Writer, d: model.Definition, module_name: str, e
             match size:
                 case model.ArraySizeFixed(size=loop_size):
                     loop_variable = loop_size
-                case model.ArraySizeVariable(size=size):
-                    loop_variable = f"object->{size}"
+                case model.ArraySizeVariable(size=variable_size):
+                    loop_variable = f"object->{variable_size}"
                 case model.ArraySizeEndless():
                     loop_variable = f"object->amount_of_{d.name}"
                 case _:
@@ -263,12 +273,13 @@ def print_free_struct_member(s: Writer, d: model.Definition, module_name: str, e
                 case model.ArrayTypeStruct(struct_data=struct_data):
                     if container_has_free(struct_data, module_name):
                         s.open_curly(f"for (i = 0; i < {loop_variable}; ++i)")
-                        s.wln(f"{container_module_prefix(struct_data.tags, module_name)}_{struct_data.name}_free(&(({variable_name})[i]));")
-                        s.closing_curly() # for int i
+                        s.wln(
+                            f"{container_module_prefix(struct_data.tags, module_name)}_{struct_data.name}_free(&(({variable_name})[i]));")
+                        s.closing_curly()  # for int i
                 case model.ArrayTypeCstring():
                     s.open_curly(f"for (i = 0; i < {loop_variable}; ++i)")
                     s.wln(f"FREE_STRING((({variable_name})[i]));")
-                    s.closing_curly() # for int i
+                    s.closing_curly()  # for int i
 
             if type(size) is not model.ArraySizeFixed:
                 s.wln(f"free({variable_name});")
