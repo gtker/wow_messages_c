@@ -59,8 +59,8 @@ typedef struct {
     version5_Realm* realms;
 
 } version6_CMD_REALM_LIST_Server;
-WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version6_CMD_REALM_LIST_Server_write(WowLoginWriter* writer, const version6_CMD_REALM_LIST_Server* object);
 WOW_LOGIN_MESSAGES_C_EXPORT void version6_CMD_REALM_LIST_Server_free(version6_CMD_REALM_LIST_Server* object);
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version6_CMD_REALM_LIST_Server_write(WowLoginWriter* writer, const version6_CMD_REALM_LIST_Server* object);
 
 typedef version2_CMD_XFER_INITIATE version6_CMD_XFER_INITIATE;
 

@@ -1,10 +1,19 @@
+/* clang-format off */
 #include "wow_world_messages/tbc.h"
 #include "test_utils.h"
 
 #include <stdlib.h> /* abort() */
 
-static void check_result(const WowWorldResult result, const char* location, const char* object, const char* reason) {
+static void check_complete(const WowWorldResult result, const char* location, const char* object, const char* reason) {
     if (result != WWM_RESULT_SUCCESS) {
+        printf("%s: %s %s %s\n", location, object, reason, wwm_error_code_to_string(result));
+        fflush(NULL);
+        abort();
+    }
+}
+
+static void check_result(const WowWorldResult result, const char* location, const char* object, const char* reason) {
+    if (result < WWM_RESULT_SUCCESS) {
         printf("%s: %s %s %s\n", location, object, reason, wwm_error_code_to_string(result));
         fflush(NULL);
         abort();
@@ -39,13 +48,32 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_TELEPORT_TO_UNIT 0", "failed to read");
+        tbc_client_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_TELEPORT_TO_UNIT 0", "failed to read");
         check_opcode(opcode.opcode, T_CMSG_TELEPORT_TO_UNIT, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_TELEPORT_TO_UNIT 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_TELEPORT_TO_UNIT 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_TELEPORT_TO_UNIT 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_TELEPORT_TO_UNIT_write(&writer, &opcode.body.CMSG_TELEPORT_TO_UNIT);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_TELEPORT_TO_UNIT 0", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_TELEPORT_TO_UNIT 0");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_TELEPORT_TO_UNIT 0", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_TELEPORT_TO_UNIT 0", TEST_UTILS_SIDE_CLIENT);
         tbc_client_opcode_free(&opcode);
     }while (0);
 
@@ -58,13 +86,31 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_ENUM 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_ENUM 0", "failed to read");
         check_opcode(opcode.opcode, T_CMSG_CHAR_ENUM, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_ENUM 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_ENUM 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_ENUM 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_CHAR_ENUM_write(&writer);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_ENUM 0", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_CHAR_ENUM 0");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_ENUM 0", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_CHAR_ENUM 0", TEST_UTILS_SIDE_CLIENT);
     }while (0);
 
     /* CMSG_CHAR_DELETE */
@@ -76,13 +122,31 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_DELETE 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_DELETE 0", "failed to read");
         check_opcode(opcode.opcode, T_CMSG_CHAR_DELETE, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_DELETE 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_DELETE 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_DELETE 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_CHAR_DELETE_write(&writer, &opcode.body.CMSG_CHAR_DELETE);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_DELETE 0", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_CHAR_DELETE 0");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_DELETE 0", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_CHAR_DELETE 0", TEST_UTILS_SIDE_CLIENT);
     }while (0);
 
     /* CMSG_PLAYER_LOGIN */
@@ -94,13 +158,31 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PLAYER_LOGIN 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PLAYER_LOGIN 0", "failed to read");
         check_opcode(opcode.opcode, T_CMSG_PLAYER_LOGIN, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PLAYER_LOGIN 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PLAYER_LOGIN 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PLAYER_LOGIN 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_PLAYER_LOGIN_write(&writer, &opcode.body.CMSG_PLAYER_LOGIN);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PLAYER_LOGIN 0", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_PLAYER_LOGIN 0");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PLAYER_LOGIN 0", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_PLAYER_LOGIN 0", TEST_UTILS_SIDE_CLIENT);
     }while (0);
 
     /* SMSG_LOGIN_SETTIMESPEED */
@@ -112,13 +194,31 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGIN_SETTIMESPEED 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGIN_SETTIMESPEED 0", "failed to read");
         check_opcode(opcode.opcode, T_SMSG_LOGIN_SETTIMESPEED, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGIN_SETTIMESPEED 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGIN_SETTIMESPEED 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGIN_SETTIMESPEED 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_SMSG_LOGIN_SETTIMESPEED_write(&writer, &opcode.body.SMSG_LOGIN_SETTIMESPEED);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGIN_SETTIMESPEED 0", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_LOGIN_SETTIMESPEED 0");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGIN_SETTIMESPEED 0", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_LOGIN_SETTIMESPEED 0", TEST_UTILS_SIDE_SERVER);
     }while (0);
 
     /* CMSG_PLAYER_LOGOUT */
@@ -130,13 +230,31 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PLAYER_LOGOUT 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PLAYER_LOGOUT 0", "failed to read");
         check_opcode(opcode.opcode, T_CMSG_PLAYER_LOGOUT, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PLAYER_LOGOUT 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PLAYER_LOGOUT 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PLAYER_LOGOUT 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_PLAYER_LOGOUT_write(&writer);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PLAYER_LOGOUT 0", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_PLAYER_LOGOUT 0");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PLAYER_LOGOUT 0", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_PLAYER_LOGOUT 0", TEST_UTILS_SIDE_CLIENT);
     }while (0);
 
     /* CMSG_LOGOUT_REQUEST */
@@ -148,13 +266,31 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_LOGOUT_REQUEST 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_LOGOUT_REQUEST 0", "failed to read");
         check_opcode(opcode.opcode, T_CMSG_LOGOUT_REQUEST, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_LOGOUT_REQUEST 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_LOGOUT_REQUEST 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_LOGOUT_REQUEST 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_LOGOUT_REQUEST_write(&writer);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_LOGOUT_REQUEST 0", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_LOGOUT_REQUEST 0");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_LOGOUT_REQUEST 0", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_LOGOUT_REQUEST 0", TEST_UTILS_SIDE_CLIENT);
     }while (0);
 
     /* SMSG_LOGOUT_RESPONSE */
@@ -166,13 +302,31 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGOUT_RESPONSE 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGOUT_RESPONSE 0", "failed to read");
         check_opcode(opcode.opcode, T_SMSG_LOGOUT_RESPONSE, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGOUT_RESPONSE 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGOUT_RESPONSE 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGOUT_RESPONSE 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_SMSG_LOGOUT_RESPONSE_write(&writer, &opcode.body.SMSG_LOGOUT_RESPONSE);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGOUT_RESPONSE 0", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_LOGOUT_RESPONSE 0");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGOUT_RESPONSE 0", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_LOGOUT_RESPONSE 0", TEST_UTILS_SIDE_SERVER);
     }while (0);
 
     /* SMSG_LOGOUT_COMPLETE */
@@ -184,13 +338,31 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGOUT_COMPLETE 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGOUT_COMPLETE 0", "failed to read");
         check_opcode(opcode.opcode, T_SMSG_LOGOUT_COMPLETE, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGOUT_COMPLETE 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGOUT_COMPLETE 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGOUT_COMPLETE 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_SMSG_LOGOUT_COMPLETE_write(&writer);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGOUT_COMPLETE 0", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_LOGOUT_COMPLETE 0");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_LOGOUT_COMPLETE 0", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_LOGOUT_COMPLETE 0", TEST_UTILS_SIDE_SERVER);
     }while (0);
 
     /* CMSG_PET_NAME_QUERY */
@@ -202,13 +374,31 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PET_NAME_QUERY 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PET_NAME_QUERY 0", "failed to read");
         check_opcode(opcode.opcode, T_CMSG_PET_NAME_QUERY, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PET_NAME_QUERY 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PET_NAME_QUERY 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PET_NAME_QUERY 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_PET_NAME_QUERY_write(&writer, &opcode.body.CMSG_PET_NAME_QUERY);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PET_NAME_QUERY 0", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_PET_NAME_QUERY 0");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PET_NAME_QUERY 0", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_PET_NAME_QUERY 0", TEST_UTILS_SIDE_CLIENT);
     }while (0);
 
     /* SMSG_DESTROY_OBJECT */
@@ -220,13 +410,31 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_DESTROY_OBJECT 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_DESTROY_OBJECT 0", "failed to read");
         check_opcode(opcode.opcode, T_SMSG_DESTROY_OBJECT, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_DESTROY_OBJECT 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_DESTROY_OBJECT 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_DESTROY_OBJECT 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_SMSG_DESTROY_OBJECT_write(&writer, &opcode.body.SMSG_DESTROY_OBJECT);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_DESTROY_OBJECT 0", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_DESTROY_OBJECT 0");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_DESTROY_OBJECT 0", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_DESTROY_OBJECT 0", TEST_UTILS_SIDE_SERVER);
     }while (0);
 
     /* MSG_MOVE_TELEPORT_ACK_Client */
@@ -238,13 +446,31 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_TELEPORT_ACK_Client 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_TELEPORT_ACK_Client 0", "failed to read");
         check_opcode(opcode.opcode, T_MSG_MOVE_TELEPORT_ACK, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_TELEPORT_ACK_Client 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_TELEPORT_ACK_Client 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_TELEPORT_ACK_Client 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_MSG_MOVE_TELEPORT_ACK_Client_write(&writer, &opcode.body.MSG_MOVE_TELEPORT_ACK_Client);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_TELEPORT_ACK_Client 0", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_TELEPORT_ACK_Client 0");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_MOVE_TELEPORT_ACK_Client 0", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " MSG_MOVE_TELEPORT_ACK_Client 0", TEST_UTILS_SIDE_CLIENT);
     }while (0);
 
     /* SMSG_TUTORIAL_FLAGS */
@@ -256,13 +482,31 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_TUTORIAL_FLAGS 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_TUTORIAL_FLAGS 0", "failed to read");
         check_opcode(opcode.opcode, T_SMSG_TUTORIAL_FLAGS, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_TUTORIAL_FLAGS 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_TUTORIAL_FLAGS 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_TUTORIAL_FLAGS 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_SMSG_TUTORIAL_FLAGS_write(&writer, &opcode.body.SMSG_TUTORIAL_FLAGS);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_TUTORIAL_FLAGS 0", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_TUTORIAL_FLAGS 0");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_TUTORIAL_FLAGS 0", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_TUTORIAL_FLAGS 0", TEST_UTILS_SIDE_SERVER);
     }while (0);
 
     /* CMSG_STANDSTATECHANGE */
@@ -274,13 +518,31 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_STANDSTATECHANGE 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_STANDSTATECHANGE 0", "failed to read");
         check_opcode(opcode.opcode, T_CMSG_STANDSTATECHANGE, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_STANDSTATECHANGE 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_STANDSTATECHANGE 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_STANDSTATECHANGE 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_STANDSTATECHANGE_write(&writer, &opcode.body.CMSG_STANDSTATECHANGE);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_STANDSTATECHANGE 0", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_STANDSTATECHANGE 0");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_STANDSTATECHANGE 0", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_STANDSTATECHANGE 0", TEST_UTILS_SIDE_CLIENT);
     }while (0);
 
     /* CMSG_AUTOEQUIP_ITEM */
@@ -292,13 +554,31 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_AUTOEQUIP_ITEM 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_AUTOEQUIP_ITEM 0", "failed to read");
         check_opcode(opcode.opcode, T_CMSG_AUTOEQUIP_ITEM, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_AUTOEQUIP_ITEM 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_AUTOEQUIP_ITEM 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_AUTOEQUIP_ITEM 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_AUTOEQUIP_ITEM_write(&writer, &opcode.body.CMSG_AUTOEQUIP_ITEM);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_AUTOEQUIP_ITEM 0", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_AUTOEQUIP_ITEM 0");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_AUTOEQUIP_ITEM 0", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_AUTOEQUIP_ITEM 0", TEST_UTILS_SIDE_CLIENT);
     }while (0);
 
     /* CMSG_INITIATE_TRADE */
@@ -310,13 +590,31 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_INITIATE_TRADE 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_INITIATE_TRADE 0", "failed to read");
         check_opcode(opcode.opcode, T_CMSG_INITIATE_TRADE, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_INITIATE_TRADE 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_INITIATE_TRADE 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_INITIATE_TRADE 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_INITIATE_TRADE_write(&writer, &opcode.body.CMSG_INITIATE_TRADE);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_INITIATE_TRADE 0", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_INITIATE_TRADE 0");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_INITIATE_TRADE 0", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_INITIATE_TRADE 0", TEST_UTILS_SIDE_CLIENT);
     }while (0);
 
     /* CMSG_CANCEL_TRADE */
@@ -328,13 +626,31 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CANCEL_TRADE 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CANCEL_TRADE 0", "failed to read");
         check_opcode(opcode.opcode, T_CMSG_CANCEL_TRADE, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CANCEL_TRADE 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CANCEL_TRADE 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CANCEL_TRADE 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_CANCEL_TRADE_write(&writer);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CANCEL_TRADE 0", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_CANCEL_TRADE 0");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CANCEL_TRADE 0", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_CANCEL_TRADE 0", TEST_UTILS_SIDE_CLIENT);
     }while (0);
 
     /* SMSG_INITIAL_SPELLS */
@@ -346,13 +662,32 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_INITIAL_SPELLS 0", "failed to read");
+        tbc_server_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_INITIAL_SPELLS 0", "failed to read");
         check_opcode(opcode.opcode, T_SMSG_INITIAL_SPELLS, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_INITIAL_SPELLS 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_INITIAL_SPELLS 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_INITIAL_SPELLS 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_SMSG_INITIAL_SPELLS_write(&writer, &opcode.body.SMSG_INITIAL_SPELLS);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_INITIAL_SPELLS 0", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_INITIAL_SPELLS 0");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_INITIAL_SPELLS 0", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_INITIAL_SPELLS 0", TEST_UTILS_SIDE_SERVER);
         tbc_server_opcode_free(&opcode);
     }while (0);
 
@@ -365,13 +700,31 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CANCEL_CAST 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CANCEL_CAST 0", "failed to read");
         check_opcode(opcode.opcode, T_CMSG_CANCEL_CAST, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CANCEL_CAST 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CANCEL_CAST 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CANCEL_CAST 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_CANCEL_CAST_write(&writer, &opcode.body.CMSG_CANCEL_CAST);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CANCEL_CAST 0", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_CANCEL_CAST 0");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CANCEL_CAST 0", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_CANCEL_CAST 0", TEST_UTILS_SIDE_CLIENT);
     }while (0);
 
     do {
@@ -382,13 +735,31 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CANCEL_CAST 1", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CANCEL_CAST 1", "failed to read");
         check_opcode(opcode.opcode, T_CMSG_CANCEL_CAST, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CANCEL_CAST 1");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CANCEL_CAST 1", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CANCEL_CAST 1", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_CANCEL_CAST_write(&writer, &opcode.body.CMSG_CANCEL_CAST);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CANCEL_CAST 1", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_CANCEL_CAST 1");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CANCEL_CAST 1", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_CANCEL_CAST 1", TEST_UTILS_SIDE_CLIENT);
     }while (0);
 
     /* CMSG_SET_SELECTION */
@@ -400,13 +771,31 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_SET_SELECTION 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_SET_SELECTION 0", "failed to read");
         check_opcode(opcode.opcode, T_CMSG_SET_SELECTION, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_SET_SELECTION 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_SET_SELECTION 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_SET_SELECTION 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_SET_SELECTION_write(&writer, &opcode.body.CMSG_SET_SELECTION);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_SET_SELECTION 0", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_SET_SELECTION 0");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_SET_SELECTION 0", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_SET_SELECTION 0", TEST_UTILS_SIDE_CLIENT);
     }while (0);
 
     /* CMSG_ATTACKSWING */
@@ -418,13 +807,31 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_ATTACKSWING 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_ATTACKSWING 0", "failed to read");
         check_opcode(opcode.opcode, T_CMSG_ATTACKSWING, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_ATTACKSWING 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_ATTACKSWING 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_ATTACKSWING 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_ATTACKSWING_write(&writer, &opcode.body.CMSG_ATTACKSWING);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_ATTACKSWING 0", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_ATTACKSWING 0");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_ATTACKSWING 0", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_ATTACKSWING 0", TEST_UTILS_SIDE_CLIENT);
     }while (0);
 
     /* SMSG_ATTACKSTART */
@@ -436,13 +843,31 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ATTACKSTART 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ATTACKSTART 0", "failed to read");
         check_opcode(opcode.opcode, T_SMSG_ATTACKSTART, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ATTACKSTART 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ATTACKSTART 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ATTACKSTART 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_SMSG_ATTACKSTART_write(&writer, &opcode.body.SMSG_ATTACKSTART);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ATTACKSTART 0", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_ATTACKSTART 0");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ATTACKSTART 0", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_ATTACKSTART 0", TEST_UTILS_SIDE_SERVER);
     }while (0);
 
     /* SMSG_ATTACKSTOP */
@@ -454,13 +879,31 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ATTACKSTOP 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ATTACKSTOP 0", "failed to read");
         check_opcode(opcode.opcode, T_SMSG_ATTACKSTOP, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ATTACKSTOP 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ATTACKSTOP 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ATTACKSTOP 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_SMSG_ATTACKSTOP_write(&writer, &opcode.body.SMSG_ATTACKSTOP);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ATTACKSTOP 0", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_ATTACKSTOP 0");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ATTACKSTOP 0", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_ATTACKSTOP 0", TEST_UTILS_SIDE_SERVER);
     }while (0);
 
     /* CMSG_QUERY_TIME */
@@ -472,13 +915,31 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_QUERY_TIME 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_QUERY_TIME 0", "failed to read");
         check_opcode(opcode.opcode, T_CMSG_QUERY_TIME, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_QUERY_TIME 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_QUERY_TIME 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_QUERY_TIME 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_QUERY_TIME_write(&writer);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_QUERY_TIME 0", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_QUERY_TIME 0");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_QUERY_TIME 0", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_QUERY_TIME 0", TEST_UTILS_SIDE_CLIENT);
     }while (0);
 
     /* CMSG_PING */
@@ -490,13 +951,31 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PING 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PING 0", "failed to read");
         check_opcode(opcode.opcode, T_CMSG_PING, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PING 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PING 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PING 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_PING_write(&writer, &opcode.body.CMSG_PING);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PING 0", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_PING 0");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_PING 0", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_PING 0", TEST_UTILS_SIDE_CLIENT);
     }while (0);
 
     /* SMSG_PONG */
@@ -508,13 +987,31 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_PONG 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_PONG 0", "failed to read");
         check_opcode(opcode.opcode, T_SMSG_PONG, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_PONG 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_PONG 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_PONG 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_SMSG_PONG_write(&writer, &opcode.body.SMSG_PONG);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_PONG 0", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_PONG 0");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_PONG 0", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_PONG 0", TEST_UTILS_SIDE_SERVER);
     }while (0);
 
     /* CMSG_SETSHEATHED */
@@ -526,13 +1023,31 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_SETSHEATHED 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_SETSHEATHED 0", "failed to read");
         check_opcode(opcode.opcode, T_CMSG_SETSHEATHED, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_SETSHEATHED 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_SETSHEATHED 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_SETSHEATHED 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_SETSHEATHED_write(&writer, &opcode.body.CMSG_SETSHEATHED);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_SETSHEATHED 0", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_SETSHEATHED 0");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_SETSHEATHED 0", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_SETSHEATHED 0", TEST_UTILS_SIDE_CLIENT);
     }while (0);
 
     /* SMSG_AUTH_CHALLENGE */
@@ -544,13 +1059,31 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_AUTH_CHALLENGE 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_AUTH_CHALLENGE 0", "failed to read");
         check_opcode(opcode.opcode, T_SMSG_AUTH_CHALLENGE, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_AUTH_CHALLENGE 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_AUTH_CHALLENGE 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_AUTH_CHALLENGE 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_SMSG_AUTH_CHALLENGE_write(&writer, &opcode.body.SMSG_AUTH_CHALLENGE);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_AUTH_CHALLENGE 0", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_AUTH_CHALLENGE 0");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_AUTH_CHALLENGE 0", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_AUTH_CHALLENGE 0", TEST_UTILS_SIDE_SERVER);
     }while (0);
 
     /* CMSG_AUTH_SESSION */
@@ -564,23 +1097,42 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_AUTH_SESSION 0", "failed to read");
+        tbc_client_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_AUTH_SESSION 0", "failed to read");
         check_opcode(opcode.opcode, T_CMSG_AUTH_SESSION, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_AUTH_SESSION 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_AUTH_SESSION 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_AUTH_SESSION 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_AUTH_SESSION_write(&writer, &opcode.body.CMSG_AUTH_SESSION);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_AUTH_SESSION 0", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_AUTH_SESSION 0", "failed to write");
+
         reader2 = wwm_create_reader(write_buffer, sizeof(write_buffer));
 
         result = tbc_client_opcode_read(&reader2, &opcode2);
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_AUTH_SESSION 0", "failed to read second");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_AUTH_SESSION 0", "failed to read second");
         check_opcode(opcode2.opcode, T_CMSG_AUTH_SESSION, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_AUTH_SESSION 0");
 
         writer2 = wwm_create_writer(write_buffer2, sizeof(write_buffer));
         result = tbc_client_opcode_write(&writer2, &opcode2);
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_AUTH_SESSION 0", "failed to write second");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_AUTH_SESSION 0", "failed to write second");
 
-        wlm_test_compare_buffers(write_buffer, write_buffer2, writer.index, __FILE__ ":" STRINGIFY(__LINE__) " CMSG_AUTH_SESSION 0");
+        world_test_compare_buffers(write_buffer, write_buffer2, writer.index, __FILE__ ":" STRINGIFY(__LINE__) " CMSG_AUTH_SESSION 0", TEST_UTILS_SIDE_CLIENT);
 
         tbc_client_opcode_free(&opcode2);
         tbc_client_opcode_free(&opcode);
@@ -595,13 +1147,31 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ACCOUNT_DATA_TIMES 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ACCOUNT_DATA_TIMES 0", "failed to read");
         check_opcode(opcode.opcode, T_SMSG_ACCOUNT_DATA_TIMES, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ACCOUNT_DATA_TIMES 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ACCOUNT_DATA_TIMES 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ACCOUNT_DATA_TIMES 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_SMSG_ACCOUNT_DATA_TIMES_write(&writer, &opcode.body.SMSG_ACCOUNT_DATA_TIMES);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ACCOUNT_DATA_TIMES 0", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_ACCOUNT_DATA_TIMES 0");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_ACCOUNT_DATA_TIMES 0", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_ACCOUNT_DATA_TIMES 0", TEST_UTILS_SIDE_SERVER);
     }while (0);
 
     /* CMSG_REQUEST_ACCOUNT_DATA */
@@ -613,13 +1183,31 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_REQUEST_ACCOUNT_DATA 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_REQUEST_ACCOUNT_DATA 0", "failed to read");
         check_opcode(opcode.opcode, T_CMSG_REQUEST_ACCOUNT_DATA, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_REQUEST_ACCOUNT_DATA 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_REQUEST_ACCOUNT_DATA 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_REQUEST_ACCOUNT_DATA 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_REQUEST_ACCOUNT_DATA_write(&writer, &opcode.body.CMSG_REQUEST_ACCOUNT_DATA);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_REQUEST_ACCOUNT_DATA 0", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_REQUEST_ACCOUNT_DATA 0");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_REQUEST_ACCOUNT_DATA 0", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_REQUEST_ACCOUNT_DATA 0", TEST_UTILS_SIDE_CLIENT);
     }while (0);
 
     /* CMSG_UPDATE_ACCOUNT_DATA */
@@ -633,23 +1221,42 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 0", "failed to read");
+        tbc_client_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 0", "failed to read");
         check_opcode(opcode.opcode, T_CMSG_UPDATE_ACCOUNT_DATA, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_UPDATE_ACCOUNT_DATA_write(&writer, &opcode.body.CMSG_UPDATE_ACCOUNT_DATA);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 0", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 0", "failed to write");
+
         reader2 = wwm_create_reader(write_buffer, sizeof(write_buffer));
 
         result = tbc_client_opcode_read(&reader2, &opcode2);
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 0", "failed to read second");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 0", "failed to read second");
         check_opcode(opcode2.opcode, T_CMSG_UPDATE_ACCOUNT_DATA, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 0");
 
         writer2 = wwm_create_writer(write_buffer2, sizeof(write_buffer));
         result = tbc_client_opcode_write(&writer2, &opcode2);
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 0", "failed to write second");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 0", "failed to write second");
 
-        wlm_test_compare_buffers(write_buffer, write_buffer2, writer.index, __FILE__ ":" STRINGIFY(__LINE__) " CMSG_UPDATE_ACCOUNT_DATA 0");
+        world_test_compare_buffers(write_buffer, write_buffer2, writer.index, __FILE__ ":" STRINGIFY(__LINE__) " CMSG_UPDATE_ACCOUNT_DATA 0", TEST_UTILS_SIDE_CLIENT);
 
         tbc_client_opcode_free(&opcode2);
         tbc_client_opcode_free(&opcode);
@@ -665,23 +1272,42 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 1", "failed to read");
+        tbc_client_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 1", "failed to read");
         check_opcode(opcode.opcode, T_CMSG_UPDATE_ACCOUNT_DATA, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 1");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 1", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 1", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_UPDATE_ACCOUNT_DATA_write(&writer, &opcode.body.CMSG_UPDATE_ACCOUNT_DATA);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 1", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 1", "failed to write");
+
         reader2 = wwm_create_reader(write_buffer, sizeof(write_buffer));
 
         result = tbc_client_opcode_read(&reader2, &opcode2);
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 1", "failed to read second");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 1", "failed to read second");
         check_opcode(opcode2.opcode, T_CMSG_UPDATE_ACCOUNT_DATA, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 1");
 
         writer2 = wwm_create_writer(write_buffer2, sizeof(write_buffer));
         result = tbc_client_opcode_write(&writer2, &opcode2);
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 1", "failed to write second");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_UPDATE_ACCOUNT_DATA 1", "failed to write second");
 
-        wlm_test_compare_buffers(write_buffer, write_buffer2, writer.index, __FILE__ ":" STRINGIFY(__LINE__) " CMSG_UPDATE_ACCOUNT_DATA 1");
+        world_test_compare_buffers(write_buffer, write_buffer2, writer.index, __FILE__ ":" STRINGIFY(__LINE__) " CMSG_UPDATE_ACCOUNT_DATA 1", TEST_UTILS_SIDE_CLIENT);
 
         tbc_client_opcode_free(&opcode2);
         tbc_client_opcode_free(&opcode);
@@ -696,13 +1322,31 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_GMTICKET_GETTICKET 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_GMTICKET_GETTICKET 0", "failed to read");
         check_opcode(opcode.opcode, T_CMSG_GMTICKET_GETTICKET, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_GMTICKET_GETTICKET 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_GMTICKET_GETTICKET 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_GMTICKET_GETTICKET 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_GMTICKET_GETTICKET_write(&writer);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_GMTICKET_GETTICKET 0", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_GMTICKET_GETTICKET 0");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_GMTICKET_GETTICKET 0", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_GMTICKET_GETTICKET 0", TEST_UTILS_SIDE_CLIENT);
     }while (0);
 
     /* MSG_AUCTION_HELLO_Client */
@@ -714,13 +1358,31 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_AUCTION_HELLO_Client 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_AUCTION_HELLO_Client 0", "failed to read");
         check_opcode(opcode.opcode, T_MSG_AUCTION_HELLO, __FILE__ ":" STRINGIFY(__LINE__), "MSG_AUCTION_HELLO_Client 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_AUCTION_HELLO_Client 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_AUCTION_HELLO_Client 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_MSG_AUCTION_HELLO_Client_write(&writer, &opcode.body.MSG_AUCTION_HELLO_Client);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_AUCTION_HELLO_Client 0", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " MSG_AUCTION_HELLO_Client 0");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_AUCTION_HELLO_Client 0", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " MSG_AUCTION_HELLO_Client 0", TEST_UTILS_SIDE_CLIENT);
     }while (0);
 
     /* CMSG_SET_ACTIVE_MOVER */
@@ -732,13 +1394,31 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_SET_ACTIVE_MOVER 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_SET_ACTIVE_MOVER 0", "failed to read");
         check_opcode(opcode.opcode, T_CMSG_SET_ACTIVE_MOVER, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_SET_ACTIVE_MOVER 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_SET_ACTIVE_MOVER 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_SET_ACTIVE_MOVER 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_SET_ACTIVE_MOVER_write(&writer, &opcode.body.CMSG_SET_ACTIVE_MOVER);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_SET_ACTIVE_MOVER 0", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_SET_ACTIVE_MOVER 0");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_SET_ACTIVE_MOVER 0", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_SET_ACTIVE_MOVER 0", TEST_UTILS_SIDE_CLIENT);
     }while (0);
 
     /* MSG_QUERY_NEXT_MAIL_TIME_Client */
@@ -750,13 +1430,31 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_QUERY_NEXT_MAIL_TIME_Client 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_QUERY_NEXT_MAIL_TIME_Client 0", "failed to read");
         check_opcode(opcode.opcode, T_MSG_QUERY_NEXT_MAIL_TIME, __FILE__ ":" STRINGIFY(__LINE__), "MSG_QUERY_NEXT_MAIL_TIME_Client 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_QUERY_NEXT_MAIL_TIME_Client 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_QUERY_NEXT_MAIL_TIME_Client 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_MSG_QUERY_NEXT_MAIL_TIME_Client_write(&writer);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_QUERY_NEXT_MAIL_TIME_Client 0", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " MSG_QUERY_NEXT_MAIL_TIME_Client 0");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "MSG_QUERY_NEXT_MAIL_TIME_Client 0", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " MSG_QUERY_NEXT_MAIL_TIME_Client 0", TEST_UTILS_SIDE_CLIENT);
     }while (0);
 
     /* CMSG_MEETINGSTONE_INFO */
@@ -768,13 +1466,31 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_MEETINGSTONE_INFO 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_MEETINGSTONE_INFO 0", "failed to read");
         check_opcode(opcode.opcode, T_CMSG_MEETINGSTONE_INFO, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_MEETINGSTONE_INFO 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_MEETINGSTONE_INFO 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_MEETINGSTONE_INFO 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_MEETINGSTONE_INFO_write(&writer);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_MEETINGSTONE_INFO 0", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_MEETINGSTONE_INFO 0");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_MEETINGSTONE_INFO 0", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_MEETINGSTONE_INFO 0", TEST_UTILS_SIDE_CLIENT);
     }while (0);
 
     /* CMSG_CHAR_RENAME */
@@ -786,13 +1502,32 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_RENAME 0", "failed to read");
+        tbc_client_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_RENAME 0", "failed to read");
         check_opcode(opcode.opcode, T_CMSG_CHAR_RENAME, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_RENAME 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_RENAME 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_RENAME 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_CHAR_RENAME_write(&writer, &opcode.body.CMSG_CHAR_RENAME);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_RENAME 0", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_CHAR_RENAME 0");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_CHAR_RENAME 0", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_CHAR_RENAME 0", TEST_UTILS_SIDE_CLIENT);
         tbc_client_opcode_free(&opcode);
     }while (0);
 
@@ -805,13 +1540,31 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_REQUEST_RAID_INFO 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_REQUEST_RAID_INFO 0", "failed to read");
         check_opcode(opcode.opcode, T_CMSG_REQUEST_RAID_INFO, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_REQUEST_RAID_INFO 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_REQUEST_RAID_INFO 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_REQUEST_RAID_INFO 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_REQUEST_RAID_INFO_write(&writer);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_REQUEST_RAID_INFO 0", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_REQUEST_RAID_INFO 0");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_REQUEST_RAID_INFO 0", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_REQUEST_RAID_INFO 0", TEST_UTILS_SIDE_CLIENT);
     }while (0);
 
     /* CMSG_MOVE_TIME_SKIPPED */
@@ -823,13 +1576,31 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_MOVE_TIME_SKIPPED 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_MOVE_TIME_SKIPPED 0", "failed to read");
         check_opcode(opcode.opcode, T_CMSG_MOVE_TIME_SKIPPED, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_MOVE_TIME_SKIPPED 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_MOVE_TIME_SKIPPED 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_MOVE_TIME_SKIPPED 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_MOVE_TIME_SKIPPED_write(&writer, &opcode.body.CMSG_MOVE_TIME_SKIPPED);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_MOVE_TIME_SKIPPED 0", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_MOVE_TIME_SKIPPED 0");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_MOVE_TIME_SKIPPED 0", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_MOVE_TIME_SKIPPED 0", TEST_UTILS_SIDE_CLIENT);
     }while (0);
 
     /* CMSG_BATTLEFIELD_STATUS */
@@ -841,13 +1612,31 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_BATTLEFIELD_STATUS 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_BATTLEFIELD_STATUS 0", "failed to read");
         check_opcode(opcode.opcode, T_CMSG_BATTLEFIELD_STATUS, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_BATTLEFIELD_STATUS 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_BATTLEFIELD_STATUS 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_BATTLEFIELD_STATUS 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_CMSG_BATTLEFIELD_STATUS_write(&writer);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_BATTLEFIELD_STATUS 0", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_BATTLEFIELD_STATUS 0");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMSG_BATTLEFIELD_STATUS 0", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMSG_BATTLEFIELD_STATUS 0", TEST_UTILS_SIDE_CLIENT);
     }while (0);
 
     /* SMSG_SPLINE_SET_RUN_SPEED */
@@ -859,13 +1648,31 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_SPLINE_SET_RUN_SPEED 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_SPLINE_SET_RUN_SPEED 0", "failed to read");
         check_opcode(opcode.opcode, T_SMSG_SPLINE_SET_RUN_SPEED, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_SPLINE_SET_RUN_SPEED 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_SPLINE_SET_RUN_SPEED 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_SPLINE_SET_RUN_SPEED 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_SMSG_SPLINE_SET_RUN_SPEED_write(&writer, &opcode.body.SMSG_SPLINE_SET_RUN_SPEED);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_SPLINE_SET_RUN_SPEED 0", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_SPLINE_SET_RUN_SPEED 0");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_SPLINE_SET_RUN_SPEED 0", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_SPLINE_SET_RUN_SPEED 0", TEST_UTILS_SIDE_SERVER);
     }while (0);
 
     /* SMSG_MOTD */
@@ -877,13 +1684,32 @@ int main(void) {
         reader = wwm_create_reader(buffer, sizeof(buffer));
         result = tbc_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_MOTD 0", "failed to read");
+        tbc_server_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_MOTD 0", "failed to read");
         check_opcode(opcode.opcode, T_SMSG_MOTD, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_MOTD 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = tbc_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_MOTD 0", "failed partial");
+            if (result == WWM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_MOTD 0", "gave too much index back");
+            }
+        }
+
         writer = wwm_create_writer(write_buffer, sizeof(write_buffer));
         result = tbc_SMSG_MOTD_write(&writer, &opcode.body.SMSG_MOTD);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_MOTD 0", "failed to write");
-        wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_MOTD 0");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "SMSG_MOTD 0", "failed to write");
+
+        world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " SMSG_MOTD 0", TEST_UTILS_SIDE_SERVER);
         tbc_server_opcode_free(&opcode);
     }while (0);
 

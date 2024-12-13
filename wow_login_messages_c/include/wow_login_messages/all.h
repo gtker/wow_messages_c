@@ -71,8 +71,8 @@ Uppercasing in regards to non-ASCII values is little weird. See `https://docs.rs
     char* account_name;
 
 } all_CMD_AUTH_LOGON_CHALLENGE_Client;
-WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult all_CMD_AUTH_LOGON_CHALLENGE_Client_write(WowLoginWriter* writer, const all_CMD_AUTH_LOGON_CHALLENGE_Client* object);
 WOW_LOGIN_MESSAGES_C_EXPORT void all_CMD_AUTH_LOGON_CHALLENGE_Client_free(all_CMD_AUTH_LOGON_CHALLENGE_Client* object);
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult all_CMD_AUTH_LOGON_CHALLENGE_Client_write(WowLoginWriter* writer, const all_CMD_AUTH_LOGON_CHALLENGE_Client* object);
 
 /* First message sent by the client when attempting to reconnect. The server will respond with [CMD_AUTH_RECONNECT_CHALLENGE_Server].
 Has the exact same layout as [CMD_AUTH_LOGON_CHALLENGE_Client]. */
@@ -92,8 +92,8 @@ Uppercasing in regards to non-ASCII values is little weird. See `https://docs.rs
     char* account_name;
 
 } all_CMD_AUTH_RECONNECT_CHALLENGE_Client;
-WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult all_CMD_AUTH_RECONNECT_CHALLENGE_Client_write(WowLoginWriter* writer, const all_CMD_AUTH_RECONNECT_CHALLENGE_Client* object);
 WOW_LOGIN_MESSAGES_C_EXPORT void all_CMD_AUTH_RECONNECT_CHALLENGE_Client_free(all_CMD_AUTH_RECONNECT_CHALLENGE_Client* object);
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult all_CMD_AUTH_RECONNECT_CHALLENGE_Client_write(WowLoginWriter* writer, const all_CMD_AUTH_RECONNECT_CHALLENGE_Client* object);
 
 typedef struct {
     WowLoginOpcode opcode;

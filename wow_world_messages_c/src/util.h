@@ -6,39 +6,24 @@
 #include <malloc.h>
 #include <stdint.h>
 
-#define WWM_CHECK_RETURN_CODE(action)                    \
-    do                                                   \
-    {                                                    \
-        int result_variable_macro = action;              \
-        if (result_variable_macro != WWM_RESULT_SUCCESS) \
-        {                                                \
-            return result_variable_macro;                \
-        }                                                \
-    }                                                    \
+#define WWM_CHECK_RETURN_CODE(action)            \
+    do                                           \
+    {                                            \
+        _return_value = action;                  \
+        if (_return_value != WWM_RESULT_SUCCESS) \
+        {                                        \
+            goto cleanup;                        \
+        }                                        \
+    }                                            \
     while (0)
 
-#define WWM_CHECK_LENGTH(type_size)                       \
-    stream->index;                                        \
-    do                                                    \
-    {                                                     \
-        if (stream->index + (type_size) > stream->length) \
-        {                                                 \
-            return WWM_RESULT_NOT_ENOUGH_BYTES;           \
-        }                                                 \
-        stream->index += (type_size);                     \
-    }                                                     \
-    while (0)
-
-#define SKIP_FORWARD_BYTES(type_size)                     \
-    do                                                    \
-    {                                                     \
-        if (reader->index + (type_size) > reader->length) \
-        {                                                 \
-            return WWM_RESULT_NOT_ENOUGH_BYTES;           \
-        }                                                 \
-        reader->index += (type_size);                     \
-    }                                                     \
-    while (0)
+#define SKIP_FORWARD_BYTES(type_size)                                           \
+    if (reader->index + (size_t)(type_size) > reader->length)                   \
+    {                                                                           \
+        _return_value = (reader->index + ((size_t)type_size)) - reader->length; \
+        goto cleanup;                                                           \
+    }                                                                           \
+    reader->index += (size_t)(type_size)
 
 WowWorldResult wwm_read_u8(WowWorldReader* stream, uint8_t* value);
 
@@ -180,9 +165,11 @@ size_t wwm_named_guid_size(const NamedGuid* value);
 void wwm_named_guid_free(NamedGuid* value);
 
 WowWorldResult wwm_read_variable_item_random_property(WowWorldReader* reader, VariableItemRandomProperty* value);
-#define READ_VARIABLE_ITEM_RANDOM_PROPERTY(variable) WWM_CHECK_RETURN_CODE(wwm_read_variable_item_random_property(reader, &variable))
+#define READ_VARIABLE_ITEM_RANDOM_PROPERTY(variable) \
+    WWM_CHECK_RETURN_CODE(wwm_read_variable_item_random_property(reader, &variable))
 WowWorldResult wwm_write_variable_item_random_property(WowWorldWriter* writer, const VariableItemRandomProperty* value);
-#define WRITE_VARIABLE_ITEM_RANDOM_PROPERTY(variable) WWM_CHECK_RETURN_CODE(wwm_write_variable_item_random_property(writer, &variable))
+#define WRITE_VARIABLE_ITEM_RANDOM_PROPERTY(variable) \
+    WWM_CHECK_RETURN_CODE(wwm_write_variable_item_random_property(writer, &variable))
 size_t wwm_variable_item_random_property_size(const VariableItemRandomProperty* value);
 
 #define READ_ARRAY(variable, arrayLength, readAction) \
@@ -209,6 +196,7 @@ size_t wwm_variable_item_random_property_size(const VariableItemRandomProperty* 
 
 #define WWM_COMPRESS_EXTRA_LENGTH 11
 
+size_t wwm_compress_data_size(const unsigned char* src, size_t src_length);
 size_t wwm_compress_data(const unsigned char* src, size_t src_length, unsigned char* dst, size_t dst_length);
 size_t wwm_decompress_data(const unsigned char* src, size_t src_length, unsigned char* dst, size_t dst_length);
 

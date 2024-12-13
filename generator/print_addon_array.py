@@ -34,12 +34,14 @@ def print_addon_array_c(s: Writer, h: Writer, v: model.WorldVersion):
         }}
 
         static WowWorldResult {module_name}_addon_array_write(WowWorldWriter* writer, const {module_name}_AddonArray* array) {{
+            int _return_value;
             uint32_t i;
             for (i = 0; i < array->amount_of_addons; ++i) {{
                 WWM_CHECK_RETURN_CODE({module_name}_Addon_write(writer, &array->addons[i]));
             }}
 
             return WWM_RESULT_SUCCESS;
+        cleanup: return _return_value; /* TODO pre check before writing */
         }}
     """)
 

@@ -11,76 +11,89 @@
 #include <stdint.h>
 #include <string.h> /* strlen */
 
-#define WLM_CHECK_RETURN_CODE(action)                    \
-    do                                                   \
-    {                                                    \
-        int result_variable_macro = action;              \
-        if (result_variable_macro != WLM_RESULT_SUCCESS) \
-        {                                                \
-            return result_variable_macro;                \
-        }                                                \
-    }                                                    \
+#define WLM_CHECK_RETURN_CODE(action)            \
+    do                                           \
+    {                                            \
+        _return_value = action;                  \
+        if (_return_value != WLM_RESULT_SUCCESS) \
+        {                                        \
+            goto cleanup;                        \
+        }                                        \
+    }                                            \
     while (0)
 
-#define WLM_CHECK_LENGTH(type_size)                       \
-    stream->index;                                        \
-    do                                                    \
-    {                                                     \
-        if (stream->index + (type_size) > stream->length) \
-        {                                                 \
-            return WLM_RESULT_NOT_ENOUGH_BYTES;           \
-        }                                                 \
-        stream->index += (type_size);                     \
-    }                                                     \
+#define WLM_CHECK_LENGTH(type_size)                                                 \
+    stream->index;                                                                  \
+    do                                                                              \
+    {                                                                               \
+        if (stream->index + (size_t)(type_size) > stream->length)                   \
+        {                                                                           \
+            _return_value = (stream->index + (size_t)(type_size)) - stream->length; \
+            goto cleanup;                                                           \
+        }                                                                           \
+        stream->index += (size_t)(type_size);                                       \
+    }                                                                               \
     while (0)
 
-#define SKIP_FORWARD_BYTES(type_size)                     \
-    do                                                    \
-    {                                                     \
-        if (reader->index + (type_size) > reader->length) \
-        {                                                 \
-            return WLM_RESULT_NOT_ENOUGH_BYTES;           \
-        }                                                 \
-        reader->index += (type_size);                     \
-    }                                                     \
+#define SKIP_FORWARD_BYTES(type_size)                                               \
+    do                                                                              \
+    {                                                                               \
+        if (reader->index + (size_t)(type_size) > reader->length)                   \
+        {                                                                           \
+            _return_value = (reader->index + (size_t)(type_size)) - reader->length; \
+            goto cleanup;                                                           \
+        }                                                                           \
+        reader->index += (size_t)(type_size);                                       \
+    }                                                                               \
     while (0)
 
 static WowLoginResult wlm_read_u8(WowLoginReader* stream, uint8_t* value)
 {
+    int _return_value;
     const size_t index = WLM_CHECK_LENGTH(1);
 
     *value = stream->source[index];
 
     return WLM_RESULT_SUCCESS;
+
+cleanup:
+    return _return_value;
 }
 
 #define READ_U8(variable) WLM_CHECK_RETURN_CODE(wlm_read_u8(reader, (uint8_t*)&variable))
 
 static WowLoginResult wlm_read_u16(WowLoginReader* stream, uint16_t* value)
 {
+    int _return_value;
     const size_t index = WLM_CHECK_LENGTH(2);
 
     *value = (uint16_t)stream->source[index] | (uint16_t)stream->source[index + 1] << 8;
 
     return WLM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 #define READ_U16(variable) WLM_CHECK_RETURN_CODE(wlm_read_u16(reader, (uint16_t*)&variable))
 
 static WowLoginResult wlm_read_u32(WowLoginReader* stream, uint32_t* value)
 {
+    int _return_value;
     const size_t index = WLM_CHECK_LENGTH(4);
 
     *value = (uint32_t)stream->source[index] | (uint32_t)stream->source[index + 1] << 8 |
         (uint32_t)stream->source[index + 2] << 16 | (uint32_t)stream->source[index + 3] << 24;
 
     return WLM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 #define READ_U32(variable) WLM_CHECK_RETURN_CODE(wlm_read_u32(reader, (uint32_t*)&variable))
 
 static WowLoginResult wlm_read_u64(WowLoginReader* stream, uint64_t* value)
 {
+    int _return_value;
     const size_t index = WLM_CHECK_LENGTH(8);
 
     *value = stream->source[index] | (uint64_t)stream->source[index + 1] << 8 |
@@ -89,47 +102,59 @@ static WowLoginResult wlm_read_u64(WowLoginReader* stream, uint64_t* value)
         (uint64_t)stream->source[index + 6] << 48 | (uint64_t)stream->source[index + 7] << 56;
 
     return WLM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 #define READ_U64(variable) WLM_CHECK_RETURN_CODE(wlm_read_u64(reader, (uint64_t*)&variable))
 
 static WowLoginResult wlm_read_i32(WowLoginReader* stream, int32_t* value)
 {
+    int _return_value;
     const size_t index = WLM_CHECK_LENGTH(4);
 
     *value = (int32_t)stream->source[index] | (int32_t)stream->source[index + 1] << 8 |
         (int32_t)stream->source[index + 2] << 16 | (int32_t)stream->source[index + 3] << 24;
 
     return WLM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 #define READ_I32(variable) WLM_CHECK_RETURN_CODE(wlm_read_i32(reader, (int32_t*)&variable))
 
 static WowLoginResult wlm_write_u8(WowLoginWriter* stream, const uint8_t value)
 {
+    int _return_value;
     const size_t index = WLM_CHECK_LENGTH(1);
 
     stream->destination[index] = (char)value;
 
     return WLM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 #define WRITE_U8(variable) WLM_CHECK_RETURN_CODE(wlm_write_u8(writer, variable))
 
 static WowLoginResult wlm_write_u16(WowLoginWriter* stream, const uint16_t value)
 {
+    int _return_value;
     const size_t index = WLM_CHECK_LENGTH(2);
 
     stream->destination[index] = (char)value;
     stream->destination[index + 1] = (char)(value >> 8);
 
     return WLM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 #define WRITE_U16(variable) WLM_CHECK_RETURN_CODE(wlm_write_u16(writer, variable))
 
 static WowLoginResult wlm_write_u32(WowLoginWriter* stream, const uint32_t value)
 {
+    int _return_value;
     const size_t index = WLM_CHECK_LENGTH(4);
 
     stream->destination[index] = (char)value;
@@ -138,12 +163,15 @@ static WowLoginResult wlm_write_u32(WowLoginWriter* stream, const uint32_t value
     stream->destination[index + 3] = (char)(value >> 24);
 
     return WLM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 #define WRITE_U32(variable) WLM_CHECK_RETURN_CODE(wlm_write_u32(writer, variable))
 
 static WowLoginResult wlm_write_u64(WowLoginWriter* stream, const uint64_t value)
 {
+    int _return_value;
     const size_t index = WLM_CHECK_LENGTH(8);
 
     stream->destination[index] = (char)value;
@@ -156,12 +184,15 @@ static WowLoginResult wlm_write_u64(WowLoginWriter* stream, const uint64_t value
     stream->destination[index + 7] = (char)(value >> 56);
 
     return WLM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 #define WRITE_U64(variable) WLM_CHECK_RETURN_CODE(wlm_write_u64(writer, variable))
 
 static WowLoginResult wlm_write_i32(WowLoginWriter* stream, const int32_t value)
 {
+    int _return_value;
     const size_t index = WLM_CHECK_LENGTH(4);
 
     stream->destination[index] = (char)value;
@@ -170,12 +201,15 @@ static WowLoginResult wlm_write_i32(WowLoginWriter* stream, const int32_t value)
     stream->destination[index + 3] = (char)(value >> 24);
 
     return WLM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 #define WRITE_I32(variable) WLM_CHECK_RETURN_CODE(wlm_write_i32(writer, variable))
 
 static WowLoginResult wlm_read_string(WowLoginReader* stream, char** string)
 {
+    int _return_value;
     uint8_t length;
 
     size_t index = WLM_CHECK_LENGTH(1);
@@ -194,12 +228,15 @@ static WowLoginResult wlm_read_string(WowLoginReader* stream, char** string)
     (*string)[length] = '\0';
 
     return WLM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 #define READ_STRING(variable) WLM_CHECK_RETURN_CODE(wlm_read_string(reader, &variable))
 
 static WowLoginResult wlm_write_string(WowLoginWriter* stream, const char* string)
 {
+    int _return_value;
     const size_t length = strlen(string);
     const size_t index = WLM_CHECK_LENGTH(1 + length);
 
@@ -207,12 +244,15 @@ static WowLoginResult wlm_write_string(WowLoginWriter* stream, const char* strin
     memcpy(&stream->destination[index + 1], string, length);
 
     return WLM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 #define WRITE_STRING(variable) WLM_CHECK_RETURN_CODE(wlm_write_string(writer, variable))
 
 static WowLoginResult wlm_read_cstring(WowLoginReader* stream, char** string)
 {
+    int _return_value;
     const unsigned char* const start = &stream->source[stream->index];
     size_t length = 1;
     size_t index = WLM_CHECK_LENGTH(1);
@@ -232,18 +272,23 @@ static WowLoginResult wlm_read_cstring(WowLoginReader* stream, char** string)
     memcpy(*string, start, length);
 
     return WLM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 #define READ_CSTRING(variable) WLM_CHECK_RETURN_CODE(wlm_read_cstring(reader, &variable))
 
 static WowLoginResult wlm_write_cstring(WowLoginWriter* stream, const char* string)
 {
+    int _return_value;
     const size_t length = strlen(string);
     const size_t index = WLM_CHECK_LENGTH(length + 1);
 
     memcpy(&stream->destination[index], string, length + 1);
 
     return WLM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 #define WRITE_CSTRING(variable) WLM_CHECK_RETURN_CODE(wlm_write_cstring(writer, variable))
@@ -272,24 +317,30 @@ static WowLoginResult wlm_write_float(WowLoginWriter* stream, const float value)
 
 static WowLoginResult wlm_read_bool8(WowLoginReader* stream, bool* value)
 {
-    uint8_t v;
+    int _return_value = 1;
+    uint8_t v = 0;
 
     WLM_CHECK_RETURN_CODE(wlm_read_u8(stream, &v));
 
     *value = v == 1 ? true : false;
 
     return WLM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 #define READ_BOOL8(variable) WLM_CHECK_RETURN_CODE(wlm_read_bool8(reader, &variable))
 
 static WowLoginResult wlm_write_bool8(WowLoginWriter* stream, const bool value)
 {
+    int _return_value = 1;
     const uint8_t v = value ? 1 : 0;
 
     WLM_CHECK_RETURN_CODE(wlm_write_u8(stream, v));
 
     return WLM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 #define WRITE_BOOL8(variable) WLM_CHECK_RETURN_CODE(wlm_write_bool8(writer, variable))
@@ -356,6 +407,8 @@ WOW_LOGIN_MESSAGES_C_EXPORT const char* wlm_error_code_to_string(const WowLoginR
     {
         case WLM_RESULT_SUCCESS:
             return "Success";
+        case WLM_RESULT_INVALID_PARAMETERS:
+            return "Invalid parameters";
         case WLM_RESULT_NOT_ENOUGH_BYTES:
             return "Not enough bytes";
         case WLM_RESULT_MALLOC_FAIL:

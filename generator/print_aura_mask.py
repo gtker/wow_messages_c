@@ -102,6 +102,7 @@ def print_aura_mask_c(s: Writer, h: Writer, v: model.WorldVersion):
         }}
 
         static WowWorldResult {module_name}_aura_mask_read(WowWorldReader* reader, {module_name}_AuraMask* mask) {{
+            int _return_value = 1;
             uint{header_size * 8}_t header;
             uint{header_size * 8}_t i;
             WWM_CHECK_RETURN_CODE(wwm_read_u{header_size * 8}(reader, &header));
@@ -115,9 +116,11 @@ def print_aura_mask_c(s: Writer, h: Writer, v: model.WorldVersion):
             }}
 
             return WWM_RESULT_SUCCESS;
+        cleanup: return _return_value;
         }}
 
         static WowWorldResult {module_name}_aura_mask_write(WowWorldWriter* writer, const {module_name}_AuraMask* mask) {{
+            int _return_value = 1;
             uint{header_size * 8}_t header = 0;
             uint{header_size * 8}_t i;
             
@@ -136,6 +139,7 @@ def print_aura_mask_c(s: Writer, h: Writer, v: model.WorldVersion):
             }}
             
             return WWM_RESULT_SUCCESS;
+        cleanup: return _return_value;
         }}
     """)
 

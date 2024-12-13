@@ -61,7 +61,7 @@ def print_size_until_inner_members(s: Writer, members: list[model.StructMember],
             s.newline()
 
         for m in uncounted_members:
-            print_size_inner(s, m, module_name, extra_indirection)
+            print_size_inner(s, m, module_name, extra_indirection, count)
 
         if return_early and not has_optional:
             s.wln(f"return _size;")
@@ -214,7 +214,7 @@ def get_size_and_remaining_members(members: list[model.StructMember], module_nam
     return count, strings, uncounted_members
 
 
-def print_size_inner(s: Writer, m: model.StructMember, module_name: str, extra_indirection: str):
+def print_size_inner(s: Writer, m: model.StructMember, module_name: str, extra_indirection: str, size_of_other_fields: int):
     extra_self = "self."
 
     match m:
@@ -223,8 +223,7 @@ def print_size_inner(s: Writer, m: model.StructMember, module_name: str, extra_i
                 case model.DataTypeArray(compressed=compressed, inner_type=inner_type, size=size):
                     if compressed and not is_cpp():
                         s.open_curly("/* C89 scope for compressed size */")
-                        s.wln(f"unsigned char* {d.name}_uncompressed_data = NULL;")
-                        s.wln(f"unsigned char* {d.name}_compressed_data = NULL;")
+                        s.wln(f"unsigned char {d.name}_uncompressed_data[{0xFFFF - 4 - size_of_other_fields}];")
 
                         s.wln(f"uint32_t compressed_i;")
                         s.wln(f"size_t compressed_size = 0;")
@@ -242,20 +241,17 @@ def print_size_inner(s: Writer, m: model.StructMember, module_name: str, extra_i
 
                         s.open_curly("if (compressed_size)")
 
-                        s.wln(f"{d.name}_uncompressed_data = malloc(compressed_size);")
-                        s.wln(f"{d.name}_compressed_data = malloc(compressed_size + WWM_COMPRESS_EXTRA_LENGTH);")
-                        s.newline()
+                        s.wln("int _return_value = 1;")
                         s.wln(f"stack_writer = wwm_create_writer({d.name}_uncompressed_data, compressed_size);")
 
                         print_array_inner_write(d, extra_indirection, inner_type, s, size, f"object->{d.name}",
                                                 module_name)
                         s.newline()
 
+                        s.wln_no_indent("cleanup:")
                         s.wln(
-                            f"_size += wwm_compress_data({d.name}_uncompressed_data, compressed_size, {d.name}_compressed_data, compressed_size + WWM_COMPRESS_EXTRA_LENGTH);")
+                            f"_size += wwm_compress_data_size({d.name}_uncompressed_data, compressed_size);")
                         s.newline()
-                        s.wln(f"free({d.name}_uncompressed_data);")
-                        s.wln(f"free({d.name}_compressed_data);")
 
                         s.closing_curly()  # if (compressed_size)
 

@@ -13,6 +13,7 @@ def print_cache_mask_c(s: Writer, h: Writer):
 
     s.write_block(f"""
         static WowWorldResult wrath_cache_mask_write(WowWorldWriter* stream, const wrath_CacheMask* mask) {{
+            int _return_value = 1;
             int i;
             uint32_t header = 0;
 
@@ -31,9 +32,11 @@ def print_cache_mask_c(s: Writer, h: Writer):
             }}
 
             return WWM_RESULT_SUCCESS;
+        cleanup: return _return_value;
         }}
 
         static WowWorldResult wrath_cache_mask_read(WowWorldReader* stream, wrath_CacheMask* mask) {{
+            int _return_value = 1;
             int i = 0;
             uint32_t header = 0;
             WWM_CHECK_RETURN_CODE(wwm_read_u32(stream, &header));
@@ -47,6 +50,7 @@ def print_cache_mask_c(s: Writer, h: Writer):
             }}
 
             return WWM_RESULT_SUCCESS;
+        cleanup: return _return_value;
         }}
 
         static size_t wrath_cache_mask_size(const wrath_CacheMask* mask) {{

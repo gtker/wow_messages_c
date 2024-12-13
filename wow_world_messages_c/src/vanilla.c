@@ -1487,6 +1487,7 @@ WOW_WORLD_MESSAGES_C_EXPORT uint32_t vanilla_update_mask_corpse_dynamic_flags_ge
 }
 
 static WowWorldResult vanilla_update_mask_write(WowWorldWriter* stream, const vanilla_UpdateMask* mask) {
+    int _return_value = 1;
     uint8_t i;
     uint8_t j;
     uint8_t amount_of_headers = 0;
@@ -1514,9 +1515,11 @@ static WowWorldResult vanilla_update_mask_write(WowWorldWriter* stream, const va
     }
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_update_mask_read(WowWorldReader* stream, vanilla_UpdateMask* mask) {
+    int _return_value = 1;
     uint8_t i;
     uint8_t j;
 
@@ -1541,6 +1544,7 @@ static WowWorldResult vanilla_update_mask_read(WowWorldReader* stream, vanilla_U
     }
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_update_mask_size(const vanilla_UpdateMask* mask) {
@@ -1563,6 +1567,17 @@ static size_t vanilla_update_mask_size(const vanilla_UpdateMask* mask) {
 
     return size + amount_of_values + (max_header * 4);
 }
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_Addon_free(vanilla_Addon* object) {
+    if (object->info_block == VANILLA_INFO_BLOCK_AVAILABLE) {
+        if (object->key_version == VANILLA_KEY_VERSION_ONE|| object->key_version == VANILLA_KEY_VERSION_TWO|| object->key_version == VANILLA_KEY_VERSION_THREE|| object->key_version == VANILLA_KEY_VERSION_FOUR|| object->key_version == VANILLA_KEY_VERSION_FIVE|| object->key_version == VANILLA_KEY_VERSION_SIX|| object->key_version == VANILLA_KEY_VERSION_SEVEN|| object->key_version == VANILLA_KEY_VERSION_EIGHT|| object->key_version == VANILLA_KEY_VERSION_NINE) {
+        }
+    }
+    if (object->url_info == VANILLA_URL_INFO_AVAILABLE) {
+        FREE_STRING(object->url);
+
+    }
+}
+
 static size_t vanilla_Addon_size(const vanilla_Addon* object) {
     size_t _size = 3;
 
@@ -1583,6 +1598,15 @@ static size_t vanilla_Addon_size(const vanilla_Addon* object) {
 }
 
 static WowWorldResult vanilla_Addon_read(WowWorldReader* reader, vanilla_Addon* object) {
+    int _return_value = 1;
+
+    if (3 > (reader->length - reader->index)) {
+        _return_value = (size_t)3 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->url = NULL;
+
     object->addon_type = 0;
     READ_U8(object->addon_type);
 
@@ -1608,9 +1632,14 @@ static WowWorldResult vanilla_Addon_read(WowWorldReader* reader, vanilla_Addon* 
 
     }
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_Addon_free(object);
+    return _return_value;
 }
 
 static WowWorldResult vanilla_Addon_write(WowWorldWriter* writer, const vanilla_Addon* object) {
+    int _return_value = 1;
+
     WRITE_U8(object->addon_type);
 
     WRITE_U8(object->info_block);
@@ -1633,17 +1662,12 @@ static WowWorldResult vanilla_Addon_write(WowWorldWriter* writer, const vanilla_
     }
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_Addon_free(vanilla_Addon* object) {
-    if (object->info_block == VANILLA_INFO_BLOCK_AVAILABLE) {
-        if (object->key_version == VANILLA_KEY_VERSION_ONE|| object->key_version == VANILLA_KEY_VERSION_TWO|| object->key_version == VANILLA_KEY_VERSION_THREE|| object->key_version == VANILLA_KEY_VERSION_FOUR|| object->key_version == VANILLA_KEY_VERSION_FIVE|| object->key_version == VANILLA_KEY_VERSION_SIX|| object->key_version == VANILLA_KEY_VERSION_SEVEN|| object->key_version == VANILLA_KEY_VERSION_EIGHT|| object->key_version == VANILLA_KEY_VERSION_NINE) {
-        }
-    }
-    if (object->url_info == VANILLA_URL_INFO_AVAILABLE) {
-        FREE_STRING(object->url);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_AddonInfo_free(vanilla_AddonInfo* object) {
+    FREE_STRING(object->addon_name);
 
-    }
 }
 
 static size_t vanilla_AddonInfo_size(const vanilla_AddonInfo* object) {
@@ -1651,6 +1675,15 @@ static size_t vanilla_AddonInfo_size(const vanilla_AddonInfo* object) {
 }
 
 static WowWorldResult vanilla_AddonInfo_read(WowWorldReader* reader, vanilla_AddonInfo* object) {
+    int _return_value = 1;
+
+    if (10 > (reader->length - reader->index)) {
+        _return_value = (size_t)10 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->addon_name = NULL;
+
     READ_CSTRING(object->addon_name);
 
     READ_U8(object->addon_has_signature);
@@ -1660,9 +1693,14 @@ static WowWorldResult vanilla_AddonInfo_read(WowWorldReader* reader, vanilla_Add
     READ_U32(object->addon_extra_crc);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_AddonInfo_free(object);
+    return _return_value;
 }
 
 static WowWorldResult vanilla_AddonInfo_write(WowWorldWriter* writer, const vanilla_AddonInfo* object) {
+    int _return_value = 1;
+
     WRITE_CSTRING(object->addon_name);
 
     WRITE_U8(object->addon_has_signature);
@@ -1673,14 +1711,17 @@ static WowWorldResult vanilla_AddonInfo_write(WowWorldWriter* writer, const vani
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_AddonInfo_free(vanilla_AddonInfo* object) {
-    FREE_STRING(object->addon_name);
-
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_AuctionListItem_read(WowWorldReader* reader, vanilla_AuctionListItem* object) {
+    int _return_value = 1;
+
+    if (64 > (reader->length - reader->index)) {
+        _return_value = (size_t)64 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->id);
 
     READ_U32(object->item);
@@ -1710,9 +1751,13 @@ static WowWorldResult vanilla_AuctionListItem_read(WowWorldReader* reader, vanil
     READ_U32(object->highest_bid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 static WowWorldResult vanilla_AuctionListItem_write(WowWorldWriter* writer, const vanilla_AuctionListItem* object) {
+    int _return_value = 1;
+
     WRITE_U32(object->id);
 
     WRITE_U32(object->item);
@@ -1743,6 +1788,7 @@ static WowWorldResult vanilla_AuctionListItem_write(WowWorldWriter* writer, cons
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_AuraLog_size(const vanilla_AuraLog* object) {
@@ -1765,6 +1811,13 @@ static size_t vanilla_AuraLog_size(const vanilla_AuraLog* object) {
 }
 
 static WowWorldResult vanilla_AuraLog_read(WowWorldReader* reader, vanilla_AuraLog* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->aura_type = 0;
     READ_U32(object->aura_type);
 
@@ -1798,9 +1851,13 @@ static WowWorldResult vanilla_AuraLog_read(WowWorldReader* reader, vanilla_AuraL
 
     }
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 static WowWorldResult vanilla_AuraLog_write(WowWorldWriter* writer, const vanilla_AuraLog* object) {
+    int _return_value = 1;
+
     WRITE_U32(object->aura_type);
 
     if (object->aura_type == VANILLA_AURA_TYPE_PERIODIC_DAMAGE|| object->aura_type == VANILLA_AURA_TYPE_PERIODIC_DAMAGE_PERCENT) {
@@ -1833,16 +1890,13 @@ static WowWorldResult vanilla_AuraLog_write(WowWorldWriter* writer, const vanill
     }
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_AuraLog_free(vanilla_AuraLog* object) {
-    if (object->aura_type == VANILLA_AURA_TYPE_PERIODIC_DAMAGE|| object->aura_type == VANILLA_AURA_TYPE_PERIODIC_DAMAGE_PERCENT) {
-    }
-    else if (object->aura_type == VANILLA_AURA_TYPE_PERIODIC_HEAL|| object->aura_type == VANILLA_AURA_TYPE_OBS_MOD_HEALTH) {
-    }
-    else if (object->aura_type == VANILLA_AURA_TYPE_OBS_MOD_MANA|| object->aura_type == VANILLA_AURA_TYPE_PERIODIC_ENERGIZE) {
-    }
-    else if (object->aura_type == VANILLA_AURA_TYPE_PERIODIC_MANA_LEECH) {
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_BattlegroundPlayer_free(vanilla_BattlegroundPlayer* object) {
+    if (object->fields != NULL) {
+        free(object->fields);
+        object->fields = NULL;
     }
 }
 
@@ -1851,6 +1905,15 @@ static size_t vanilla_BattlegroundPlayer_size(const vanilla_BattlegroundPlayer* 
 }
 
 static WowWorldResult vanilla_BattlegroundPlayer_read(WowWorldReader* reader, vanilla_BattlegroundPlayer* object) {
+    int _return_value = 1;
+
+    if (32 > (reader->length - reader->index)) {
+        _return_value = (size_t)32 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->fields = NULL;
+
     READ_U64(object->player);
 
     object->rank = 0;
@@ -1866,7 +1929,7 @@ static WowWorldResult vanilla_BattlegroundPlayer_read(WowWorldReader* reader, va
 
     READ_U32(object->amount_of_extra_fields);
 
-    object->fields = malloc(object->amount_of_extra_fields * sizeof(uint32_t));
+    object->fields = calloc(object->amount_of_extra_fields, sizeof(uint32_t));
     if (object->fields == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -1874,9 +1937,14 @@ static WowWorldResult vanilla_BattlegroundPlayer_read(WowWorldReader* reader, va
 
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_BattlegroundPlayer_free(object);
+    return _return_value;
 }
 
 static WowWorldResult vanilla_BattlegroundPlayer_write(WowWorldWriter* writer, const vanilla_BattlegroundPlayer* object) {
+    int _return_value = 1;
+
     WRITE_U64(object->player);
 
     WRITE_U32(object->rank);
@@ -1895,14 +1963,17 @@ static WowWorldResult vanilla_BattlegroundPlayer_write(WowWorldWriter* writer, c
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_BattlegroundPlayer_free(vanilla_BattlegroundPlayer* object) {
-    free(object->fields);
-    object->fields = NULL;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_BattlegroundPlayerPosition_read(WowWorldReader* reader, vanilla_BattlegroundPlayerPosition* object) {
+    int _return_value = 1;
+
+    if (16 > (reader->length - reader->index)) {
+        _return_value = (size_t)16 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->player);
 
     READ_FLOAT(object->position_x);
@@ -1910,9 +1981,13 @@ static WowWorldResult vanilla_BattlegroundPlayerPosition_read(WowWorldReader* re
     READ_FLOAT(object->position_y);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 static WowWorldResult vanilla_BattlegroundPlayerPosition_write(WowWorldWriter* writer, const vanilla_BattlegroundPlayerPosition* object) {
+    int _return_value = 1;
+
     WRITE_U64(object->player);
 
     WRITE_FLOAT(object->position_x);
@@ -1921,42 +1996,72 @@ static WowWorldResult vanilla_BattlegroundPlayerPosition_write(WowWorldWriter* w
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_ChannelMember_read(WowWorldReader* reader, vanilla_ChannelMember* object) {
+    int _return_value = 1;
+
+    if (9 > (reader->length - reader->index)) {
+        _return_value = (size_t)9 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     object->member_flags = 0;
     READ_U8(object->member_flags);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 static WowWorldResult vanilla_ChannelMember_write(WowWorldWriter* writer, const vanilla_ChannelMember* object) {
+    int _return_value = 1;
+
     WRITE_U64(object->guid);
 
     WRITE_U8(object->member_flags);
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CharacterGear_read(WowWorldReader* reader, vanilla_CharacterGear* object) {
+    int _return_value = 1;
+
+    if (5 > (reader->length - reader->index)) {
+        _return_value = (size_t)5 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->equipment_display_id);
 
     object->inventory_type = 0;
     READ_U8(object->inventory_type);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 static WowWorldResult vanilla_CharacterGear_write(WowWorldWriter* writer, const vanilla_CharacterGear* object) {
+    int _return_value = 1;
+
     WRITE_U32(object->equipment_display_id);
 
     WRITE_U8(object->inventory_type);
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_Character_free(vanilla_Character* object) {
+    FREE_STRING(object->name);
+
 }
 
 static size_t vanilla_Character_size(const vanilla_Character* object) {
@@ -1964,6 +2069,15 @@ static size_t vanilla_Character_size(const vanilla_Character* object) {
 }
 
 static WowWorldResult vanilla_Character_read(WowWorldReader* reader, vanilla_Character* object) {
+    int _return_value = 1;
+
+    if (159 > (reader->length - reader->index)) {
+        _return_value = (size_t)159 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->name = NULL;
+
     READ_U64(object->guid);
 
     READ_CSTRING(object->name);
@@ -2018,9 +2132,14 @@ static WowWorldResult vanilla_Character_read(WowWorldReader* reader, vanilla_Cha
     SKIP_FORWARD_BYTES(1);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_Character_free(object);
+    return _return_value;
 }
 
 static WowWorldResult vanilla_Character_write(WowWorldWriter* writer, const vanilla_Character* object) {
+    int _return_value = 1;
+
     WRITE_U64(object->guid);
 
     WRITE_CSTRING(object->name);
@@ -2069,11 +2188,20 @@ static WowWorldResult vanilla_Character_write(WowWorldWriter* writer, const vani
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_Character_free(vanilla_Character* object) {
-    FREE_STRING(object->name);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MonsterMove_free(vanilla_MonsterMove* object) {
+    if (object->move_type == VANILLA_MONSTER_MOVE_TYPE_FACING_TARGET) {
+    }
+    else if (object->move_type == VANILLA_MONSTER_MOVE_TYPE_FACING_ANGLE) {
+    }
+    else if (object->move_type == VANILLA_MONSTER_MOVE_TYPE_FACING_SPOT) {
+    }
+    if (object->move_type == VANILLA_MONSTER_MOVE_TYPE_NORMAL|| object->move_type == VANILLA_MONSTER_MOVE_TYPE_FACING_SPOT|| object->move_type == VANILLA_MONSTER_MOVE_TYPE_FACING_TARGET|| object->move_type == VANILLA_MONSTER_MOVE_TYPE_FACING_ANGLE) {
+        wwm_monster_move_spline_free(&object->splines);
 
+    }
 }
 
 static size_t vanilla_MonsterMove_size(const vanilla_MonsterMove* object) {
@@ -2097,6 +2225,16 @@ static size_t vanilla_MonsterMove_size(const vanilla_MonsterMove* object) {
 }
 
 static WowWorldResult vanilla_MonsterMove_read(WowWorldReader* reader, vanilla_MonsterMove* object) {
+    int _return_value = 1;
+
+    if (17 > (reader->length - reader->index)) {
+        _return_value = (size_t)17 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->splines.amount_of_splines = 0;
+    object->splines.splines = NULL;
+
     WWM_CHECK_RETURN_CODE(all_Vector3d_read(reader, &object->spline_point));
 
     READ_U32(object->spline_id);
@@ -2126,9 +2264,14 @@ static WowWorldResult vanilla_MonsterMove_read(WowWorldReader* reader, vanilla_M
 
     }
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_MonsterMove_free(object);
+    return _return_value;
 }
 
 static WowWorldResult vanilla_MonsterMove_write(WowWorldWriter* writer, const vanilla_MonsterMove* object) {
+    int _return_value = 1;
+
     WWM_CHECK_RETURN_CODE(all_Vector3d_write(writer, &object->spline_point));
 
     WRITE_U32(object->spline_id);
@@ -2157,18 +2300,17 @@ static WowWorldResult vanilla_MonsterMove_write(WowWorldWriter* writer, const va
     }
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MonsterMove_free(vanilla_MonsterMove* object) {
-    if (object->move_type == VANILLA_MONSTER_MOVE_TYPE_FACING_TARGET) {
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CompressedMove_free(vanilla_CompressedMove* object) {
+    if (object->opcode == VANILLA_COMPRESSED_MOVE_OPCODE_SMSG_SPLINE_SET_RUN_SPEED) {
     }
-    else if (object->move_type == VANILLA_MONSTER_MOVE_TYPE_FACING_ANGLE) {
+    else if (object->opcode == VANILLA_COMPRESSED_MOVE_OPCODE_SMSG_MONSTER_MOVE) {
+        vanilla_MonsterMove_free(&object->monster_move);
     }
-    else if (object->move_type == VANILLA_MONSTER_MOVE_TYPE_FACING_SPOT) {
-    }
-    if (object->move_type == VANILLA_MONSTER_MOVE_TYPE_NORMAL|| object->move_type == VANILLA_MONSTER_MOVE_TYPE_FACING_SPOT|| object->move_type == VANILLA_MONSTER_MOVE_TYPE_FACING_TARGET|| object->move_type == VANILLA_MONSTER_MOVE_TYPE_FACING_ANGLE) {
-        wwm_monster_move_spline_free(&object->splines);
-
+    else if (object->opcode == VANILLA_COMPRESSED_MOVE_OPCODE_SMSG_MONSTER_MOVE_TRANSPORT) {
+        vanilla_MonsterMove_free(&object->monster_move_transport);
     }
 }
 
@@ -2189,6 +2331,14 @@ static size_t vanilla_CompressedMove_size(const vanilla_CompressedMove* object) 
 }
 
 static WowWorldResult vanilla_CompressedMove_read(WowWorldReader* reader, vanilla_CompressedMove* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+
     SKIP_FORWARD_BYTES(1);
 
     object->opcode = 0;
@@ -2211,9 +2361,14 @@ static WowWorldResult vanilla_CompressedMove_read(WowWorldReader* reader, vanill
 
     }
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CompressedMove_free(object);
+    return _return_value;
 }
 
 static WowWorldResult vanilla_CompressedMove_write(WowWorldWriter* writer, const vanilla_CompressedMove* object) {
+    int _return_value = 1;
+
     WRITE_U8((uint8_t)vanilla_CompressedMove_size(object));
 
     WRITE_U16(object->opcode);
@@ -2236,20 +2391,17 @@ static WowWorldResult vanilla_CompressedMove_write(WowWorldWriter* writer, const
     }
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CompressedMove_free(vanilla_CompressedMove* object) {
-    if (object->opcode == VANILLA_COMPRESSED_MOVE_OPCODE_SMSG_SPLINE_SET_RUN_SPEED) {
-    }
-    else if (object->opcode == VANILLA_COMPRESSED_MOVE_OPCODE_SMSG_MONSTER_MOVE) {
-        vanilla_MonsterMove_free(&object->monster_move);
-    }
-    else if (object->opcode == VANILLA_COMPRESSED_MOVE_OPCODE_SMSG_MONSTER_MOVE_TRANSPORT) {
-        vanilla_MonsterMove_free(&object->monster_move_transport);
-    }
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CooldownSpell_read(WowWorldReader* reader, vanilla_CooldownSpell* object) {
+    int _return_value = 1;
+
+    if (14 > (reader->length - reader->index)) {
+        _return_value = (size_t)14 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U16(object->spell_id);
 
     READ_U16(object->item_id);
@@ -2261,9 +2413,13 @@ static WowWorldResult vanilla_CooldownSpell_read(WowWorldReader* reader, vanilla
     READ_U32(object->category_cooldown);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 static WowWorldResult vanilla_CooldownSpell_write(WowWorldWriter* writer, const vanilla_CooldownSpell* object) {
+    int _return_value = 1;
+
     WRITE_U16(object->spell_id);
 
     WRITE_U16(object->item_id);
@@ -2276,9 +2432,17 @@ static WowWorldResult vanilla_CooldownSpell_write(WowWorldWriter* writer, const 
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_DamageInfo_read(WowWorldReader* reader, vanilla_DamageInfo* object) {
+    int _return_value = 1;
+
+    if (20 > (reader->length - reader->index)) {
+        _return_value = (size_t)20 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->spell_school_mask);
 
     READ_FLOAT(object->damage_float);
@@ -2290,9 +2454,13 @@ static WowWorldResult vanilla_DamageInfo_read(WowWorldReader* reader, vanilla_Da
     READ_U32(object->resist);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 static WowWorldResult vanilla_DamageInfo_write(WowWorldWriter* writer, const vanilla_DamageInfo* object) {
+    int _return_value = 1;
+
     WRITE_U32(object->spell_school_mask);
 
     WRITE_FLOAT(object->damage_float);
@@ -2305,60 +2473,97 @@ static WowWorldResult vanilla_DamageInfo_write(WowWorldWriter* writer, const van
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_FactionInitializer_read(WowWorldReader* reader, vanilla_FactionInitializer* object) {
+    int _return_value = 1;
+
+    if (5 > (reader->length - reader->index)) {
+        _return_value = (size_t)5 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->flag = 0;
     READ_U8(object->flag);
 
     READ_U32(object->standing);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 static WowWorldResult vanilla_FactionInitializer_write(WowWorldWriter* writer, const vanilla_FactionInitializer* object) {
+    int _return_value = 1;
+
     WRITE_U8(object->flag);
 
     WRITE_U32(object->standing);
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_FactionStanding_read(WowWorldReader* reader, vanilla_FactionStanding* object) {
+    int _return_value = 1;
+
+    if (6 > (reader->length - reader->index)) {
+        _return_value = (size_t)6 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->faction = 0;
     READ_U16(object->faction);
 
     READ_U32(object->standing);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 static WowWorldResult vanilla_FactionStanding_write(WowWorldWriter* writer, const vanilla_FactionStanding* object) {
+    int _return_value = 1;
+
     WRITE_U16(object->faction);
 
     WRITE_U32(object->standing);
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_ForcedReaction_read(WowWorldReader* reader, vanilla_ForcedReaction* object) {
+    int _return_value = 1;
+
+    if (6 > (reader->length - reader->index)) {
+        _return_value = (size_t)6 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->faction = 0;
     READ_U16(object->faction);
 
     READ_U32(object->reputation_rank);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 static WowWorldResult vanilla_ForcedReaction_write(WowWorldWriter* writer, const vanilla_ForcedReaction* object) {
+    int _return_value = 1;
+
     WRITE_U16(object->faction);
 
     WRITE_U32(object->reputation_rank);
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_Friend_size(const vanilla_Friend* object) {
@@ -2372,6 +2577,13 @@ static size_t vanilla_Friend_size(const vanilla_Friend* object) {
 }
 
 static WowWorldResult vanilla_Friend_read(WowWorldReader* reader, vanilla_Friend* object) {
+    int _return_value = 1;
+
+    if (9 > (reader->length - reader->index)) {
+        _return_value = (size_t)9 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     object->status = 0;
@@ -2388,9 +2600,13 @@ static WowWorldResult vanilla_Friend_read(WowWorldReader* reader, vanilla_Friend
 
     }
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 static WowWorldResult vanilla_Friend_write(WowWorldWriter* writer, const vanilla_Friend* object) {
+    int _return_value = 1;
+
     WRITE_U64(object->guid);
 
     WRITE_U8(object->status);
@@ -2405,11 +2621,12 @@ static WowWorldResult vanilla_Friend_write(WowWorldWriter* writer, const vanilla
     }
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_Friend_free(vanilla_Friend* object) {
-    if (object->status == VANILLA_FRIEND_STATUS_ONLINE|| object->status == VANILLA_FRIEND_STATUS_AFK|| object->status == VANILLA_FRIEND_STATUS_UNKNOWN3|| object->status == VANILLA_FRIEND_STATUS_DND) {
-    }
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_GmSurveyQuestion_free(vanilla_GmSurveyQuestion* object) {
+    FREE_STRING(object->comment);
+
 }
 
 static size_t vanilla_GmSurveyQuestion_size(const vanilla_GmSurveyQuestion* object) {
@@ -2417,6 +2634,15 @@ static size_t vanilla_GmSurveyQuestion_size(const vanilla_GmSurveyQuestion* obje
 }
 
 static WowWorldResult vanilla_GmSurveyQuestion_read(WowWorldReader* reader, vanilla_GmSurveyQuestion* object) {
+    int _return_value = 1;
+
+    if (6 > (reader->length - reader->index)) {
+        _return_value = (size_t)6 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->comment = NULL;
+
     READ_U32(object->question_id);
 
     READ_U8(object->answer);
@@ -2424,9 +2650,14 @@ static WowWorldResult vanilla_GmSurveyQuestion_read(WowWorldReader* reader, vani
     READ_CSTRING(object->comment);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_GmSurveyQuestion_free(object);
+    return _return_value;
 }
 
 static WowWorldResult vanilla_GmSurveyQuestion_write(WowWorldWriter* writer, const vanilla_GmSurveyQuestion* object) {
+    int _return_value = 1;
+
     WRITE_U32(object->question_id);
 
     WRITE_U8(object->answer);
@@ -2435,10 +2666,11 @@ static WowWorldResult vanilla_GmSurveyQuestion_write(WowWorldWriter* writer, con
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_GmSurveyQuestion_free(vanilla_GmSurveyQuestion* object) {
-    FREE_STRING(object->comment);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_GossipItem_free(vanilla_GossipItem* object) {
+    FREE_STRING(object->message);
 
 }
 
@@ -2447,6 +2679,15 @@ static size_t vanilla_GossipItem_size(const vanilla_GossipItem* object) {
 }
 
 static WowWorldResult vanilla_GossipItem_read(WowWorldReader* reader, vanilla_GossipItem* object) {
+    int _return_value = 1;
+
+    if (7 > (reader->length - reader->index)) {
+        _return_value = (size_t)7 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->message = NULL;
+
     READ_U32(object->id);
 
     READ_U8(object->item_icon);
@@ -2456,9 +2697,14 @@ static WowWorldResult vanilla_GossipItem_read(WowWorldReader* reader, vanilla_Go
     READ_CSTRING(object->message);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_GossipItem_free(object);
+    return _return_value;
 }
 
 static WowWorldResult vanilla_GossipItem_write(WowWorldWriter* writer, const vanilla_GossipItem* object) {
+    int _return_value = 1;
+
     WRITE_U32(object->id);
 
     WRITE_U8(object->item_icon);
@@ -2469,10 +2715,11 @@ static WowWorldResult vanilla_GossipItem_write(WowWorldWriter* writer, const van
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_GossipItem_free(vanilla_GossipItem* object) {
-    FREE_STRING(object->message);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_GroupListMember_free(vanilla_GroupListMember* object) {
+    FREE_STRING(object->name);
 
 }
 
@@ -2481,6 +2728,15 @@ static size_t vanilla_GroupListMember_size(const vanilla_GroupListMember* object
 }
 
 static WowWorldResult vanilla_GroupListMember_read(WowWorldReader* reader, vanilla_GroupListMember* object) {
+    int _return_value = 1;
+
+    if (11 > (reader->length - reader->index)) {
+        _return_value = (size_t)11 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->name = NULL;
+
     READ_CSTRING(object->name);
 
     READ_U64(object->guid);
@@ -2490,9 +2746,14 @@ static WowWorldResult vanilla_GroupListMember_read(WowWorldReader* reader, vanil
     READ_U8(object->flags);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_GroupListMember_free(object);
+    return _return_value;
 }
 
 static WowWorldResult vanilla_GroupListMember_write(WowWorldWriter* writer, const vanilla_GroupListMember* object) {
+    int _return_value = 1;
+
     WRITE_CSTRING(object->name);
 
     WRITE_U64(object->guid);
@@ -2503,10 +2764,17 @@ static WowWorldResult vanilla_GroupListMember_write(WowWorldWriter* writer, cons
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_GroupListMember_free(vanilla_GroupListMember* object) {
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_GuildMember_free(vanilla_GuildMember* object) {
     FREE_STRING(object->name);
+
+    if (object->status == VANILLA_GUILD_MEMBER_STATUS_OFFLINE) {
+    }
+    FREE_STRING(object->public_note);
+
+    FREE_STRING(object->officer_note);
 
 }
 
@@ -2521,6 +2789,17 @@ static size_t vanilla_GuildMember_size(const vanilla_GuildMember* object) {
 }
 
 static WowWorldResult vanilla_GuildMember_read(WowWorldReader* reader, vanilla_GuildMember* object) {
+    int _return_value = 1;
+
+    if (22 > (reader->length - reader->index)) {
+        _return_value = (size_t)22 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->name = NULL;
+    object->public_note = NULL;
+    object->officer_note = NULL;
+
     READ_U64(object->guid);
 
     object->status = 0;
@@ -2547,9 +2826,14 @@ static WowWorldResult vanilla_GuildMember_read(WowWorldReader* reader, vanilla_G
     READ_CSTRING(object->officer_note);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_GuildMember_free(object);
+    return _return_value;
 }
 
 static WowWorldResult vanilla_GuildMember_write(WowWorldWriter* writer, const vanilla_GuildMember* object) {
+    int _return_value = 1;
+
     WRITE_U64(object->guid);
 
     WRITE_U8(object->status);
@@ -2574,37 +2858,46 @@ static WowWorldResult vanilla_GuildMember_write(WowWorldWriter* writer, const va
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_GuildMember_free(vanilla_GuildMember* object) {
-    FREE_STRING(object->name);
-
-    if (object->status == VANILLA_GUILD_MEMBER_STATUS_OFFLINE) {
-    }
-    FREE_STRING(object->public_note);
-
-    FREE_STRING(object->officer_note);
-
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_InitialSpell_read(WowWorldReader* reader, vanilla_InitialSpell* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U16(object->spell_id);
 
     READ_U16(object->unknown1);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 static WowWorldResult vanilla_InitialSpell_write(WowWorldWriter* writer, const vanilla_InitialSpell* object) {
+    int _return_value = 1;
+
     WRITE_U16(object->spell_id);
 
     WRITE_U16(object->unknown1);
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_ItemDamageType_read(WowWorldReader* reader, vanilla_ItemDamageType* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_FLOAT(object->damage_minimum);
 
     READ_FLOAT(object->damage_maximum);
@@ -2613,9 +2906,13 @@ static WowWorldResult vanilla_ItemDamageType_read(WowWorldReader* reader, vanill
     READ_U32(object->school);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 static WowWorldResult vanilla_ItemDamageType_write(WowWorldWriter* writer, const vanilla_ItemDamageType* object) {
+    int _return_value = 1;
+
     WRITE_FLOAT(object->damage_minimum);
 
     WRITE_FLOAT(object->damage_maximum);
@@ -2624,9 +2921,17 @@ static WowWorldResult vanilla_ItemDamageType_write(WowWorldWriter* writer, const
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_ItemSpells_read(WowWorldReader* reader, vanilla_ItemSpells* object) {
+    int _return_value = 1;
+
+    if (24 > (reader->length - reader->index)) {
+        _return_value = (size_t)24 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->spell);
 
     object->spell_trigger = 0;
@@ -2641,9 +2946,13 @@ static WowWorldResult vanilla_ItemSpells_read(WowWorldReader* reader, vanilla_It
     READ_I32(object->spell_category_cooldown);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 static WowWorldResult vanilla_ItemSpells_write(WowWorldWriter* writer, const vanilla_ItemSpells* object) {
+    int _return_value = 1;
+
     WRITE_U32(object->spell);
 
     WRITE_U32(object->spell_trigger);
@@ -2658,27 +2967,47 @@ static WowWorldResult vanilla_ItemSpells_write(WowWorldWriter* writer, const van
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_ItemStat_read(WowWorldReader* reader, vanilla_ItemStat* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->stat_type = 0;
     READ_U32(object->stat_type);
 
     READ_I32(object->value);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 static WowWorldResult vanilla_ItemStat_write(WowWorldWriter* writer, const vanilla_ItemStat* object) {
+    int _return_value = 1;
+
     WRITE_U32(object->stat_type);
 
     WRITE_I32(object->value);
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_ListInventoryItem_read(WowWorldReader* reader, vanilla_ListInventoryItem* object) {
+    int _return_value = 1;
+
+    if (28 > (reader->length - reader->index)) {
+        _return_value = (size_t)28 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->item_stack_count);
 
     READ_U32(object->item);
@@ -2694,9 +3023,13 @@ static WowWorldResult vanilla_ListInventoryItem_read(WowWorldReader* reader, van
     READ_U32(object->durability);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 static WowWorldResult vanilla_ListInventoryItem_write(WowWorldWriter* writer, const vanilla_ListInventoryItem* object) {
+    int _return_value = 1;
+
     WRITE_U32(object->item_stack_count);
 
     WRITE_U32(object->item);
@@ -2713,9 +3046,17 @@ static WowWorldResult vanilla_ListInventoryItem_write(WowWorldWriter* writer, co
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_LootItem_read(WowWorldReader* reader, vanilla_LootItem* object) {
+    int _return_value = 1;
+
+    if (6 > (reader->length - reader->index)) {
+        _return_value = (size_t)6 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U8(object->index);
 
     READ_U32(object->item);
@@ -2724,9 +3065,13 @@ static WowWorldResult vanilla_LootItem_read(WowWorldReader* reader, vanilla_Loot
     READ_U8(object->ty);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 static WowWorldResult vanilla_LootItem_write(WowWorldWriter* writer, const vanilla_LootItem* object) {
+    int _return_value = 1;
+
     WRITE_U8(object->index);
 
     WRITE_U32(object->item);
@@ -2735,6 +3080,18 @@ static WowWorldResult vanilla_LootItem_write(WowWorldWriter* writer, const vanil
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_Mail_free(vanilla_Mail* object) {
+    if (object->message_type == VANILLA_MAIL_TYPE_NORMAL) {
+    }
+    else if (object->message_type == VANILLA_MAIL_TYPE_CREATURE|| object->message_type == VANILLA_MAIL_TYPE_GAMEOBJECT) {
+    }
+    else if (object->message_type == VANILLA_MAIL_TYPE_AUCTION) {
+    }
+    FREE_STRING(object->subject);
+
 }
 
 static size_t vanilla_Mail_size(const vanilla_Mail* object) {
@@ -2754,6 +3111,15 @@ static size_t vanilla_Mail_size(const vanilla_Mail* object) {
 }
 
 static WowWorldResult vanilla_Mail_read(WowWorldReader* reader, vanilla_Mail* object) {
+    int _return_value = 1;
+
+    if (67 > (reader->length - reader->index)) {
+        _return_value = (size_t)67 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->subject = NULL;
+
     READ_U32(object->message_id);
 
     object->message_type = 0;
@@ -2806,9 +3172,14 @@ static WowWorldResult vanilla_Mail_read(WowWorldReader* reader, vanilla_Mail* ob
     READ_U32(object->mail_template_id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_Mail_free(object);
+    return _return_value;
 }
 
 static WowWorldResult vanilla_Mail_write(WowWorldWriter* writer, const vanilla_Mail* object) {
+    int _return_value = 1;
+
     WRITE_U32(object->message_id);
 
     WRITE_U8(object->message_type);
@@ -2861,17 +3232,42 @@ static WowWorldResult vanilla_Mail_write(WowWorldWriter* writer, const vanilla_M
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_Mail_free(vanilla_Mail* object) {
-    if (object->message_type == VANILLA_MAIL_TYPE_NORMAL) {
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MovementBlock_free(vanilla_MovementBlock* object) {
+    if ((object->update_flag & VANILLA_UPDATE_FLAG_LIVING) != 0) {
+        if ((object->flags & VANILLA_MOVEMENT_FLAGS_ON_TRANSPORT) != 0) {
+        }
+        if ((object->flags & VANILLA_MOVEMENT_FLAGS_SWIMMING) != 0) {
+        }
+        if ((object->flags & VANILLA_MOVEMENT_FLAGS_JUMPING) != 0) {
+        }
+        if ((object->flags & VANILLA_MOVEMENT_FLAGS_SPLINE_ELEVATION) != 0) {
+        }
+        if ((object->flags & VANILLA_MOVEMENT_FLAGS_SPLINE_ENABLED) != 0) {
+            if ((object->spline_flags & VANILLA_SPLINE_FLAG_FINAL_ANGLE) != 0) {
+            }
+            else if ((object->spline_flags & VANILLA_SPLINE_FLAG_FINAL_TARGET) != 0) {
+            }
+            else if ((object->spline_flags & VANILLA_SPLINE_FLAG_FINAL_POINT) != 0) {
+            }
+            if (object->nodes != NULL) {
+                free(object->nodes);
+                object->nodes = NULL;
+            }
+        }
     }
-    else if (object->message_type == VANILLA_MAIL_TYPE_CREATURE|| object->message_type == VANILLA_MAIL_TYPE_GAMEOBJECT) {
+    else if ((object->update_flag & VANILLA_UPDATE_FLAG_HAS_POSITION) != 0) {
     }
-    else if (object->message_type == VANILLA_MAIL_TYPE_AUCTION) {
+    if ((object->update_flag & VANILLA_UPDATE_FLAG_HIGH_GUID) != 0) {
     }
-    FREE_STRING(object->subject);
-
+    if ((object->update_flag & VANILLA_UPDATE_FLAG_ALL) != 0) {
+    }
+    if ((object->update_flag & VANILLA_UPDATE_FLAG_MELEE_ATTACKING) != 0) {
+    }
+    if ((object->update_flag & VANILLA_UPDATE_FLAG_TRANSPORT) != 0) {
+    }
 }
 
 static size_t vanilla_MovementBlock_size(const vanilla_MovementBlock* object) {
@@ -2936,6 +3332,15 @@ static size_t vanilla_MovementBlock_size(const vanilla_MovementBlock* object) {
 }
 
 static WowWorldResult vanilla_MovementBlock_read(WowWorldReader* reader, vanilla_MovementBlock* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->nodes = NULL;
+
     object->update_flag = 0;
     READ_U8(object->update_flag);
 
@@ -3013,7 +3418,7 @@ static WowWorldResult vanilla_MovementBlock_read(WowWorldReader* reader, vanilla
 
             READ_U32(object->amount_of_nodes);
 
-            object->nodes = malloc(object->amount_of_nodes * sizeof(all_Vector3d));
+            object->nodes = calloc(object->amount_of_nodes, sizeof(all_Vector3d));
             if (object->nodes == NULL) {
                 return WWM_RESULT_MALLOC_FAIL;
             }
@@ -3047,9 +3452,14 @@ static WowWorldResult vanilla_MovementBlock_read(WowWorldReader* reader, vanilla
 
     }
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_MovementBlock_free(object);
+    return _return_value;
 }
 
 static WowWorldResult vanilla_MovementBlock_write(WowWorldWriter* writer, const vanilla_MovementBlock* object) {
+    int _return_value = 1;
+
     WRITE_U8(object->update_flag);
 
     if ((object->update_flag & VANILLA_UPDATE_FLAG_LIVING) != 0) {
@@ -3154,39 +3564,7 @@ static WowWorldResult vanilla_MovementBlock_write(WowWorldWriter* writer, const 
     }
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MovementBlock_free(vanilla_MovementBlock* object) {
-    if ((object->update_flag & VANILLA_UPDATE_FLAG_LIVING) != 0) {
-        if ((object->flags & VANILLA_MOVEMENT_FLAGS_ON_TRANSPORT) != 0) {
-        }
-        if ((object->flags & VANILLA_MOVEMENT_FLAGS_SWIMMING) != 0) {
-        }
-        if ((object->flags & VANILLA_MOVEMENT_FLAGS_JUMPING) != 0) {
-        }
-        if ((object->flags & VANILLA_MOVEMENT_FLAGS_SPLINE_ELEVATION) != 0) {
-        }
-        if ((object->flags & VANILLA_MOVEMENT_FLAGS_SPLINE_ENABLED) != 0) {
-            if ((object->spline_flags & VANILLA_SPLINE_FLAG_FINAL_ANGLE) != 0) {
-            }
-            else if ((object->spline_flags & VANILLA_SPLINE_FLAG_FINAL_TARGET) != 0) {
-            }
-            else if ((object->spline_flags & VANILLA_SPLINE_FLAG_FINAL_POINT) != 0) {
-            }
-            free(object->nodes);
-            object->nodes = NULL;
-        }
-    }
-    else if ((object->update_flag & VANILLA_UPDATE_FLAG_HAS_POSITION) != 0) {
-    }
-    if ((object->update_flag & VANILLA_UPDATE_FLAG_HIGH_GUID) != 0) {
-    }
-    if ((object->update_flag & VANILLA_UPDATE_FLAG_ALL) != 0) {
-    }
-    if ((object->update_flag & VANILLA_UPDATE_FLAG_MELEE_ATTACKING) != 0) {
-    }
-    if ((object->update_flag & VANILLA_UPDATE_FLAG_TRANSPORT) != 0) {
-    }
+cleanup: return _return_value;
 }
 
 static size_t vanilla_TransportInfo_size(const vanilla_TransportInfo* object) {
@@ -3194,6 +3572,13 @@ static size_t vanilla_TransportInfo_size(const vanilla_TransportInfo* object) {
 }
 
 static WowWorldResult vanilla_TransportInfo_read(WowWorldReader* reader, vanilla_TransportInfo* object) {
+    int _return_value = 1;
+
+    if (21 > (reader->length - reader->index)) {
+        _return_value = (size_t)21 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     WWM_CHECK_RETURN_CODE(all_Vector3d_read(reader, &object->position));
@@ -3203,9 +3588,13 @@ static WowWorldResult vanilla_TransportInfo_read(WowWorldReader* reader, vanilla
     READ_U32(object->timestamp);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 static WowWorldResult vanilla_TransportInfo_write(WowWorldWriter* writer, const vanilla_TransportInfo* object) {
+    int _return_value = 1;
+
     WRITE_PACKED_GUID(object->guid);
 
     WWM_CHECK_RETURN_CODE(all_Vector3d_write(writer, &object->position));
@@ -3216,6 +3605,7 @@ static WowWorldResult vanilla_TransportInfo_write(WowWorldWriter* writer, const 
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MovementInfo_size(const vanilla_MovementInfo* object) {
@@ -3241,6 +3631,13 @@ static size_t vanilla_MovementInfo_size(const vanilla_MovementInfo* object) {
 }
 
 static WowWorldResult vanilla_MovementInfo_read(WowWorldReader* reader, vanilla_MovementInfo* object) {
+    int _return_value = 1;
+
+    if (28 > (reader->length - reader->index)) {
+        _return_value = (size_t)28 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->flags = 0;
     READ_U32(object->flags);
 
@@ -3275,9 +3672,13 @@ static WowWorldResult vanilla_MovementInfo_read(WowWorldReader* reader, vanilla_
 
     }
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 static WowWorldResult vanilla_MovementInfo_write(WowWorldWriter* writer, const vanilla_MovementInfo* object) {
+    int _return_value = 1;
+
     WRITE_U32(object->flags);
 
     WRITE_U32(object->timestamp);
@@ -3312,34 +3713,44 @@ static WowWorldResult vanilla_MovementInfo_write(WowWorldWriter* writer, const v
     }
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MovementInfo_free(vanilla_MovementInfo* object) {
-    if ((object->flags & VANILLA_MOVEMENT_FLAGS_ON_TRANSPORT) != 0) {
-    }
-    if ((object->flags & VANILLA_MOVEMENT_FLAGS_SWIMMING) != 0) {
-    }
-    if ((object->flags & VANILLA_MOVEMENT_FLAGS_JUMPING) != 0) {
-    }
-    if ((object->flags & VANILLA_MOVEMENT_FLAGS_SPLINE_ELEVATION) != 0) {
-    }
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_NpcTextUpdateEmote_read(WowWorldReader* reader, vanilla_NpcTextUpdateEmote* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->delay);
 
     READ_U32(object->emote);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 static WowWorldResult vanilla_NpcTextUpdateEmote_write(WowWorldWriter* writer, const vanilla_NpcTextUpdateEmote* object) {
+    int _return_value = 1;
+
     WRITE_U32(object->delay);
 
     WRITE_U32(object->emote);
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_NpcTextUpdate_free(vanilla_NpcTextUpdate* object) {
+    size_t i;
+
+    for (i = 0; i < 2; ++i) {
+        FREE_STRING(((object->texts)[i]));
+    }
 }
 
 static size_t vanilla_NpcTextUpdate_size(const vanilla_NpcTextUpdate* object) {
@@ -3356,6 +3767,16 @@ static size_t vanilla_NpcTextUpdate_size(const vanilla_NpcTextUpdate* object) {
 }
 
 static WowWorldResult vanilla_NpcTextUpdate_read(WowWorldReader* reader, vanilla_NpcTextUpdate* object) {
+    int _return_value = 1;
+
+    if (34 > (reader->length - reader->index)) {
+        _return_value = (size_t)34 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->texts[0] = NULL;
+    object->texts[1] = NULL;
+
     READ_FLOAT(object->probability);
 
     READ_ARRAY(object->texts, 2, READ_CSTRING(object->texts[i]));
@@ -3366,9 +3787,14 @@ static WowWorldResult vanilla_NpcTextUpdate_read(WowWorldReader* reader, vanilla
     READ_ARRAY(object->emotes, 3, WWM_CHECK_RETURN_CODE(vanilla_NpcTextUpdateEmote_read(reader, &object->emotes[i])));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_NpcTextUpdate_free(object);
+    return _return_value;
 }
 
 static WowWorldResult vanilla_NpcTextUpdate_write(WowWorldWriter* writer, const vanilla_NpcTextUpdate* object) {
+    int _return_value = 1;
+
     WRITE_FLOAT(object->probability);
 
     WRITE_ARRAY(object->texts, 2, WRITE_CSTRING(object->texts[i]));
@@ -3379,13 +3805,23 @@ static WowWorldResult vanilla_NpcTextUpdate_write(WowWorldWriter* writer, const 
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_NpcTextUpdate_free(vanilla_NpcTextUpdate* object) {
-    size_t i;
-
-    for (i = 0; i < 2; ++i) {
-        FREE_STRING(((object->texts)[i]));
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_Object_free(vanilla_Object* object) {
+    if (object->update_type == VANILLA_UPDATE_TYPE_VALUES) {
+    }
+    else if (object->update_type == VANILLA_UPDATE_TYPE_MOVEMENT) {
+        vanilla_MovementBlock_free(&object->movement1);
+    }
+    else if (object->update_type == VANILLA_UPDATE_TYPE_CREATE_OBJECT|| object->update_type == VANILLA_UPDATE_TYPE_CREATE_OBJECT2) {
+        vanilla_MovementBlock_free(&object->movement2);
+    }
+    else if (object->update_type == VANILLA_UPDATE_TYPE_OUT_OF_RANGE_OBJECTS|| object->update_type == VANILLA_UPDATE_TYPE_NEAR_OBJECTS) {
+        if (object->guids != NULL) {
+            free(object->guids);
+            object->guids = NULL;
+        }
     }
 }
 
@@ -3417,13 +3853,22 @@ static size_t vanilla_Object_size(const vanilla_Object* object) {
 }
 
 static WowWorldResult vanilla_Object_read(WowWorldReader* reader, vanilla_Object* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->guids = NULL;
+
     object->update_type = 0;
     READ_U8(object->update_type);
 
     if (object->update_type == VANILLA_UPDATE_TYPE_VALUES) {
         READ_PACKED_GUID(object->guid1);
 
-        vanilla_update_mask_read(reader, &object->mask1);
+        WWM_CHECK_RETURN_CODE(vanilla_update_mask_read(reader, &object->mask1));
 
     }
     else if (object->update_type == VANILLA_UPDATE_TYPE_MOVEMENT) {
@@ -3440,13 +3885,13 @@ static WowWorldResult vanilla_Object_read(WowWorldReader* reader, vanilla_Object
 
         WWM_CHECK_RETURN_CODE(vanilla_MovementBlock_read(reader, &object->movement2));
 
-        vanilla_update_mask_read(reader, &object->mask2);
+        WWM_CHECK_RETURN_CODE(vanilla_update_mask_read(reader, &object->mask2));
 
     }
     else if (object->update_type == VANILLA_UPDATE_TYPE_OUT_OF_RANGE_OBJECTS|| object->update_type == VANILLA_UPDATE_TYPE_NEAR_OBJECTS) {
         READ_U32(object->count);
 
-        object->guids = malloc(object->count * sizeof(uint64_t));
+        object->guids = calloc(object->count, sizeof(uint64_t));
         if (object->guids == NULL) {
             return WWM_RESULT_MALLOC_FAIL;
         }
@@ -3455,9 +3900,14 @@ static WowWorldResult vanilla_Object_read(WowWorldReader* reader, vanilla_Object
 
     }
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_Object_free(object);
+    return _return_value;
 }
 
 static WowWorldResult vanilla_Object_write(WowWorldWriter* writer, const vanilla_Object* object) {
+    int _return_value = 1;
+
     WRITE_U8(object->update_type);
 
     if (object->update_type == VANILLA_UPDATE_TYPE_VALUES) {
@@ -3490,24 +3940,17 @@ static WowWorldResult vanilla_Object_write(WowWorldWriter* writer, const vanilla
     }
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_Object_free(vanilla_Object* object) {
-    if (object->update_type == VANILLA_UPDATE_TYPE_VALUES) {
-    }
-    else if (object->update_type == VANILLA_UPDATE_TYPE_MOVEMENT) {
-        vanilla_MovementBlock_free(&object->movement1);
-    }
-    else if (object->update_type == VANILLA_UPDATE_TYPE_CREATE_OBJECT|| object->update_type == VANILLA_UPDATE_TYPE_CREATE_OBJECT2) {
-        vanilla_MovementBlock_free(&object->movement2);
-    }
-    else if (object->update_type == VANILLA_UPDATE_TYPE_OUT_OF_RANGE_OBJECTS|| object->update_type == VANILLA_UPDATE_TYPE_NEAR_OBJECTS) {
-        free(object->guids);
-        object->guids = NULL;
-    }
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_PetSpellCooldown_read(WowWorldReader* reader, vanilla_PetSpellCooldown* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U16(object->spell);
 
     READ_U16(object->spell_category);
@@ -3517,9 +3960,13 @@ static WowWorldResult vanilla_PetSpellCooldown_read(WowWorldReader* reader, vani
     READ_U32(object->category_cooldown);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 static WowWorldResult vanilla_PetSpellCooldown_write(WowWorldWriter* writer, const vanilla_PetSpellCooldown* object) {
+    int _return_value = 1;
+
     WRITE_U16(object->spell);
 
     WRITE_U16(object->spell_category);
@@ -3530,9 +3977,17 @@ static WowWorldResult vanilla_PetSpellCooldown_write(WowWorldWriter* writer, con
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_PetitionShowlist_read(WowWorldReader* reader, vanilla_PetitionShowlist* object) {
+    int _return_value = 1;
+
+    if (20 > (reader->length - reader->index)) {
+        _return_value = (size_t)20 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->index);
 
     READ_U32(object->charter_entry);
@@ -3544,9 +3999,13 @@ static WowWorldResult vanilla_PetitionShowlist_read(WowWorldReader* reader, vani
     READ_U32(object->unknown1);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 static WowWorldResult vanilla_PetitionShowlist_write(WowWorldWriter* writer, const vanilla_PetitionShowlist* object) {
+    int _return_value = 1;
+
     WRITE_U32(object->index);
 
     WRITE_U32(object->charter_entry);
@@ -3559,40 +4018,70 @@ static WowWorldResult vanilla_PetitionShowlist_write(WowWorldWriter* writer, con
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_PetitionSignature_read(WowWorldReader* reader, vanilla_PetitionSignature* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->signer);
 
     READ_U32(object->unknown1);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 static WowWorldResult vanilla_PetitionSignature_write(WowWorldWriter* writer, const vanilla_PetitionSignature* object) {
+    int _return_value = 1;
+
     WRITE_U64(object->signer);
 
     WRITE_U32(object->unknown1);
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_QuestDetailsEmote_read(WowWorldReader* reader, vanilla_QuestDetailsEmote* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->emote);
 
     READ_U32(object->emote_delay);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 static WowWorldResult vanilla_QuestDetailsEmote_write(WowWorldWriter* writer, const vanilla_QuestDetailsEmote* object) {
+    int _return_value = 1;
+
     WRITE_U32(object->emote);
 
     WRITE_U32(object->emote_delay);
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_QuestItem_free(vanilla_QuestItem* object) {
+    FREE_STRING(object->title);
+
 }
 
 static size_t vanilla_QuestItem_size(const vanilla_QuestItem* object) {
@@ -3600,6 +4089,15 @@ static size_t vanilla_QuestItem_size(const vanilla_QuestItem* object) {
 }
 
 static WowWorldResult vanilla_QuestItem_read(WowWorldReader* reader, vanilla_QuestItem* object) {
+    int _return_value = 1;
+
+    if (13 > (reader->length - reader->index)) {
+        _return_value = (size_t)13 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->title = NULL;
+
     READ_U32(object->quest_id);
 
     READ_U32(object->quest_icon);
@@ -3609,9 +4107,14 @@ static WowWorldResult vanilla_QuestItem_read(WowWorldReader* reader, vanilla_Que
     READ_CSTRING(object->title);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_QuestItem_free(object);
+    return _return_value;
 }
 
 static WowWorldResult vanilla_QuestItem_write(WowWorldWriter* writer, const vanilla_QuestItem* object) {
+    int _return_value = 1;
+
     WRITE_U32(object->quest_id);
 
     WRITE_U32(object->quest_icon);
@@ -3622,14 +4125,17 @@ static WowWorldResult vanilla_QuestItem_write(WowWorldWriter* writer, const vani
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_QuestItem_free(vanilla_QuestItem* object) {
-    FREE_STRING(object->title);
-
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_QuestItemRequirement_read(WowWorldReader* reader, vanilla_QuestItemRequirement* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->item);
 
     READ_U32(object->item_count);
@@ -3637,9 +4143,13 @@ static WowWorldResult vanilla_QuestItemRequirement_read(WowWorldReader* reader, 
     READ_U32(object->item_display_id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 static WowWorldResult vanilla_QuestItemRequirement_write(WowWorldWriter* writer, const vanilla_QuestItemRequirement* object) {
+    int _return_value = 1;
+
     WRITE_U32(object->item);
 
     WRITE_U32(object->item_count);
@@ -3648,26 +4158,46 @@ static WowWorldResult vanilla_QuestItemRequirement_write(WowWorldWriter* writer,
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_QuestItemReward_read(WowWorldReader* reader, vanilla_QuestItemReward* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->item);
 
     READ_U32(object->item_count);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 static WowWorldResult vanilla_QuestItemReward_write(WowWorldWriter* writer, const vanilla_QuestItemReward* object) {
+    int _return_value = 1;
+
     WRITE_U32(object->item);
 
     WRITE_U32(object->item_count);
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_QuestObjective_read(WowWorldReader* reader, vanilla_QuestObjective* object) {
+    int _return_value = 1;
+
+    if (16 > (reader->length - reader->index)) {
+        _return_value = (size_t)16 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->creature_id);
 
     READ_U32(object->kill_count);
@@ -3677,9 +4207,13 @@ static WowWorldResult vanilla_QuestObjective_read(WowWorldReader* reader, vanill
     READ_U32(object->required_item_count);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 static WowWorldResult vanilla_QuestObjective_write(WowWorldWriter* writer, const vanilla_QuestObjective* object) {
+    int _return_value = 1;
+
     WRITE_U32(object->creature_id);
 
     WRITE_U32(object->kill_count);
@@ -3690,9 +4224,17 @@ static WowWorldResult vanilla_QuestObjective_write(WowWorldWriter* writer, const
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_RaidInfo_read(WowWorldReader* reader, vanilla_RaidInfo* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->map = 0;
     READ_U32(object->map);
 
@@ -3701,9 +4243,13 @@ static WowWorldResult vanilla_RaidInfo_read(WowWorldReader* reader, vanilla_Raid
     READ_U32(object->instance_id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 static WowWorldResult vanilla_RaidInfo_write(WowWorldWriter* writer, const vanilla_RaidInfo* object) {
+    int _return_value = 1;
+
     WRITE_U32(object->map);
 
     WRITE_U32(object->reset_time);
@@ -3712,24 +4258,62 @@ static WowWorldResult vanilla_RaidInfo_write(WowWorldWriter* writer, const vanil
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_RaidTargetUpdate_read(WowWorldReader* reader, vanilla_RaidTargetUpdate* object) {
+    int _return_value = 1;
+
+    if (9 > (reader->length - reader->index)) {
+        _return_value = (size_t)9 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->index = 0;
     READ_U8(object->index);
 
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 static WowWorldResult vanilla_RaidTargetUpdate_write(WowWorldWriter* writer, const vanilla_RaidTargetUpdate* object) {
+    int _return_value = 1;
+
     WRITE_U8(object->index);
 
     WRITE_U64(object->guid);
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SpellCastTargets_free(vanilla_SpellCastTargets* object) {
+    if ((object->target_flags & VANILLA_SPELL_CAST_TARGET_FLAGS_UNIT) != 0) {
+    }
+    if ((object->target_flags & VANILLA_SPELL_CAST_TARGET_FLAGS_GAMEOBJECT) != 0) {
+    }
+    else if ((object->target_flags & VANILLA_SPELL_CAST_TARGET_FLAGS_OBJECT_UNK) != 0) {
+    }
+    if ((object->target_flags & VANILLA_SPELL_CAST_TARGET_FLAGS_ITEM) != 0) {
+    }
+    else if ((object->target_flags & VANILLA_SPELL_CAST_TARGET_FLAGS_TRADE_ITEM) != 0) {
+    }
+    if ((object->target_flags & VANILLA_SPELL_CAST_TARGET_FLAGS_SOURCE_LOCATION) != 0) {
+    }
+    if ((object->target_flags & VANILLA_SPELL_CAST_TARGET_FLAGS_DEST_LOCATION) != 0) {
+    }
+    if ((object->target_flags & VANILLA_SPELL_CAST_TARGET_FLAGS_STRING) != 0) {
+        FREE_STRING(object->target_string);
+
+    }
+    if ((object->target_flags & VANILLA_SPELL_CAST_TARGET_FLAGS_CORPSE) != 0) {
+    }
+    else if ((object->target_flags & VANILLA_SPELL_CAST_TARGET_FLAGS_PVP_CORPSE) != 0) {
+    }
 }
 
 static size_t vanilla_SpellCastTargets_size(const vanilla_SpellCastTargets* object) {
@@ -3776,6 +4360,15 @@ static size_t vanilla_SpellCastTargets_size(const vanilla_SpellCastTargets* obje
 }
 
 static WowWorldResult vanilla_SpellCastTargets_read(WowWorldReader* reader, vanilla_SpellCastTargets* object) {
+    int _return_value = 1;
+
+    if (2 > (reader->length - reader->index)) {
+        _return_value = (size_t)2 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->target_string = NULL;
+
     object->target_flags = 0;
     READ_U16(object->target_flags);
 
@@ -3820,9 +4413,14 @@ static WowWorldResult vanilla_SpellCastTargets_read(WowWorldReader* reader, vani
 
     }
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SpellCastTargets_free(object);
+    return _return_value;
 }
 
 static WowWorldResult vanilla_SpellCastTargets_write(WowWorldWriter* writer, const vanilla_SpellCastTargets* object) {
+    int _return_value = 1;
+
     WRITE_U16(object->target_flags);
 
     if ((object->target_flags & VANILLA_SPELL_CAST_TARGET_FLAGS_UNIT) != 0) {
@@ -3867,48 +4465,36 @@ static WowWorldResult vanilla_SpellCastTargets_write(WowWorldWriter* writer, con
     }
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SpellCastTargets_free(vanilla_SpellCastTargets* object) {
-    if ((object->target_flags & VANILLA_SPELL_CAST_TARGET_FLAGS_UNIT) != 0) {
-    }
-    if ((object->target_flags & VANILLA_SPELL_CAST_TARGET_FLAGS_GAMEOBJECT) != 0) {
-    }
-    else if ((object->target_flags & VANILLA_SPELL_CAST_TARGET_FLAGS_OBJECT_UNK) != 0) {
-    }
-    if ((object->target_flags & VANILLA_SPELL_CAST_TARGET_FLAGS_ITEM) != 0) {
-    }
-    else if ((object->target_flags & VANILLA_SPELL_CAST_TARGET_FLAGS_TRADE_ITEM) != 0) {
-    }
-    if ((object->target_flags & VANILLA_SPELL_CAST_TARGET_FLAGS_SOURCE_LOCATION) != 0) {
-    }
-    if ((object->target_flags & VANILLA_SPELL_CAST_TARGET_FLAGS_DEST_LOCATION) != 0) {
-    }
-    if ((object->target_flags & VANILLA_SPELL_CAST_TARGET_FLAGS_STRING) != 0) {
-        FREE_STRING(object->target_string);
-
-    }
-    if ((object->target_flags & VANILLA_SPELL_CAST_TARGET_FLAGS_CORPSE) != 0) {
-    }
-    else if ((object->target_flags & VANILLA_SPELL_CAST_TARGET_FLAGS_PVP_CORPSE) != 0) {
-    }
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SpellCooldownStatus_read(WowWorldReader* reader, vanilla_SpellCooldownStatus* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->id);
 
     READ_U32(object->cooldown_time);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 static WowWorldResult vanilla_SpellCooldownStatus_write(WowWorldWriter* writer, const vanilla_SpellCooldownStatus* object) {
+    int _return_value = 1;
+
     WRITE_U32(object->id);
 
     WRITE_U32(object->cooldown_time);
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SpellLog_size(const vanilla_SpellLog* object) {
@@ -3946,6 +4532,13 @@ static size_t vanilla_SpellLog_size(const vanilla_SpellLog* object) {
 }
 
 static WowWorldResult vanilla_SpellLog_read(WowWorldReader* reader, vanilla_SpellLog* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->effect = 0;
     READ_U32(object->effect);
 
@@ -4011,9 +4604,13 @@ static WowWorldResult vanilla_SpellLog_read(WowWorldReader* reader, vanilla_Spel
 
     }
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 static WowWorldResult vanilla_SpellLog_write(WowWorldWriter* writer, const vanilla_SpellLog* object) {
+    int _return_value = 1;
+
     WRITE_U32(object->effect);
 
     WRITE_U32(1);
@@ -4078,63 +4675,72 @@ static WowWorldResult vanilla_SpellLog_write(WowWorldWriter* writer, const vanil
     }
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SpellLog_free(vanilla_SpellLog* object) {
-    if (object->effect == VANILLA_SPELL_EFFECT_POWER_DRAIN) {
-    }
-    else if (object->effect == VANILLA_SPELL_EFFECT_HEAL|| object->effect == VANILLA_SPELL_EFFECT_HEAL_MAX_HEALTH) {
-    }
-    else if (object->effect == VANILLA_SPELL_EFFECT_ENERGIZE) {
-    }
-    else if (object->effect == VANILLA_SPELL_EFFECT_ADD_EXTRA_ATTACKS) {
-    }
-    else if (object->effect == VANILLA_SPELL_EFFECT_CREATE_ITEM) {
-    }
-    else if (object->effect == VANILLA_SPELL_EFFECT_INTERRUPT_CAST) {
-    }
-    else if (object->effect == VANILLA_SPELL_EFFECT_DURABILITY_DAMAGE) {
-    }
-    else if (object->effect == VANILLA_SPELL_EFFECT_FEED_PET) {
-    }
-    else if (object->effect == VANILLA_SPELL_EFFECT_INSTAKILL|| object->effect == VANILLA_SPELL_EFFECT_RESURRECT|| object->effect == VANILLA_SPELL_EFFECT_DISPEL|| object->effect == VANILLA_SPELL_EFFECT_THREAT|| object->effect == VANILLA_SPELL_EFFECT_DISTRACT|| object->effect == VANILLA_SPELL_EFFECT_SANCTUARY|| object->effect == VANILLA_SPELL_EFFECT_THREAT_ALL|| object->effect == VANILLA_SPELL_EFFECT_DISPEL_MECHANIC|| object->effect == VANILLA_SPELL_EFFECT_RESURRECT_NEW|| object->effect == VANILLA_SPELL_EFFECT_ATTACK_ME|| object->effect == VANILLA_SPELL_EFFECT_SKIN_PLAYER_CORPSE|| object->effect == VANILLA_SPELL_EFFECT_MODIFY_THREAT_PERCENT|| object->effect == VANILLA_SPELL_EFFECT_UNKNOWN126|| object->effect == VANILLA_SPELL_EFFECT_OPEN_LOCK|| object->effect == VANILLA_SPELL_EFFECT_OPEN_LOCK_ITEM|| object->effect == VANILLA_SPELL_EFFECT_DISMISS_PET|| object->effect == VANILLA_SPELL_EFFECT_TRANS_DOOR|| object->effect == VANILLA_SPELL_EFFECT_SUMMON|| object->effect == VANILLA_SPELL_EFFECT_SUMMON_PET|| object->effect == VANILLA_SPELL_EFFECT_SUMMON_WILD|| object->effect == VANILLA_SPELL_EFFECT_SUMMON_GUARDIAN|| object->effect == VANILLA_SPELL_EFFECT_SUMMON_TOTEM_SLOT1|| object->effect == VANILLA_SPELL_EFFECT_SUMMON_TOTEM_SLOT2|| object->effect == VANILLA_SPELL_EFFECT_SUMMON_TOTEM_SLOT3|| object->effect == VANILLA_SPELL_EFFECT_SUMMON_TOTEM_SLOT4|| object->effect == VANILLA_SPELL_EFFECT_SUMMON_POSSESSED|| object->effect == VANILLA_SPELL_EFFECT_SUMMON_TOTEM|| object->effect == VANILLA_SPELL_EFFECT_SUMMON_CRITTER|| object->effect == VANILLA_SPELL_EFFECT_SUMMON_OBJECT_WILD|| object->effect == VANILLA_SPELL_EFFECT_SUMMON_OBJECT_SLOT1|| object->effect == VANILLA_SPELL_EFFECT_SUMMON_OBJECT_SLOT2|| object->effect == VANILLA_SPELL_EFFECT_SUMMON_OBJECT_SLOT3|| object->effect == VANILLA_SPELL_EFFECT_SUMMON_OBJECT_SLOT4|| object->effect == VANILLA_SPELL_EFFECT_SUMMON_DEMON) {
-    }
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SpellLogMiss_read(WowWorldReader* reader, vanilla_SpellLogMiss* object) {
+    int _return_value = 1;
+
+    if (9 > (reader->length - reader->index)) {
+        _return_value = (size_t)9 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->target);
 
     object->miss_info = 0;
     READ_U8(object->miss_info);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 static WowWorldResult vanilla_SpellLogMiss_write(WowWorldWriter* writer, const vanilla_SpellLogMiss* object) {
+    int _return_value = 1;
+
     WRITE_U64(object->target);
 
     WRITE_U8(object->miss_info);
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SpellMiss_read(WowWorldReader* reader, vanilla_SpellMiss* object) {
+    int _return_value = 1;
+
+    if (9 > (reader->length - reader->index)) {
+        _return_value = (size_t)9 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->target);
 
     object->miss_info = 0;
     READ_U8(object->miss_info);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 static WowWorldResult vanilla_SpellMiss_write(WowWorldWriter* writer, const vanilla_SpellMiss* object) {
+    int _return_value = 1;
+
     WRITE_U64(object->target);
 
     WRITE_U8(object->miss_info);
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_StabledPet_free(vanilla_StabledPet* object) {
+    FREE_STRING(object->name);
+
 }
 
 static size_t vanilla_StabledPet_size(const vanilla_StabledPet* object) {
@@ -4142,6 +4748,15 @@ static size_t vanilla_StabledPet_size(const vanilla_StabledPet* object) {
 }
 
 static WowWorldResult vanilla_StabledPet_read(WowWorldReader* reader, vanilla_StabledPet* object) {
+    int _return_value = 1;
+
+    if (18 > (reader->length - reader->index)) {
+        _return_value = (size_t)18 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->name = NULL;
+
     READ_U32(object->pet_number);
 
     READ_U32(object->entry);
@@ -4155,9 +4770,14 @@ static WowWorldResult vanilla_StabledPet_read(WowWorldReader* reader, vanilla_St
     READ_U8(object->slot);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_StabledPet_free(object);
+    return _return_value;
 }
 
 static WowWorldResult vanilla_StabledPet_write(WowWorldWriter* writer, const vanilla_StabledPet* object) {
+    int _return_value = 1;
+
     WRITE_U32(object->pet_number);
 
     WRITE_U32(object->entry);
@@ -4172,14 +4792,17 @@ static WowWorldResult vanilla_StabledPet_write(WowWorldWriter* writer, const van
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_StabledPet_free(vanilla_StabledPet* object) {
-    FREE_STRING(object->name);
-
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_TradeSlot_read(WowWorldReader* reader, vanilla_TradeSlot* object) {
+    int _return_value = 1;
+
+    if (61 > (reader->length - reader->index)) {
+        _return_value = (size_t)61 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U8(object->trade_slot_number);
 
     READ_U32(object->item);
@@ -4209,9 +4832,13 @@ static WowWorldResult vanilla_TradeSlot_read(WowWorldReader* reader, vanilla_Tra
     READ_U32(object->durability);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 static WowWorldResult vanilla_TradeSlot_write(WowWorldWriter* writer, const vanilla_TradeSlot* object) {
+    int _return_value = 1;
+
     WRITE_U8(object->trade_slot_number);
 
     WRITE_U32(object->item);
@@ -4242,9 +4869,17 @@ static WowWorldResult vanilla_TradeSlot_write(WowWorldWriter* writer, const vani
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_TrainerSpell_read(WowWorldReader* reader, vanilla_TrainerSpell* object) {
+    int _return_value = 1;
+
+    if (38 > (reader->length - reader->index)) {
+        _return_value = (size_t)38 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->spell);
 
     object->state = 0;
@@ -4266,9 +4901,13 @@ static WowWorldResult vanilla_TrainerSpell_read(WowWorldReader* reader, vanilla_
     READ_ARRAY(object->required_spells, 3, READ_U32(object->required_spells[i]));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 static WowWorldResult vanilla_TrainerSpell_write(WowWorldWriter* writer, const vanilla_TrainerSpell* object) {
+    int _return_value = 1;
+
     WRITE_U32(object->spell);
 
     WRITE_U8(object->state);
@@ -4289,6 +4928,14 @@ static WowWorldResult vanilla_TrainerSpell_write(WowWorldWriter* writer, const v
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_WhoPlayer_free(vanilla_WhoPlayer* object) {
+    FREE_STRING(object->name);
+
+    FREE_STRING(object->guild);
+
 }
 
 static size_t vanilla_WhoPlayer_size(const vanilla_WhoPlayer* object) {
@@ -4296,6 +4943,16 @@ static size_t vanilla_WhoPlayer_size(const vanilla_WhoPlayer* object) {
 }
 
 static WowWorldResult vanilla_WhoPlayer_read(WowWorldReader* reader, vanilla_WhoPlayer* object) {
+    int _return_value = 1;
+
+    if (16 > (reader->length - reader->index)) {
+        _return_value = (size_t)16 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->name = NULL;
+    object->guild = NULL;
+
     READ_CSTRING(object->name);
 
     READ_CSTRING(object->guild);
@@ -4314,9 +4971,14 @@ static WowWorldResult vanilla_WhoPlayer_read(WowWorldReader* reader, vanilla_Who
     READ_U32(object->party_status);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_WhoPlayer_free(object);
+    return _return_value;
 }
 
 static WowWorldResult vanilla_WhoPlayer_write(WowWorldWriter* writer, const vanilla_WhoPlayer* object) {
+    int _return_value = 1;
+
     WRITE_CSTRING(object->name);
 
     WRITE_CSTRING(object->guild);
@@ -4333,30 +4995,36 @@ static WowWorldResult vanilla_WhoPlayer_write(WowWorldWriter* writer, const vani
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_WhoPlayer_free(vanilla_WhoPlayer* object) {
-    FREE_STRING(object->name);
-
-    FREE_STRING(object->guild);
-
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_WorldState_read(WowWorldReader* reader, vanilla_WorldState* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->state);
 
     READ_U32(object->value);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 static WowWorldResult vanilla_WorldState_write(WowWorldWriter* writer, const vanilla_WorldState* object) {
+    int _return_value = 1;
+
     WRITE_U32(object->state);
 
     WRITE_U32(object->value);
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_aura_mask_size(const vanilla_AuraMask* object) {
@@ -4373,6 +5041,7 @@ static size_t vanilla_aura_mask_size(const vanilla_AuraMask* object) {
 }
 
 static WowWorldResult vanilla_aura_mask_read(WowWorldReader* reader, vanilla_AuraMask* mask) {
+    int _return_value = 1;
     uint32_t header;
     uint32_t i;
     WWM_CHECK_RETURN_CODE(wwm_read_u32(reader, &header));
@@ -4386,9 +5055,11 @@ static WowWorldResult vanilla_aura_mask_read(WowWorldReader* reader, vanilla_Aur
     }
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_aura_mask_write(WowWorldWriter* writer, const vanilla_AuraMask* mask) {
+    int _return_value = 1;
     uint32_t header = 0;
     uint32_t i;
 
@@ -4407,15 +5078,29 @@ static WowWorldResult vanilla_aura_mask_write(WowWorldWriter* writer, const vani
     }
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BOOTME_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x00000001); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_DBLOOKUP_free(vanilla_CMSG_DBLOOKUP* object) {
+    FREE_STRING(object->query);
+
 }
 
 static size_t vanilla_CMSG_DBLOOKUP_size(const vanilla_CMSG_DBLOOKUP* object) {
@@ -4423,12 +5108,31 @@ static size_t vanilla_CMSG_DBLOOKUP_size(const vanilla_CMSG_DBLOOKUP* object) {
 }
 
 static WowWorldResult vanilla_CMSG_DBLOOKUP_read(WowWorldReader* reader, vanilla_CMSG_DBLOOKUP* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->query = NULL;
+
     READ_CSTRING(object->query);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_DBLOOKUP_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_DBLOOKUP_write(WowWorldWriter* writer, const vanilla_CMSG_DBLOOKUP* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_DBLOOKUP_size(object) + 4); /* size */
 
     WRITE_U32(0x00000002); /* opcode */
@@ -4437,14 +5141,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_DBLOOKUP_write(WowWorldW
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_DBLOOKUP_free(vanilla_CMSG_DBLOOKUP* object) {
-    FREE_STRING(object->query);
-
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_WORLD_TELEPORT_read(WowWorldReader* reader, vanilla_CMSG_WORLD_TELEPORT* object) {
+    int _return_value = 1;
+
+    if (24 > (reader->length - reader->index)) {
+        _return_value = (size_t)24 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->time);
 
     object->map = 0;
@@ -4455,9 +5162,18 @@ static WowWorldResult vanilla_CMSG_WORLD_TELEPORT_read(WowWorldReader* reader, v
     READ_FLOAT(object->orientation);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_WORLD_TELEPORT_write(WowWorldWriter* writer, const vanilla_CMSG_WORLD_TELEPORT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0018 + 4); /* size */
 
     WRITE_U32(0x00000008); /* opcode */
@@ -4472,6 +5188,12 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_WORLD_TELEPORT_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_TELEPORT_TO_UNIT_free(vanilla_CMSG_TELEPORT_TO_UNIT* object) {
+    FREE_STRING(object->name);
+
 }
 
 static size_t vanilla_CMSG_TELEPORT_TO_UNIT_size(const vanilla_CMSG_TELEPORT_TO_UNIT* object) {
@@ -4479,12 +5201,31 @@ static size_t vanilla_CMSG_TELEPORT_TO_UNIT_size(const vanilla_CMSG_TELEPORT_TO_
 }
 
 static WowWorldResult vanilla_CMSG_TELEPORT_TO_UNIT_read(WowWorldReader* reader, vanilla_CMSG_TELEPORT_TO_UNIT* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->name = NULL;
+
     READ_CSTRING(object->name);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_TELEPORT_TO_UNIT_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_TELEPORT_TO_UNIT_write(WowWorldWriter* writer, const vanilla_CMSG_TELEPORT_TO_UNIT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_TELEPORT_TO_UNIT_size(object) + 4); /* size */
 
     WRITE_U32(0x00000009); /* opcode */
@@ -4493,9 +5234,10 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_TELEPORT_TO_UNIT_write(W
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_TELEPORT_TO_UNIT_free(vanilla_CMSG_TELEPORT_TO_UNIT* object) {
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHAR_CREATE_free(vanilla_CMSG_CHAR_CREATE* object) {
     FREE_STRING(object->name);
 
 }
@@ -4505,6 +5247,15 @@ static size_t vanilla_CMSG_CHAR_CREATE_size(const vanilla_CMSG_CHAR_CREATE* obje
 }
 
 static WowWorldResult vanilla_CMSG_CHAR_CREATE_read(WowWorldReader* reader, vanilla_CMSG_CHAR_CREATE* object) {
+    int _return_value = 1;
+
+    if (10 > (reader->length - reader->index)) {
+        _return_value = (size_t)10 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->name = NULL;
+
     READ_CSTRING(object->name);
 
     object->race = 0;
@@ -4529,9 +5280,19 @@ static WowWorldResult vanilla_CMSG_CHAR_CREATE_read(WowWorldReader* reader, vani
     SKIP_FORWARD_BYTES(1);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_CHAR_CREATE_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHAR_CREATE_write(WowWorldWriter* writer, const vanilla_CMSG_CHAR_CREATE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_CHAR_CREATE_size(object) + 4); /* size */
 
     WRITE_U32(0x00000036); /* opcode */
@@ -4558,29 +5319,49 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHAR_CREATE_write(WowWor
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHAR_CREATE_free(vanilla_CMSG_CHAR_CREATE* object) {
-    FREE_STRING(object->name);
-
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHAR_ENUM_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x00000037); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_CHAR_DELETE_read(WowWorldReader* reader, vanilla_CMSG_CHAR_DELETE* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHAR_DELETE_write(WowWorldWriter* writer, const vanilla_CMSG_CHAR_DELETE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x00000038); /* opcode */
@@ -4589,16 +5370,33 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHAR_DELETE_write(WowWor
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_CHAR_CREATE_read(WowWorldReader* reader, vanilla_SMSG_CHAR_CREATE* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->result = 0;
     READ_U8(object->result);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CHAR_CREATE_write(WowWorldWriter* writer, const vanilla_SMSG_CHAR_CREATE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0001 + 2); /* size */
 
     WRITE_U16(0x0000003a); /* opcode */
@@ -4607,6 +5405,19 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CHAR_CREATE_write(WowWor
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_CHAR_ENUM_free(vanilla_SMSG_CHAR_ENUM* object) {
+    size_t i;
+
+    if (object->characters != NULL) {
+        for (i = 0; i < object->amount_of_characters; ++i) {
+            vanilla_Character_free(&((object->characters)[i]));
+        }
+        free(object->characters);
+        object->characters = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_CHAR_ENUM_size(const vanilla_SMSG_CHAR_ENUM* object) {
@@ -4623,9 +5434,18 @@ static size_t vanilla_SMSG_CHAR_ENUM_size(const vanilla_SMSG_CHAR_ENUM* object) 
 }
 
 static WowWorldResult vanilla_SMSG_CHAR_ENUM_read(WowWorldReader* reader, vanilla_SMSG_CHAR_ENUM* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->characters = NULL;
+
     READ_U8(object->amount_of_characters);
 
-    object->characters = malloc(object->amount_of_characters * sizeof(vanilla_Character));
+    object->characters = calloc(object->amount_of_characters, sizeof(vanilla_Character));
     if (object->characters == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -4633,9 +5453,19 @@ static WowWorldResult vanilla_SMSG_CHAR_ENUM_read(WowWorldReader* reader, vanill
 
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_CHAR_ENUM_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CHAR_ENUM_write(WowWorldWriter* writer, const vanilla_SMSG_CHAR_ENUM* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_CHAR_ENUM_size(object) + 2); /* size */
 
     WRITE_U16(0x0000003b); /* opcode */
@@ -4646,26 +5476,33 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CHAR_ENUM_write(WowWorld
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_CHAR_ENUM_free(vanilla_SMSG_CHAR_ENUM* object) {
-    size_t i;
-
-    for (i = 0; i < object->amount_of_characters; ++i) {
-        vanilla_Character_free(&((object->characters)[i]));
-    }
-    free(object->characters);
-    object->characters = NULL;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_CHAR_DELETE_read(WowWorldReader* reader, vanilla_SMSG_CHAR_DELETE* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->result = 0;
     READ_U8(object->result);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CHAR_DELETE_write(WowWorldWriter* writer, const vanilla_SMSG_CHAR_DELETE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0001 + 2); /* size */
 
     WRITE_U16(0x0000003c); /* opcode */
@@ -4674,15 +5511,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CHAR_DELETE_write(WowWor
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_PLAYER_LOGIN_read(WowWorldReader* reader, vanilla_CMSG_PLAYER_LOGIN* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PLAYER_LOGIN_write(WowWorldWriter* writer, const vanilla_CMSG_PLAYER_LOGIN* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x0000003d); /* opcode */
@@ -4691,9 +5545,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PLAYER_LOGIN_write(WowWo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_NEW_WORLD_read(WowWorldReader* reader, vanilla_SMSG_NEW_WORLD* object) {
+    int _return_value = 1;
+
+    if (20 > (reader->length - reader->index)) {
+        _return_value = (size_t)20 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->map = 0;
     READ_U32(object->map);
 
@@ -4702,9 +5564,18 @@ static WowWorldResult vanilla_SMSG_NEW_WORLD_read(WowWorldReader* reader, vanill
     READ_FLOAT(object->orientation);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_NEW_WORLD_write(WowWorldWriter* writer, const vanilla_SMSG_NEW_WORLD* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0014 + 2); /* size */
 
     WRITE_U16(0x0000003e); /* opcode */
@@ -4717,6 +5588,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_NEW_WORLD_write(WowWorld
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_TRANSFER_PENDING_free(vanilla_SMSG_TRANSFER_PENDING* object) {
+    if (object->has_transport != NULL) {
+        free(object->has_transport);
+        object->has_transport = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_TRANSFER_PENDING_size(const vanilla_SMSG_TRANSFER_PENDING* object) {
@@ -4730,8 +5609,16 @@ static size_t vanilla_SMSG_TRANSFER_PENDING_size(const vanilla_SMSG_TRANSFER_PEN
 }
 
 static WowWorldResult vanilla_SMSG_TRANSFER_PENDING_read(WowWorldReader* reader, vanilla_SMSG_TRANSFER_PENDING* object, size_t body_size) {
+    int _return_value = 1;
+
     size_t _size = 0;
 
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->has_transport = NULL;
     object->map = 0;
     READ_U32(object->map);
     _size += 4;
@@ -4740,7 +5627,8 @@ static WowWorldResult vanilla_SMSG_TRANSFER_PENDING_read(WowWorldReader* reader,
     if (_size < body_size) {
         object->has_transport = malloc(sizeof(vanilla_SMSG_TRANSFER_PENDING_has_transport));
         if (object->has_transport == NULL) {
-            return WWM_RESULT_MALLOC_FAIL;
+            _return_value = WWM_RESULT_MALLOC_FAIL;
+            goto cleanup;
         }
 
         READ_U32(object->has_transport->transport);
@@ -4750,9 +5638,19 @@ static WowWorldResult vanilla_SMSG_TRANSFER_PENDING_read(WowWorldReader* reader,
 
     }
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_TRANSFER_PENDING_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TRANSFER_PENDING_write(WowWorldWriter* writer, const vanilla_SMSG_TRANSFER_PENDING* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_TRANSFER_PENDING_size(object) + 2); /* size */
 
     WRITE_U16(0x0000003f); /* opcode */
@@ -4767,13 +5665,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TRANSFER_PENDING_write(W
     }
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_TRANSFER_PENDING_free(vanilla_SMSG_TRANSFER_PENDING* object) {
-    free(object->has_transport);
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_TRANSFER_ABORTED_read(WowWorldReader* reader, vanilla_SMSG_TRANSFER_ABORTED* object) {
+    int _return_value = 1;
+
+    if (6 > (reader->length - reader->index)) {
+        _return_value = (size_t)6 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->map = 0;
     READ_U32(object->map);
 
@@ -4783,9 +5685,18 @@ static WowWorldResult vanilla_SMSG_TRANSFER_ABORTED_read(WowWorldReader* reader,
     READ_U8(object->argument);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TRANSFER_ABORTED_write(WowWorldWriter* writer, const vanilla_SMSG_TRANSFER_ABORTED* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0006 + 2); /* size */
 
     WRITE_U16(0x00000040); /* opcode */
@@ -4798,16 +5709,33 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TRANSFER_ABORTED_write(W
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_CHARACTER_LOGIN_FAILED_read(WowWorldReader* reader, vanilla_SMSG_CHARACTER_LOGIN_FAILED* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->result = 0;
     READ_U8(object->result);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CHARACTER_LOGIN_FAILED_write(WowWorldWriter* writer, const vanilla_SMSG_CHARACTER_LOGIN_FAILED* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0001 + 2); /* size */
 
     WRITE_U16(0x00000041); /* opcode */
@@ -4816,17 +5744,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CHARACTER_LOGIN_FAILED_w
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_LOGIN_SETTIMESPEED_read(WowWorldReader* reader, vanilla_SMSG_LOGIN_SETTIMESPEED* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->datetime);
 
     READ_FLOAT(object->timescale);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOGIN_SETTIMESPEED_write(WowWorldWriter* writer, const vanilla_SMSG_LOGIN_SETTIMESPEED* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 2); /* size */
 
     WRITE_U16(0x00000042); /* opcode */
@@ -4837,27 +5782,51 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOGIN_SETTIMESPEED_write
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PLAYER_LOGOUT_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x0000004a); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_LOGOUT_REQUEST_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x0000004b); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_LOGOUT_RESPONSE_read(WowWorldReader* reader, vanilla_SMSG_LOGOUT_RESPONSE* object) {
+    int _return_value = 1;
+
+    if (5 > (reader->length - reader->index)) {
+        _return_value = (size_t)5 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->result = 0;
     READ_U32(object->result);
 
@@ -4865,9 +5834,18 @@ static WowWorldResult vanilla_SMSG_LOGOUT_RESPONSE_read(WowWorldReader* reader, 
     READ_U8(object->speed);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOGOUT_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_LOGOUT_RESPONSE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0005 + 2); /* size */
 
     WRITE_U16(0x0000004c); /* opcode */
@@ -4878,42 +5856,83 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOGOUT_RESPONSE_write(Wo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOGOUT_COMPLETE_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 2); /* size */
 
     WRITE_U16(0x0000004d); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_LOGOUT_CANCEL_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x0000004e); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOGOUT_CANCEL_ACK_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 2); /* size */
 
     WRITE_U16(0x0000004f); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_NAME_QUERY_read(WowWorldReader* reader, vanilla_CMSG_NAME_QUERY* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_NAME_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_NAME_QUERY* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x00000050); /* opcode */
@@ -4922,6 +5941,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_NAME_QUERY_write(WowWorl
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_NAME_QUERY_RESPONSE_free(vanilla_SMSG_NAME_QUERY_RESPONSE* object) {
+    FREE_STRING(object->character_name);
+
+    FREE_STRING(object->realm_name);
+
 }
 
 static size_t vanilla_SMSG_NAME_QUERY_RESPONSE_size(const vanilla_SMSG_NAME_QUERY_RESPONSE* object) {
@@ -4929,6 +5956,16 @@ static size_t vanilla_SMSG_NAME_QUERY_RESPONSE_size(const vanilla_SMSG_NAME_QUER
 }
 
 static WowWorldResult vanilla_SMSG_NAME_QUERY_RESPONSE_read(WowWorldReader* reader, vanilla_SMSG_NAME_QUERY_RESPONSE* object) {
+    int _return_value = 1;
+
+    if (22 > (reader->length - reader->index)) {
+        _return_value = (size_t)22 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->character_name = NULL;
+    object->realm_name = NULL;
+
     READ_U64(object->guid);
 
     READ_CSTRING(object->character_name);
@@ -4945,9 +5982,19 @@ static WowWorldResult vanilla_SMSG_NAME_QUERY_RESPONSE_read(WowWorldReader* read
     READ_U32(object->class_type);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_NAME_QUERY_RESPONSE_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_NAME_QUERY_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_NAME_QUERY_RESPONSE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_NAME_QUERY_RESPONSE_size(object) + 2); /* size */
 
     WRITE_U16(0x00000051); /* opcode */
@@ -4966,24 +6013,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_NAME_QUERY_RESPONSE_writ
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_NAME_QUERY_RESPONSE_free(vanilla_SMSG_NAME_QUERY_RESPONSE* object) {
-    FREE_STRING(object->character_name);
-
-    FREE_STRING(object->realm_name);
-
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_PET_NAME_QUERY_read(WowWorldReader* reader, vanilla_CMSG_PET_NAME_QUERY* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->pet_number);
 
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PET_NAME_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_PET_NAME_QUERY* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 4); /* size */
 
     WRITE_U32(0x00000052); /* opcode */
@@ -4994,6 +6051,12 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PET_NAME_QUERY_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_PET_NAME_QUERY_RESPONSE_free(vanilla_SMSG_PET_NAME_QUERY_RESPONSE* object) {
+    FREE_STRING(object->name);
+
 }
 
 static size_t vanilla_SMSG_PET_NAME_QUERY_RESPONSE_size(const vanilla_SMSG_PET_NAME_QUERY_RESPONSE* object) {
@@ -5001,6 +6064,15 @@ static size_t vanilla_SMSG_PET_NAME_QUERY_RESPONSE_size(const vanilla_SMSG_PET_N
 }
 
 static WowWorldResult vanilla_SMSG_PET_NAME_QUERY_RESPONSE_read(WowWorldReader* reader, vanilla_SMSG_PET_NAME_QUERY_RESPONSE* object) {
+    int _return_value = 1;
+
+    if (9 > (reader->length - reader->index)) {
+        _return_value = (size_t)9 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->name = NULL;
+
     READ_U32(object->pet_number);
 
     READ_CSTRING(object->name);
@@ -5008,9 +6080,19 @@ static WowWorldResult vanilla_SMSG_PET_NAME_QUERY_RESPONSE_read(WowWorldReader* 
     READ_U32(object->pet_name_timestamp);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_PET_NAME_QUERY_RESPONSE_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PET_NAME_QUERY_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_PET_NAME_QUERY_RESPONSE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_PET_NAME_QUERY_RESPONSE_size(object) + 2); /* size */
 
     WRITE_U16(0x00000053); /* opcode */
@@ -5023,20 +6105,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PET_NAME_QUERY_RESPONSE_
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_PET_NAME_QUERY_RESPONSE_free(vanilla_SMSG_PET_NAME_QUERY_RESPONSE* object) {
-    FREE_STRING(object->name);
-
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_GUILD_QUERY_read(WowWorldReader* reader, vanilla_CMSG_GUILD_QUERY* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->guild_id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_GUILD_QUERY* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 4); /* size */
 
     WRITE_U32(0x00000054); /* opcode */
@@ -5045,6 +6139,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_QUERY_write(WowWor
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GUILD_QUERY_RESPONSE_free(vanilla_SMSG_GUILD_QUERY_RESPONSE* object) {
+    size_t i;
+
+    FREE_STRING(object->name);
+
+    for (i = 0; i < 10; ++i) {
+        FREE_STRING(((object->rank_names)[i]));
+    }
 }
 
 static size_t vanilla_SMSG_GUILD_QUERY_RESPONSE_size(const vanilla_SMSG_GUILD_QUERY_RESPONSE* object) {
@@ -5061,6 +6166,25 @@ static size_t vanilla_SMSG_GUILD_QUERY_RESPONSE_size(const vanilla_SMSG_GUILD_QU
 }
 
 static WowWorldResult vanilla_SMSG_GUILD_QUERY_RESPONSE_read(WowWorldReader* reader, vanilla_SMSG_GUILD_QUERY_RESPONSE* object) {
+    int _return_value = 1;
+
+    if (35 > (reader->length - reader->index)) {
+        _return_value = (size_t)35 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->name = NULL;
+    object->rank_names[0] = NULL;
+    object->rank_names[1] = NULL;
+    object->rank_names[2] = NULL;
+    object->rank_names[3] = NULL;
+    object->rank_names[4] = NULL;
+    object->rank_names[5] = NULL;
+    object->rank_names[6] = NULL;
+    object->rank_names[7] = NULL;
+    object->rank_names[8] = NULL;
+    object->rank_names[9] = NULL;
+
     READ_U32(object->id);
 
     READ_CSTRING(object->name);
@@ -5078,9 +6202,19 @@ static WowWorldResult vanilla_SMSG_GUILD_QUERY_RESPONSE_read(WowWorldReader* rea
     READ_U32(object->background_color);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_GUILD_QUERY_RESPONSE_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GUILD_QUERY_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_GUILD_QUERY_RESPONSE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_GUILD_QUERY_RESPONSE_size(object) + 2); /* size */
 
     WRITE_U16(0x00000055); /* opcode */
@@ -5103,27 +6237,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GUILD_QUERY_RESPONSE_wri
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GUILD_QUERY_RESPONSE_free(vanilla_SMSG_GUILD_QUERY_RESPONSE* object) {
-    size_t i;
-
-    FREE_STRING(object->name);
-
-    for (i = 0; i < 10; ++i) {
-        FREE_STRING(((object->rank_names)[i]));
-    }
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_ITEM_QUERY_SINGLE_read(WowWorldReader* reader, vanilla_CMSG_ITEM_QUERY_SINGLE* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->item);
 
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_ITEM_QUERY_SINGLE_write(WowWorldWriter* writer, const vanilla_CMSG_ITEM_QUERY_SINGLE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 4); /* size */
 
     WRITE_U32(0x00000056); /* opcode */
@@ -5134,6 +6275,24 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_ITEM_QUERY_SINGLE_write(
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_ITEM_QUERY_SINGLE_RESPONSE_free(vanilla_SMSG_ITEM_QUERY_SINGLE_RESPONSE* object) {
+    if (object->found != NULL) {
+        FREE_STRING(object->found->name1);
+
+        FREE_STRING(object->found->name2);
+
+        FREE_STRING(object->found->name3);
+
+        FREE_STRING(object->found->name4);
+
+        FREE_STRING(object->found->description);
+
+        free(object->found);
+        object->found = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_ITEM_QUERY_SINGLE_RESPONSE_size(const vanilla_SMSG_ITEM_QUERY_SINGLE_RESPONSE* object) {
@@ -5147,8 +6306,16 @@ static size_t vanilla_SMSG_ITEM_QUERY_SINGLE_RESPONSE_size(const vanilla_SMSG_IT
 }
 
 static WowWorldResult vanilla_SMSG_ITEM_QUERY_SINGLE_RESPONSE_read(WowWorldReader* reader, vanilla_SMSG_ITEM_QUERY_SINGLE_RESPONSE* object, size_t body_size) {
+    int _return_value = 1;
+
     size_t _size = 0;
 
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->found = NULL;
     READ_U32(object->item);
     _size += 4;
 
@@ -5156,8 +6323,15 @@ static WowWorldResult vanilla_SMSG_ITEM_QUERY_SINGLE_RESPONSE_read(WowWorldReade
     if (_size < body_size) {
         object->found = malloc(sizeof(vanilla_SMSG_ITEM_QUERY_SINGLE_RESPONSE_found));
         if (object->found == NULL) {
-            return WWM_RESULT_MALLOC_FAIL;
+            _return_value = WWM_RESULT_MALLOC_FAIL;
+            goto cleanup;
         }
+
+        object->found->name1 = NULL;
+        object->found->name2 = NULL;
+        object->found->name3 = NULL;
+        object->found->name4 = NULL;
+        object->found->description = NULL;
 
         object->found->class_and_sub_class = 0;
         READ_U64(object->found->class_and_sub_class);
@@ -5285,9 +6459,19 @@ static WowWorldResult vanilla_SMSG_ITEM_QUERY_SINGLE_RESPONSE_read(WowWorldReade
 
     }
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_ITEM_QUERY_SINGLE_RESPONSE_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ITEM_QUERY_SINGLE_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_ITEM_QUERY_SINGLE_RESPONSE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_ITEM_QUERY_SINGLE_RESPONSE_size(object) + 2); /* size */
 
     WRITE_U16(0x00000058); /* opcode */
@@ -5406,29 +6590,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ITEM_QUERY_SINGLE_RESPON
     }
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_ITEM_QUERY_SINGLE_RESPONSE_free(vanilla_SMSG_ITEM_QUERY_SINGLE_RESPONSE* object) {
-    FREE_STRING(object->found->name1);
-
-    FREE_STRING(object->found->name2);
-
-    FREE_STRING(object->found->name3);
-
-    FREE_STRING(object->found->name4);
-
-    FREE_STRING(object->found->description);
-
-    free(object->found);
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_PAGE_TEXT_QUERY_read(WowWorldReader* reader, vanilla_CMSG_PAGE_TEXT_QUERY* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->page_id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PAGE_TEXT_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_PAGE_TEXT_QUERY* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 4); /* size */
 
     WRITE_U32(0x0000005a); /* opcode */
@@ -5437,6 +6624,12 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PAGE_TEXT_QUERY_write(Wo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_PAGE_TEXT_QUERY_RESPONSE_free(vanilla_SMSG_PAGE_TEXT_QUERY_RESPONSE* object) {
+    FREE_STRING(object->text);
+
 }
 
 static size_t vanilla_SMSG_PAGE_TEXT_QUERY_RESPONSE_size(const vanilla_SMSG_PAGE_TEXT_QUERY_RESPONSE* object) {
@@ -5444,6 +6637,15 @@ static size_t vanilla_SMSG_PAGE_TEXT_QUERY_RESPONSE_size(const vanilla_SMSG_PAGE
 }
 
 static WowWorldResult vanilla_SMSG_PAGE_TEXT_QUERY_RESPONSE_read(WowWorldReader* reader, vanilla_SMSG_PAGE_TEXT_QUERY_RESPONSE* object) {
+    int _return_value = 1;
+
+    if (9 > (reader->length - reader->index)) {
+        _return_value = (size_t)9 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->text = NULL;
+
     READ_U32(object->page_id);
 
     READ_CSTRING(object->text);
@@ -5451,9 +6653,19 @@ static WowWorldResult vanilla_SMSG_PAGE_TEXT_QUERY_RESPONSE_read(WowWorldReader*
     READ_U32(object->next_page_id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_PAGE_TEXT_QUERY_RESPONSE_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PAGE_TEXT_QUERY_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_PAGE_TEXT_QUERY_RESPONSE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_PAGE_TEXT_QUERY_RESPONSE_size(object) + 2); /* size */
 
     WRITE_U16(0x0000005b); /* opcode */
@@ -5466,20 +6678,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PAGE_TEXT_QUERY_RESPONSE
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_PAGE_TEXT_QUERY_RESPONSE_free(vanilla_SMSG_PAGE_TEXT_QUERY_RESPONSE* object) {
-    FREE_STRING(object->text);
-
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_QUEST_QUERY_read(WowWorldReader* reader, vanilla_CMSG_QUEST_QUERY* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->quest_id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUEST_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_QUEST_QUERY* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 4); /* size */
 
     WRITE_U32(0x0000005c); /* opcode */
@@ -5488,6 +6712,23 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUEST_QUERY_write(WowWor
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_QUEST_QUERY_RESPONSE_free(vanilla_SMSG_QUEST_QUERY_RESPONSE* object) {
+    size_t i;
+
+    FREE_STRING(object->title);
+
+    FREE_STRING(object->objective_text);
+
+    FREE_STRING(object->details);
+
+    FREE_STRING(object->end_text);
+
+    for (i = 0; i < 4; ++i) {
+        FREE_STRING(((object->objective_texts)[i]));
+    }
 }
 
 static size_t vanilla_SMSG_QUEST_QUERY_RESPONSE_size(const vanilla_SMSG_QUEST_QUERY_RESPONSE* object) {
@@ -5504,6 +6745,22 @@ static size_t vanilla_SMSG_QUEST_QUERY_RESPONSE_size(const vanilla_SMSG_QUEST_QU
 }
 
 static WowWorldResult vanilla_SMSG_QUEST_QUERY_RESPONSE_read(WowWorldReader* reader, vanilla_SMSG_QUEST_QUERY_RESPONSE* object) {
+    int _return_value = 1;
+
+    if (224 > (reader->length - reader->index)) {
+        _return_value = (size_t)224 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->title = NULL;
+    object->objective_text = NULL;
+    object->details = NULL;
+    object->end_text = NULL;
+    object->objective_texts[0] = NULL;
+    object->objective_texts[1] = NULL;
+    object->objective_texts[2] = NULL;
+    object->objective_texts[3] = NULL;
+
     READ_U32(object->quest_id);
 
     READ_U32(object->quest_method);
@@ -5559,9 +6816,19 @@ static WowWorldResult vanilla_SMSG_QUEST_QUERY_RESPONSE_read(WowWorldReader* rea
     READ_ARRAY(object->objective_texts, 4, READ_CSTRING(object->objective_texts[i]));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_QUEST_QUERY_RESPONSE_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUEST_QUERY_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_QUEST_QUERY_RESPONSE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_QUEST_QUERY_RESPONSE_size(object) + 2); /* size */
 
     WRITE_U16(0x0000005d); /* opcode */
@@ -5620,33 +6887,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUEST_QUERY_RESPONSE_wri
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_QUEST_QUERY_RESPONSE_free(vanilla_SMSG_QUEST_QUERY_RESPONSE* object) {
-    size_t i;
-
-    FREE_STRING(object->title);
-
-    FREE_STRING(object->objective_text);
-
-    FREE_STRING(object->details);
-
-    FREE_STRING(object->end_text);
-
-    for (i = 0; i < 4; ++i) {
-        FREE_STRING(((object->objective_texts)[i]));
-    }
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_GAMEOBJECT_QUERY_read(WowWorldReader* reader, vanilla_CMSG_GAMEOBJECT_QUERY* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->entry_id);
 
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GAMEOBJECT_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_GAMEOBJECT_QUERY* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 4); /* size */
 
     WRITE_U32(0x0000005e); /* opcode */
@@ -5657,6 +6925,24 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GAMEOBJECT_QUERY_write(W
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GAMEOBJECT_QUERY_RESPONSE_free(vanilla_SMSG_GAMEOBJECT_QUERY_RESPONSE* object) {
+    if (object->found != NULL) {
+        FREE_STRING(object->found->name1);
+
+        FREE_STRING(object->found->name2);
+
+        FREE_STRING(object->found->name3);
+
+        FREE_STRING(object->found->name4);
+
+        FREE_STRING(object->found->name5);
+
+        free(object->found);
+        object->found = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_GAMEOBJECT_QUERY_RESPONSE_size(const vanilla_SMSG_GAMEOBJECT_QUERY_RESPONSE* object) {
@@ -5670,8 +6956,16 @@ static size_t vanilla_SMSG_GAMEOBJECT_QUERY_RESPONSE_size(const vanilla_SMSG_GAM
 }
 
 static WowWorldResult vanilla_SMSG_GAMEOBJECT_QUERY_RESPONSE_read(WowWorldReader* reader, vanilla_SMSG_GAMEOBJECT_QUERY_RESPONSE* object, size_t body_size) {
+    int _return_value = 1;
+
     size_t _size = 0;
 
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->found = NULL;
     READ_U32(object->entry_id);
     _size += 4;
 
@@ -5679,8 +6973,15 @@ static WowWorldResult vanilla_SMSG_GAMEOBJECT_QUERY_RESPONSE_read(WowWorldReader
     if (_size < body_size) {
         object->found = malloc(sizeof(vanilla_SMSG_GAMEOBJECT_QUERY_RESPONSE_found));
         if (object->found == NULL) {
-            return WWM_RESULT_MALLOC_FAIL;
+            _return_value = WWM_RESULT_MALLOC_FAIL;
+            goto cleanup;
         }
+
+        object->found->name1 = NULL;
+        object->found->name2 = NULL;
+        object->found->name3 = NULL;
+        object->found->name4 = NULL;
+        object->found->name5 = NULL;
 
         READ_U32(object->found->info_type);
 
@@ -5700,9 +7001,19 @@ static WowWorldResult vanilla_SMSG_GAMEOBJECT_QUERY_RESPONSE_read(WowWorldReader
 
     }
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_GAMEOBJECT_QUERY_RESPONSE_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GAMEOBJECT_QUERY_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_GAMEOBJECT_QUERY_RESPONSE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_GAMEOBJECT_QUERY_RESPONSE_size(object) + 2); /* size */
 
     WRITE_U16(0x0000005f); /* opcode */
@@ -5729,31 +7040,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GAMEOBJECT_QUERY_RESPONS
     }
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GAMEOBJECT_QUERY_RESPONSE_free(vanilla_SMSG_GAMEOBJECT_QUERY_RESPONSE* object) {
-    FREE_STRING(object->found->name1);
-
-    FREE_STRING(object->found->name2);
-
-    FREE_STRING(object->found->name3);
-
-    FREE_STRING(object->found->name4);
-
-    FREE_STRING(object->found->name5);
-
-    free(object->found);
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_CREATURE_QUERY_read(WowWorldReader* reader, vanilla_CMSG_CREATURE_QUERY* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->creature);
 
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CREATURE_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_CREATURE_QUERY* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 4); /* size */
 
     WRITE_U32(0x00000060); /* opcode */
@@ -5764,6 +7078,24 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CREATURE_QUERY_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_CREATURE_QUERY_RESPONSE_free(vanilla_SMSG_CREATURE_QUERY_RESPONSE* object) {
+    if (object->found != NULL) {
+        FREE_STRING(object->found->name1);
+
+        FREE_STRING(object->found->name2);
+
+        FREE_STRING(object->found->name3);
+
+        FREE_STRING(object->found->name4);
+
+        FREE_STRING(object->found->sub_name);
+
+        free(object->found);
+        object->found = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_CREATURE_QUERY_RESPONSE_size(const vanilla_SMSG_CREATURE_QUERY_RESPONSE* object) {
@@ -5777,8 +7109,16 @@ static size_t vanilla_SMSG_CREATURE_QUERY_RESPONSE_size(const vanilla_SMSG_CREAT
 }
 
 static WowWorldResult vanilla_SMSG_CREATURE_QUERY_RESPONSE_read(WowWorldReader* reader, vanilla_SMSG_CREATURE_QUERY_RESPONSE* object, size_t body_size) {
+    int _return_value = 1;
+
     size_t _size = 0;
 
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->found = NULL;
     READ_U32(object->creature_entry);
     _size += 4;
 
@@ -5786,8 +7126,15 @@ static WowWorldResult vanilla_SMSG_CREATURE_QUERY_RESPONSE_read(WowWorldReader* 
     if (_size < body_size) {
         object->found = malloc(sizeof(vanilla_SMSG_CREATURE_QUERY_RESPONSE_found));
         if (object->found == NULL) {
-            return WWM_RESULT_MALLOC_FAIL;
+            _return_value = WWM_RESULT_MALLOC_FAIL;
+            goto cleanup;
         }
+
+        object->found->name1 = NULL;
+        object->found->name2 = NULL;
+        object->found->name3 = NULL;
+        object->found->name4 = NULL;
+        object->found->sub_name = NULL;
 
         READ_CSTRING(object->found->name1);
 
@@ -5820,9 +7167,19 @@ static WowWorldResult vanilla_SMSG_CREATURE_QUERY_RESPONSE_read(WowWorldReader* 
 
     }
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_CREATURE_QUERY_RESPONSE_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CREATURE_QUERY_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_CREATURE_QUERY_RESPONSE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_CREATURE_QUERY_RESPONSE_size(object) + 2); /* size */
 
     WRITE_U16(0x00000061); /* opcode */
@@ -5861,20 +7218,27 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CREATURE_QUERY_RESPONSE_
     }
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_CREATURE_QUERY_RESPONSE_free(vanilla_SMSG_CREATURE_QUERY_RESPONSE* object) {
-    FREE_STRING(object->found->name1);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_WHO_free(vanilla_CMSG_WHO* object) {
+    size_t i;
 
-    FREE_STRING(object->found->name2);
+    FREE_STRING(object->player_name);
 
-    FREE_STRING(object->found->name3);
+    FREE_STRING(object->guild_name);
 
-    FREE_STRING(object->found->name4);
-
-    FREE_STRING(object->found->sub_name);
-
-    free(object->found);
+    if (object->zones != NULL) {
+        free(object->zones);
+        object->zones = NULL;
+    }
+    if (object->search_strings != NULL) {
+        for (i = 0; i < object->amount_of_strings; ++i) {
+            FREE_STRING(((object->search_strings)[i]));
+        }
+        free(object->search_strings);
+        object->search_strings = NULL;
+    }
 }
 
 static size_t vanilla_CMSG_WHO_size(const vanilla_CMSG_WHO* object) {
@@ -5891,6 +7255,18 @@ static size_t vanilla_CMSG_WHO_size(const vanilla_CMSG_WHO* object) {
 }
 
 static WowWorldResult vanilla_CMSG_WHO_read(WowWorldReader* reader, vanilla_CMSG_WHO* object) {
+    int _return_value = 1;
+
+    if (26 > (reader->length - reader->index)) {
+        _return_value = (size_t)26 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->player_name = NULL;
+    object->guild_name = NULL;
+    object->zones = NULL;
+    object->search_strings = NULL;
+
     READ_U32(object->minimum_level);
 
     READ_U32(object->maximum_level);
@@ -5905,7 +7281,7 @@ static WowWorldResult vanilla_CMSG_WHO_read(WowWorldReader* reader, vanilla_CMSG
 
     READ_U32(object->amount_of_zones);
 
-    object->zones = malloc(object->amount_of_zones * sizeof(uint32_t));
+    object->zones = calloc(object->amount_of_zones, sizeof(uint32_t));
     if (object->zones == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -5914,7 +7290,7 @@ static WowWorldResult vanilla_CMSG_WHO_read(WowWorldReader* reader, vanilla_CMSG
 
     READ_U32(object->amount_of_strings);
 
-    object->search_strings = malloc(object->amount_of_strings * sizeof(char*));
+    object->search_strings = calloc(object->amount_of_strings, sizeof(char*));
     if (object->search_strings == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -5922,9 +7298,19 @@ static WowWorldResult vanilla_CMSG_WHO_read(WowWorldReader* reader, vanilla_CMSG
 
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_WHO_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_WHO_write(WowWorldWriter* writer, const vanilla_CMSG_WHO* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_WHO_size(object) + 4); /* size */
 
     WRITE_U32(0x00000062); /* opcode */
@@ -5951,22 +7337,19 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_WHO_write(WowWorldWriter
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_WHO_free(vanilla_CMSG_WHO* object) {
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_WHO_free(vanilla_SMSG_WHO* object) {
     size_t i;
 
-    FREE_STRING(object->player_name);
-
-    FREE_STRING(object->guild_name);
-
-    free(object->zones);
-    object->zones = NULL;
-    for (i = 0; i < object->amount_of_strings; ++i) {
-        FREE_STRING(((object->search_strings)[i]));
+    if (object->players != NULL) {
+        for (i = 0; i < object->listed_players; ++i) {
+            vanilla_WhoPlayer_free(&((object->players)[i]));
+        }
+        free(object->players);
+        object->players = NULL;
     }
-    free(object->search_strings);
-    object->search_strings = NULL;
 }
 
 static size_t vanilla_SMSG_WHO_size(const vanilla_SMSG_WHO* object) {
@@ -5983,11 +7366,20 @@ static size_t vanilla_SMSG_WHO_size(const vanilla_SMSG_WHO* object) {
 }
 
 static WowWorldResult vanilla_SMSG_WHO_read(WowWorldReader* reader, vanilla_SMSG_WHO* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->players = NULL;
+
     READ_U32(object->listed_players);
 
     READ_U32(object->online_players);
 
-    object->players = malloc(object->listed_players * sizeof(vanilla_WhoPlayer));
+    object->players = calloc(object->listed_players, sizeof(vanilla_WhoPlayer));
     if (object->players == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -5995,9 +7387,19 @@ static WowWorldResult vanilla_SMSG_WHO_read(WowWorldReader* reader, vanilla_SMSG
 
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_WHO_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_WHO_write(WowWorldWriter* writer, const vanilla_SMSG_WHO* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_WHO_size(object) + 2); /* size */
 
     WRITE_U16(0x00000063); /* opcode */
@@ -6010,16 +7412,12 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_WHO_write(WowWorldWriter
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_WHO_free(vanilla_SMSG_WHO* object) {
-    size_t i;
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_WHOIS_free(vanilla_CMSG_WHOIS* object) {
+    FREE_STRING(object->character);
 
-    for (i = 0; i < object->listed_players; ++i) {
-        vanilla_WhoPlayer_free(&((object->players)[i]));
-    }
-    free(object->players);
-    object->players = NULL;
 }
 
 static size_t vanilla_CMSG_WHOIS_size(const vanilla_CMSG_WHOIS* object) {
@@ -6027,12 +7425,31 @@ static size_t vanilla_CMSG_WHOIS_size(const vanilla_CMSG_WHOIS* object) {
 }
 
 static WowWorldResult vanilla_CMSG_WHOIS_read(WowWorldReader* reader, vanilla_CMSG_WHOIS* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->character = NULL;
+
     READ_CSTRING(object->character);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_WHOIS_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_WHOIS_write(WowWorldWriter* writer, const vanilla_CMSG_WHOIS* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_WHOIS_size(object) + 4); /* size */
 
     WRITE_U32(0x00000064); /* opcode */
@@ -6041,10 +7458,11 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_WHOIS_write(WowWorldWrit
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_WHOIS_free(vanilla_CMSG_WHOIS* object) {
-    FREE_STRING(object->character);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_WHOIS_free(vanilla_SMSG_WHOIS* object) {
+    FREE_STRING(object->message);
 
 }
 
@@ -6053,12 +7471,31 @@ static size_t vanilla_SMSG_WHOIS_size(const vanilla_SMSG_WHOIS* object) {
 }
 
 static WowWorldResult vanilla_SMSG_WHOIS_read(WowWorldReader* reader, vanilla_SMSG_WHOIS* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->message = NULL;
+
     READ_CSTRING(object->message);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_WHOIS_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_WHOIS_write(WowWorldWriter* writer, const vanilla_SMSG_WHOIS* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_WHOIS_size(object) + 2); /* size */
 
     WRITE_U16(0x00000065); /* opcode */
@@ -6067,20 +7504,31 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_WHOIS_write(WowWorldWrit
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_WHOIS_free(vanilla_SMSG_WHOIS* object) {
-    FREE_STRING(object->message);
-
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_FRIEND_LIST_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x00000066); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_FRIEND_LIST_free(vanilla_SMSG_FRIEND_LIST* object) {
+    if (object->friends != NULL) {
+        free(object->friends);
+        object->friends = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_FRIEND_LIST_size(const vanilla_SMSG_FRIEND_LIST* object) {
@@ -6097,9 +7545,18 @@ static size_t vanilla_SMSG_FRIEND_LIST_size(const vanilla_SMSG_FRIEND_LIST* obje
 }
 
 static WowWorldResult vanilla_SMSG_FRIEND_LIST_read(WowWorldReader* reader, vanilla_SMSG_FRIEND_LIST* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->friends = NULL;
+
     READ_U8(object->amount_of_friends);
 
-    object->friends = malloc(object->amount_of_friends * sizeof(vanilla_Friend));
+    object->friends = calloc(object->amount_of_friends, sizeof(vanilla_Friend));
     if (object->friends == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -6107,9 +7564,19 @@ static WowWorldResult vanilla_SMSG_FRIEND_LIST_read(WowWorldReader* reader, vani
 
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_FRIEND_LIST_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_FRIEND_LIST_write(WowWorldWriter* writer, const vanilla_SMSG_FRIEND_LIST* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_FRIEND_LIST_size(object) + 2); /* size */
 
     WRITE_U16(0x00000067); /* opcode */
@@ -6120,28 +7587,35 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_FRIEND_LIST_write(WowWor
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_FRIEND_LIST_free(vanilla_SMSG_FRIEND_LIST* object) {
-    size_t i;
-
-    for (i = 0; i < object->amount_of_friends; ++i) {
-        vanilla_Friend_free(&((object->friends)[i]));
-    }
-    free(object->friends);
-    object->friends = NULL;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_FRIEND_STATUS_read(WowWorldReader* reader, vanilla_SMSG_FRIEND_STATUS* object) {
+    int _return_value = 1;
+
+    if (9 > (reader->length - reader->index)) {
+        _return_value = (size_t)9 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->result = 0;
     READ_U8(object->result);
 
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_FRIEND_STATUS_write(WowWorldWriter* writer, const vanilla_SMSG_FRIEND_STATUS* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0009 + 2); /* size */
 
     WRITE_U16(0x00000068); /* opcode */
@@ -6152,6 +7626,12 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_FRIEND_STATUS_write(WowW
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_ADD_FRIEND_free(vanilla_CMSG_ADD_FRIEND* object) {
+    FREE_STRING(object->name);
+
 }
 
 static size_t vanilla_CMSG_ADD_FRIEND_size(const vanilla_CMSG_ADD_FRIEND* object) {
@@ -6159,12 +7639,31 @@ static size_t vanilla_CMSG_ADD_FRIEND_size(const vanilla_CMSG_ADD_FRIEND* object
 }
 
 static WowWorldResult vanilla_CMSG_ADD_FRIEND_read(WowWorldReader* reader, vanilla_CMSG_ADD_FRIEND* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->name = NULL;
+
     READ_CSTRING(object->name);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_ADD_FRIEND_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_ADD_FRIEND_write(WowWorldWriter* writer, const vanilla_CMSG_ADD_FRIEND* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_ADD_FRIEND_size(object) + 4); /* size */
 
     WRITE_U32(0x00000069); /* opcode */
@@ -6173,20 +7672,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_ADD_FRIEND_write(WowWorl
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_ADD_FRIEND_free(vanilla_CMSG_ADD_FRIEND* object) {
-    FREE_STRING(object->name);
-
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_DEL_FRIEND_read(WowWorldReader* reader, vanilla_CMSG_DEL_FRIEND* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_DEL_FRIEND_write(WowWorldWriter* writer, const vanilla_CMSG_DEL_FRIEND* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x0000006a); /* opcode */
@@ -6195,6 +7706,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_DEL_FRIEND_write(WowWorl
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_IGNORE_LIST_free(vanilla_SMSG_IGNORE_LIST* object) {
+    if (object->ignored != NULL) {
+        free(object->ignored);
+        object->ignored = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_IGNORE_LIST_size(const vanilla_SMSG_IGNORE_LIST* object) {
@@ -6202,9 +7721,18 @@ static size_t vanilla_SMSG_IGNORE_LIST_size(const vanilla_SMSG_IGNORE_LIST* obje
 }
 
 static WowWorldResult vanilla_SMSG_IGNORE_LIST_read(WowWorldReader* reader, vanilla_SMSG_IGNORE_LIST* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->ignored = NULL;
+
     READ_U8(object->amount_of_ignored);
 
-    object->ignored = malloc(object->amount_of_ignored * sizeof(uint64_t));
+    object->ignored = calloc(object->amount_of_ignored, sizeof(uint64_t));
     if (object->ignored == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -6212,9 +7740,19 @@ static WowWorldResult vanilla_SMSG_IGNORE_LIST_read(WowWorldReader* reader, vani
 
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_IGNORE_LIST_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_IGNORE_LIST_write(WowWorldWriter* writer, const vanilla_SMSG_IGNORE_LIST* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_IGNORE_LIST_size(object) + 2); /* size */
 
     WRITE_U16(0x0000006b); /* opcode */
@@ -6225,11 +7763,12 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_IGNORE_LIST_write(WowWor
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_IGNORE_LIST_free(vanilla_SMSG_IGNORE_LIST* object) {
-    free(object->ignored);
-    object->ignored = NULL;
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_ADD_IGNORE_free(vanilla_CMSG_ADD_IGNORE* object) {
+    FREE_STRING(object->name);
+
 }
 
 static size_t vanilla_CMSG_ADD_IGNORE_size(const vanilla_CMSG_ADD_IGNORE* object) {
@@ -6237,12 +7776,31 @@ static size_t vanilla_CMSG_ADD_IGNORE_size(const vanilla_CMSG_ADD_IGNORE* object
 }
 
 static WowWorldResult vanilla_CMSG_ADD_IGNORE_read(WowWorldReader* reader, vanilla_CMSG_ADD_IGNORE* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->name = NULL;
+
     READ_CSTRING(object->name);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_ADD_IGNORE_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_ADD_IGNORE_write(WowWorldWriter* writer, const vanilla_CMSG_ADD_IGNORE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_ADD_IGNORE_size(object) + 4); /* size */
 
     WRITE_U32(0x0000006c); /* opcode */
@@ -6251,20 +7809,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_ADD_IGNORE_write(WowWorl
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_ADD_IGNORE_free(vanilla_CMSG_ADD_IGNORE* object) {
-    FREE_STRING(object->name);
-
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_DEL_IGNORE_read(WowWorldReader* reader, vanilla_CMSG_DEL_IGNORE* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_DEL_IGNORE_write(WowWorldWriter* writer, const vanilla_CMSG_DEL_IGNORE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x0000006d); /* opcode */
@@ -6273,6 +7843,12 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_DEL_IGNORE_write(WowWorl
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GROUP_INVITE_free(vanilla_CMSG_GROUP_INVITE* object) {
+    FREE_STRING(object->name);
+
 }
 
 static size_t vanilla_CMSG_GROUP_INVITE_size(const vanilla_CMSG_GROUP_INVITE* object) {
@@ -6280,12 +7856,31 @@ static size_t vanilla_CMSG_GROUP_INVITE_size(const vanilla_CMSG_GROUP_INVITE* ob
 }
 
 static WowWorldResult vanilla_CMSG_GROUP_INVITE_read(WowWorldReader* reader, vanilla_CMSG_GROUP_INVITE* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->name = NULL;
+
     READ_CSTRING(object->name);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_GROUP_INVITE_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GROUP_INVITE_write(WowWorldWriter* writer, const vanilla_CMSG_GROUP_INVITE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_GROUP_INVITE_size(object) + 4); /* size */
 
     WRITE_U32(0x0000006e); /* opcode */
@@ -6294,9 +7889,10 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GROUP_INVITE_write(WowWo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GROUP_INVITE_free(vanilla_CMSG_GROUP_INVITE* object) {
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GROUP_INVITE_free(vanilla_SMSG_GROUP_INVITE* object) {
     FREE_STRING(object->name);
 
 }
@@ -6306,12 +7902,31 @@ static size_t vanilla_SMSG_GROUP_INVITE_size(const vanilla_SMSG_GROUP_INVITE* ob
 }
 
 static WowWorldResult vanilla_SMSG_GROUP_INVITE_read(WowWorldReader* reader, vanilla_SMSG_GROUP_INVITE* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->name = NULL;
+
     READ_CSTRING(object->name);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_GROUP_INVITE_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GROUP_INVITE_write(WowWorldWriter* writer, const vanilla_SMSG_GROUP_INVITE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_GROUP_INVITE_size(object) + 2); /* size */
 
     WRITE_U16(0x0000006f); /* opcode */
@@ -6320,29 +7935,46 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GROUP_INVITE_write(WowWo
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GROUP_INVITE_free(vanilla_SMSG_GROUP_INVITE* object) {
-    FREE_STRING(object->name);
-
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GROUP_ACCEPT_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x00000072); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GROUP_DECLINE_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x00000073); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GROUP_DECLINE_free(vanilla_SMSG_GROUP_DECLINE* object) {
+    FREE_STRING(object->name);
+
 }
 
 static size_t vanilla_SMSG_GROUP_DECLINE_size(const vanilla_SMSG_GROUP_DECLINE* object) {
@@ -6350,12 +7982,31 @@ static size_t vanilla_SMSG_GROUP_DECLINE_size(const vanilla_SMSG_GROUP_DECLINE* 
 }
 
 static WowWorldResult vanilla_SMSG_GROUP_DECLINE_read(WowWorldReader* reader, vanilla_SMSG_GROUP_DECLINE* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->name = NULL;
+
     READ_CSTRING(object->name);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_GROUP_DECLINE_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GROUP_DECLINE_write(WowWorldWriter* writer, const vanilla_SMSG_GROUP_DECLINE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_GROUP_DECLINE_size(object) + 2); /* size */
 
     WRITE_U16(0x00000074); /* opcode */
@@ -6364,9 +8015,10 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GROUP_DECLINE_write(WowW
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GROUP_DECLINE_free(vanilla_SMSG_GROUP_DECLINE* object) {
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GROUP_UNINVITE_free(vanilla_CMSG_GROUP_UNINVITE* object) {
     FREE_STRING(object->name);
 
 }
@@ -6376,12 +8028,31 @@ static size_t vanilla_CMSG_GROUP_UNINVITE_size(const vanilla_CMSG_GROUP_UNINVITE
 }
 
 static WowWorldResult vanilla_CMSG_GROUP_UNINVITE_read(WowWorldReader* reader, vanilla_CMSG_GROUP_UNINVITE* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->name = NULL;
+
     READ_CSTRING(object->name);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_GROUP_UNINVITE_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GROUP_UNINVITE_write(WowWorldWriter* writer, const vanilla_CMSG_GROUP_UNINVITE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_GROUP_UNINVITE_size(object) + 4); /* size */
 
     WRITE_U32(0x00000075); /* opcode */
@@ -6390,20 +8061,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GROUP_UNINVITE_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GROUP_UNINVITE_free(vanilla_CMSG_GROUP_UNINVITE* object) {
-    FREE_STRING(object->name);
-
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_GROUP_UNINVITE_GUID_read(WowWorldReader* reader, vanilla_CMSG_GROUP_UNINVITE_GUID* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GROUP_UNINVITE_GUID_write(WowWorldWriter* writer, const vanilla_CMSG_GROUP_UNINVITE_GUID* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x00000076); /* opcode */
@@ -6412,24 +8095,49 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GROUP_UNINVITE_GUID_writ
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GROUP_UNINVITE_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 2); /* size */
 
     WRITE_U16(0x00000077); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_GROUP_SET_LEADER_read(WowWorldReader* reader, vanilla_CMSG_GROUP_SET_LEADER* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GROUP_SET_LEADER_write(WowWorldWriter* writer, const vanilla_CMSG_GROUP_SET_LEADER* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x00000078); /* opcode */
@@ -6438,6 +8146,12 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GROUP_SET_LEADER_write(W
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GROUP_SET_LEADER_free(vanilla_SMSG_GROUP_SET_LEADER* object) {
+    FREE_STRING(object->name);
+
 }
 
 static size_t vanilla_SMSG_GROUP_SET_LEADER_size(const vanilla_SMSG_GROUP_SET_LEADER* object) {
@@ -6445,12 +8159,31 @@ static size_t vanilla_SMSG_GROUP_SET_LEADER_size(const vanilla_SMSG_GROUP_SET_LE
 }
 
 static WowWorldResult vanilla_SMSG_GROUP_SET_LEADER_read(WowWorldReader* reader, vanilla_SMSG_GROUP_SET_LEADER* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->name = NULL;
+
     READ_CSTRING(object->name);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_GROUP_SET_LEADER_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GROUP_SET_LEADER_write(WowWorldWriter* writer, const vanilla_SMSG_GROUP_SET_LEADER* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_GROUP_SET_LEADER_size(object) + 2); /* size */
 
     WRITE_U16(0x00000079); /* opcode */
@@ -6459,14 +8192,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GROUP_SET_LEADER_write(W
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GROUP_SET_LEADER_free(vanilla_SMSG_GROUP_SET_LEADER* object) {
-    FREE_STRING(object->name);
-
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_LOOT_METHOD_read(WowWorldReader* reader, vanilla_CMSG_LOOT_METHOD* object) {
+    int _return_value = 1;
+
+    if (16 > (reader->length - reader->index)) {
+        _return_value = (size_t)16 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->loot_setting = 0;
     READ_U32(object->loot_setting);
 
@@ -6476,9 +8212,18 @@ static WowWorldResult vanilla_CMSG_LOOT_METHOD_read(WowWorldReader* reader, vani
     READ_U32(object->loot_threshold);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_LOOT_METHOD_write(WowWorldWriter* writer, const vanilla_CMSG_LOOT_METHOD* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0010 + 4); /* size */
 
     WRITE_U32(0x0000007a); /* opcode */
@@ -6491,24 +8236,57 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_LOOT_METHOD_write(WowWor
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GROUP_DISBAND_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x0000007b); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GROUP_DESTROYED_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 2); /* size */
 
     WRITE_U16(0x0000007c); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GROUP_LIST_free(vanilla_SMSG_GROUP_LIST* object) {
+    size_t i;
+
+    if (object->members != NULL) {
+        for (i = 0; i < object->amount_of_members; ++i) {
+            vanilla_GroupListMember_free(&((object->members)[i]));
+        }
+        free(object->members);
+        object->members = NULL;
+    }
+    if (object->group_not_empty != NULL) {
+        free(object->group_not_empty);
+        object->group_not_empty = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_GROUP_LIST_size(const vanilla_SMSG_GROUP_LIST* object) {
@@ -6529,7 +8307,17 @@ static size_t vanilla_SMSG_GROUP_LIST_size(const vanilla_SMSG_GROUP_LIST* object
 }
 
 static WowWorldResult vanilla_SMSG_GROUP_LIST_read(WowWorldReader* reader, vanilla_SMSG_GROUP_LIST* object, size_t body_size) {
+    int _return_value = 1;
+
     size_t _size = 0;
+
+    if (14 > (reader->length - reader->index)) {
+        _return_value = (size_t)14 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->group_not_empty = NULL;
+    object->members = NULL;
 
     object->group_type = 0;
     READ_U8(object->group_type);
@@ -6541,7 +8329,7 @@ static WowWorldResult vanilla_SMSG_GROUP_LIST_read(WowWorldReader* reader, vanil
     READ_U32(object->amount_of_members);
     _size += 4;
 
-    object->members = malloc(object->amount_of_members * sizeof(vanilla_GroupListMember));
+    object->members = calloc(object->amount_of_members, sizeof(vanilla_GroupListMember));
     if (object->members == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -6555,7 +8343,8 @@ static WowWorldResult vanilla_SMSG_GROUP_LIST_read(WowWorldReader* reader, vanil
     if (_size < body_size) {
         object->group_not_empty = malloc(sizeof(vanilla_SMSG_GROUP_LIST_group_not_empty));
         if (object->group_not_empty == NULL) {
-            return WWM_RESULT_MALLOC_FAIL;
+            _return_value = WWM_RESULT_MALLOC_FAIL;
+            goto cleanup;
         }
 
         object->group_not_empty->loot_setting = 0;
@@ -6568,9 +8357,19 @@ static WowWorldResult vanilla_SMSG_GROUP_LIST_read(WowWorldReader* reader, vanil
 
     }
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_GROUP_LIST_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GROUP_LIST_write(WowWorldWriter* writer, const vanilla_SMSG_GROUP_LIST* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_GROUP_LIST_size(object) + 2); /* size */
 
     WRITE_U16(0x0000007d); /* opcode */
@@ -6595,17 +8394,52 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GROUP_LIST_write(WowWorl
     }
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GROUP_LIST_free(vanilla_SMSG_GROUP_LIST* object) {
-    size_t i;
-
-    for (i = 0; i < object->amount_of_members; ++i) {
-        vanilla_GroupListMember_free(&((object->members)[i]));
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_PARTY_MEMBER_STATS_free(vanilla_SMSG_PARTY_MEMBER_STATS* object) {
+    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_STATUS) != 0) {
     }
-    free(object->members);
-    object->members = NULL;
-    free(object->group_not_empty);
+    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_CUR_HP) != 0) {
+    }
+    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_MAX_HP) != 0) {
+    }
+    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_POWER_TYPE) != 0) {
+    }
+    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_CUR_POWER) != 0) {
+    }
+    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_MAX_POWER) != 0) {
+    }
+    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_LEVEL) != 0) {
+    }
+    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_ZONE) != 0) {
+    }
+    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_POSITION) != 0) {
+    }
+    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_AURAS) != 0) {
+    }
+    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_AURAS_2) != 0) {
+    }
+    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_PET_GUID) != 0) {
+    }
+    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_PET_NAME) != 0) {
+        FREE_STRING(object->pet_name);
+
+    }
+    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_PET_MODEL_ID) != 0) {
+    }
+    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_PET_CUR_HP) != 0) {
+    }
+    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_PET_MAX_HP) != 0) {
+    }
+    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_PET_POWER_TYPE) != 0) {
+    }
+    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_PET_CUR_POWER) != 0) {
+    }
+    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_PET_MAX_POWER) != 0) {
+    }
+    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_PET_AURAS) != 0) {
+    }
 }
 
 static size_t vanilla_SMSG_PARTY_MEMBER_STATS_size(const vanilla_SMSG_PARTY_MEMBER_STATS* object) {
@@ -6695,6 +8529,15 @@ static size_t vanilla_SMSG_PARTY_MEMBER_STATS_size(const vanilla_SMSG_PARTY_MEMB
 }
 
 static WowWorldResult vanilla_SMSG_PARTY_MEMBER_STATS_read(WowWorldReader* reader, vanilla_SMSG_PARTY_MEMBER_STATS* object) {
+    int _return_value = 1;
+
+    if (5 > (reader->length - reader->index)) {
+        _return_value = (size_t)5 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->pet_name = NULL;
+
     READ_PACKED_GUID(object->guid);
 
     object->mask = 0;
@@ -6787,9 +8630,19 @@ static WowWorldResult vanilla_SMSG_PARTY_MEMBER_STATS_read(WowWorldReader* reade
 
     }
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_PARTY_MEMBER_STATS_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PARTY_MEMBER_STATS_write(WowWorldWriter* writer, const vanilla_SMSG_PARTY_MEMBER_STATS* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_PARTY_MEMBER_STATS_size(object) + 2); /* size */
 
     WRITE_U16(0x0000007e); /* opcode */
@@ -6882,51 +8735,12 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PARTY_MEMBER_STATS_write
     }
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_PARTY_MEMBER_STATS_free(vanilla_SMSG_PARTY_MEMBER_STATS* object) {
-    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_STATUS) != 0) {
-    }
-    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_CUR_HP) != 0) {
-    }
-    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_MAX_HP) != 0) {
-    }
-    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_POWER_TYPE) != 0) {
-    }
-    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_CUR_POWER) != 0) {
-    }
-    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_MAX_POWER) != 0) {
-    }
-    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_LEVEL) != 0) {
-    }
-    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_ZONE) != 0) {
-    }
-    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_POSITION) != 0) {
-    }
-    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_AURAS) != 0) {
-    }
-    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_AURAS_2) != 0) {
-    }
-    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_PET_GUID) != 0) {
-    }
-    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_PET_NAME) != 0) {
-        FREE_STRING(object->pet_name);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_PARTY_COMMAND_RESULT_free(vanilla_SMSG_PARTY_COMMAND_RESULT* object) {
+    FREE_STRING(object->member);
 
-    }
-    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_PET_MODEL_ID) != 0) {
-    }
-    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_PET_CUR_HP) != 0) {
-    }
-    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_PET_MAX_HP) != 0) {
-    }
-    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_PET_POWER_TYPE) != 0) {
-    }
-    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_PET_CUR_POWER) != 0) {
-    }
-    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_PET_MAX_POWER) != 0) {
-    }
-    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_PET_AURAS) != 0) {
-    }
 }
 
 static size_t vanilla_SMSG_PARTY_COMMAND_RESULT_size(const vanilla_SMSG_PARTY_COMMAND_RESULT* object) {
@@ -6934,6 +8748,15 @@ static size_t vanilla_SMSG_PARTY_COMMAND_RESULT_size(const vanilla_SMSG_PARTY_CO
 }
 
 static WowWorldResult vanilla_SMSG_PARTY_COMMAND_RESULT_read(WowWorldReader* reader, vanilla_SMSG_PARTY_COMMAND_RESULT* object) {
+    int _return_value = 1;
+
+    if (9 > (reader->length - reader->index)) {
+        _return_value = (size_t)9 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->member = NULL;
+
     object->operation = 0;
     READ_U32(object->operation);
 
@@ -6943,9 +8766,19 @@ static WowWorldResult vanilla_SMSG_PARTY_COMMAND_RESULT_read(WowWorldReader* rea
     READ_U32(object->result);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_PARTY_COMMAND_RESULT_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PARTY_COMMAND_RESULT_write(WowWorldWriter* writer, const vanilla_SMSG_PARTY_COMMAND_RESULT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_PARTY_COMMAND_RESULT_size(object) + 2); /* size */
 
     WRITE_U16(0x0000007f); /* opcode */
@@ -6958,10 +8791,11 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PARTY_COMMAND_RESULT_wri
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_PARTY_COMMAND_RESULT_free(vanilla_SMSG_PARTY_COMMAND_RESULT* object) {
-    FREE_STRING(object->member);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GUILD_CREATE_free(vanilla_CMSG_GUILD_CREATE* object) {
+    FREE_STRING(object->guild_name);
 
 }
 
@@ -6970,12 +8804,31 @@ static size_t vanilla_CMSG_GUILD_CREATE_size(const vanilla_CMSG_GUILD_CREATE* ob
 }
 
 static WowWorldResult vanilla_CMSG_GUILD_CREATE_read(WowWorldReader* reader, vanilla_CMSG_GUILD_CREATE* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->guild_name = NULL;
+
     READ_CSTRING(object->guild_name);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_GUILD_CREATE_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_CREATE_write(WowWorldWriter* writer, const vanilla_CMSG_GUILD_CREATE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_GUILD_CREATE_size(object) + 4); /* size */
 
     WRITE_U32(0x00000081); /* opcode */
@@ -6984,10 +8837,11 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_CREATE_write(WowWo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GUILD_CREATE_free(vanilla_CMSG_GUILD_CREATE* object) {
-    FREE_STRING(object->guild_name);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GUILD_INVITE_free(vanilla_CMSG_GUILD_INVITE* object) {
+    FREE_STRING(object->invited_player);
 
 }
 
@@ -6996,12 +8850,31 @@ static size_t vanilla_CMSG_GUILD_INVITE_size(const vanilla_CMSG_GUILD_INVITE* ob
 }
 
 static WowWorldResult vanilla_CMSG_GUILD_INVITE_read(WowWorldReader* reader, vanilla_CMSG_GUILD_INVITE* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->invited_player = NULL;
+
     READ_CSTRING(object->invited_player);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_GUILD_INVITE_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_INVITE_write(WowWorldWriter* writer, const vanilla_CMSG_GUILD_INVITE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_GUILD_INVITE_size(object) + 4); /* size */
 
     WRITE_U32(0x00000082); /* opcode */
@@ -7010,10 +8883,13 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_INVITE_write(WowWo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GUILD_INVITE_free(vanilla_CMSG_GUILD_INVITE* object) {
-    FREE_STRING(object->invited_player);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GUILD_INVITE_free(vanilla_SMSG_GUILD_INVITE* object) {
+    FREE_STRING(object->player_name);
+
+    FREE_STRING(object->guild_name);
 
 }
 
@@ -7022,14 +8898,34 @@ static size_t vanilla_SMSG_GUILD_INVITE_size(const vanilla_SMSG_GUILD_INVITE* ob
 }
 
 static WowWorldResult vanilla_SMSG_GUILD_INVITE_read(WowWorldReader* reader, vanilla_SMSG_GUILD_INVITE* object) {
+    int _return_value = 1;
+
+    if (2 > (reader->length - reader->index)) {
+        _return_value = (size_t)2 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->player_name = NULL;
+    object->guild_name = NULL;
+
     READ_CSTRING(object->player_name);
 
     READ_CSTRING(object->guild_name);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_GUILD_INVITE_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GUILD_INVITE_write(WowWorldWriter* writer, const vanilla_SMSG_GUILD_INVITE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_GUILD_INVITE_size(object) + 2); /* size */
 
     WRITE_U16(0x00000083); /* opcode */
@@ -7040,40 +8936,63 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GUILD_INVITE_write(WowWo
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GUILD_INVITE_free(vanilla_SMSG_GUILD_INVITE* object) {
-    FREE_STRING(object->player_name);
-
-    FREE_STRING(object->guild_name);
-
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_ACCEPT_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x00000084); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_DECLINE_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x00000085); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_INFO_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x00000087); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GUILD_INFO_free(vanilla_SMSG_GUILD_INFO* object) {
+    FREE_STRING(object->guild_name);
+
 }
 
 static size_t vanilla_SMSG_GUILD_INFO_size(const vanilla_SMSG_GUILD_INFO* object) {
@@ -7081,6 +9000,15 @@ static size_t vanilla_SMSG_GUILD_INFO_size(const vanilla_SMSG_GUILD_INFO* object
 }
 
 static WowWorldResult vanilla_SMSG_GUILD_INFO_read(WowWorldReader* reader, vanilla_SMSG_GUILD_INFO* object) {
+    int _return_value = 1;
+
+    if (21 > (reader->length - reader->index)) {
+        _return_value = (size_t)21 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->guild_name = NULL;
+
     READ_CSTRING(object->guild_name);
 
     READ_U32(object->created_day);
@@ -7094,9 +9022,19 @@ static WowWorldResult vanilla_SMSG_GUILD_INFO_read(WowWorldReader* reader, vanil
     READ_U32(object->amount_of_accounts_in_guild);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_GUILD_INFO_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GUILD_INFO_write(WowWorldWriter* writer, const vanilla_SMSG_GUILD_INFO* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_GUILD_INFO_size(object) + 2); /* size */
 
     WRITE_U16(0x00000088); /* opcode */
@@ -7115,20 +9053,44 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GUILD_INFO_write(WowWorl
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GUILD_INFO_free(vanilla_SMSG_GUILD_INFO* object) {
-    FREE_STRING(object->guild_name);
-
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_ROSTER_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x00000089); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GUILD_ROSTER_free(vanilla_SMSG_GUILD_ROSTER* object) {
+    size_t i;
+
+    FREE_STRING(object->motd);
+
+    FREE_STRING(object->guild_info);
+
+    if (object->rights != NULL) {
+        free(object->rights);
+        object->rights = NULL;
+    }
+    if (object->members != NULL) {
+        for (i = 0; i < object->amount_of_members; ++i) {
+            vanilla_GuildMember_free(&((object->members)[i]));
+        }
+        free(object->members);
+        object->members = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_GUILD_ROSTER_size(const vanilla_SMSG_GUILD_ROSTER* object) {
@@ -7145,6 +9107,18 @@ static size_t vanilla_SMSG_GUILD_ROSTER_size(const vanilla_SMSG_GUILD_ROSTER* ob
 }
 
 static WowWorldResult vanilla_SMSG_GUILD_ROSTER_read(WowWorldReader* reader, vanilla_SMSG_GUILD_ROSTER* object) {
+    int _return_value = 1;
+
+    if (10 > (reader->length - reader->index)) {
+        _return_value = (size_t)10 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->motd = NULL;
+    object->guild_info = NULL;
+    object->rights = NULL;
+    object->members = NULL;
+
     READ_U32(object->amount_of_members);
 
     READ_CSTRING(object->motd);
@@ -7153,14 +9127,14 @@ static WowWorldResult vanilla_SMSG_GUILD_ROSTER_read(WowWorldReader* reader, van
 
     READ_U32(object->amount_of_rights);
 
-    object->rights = malloc(object->amount_of_rights * sizeof(uint32_t));
+    object->rights = calloc(object->amount_of_rights, sizeof(uint32_t));
     if (object->rights == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
     READ_ARRAY(object->rights, object->amount_of_rights, READ_U32(object->rights[i]));
 
 
-    object->members = malloc(object->amount_of_members * sizeof(vanilla_GuildMember));
+    object->members = calloc(object->amount_of_members, sizeof(vanilla_GuildMember));
     if (object->members == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -7168,9 +9142,19 @@ static WowWorldResult vanilla_SMSG_GUILD_ROSTER_read(WowWorldReader* reader, van
 
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_GUILD_ROSTER_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GUILD_ROSTER_write(WowWorldWriter* writer, const vanilla_SMSG_GUILD_ROSTER* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_GUILD_ROSTER_size(object) + 2); /* size */
 
     WRITE_U16(0x0000008a); /* opcode */
@@ -7189,22 +9173,12 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GUILD_ROSTER_write(WowWo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GUILD_ROSTER_free(vanilla_SMSG_GUILD_ROSTER* object) {
-    size_t i;
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GUILD_PROMOTE_free(vanilla_CMSG_GUILD_PROMOTE* object) {
+    FREE_STRING(object->player_name);
 
-    FREE_STRING(object->motd);
-
-    FREE_STRING(object->guild_info);
-
-    free(object->rights);
-    object->rights = NULL;
-    for (i = 0; i < object->amount_of_members; ++i) {
-        vanilla_GuildMember_free(&((object->members)[i]));
-    }
-    free(object->members);
-    object->members = NULL;
 }
 
 static size_t vanilla_CMSG_GUILD_PROMOTE_size(const vanilla_CMSG_GUILD_PROMOTE* object) {
@@ -7212,12 +9186,31 @@ static size_t vanilla_CMSG_GUILD_PROMOTE_size(const vanilla_CMSG_GUILD_PROMOTE* 
 }
 
 static WowWorldResult vanilla_CMSG_GUILD_PROMOTE_read(WowWorldReader* reader, vanilla_CMSG_GUILD_PROMOTE* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->player_name = NULL;
+
     READ_CSTRING(object->player_name);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_GUILD_PROMOTE_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_PROMOTE_write(WowWorldWriter* writer, const vanilla_CMSG_GUILD_PROMOTE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_GUILD_PROMOTE_size(object) + 4); /* size */
 
     WRITE_U32(0x0000008b); /* opcode */
@@ -7226,9 +9219,10 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_PROMOTE_write(WowW
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GUILD_PROMOTE_free(vanilla_CMSG_GUILD_PROMOTE* object) {
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GUILD_DEMOTE_free(vanilla_CMSG_GUILD_DEMOTE* object) {
     FREE_STRING(object->player_name);
 
 }
@@ -7238,12 +9232,31 @@ static size_t vanilla_CMSG_GUILD_DEMOTE_size(const vanilla_CMSG_GUILD_DEMOTE* ob
 }
 
 static WowWorldResult vanilla_CMSG_GUILD_DEMOTE_read(WowWorldReader* reader, vanilla_CMSG_GUILD_DEMOTE* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->player_name = NULL;
+
     READ_CSTRING(object->player_name);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_GUILD_DEMOTE_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_DEMOTE_write(WowWorldWriter* writer, const vanilla_CMSG_GUILD_DEMOTE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_GUILD_DEMOTE_size(object) + 4); /* size */
 
     WRITE_U32(0x0000008c); /* opcode */
@@ -7252,20 +9265,29 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_DEMOTE_write(WowWo
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GUILD_DEMOTE_free(vanilla_CMSG_GUILD_DEMOTE* object) {
-    FREE_STRING(object->player_name);
-
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_LEAVE_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x0000008d); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GUILD_REMOVE_free(vanilla_CMSG_GUILD_REMOVE* object) {
+    FREE_STRING(object->player_name);
+
 }
 
 static size_t vanilla_CMSG_GUILD_REMOVE_size(const vanilla_CMSG_GUILD_REMOVE* object) {
@@ -7273,12 +9295,31 @@ static size_t vanilla_CMSG_GUILD_REMOVE_size(const vanilla_CMSG_GUILD_REMOVE* ob
 }
 
 static WowWorldResult vanilla_CMSG_GUILD_REMOVE_read(WowWorldReader* reader, vanilla_CMSG_GUILD_REMOVE* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->player_name = NULL;
+
     READ_CSTRING(object->player_name);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_GUILD_REMOVE_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_REMOVE_write(WowWorldWriter* writer, const vanilla_CMSG_GUILD_REMOVE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_GUILD_REMOVE_size(object) + 4); /* size */
 
     WRITE_U32(0x0000008e); /* opcode */
@@ -7287,20 +9328,29 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_REMOVE_write(WowWo
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GUILD_REMOVE_free(vanilla_CMSG_GUILD_REMOVE* object) {
-    FREE_STRING(object->player_name);
-
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_DISBAND_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x0000008f); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GUILD_LEADER_free(vanilla_CMSG_GUILD_LEADER* object) {
+    FREE_STRING(object->new_guild_leader_name);
+
 }
 
 static size_t vanilla_CMSG_GUILD_LEADER_size(const vanilla_CMSG_GUILD_LEADER* object) {
@@ -7308,12 +9358,31 @@ static size_t vanilla_CMSG_GUILD_LEADER_size(const vanilla_CMSG_GUILD_LEADER* ob
 }
 
 static WowWorldResult vanilla_CMSG_GUILD_LEADER_read(WowWorldReader* reader, vanilla_CMSG_GUILD_LEADER* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->new_guild_leader_name = NULL;
+
     READ_CSTRING(object->new_guild_leader_name);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_GUILD_LEADER_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_LEADER_write(WowWorldWriter* writer, const vanilla_CMSG_GUILD_LEADER* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_GUILD_LEADER_size(object) + 4); /* size */
 
     WRITE_U32(0x00000090); /* opcode */
@@ -7322,10 +9391,11 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_LEADER_write(WowWo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GUILD_LEADER_free(vanilla_CMSG_GUILD_LEADER* object) {
-    FREE_STRING(object->new_guild_leader_name);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GUILD_MOTD_free(vanilla_CMSG_GUILD_MOTD* object) {
+    FREE_STRING(object->message_of_the_day);
 
 }
 
@@ -7334,12 +9404,31 @@ static size_t vanilla_CMSG_GUILD_MOTD_size(const vanilla_CMSG_GUILD_MOTD* object
 }
 
 static WowWorldResult vanilla_CMSG_GUILD_MOTD_read(WowWorldReader* reader, vanilla_CMSG_GUILD_MOTD* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->message_of_the_day = NULL;
+
     READ_CSTRING(object->message_of_the_day);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_GUILD_MOTD_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_MOTD_write(WowWorldWriter* writer, const vanilla_CMSG_GUILD_MOTD* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_GUILD_MOTD_size(object) + 4); /* size */
 
     WRITE_U32(0x00000091); /* opcode */
@@ -7348,11 +9437,19 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_MOTD_write(WowWorl
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GUILD_MOTD_free(vanilla_CMSG_GUILD_MOTD* object) {
-    FREE_STRING(object->message_of_the_day);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GUILD_EVENT_free(vanilla_SMSG_GUILD_EVENT* object) {
+    size_t i;
 
+    if (object->event_descriptions != NULL) {
+        for (i = 0; i < object->amount_of_events; ++i) {
+            FREE_STRING(((object->event_descriptions)[i]));
+        }
+        free(object->event_descriptions);
+        object->event_descriptions = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_GUILD_EVENT_size(const vanilla_SMSG_GUILD_EVENT* object) {
@@ -7369,12 +9466,21 @@ static size_t vanilla_SMSG_GUILD_EVENT_size(const vanilla_SMSG_GUILD_EVENT* obje
 }
 
 static WowWorldResult vanilla_SMSG_GUILD_EVENT_read(WowWorldReader* reader, vanilla_SMSG_GUILD_EVENT* object) {
+    int _return_value = 1;
+
+    if (2 > (reader->length - reader->index)) {
+        _return_value = (size_t)2 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->event_descriptions = NULL;
+
     object->event = 0;
     READ_U8(object->event);
 
     READ_U8(object->amount_of_events);
 
-    object->event_descriptions = malloc(object->amount_of_events * sizeof(char*));
+    object->event_descriptions = calloc(object->amount_of_events, sizeof(char*));
     if (object->event_descriptions == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -7382,9 +9488,19 @@ static WowWorldResult vanilla_SMSG_GUILD_EVENT_read(WowWorldReader* reader, vani
 
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_GUILD_EVENT_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GUILD_EVENT_write(WowWorldWriter* writer, const vanilla_SMSG_GUILD_EVENT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_GUILD_EVENT_size(object) + 2); /* size */
 
     WRITE_U16(0x00000092); /* opcode */
@@ -7397,16 +9513,12 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GUILD_EVENT_write(WowWor
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GUILD_EVENT_free(vanilla_SMSG_GUILD_EVENT* object) {
-    size_t i;
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GUILD_COMMAND_RESULT_free(vanilla_SMSG_GUILD_COMMAND_RESULT* object) {
+    FREE_STRING(object->string);
 
-    for (i = 0; i < object->amount_of_events; ++i) {
-        FREE_STRING(((object->event_descriptions)[i]));
-    }
-    free(object->event_descriptions);
-    object->event_descriptions = NULL;
 }
 
 static size_t vanilla_SMSG_GUILD_COMMAND_RESULT_size(const vanilla_SMSG_GUILD_COMMAND_RESULT* object) {
@@ -7414,6 +9526,15 @@ static size_t vanilla_SMSG_GUILD_COMMAND_RESULT_size(const vanilla_SMSG_GUILD_CO
 }
 
 static WowWorldResult vanilla_SMSG_GUILD_COMMAND_RESULT_read(WowWorldReader* reader, vanilla_SMSG_GUILD_COMMAND_RESULT* object) {
+    int _return_value = 1;
+
+    if (9 > (reader->length - reader->index)) {
+        _return_value = (size_t)9 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->string = NULL;
+
     object->command = 0;
     READ_U32(object->command);
 
@@ -7423,9 +9544,19 @@ static WowWorldResult vanilla_SMSG_GUILD_COMMAND_RESULT_read(WowWorldReader* rea
     READ_U32(object->result);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_GUILD_COMMAND_RESULT_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GUILD_COMMAND_RESULT_write(WowWorldWriter* writer, const vanilla_SMSG_GUILD_COMMAND_RESULT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_GUILD_COMMAND_RESULT_size(object) + 2); /* size */
 
     WRITE_U16(0x00000093); /* opcode */
@@ -7438,10 +9569,19 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GUILD_COMMAND_RESULT_wri
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GUILD_COMMAND_RESULT_free(vanilla_SMSG_GUILD_COMMAND_RESULT* object) {
-    FREE_STRING(object->string);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_MESSAGECHAT_free(vanilla_CMSG_MESSAGECHAT* object) {
+    if (object->chat_type == VANILLA_CHAT_TYPE_WHISPER) {
+        FREE_STRING(object->target_player);
+
+    }
+    else if (object->chat_type == VANILLA_CHAT_TYPE_CHANNEL) {
+        FREE_STRING(object->channel);
+
+    }
+    FREE_STRING(object->message);
 
 }
 
@@ -7459,6 +9599,17 @@ static size_t vanilla_CMSG_MESSAGECHAT_size(const vanilla_CMSG_MESSAGECHAT* obje
 }
 
 static WowWorldResult vanilla_CMSG_MESSAGECHAT_read(WowWorldReader* reader, vanilla_CMSG_MESSAGECHAT* object) {
+    int _return_value = 1;
+
+    if (9 > (reader->length - reader->index)) {
+        _return_value = (size_t)9 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->target_player = NULL;
+    object->channel = NULL;
+    object->message = NULL;
+
     object->chat_type = 0;
     READ_U32(object->chat_type);
 
@@ -7476,9 +9627,19 @@ static WowWorldResult vanilla_CMSG_MESSAGECHAT_read(WowWorldReader* reader, vani
     READ_CSTRING(object->message);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_MESSAGECHAT_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MESSAGECHAT_write(WowWorldWriter* writer, const vanilla_CMSG_MESSAGECHAT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_MESSAGECHAT_size(object) + 4); /* size */
 
     WRITE_U32(0x00000095); /* opcode */
@@ -7499,16 +9660,25 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MESSAGECHAT_write(WowWor
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_MESSAGECHAT_free(vanilla_CMSG_MESSAGECHAT* object) {
-    if (object->chat_type == VANILLA_CHAT_TYPE_WHISPER) {
-        FREE_STRING(object->target_player);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_MESSAGECHAT_free(vanilla_SMSG_MESSAGECHAT* object) {
+    if (object->chat_type == VANILLA_CHAT_TYPE_MONSTER_WHISPER|| object->chat_type == VANILLA_CHAT_TYPE_RAID_BOSS_EMOTE|| object->chat_type == VANILLA_CHAT_TYPE_MONSTER_EMOTE) {
+        FREE_STRING(object->monster_name);
+
+    }
+    else if (object->chat_type == VANILLA_CHAT_TYPE_SAY|| object->chat_type == VANILLA_CHAT_TYPE_PARTY|| object->chat_type == VANILLA_CHAT_TYPE_YELL) {
+    }
+    else if (object->chat_type == VANILLA_CHAT_TYPE_MONSTER_SAY|| object->chat_type == VANILLA_CHAT_TYPE_MONSTER_YELL) {
+        FREE_STRING(object->sender_name);
 
     }
     else if (object->chat_type == VANILLA_CHAT_TYPE_CHANNEL) {
-        FREE_STRING(object->channel);
+        FREE_STRING(object->channel_name);
 
+    }
+    else if (object->chat_type == VANILLA_CHAT_TYPE_RAID|| object->chat_type == VANILLA_CHAT_TYPE_GUILD|| object->chat_type == VANILLA_CHAT_TYPE_OFFICER|| object->chat_type == VANILLA_CHAT_TYPE_WHISPER|| object->chat_type == VANILLA_CHAT_TYPE_WHISPER_INFORM|| object->chat_type == VANILLA_CHAT_TYPE_EMOTE|| object->chat_type == VANILLA_CHAT_TYPE_TEXT_EMOTE|| object->chat_type == VANILLA_CHAT_TYPE_SYSTEM|| object->chat_type == VANILLA_CHAT_TYPE_CHANNEL_JOIN|| object->chat_type == VANILLA_CHAT_TYPE_CHANNEL_LEAVE|| object->chat_type == VANILLA_CHAT_TYPE_CHANNEL_LIST|| object->chat_type == VANILLA_CHAT_TYPE_CHANNEL_NOTICE|| object->chat_type == VANILLA_CHAT_TYPE_CHANNEL_NOTICE_USER|| object->chat_type == VANILLA_CHAT_TYPE_AFK|| object->chat_type == VANILLA_CHAT_TYPE_DND|| object->chat_type == VANILLA_CHAT_TYPE_IGNORED|| object->chat_type == VANILLA_CHAT_TYPE_SKILL|| object->chat_type == VANILLA_CHAT_TYPE_LOOT|| object->chat_type == VANILLA_CHAT_TYPE_BG_SYSTEM_NEUTRAL|| object->chat_type == VANILLA_CHAT_TYPE_BG_SYSTEM_ALLIANCE|| object->chat_type == VANILLA_CHAT_TYPE_BG_SYSTEM_HORDE|| object->chat_type == VANILLA_CHAT_TYPE_RAID_LEADER|| object->chat_type == VANILLA_CHAT_TYPE_RAID_WARNING|| object->chat_type == VANILLA_CHAT_TYPE_RAID_BOSS_WHISPER|| object->chat_type == VANILLA_CHAT_TYPE_BATTLEGROUND|| object->chat_type == VANILLA_CHAT_TYPE_BATTLEGROUND_LEADER) {
     }
     FREE_STRING(object->message);
 
@@ -7537,6 +9707,18 @@ static size_t vanilla_SMSG_MESSAGECHAT_size(const vanilla_SMSG_MESSAGECHAT* obje
 }
 
 static WowWorldResult vanilla_SMSG_MESSAGECHAT_read(WowWorldReader* reader, vanilla_SMSG_MESSAGECHAT* object) {
+    int _return_value = 1;
+
+    if (19 > (reader->length - reader->index)) {
+        _return_value = (size_t)19 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->monster_name = NULL;
+    object->sender_name = NULL;
+    object->channel_name = NULL;
+    object->message = NULL;
+
     object->chat_type = 0;
     READ_U8(object->chat_type);
 
@@ -7581,9 +9763,19 @@ static WowWorldResult vanilla_SMSG_MESSAGECHAT_read(WowWorldReader* reader, vani
     READ_U8(object->tag);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_MESSAGECHAT_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MESSAGECHAT_write(WowWorldWriter* writer, const vanilla_SMSG_MESSAGECHAT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_MESSAGECHAT_size(object) + 2); /* size */
 
     WRITE_U16(0x00000096); /* opcode */
@@ -7630,26 +9822,13 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MESSAGECHAT_write(WowWor
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_MESSAGECHAT_free(vanilla_SMSG_MESSAGECHAT* object) {
-    if (object->chat_type == VANILLA_CHAT_TYPE_MONSTER_WHISPER|| object->chat_type == VANILLA_CHAT_TYPE_RAID_BOSS_EMOTE|| object->chat_type == VANILLA_CHAT_TYPE_MONSTER_EMOTE) {
-        FREE_STRING(object->monster_name);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_JOIN_CHANNEL_free(vanilla_CMSG_JOIN_CHANNEL* object) {
+    FREE_STRING(object->channel_name);
 
-    }
-    else if (object->chat_type == VANILLA_CHAT_TYPE_SAY|| object->chat_type == VANILLA_CHAT_TYPE_PARTY|| object->chat_type == VANILLA_CHAT_TYPE_YELL) {
-    }
-    else if (object->chat_type == VANILLA_CHAT_TYPE_MONSTER_SAY|| object->chat_type == VANILLA_CHAT_TYPE_MONSTER_YELL) {
-        FREE_STRING(object->sender_name);
-
-    }
-    else if (object->chat_type == VANILLA_CHAT_TYPE_CHANNEL) {
-        FREE_STRING(object->channel_name);
-
-    }
-    else if (object->chat_type == VANILLA_CHAT_TYPE_RAID|| object->chat_type == VANILLA_CHAT_TYPE_GUILD|| object->chat_type == VANILLA_CHAT_TYPE_OFFICER|| object->chat_type == VANILLA_CHAT_TYPE_WHISPER|| object->chat_type == VANILLA_CHAT_TYPE_WHISPER_INFORM|| object->chat_type == VANILLA_CHAT_TYPE_EMOTE|| object->chat_type == VANILLA_CHAT_TYPE_TEXT_EMOTE|| object->chat_type == VANILLA_CHAT_TYPE_SYSTEM|| object->chat_type == VANILLA_CHAT_TYPE_CHANNEL_JOIN|| object->chat_type == VANILLA_CHAT_TYPE_CHANNEL_LEAVE|| object->chat_type == VANILLA_CHAT_TYPE_CHANNEL_LIST|| object->chat_type == VANILLA_CHAT_TYPE_CHANNEL_NOTICE|| object->chat_type == VANILLA_CHAT_TYPE_CHANNEL_NOTICE_USER|| object->chat_type == VANILLA_CHAT_TYPE_AFK|| object->chat_type == VANILLA_CHAT_TYPE_DND|| object->chat_type == VANILLA_CHAT_TYPE_IGNORED|| object->chat_type == VANILLA_CHAT_TYPE_SKILL|| object->chat_type == VANILLA_CHAT_TYPE_LOOT|| object->chat_type == VANILLA_CHAT_TYPE_BG_SYSTEM_NEUTRAL|| object->chat_type == VANILLA_CHAT_TYPE_BG_SYSTEM_ALLIANCE|| object->chat_type == VANILLA_CHAT_TYPE_BG_SYSTEM_HORDE|| object->chat_type == VANILLA_CHAT_TYPE_RAID_LEADER|| object->chat_type == VANILLA_CHAT_TYPE_RAID_WARNING|| object->chat_type == VANILLA_CHAT_TYPE_RAID_BOSS_WHISPER|| object->chat_type == VANILLA_CHAT_TYPE_BATTLEGROUND|| object->chat_type == VANILLA_CHAT_TYPE_BATTLEGROUND_LEADER) {
-    }
-    FREE_STRING(object->message);
+    FREE_STRING(object->channel_password);
 
 }
 
@@ -7658,14 +9837,34 @@ static size_t vanilla_CMSG_JOIN_CHANNEL_size(const vanilla_CMSG_JOIN_CHANNEL* ob
 }
 
 static WowWorldResult vanilla_CMSG_JOIN_CHANNEL_read(WowWorldReader* reader, vanilla_CMSG_JOIN_CHANNEL* object) {
+    int _return_value = 1;
+
+    if (2 > (reader->length - reader->index)) {
+        _return_value = (size_t)2 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->channel_name = NULL;
+    object->channel_password = NULL;
+
     READ_CSTRING(object->channel_name);
 
     READ_CSTRING(object->channel_password);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_JOIN_CHANNEL_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_JOIN_CHANNEL_write(WowWorldWriter* writer, const vanilla_CMSG_JOIN_CHANNEL* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_JOIN_CHANNEL_size(object) + 4); /* size */
 
     WRITE_U32(0x00000097); /* opcode */
@@ -7676,12 +9875,11 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_JOIN_CHANNEL_write(WowWo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_JOIN_CHANNEL_free(vanilla_CMSG_JOIN_CHANNEL* object) {
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_LEAVE_CHANNEL_free(vanilla_CMSG_LEAVE_CHANNEL* object) {
     FREE_STRING(object->channel_name);
-
-    FREE_STRING(object->channel_password);
 
 }
 
@@ -7690,12 +9888,31 @@ static size_t vanilla_CMSG_LEAVE_CHANNEL_size(const vanilla_CMSG_LEAVE_CHANNEL* 
 }
 
 static WowWorldResult vanilla_CMSG_LEAVE_CHANNEL_read(WowWorldReader* reader, vanilla_CMSG_LEAVE_CHANNEL* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->channel_name = NULL;
+
     READ_CSTRING(object->channel_name);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_LEAVE_CHANNEL_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_LEAVE_CHANNEL_write(WowWorldWriter* writer, const vanilla_CMSG_LEAVE_CHANNEL* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_LEAVE_CHANNEL_size(object) + 4); /* size */
 
     WRITE_U32(0x00000098); /* opcode */
@@ -7704,9 +9921,10 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_LEAVE_CHANNEL_write(WowW
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_LEAVE_CHANNEL_free(vanilla_CMSG_LEAVE_CHANNEL* object) {
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_CHANNEL_NOTIFY_free(vanilla_SMSG_CHANNEL_NOTIFY* object) {
     FREE_STRING(object->channel_name);
 
 }
@@ -7716,15 +9934,34 @@ static size_t vanilla_SMSG_CHANNEL_NOTIFY_size(const vanilla_SMSG_CHANNEL_NOTIFY
 }
 
 static WowWorldResult vanilla_SMSG_CHANNEL_NOTIFY_read(WowWorldReader* reader, vanilla_SMSG_CHANNEL_NOTIFY* object) {
+    int _return_value = 1;
+
+    if (2 > (reader->length - reader->index)) {
+        _return_value = (size_t)2 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->channel_name = NULL;
+
     object->notify_type = 0;
     READ_U8(object->notify_type);
 
     READ_CSTRING(object->channel_name);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_CHANNEL_NOTIFY_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CHANNEL_NOTIFY_write(WowWorldWriter* writer, const vanilla_SMSG_CHANNEL_NOTIFY* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_CHANNEL_NOTIFY_size(object) + 2); /* size */
 
     WRITE_U16(0x00000099); /* opcode */
@@ -7735,9 +9972,10 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CHANNEL_NOTIFY_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_CHANNEL_NOTIFY_free(vanilla_SMSG_CHANNEL_NOTIFY* object) {
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_LIST_free(vanilla_CMSG_CHANNEL_LIST* object) {
     FREE_STRING(object->channel_name);
 
 }
@@ -7747,12 +9985,31 @@ static size_t vanilla_CMSG_CHANNEL_LIST_size(const vanilla_CMSG_CHANNEL_LIST* ob
 }
 
 static WowWorldResult vanilla_CMSG_CHANNEL_LIST_read(WowWorldReader* reader, vanilla_CMSG_CHANNEL_LIST* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->channel_name = NULL;
+
     READ_CSTRING(object->channel_name);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_CHANNEL_LIST_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_LIST_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_LIST* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_CHANNEL_LIST_size(object) + 4); /* size */
 
     WRITE_U32(0x0000009a); /* opcode */
@@ -7761,11 +10018,16 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_LIST_write(WowWo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_LIST_free(vanilla_CMSG_CHANNEL_LIST* object) {
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_CHANNEL_LIST_free(vanilla_SMSG_CHANNEL_LIST* object) {
     FREE_STRING(object->channel_name);
 
+    if (object->members != NULL) {
+        free(object->members);
+        object->members = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_CHANNEL_LIST_size(const vanilla_SMSG_CHANNEL_LIST* object) {
@@ -7773,6 +10035,16 @@ static size_t vanilla_SMSG_CHANNEL_LIST_size(const vanilla_SMSG_CHANNEL_LIST* ob
 }
 
 static WowWorldResult vanilla_SMSG_CHANNEL_LIST_read(WowWorldReader* reader, vanilla_SMSG_CHANNEL_LIST* object) {
+    int _return_value = 1;
+
+    if (6 > (reader->length - reader->index)) {
+        _return_value = (size_t)6 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->channel_name = NULL;
+    object->members = NULL;
+
     READ_CSTRING(object->channel_name);
 
     object->channel_flags = 0;
@@ -7780,7 +10052,7 @@ static WowWorldResult vanilla_SMSG_CHANNEL_LIST_read(WowWorldReader* reader, van
 
     READ_U32(object->amount_of_members);
 
-    object->members = malloc(object->amount_of_members * sizeof(vanilla_ChannelMember));
+    object->members = calloc(object->amount_of_members, sizeof(vanilla_ChannelMember));
     if (object->members == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -7788,9 +10060,19 @@ static WowWorldResult vanilla_SMSG_CHANNEL_LIST_read(WowWorldReader* reader, van
 
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_CHANNEL_LIST_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CHANNEL_LIST_write(WowWorldWriter* writer, const vanilla_SMSG_CHANNEL_LIST* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_CHANNEL_LIST_size(object) + 2); /* size */
 
     WRITE_U16(0x0000009b); /* opcode */
@@ -7805,13 +10087,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CHANNEL_LIST_write(WowWo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_CHANNEL_LIST_free(vanilla_SMSG_CHANNEL_LIST* object) {
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_PASSWORD_free(vanilla_CMSG_CHANNEL_PASSWORD* object) {
     FREE_STRING(object->channel_name);
 
-    free(object->members);
-    object->members = NULL;
+    FREE_STRING(object->channel_password);
+
 }
 
 static size_t vanilla_CMSG_CHANNEL_PASSWORD_size(const vanilla_CMSG_CHANNEL_PASSWORD* object) {
@@ -7819,14 +10102,34 @@ static size_t vanilla_CMSG_CHANNEL_PASSWORD_size(const vanilla_CMSG_CHANNEL_PASS
 }
 
 static WowWorldResult vanilla_CMSG_CHANNEL_PASSWORD_read(WowWorldReader* reader, vanilla_CMSG_CHANNEL_PASSWORD* object) {
+    int _return_value = 1;
+
+    if (2 > (reader->length - reader->index)) {
+        _return_value = (size_t)2 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->channel_name = NULL;
+    object->channel_password = NULL;
+
     READ_CSTRING(object->channel_name);
 
     READ_CSTRING(object->channel_password);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_CHANNEL_PASSWORD_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_PASSWORD_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_PASSWORD* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_CHANNEL_PASSWORD_size(object) + 4); /* size */
 
     WRITE_U32(0x0000009c); /* opcode */
@@ -7837,12 +10140,13 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_PASSWORD_write(W
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_PASSWORD_free(vanilla_CMSG_CHANNEL_PASSWORD* object) {
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_SET_OWNER_free(vanilla_CMSG_CHANNEL_SET_OWNER* object) {
     FREE_STRING(object->channel_name);
 
-    FREE_STRING(object->channel_password);
+    FREE_STRING(object->new_owner);
 
 }
 
@@ -7851,14 +10155,34 @@ static size_t vanilla_CMSG_CHANNEL_SET_OWNER_size(const vanilla_CMSG_CHANNEL_SET
 }
 
 static WowWorldResult vanilla_CMSG_CHANNEL_SET_OWNER_read(WowWorldReader* reader, vanilla_CMSG_CHANNEL_SET_OWNER* object) {
+    int _return_value = 1;
+
+    if (2 > (reader->length - reader->index)) {
+        _return_value = (size_t)2 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->channel_name = NULL;
+    object->new_owner = NULL;
+
     READ_CSTRING(object->channel_name);
 
     READ_CSTRING(object->new_owner);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_CHANNEL_SET_OWNER_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_SET_OWNER_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_SET_OWNER* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_CHANNEL_SET_OWNER_size(object) + 4); /* size */
 
     WRITE_U32(0x0000009d); /* opcode */
@@ -7869,12 +10193,11 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_SET_OWNER_write(
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_SET_OWNER_free(vanilla_CMSG_CHANNEL_SET_OWNER* object) {
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_OWNER_free(vanilla_CMSG_CHANNEL_OWNER* object) {
     FREE_STRING(object->channel_name);
-
-    FREE_STRING(object->new_owner);
 
 }
 
@@ -7883,12 +10206,31 @@ static size_t vanilla_CMSG_CHANNEL_OWNER_size(const vanilla_CMSG_CHANNEL_OWNER* 
 }
 
 static WowWorldResult vanilla_CMSG_CHANNEL_OWNER_read(WowWorldReader* reader, vanilla_CMSG_CHANNEL_OWNER* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->channel_name = NULL;
+
     READ_CSTRING(object->channel_name);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_CHANNEL_OWNER_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_OWNER_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_OWNER* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_CHANNEL_OWNER_size(object) + 4); /* size */
 
     WRITE_U32(0x0000009e); /* opcode */
@@ -7897,10 +10239,13 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_OWNER_write(WowW
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_OWNER_free(vanilla_CMSG_CHANNEL_OWNER* object) {
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_MODERATOR_free(vanilla_CMSG_CHANNEL_MODERATOR* object) {
     FREE_STRING(object->channel_name);
+
+    FREE_STRING(object->player_name);
 
 }
 
@@ -7909,14 +10254,34 @@ static size_t vanilla_CMSG_CHANNEL_MODERATOR_size(const vanilla_CMSG_CHANNEL_MOD
 }
 
 static WowWorldResult vanilla_CMSG_CHANNEL_MODERATOR_read(WowWorldReader* reader, vanilla_CMSG_CHANNEL_MODERATOR* object) {
+    int _return_value = 1;
+
+    if (2 > (reader->length - reader->index)) {
+        _return_value = (size_t)2 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->channel_name = NULL;
+    object->player_name = NULL;
+
     READ_CSTRING(object->channel_name);
 
     READ_CSTRING(object->player_name);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_CHANNEL_MODERATOR_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_MODERATOR_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_MODERATOR* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_CHANNEL_MODERATOR_size(object) + 4); /* size */
 
     WRITE_U32(0x0000009f); /* opcode */
@@ -7927,9 +10292,10 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_MODERATOR_write(
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_MODERATOR_free(vanilla_CMSG_CHANNEL_MODERATOR* object) {
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_UNMODERATOR_free(vanilla_CMSG_CHANNEL_UNMODERATOR* object) {
     FREE_STRING(object->channel_name);
 
     FREE_STRING(object->player_name);
@@ -7941,14 +10307,34 @@ static size_t vanilla_CMSG_CHANNEL_UNMODERATOR_size(const vanilla_CMSG_CHANNEL_U
 }
 
 static WowWorldResult vanilla_CMSG_CHANNEL_UNMODERATOR_read(WowWorldReader* reader, vanilla_CMSG_CHANNEL_UNMODERATOR* object) {
+    int _return_value = 1;
+
+    if (2 > (reader->length - reader->index)) {
+        _return_value = (size_t)2 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->channel_name = NULL;
+    object->player_name = NULL;
+
     READ_CSTRING(object->channel_name);
 
     READ_CSTRING(object->player_name);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_CHANNEL_UNMODERATOR_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_UNMODERATOR_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_UNMODERATOR* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_CHANNEL_UNMODERATOR_size(object) + 4); /* size */
 
     WRITE_U32(0x000000a0); /* opcode */
@@ -7959,9 +10345,10 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_UNMODERATOR_writ
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_UNMODERATOR_free(vanilla_CMSG_CHANNEL_UNMODERATOR* object) {
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_MUTE_free(vanilla_CMSG_CHANNEL_MUTE* object) {
     FREE_STRING(object->channel_name);
 
     FREE_STRING(object->player_name);
@@ -7973,14 +10360,34 @@ static size_t vanilla_CMSG_CHANNEL_MUTE_size(const vanilla_CMSG_CHANNEL_MUTE* ob
 }
 
 static WowWorldResult vanilla_CMSG_CHANNEL_MUTE_read(WowWorldReader* reader, vanilla_CMSG_CHANNEL_MUTE* object) {
+    int _return_value = 1;
+
+    if (2 > (reader->length - reader->index)) {
+        _return_value = (size_t)2 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->channel_name = NULL;
+    object->player_name = NULL;
+
     READ_CSTRING(object->channel_name);
 
     READ_CSTRING(object->player_name);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_CHANNEL_MUTE_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_MUTE_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_MUTE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_CHANNEL_MUTE_size(object) + 4); /* size */
 
     WRITE_U32(0x000000a1); /* opcode */
@@ -7991,9 +10398,10 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_MUTE_write(WowWo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_MUTE_free(vanilla_CMSG_CHANNEL_MUTE* object) {
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_UNMUTE_free(vanilla_CMSG_CHANNEL_UNMUTE* object) {
     FREE_STRING(object->channel_name);
 
     FREE_STRING(object->player_name);
@@ -8005,14 +10413,34 @@ static size_t vanilla_CMSG_CHANNEL_UNMUTE_size(const vanilla_CMSG_CHANNEL_UNMUTE
 }
 
 static WowWorldResult vanilla_CMSG_CHANNEL_UNMUTE_read(WowWorldReader* reader, vanilla_CMSG_CHANNEL_UNMUTE* object) {
+    int _return_value = 1;
+
+    if (2 > (reader->length - reader->index)) {
+        _return_value = (size_t)2 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->channel_name = NULL;
+    object->player_name = NULL;
+
     READ_CSTRING(object->channel_name);
 
     READ_CSTRING(object->player_name);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_CHANNEL_UNMUTE_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_UNMUTE_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_UNMUTE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_CHANNEL_UNMUTE_size(object) + 4); /* size */
 
     WRITE_U32(0x000000a2); /* opcode */
@@ -8023,9 +10451,10 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_UNMUTE_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_UNMUTE_free(vanilla_CMSG_CHANNEL_UNMUTE* object) {
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_INVITE_free(vanilla_CMSG_CHANNEL_INVITE* object) {
     FREE_STRING(object->channel_name);
 
     FREE_STRING(object->player_name);
@@ -8037,14 +10466,34 @@ static size_t vanilla_CMSG_CHANNEL_INVITE_size(const vanilla_CMSG_CHANNEL_INVITE
 }
 
 static WowWorldResult vanilla_CMSG_CHANNEL_INVITE_read(WowWorldReader* reader, vanilla_CMSG_CHANNEL_INVITE* object) {
+    int _return_value = 1;
+
+    if (2 > (reader->length - reader->index)) {
+        _return_value = (size_t)2 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->channel_name = NULL;
+    object->player_name = NULL;
+
     READ_CSTRING(object->channel_name);
 
     READ_CSTRING(object->player_name);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_CHANNEL_INVITE_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_INVITE_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_INVITE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_CHANNEL_INVITE_size(object) + 4); /* size */
 
     WRITE_U32(0x000000a3); /* opcode */
@@ -8055,9 +10504,10 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_INVITE_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_INVITE_free(vanilla_CMSG_CHANNEL_INVITE* object) {
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_KICK_free(vanilla_CMSG_CHANNEL_KICK* object) {
     FREE_STRING(object->channel_name);
 
     FREE_STRING(object->player_name);
@@ -8069,14 +10519,34 @@ static size_t vanilla_CMSG_CHANNEL_KICK_size(const vanilla_CMSG_CHANNEL_KICK* ob
 }
 
 static WowWorldResult vanilla_CMSG_CHANNEL_KICK_read(WowWorldReader* reader, vanilla_CMSG_CHANNEL_KICK* object) {
+    int _return_value = 1;
+
+    if (2 > (reader->length - reader->index)) {
+        _return_value = (size_t)2 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->channel_name = NULL;
+    object->player_name = NULL;
+
     READ_CSTRING(object->channel_name);
 
     READ_CSTRING(object->player_name);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_CHANNEL_KICK_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_KICK_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_KICK* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_CHANNEL_KICK_size(object) + 4); /* size */
 
     WRITE_U32(0x000000a4); /* opcode */
@@ -8087,9 +10557,10 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_KICK_write(WowWo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_KICK_free(vanilla_CMSG_CHANNEL_KICK* object) {
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_BAN_free(vanilla_CMSG_CHANNEL_BAN* object) {
     FREE_STRING(object->channel_name);
 
     FREE_STRING(object->player_name);
@@ -8101,14 +10572,34 @@ static size_t vanilla_CMSG_CHANNEL_BAN_size(const vanilla_CMSG_CHANNEL_BAN* obje
 }
 
 static WowWorldResult vanilla_CMSG_CHANNEL_BAN_read(WowWorldReader* reader, vanilla_CMSG_CHANNEL_BAN* object) {
+    int _return_value = 1;
+
+    if (2 > (reader->length - reader->index)) {
+        _return_value = (size_t)2 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->channel_name = NULL;
+    object->player_name = NULL;
+
     READ_CSTRING(object->channel_name);
 
     READ_CSTRING(object->player_name);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_CHANNEL_BAN_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_BAN_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_BAN* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_CHANNEL_BAN_size(object) + 4); /* size */
 
     WRITE_U32(0x000000a5); /* opcode */
@@ -8119,9 +10610,10 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_BAN_write(WowWor
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_BAN_free(vanilla_CMSG_CHANNEL_BAN* object) {
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_UNBAN_free(vanilla_CMSG_CHANNEL_UNBAN* object) {
     FREE_STRING(object->channel_name);
 
     FREE_STRING(object->player_name);
@@ -8133,14 +10625,34 @@ static size_t vanilla_CMSG_CHANNEL_UNBAN_size(const vanilla_CMSG_CHANNEL_UNBAN* 
 }
 
 static WowWorldResult vanilla_CMSG_CHANNEL_UNBAN_read(WowWorldReader* reader, vanilla_CMSG_CHANNEL_UNBAN* object) {
+    int _return_value = 1;
+
+    if (2 > (reader->length - reader->index)) {
+        _return_value = (size_t)2 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->channel_name = NULL;
+    object->player_name = NULL;
+
     READ_CSTRING(object->channel_name);
 
     READ_CSTRING(object->player_name);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_CHANNEL_UNBAN_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_UNBAN_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_UNBAN* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_CHANNEL_UNBAN_size(object) + 4); /* size */
 
     WRITE_U32(0x000000a6); /* opcode */
@@ -8151,12 +10663,11 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_UNBAN_write(WowW
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_UNBAN_free(vanilla_CMSG_CHANNEL_UNBAN* object) {
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_ANNOUNCEMENTS_free(vanilla_CMSG_CHANNEL_ANNOUNCEMENTS* object) {
     FREE_STRING(object->channel_name);
-
-    FREE_STRING(object->player_name);
 
 }
 
@@ -8165,12 +10676,31 @@ static size_t vanilla_CMSG_CHANNEL_ANNOUNCEMENTS_size(const vanilla_CMSG_CHANNEL
 }
 
 static WowWorldResult vanilla_CMSG_CHANNEL_ANNOUNCEMENTS_read(WowWorldReader* reader, vanilla_CMSG_CHANNEL_ANNOUNCEMENTS* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->channel_name = NULL;
+
     READ_CSTRING(object->channel_name);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_CHANNEL_ANNOUNCEMENTS_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_ANNOUNCEMENTS_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_ANNOUNCEMENTS* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_CHANNEL_ANNOUNCEMENTS_size(object) + 4); /* size */
 
     WRITE_U32(0x000000a7); /* opcode */
@@ -8179,9 +10709,10 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_ANNOUNCEMENTS_wr
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_ANNOUNCEMENTS_free(vanilla_CMSG_CHANNEL_ANNOUNCEMENTS* object) {
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_MODERATE_free(vanilla_CMSG_CHANNEL_MODERATE* object) {
     FREE_STRING(object->channel_name);
 
 }
@@ -8191,12 +10722,31 @@ static size_t vanilla_CMSG_CHANNEL_MODERATE_size(const vanilla_CMSG_CHANNEL_MODE
 }
 
 static WowWorldResult vanilla_CMSG_CHANNEL_MODERATE_read(WowWorldReader* reader, vanilla_CMSG_CHANNEL_MODERATE* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->channel_name = NULL;
+
     READ_CSTRING(object->channel_name);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_CHANNEL_MODERATE_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_MODERATE_write(WowWorldWriter* writer, const vanilla_CMSG_CHANNEL_MODERATE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_CHANNEL_MODERATE_size(object) + 4); /* size */
 
     WRITE_U32(0x000000a8); /* opcode */
@@ -8205,11 +10755,19 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHANNEL_MODERATE_write(W
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHANNEL_MODERATE_free(vanilla_CMSG_CHANNEL_MODERATE* object) {
-    FREE_STRING(object->channel_name);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_UPDATE_OBJECT_free(vanilla_SMSG_UPDATE_OBJECT* object) {
+    size_t i;
 
+    if (object->objects != NULL) {
+        for (i = 0; i < object->amount_of_objects; ++i) {
+            vanilla_Object_free(&((object->objects)[i]));
+        }
+        free(object->objects);
+        object->objects = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_UPDATE_OBJECT_size(const vanilla_SMSG_UPDATE_OBJECT* object) {
@@ -8226,11 +10784,20 @@ static size_t vanilla_SMSG_UPDATE_OBJECT_size(const vanilla_SMSG_UPDATE_OBJECT* 
 }
 
 static WowWorldResult vanilla_SMSG_UPDATE_OBJECT_read(WowWorldReader* reader, vanilla_SMSG_UPDATE_OBJECT* object) {
+    int _return_value = 1;
+
+    if (5 > (reader->length - reader->index)) {
+        _return_value = (size_t)5 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->objects = NULL;
+
     READ_U32(object->amount_of_objects);
 
     READ_U8(object->has_transport);
 
-    object->objects = malloc(object->amount_of_objects * sizeof(vanilla_Object));
+    object->objects = calloc(object->amount_of_objects, sizeof(vanilla_Object));
     if (object->objects == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -8238,9 +10805,19 @@ static WowWorldResult vanilla_SMSG_UPDATE_OBJECT_read(WowWorldReader* reader, va
 
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_UPDATE_OBJECT_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_UPDATE_OBJECT_write(WowWorldWriter* writer, const vanilla_SMSG_UPDATE_OBJECT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_UPDATE_OBJECT_size(object) + 2); /* size */
 
     WRITE_U16(0x000000a9); /* opcode */
@@ -8253,25 +10830,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_UPDATE_OBJECT_write(WowW
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_UPDATE_OBJECT_free(vanilla_SMSG_UPDATE_OBJECT* object) {
-    size_t i;
-
-    for (i = 0; i < object->amount_of_objects; ++i) {
-        vanilla_Object_free(&((object->objects)[i]));
-    }
-    free(object->objects);
-    object->objects = NULL;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_DESTROY_OBJECT_read(WowWorldReader* reader, vanilla_SMSG_DESTROY_OBJECT* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_DESTROY_OBJECT_write(WowWorldWriter* writer, const vanilla_SMSG_DESTROY_OBJECT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 2); /* size */
 
     WRITE_U16(0x000000aa); /* opcode */
@@ -8280,6 +10864,11 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_DESTROY_OBJECT_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_USE_ITEM_free(vanilla_CMSG_USE_ITEM* object) {
+    vanilla_SpellCastTargets_free(&object->targets);
 }
 
 static size_t vanilla_CMSG_USE_ITEM_size(const vanilla_CMSG_USE_ITEM* object) {
@@ -8287,6 +10876,14 @@ static size_t vanilla_CMSG_USE_ITEM_size(const vanilla_CMSG_USE_ITEM* object) {
 }
 
 static WowWorldResult vanilla_CMSG_USE_ITEM_read(WowWorldReader* reader, vanilla_CMSG_USE_ITEM* object) {
+    int _return_value = 1;
+
+    if (5 > (reader->length - reader->index)) {
+        _return_value = (size_t)5 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+
     READ_U8(object->bag_index);
 
     READ_U8(object->bag_slot);
@@ -8296,9 +10893,19 @@ static WowWorldResult vanilla_CMSG_USE_ITEM_read(WowWorldReader* reader, vanilla
     WWM_CHECK_RETURN_CODE(vanilla_SpellCastTargets_read(reader, &object->targets));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_USE_ITEM_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_USE_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_USE_ITEM* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_USE_ITEM_size(object) + 4); /* size */
 
     WRITE_U32(0x000000ab); /* opcode */
@@ -8313,21 +10920,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_USE_ITEM_write(WowWorldW
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_USE_ITEM_free(vanilla_CMSG_USE_ITEM* object) {
-    vanilla_SpellCastTargets_free(&object->targets);
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_OPEN_ITEM_read(WowWorldReader* reader, vanilla_CMSG_OPEN_ITEM* object) {
+    int _return_value = 1;
+
+    if (2 > (reader->length - reader->index)) {
+        _return_value = (size_t)2 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U8(object->bag_index);
 
     READ_U8(object->slot);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_OPEN_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_OPEN_ITEM* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0002 + 4); /* size */
 
     WRITE_U32(0x000000ac); /* opcode */
@@ -8338,17 +10958,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_OPEN_ITEM_write(WowWorld
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_READ_ITEM_read(WowWorldReader* reader, vanilla_CMSG_READ_ITEM* object) {
+    int _return_value = 1;
+
+    if (2 > (reader->length - reader->index)) {
+        _return_value = (size_t)2 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U8(object->bag_index);
 
     READ_U8(object->slot);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_READ_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_READ_ITEM* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0002 + 4); /* size */
 
     WRITE_U32(0x000000ad); /* opcode */
@@ -8359,15 +10996,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_READ_ITEM_write(WowWorld
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_READ_ITEM_OK_read(WowWorldReader* reader, vanilla_SMSG_READ_ITEM_OK* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_READ_ITEM_OK_write(WowWorldWriter* writer, const vanilla_SMSG_READ_ITEM_OK* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 2); /* size */
 
     WRITE_U16(0x000000ae); /* opcode */
@@ -8376,15 +11030,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_READ_ITEM_OK_write(WowWo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_READ_ITEM_FAILED_read(WowWorldReader* reader, vanilla_SMSG_READ_ITEM_FAILED* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_READ_ITEM_FAILED_write(WowWorldWriter* writer, const vanilla_SMSG_READ_ITEM_FAILED* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 2); /* size */
 
     WRITE_U16(0x000000af); /* opcode */
@@ -8393,17 +11064,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_READ_ITEM_FAILED_write(W
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_ITEM_COOLDOWN_read(WowWorldReader* reader, vanilla_SMSG_ITEM_COOLDOWN* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_U32(object->id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ITEM_COOLDOWN_write(WowWorldWriter* writer, const vanilla_SMSG_ITEM_COOLDOWN* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 2); /* size */
 
     WRITE_U16(0x000000b0); /* opcode */
@@ -8414,15 +11102,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ITEM_COOLDOWN_write(WowW
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_GAMEOBJ_USE_read(WowWorldReader* reader, vanilla_CMSG_GAMEOBJ_USE* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GAMEOBJ_USE_write(WowWorldWriter* writer, const vanilla_CMSG_GAMEOBJ_USE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x000000b1); /* opcode */
@@ -8431,17 +11136,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GAMEOBJ_USE_write(WowWor
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_GAMEOBJECT_CUSTOM_ANIM_read(WowWorldReader* reader, vanilla_SMSG_GAMEOBJECT_CUSTOM_ANIM* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_U32(object->animation_id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GAMEOBJECT_CUSTOM_ANIM_write(WowWorldWriter* writer, const vanilla_SMSG_GAMEOBJECT_CUSTOM_ANIM* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 2); /* size */
 
     WRITE_U16(0x000000b3); /* opcode */
@@ -8452,15 +11174,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GAMEOBJECT_CUSTOM_ANIM_w
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_AREATRIGGER_read(WowWorldReader* reader, vanilla_CMSG_AREATRIGGER* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->trigger_id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AREATRIGGER_write(WowWorldWriter* writer, const vanilla_CMSG_AREATRIGGER* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 4); /* size */
 
     WRITE_U32(0x000000b4); /* opcode */
@@ -8469,6 +11208,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AREATRIGGER_write(WowWor
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_START_FORWARD_Client_size(const vanilla_MSG_MOVE_START_FORWARD_Client* object) {
@@ -8476,12 +11216,28 @@ static size_t vanilla_MSG_MOVE_START_FORWARD_Client_size(const vanilla_MSG_MOVE_
 }
 
 static WowWorldResult vanilla_MSG_MOVE_START_FORWARD_Client_read(WowWorldReader* reader, vanilla_MSG_MOVE_START_FORWARD_Client* object) {
+    int _return_value = 1;
+
+    if (28 > (reader->length - reader->index)) {
+        _return_value = (size_t)28 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_FORWARD_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_FORWARD_Client* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_START_FORWARD_Client_size(object) + 4); /* size */
 
     WRITE_U32(0x000000b5); /* opcode */
@@ -8490,10 +11246,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_FORWARD_Client
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_START_FORWARD_Client_free(vanilla_MSG_MOVE_START_FORWARD_Client* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_START_FORWARD_Server_size(const vanilla_MSG_MOVE_START_FORWARD_Server* object) {
@@ -8501,14 +11254,30 @@ static size_t vanilla_MSG_MOVE_START_FORWARD_Server_size(const vanilla_MSG_MOVE_
 }
 
 static WowWorldResult vanilla_MSG_MOVE_START_FORWARD_Server_read(WowWorldReader* reader, vanilla_MSG_MOVE_START_FORWARD_Server* object) {
+    int _return_value = 1;
+
+    if (29 > (reader->length - reader->index)) {
+        _return_value = (size_t)29 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_FORWARD_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_FORWARD_Server* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_START_FORWARD_Server_size(object) + 2); /* size */
 
     WRITE_U16(0x000000b5); /* opcode */
@@ -8519,10 +11288,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_FORWARD_Server
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_START_FORWARD_Server_free(vanilla_MSG_MOVE_START_FORWARD_Server* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_START_BACKWARD_Client_size(const vanilla_MSG_MOVE_START_BACKWARD_Client* object) {
@@ -8530,12 +11296,28 @@ static size_t vanilla_MSG_MOVE_START_BACKWARD_Client_size(const vanilla_MSG_MOVE
 }
 
 static WowWorldResult vanilla_MSG_MOVE_START_BACKWARD_Client_read(WowWorldReader* reader, vanilla_MSG_MOVE_START_BACKWARD_Client* object) {
+    int _return_value = 1;
+
+    if (28 > (reader->length - reader->index)) {
+        _return_value = (size_t)28 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_BACKWARD_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_BACKWARD_Client* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_START_BACKWARD_Client_size(object) + 4); /* size */
 
     WRITE_U32(0x000000b6); /* opcode */
@@ -8544,10 +11326,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_BACKWARD_Clien
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_START_BACKWARD_Client_free(vanilla_MSG_MOVE_START_BACKWARD_Client* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_START_BACKWARD_Server_size(const vanilla_MSG_MOVE_START_BACKWARD_Server* object) {
@@ -8555,14 +11334,30 @@ static size_t vanilla_MSG_MOVE_START_BACKWARD_Server_size(const vanilla_MSG_MOVE
 }
 
 static WowWorldResult vanilla_MSG_MOVE_START_BACKWARD_Server_read(WowWorldReader* reader, vanilla_MSG_MOVE_START_BACKWARD_Server* object) {
+    int _return_value = 1;
+
+    if (29 > (reader->length - reader->index)) {
+        _return_value = (size_t)29 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_BACKWARD_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_BACKWARD_Server* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_START_BACKWARD_Server_size(object) + 2); /* size */
 
     WRITE_U16(0x000000b6); /* opcode */
@@ -8573,10 +11368,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_BACKWARD_Serve
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_START_BACKWARD_Server_free(vanilla_MSG_MOVE_START_BACKWARD_Server* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_STOP_Client_size(const vanilla_MSG_MOVE_STOP_Client* object) {
@@ -8584,12 +11376,28 @@ static size_t vanilla_MSG_MOVE_STOP_Client_size(const vanilla_MSG_MOVE_STOP_Clie
 }
 
 static WowWorldResult vanilla_MSG_MOVE_STOP_Client_read(WowWorldReader* reader, vanilla_MSG_MOVE_STOP_Client* object) {
+    int _return_value = 1;
+
+    if (28 > (reader->length - reader->index)) {
+        _return_value = (size_t)28 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_STOP_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_STOP_Client* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_STOP_Client_size(object) + 4); /* size */
 
     WRITE_U32(0x000000b7); /* opcode */
@@ -8598,10 +11406,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_STOP_Client_write(Wo
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_STOP_Client_free(vanilla_MSG_MOVE_STOP_Client* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_STOP_Server_size(const vanilla_MSG_MOVE_STOP_Server* object) {
@@ -8609,14 +11414,30 @@ static size_t vanilla_MSG_MOVE_STOP_Server_size(const vanilla_MSG_MOVE_STOP_Serv
 }
 
 static WowWorldResult vanilla_MSG_MOVE_STOP_Server_read(WowWorldReader* reader, vanilla_MSG_MOVE_STOP_Server* object) {
+    int _return_value = 1;
+
+    if (29 > (reader->length - reader->index)) {
+        _return_value = (size_t)29 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_STOP_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_STOP_Server* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_STOP_Server_size(object) + 2); /* size */
 
     WRITE_U16(0x000000b7); /* opcode */
@@ -8627,10 +11448,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_STOP_Server_write(Wo
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_STOP_Server_free(vanilla_MSG_MOVE_STOP_Server* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_START_STRAFE_LEFT_Client_size(const vanilla_MSG_MOVE_START_STRAFE_LEFT_Client* object) {
@@ -8638,12 +11456,28 @@ static size_t vanilla_MSG_MOVE_START_STRAFE_LEFT_Client_size(const vanilla_MSG_M
 }
 
 static WowWorldResult vanilla_MSG_MOVE_START_STRAFE_LEFT_Client_read(WowWorldReader* reader, vanilla_MSG_MOVE_START_STRAFE_LEFT_Client* object) {
+    int _return_value = 1;
+
+    if (28 > (reader->length - reader->index)) {
+        _return_value = (size_t)28 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_STRAFE_LEFT_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_STRAFE_LEFT_Client* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_START_STRAFE_LEFT_Client_size(object) + 4); /* size */
 
     WRITE_U32(0x000000b8); /* opcode */
@@ -8652,10 +11486,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_STRAFE_LEFT_Cl
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_START_STRAFE_LEFT_Client_free(vanilla_MSG_MOVE_START_STRAFE_LEFT_Client* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_START_STRAFE_LEFT_Server_size(const vanilla_MSG_MOVE_START_STRAFE_LEFT_Server* object) {
@@ -8663,14 +11494,30 @@ static size_t vanilla_MSG_MOVE_START_STRAFE_LEFT_Server_size(const vanilla_MSG_M
 }
 
 static WowWorldResult vanilla_MSG_MOVE_START_STRAFE_LEFT_Server_read(WowWorldReader* reader, vanilla_MSG_MOVE_START_STRAFE_LEFT_Server* object) {
+    int _return_value = 1;
+
+    if (29 > (reader->length - reader->index)) {
+        _return_value = (size_t)29 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_STRAFE_LEFT_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_STRAFE_LEFT_Server* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_START_STRAFE_LEFT_Server_size(object) + 2); /* size */
 
     WRITE_U16(0x000000b8); /* opcode */
@@ -8681,10 +11528,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_STRAFE_LEFT_Se
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_START_STRAFE_LEFT_Server_free(vanilla_MSG_MOVE_START_STRAFE_LEFT_Server* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_START_STRAFE_RIGHT_Client_size(const vanilla_MSG_MOVE_START_STRAFE_RIGHT_Client* object) {
@@ -8692,12 +11536,28 @@ static size_t vanilla_MSG_MOVE_START_STRAFE_RIGHT_Client_size(const vanilla_MSG_
 }
 
 static WowWorldResult vanilla_MSG_MOVE_START_STRAFE_RIGHT_Client_read(WowWorldReader* reader, vanilla_MSG_MOVE_START_STRAFE_RIGHT_Client* object) {
+    int _return_value = 1;
+
+    if (28 > (reader->length - reader->index)) {
+        _return_value = (size_t)28 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_STRAFE_RIGHT_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_STRAFE_RIGHT_Client* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_START_STRAFE_RIGHT_Client_size(object) + 4); /* size */
 
     WRITE_U32(0x000000b9); /* opcode */
@@ -8706,10 +11566,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_STRAFE_RIGHT_C
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_START_STRAFE_RIGHT_Client_free(vanilla_MSG_MOVE_START_STRAFE_RIGHT_Client* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_START_STRAFE_RIGHT_Server_size(const vanilla_MSG_MOVE_START_STRAFE_RIGHT_Server* object) {
@@ -8717,14 +11574,30 @@ static size_t vanilla_MSG_MOVE_START_STRAFE_RIGHT_Server_size(const vanilla_MSG_
 }
 
 static WowWorldResult vanilla_MSG_MOVE_START_STRAFE_RIGHT_Server_read(WowWorldReader* reader, vanilla_MSG_MOVE_START_STRAFE_RIGHT_Server* object) {
+    int _return_value = 1;
+
+    if (29 > (reader->length - reader->index)) {
+        _return_value = (size_t)29 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_STRAFE_RIGHT_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_STRAFE_RIGHT_Server* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_START_STRAFE_RIGHT_Server_size(object) + 2); /* size */
 
     WRITE_U16(0x000000b9); /* opcode */
@@ -8735,10 +11608,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_STRAFE_RIGHT_S
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_START_STRAFE_RIGHT_Server_free(vanilla_MSG_MOVE_START_STRAFE_RIGHT_Server* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_STOP_STRAFE_Client_size(const vanilla_MSG_MOVE_STOP_STRAFE_Client* object) {
@@ -8746,12 +11616,28 @@ static size_t vanilla_MSG_MOVE_STOP_STRAFE_Client_size(const vanilla_MSG_MOVE_ST
 }
 
 static WowWorldResult vanilla_MSG_MOVE_STOP_STRAFE_Client_read(WowWorldReader* reader, vanilla_MSG_MOVE_STOP_STRAFE_Client* object) {
+    int _return_value = 1;
+
+    if (28 > (reader->length - reader->index)) {
+        _return_value = (size_t)28 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_STOP_STRAFE_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_STOP_STRAFE_Client* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_STOP_STRAFE_Client_size(object) + 4); /* size */
 
     WRITE_U32(0x000000ba); /* opcode */
@@ -8760,10 +11646,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_STOP_STRAFE_Client_w
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_STOP_STRAFE_Client_free(vanilla_MSG_MOVE_STOP_STRAFE_Client* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_STOP_STRAFE_Server_size(const vanilla_MSG_MOVE_STOP_STRAFE_Server* object) {
@@ -8771,14 +11654,30 @@ static size_t vanilla_MSG_MOVE_STOP_STRAFE_Server_size(const vanilla_MSG_MOVE_ST
 }
 
 static WowWorldResult vanilla_MSG_MOVE_STOP_STRAFE_Server_read(WowWorldReader* reader, vanilla_MSG_MOVE_STOP_STRAFE_Server* object) {
+    int _return_value = 1;
+
+    if (29 > (reader->length - reader->index)) {
+        _return_value = (size_t)29 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_STOP_STRAFE_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_STOP_STRAFE_Server* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_STOP_STRAFE_Server_size(object) + 2); /* size */
 
     WRITE_U16(0x000000ba); /* opcode */
@@ -8789,10 +11688,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_STOP_STRAFE_Server_w
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_STOP_STRAFE_Server_free(vanilla_MSG_MOVE_STOP_STRAFE_Server* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_JUMP_Client_size(const vanilla_MSG_MOVE_JUMP_Client* object) {
@@ -8800,12 +11696,28 @@ static size_t vanilla_MSG_MOVE_JUMP_Client_size(const vanilla_MSG_MOVE_JUMP_Clie
 }
 
 static WowWorldResult vanilla_MSG_MOVE_JUMP_Client_read(WowWorldReader* reader, vanilla_MSG_MOVE_JUMP_Client* object) {
+    int _return_value = 1;
+
+    if (28 > (reader->length - reader->index)) {
+        _return_value = (size_t)28 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_JUMP_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_JUMP_Client* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_JUMP_Client_size(object) + 4); /* size */
 
     WRITE_U32(0x000000bb); /* opcode */
@@ -8814,10 +11726,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_JUMP_Client_write(Wo
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_JUMP_Client_free(vanilla_MSG_MOVE_JUMP_Client* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_JUMP_Server_size(const vanilla_MSG_MOVE_JUMP_Server* object) {
@@ -8825,14 +11734,30 @@ static size_t vanilla_MSG_MOVE_JUMP_Server_size(const vanilla_MSG_MOVE_JUMP_Serv
 }
 
 static WowWorldResult vanilla_MSG_MOVE_JUMP_Server_read(WowWorldReader* reader, vanilla_MSG_MOVE_JUMP_Server* object) {
+    int _return_value = 1;
+
+    if (29 > (reader->length - reader->index)) {
+        _return_value = (size_t)29 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_JUMP_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_JUMP_Server* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_JUMP_Server_size(object) + 2); /* size */
 
     WRITE_U16(0x000000bb); /* opcode */
@@ -8843,10 +11768,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_JUMP_Server_write(Wo
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_JUMP_Server_free(vanilla_MSG_MOVE_JUMP_Server* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_START_TURN_LEFT_Client_size(const vanilla_MSG_MOVE_START_TURN_LEFT_Client* object) {
@@ -8854,12 +11776,28 @@ static size_t vanilla_MSG_MOVE_START_TURN_LEFT_Client_size(const vanilla_MSG_MOV
 }
 
 static WowWorldResult vanilla_MSG_MOVE_START_TURN_LEFT_Client_read(WowWorldReader* reader, vanilla_MSG_MOVE_START_TURN_LEFT_Client* object) {
+    int _return_value = 1;
+
+    if (28 > (reader->length - reader->index)) {
+        _return_value = (size_t)28 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_TURN_LEFT_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_TURN_LEFT_Client* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_START_TURN_LEFT_Client_size(object) + 4); /* size */
 
     WRITE_U32(0x000000bc); /* opcode */
@@ -8868,10 +11806,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_TURN_LEFT_Clie
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_START_TURN_LEFT_Client_free(vanilla_MSG_MOVE_START_TURN_LEFT_Client* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_START_TURN_LEFT_Server_size(const vanilla_MSG_MOVE_START_TURN_LEFT_Server* object) {
@@ -8879,14 +11814,30 @@ static size_t vanilla_MSG_MOVE_START_TURN_LEFT_Server_size(const vanilla_MSG_MOV
 }
 
 static WowWorldResult vanilla_MSG_MOVE_START_TURN_LEFT_Server_read(WowWorldReader* reader, vanilla_MSG_MOVE_START_TURN_LEFT_Server* object) {
+    int _return_value = 1;
+
+    if (29 > (reader->length - reader->index)) {
+        _return_value = (size_t)29 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_TURN_LEFT_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_TURN_LEFT_Server* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_START_TURN_LEFT_Server_size(object) + 2); /* size */
 
     WRITE_U16(0x000000bc); /* opcode */
@@ -8897,10 +11848,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_TURN_LEFT_Serv
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_START_TURN_LEFT_Server_free(vanilla_MSG_MOVE_START_TURN_LEFT_Server* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_START_TURN_RIGHT_Client_size(const vanilla_MSG_MOVE_START_TURN_RIGHT_Client* object) {
@@ -8908,12 +11856,28 @@ static size_t vanilla_MSG_MOVE_START_TURN_RIGHT_Client_size(const vanilla_MSG_MO
 }
 
 static WowWorldResult vanilla_MSG_MOVE_START_TURN_RIGHT_Client_read(WowWorldReader* reader, vanilla_MSG_MOVE_START_TURN_RIGHT_Client* object) {
+    int _return_value = 1;
+
+    if (28 > (reader->length - reader->index)) {
+        _return_value = (size_t)28 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_TURN_RIGHT_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_TURN_RIGHT_Client* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_START_TURN_RIGHT_Client_size(object) + 4); /* size */
 
     WRITE_U32(0x000000bd); /* opcode */
@@ -8922,10 +11886,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_TURN_RIGHT_Cli
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_START_TURN_RIGHT_Client_free(vanilla_MSG_MOVE_START_TURN_RIGHT_Client* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_START_TURN_RIGHT_Server_size(const vanilla_MSG_MOVE_START_TURN_RIGHT_Server* object) {
@@ -8933,14 +11894,30 @@ static size_t vanilla_MSG_MOVE_START_TURN_RIGHT_Server_size(const vanilla_MSG_MO
 }
 
 static WowWorldResult vanilla_MSG_MOVE_START_TURN_RIGHT_Server_read(WowWorldReader* reader, vanilla_MSG_MOVE_START_TURN_RIGHT_Server* object) {
+    int _return_value = 1;
+
+    if (29 > (reader->length - reader->index)) {
+        _return_value = (size_t)29 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_TURN_RIGHT_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_TURN_RIGHT_Server* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_START_TURN_RIGHT_Server_size(object) + 2); /* size */
 
     WRITE_U16(0x000000bd); /* opcode */
@@ -8951,10 +11928,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_TURN_RIGHT_Ser
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_START_TURN_RIGHT_Server_free(vanilla_MSG_MOVE_START_TURN_RIGHT_Server* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_STOP_TURN_Client_size(const vanilla_MSG_MOVE_STOP_TURN_Client* object) {
@@ -8962,12 +11936,28 @@ static size_t vanilla_MSG_MOVE_STOP_TURN_Client_size(const vanilla_MSG_MOVE_STOP
 }
 
 static WowWorldResult vanilla_MSG_MOVE_STOP_TURN_Client_read(WowWorldReader* reader, vanilla_MSG_MOVE_STOP_TURN_Client* object) {
+    int _return_value = 1;
+
+    if (28 > (reader->length - reader->index)) {
+        _return_value = (size_t)28 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_STOP_TURN_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_STOP_TURN_Client* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_STOP_TURN_Client_size(object) + 4); /* size */
 
     WRITE_U32(0x000000be); /* opcode */
@@ -8976,10 +11966,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_STOP_TURN_Client_wri
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_STOP_TURN_Client_free(vanilla_MSG_MOVE_STOP_TURN_Client* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_STOP_TURN_Server_size(const vanilla_MSG_MOVE_STOP_TURN_Server* object) {
@@ -8987,14 +11974,30 @@ static size_t vanilla_MSG_MOVE_STOP_TURN_Server_size(const vanilla_MSG_MOVE_STOP
 }
 
 static WowWorldResult vanilla_MSG_MOVE_STOP_TURN_Server_read(WowWorldReader* reader, vanilla_MSG_MOVE_STOP_TURN_Server* object) {
+    int _return_value = 1;
+
+    if (29 > (reader->length - reader->index)) {
+        _return_value = (size_t)29 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_STOP_TURN_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_STOP_TURN_Server* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_STOP_TURN_Server_size(object) + 2); /* size */
 
     WRITE_U16(0x000000be); /* opcode */
@@ -9005,10 +12008,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_STOP_TURN_Server_wri
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_STOP_TURN_Server_free(vanilla_MSG_MOVE_STOP_TURN_Server* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_START_PITCH_UP_Client_size(const vanilla_MSG_MOVE_START_PITCH_UP_Client* object) {
@@ -9016,12 +12016,28 @@ static size_t vanilla_MSG_MOVE_START_PITCH_UP_Client_size(const vanilla_MSG_MOVE
 }
 
 static WowWorldResult vanilla_MSG_MOVE_START_PITCH_UP_Client_read(WowWorldReader* reader, vanilla_MSG_MOVE_START_PITCH_UP_Client* object) {
+    int _return_value = 1;
+
+    if (28 > (reader->length - reader->index)) {
+        _return_value = (size_t)28 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_PITCH_UP_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_PITCH_UP_Client* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_START_PITCH_UP_Client_size(object) + 4); /* size */
 
     WRITE_U32(0x000000bf); /* opcode */
@@ -9030,10 +12046,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_PITCH_UP_Clien
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_START_PITCH_UP_Client_free(vanilla_MSG_MOVE_START_PITCH_UP_Client* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_START_PITCH_UP_Server_size(const vanilla_MSG_MOVE_START_PITCH_UP_Server* object) {
@@ -9041,14 +12054,30 @@ static size_t vanilla_MSG_MOVE_START_PITCH_UP_Server_size(const vanilla_MSG_MOVE
 }
 
 static WowWorldResult vanilla_MSG_MOVE_START_PITCH_UP_Server_read(WowWorldReader* reader, vanilla_MSG_MOVE_START_PITCH_UP_Server* object) {
+    int _return_value = 1;
+
+    if (29 > (reader->length - reader->index)) {
+        _return_value = (size_t)29 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_PITCH_UP_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_PITCH_UP_Server* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_START_PITCH_UP_Server_size(object) + 2); /* size */
 
     WRITE_U16(0x000000bf); /* opcode */
@@ -9059,10 +12088,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_PITCH_UP_Serve
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_START_PITCH_UP_Server_free(vanilla_MSG_MOVE_START_PITCH_UP_Server* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_START_PITCH_DOWN_Client_size(const vanilla_MSG_MOVE_START_PITCH_DOWN_Client* object) {
@@ -9070,12 +12096,28 @@ static size_t vanilla_MSG_MOVE_START_PITCH_DOWN_Client_size(const vanilla_MSG_MO
 }
 
 static WowWorldResult vanilla_MSG_MOVE_START_PITCH_DOWN_Client_read(WowWorldReader* reader, vanilla_MSG_MOVE_START_PITCH_DOWN_Client* object) {
+    int _return_value = 1;
+
+    if (28 > (reader->length - reader->index)) {
+        _return_value = (size_t)28 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_PITCH_DOWN_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_PITCH_DOWN_Client* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_START_PITCH_DOWN_Client_size(object) + 4); /* size */
 
     WRITE_U32(0x000000c0); /* opcode */
@@ -9084,10 +12126,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_PITCH_DOWN_Cli
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_START_PITCH_DOWN_Client_free(vanilla_MSG_MOVE_START_PITCH_DOWN_Client* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_START_PITCH_DOWN_Server_size(const vanilla_MSG_MOVE_START_PITCH_DOWN_Server* object) {
@@ -9095,14 +12134,30 @@ static size_t vanilla_MSG_MOVE_START_PITCH_DOWN_Server_size(const vanilla_MSG_MO
 }
 
 static WowWorldResult vanilla_MSG_MOVE_START_PITCH_DOWN_Server_read(WowWorldReader* reader, vanilla_MSG_MOVE_START_PITCH_DOWN_Server* object) {
+    int _return_value = 1;
+
+    if (29 > (reader->length - reader->index)) {
+        _return_value = (size_t)29 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_PITCH_DOWN_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_PITCH_DOWN_Server* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_START_PITCH_DOWN_Server_size(object) + 2); /* size */
 
     WRITE_U16(0x000000c0); /* opcode */
@@ -9113,10 +12168,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_PITCH_DOWN_Ser
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_START_PITCH_DOWN_Server_free(vanilla_MSG_MOVE_START_PITCH_DOWN_Server* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_STOP_PITCH_Client_size(const vanilla_MSG_MOVE_STOP_PITCH_Client* object) {
@@ -9124,12 +12176,28 @@ static size_t vanilla_MSG_MOVE_STOP_PITCH_Client_size(const vanilla_MSG_MOVE_STO
 }
 
 static WowWorldResult vanilla_MSG_MOVE_STOP_PITCH_Client_read(WowWorldReader* reader, vanilla_MSG_MOVE_STOP_PITCH_Client* object) {
+    int _return_value = 1;
+
+    if (28 > (reader->length - reader->index)) {
+        _return_value = (size_t)28 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_STOP_PITCH_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_STOP_PITCH_Client* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_STOP_PITCH_Client_size(object) + 4); /* size */
 
     WRITE_U32(0x000000c1); /* opcode */
@@ -9138,10 +12206,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_STOP_PITCH_Client_wr
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_STOP_PITCH_Client_free(vanilla_MSG_MOVE_STOP_PITCH_Client* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_STOP_PITCH_Server_size(const vanilla_MSG_MOVE_STOP_PITCH_Server* object) {
@@ -9149,14 +12214,30 @@ static size_t vanilla_MSG_MOVE_STOP_PITCH_Server_size(const vanilla_MSG_MOVE_STO
 }
 
 static WowWorldResult vanilla_MSG_MOVE_STOP_PITCH_Server_read(WowWorldReader* reader, vanilla_MSG_MOVE_STOP_PITCH_Server* object) {
+    int _return_value = 1;
+
+    if (29 > (reader->length - reader->index)) {
+        _return_value = (size_t)29 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_STOP_PITCH_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_STOP_PITCH_Server* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_STOP_PITCH_Server_size(object) + 2); /* size */
 
     WRITE_U16(0x000000c1); /* opcode */
@@ -9167,10 +12248,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_STOP_PITCH_Server_wr
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_STOP_PITCH_Server_free(vanilla_MSG_MOVE_STOP_PITCH_Server* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_SET_RUN_MODE_Client_size(const vanilla_MSG_MOVE_SET_RUN_MODE_Client* object) {
@@ -9178,12 +12256,28 @@ static size_t vanilla_MSG_MOVE_SET_RUN_MODE_Client_size(const vanilla_MSG_MOVE_S
 }
 
 static WowWorldResult vanilla_MSG_MOVE_SET_RUN_MODE_Client_read(WowWorldReader* reader, vanilla_MSG_MOVE_SET_RUN_MODE_Client* object) {
+    int _return_value = 1;
+
+    if (28 > (reader->length - reader->index)) {
+        _return_value = (size_t)28 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_SET_RUN_MODE_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_SET_RUN_MODE_Client* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_SET_RUN_MODE_Client_size(object) + 4); /* size */
 
     WRITE_U32(0x000000c2); /* opcode */
@@ -9192,10 +12286,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_SET_RUN_MODE_Client_
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_SET_RUN_MODE_Client_free(vanilla_MSG_MOVE_SET_RUN_MODE_Client* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_SET_RUN_MODE_Server_size(const vanilla_MSG_MOVE_SET_RUN_MODE_Server* object) {
@@ -9203,14 +12294,30 @@ static size_t vanilla_MSG_MOVE_SET_RUN_MODE_Server_size(const vanilla_MSG_MOVE_S
 }
 
 static WowWorldResult vanilla_MSG_MOVE_SET_RUN_MODE_Server_read(WowWorldReader* reader, vanilla_MSG_MOVE_SET_RUN_MODE_Server* object) {
+    int _return_value = 1;
+
+    if (29 > (reader->length - reader->index)) {
+        _return_value = (size_t)29 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_SET_RUN_MODE_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_SET_RUN_MODE_Server* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_SET_RUN_MODE_Server_size(object) + 2); /* size */
 
     WRITE_U16(0x000000c2); /* opcode */
@@ -9221,10 +12328,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_SET_RUN_MODE_Server_
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_SET_RUN_MODE_Server_free(vanilla_MSG_MOVE_SET_RUN_MODE_Server* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_SET_WALK_MODE_Client_size(const vanilla_MSG_MOVE_SET_WALK_MODE_Client* object) {
@@ -9232,12 +12336,28 @@ static size_t vanilla_MSG_MOVE_SET_WALK_MODE_Client_size(const vanilla_MSG_MOVE_
 }
 
 static WowWorldResult vanilla_MSG_MOVE_SET_WALK_MODE_Client_read(WowWorldReader* reader, vanilla_MSG_MOVE_SET_WALK_MODE_Client* object) {
+    int _return_value = 1;
+
+    if (28 > (reader->length - reader->index)) {
+        _return_value = (size_t)28 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_SET_WALK_MODE_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_SET_WALK_MODE_Client* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_SET_WALK_MODE_Client_size(object) + 4); /* size */
 
     WRITE_U32(0x000000c3); /* opcode */
@@ -9246,10 +12366,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_SET_WALK_MODE_Client
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_SET_WALK_MODE_Client_free(vanilla_MSG_MOVE_SET_WALK_MODE_Client* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_SET_WALK_MODE_Server_size(const vanilla_MSG_MOVE_SET_WALK_MODE_Server* object) {
@@ -9257,14 +12374,30 @@ static size_t vanilla_MSG_MOVE_SET_WALK_MODE_Server_size(const vanilla_MSG_MOVE_
 }
 
 static WowWorldResult vanilla_MSG_MOVE_SET_WALK_MODE_Server_read(WowWorldReader* reader, vanilla_MSG_MOVE_SET_WALK_MODE_Server* object) {
+    int _return_value = 1;
+
+    if (29 > (reader->length - reader->index)) {
+        _return_value = (size_t)29 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_SET_WALK_MODE_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_SET_WALK_MODE_Server* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_SET_WALK_MODE_Server_size(object) + 2); /* size */
 
     WRITE_U16(0x000000c3); /* opcode */
@@ -9275,10 +12408,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_SET_WALK_MODE_Server
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_SET_WALK_MODE_Server_free(vanilla_MSG_MOVE_SET_WALK_MODE_Server* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_TELEPORT_ACK_Client_size(const vanilla_MSG_MOVE_TELEPORT_ACK_Client* object) {
@@ -9286,6 +12416,13 @@ static size_t vanilla_MSG_MOVE_TELEPORT_ACK_Client_size(const vanilla_MSG_MOVE_T
 }
 
 static WowWorldResult vanilla_MSG_MOVE_TELEPORT_ACK_Client_read(WowWorldReader* reader, vanilla_MSG_MOVE_TELEPORT_ACK_Client* object) {
+    int _return_value = 1;
+
+    if (9 > (reader->length - reader->index)) {
+        _return_value = (size_t)9 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     READ_U32(object->movement_counter);
@@ -9293,9 +12430,18 @@ static WowWorldResult vanilla_MSG_MOVE_TELEPORT_ACK_Client_read(WowWorldReader* 
     READ_U32(object->time);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_TELEPORT_ACK_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_TELEPORT_ACK_Client* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_TELEPORT_ACK_Client_size(object) + 4); /* size */
 
     WRITE_U32(0x000000c7); /* opcode */
@@ -9308,6 +12454,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_TELEPORT_ACK_Client_
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_TELEPORT_ACK_Server_size(const vanilla_MSG_MOVE_TELEPORT_ACK_Server* object) {
@@ -9315,6 +12462,13 @@ static size_t vanilla_MSG_MOVE_TELEPORT_ACK_Server_size(const vanilla_MSG_MOVE_T
 }
 
 static WowWorldResult vanilla_MSG_MOVE_TELEPORT_ACK_Server_read(WowWorldReader* reader, vanilla_MSG_MOVE_TELEPORT_ACK_Server* object) {
+    int _return_value = 1;
+
+    if (33 > (reader->length - reader->index)) {
+        _return_value = (size_t)33 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     READ_U32(object->movement_counter);
@@ -9322,9 +12476,18 @@ static WowWorldResult vanilla_MSG_MOVE_TELEPORT_ACK_Server_read(WowWorldReader* 
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_TELEPORT_ACK_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_TELEPORT_ACK_Server* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_TELEPORT_ACK_Server_size(object) + 2); /* size */
 
     WRITE_U16(0x000000c7); /* opcode */
@@ -9337,10 +12500,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_TELEPORT_ACK_Server_
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_TELEPORT_ACK_Server_free(vanilla_MSG_MOVE_TELEPORT_ACK_Server* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_FALL_LAND_Client_size(const vanilla_MSG_MOVE_FALL_LAND_Client* object) {
@@ -9348,12 +12508,28 @@ static size_t vanilla_MSG_MOVE_FALL_LAND_Client_size(const vanilla_MSG_MOVE_FALL
 }
 
 static WowWorldResult vanilla_MSG_MOVE_FALL_LAND_Client_read(WowWorldReader* reader, vanilla_MSG_MOVE_FALL_LAND_Client* object) {
+    int _return_value = 1;
+
+    if (28 > (reader->length - reader->index)) {
+        _return_value = (size_t)28 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_FALL_LAND_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_FALL_LAND_Client* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_FALL_LAND_Client_size(object) + 4); /* size */
 
     WRITE_U32(0x000000c9); /* opcode */
@@ -9362,10 +12538,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_FALL_LAND_Client_wri
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_FALL_LAND_Client_free(vanilla_MSG_MOVE_FALL_LAND_Client* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_FALL_LAND_Server_size(const vanilla_MSG_MOVE_FALL_LAND_Server* object) {
@@ -9373,14 +12546,30 @@ static size_t vanilla_MSG_MOVE_FALL_LAND_Server_size(const vanilla_MSG_MOVE_FALL
 }
 
 static WowWorldResult vanilla_MSG_MOVE_FALL_LAND_Server_read(WowWorldReader* reader, vanilla_MSG_MOVE_FALL_LAND_Server* object) {
+    int _return_value = 1;
+
+    if (29 > (reader->length - reader->index)) {
+        _return_value = (size_t)29 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_FALL_LAND_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_FALL_LAND_Server* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_FALL_LAND_Server_size(object) + 2); /* size */
 
     WRITE_U16(0x000000c9); /* opcode */
@@ -9391,10 +12580,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_FALL_LAND_Server_wri
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_FALL_LAND_Server_free(vanilla_MSG_MOVE_FALL_LAND_Server* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_START_SWIM_Client_size(const vanilla_MSG_MOVE_START_SWIM_Client* object) {
@@ -9402,12 +12588,28 @@ static size_t vanilla_MSG_MOVE_START_SWIM_Client_size(const vanilla_MSG_MOVE_STA
 }
 
 static WowWorldResult vanilla_MSG_MOVE_START_SWIM_Client_read(WowWorldReader* reader, vanilla_MSG_MOVE_START_SWIM_Client* object) {
+    int _return_value = 1;
+
+    if (28 > (reader->length - reader->index)) {
+        _return_value = (size_t)28 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_SWIM_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_SWIM_Client* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_START_SWIM_Client_size(object) + 4); /* size */
 
     WRITE_U32(0x000000ca); /* opcode */
@@ -9416,10 +12618,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_SWIM_Client_wr
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_START_SWIM_Client_free(vanilla_MSG_MOVE_START_SWIM_Client* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_START_SWIM_Server_size(const vanilla_MSG_MOVE_START_SWIM_Server* object) {
@@ -9427,14 +12626,30 @@ static size_t vanilla_MSG_MOVE_START_SWIM_Server_size(const vanilla_MSG_MOVE_STA
 }
 
 static WowWorldResult vanilla_MSG_MOVE_START_SWIM_Server_read(WowWorldReader* reader, vanilla_MSG_MOVE_START_SWIM_Server* object) {
+    int _return_value = 1;
+
+    if (29 > (reader->length - reader->index)) {
+        _return_value = (size_t)29 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_SWIM_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_START_SWIM_Server* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_START_SWIM_Server_size(object) + 2); /* size */
 
     WRITE_U16(0x000000ca); /* opcode */
@@ -9445,10 +12660,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_START_SWIM_Server_wr
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_START_SWIM_Server_free(vanilla_MSG_MOVE_START_SWIM_Server* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_STOP_SWIM_Client_size(const vanilla_MSG_MOVE_STOP_SWIM_Client* object) {
@@ -9456,12 +12668,28 @@ static size_t vanilla_MSG_MOVE_STOP_SWIM_Client_size(const vanilla_MSG_MOVE_STOP
 }
 
 static WowWorldResult vanilla_MSG_MOVE_STOP_SWIM_Client_read(WowWorldReader* reader, vanilla_MSG_MOVE_STOP_SWIM_Client* object) {
+    int _return_value = 1;
+
+    if (28 > (reader->length - reader->index)) {
+        _return_value = (size_t)28 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_STOP_SWIM_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_STOP_SWIM_Client* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_STOP_SWIM_Client_size(object) + 4); /* size */
 
     WRITE_U32(0x000000cb); /* opcode */
@@ -9470,10 +12698,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_STOP_SWIM_Client_wri
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_STOP_SWIM_Client_free(vanilla_MSG_MOVE_STOP_SWIM_Client* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_STOP_SWIM_Server_size(const vanilla_MSG_MOVE_STOP_SWIM_Server* object) {
@@ -9481,14 +12706,30 @@ static size_t vanilla_MSG_MOVE_STOP_SWIM_Server_size(const vanilla_MSG_MOVE_STOP
 }
 
 static WowWorldResult vanilla_MSG_MOVE_STOP_SWIM_Server_read(WowWorldReader* reader, vanilla_MSG_MOVE_STOP_SWIM_Server* object) {
+    int _return_value = 1;
+
+    if (29 > (reader->length - reader->index)) {
+        _return_value = (size_t)29 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_STOP_SWIM_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_STOP_SWIM_Server* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_STOP_SWIM_Server_size(object) + 2); /* size */
 
     WRITE_U16(0x000000cb); /* opcode */
@@ -9499,10 +12740,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_STOP_SWIM_Server_wri
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_STOP_SWIM_Server_free(vanilla_MSG_MOVE_STOP_SWIM_Server* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_SET_FACING_Client_size(const vanilla_MSG_MOVE_SET_FACING_Client* object) {
@@ -9510,12 +12748,28 @@ static size_t vanilla_MSG_MOVE_SET_FACING_Client_size(const vanilla_MSG_MOVE_SET
 }
 
 static WowWorldResult vanilla_MSG_MOVE_SET_FACING_Client_read(WowWorldReader* reader, vanilla_MSG_MOVE_SET_FACING_Client* object) {
+    int _return_value = 1;
+
+    if (28 > (reader->length - reader->index)) {
+        _return_value = (size_t)28 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_SET_FACING_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_SET_FACING_Client* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_SET_FACING_Client_size(object) + 4); /* size */
 
     WRITE_U32(0x000000da); /* opcode */
@@ -9524,10 +12778,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_SET_FACING_Client_wr
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_SET_FACING_Client_free(vanilla_MSG_MOVE_SET_FACING_Client* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_SET_FACING_Server_size(const vanilla_MSG_MOVE_SET_FACING_Server* object) {
@@ -9535,14 +12786,30 @@ static size_t vanilla_MSG_MOVE_SET_FACING_Server_size(const vanilla_MSG_MOVE_SET
 }
 
 static WowWorldResult vanilla_MSG_MOVE_SET_FACING_Server_read(WowWorldReader* reader, vanilla_MSG_MOVE_SET_FACING_Server* object) {
+    int _return_value = 1;
+
+    if (29 > (reader->length - reader->index)) {
+        _return_value = (size_t)29 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_SET_FACING_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_SET_FACING_Server* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_SET_FACING_Server_size(object) + 2); /* size */
 
     WRITE_U16(0x000000da); /* opcode */
@@ -9553,10 +12820,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_SET_FACING_Server_wr
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_SET_FACING_Server_free(vanilla_MSG_MOVE_SET_FACING_Server* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_SET_PITCH_Client_size(const vanilla_MSG_MOVE_SET_PITCH_Client* object) {
@@ -9564,12 +12828,28 @@ static size_t vanilla_MSG_MOVE_SET_PITCH_Client_size(const vanilla_MSG_MOVE_SET_
 }
 
 static WowWorldResult vanilla_MSG_MOVE_SET_PITCH_Client_read(WowWorldReader* reader, vanilla_MSG_MOVE_SET_PITCH_Client* object) {
+    int _return_value = 1;
+
+    if (28 > (reader->length - reader->index)) {
+        _return_value = (size_t)28 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_SET_PITCH_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_SET_PITCH_Client* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_SET_PITCH_Client_size(object) + 4); /* size */
 
     WRITE_U32(0x000000db); /* opcode */
@@ -9578,10 +12858,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_SET_PITCH_Client_wri
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_SET_PITCH_Client_free(vanilla_MSG_MOVE_SET_PITCH_Client* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_SET_PITCH_Server_size(const vanilla_MSG_MOVE_SET_PITCH_Server* object) {
@@ -9589,14 +12866,30 @@ static size_t vanilla_MSG_MOVE_SET_PITCH_Server_size(const vanilla_MSG_MOVE_SET_
 }
 
 static WowWorldResult vanilla_MSG_MOVE_SET_PITCH_Server_read(WowWorldReader* reader, vanilla_MSG_MOVE_SET_PITCH_Server* object) {
+    int _return_value = 1;
+
+    if (29 > (reader->length - reader->index)) {
+        _return_value = (size_t)29 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_SET_PITCH_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_SET_PITCH_Server* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_SET_PITCH_Server_size(object) + 2); /* size */
 
     WRITE_U16(0x000000db); /* opcode */
@@ -9607,28 +12900,52 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_SET_PITCH_Server_wri
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_SET_PITCH_Server_free(vanilla_MSG_MOVE_SET_PITCH_Server* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_WORLDPORT_ACK_cmsg_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x000000dc); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_WORLDPORT_ACK_smsg_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 2); /* size */
 
     WRITE_U16(0x000000dc); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_MONSTER_MOVE_free(vanilla_SMSG_MONSTER_MOVE* object) {
+    if (object->move_type == VANILLA_MONSTER_MOVE_TYPE_FACING_TARGET) {
+    }
+    else if (object->move_type == VANILLA_MONSTER_MOVE_TYPE_FACING_ANGLE) {
+    }
+    else if (object->move_type == VANILLA_MONSTER_MOVE_TYPE_FACING_SPOT) {
+    }
+    wwm_monster_move_spline_free(&object->splines);
+
 }
 
 static size_t vanilla_SMSG_MONSTER_MOVE_size(const vanilla_SMSG_MONSTER_MOVE* object) {
@@ -9648,6 +12965,16 @@ static size_t vanilla_SMSG_MONSTER_MOVE_size(const vanilla_SMSG_MONSTER_MOVE* ob
 }
 
 static WowWorldResult vanilla_SMSG_MONSTER_MOVE_read(WowWorldReader* reader, vanilla_SMSG_MONSTER_MOVE* object) {
+    int _return_value = 1;
+
+    if (30 > (reader->length - reader->index)) {
+        _return_value = (size_t)30 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->splines.amount_of_splines = 0;
+    object->splines.splines = NULL;
+
     READ_PACKED_GUID(object->guid);
 
     WWM_CHECK_RETURN_CODE(all_Vector3d_read(reader, &object->spline_point));
@@ -9677,9 +13004,19 @@ static WowWorldResult vanilla_SMSG_MONSTER_MOVE_read(WowWorldReader* reader, van
     READ_MONSTER_MOVE_SPLINE(object->splines);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_MONSTER_MOVE_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MONSTER_MOVE_write(WowWorldWriter* writer, const vanilla_SMSG_MONSTER_MOVE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_MONSTER_MOVE_size(object) + 2); /* size */
 
     WRITE_U16(0x000000dd); /* opcode */
@@ -9712,17 +13049,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MONSTER_MOVE_write(WowWo
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_MONSTER_MOVE_free(vanilla_SMSG_MONSTER_MOVE* object) {
-    if (object->move_type == VANILLA_MONSTER_MOVE_TYPE_FACING_TARGET) {
-    }
-    else if (object->move_type == VANILLA_MONSTER_MOVE_TYPE_FACING_ANGLE) {
-    }
-    else if (object->move_type == VANILLA_MONSTER_MOVE_TYPE_FACING_SPOT) {
-    }
-    wwm_monster_move_spline_free(&object->splines);
-
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_MOVE_WATER_WALK_size(const vanilla_SMSG_MOVE_WATER_WALK* object) {
@@ -9730,14 +13057,30 @@ static size_t vanilla_SMSG_MOVE_WATER_WALK_size(const vanilla_SMSG_MOVE_WATER_WA
 }
 
 static WowWorldResult vanilla_SMSG_MOVE_WATER_WALK_read(WowWorldReader* reader, vanilla_SMSG_MOVE_WATER_WALK* object) {
+    int _return_value = 1;
+
+    if (5 > (reader->length - reader->index)) {
+        _return_value = (size_t)5 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     READ_U32(object->counter);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MOVE_WATER_WALK_write(WowWorldWriter* writer, const vanilla_SMSG_MOVE_WATER_WALK* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_MOVE_WATER_WALK_size(object) + 2); /* size */
 
     WRITE_U16(0x000000de); /* opcode */
@@ -9748,6 +13091,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MOVE_WATER_WALK_write(Wo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_MOVE_LAND_WALK_size(const vanilla_SMSG_MOVE_LAND_WALK* object) {
@@ -9755,14 +13099,30 @@ static size_t vanilla_SMSG_MOVE_LAND_WALK_size(const vanilla_SMSG_MOVE_LAND_WALK
 }
 
 static WowWorldResult vanilla_SMSG_MOVE_LAND_WALK_read(WowWorldReader* reader, vanilla_SMSG_MOVE_LAND_WALK* object) {
+    int _return_value = 1;
+
+    if (5 > (reader->length - reader->index)) {
+        _return_value = (size_t)5 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     READ_U32(object->counter);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MOVE_LAND_WALK_write(WowWorldWriter* writer, const vanilla_SMSG_MOVE_LAND_WALK* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_MOVE_LAND_WALK_size(object) + 2); /* size */
 
     WRITE_U16(0x000000df); /* opcode */
@@ -9773,17 +13133,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MOVE_LAND_WALK_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_MOVE_SET_RAW_POSITION_read(WowWorldReader* reader, vanilla_CMSG_MOVE_SET_RAW_POSITION* object) {
+    int _return_value = 1;
+
+    if (16 > (reader->length - reader->index)) {
+        _return_value = (size_t)16 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     WWM_CHECK_RETURN_CODE(all_Vector3d_read(reader, &object->position));
 
     READ_FLOAT(object->orientation);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MOVE_SET_RAW_POSITION_write(WowWorldWriter* writer, const vanilla_CMSG_MOVE_SET_RAW_POSITION* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0010 + 4); /* size */
 
     WRITE_U32(0x000000e1); /* opcode */
@@ -9794,6 +13171,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MOVE_SET_RAW_POSITION_wr
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_FORCE_RUN_SPEED_CHANGE_size(const vanilla_SMSG_FORCE_RUN_SPEED_CHANGE* object) {
@@ -9801,6 +13179,13 @@ static size_t vanilla_SMSG_FORCE_RUN_SPEED_CHANGE_size(const vanilla_SMSG_FORCE_
 }
 
 static WowWorldResult vanilla_SMSG_FORCE_RUN_SPEED_CHANGE_read(WowWorldReader* reader, vanilla_SMSG_FORCE_RUN_SPEED_CHANGE* object) {
+    int _return_value = 1;
+
+    if (9 > (reader->length - reader->index)) {
+        _return_value = (size_t)9 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     READ_U32(object->move_event);
@@ -9808,9 +13193,18 @@ static WowWorldResult vanilla_SMSG_FORCE_RUN_SPEED_CHANGE_read(WowWorldReader* r
     READ_FLOAT(object->speed);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_FORCE_RUN_SPEED_CHANGE_write(WowWorldWriter* writer, const vanilla_SMSG_FORCE_RUN_SPEED_CHANGE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_FORCE_RUN_SPEED_CHANGE_size(object) + 2); /* size */
 
     WRITE_U16(0x000000e2); /* opcode */
@@ -9823,6 +13217,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_FORCE_RUN_SPEED_CHANGE_w
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_CMSG_FORCE_RUN_SPEED_CHANGE_ACK_size(const vanilla_CMSG_FORCE_RUN_SPEED_CHANGE_ACK* object) {
@@ -9830,6 +13225,13 @@ static size_t vanilla_CMSG_FORCE_RUN_SPEED_CHANGE_ACK_size(const vanilla_CMSG_FO
 }
 
 static WowWorldResult vanilla_CMSG_FORCE_RUN_SPEED_CHANGE_ACK_read(WowWorldReader* reader, vanilla_CMSG_FORCE_RUN_SPEED_CHANGE_ACK* object) {
+    int _return_value = 1;
+
+    if (44 > (reader->length - reader->index)) {
+        _return_value = (size_t)44 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_U32(object->counter);
@@ -9839,9 +13241,18 @@ static WowWorldResult vanilla_CMSG_FORCE_RUN_SPEED_CHANGE_ACK_read(WowWorldReade
     READ_FLOAT(object->new_speed);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_FORCE_RUN_SPEED_CHANGE_ACK_write(WowWorldWriter* writer, const vanilla_CMSG_FORCE_RUN_SPEED_CHANGE_ACK* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_FORCE_RUN_SPEED_CHANGE_ACK_size(object) + 4); /* size */
 
     WRITE_U32(0x000000e3); /* opcode */
@@ -9856,10 +13267,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_FORCE_RUN_SPEED_CHANGE_A
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_FORCE_RUN_SPEED_CHANGE_ACK_free(vanilla_CMSG_FORCE_RUN_SPEED_CHANGE_ACK* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_FORCE_RUN_BACK_SPEED_CHANGE_size(const vanilla_SMSG_FORCE_RUN_BACK_SPEED_CHANGE* object) {
@@ -9867,6 +13275,13 @@ static size_t vanilla_SMSG_FORCE_RUN_BACK_SPEED_CHANGE_size(const vanilla_SMSG_F
 }
 
 static WowWorldResult vanilla_SMSG_FORCE_RUN_BACK_SPEED_CHANGE_read(WowWorldReader* reader, vanilla_SMSG_FORCE_RUN_BACK_SPEED_CHANGE* object) {
+    int _return_value = 1;
+
+    if (9 > (reader->length - reader->index)) {
+        _return_value = (size_t)9 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     READ_U32(object->move_event);
@@ -9874,9 +13289,18 @@ static WowWorldResult vanilla_SMSG_FORCE_RUN_BACK_SPEED_CHANGE_read(WowWorldRead
     READ_FLOAT(object->speed);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_FORCE_RUN_BACK_SPEED_CHANGE_write(WowWorldWriter* writer, const vanilla_SMSG_FORCE_RUN_BACK_SPEED_CHANGE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_FORCE_RUN_BACK_SPEED_CHANGE_size(object) + 2); /* size */
 
     WRITE_U16(0x000000e4); /* opcode */
@@ -9889,6 +13313,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_FORCE_RUN_BACK_SPEED_CHA
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK_size(const vanilla_CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK* object) {
@@ -9896,6 +13321,13 @@ static size_t vanilla_CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK_size(const vanilla_CM
 }
 
 static WowWorldResult vanilla_CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK_read(WowWorldReader* reader, vanilla_CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK* object) {
+    int _return_value = 1;
+
+    if (44 > (reader->length - reader->index)) {
+        _return_value = (size_t)44 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_U32(object->movement_counter);
@@ -9905,9 +13337,18 @@ static WowWorldResult vanilla_CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK_read(WowWorld
     READ_FLOAT(object->new_speed);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK_write(WowWorldWriter* writer, const vanilla_CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK_size(object) + 4); /* size */
 
     WRITE_U32(0x000000e5); /* opcode */
@@ -9922,10 +13363,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_FORCE_RUN_BACK_SPEED_CHA
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK_free(vanilla_CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_FORCE_SWIM_SPEED_CHANGE_size(const vanilla_SMSG_FORCE_SWIM_SPEED_CHANGE* object) {
@@ -9933,6 +13371,13 @@ static size_t vanilla_SMSG_FORCE_SWIM_SPEED_CHANGE_size(const vanilla_SMSG_FORCE
 }
 
 static WowWorldResult vanilla_SMSG_FORCE_SWIM_SPEED_CHANGE_read(WowWorldReader* reader, vanilla_SMSG_FORCE_SWIM_SPEED_CHANGE* object) {
+    int _return_value = 1;
+
+    if (9 > (reader->length - reader->index)) {
+        _return_value = (size_t)9 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     READ_U32(object->move_event);
@@ -9940,9 +13385,18 @@ static WowWorldResult vanilla_SMSG_FORCE_SWIM_SPEED_CHANGE_read(WowWorldReader* 
     READ_FLOAT(object->speed);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_FORCE_SWIM_SPEED_CHANGE_write(WowWorldWriter* writer, const vanilla_SMSG_FORCE_SWIM_SPEED_CHANGE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_FORCE_SWIM_SPEED_CHANGE_size(object) + 2); /* size */
 
     WRITE_U16(0x000000e6); /* opcode */
@@ -9955,6 +13409,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_FORCE_SWIM_SPEED_CHANGE_
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_CMSG_FORCE_SWIM_SPEED_CHANGE_ACK_size(const vanilla_CMSG_FORCE_SWIM_SPEED_CHANGE_ACK* object) {
@@ -9962,6 +13417,13 @@ static size_t vanilla_CMSG_FORCE_SWIM_SPEED_CHANGE_ACK_size(const vanilla_CMSG_F
 }
 
 static WowWorldResult vanilla_CMSG_FORCE_SWIM_SPEED_CHANGE_ACK_read(WowWorldReader* reader, vanilla_CMSG_FORCE_SWIM_SPEED_CHANGE_ACK* object) {
+    int _return_value = 1;
+
+    if (44 > (reader->length - reader->index)) {
+        _return_value = (size_t)44 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_U32(object->counter);
@@ -9971,9 +13433,18 @@ static WowWorldResult vanilla_CMSG_FORCE_SWIM_SPEED_CHANGE_ACK_read(WowWorldRead
     READ_FLOAT(object->new_speed);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_FORCE_SWIM_SPEED_CHANGE_ACK_write(WowWorldWriter* writer, const vanilla_CMSG_FORCE_SWIM_SPEED_CHANGE_ACK* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_FORCE_SWIM_SPEED_CHANGE_ACK_size(object) + 4); /* size */
 
     WRITE_U32(0x000000e7); /* opcode */
@@ -9988,21 +13459,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_FORCE_SWIM_SPEED_CHANGE_
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_FORCE_SWIM_SPEED_CHANGE_ACK_free(vanilla_CMSG_FORCE_SWIM_SPEED_CHANGE_ACK* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_FORCE_MOVE_ROOT_read(WowWorldReader* reader, vanilla_SMSG_FORCE_MOVE_ROOT* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_U32(object->counter);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_FORCE_MOVE_ROOT_write(WowWorldWriter* writer, const vanilla_SMSG_FORCE_MOVE_ROOT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 2); /* size */
 
     WRITE_U16(0x000000e8); /* opcode */
@@ -10013,6 +13497,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_FORCE_MOVE_ROOT_write(Wo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_CMSG_FORCE_MOVE_ROOT_ACK_size(const vanilla_CMSG_FORCE_MOVE_ROOT_ACK* object) {
@@ -10020,6 +13505,13 @@ static size_t vanilla_CMSG_FORCE_MOVE_ROOT_ACK_size(const vanilla_CMSG_FORCE_MOV
 }
 
 static WowWorldResult vanilla_CMSG_FORCE_MOVE_ROOT_ACK_read(WowWorldReader* reader, vanilla_CMSG_FORCE_MOVE_ROOT_ACK* object) {
+    int _return_value = 1;
+
+    if (40 > (reader->length - reader->index)) {
+        _return_value = (size_t)40 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_U32(object->movement_counter);
@@ -10027,9 +13519,18 @@ static WowWorldResult vanilla_CMSG_FORCE_MOVE_ROOT_ACK_read(WowWorldReader* read
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_FORCE_MOVE_ROOT_ACK_write(WowWorldWriter* writer, const vanilla_CMSG_FORCE_MOVE_ROOT_ACK* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_FORCE_MOVE_ROOT_ACK_size(object) + 4); /* size */
 
     WRITE_U32(0x000000e9); /* opcode */
@@ -10042,21 +13543,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_FORCE_MOVE_ROOT_ACK_writ
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_FORCE_MOVE_ROOT_ACK_free(vanilla_CMSG_FORCE_MOVE_ROOT_ACK* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_FORCE_MOVE_UNROOT_read(WowWorldReader* reader, vanilla_SMSG_FORCE_MOVE_UNROOT* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_U32(object->counter);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_FORCE_MOVE_UNROOT_write(WowWorldWriter* writer, const vanilla_SMSG_FORCE_MOVE_UNROOT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 2); /* size */
 
     WRITE_U16(0x000000ea); /* opcode */
@@ -10067,6 +13581,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_FORCE_MOVE_UNROOT_write(
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_CMSG_FORCE_MOVE_UNROOT_ACK_size(const vanilla_CMSG_FORCE_MOVE_UNROOT_ACK* object) {
@@ -10074,6 +13589,13 @@ static size_t vanilla_CMSG_FORCE_MOVE_UNROOT_ACK_size(const vanilla_CMSG_FORCE_M
 }
 
 static WowWorldResult vanilla_CMSG_FORCE_MOVE_UNROOT_ACK_read(WowWorldReader* reader, vanilla_CMSG_FORCE_MOVE_UNROOT_ACK* object) {
+    int _return_value = 1;
+
+    if (40 > (reader->length - reader->index)) {
+        _return_value = (size_t)40 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_U32(object->movement_counter);
@@ -10081,9 +13603,18 @@ static WowWorldResult vanilla_CMSG_FORCE_MOVE_UNROOT_ACK_read(WowWorldReader* re
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_FORCE_MOVE_UNROOT_ACK_write(WowWorldWriter* writer, const vanilla_CMSG_FORCE_MOVE_UNROOT_ACK* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_FORCE_MOVE_UNROOT_ACK_size(object) + 4); /* size */
 
     WRITE_U32(0x000000eb); /* opcode */
@@ -10096,10 +13627,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_FORCE_MOVE_UNROOT_ACK_wr
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_FORCE_MOVE_UNROOT_ACK_free(vanilla_CMSG_FORCE_MOVE_UNROOT_ACK* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_HEARTBEAT_Client_size(const vanilla_MSG_MOVE_HEARTBEAT_Client* object) {
@@ -10107,12 +13635,28 @@ static size_t vanilla_MSG_MOVE_HEARTBEAT_Client_size(const vanilla_MSG_MOVE_HEAR
 }
 
 static WowWorldResult vanilla_MSG_MOVE_HEARTBEAT_Client_read(WowWorldReader* reader, vanilla_MSG_MOVE_HEARTBEAT_Client* object) {
+    int _return_value = 1;
+
+    if (28 > (reader->length - reader->index)) {
+        _return_value = (size_t)28 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_HEARTBEAT_Client_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_HEARTBEAT_Client* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_HEARTBEAT_Client_size(object) + 4); /* size */
 
     WRITE_U32(0x000000ee); /* opcode */
@@ -10121,10 +13665,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_HEARTBEAT_Client_wri
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_HEARTBEAT_Client_free(vanilla_MSG_MOVE_HEARTBEAT_Client* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_HEARTBEAT_Server_size(const vanilla_MSG_MOVE_HEARTBEAT_Server* object) {
@@ -10132,14 +13673,30 @@ static size_t vanilla_MSG_MOVE_HEARTBEAT_Server_size(const vanilla_MSG_MOVE_HEAR
 }
 
 static WowWorldResult vanilla_MSG_MOVE_HEARTBEAT_Server_read(WowWorldReader* reader, vanilla_MSG_MOVE_HEARTBEAT_Server* object) {
+    int _return_value = 1;
+
+    if (29 > (reader->length - reader->index)) {
+        _return_value = (size_t)29 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_HEARTBEAT_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_HEARTBEAT_Server* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_HEARTBEAT_Server_size(object) + 2); /* size */
 
     WRITE_U16(0x000000ee); /* opcode */
@@ -10150,10 +13707,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_HEARTBEAT_Server_wri
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_HEARTBEAT_Server_free(vanilla_MSG_MOVE_HEARTBEAT_Server* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_MOVE_KNOCK_BACK_size(const vanilla_SMSG_MOVE_KNOCK_BACK* object) {
@@ -10161,6 +13715,13 @@ static size_t vanilla_SMSG_MOVE_KNOCK_BACK_size(const vanilla_SMSG_MOVE_KNOCK_BA
 }
 
 static WowWorldResult vanilla_SMSG_MOVE_KNOCK_BACK_read(WowWorldReader* reader, vanilla_SMSG_MOVE_KNOCK_BACK* object) {
+    int _return_value = 1;
+
+    if (21 > (reader->length - reader->index)) {
+        _return_value = (size_t)21 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     READ_U32(object->movement_counter);
@@ -10174,9 +13735,18 @@ static WowWorldResult vanilla_SMSG_MOVE_KNOCK_BACK_read(WowWorldReader* reader, 
     READ_FLOAT(object->vertical_speed);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MOVE_KNOCK_BACK_write(WowWorldWriter* writer, const vanilla_SMSG_MOVE_KNOCK_BACK* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_MOVE_KNOCK_BACK_size(object) + 2); /* size */
 
     WRITE_U16(0x000000ef); /* opcode */
@@ -10195,6 +13765,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MOVE_KNOCK_BACK_write(Wo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_CMSG_MOVE_KNOCK_BACK_ACK_size(const vanilla_CMSG_MOVE_KNOCK_BACK_ACK* object) {
@@ -10202,6 +13773,13 @@ static size_t vanilla_CMSG_MOVE_KNOCK_BACK_ACK_size(const vanilla_CMSG_MOVE_KNOC
 }
 
 static WowWorldResult vanilla_CMSG_MOVE_KNOCK_BACK_ACK_read(WowWorldReader* reader, vanilla_CMSG_MOVE_KNOCK_BACK_ACK* object) {
+    int _return_value = 1;
+
+    if (40 > (reader->length - reader->index)) {
+        _return_value = (size_t)40 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_U32(object->counter);
@@ -10209,9 +13787,18 @@ static WowWorldResult vanilla_CMSG_MOVE_KNOCK_BACK_ACK_read(WowWorldReader* read
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MOVE_KNOCK_BACK_ACK_write(WowWorldWriter* writer, const vanilla_CMSG_MOVE_KNOCK_BACK_ACK* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_MOVE_KNOCK_BACK_ACK_size(object) + 4); /* size */
 
     WRITE_U32(0x000000f0); /* opcode */
@@ -10224,10 +13811,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MOVE_KNOCK_BACK_ACK_writ
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_MOVE_KNOCK_BACK_ACK_free(vanilla_CMSG_MOVE_KNOCK_BACK_ACK* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_MOVE_FEATHER_FALL_size(const vanilla_SMSG_MOVE_FEATHER_FALL* object) {
@@ -10235,14 +13819,30 @@ static size_t vanilla_SMSG_MOVE_FEATHER_FALL_size(const vanilla_SMSG_MOVE_FEATHE
 }
 
 static WowWorldResult vanilla_SMSG_MOVE_FEATHER_FALL_read(WowWorldReader* reader, vanilla_SMSG_MOVE_FEATHER_FALL* object) {
+    int _return_value = 1;
+
+    if (5 > (reader->length - reader->index)) {
+        _return_value = (size_t)5 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     READ_U32(object->counter);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MOVE_FEATHER_FALL_write(WowWorldWriter* writer, const vanilla_SMSG_MOVE_FEATHER_FALL* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_MOVE_FEATHER_FALL_size(object) + 2); /* size */
 
     WRITE_U16(0x000000f2); /* opcode */
@@ -10253,6 +13853,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MOVE_FEATHER_FALL_write(
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_MOVE_NORMAL_FALL_size(const vanilla_SMSG_MOVE_NORMAL_FALL* object) {
@@ -10260,14 +13861,30 @@ static size_t vanilla_SMSG_MOVE_NORMAL_FALL_size(const vanilla_SMSG_MOVE_NORMAL_
 }
 
 static WowWorldResult vanilla_SMSG_MOVE_NORMAL_FALL_read(WowWorldReader* reader, vanilla_SMSG_MOVE_NORMAL_FALL* object) {
+    int _return_value = 1;
+
+    if (5 > (reader->length - reader->index)) {
+        _return_value = (size_t)5 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     READ_U32(object->counter);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MOVE_NORMAL_FALL_write(WowWorldWriter* writer, const vanilla_SMSG_MOVE_NORMAL_FALL* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_MOVE_NORMAL_FALL_size(object) + 2); /* size */
 
     WRITE_U16(0x000000f3); /* opcode */
@@ -10278,6 +13895,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MOVE_NORMAL_FALL_write(W
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_MOVE_SET_HOVER_size(const vanilla_SMSG_MOVE_SET_HOVER* object) {
@@ -10285,14 +13903,30 @@ static size_t vanilla_SMSG_MOVE_SET_HOVER_size(const vanilla_SMSG_MOVE_SET_HOVER
 }
 
 static WowWorldResult vanilla_SMSG_MOVE_SET_HOVER_read(WowWorldReader* reader, vanilla_SMSG_MOVE_SET_HOVER* object) {
+    int _return_value = 1;
+
+    if (5 > (reader->length - reader->index)) {
+        _return_value = (size_t)5 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     READ_U32(object->counter);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MOVE_SET_HOVER_write(WowWorldWriter* writer, const vanilla_SMSG_MOVE_SET_HOVER* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_MOVE_SET_HOVER_size(object) + 2); /* size */
 
     WRITE_U16(0x000000f4); /* opcode */
@@ -10303,6 +13937,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MOVE_SET_HOVER_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_MOVE_UNSET_HOVER_size(const vanilla_SMSG_MOVE_UNSET_HOVER* object) {
@@ -10310,14 +13945,30 @@ static size_t vanilla_SMSG_MOVE_UNSET_HOVER_size(const vanilla_SMSG_MOVE_UNSET_H
 }
 
 static WowWorldResult vanilla_SMSG_MOVE_UNSET_HOVER_read(WowWorldReader* reader, vanilla_SMSG_MOVE_UNSET_HOVER* object) {
+    int _return_value = 1;
+
+    if (5 > (reader->length - reader->index)) {
+        _return_value = (size_t)5 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     READ_U32(object->counter);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MOVE_UNSET_HOVER_write(WowWorldWriter* writer, const vanilla_SMSG_MOVE_UNSET_HOVER* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_MOVE_UNSET_HOVER_size(object) + 2); /* size */
 
     WRITE_U16(0x000000f5); /* opcode */
@@ -10328,6 +13979,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MOVE_UNSET_HOVER_write(W
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_CMSG_MOVE_HOVER_ACK_size(const vanilla_CMSG_MOVE_HOVER_ACK* object) {
@@ -10335,6 +13987,13 @@ static size_t vanilla_CMSG_MOVE_HOVER_ACK_size(const vanilla_CMSG_MOVE_HOVER_ACK
 }
 
 static WowWorldResult vanilla_CMSG_MOVE_HOVER_ACK_read(WowWorldReader* reader, vanilla_CMSG_MOVE_HOVER_ACK* object) {
+    int _return_value = 1;
+
+    if (44 > (reader->length - reader->index)) {
+        _return_value = (size_t)44 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_U32(object->counter);
@@ -10344,9 +14003,18 @@ static WowWorldResult vanilla_CMSG_MOVE_HOVER_ACK_read(WowWorldReader* reader, v
     READ_U32(object->is_applied);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MOVE_HOVER_ACK_write(WowWorldWriter* writer, const vanilla_CMSG_MOVE_HOVER_ACK* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_MOVE_HOVER_ACK_size(object) + 4); /* size */
 
     WRITE_U32(0x000000f6); /* opcode */
@@ -10361,20 +14029,33 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MOVE_HOVER_ACK_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_MOVE_HOVER_ACK_free(vanilla_CMSG_MOVE_HOVER_ACK* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_TRIGGER_CINEMATIC_read(WowWorldReader* reader, vanilla_SMSG_TRIGGER_CINEMATIC* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->cinematic_sequence_id = 0;
     READ_U32(object->cinematic_sequence_id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TRIGGER_CINEMATIC_write(WowWorldWriter* writer, const vanilla_SMSG_TRIGGER_CINEMATIC* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 2); /* size */
 
     WRITE_U16(0x000000fa); /* opcode */
@@ -10383,33 +14064,66 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TRIGGER_CINEMATIC_write(
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_NEXT_CINEMATIC_CAMERA_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x000000fb); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_COMPLETE_CINEMATIC_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x000000fc); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_TUTORIAL_FLAGS_read(WowWorldReader* reader, vanilla_SMSG_TUTORIAL_FLAGS* object) {
+    int _return_value = 1;
+
+    if (32 > (reader->length - reader->index)) {
+        _return_value = (size_t)32 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_ARRAY(object->tutorial_data, 8, READ_U32(object->tutorial_data[i]));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TUTORIAL_FLAGS_write(WowWorldWriter* writer, const vanilla_SMSG_TUTORIAL_FLAGS* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0020 + 2); /* size */
 
     WRITE_U16(0x000000fd); /* opcode */
@@ -10418,15 +14132,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TUTORIAL_FLAGS_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_TUTORIAL_FLAG_read(WowWorldReader* reader, vanilla_CMSG_TUTORIAL_FLAG* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->tutorial_flag);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_TUTORIAL_FLAG_write(WowWorldWriter* writer, const vanilla_CMSG_TUTORIAL_FLAG* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 4); /* size */
 
     WRITE_U32(0x000000fe); /* opcode */
@@ -10435,34 +14166,67 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_TUTORIAL_FLAG_write(WowW
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_TUTORIAL_CLEAR_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x000000ff); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_TUTORIAL_RESET_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x00000100); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_STANDSTATECHANGE_read(WowWorldReader* reader, vanilla_CMSG_STANDSTATECHANGE* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->animation_state = 0;
     READ_U32(object->animation_state);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_STANDSTATECHANGE_write(WowWorldWriter* writer, const vanilla_CMSG_STANDSTATECHANGE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 4); /* size */
 
     WRITE_U32(0x00000101); /* opcode */
@@ -10471,16 +14235,33 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_STANDSTATECHANGE_write(W
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_EMOTE_read(WowWorldReader* reader, vanilla_CMSG_EMOTE* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->emote = 0;
     READ_U32(object->emote);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_EMOTE_write(WowWorldWriter* writer, const vanilla_CMSG_EMOTE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 4); /* size */
 
     WRITE_U32(0x00000102); /* opcode */
@@ -10489,18 +14270,35 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_EMOTE_write(WowWorldWrit
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_EMOTE_read(WowWorldReader* reader, vanilla_SMSG_EMOTE* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->emote = 0;
     READ_U32(object->emote);
 
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_EMOTE_write(WowWorldWriter* writer, const vanilla_SMSG_EMOTE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 2); /* size */
 
     WRITE_U16(0x00000103); /* opcode */
@@ -10511,9 +14309,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_EMOTE_write(WowWorldWrit
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_TEXT_EMOTE_read(WowWorldReader* reader, vanilla_CMSG_TEXT_EMOTE* object) {
+    int _return_value = 1;
+
+    if (16 > (reader->length - reader->index)) {
+        _return_value = (size_t)16 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->text_emote = 0;
     READ_U32(object->text_emote);
 
@@ -10522,9 +14328,18 @@ static WowWorldResult vanilla_CMSG_TEXT_EMOTE_read(WowWorldReader* reader, vanil
     READ_U64(object->target);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_TEXT_EMOTE_write(WowWorldWriter* writer, const vanilla_CMSG_TEXT_EMOTE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0010 + 4); /* size */
 
     WRITE_U32(0x00000104); /* opcode */
@@ -10537,6 +14352,12 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_TEXT_EMOTE_write(WowWorl
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_TEXT_EMOTE_free(vanilla_SMSG_TEXT_EMOTE* object) {
+    FREE_STRING(object->name);
+
 }
 
 static size_t vanilla_SMSG_TEXT_EMOTE_size(const vanilla_SMSG_TEXT_EMOTE* object) {
@@ -10544,6 +14365,15 @@ static size_t vanilla_SMSG_TEXT_EMOTE_size(const vanilla_SMSG_TEXT_EMOTE* object
 }
 
 static WowWorldResult vanilla_SMSG_TEXT_EMOTE_read(WowWorldReader* reader, vanilla_SMSG_TEXT_EMOTE* object) {
+    int _return_value = 1;
+
+    if (21 > (reader->length - reader->index)) {
+        _return_value = (size_t)21 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->name = NULL;
+
     READ_U64(object->guid);
 
     object->text_emote = 0;
@@ -10554,9 +14384,19 @@ static WowWorldResult vanilla_SMSG_TEXT_EMOTE_read(WowWorldReader* reader, vanil
     READ_SIZED_CSTRING(object->name);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_TEXT_EMOTE_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TEXT_EMOTE_write(WowWorldWriter* writer, const vanilla_SMSG_TEXT_EMOTE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_TEXT_EMOTE_size(object) + 2); /* size */
 
     WRITE_U16(0x00000105); /* opcode */
@@ -10571,20 +14411,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TEXT_EMOTE_write(WowWorl
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_TEXT_EMOTE_free(vanilla_SMSG_TEXT_EMOTE* object) {
-    FREE_STRING(object->name);
-
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_AUTOSTORE_LOOT_ITEM_read(WowWorldReader* reader, vanilla_CMSG_AUTOSTORE_LOOT_ITEM* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U8(object->item_slot);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUTOSTORE_LOOT_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_AUTOSTORE_LOOT_ITEM* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0001 + 4); /* size */
 
     WRITE_U32(0x00000108); /* opcode */
@@ -10593,17 +14445,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUTOSTORE_LOOT_ITEM_writ
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_AUTOEQUIP_ITEM_read(WowWorldReader* reader, vanilla_CMSG_AUTOEQUIP_ITEM* object) {
+    int _return_value = 1;
+
+    if (2 > (reader->length - reader->index)) {
+        _return_value = (size_t)2 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U8(object->source_bag);
 
     READ_U8(object->source_slot);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUTOEQUIP_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_AUTOEQUIP_ITEM* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0002 + 4); /* size */
 
     WRITE_U32(0x0000010a); /* opcode */
@@ -10614,9 +14483,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUTOEQUIP_ITEM_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_AUTOSTORE_BAG_ITEM_read(WowWorldReader* reader, vanilla_CMSG_AUTOSTORE_BAG_ITEM* object) {
+    int _return_value = 1;
+
+    if (3 > (reader->length - reader->index)) {
+        _return_value = (size_t)3 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U8(object->source_bag);
 
     READ_U8(object->source_slot);
@@ -10624,9 +14501,18 @@ static WowWorldResult vanilla_CMSG_AUTOSTORE_BAG_ITEM_read(WowWorldReader* reade
     READ_U8(object->destination_bag);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUTOSTORE_BAG_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_AUTOSTORE_BAG_ITEM* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0003 + 4); /* size */
 
     WRITE_U32(0x0000010b); /* opcode */
@@ -10639,9 +14525,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUTOSTORE_BAG_ITEM_write
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_SWAP_ITEM_read(WowWorldReader* reader, vanilla_CMSG_SWAP_ITEM* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U8(object->destination_bag);
 
     READ_U8(object->destionation_slot);
@@ -10651,9 +14545,18 @@ static WowWorldResult vanilla_CMSG_SWAP_ITEM_read(WowWorldReader* reader, vanill
     READ_U8(object->source_slot);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SWAP_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_SWAP_ITEM* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 4); /* size */
 
     WRITE_U32(0x0000010c); /* opcode */
@@ -10668,9 +14571,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SWAP_ITEM_write(WowWorld
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_SWAP_INV_ITEM_read(WowWorldReader* reader, vanilla_CMSG_SWAP_INV_ITEM* object) {
+    int _return_value = 1;
+
+    if (2 > (reader->length - reader->index)) {
+        _return_value = (size_t)2 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->source_slot = 0;
     READ_U8(object->source_slot);
 
@@ -10678,9 +14589,18 @@ static WowWorldResult vanilla_CMSG_SWAP_INV_ITEM_read(WowWorldReader* reader, va
     READ_U8(object->destination_slot);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SWAP_INV_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_SWAP_INV_ITEM* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0002 + 4); /* size */
 
     WRITE_U32(0x0000010d); /* opcode */
@@ -10691,9 +14611,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SWAP_INV_ITEM_write(WowW
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_SPLIT_ITEM_read(WowWorldReader* reader, vanilla_CMSG_SPLIT_ITEM* object) {
+    int _return_value = 1;
+
+    if (5 > (reader->length - reader->index)) {
+        _return_value = (size_t)5 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U8(object->source_bag);
 
     READ_U8(object->source_slot);
@@ -10705,9 +14633,18 @@ static WowWorldResult vanilla_CMSG_SPLIT_ITEM_read(WowWorldReader* reader, vanil
     READ_U8(object->amount);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SPLIT_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_SPLIT_ITEM* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0005 + 4); /* size */
 
     WRITE_U32(0x0000010e); /* opcode */
@@ -10724,17 +14661,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SPLIT_ITEM_write(WowWorl
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_AUTOEQUIP_ITEM_SLOT_read(WowWorldReader* reader, vanilla_CMSG_AUTOEQUIP_ITEM_SLOT* object) {
+    int _return_value = 1;
+
+    if (9 > (reader->length - reader->index)) {
+        _return_value = (size_t)9 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_U8(object->destination_slot);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUTOEQUIP_ITEM_SLOT_write(WowWorldWriter* writer, const vanilla_CMSG_AUTOEQUIP_ITEM_SLOT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0009 + 4); /* size */
 
     WRITE_U32(0x0000010f); /* opcode */
@@ -10745,9 +14699,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUTOEQUIP_ITEM_SLOT_writ
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_DESTROYITEM_read(WowWorldReader* reader, vanilla_CMSG_DESTROYITEM* object) {
+    int _return_value = 1;
+
+    if (6 > (reader->length - reader->index)) {
+        _return_value = (size_t)6 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U8(object->bag);
 
     READ_U8(object->slot);
@@ -10761,9 +14723,18 @@ static WowWorldResult vanilla_CMSG_DESTROYITEM_read(WowWorldReader* reader, vani
     READ_U8(object->unknown3);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_DESTROYITEM_write(WowWorldWriter* writer, const vanilla_CMSG_DESTROYITEM* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0006 + 4); /* size */
 
     WRITE_U32(0x00000111); /* opcode */
@@ -10782,6 +14753,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_DESTROYITEM_write(WowWor
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_INVENTORY_CHANGE_FAILURE_size(const vanilla_SMSG_INVENTORY_CHANGE_FAILURE* object) {
@@ -10799,6 +14771,13 @@ static size_t vanilla_SMSG_INVENTORY_CHANGE_FAILURE_size(const vanilla_SMSG_INVE
 }
 
 static WowWorldResult vanilla_SMSG_INVENTORY_CHANGE_FAILURE_read(WowWorldReader* reader, vanilla_SMSG_INVENTORY_CHANGE_FAILURE* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->result = 0;
     READ_U8(object->result);
 
@@ -10815,9 +14794,18 @@ static WowWorldResult vanilla_SMSG_INVENTORY_CHANGE_FAILURE_read(WowWorldReader*
 
     }
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_INVENTORY_CHANGE_FAILURE_write(WowWorldWriter* writer, const vanilla_SMSG_INVENTORY_CHANGE_FAILURE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_INVENTORY_CHANGE_FAILURE_size(object) + 2); /* size */
 
     WRITE_U16(0x00000112); /* opcode */
@@ -10838,22 +14826,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_INVENTORY_CHANGE_FAILURE
     }
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_INVENTORY_CHANGE_FAILURE_free(vanilla_SMSG_INVENTORY_CHANGE_FAILURE* object) {
-    if (object->result == VANILLA_INVENTORY_RESULT_CANT_EQUIP_LEVEL_I) {
-    }
-    if (object->result == VANILLA_INVENTORY_RESULT_CANT_EQUIP_LEVEL_I|| object->result == VANILLA_INVENTORY_RESULT_CANT_EQUIP_SKILL|| object->result == VANILLA_INVENTORY_RESULT_ITEM_DOESNT_GO_TO_SLOT|| object->result == VANILLA_INVENTORY_RESULT_BAG_FULL|| object->result == VANILLA_INVENTORY_RESULT_NONEMPTY_BAG_OVER_OTHER_BAG|| object->result == VANILLA_INVENTORY_RESULT_CANT_TRADE_EQUIP_BAGS|| object->result == VANILLA_INVENTORY_RESULT_ONLY_AMMO_CAN_GO_HERE|| object->result == VANILLA_INVENTORY_RESULT_NO_REQUIRED_PROFICIENCY|| object->result == VANILLA_INVENTORY_RESULT_NO_EQUIPMENT_SLOT_AVAILABLE|| object->result == VANILLA_INVENTORY_RESULT_YOU_CAN_NEVER_USE_THAT_ITEM|| object->result == VANILLA_INVENTORY_RESULT_YOU_CAN_NEVER_USE_THAT_ITEM2|| object->result == VANILLA_INVENTORY_RESULT_NO_EQUIPMENT_SLOT_AVAILABLE2|| object->result == VANILLA_INVENTORY_RESULT_CANT_EQUIP_WITH_TWOHANDED|| object->result == VANILLA_INVENTORY_RESULT_CANT_DUAL_WIELD|| object->result == VANILLA_INVENTORY_RESULT_ITEM_DOESNT_GO_INTO_BAG|| object->result == VANILLA_INVENTORY_RESULT_ITEM_DOESNT_GO_INTO_BAG2|| object->result == VANILLA_INVENTORY_RESULT_CANT_CARRY_MORE_OF_THIS|| object->result == VANILLA_INVENTORY_RESULT_NO_EQUIPMENT_SLOT_AVAILABLE3|| object->result == VANILLA_INVENTORY_RESULT_ITEM_CANT_STACK|| object->result == VANILLA_INVENTORY_RESULT_ITEM_CANT_BE_EQUIPPED|| object->result == VANILLA_INVENTORY_RESULT_ITEMS_CANT_BE_SWAPPED|| object->result == VANILLA_INVENTORY_RESULT_SLOT_IS_EMPTY|| object->result == VANILLA_INVENTORY_RESULT_ITEM_NOT_FOUND|| object->result == VANILLA_INVENTORY_RESULT_CANT_DROP_SOULBOUND|| object->result == VANILLA_INVENTORY_RESULT_OUT_OF_RANGE|| object->result == VANILLA_INVENTORY_RESULT_TRIED_TO_SPLIT_MORE_THAN_COUNT|| object->result == VANILLA_INVENTORY_RESULT_COULDNT_SPLIT_ITEMS|| object->result == VANILLA_INVENTORY_RESULT_MISSING_REAGENT|| object->result == VANILLA_INVENTORY_RESULT_NOT_ENOUGH_MONEY|| object->result == VANILLA_INVENTORY_RESULT_NOT_A_BAG|| object->result == VANILLA_INVENTORY_RESULT_CAN_ONLY_DO_WITH_EMPTY_BAGS|| object->result == VANILLA_INVENTORY_RESULT_DONT_OWN_THAT_ITEM|| object->result == VANILLA_INVENTORY_RESULT_CAN_EQUIP_ONLY1_QUIVER|| object->result == VANILLA_INVENTORY_RESULT_MUST_PURCHASE_THAT_BAG_SLOT|| object->result == VANILLA_INVENTORY_RESULT_TOO_FAR_AWAY_FROM_BANK|| object->result == VANILLA_INVENTORY_RESULT_ITEM_LOCKED|| object->result == VANILLA_INVENTORY_RESULT_YOU_ARE_STUNNED|| object->result == VANILLA_INVENTORY_RESULT_YOU_ARE_DEAD|| object->result == VANILLA_INVENTORY_RESULT_CANT_DO_RIGHT_NOW|| object->result == VANILLA_INVENTORY_RESULT_INT_BAG_ERROR|| object->result == VANILLA_INVENTORY_RESULT_CAN_EQUIP_ONLY1_BOLT|| object->result == VANILLA_INVENTORY_RESULT_CAN_EQUIP_ONLY1_AMMOPOUCH|| object->result == VANILLA_INVENTORY_RESULT_STACKABLE_CANT_BE_WRAPPED|| object->result == VANILLA_INVENTORY_RESULT_EQUIPPED_CANT_BE_WRAPPED|| object->result == VANILLA_INVENTORY_RESULT_WRAPPED_CANT_BE_WRAPPED|| object->result == VANILLA_INVENTORY_RESULT_BOUND_CANT_BE_WRAPPED|| object->result == VANILLA_INVENTORY_RESULT_UNIQUE_CANT_BE_WRAPPED|| object->result == VANILLA_INVENTORY_RESULT_BAGS_CANT_BE_WRAPPED|| object->result == VANILLA_INVENTORY_RESULT_ALREADY_LOOTED|| object->result == VANILLA_INVENTORY_RESULT_INVENTORY_FULL|| object->result == VANILLA_INVENTORY_RESULT_BANK_FULL|| object->result == VANILLA_INVENTORY_RESULT_ITEM_IS_CURRENTLY_SOLD_OUT|| object->result == VANILLA_INVENTORY_RESULT_BAG_FULL3|| object->result == VANILLA_INVENTORY_RESULT_ITEM_NOT_FOUND2|| object->result == VANILLA_INVENTORY_RESULT_ITEM_CANT_STACK2|| object->result == VANILLA_INVENTORY_RESULT_BAG_FULL4|| object->result == VANILLA_INVENTORY_RESULT_ITEM_SOLD_OUT|| object->result == VANILLA_INVENTORY_RESULT_OBJECT_IS_BUSY|| object->result == VANILLA_INVENTORY_RESULT_NONE|| object->result == VANILLA_INVENTORY_RESULT_NOT_IN_COMBAT|| object->result == VANILLA_INVENTORY_RESULT_NOT_WHILE_DISARMED|| object->result == VANILLA_INVENTORY_RESULT_BAG_FULL6|| object->result == VANILLA_INVENTORY_RESULT_CANT_EQUIP_RANK|| object->result == VANILLA_INVENTORY_RESULT_CANT_EQUIP_REPUTATION|| object->result == VANILLA_INVENTORY_RESULT_TOO_MANY_SPECIAL_BAGS|| object->result == VANILLA_INVENTORY_RESULT_LOOT_CANT_LOOT_THAT_NOW) {
-    }
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_OPEN_CONTAINER_read(WowWorldReader* reader, vanilla_SMSG_OPEN_CONTAINER* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_OPEN_CONTAINER_write(WowWorldWriter* writer, const vanilla_SMSG_OPEN_CONTAINER* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 2); /* size */
 
     WRITE_U16(0x00000113); /* opcode */
@@ -10862,15 +14860,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_OPEN_CONTAINER_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_INSPECT_read(WowWorldReader* reader, vanilla_CMSG_INSPECT* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_INSPECT_write(WowWorldWriter* writer, const vanilla_CMSG_INSPECT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x00000114); /* opcode */
@@ -10879,15 +14894,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_INSPECT_write(WowWorldWr
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_INSPECT_read(WowWorldReader* reader, vanilla_SMSG_INSPECT* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_INSPECT_write(WowWorldWriter* writer, const vanilla_SMSG_INSPECT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 2); /* size */
 
     WRITE_U16(0x00000115); /* opcode */
@@ -10896,15 +14928,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_INSPECT_write(WowWorldWr
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_INITIATE_TRADE_read(WowWorldReader* reader, vanilla_CMSG_INITIATE_TRADE* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_INITIATE_TRADE_write(WowWorldWriter* writer, const vanilla_CMSG_INITIATE_TRADE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x00000116); /* opcode */
@@ -10913,42 +14962,83 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_INITIATE_TRADE_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BEGIN_TRADE_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x00000117); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BUSY_TRADE_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x00000118); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_IGNORE_TRADE_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x00000119); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_ACCEPT_TRADE_read(WowWorldReader* reader, vanilla_CMSG_ACCEPT_TRADE* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->unknown1);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_ACCEPT_TRADE_write(WowWorldWriter* writer, const vanilla_CMSG_ACCEPT_TRADE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 4); /* size */
 
     WRITE_U32(0x0000011a); /* opcode */
@@ -10957,27 +15047,51 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_ACCEPT_TRADE_write(WowWo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_UNACCEPT_TRADE_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x0000011b); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CANCEL_TRADE_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x0000011c); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_SET_TRADE_ITEM_read(WowWorldReader* reader, vanilla_CMSG_SET_TRADE_ITEM* object) {
+    int _return_value = 1;
+
+    if (3 > (reader->length - reader->index)) {
+        _return_value = (size_t)3 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U8(object->trade_slot);
 
     READ_U8(object->bag);
@@ -10985,9 +15099,18 @@ static WowWorldResult vanilla_CMSG_SET_TRADE_ITEM_read(WowWorldReader* reader, v
     READ_U8(object->slot);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SET_TRADE_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_SET_TRADE_ITEM* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0003 + 4); /* size */
 
     WRITE_U32(0x0000011d); /* opcode */
@@ -11000,15 +15123,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SET_TRADE_ITEM_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_CLEAR_TRADE_ITEM_read(WowWorldReader* reader, vanilla_CMSG_CLEAR_TRADE_ITEM* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U8(object->trade_slot);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CLEAR_TRADE_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_CLEAR_TRADE_ITEM* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0001 + 4); /* size */
 
     WRITE_U32(0x0000011e); /* opcode */
@@ -11017,15 +15157,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CLEAR_TRADE_ITEM_write(W
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_SET_TRADE_GOLD_read(WowWorldReader* reader, vanilla_CMSG_SET_TRADE_GOLD* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->gold);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SET_TRADE_GOLD_write(WowWorldWriter* writer, const vanilla_CMSG_SET_TRADE_GOLD* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 4); /* size */
 
     WRITE_U32(0x0000011f); /* opcode */
@@ -11034,6 +15191,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SET_TRADE_GOLD_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_TRADE_STATUS_size(const vanilla_SMSG_TRADE_STATUS* object) {
@@ -11053,6 +15211,13 @@ static size_t vanilla_SMSG_TRADE_STATUS_size(const vanilla_SMSG_TRADE_STATUS* ob
 }
 
 static WowWorldResult vanilla_SMSG_TRADE_STATUS_read(WowWorldReader* reader, vanilla_SMSG_TRADE_STATUS* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->status = 0;
     READ_U32(object->status);
 
@@ -11074,9 +15239,18 @@ static WowWorldResult vanilla_SMSG_TRADE_STATUS_read(WowWorldReader* reader, van
 
     }
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TRADE_STATUS_write(WowWorldWriter* writer, const vanilla_SMSG_TRADE_STATUS* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_TRADE_STATUS_size(object) + 2); /* size */
 
     WRITE_U16(0x00000120); /* opcode */
@@ -11101,18 +15275,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TRADE_STATUS_write(WowWo
     }
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_TRADE_STATUS_free(vanilla_SMSG_TRADE_STATUS* object) {
-    if (object->status == VANILLA_TRADE_STATUS_BEGIN_TRADE) {
-    }
-    else if (object->status == VANILLA_TRADE_STATUS_CLOSE_WINDOW) {
-    }
-    else if (object->status == VANILLA_TRADE_STATUS_ONLY_CONJURED|| object->status == VANILLA_TRADE_STATUS_NOT_ON_TAPLIST) {
-    }
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_TRADE_STATUS_EXTENDED_read(WowWorldReader* reader, vanilla_SMSG_TRADE_STATUS_EXTENDED* object) {
+    int _return_value = 1;
+
+    if (444 > (reader->length - reader->index)) {
+        _return_value = (size_t)444 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_BOOL8(object->self_player);
 
     READ_U32(object->trade_slot_count1);
@@ -11126,9 +15299,18 @@ static WowWorldResult vanilla_SMSG_TRADE_STATUS_EXTENDED_read(WowWorldReader* re
     READ_ARRAY(object->trade_slots, 7, WWM_CHECK_RETURN_CODE(vanilla_TradeSlot_read(reader, &object->trade_slots[i])));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TRADE_STATUS_EXTENDED_write(WowWorldWriter* writer, const vanilla_SMSG_TRADE_STATUS_EXTENDED* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x01bc + 2); /* size */
 
     WRITE_U16(0x00000121); /* opcode */
@@ -11147,6 +15329,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TRADE_STATUS_EXTENDED_wr
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_INITIALIZE_FACTIONS_free(vanilla_SMSG_INITIALIZE_FACTIONS* object) {
+    if (object->factions != NULL) {
+        free(object->factions);
+        object->factions = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_INITIALIZE_FACTIONS_size(const vanilla_SMSG_INITIALIZE_FACTIONS* object) {
@@ -11154,9 +15344,18 @@ static size_t vanilla_SMSG_INITIALIZE_FACTIONS_size(const vanilla_SMSG_INITIALIZ
 }
 
 static WowWorldResult vanilla_SMSG_INITIALIZE_FACTIONS_read(WowWorldReader* reader, vanilla_SMSG_INITIALIZE_FACTIONS* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->factions = NULL;
+
     READ_U32(object->amount_of_factions);
 
-    object->factions = malloc(object->amount_of_factions * sizeof(vanilla_FactionInitializer));
+    object->factions = calloc(object->amount_of_factions, sizeof(vanilla_FactionInitializer));
     if (object->factions == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -11164,9 +15363,19 @@ static WowWorldResult vanilla_SMSG_INITIALIZE_FACTIONS_read(WowWorldReader* read
 
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_INITIALIZE_FACTIONS_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_INITIALIZE_FACTIONS_write(WowWorldWriter* writer, const vanilla_SMSG_INITIALIZE_FACTIONS* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_INITIALIZE_FACTIONS_size(object) + 2); /* size */
 
     WRITE_U16(0x00000122); /* opcode */
@@ -11177,21 +15386,33 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_INITIALIZE_FACTIONS_writ
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_INITIALIZE_FACTIONS_free(vanilla_SMSG_INITIALIZE_FACTIONS* object) {
-    free(object->factions);
-    object->factions = NULL;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_SET_FACTION_VISIBLE_read(WowWorldReader* reader, vanilla_SMSG_SET_FACTION_VISIBLE* object) {
+    int _return_value = 1;
+
+    if (2 > (reader->length - reader->index)) {
+        _return_value = (size_t)2 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->faction = 0;
     READ_U16(object->faction);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SET_FACTION_VISIBLE_write(WowWorldWriter* writer, const vanilla_SMSG_SET_FACTION_VISIBLE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0002 + 2); /* size */
 
     WRITE_U16(0x00000123); /* opcode */
@@ -11200,6 +15421,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SET_FACTION_VISIBLE_writ
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_SET_FACTION_STANDING_free(vanilla_SMSG_SET_FACTION_STANDING* object) {
+    if (object->faction_standings != NULL) {
+        free(object->faction_standings);
+        object->faction_standings = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_SET_FACTION_STANDING_size(const vanilla_SMSG_SET_FACTION_STANDING* object) {
@@ -11207,9 +15436,18 @@ static size_t vanilla_SMSG_SET_FACTION_STANDING_size(const vanilla_SMSG_SET_FACT
 }
 
 static WowWorldResult vanilla_SMSG_SET_FACTION_STANDING_read(WowWorldReader* reader, vanilla_SMSG_SET_FACTION_STANDING* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->faction_standings = NULL;
+
     READ_U32(object->amount_of_faction_standings);
 
-    object->faction_standings = malloc(object->amount_of_faction_standings * sizeof(vanilla_FactionStanding));
+    object->faction_standings = calloc(object->amount_of_faction_standings, sizeof(vanilla_FactionStanding));
     if (object->faction_standings == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -11217,9 +15455,19 @@ static WowWorldResult vanilla_SMSG_SET_FACTION_STANDING_read(WowWorldReader* rea
 
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_SET_FACTION_STANDING_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SET_FACTION_STANDING_write(WowWorldWriter* writer, const vanilla_SMSG_SET_FACTION_STANDING* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_SET_FACTION_STANDING_size(object) + 2); /* size */
 
     WRITE_U16(0x00000124); /* opcode */
@@ -11230,14 +15478,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SET_FACTION_STANDING_wri
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_SET_FACTION_STANDING_free(vanilla_SMSG_SET_FACTION_STANDING* object) {
-    free(object->faction_standings);
-    object->faction_standings = NULL;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_SET_FACTION_ATWAR_read(WowWorldReader* reader, vanilla_CMSG_SET_FACTION_ATWAR* object) {
+    int _return_value = 1;
+
+    if (3 > (reader->length - reader->index)) {
+        _return_value = (size_t)3 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->faction = 0;
     READ_U16(object->faction);
 
@@ -11245,9 +15496,18 @@ static WowWorldResult vanilla_CMSG_SET_FACTION_ATWAR_read(WowWorldReader* reader
     READ_U8(object->flags);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SET_FACTION_ATWAR_write(WowWorldWriter* writer, const vanilla_CMSG_SET_FACTION_ATWAR* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0003 + 4); /* size */
 
     WRITE_U32(0x00000125); /* opcode */
@@ -11258,18 +15518,35 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SET_FACTION_ATWAR_write(
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_SET_PROFICIENCY_read(WowWorldReader* reader, vanilla_SMSG_SET_PROFICIENCY* object) {
+    int _return_value = 1;
+
+    if (5 > (reader->length - reader->index)) {
+        _return_value = (size_t)5 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->class_type = 0;
     READ_U8(object->class_type);
 
     READ_U32(object->item_sub_class_mask);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SET_PROFICIENCY_write(WowWorldWriter* writer, const vanilla_SMSG_SET_PROFICIENCY* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0005 + 2); /* size */
 
     WRITE_U16(0x00000127); /* opcode */
@@ -11280,9 +15557,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SET_PROFICIENCY_write(Wo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_SET_ACTION_BUTTON_read(WowWorldReader* reader, vanilla_CMSG_SET_ACTION_BUTTON* object) {
+    int _return_value = 1;
+
+    if (5 > (reader->length - reader->index)) {
+        _return_value = (size_t)5 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U8(object->button);
 
     READ_U16(object->action);
@@ -11292,9 +15577,18 @@ static WowWorldResult vanilla_CMSG_SET_ACTION_BUTTON_read(WowWorldReader* reader
     READ_U8(object->action_type);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SET_ACTION_BUTTON_write(WowWorldWriter* writer, const vanilla_CMSG_SET_ACTION_BUTTON* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0005 + 4); /* size */
 
     WRITE_U32(0x00000128); /* opcode */
@@ -11309,15 +15603,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SET_ACTION_BUTTON_write(
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_ACTION_BUTTONS_read(WowWorldReader* reader, vanilla_SMSG_ACTION_BUTTONS* object) {
+    int _return_value = 1;
+
+    if (480 > (reader->length - reader->index)) {
+        _return_value = (size_t)480 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_ARRAY(object->data, 120, READ_U32(object->data[i]));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ACTION_BUTTONS_write(WowWorldWriter* writer, const vanilla_SMSG_ACTION_BUTTONS* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x01e0 + 2); /* size */
 
     WRITE_U16(0x00000129); /* opcode */
@@ -11326,6 +15637,18 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ACTION_BUTTONS_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_INITIAL_SPELLS_free(vanilla_SMSG_INITIAL_SPELLS* object) {
+    if (object->initial_spells != NULL) {
+        free(object->initial_spells);
+        object->initial_spells = NULL;
+    }
+    if (object->cooldowns != NULL) {
+        free(object->cooldowns);
+        object->cooldowns = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_INITIAL_SPELLS_size(const vanilla_SMSG_INITIAL_SPELLS* object) {
@@ -11333,11 +15656,21 @@ static size_t vanilla_SMSG_INITIAL_SPELLS_size(const vanilla_SMSG_INITIAL_SPELLS
 }
 
 static WowWorldResult vanilla_SMSG_INITIAL_SPELLS_read(WowWorldReader* reader, vanilla_SMSG_INITIAL_SPELLS* object) {
+    int _return_value = 1;
+
+    if (5 > (reader->length - reader->index)) {
+        _return_value = (size_t)5 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->initial_spells = NULL;
+    object->cooldowns = NULL;
+
     READ_U8(object->unknown1);
 
     READ_U16(object->spell_count);
 
-    object->initial_spells = malloc(object->spell_count * sizeof(vanilla_InitialSpell));
+    object->initial_spells = calloc(object->spell_count, sizeof(vanilla_InitialSpell));
     if (object->initial_spells == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -11346,7 +15679,7 @@ static WowWorldResult vanilla_SMSG_INITIAL_SPELLS_read(WowWorldReader* reader, v
 
     READ_U16(object->cooldown_count);
 
-    object->cooldowns = malloc(object->cooldown_count * sizeof(vanilla_CooldownSpell));
+    object->cooldowns = calloc(object->cooldown_count, sizeof(vanilla_CooldownSpell));
     if (object->cooldowns == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -11354,9 +15687,19 @@ static WowWorldResult vanilla_SMSG_INITIAL_SPELLS_read(WowWorldReader* reader, v
 
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_INITIAL_SPELLS_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_INITIAL_SPELLS_write(WowWorldWriter* writer, const vanilla_SMSG_INITIAL_SPELLS* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_INITIAL_SPELLS_size(object) + 2); /* size */
 
     WRITE_U16(0x0000012a); /* opcode */
@@ -11373,22 +15716,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_INITIAL_SPELLS_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_INITIAL_SPELLS_free(vanilla_SMSG_INITIAL_SPELLS* object) {
-    free(object->initial_spells);
-    object->initial_spells = NULL;
-    free(object->cooldowns);
-    object->cooldowns = NULL;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_LEARNED_SPELL_read(WowWorldReader* reader, vanilla_SMSG_LEARNED_SPELL* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LEARNED_SPELL_write(WowWorldWriter* writer, const vanilla_SMSG_LEARNED_SPELL* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 2); /* size */
 
     WRITE_U16(0x0000012b); /* opcode */
@@ -11397,17 +15750,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LEARNED_SPELL_write(WowW
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_SUPERCEDED_SPELL_read(WowWorldReader* reader, vanilla_SMSG_SUPERCEDED_SPELL* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U16(object->new_spell_id);
 
     READ_U16(object->old_spell_id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SUPERCEDED_SPELL_write(WowWorldWriter* writer, const vanilla_SMSG_SUPERCEDED_SPELL* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 2); /* size */
 
     WRITE_U16(0x0000012c); /* opcode */
@@ -11418,6 +15788,11 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SUPERCEDED_SPELL_write(W
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CAST_SPELL_free(vanilla_CMSG_CAST_SPELL* object) {
+    vanilla_SpellCastTargets_free(&object->targets);
 }
 
 static size_t vanilla_CMSG_CAST_SPELL_size(const vanilla_CMSG_CAST_SPELL* object) {
@@ -11425,14 +15800,32 @@ static size_t vanilla_CMSG_CAST_SPELL_size(const vanilla_CMSG_CAST_SPELL* object
 }
 
 static WowWorldResult vanilla_CMSG_CAST_SPELL_read(WowWorldReader* reader, vanilla_CMSG_CAST_SPELL* object) {
+    int _return_value = 1;
+
+    if (6 > (reader->length - reader->index)) {
+        _return_value = (size_t)6 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+
     READ_U32(object->spell);
 
     WWM_CHECK_RETURN_CODE(vanilla_SpellCastTargets_read(reader, &object->targets));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_CAST_SPELL_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CAST_SPELL_write(WowWorldWriter* writer, const vanilla_CMSG_CAST_SPELL* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_CAST_SPELL_size(object) + 4); /* size */
 
     WRITE_U32(0x0000012e); /* opcode */
@@ -11443,19 +15836,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CAST_SPELL_write(WowWorl
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CAST_SPELL_free(vanilla_CMSG_CAST_SPELL* object) {
-    vanilla_SpellCastTargets_free(&object->targets);
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_CANCEL_CAST_read(WowWorldReader* reader, vanilla_CMSG_CANCEL_CAST* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CANCEL_CAST_write(WowWorldWriter* writer, const vanilla_CMSG_CANCEL_CAST* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 4); /* size */
 
     WRITE_U32(0x0000012f); /* opcode */
@@ -11464,6 +15870,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CANCEL_CAST_write(WowWor
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_CAST_RESULT_size(const vanilla_SMSG_CAST_RESULT* object) {
@@ -11488,6 +15895,13 @@ static size_t vanilla_SMSG_CAST_RESULT_size(const vanilla_SMSG_CAST_RESULT* obje
 }
 
 static WowWorldResult vanilla_SMSG_CAST_RESULT_read(WowWorldReader* reader, vanilla_SMSG_CAST_RESULT* object) {
+    int _return_value = 1;
+
+    if (5 > (reader->length - reader->index)) {
+        _return_value = (size_t)5 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->spell);
 
     object->result = 0;
@@ -11516,9 +15930,18 @@ static WowWorldResult vanilla_SMSG_CAST_RESULT_read(WowWorldReader* reader, vani
         }
     }
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CAST_RESULT_write(WowWorldWriter* writer, const vanilla_SMSG_CAST_RESULT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_CAST_RESULT_size(object) + 2); /* size */
 
     WRITE_U16(0x00000130); /* opcode */
@@ -11549,16 +15972,12 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CAST_RESULT_write(WowWor
     }
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_CAST_RESULT_free(vanilla_SMSG_CAST_RESULT* object) {
-    if (object->result == VANILLA_SIMPLE_SPELL_CAST_RESULT_SUCCESS) {
-        if (object->reason == VANILLA_CAST_FAILURE_REASON_REQUIRES_SPELL_FOCUS) {
-        }
-        else if (object->reason == VANILLA_CAST_FAILURE_REASON_REQUIRES_AREA) {
-        }
-        else if (object->reason == VANILLA_CAST_FAILURE_REASON_EQUIPPED_ITEM_CLASS) {
-        }
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_SPELL_START_free(vanilla_SMSG_SPELL_START* object) {
+    vanilla_SpellCastTargets_free(&object->targets);
+    if ((object->flags & VANILLA_CAST_FLAGS_AMMO) != 0) {
     }
 }
 
@@ -11573,6 +15992,14 @@ static size_t vanilla_SMSG_SPELL_START_size(const vanilla_SMSG_SPELL_START* obje
 }
 
 static WowWorldResult vanilla_SMSG_SPELL_START_read(WowWorldReader* reader, vanilla_SMSG_SPELL_START* object) {
+    int _return_value = 1;
+
+    if (14 > (reader->length - reader->index)) {
+        _return_value = (size_t)14 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+
     READ_PACKED_GUID(object->cast_item);
 
     READ_PACKED_GUID(object->caster);
@@ -11593,9 +16020,19 @@ static WowWorldResult vanilla_SMSG_SPELL_START_read(WowWorldReader* reader, vani
 
     }
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_SPELL_START_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELL_START_write(WowWorldWriter* writer, const vanilla_SMSG_SPELL_START* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_SPELL_START_size(object) + 2); /* size */
 
     WRITE_U16(0x00000131); /* opcode */
@@ -11620,9 +16057,18 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELL_START_write(WowWor
     }
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_SPELL_START_free(vanilla_SMSG_SPELL_START* object) {
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_SPELL_GO_free(vanilla_SMSG_SPELL_GO* object) {
+    if (object->hits != NULL) {
+        free(object->hits);
+        object->hits = NULL;
+    }
+    if (object->misses != NULL) {
+        free(object->misses);
+        object->misses = NULL;
+    }
     vanilla_SpellCastTargets_free(&object->targets);
     if ((object->flags & VANILLA_CAST_FLAGS_AMMO) != 0) {
     }
@@ -11639,6 +16085,16 @@ static size_t vanilla_SMSG_SPELL_GO_size(const vanilla_SMSG_SPELL_GO* object) {
 }
 
 static WowWorldResult vanilla_SMSG_SPELL_GO_read(WowWorldReader* reader, vanilla_SMSG_SPELL_GO* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->hits = NULL;
+    object->misses = NULL;
+
     READ_PACKED_GUID(object->cast_item);
 
     READ_PACKED_GUID(object->caster);
@@ -11650,7 +16106,7 @@ static WowWorldResult vanilla_SMSG_SPELL_GO_read(WowWorldReader* reader, vanilla
 
     READ_U8(object->amount_of_hits);
 
-    object->hits = malloc(object->amount_of_hits * sizeof(uint64_t));
+    object->hits = calloc(object->amount_of_hits, sizeof(uint64_t));
     if (object->hits == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -11659,7 +16115,7 @@ static WowWorldResult vanilla_SMSG_SPELL_GO_read(WowWorldReader* reader, vanilla
 
     READ_U8(object->amount_of_misses);
 
-    object->misses = malloc(object->amount_of_misses * sizeof(vanilla_SpellMiss));
+    object->misses = calloc(object->amount_of_misses, sizeof(vanilla_SpellMiss));
     if (object->misses == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -11675,9 +16131,19 @@ static WowWorldResult vanilla_SMSG_SPELL_GO_read(WowWorldReader* reader, vanilla
 
     }
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_SPELL_GO_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELL_GO_write(WowWorldWriter* writer, const vanilla_SMSG_SPELL_GO* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_SPELL_GO_size(object) + 2); /* size */
 
     WRITE_U16(0x00000132); /* opcode */
@@ -11708,19 +16174,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELL_GO_write(WowWorldW
     }
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_SPELL_GO_free(vanilla_SMSG_SPELL_GO* object) {
-    free(object->hits);
-    object->hits = NULL;
-    free(object->misses);
-    object->misses = NULL;
-    vanilla_SpellCastTargets_free(&object->targets);
-    if ((object->flags & VANILLA_CAST_FLAGS_AMMO) != 0) {
-    }
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_SPELL_FAILURE_read(WowWorldReader* reader, vanilla_SMSG_SPELL_FAILURE* object) {
+    int _return_value = 1;
+
+    if (13 > (reader->length - reader->index)) {
+        _return_value = (size_t)13 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_U32(object->spell);
@@ -11729,9 +16193,18 @@ static WowWorldResult vanilla_SMSG_SPELL_FAILURE_read(WowWorldReader* reader, va
     READ_U8(object->result);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELL_FAILURE_write(WowWorldWriter* writer, const vanilla_SMSG_SPELL_FAILURE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000d + 2); /* size */
 
     WRITE_U16(0x00000133); /* opcode */
@@ -11744,6 +16217,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELL_FAILURE_write(WowW
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_SPELL_COOLDOWN_free(vanilla_SMSG_SPELL_COOLDOWN* object) {
+    if (object->cooldowns != NULL) {
+        free(object->cooldowns);
+        object->cooldowns = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_SPELL_COOLDOWN_size(const vanilla_SMSG_SPELL_COOLDOWN* object) {
@@ -11751,7 +16232,16 @@ static size_t vanilla_SMSG_SPELL_COOLDOWN_size(const vanilla_SMSG_SPELL_COOLDOWN
 }
 
 static WowWorldResult vanilla_SMSG_SPELL_COOLDOWN_read(WowWorldReader* reader, vanilla_SMSG_SPELL_COOLDOWN* object, size_t body_size) {
+    int _return_value = 1;
+
     size_t _size = 0;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->cooldowns = NULL;
 
     READ_U64(object->guid);
     _size += 8;
@@ -11763,7 +16253,8 @@ static WowWorldResult vanilla_SMSG_SPELL_COOLDOWN_read(WowWorldReader* reader, v
 
         object->cooldowns = malloc(_current_size);
         if (object->cooldowns == NULL) {
-            return WWM_RESULT_MALLOC_FAIL;
+            _return_value = WWM_RESULT_MALLOC_FAIL;
+            goto cleanup;
         }
         while (_size < body_size) {
             WWM_CHECK_RETURN_CODE(vanilla_SpellCooldownStatus_read(reader, &object->cooldowns[i]));
@@ -11775,7 +16266,8 @@ static WowWorldResult vanilla_SMSG_SPELL_COOLDOWN_read(WowWorldReader* reader, v
                 object->cooldowns = realloc(object->cooldowns, _current_size);
                 if (object->cooldowns == NULL) {
                     free(object->cooldowns);
-                    return WWM_RESULT_MALLOC_FAIL;
+                    _return_value = WWM_RESULT_MALLOC_FAIL;
+                    goto cleanup;
                 }
             }
         }
@@ -11784,9 +16276,19 @@ static WowWorldResult vanilla_SMSG_SPELL_COOLDOWN_read(WowWorldReader* reader, v
     }
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_SPELL_COOLDOWN_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELL_COOLDOWN_write(WowWorldWriter* writer, const vanilla_SMSG_SPELL_COOLDOWN* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_SPELL_COOLDOWN_size(object) + 2); /* size */
 
     WRITE_U16(0x00000134); /* opcode */
@@ -11797,22 +16299,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELL_COOLDOWN_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_SPELL_COOLDOWN_free(vanilla_SMSG_SPELL_COOLDOWN* object) {
-    free(object->cooldowns);
-    object->cooldowns = NULL;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_COOLDOWN_EVENT_read(WowWorldReader* reader, vanilla_SMSG_COOLDOWN_EVENT* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->id);
 
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_COOLDOWN_EVENT_write(WowWorldWriter* writer, const vanilla_SMSG_COOLDOWN_EVENT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 2); /* size */
 
     WRITE_U16(0x00000135); /* opcode */
@@ -11823,15 +16337,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_COOLDOWN_EVENT_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_CANCEL_AURA_read(WowWorldReader* reader, vanilla_CMSG_CANCEL_AURA* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CANCEL_AURA_write(WowWorldWriter* writer, const vanilla_CMSG_CANCEL_AURA* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 4); /* size */
 
     WRITE_U32(0x00000136); /* opcode */
@@ -11840,17 +16371,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CANCEL_AURA_write(WowWor
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_UPDATE_AURA_DURATION_read(WowWorldReader* reader, vanilla_SMSG_UPDATE_AURA_DURATION* object) {
+    int _return_value = 1;
+
+    if (5 > (reader->length - reader->index)) {
+        _return_value = (size_t)5 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U8(object->aura_slot);
 
     READ_U32(object->aura_duration);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_UPDATE_AURA_DURATION_write(WowWorldWriter* writer, const vanilla_SMSG_UPDATE_AURA_DURATION* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0005 + 2); /* size */
 
     WRITE_U16(0x00000137); /* opcode */
@@ -11861,9 +16409,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_UPDATE_AURA_DURATION_wri
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_PET_CAST_FAILED_read(WowWorldReader* reader, vanilla_SMSG_PET_CAST_FAILED* object) {
+    int _return_value = 1;
+
+    if (6 > (reader->length - reader->index)) {
+        _return_value = (size_t)6 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->id);
 
     READ_U8(object->unknown1);
@@ -11872,9 +16428,18 @@ static WowWorldResult vanilla_SMSG_PET_CAST_FAILED_read(WowWorldReader* reader, 
     READ_U8(object->result);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PET_CAST_FAILED_write(WowWorldWriter* writer, const vanilla_SMSG_PET_CAST_FAILED* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0006 + 2); /* size */
 
     WRITE_U16(0x00000138); /* opcode */
@@ -11887,17 +16452,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PET_CAST_FAILED_write(Wo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_MSG_CHANNEL_START_Server_read(WowWorldReader* reader, vanilla_MSG_CHANNEL_START_Server* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->spell);
 
     READ_U32(object->duration);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_CHANNEL_START_Server_write(WowWorldWriter* writer, const vanilla_MSG_CHANNEL_START_Server* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 2); /* size */
 
     WRITE_U16(0x00000139); /* opcode */
@@ -11908,15 +16490,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_CHANNEL_START_Server_writ
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_MSG_CHANNEL_UPDATE_Server_read(WowWorldReader* reader, vanilla_MSG_CHANNEL_UPDATE_Server* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->time);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_CHANNEL_UPDATE_Server_write(WowWorldWriter* writer, const vanilla_MSG_CHANNEL_UPDATE_Server* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 2); /* size */
 
     WRITE_U16(0x0000013a); /* opcode */
@@ -11925,15 +16524,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_CHANNEL_UPDATE_Server_wri
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_CANCEL_CHANNELLING_read(WowWorldReader* reader, vanilla_CMSG_CANCEL_CHANNELLING* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CANCEL_CHANNELLING_write(WowWorldWriter* writer, const vanilla_CMSG_CANCEL_CHANNELLING* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 4); /* size */
 
     WRITE_U32(0x0000013b); /* opcode */
@@ -11942,18 +16558,35 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CANCEL_CHANNELLING_write
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_AI_REACTION_read(WowWorldReader* reader, vanilla_SMSG_AI_REACTION* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     object->reaction = 0;
     READ_U32(object->reaction);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_AI_REACTION_write(WowWorldWriter* writer, const vanilla_SMSG_AI_REACTION* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 2); /* size */
 
     WRITE_U16(0x0000013c); /* opcode */
@@ -11964,15 +16597,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_AI_REACTION_write(WowWor
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_SET_SELECTION_read(WowWorldReader* reader, vanilla_CMSG_SET_SELECTION* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->target);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SET_SELECTION_write(WowWorldWriter* writer, const vanilla_CMSG_SET_SELECTION* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x0000013d); /* opcode */
@@ -11981,15 +16631,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SET_SELECTION_write(WowW
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_SET_TARGET_OBSOLETE_read(WowWorldReader* reader, vanilla_CMSG_SET_TARGET_OBSOLETE* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SET_TARGET_OBSOLETE_write(WowWorldWriter* writer, const vanilla_CMSG_SET_TARGET_OBSOLETE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x0000013e); /* opcode */
@@ -11998,15 +16665,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SET_TARGET_OBSOLETE_writ
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_ATTACKSWING_read(WowWorldReader* reader, vanilla_CMSG_ATTACKSWING* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_ATTACKSWING_write(WowWorldWriter* writer, const vanilla_CMSG_ATTACKSWING* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x00000141); /* opcode */
@@ -12015,26 +16699,51 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_ATTACKSWING_write(WowWor
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_ATTACKSTOP_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x00000142); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_ATTACKSTART_read(WowWorldReader* reader, vanilla_SMSG_ATTACKSTART* object) {
+    int _return_value = 1;
+
+    if (16 > (reader->length - reader->index)) {
+        _return_value = (size_t)16 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->attacker);
 
     READ_U64(object->victim);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ATTACKSTART_write(WowWorldWriter* writer, const vanilla_SMSG_ATTACKSTART* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0010 + 2); /* size */
 
     WRITE_U16(0x00000143); /* opcode */
@@ -12045,6 +16754,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ATTACKSTART_write(WowWor
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_ATTACKSTOP_size(const vanilla_SMSG_ATTACKSTOP* object) {
@@ -12052,6 +16762,13 @@ static size_t vanilla_SMSG_ATTACKSTOP_size(const vanilla_SMSG_ATTACKSTOP* object
 }
 
 static WowWorldResult vanilla_SMSG_ATTACKSTOP_read(WowWorldReader* reader, vanilla_SMSG_ATTACKSTOP* object) {
+    int _return_value = 1;
+
+    if (6 > (reader->length - reader->index)) {
+        _return_value = (size_t)6 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->player);
 
     READ_PACKED_GUID(object->enemy);
@@ -12059,9 +16776,18 @@ static WowWorldResult vanilla_SMSG_ATTACKSTOP_read(WowWorldReader* reader, vanil
     READ_U32(object->unknown1);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ATTACKSTOP_write(WowWorldWriter* writer, const vanilla_SMSG_ATTACKSTOP* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_ATTACKSTOP_size(object) + 2); /* size */
 
     WRITE_U16(0x00000144); /* opcode */
@@ -12074,51 +16800,99 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ATTACKSTOP_write(WowWorl
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ATTACKSWING_NOTINRANGE_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 2); /* size */
 
     WRITE_U16(0x00000145); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ATTACKSWING_BADFACING_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 2); /* size */
 
     WRITE_U16(0x00000146); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ATTACKSWING_NOTSTANDING_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 2); /* size */
 
     WRITE_U16(0x00000147); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ATTACKSWING_DEADTARGET_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 2); /* size */
 
     WRITE_U16(0x00000148); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ATTACKSWING_CANT_ATTACK_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 2); /* size */
 
     WRITE_U16(0x00000149); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_ATTACKERSTATEUPDATE_free(vanilla_SMSG_ATTACKERSTATEUPDATE* object) {
+    if (object->damages != NULL) {
+        free(object->damages);
+        object->damages = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_ATTACKERSTATEUPDATE_size(const vanilla_SMSG_ATTACKERSTATEUPDATE* object) {
@@ -12126,6 +16900,15 @@ static size_t vanilla_SMSG_ATTACKERSTATEUPDATE_size(const vanilla_SMSG_ATTACKERS
 }
 
 static WowWorldResult vanilla_SMSG_ATTACKERSTATEUPDATE_read(WowWorldReader* reader, vanilla_SMSG_ATTACKERSTATEUPDATE* object) {
+    int _return_value = 1;
+
+    if (27 > (reader->length - reader->index)) {
+        _return_value = (size_t)27 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->damages = NULL;
+
     object->hit_info = 0;
     READ_U32(object->hit_info);
 
@@ -12137,7 +16920,7 @@ static WowWorldResult vanilla_SMSG_ATTACKERSTATEUPDATE_read(WowWorldReader* read
 
     READ_U8(object->amount_of_damages);
 
-    object->damages = malloc(object->amount_of_damages * sizeof(vanilla_DamageInfo));
+    object->damages = calloc(object->amount_of_damages, sizeof(vanilla_DamageInfo));
     if (object->damages == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -12153,9 +16936,19 @@ static WowWorldResult vanilla_SMSG_ATTACKERSTATEUPDATE_read(WowWorldReader* read
     READ_U32(object->blocked_amount);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_ATTACKERSTATEUPDATE_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ATTACKERSTATEUPDATE_write(WowWorldWriter* writer, const vanilla_SMSG_ATTACKERSTATEUPDATE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_ATTACKERSTATEUPDATE_size(object) + 2); /* size */
 
     WRITE_U16(0x0000014a); /* opcode */
@@ -12182,20 +16975,24 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ATTACKERSTATEUPDATE_writ
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_ATTACKERSTATEUPDATE_free(vanilla_SMSG_ATTACKERSTATEUPDATE* object) {
-    free(object->damages);
-    object->damages = NULL;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CANCEL_COMBAT_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 2); /* size */
 
     WRITE_U16(0x0000014e); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_SPELLHEALLOG_size(const vanilla_SMSG_SPELLHEALLOG* object) {
@@ -12203,6 +17000,13 @@ static size_t vanilla_SMSG_SPELLHEALLOG_size(const vanilla_SMSG_SPELLHEALLOG* ob
 }
 
 static WowWorldResult vanilla_SMSG_SPELLHEALLOG_read(WowWorldReader* reader, vanilla_SMSG_SPELLHEALLOG* object) {
+    int _return_value = 1;
+
+    if (11 > (reader->length - reader->index)) {
+        _return_value = (size_t)11 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->victim);
 
     READ_PACKED_GUID(object->caster);
@@ -12214,9 +17018,18 @@ static WowWorldResult vanilla_SMSG_SPELLHEALLOG_read(WowWorldReader* reader, van
     READ_BOOL8(object->critical);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELLHEALLOG_write(WowWorldWriter* writer, const vanilla_SMSG_SPELLHEALLOG* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_SPELLHEALLOG_size(object) + 2); /* size */
 
     WRITE_U16(0x00000150); /* opcode */
@@ -12233,6 +17046,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELLHEALLOG_write(WowWo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_SPELLENERGIZELOG_size(const vanilla_SMSG_SPELLENERGIZELOG* object) {
@@ -12240,6 +17054,13 @@ static size_t vanilla_SMSG_SPELLENERGIZELOG_size(const vanilla_SMSG_SPELLENERGIZ
 }
 
 static WowWorldResult vanilla_SMSG_SPELLENERGIZELOG_read(WowWorldReader* reader, vanilla_SMSG_SPELLENERGIZELOG* object) {
+    int _return_value = 1;
+
+    if (14 > (reader->length - reader->index)) {
+        _return_value = (size_t)14 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->victim);
 
     READ_PACKED_GUID(object->caster);
@@ -12252,9 +17073,18 @@ static WowWorldResult vanilla_SMSG_SPELLENERGIZELOG_read(WowWorldReader* reader,
     READ_U32(object->damage);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELLENERGIZELOG_write(WowWorldWriter* writer, const vanilla_SMSG_SPELLENERGIZELOG* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_SPELLENERGIZELOG_size(object) + 2); /* size */
 
     WRITE_U16(0x00000151); /* opcode */
@@ -12271,9 +17101,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELLENERGIZELOG_write(W
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_BINDPOINTUPDATE_read(WowWorldReader* reader, vanilla_SMSG_BINDPOINTUPDATE* object) {
+    int _return_value = 1;
+
+    if (20 > (reader->length - reader->index)) {
+        _return_value = (size_t)20 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     WWM_CHECK_RETURN_CODE(all_Vector3d_read(reader, &object->position));
 
     object->map = 0;
@@ -12283,9 +17121,18 @@ static WowWorldResult vanilla_SMSG_BINDPOINTUPDATE_read(WowWorldReader* reader, 
     READ_U32(object->area);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_BINDPOINTUPDATE_write(WowWorldWriter* writer, const vanilla_SMSG_BINDPOINTUPDATE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0014 + 2); /* size */
 
     WRITE_U16(0x00000155); /* opcode */
@@ -12298,18 +17145,35 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_BINDPOINTUPDATE_write(Wo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_PLAYERBOUND_read(WowWorldReader* reader, vanilla_SMSG_PLAYERBOUND* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     object->area = 0;
     READ_U32(object->area);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PLAYERBOUND_write(WowWorldWriter* writer, const vanilla_SMSG_PLAYERBOUND* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 2); /* size */
 
     WRITE_U16(0x00000158); /* opcode */
@@ -12320,6 +17184,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PLAYERBOUND_write(WowWor
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_CLIENT_CONTROL_UPDATE_size(const vanilla_SMSG_CLIENT_CONTROL_UPDATE* object) {
@@ -12327,14 +17192,30 @@ static size_t vanilla_SMSG_CLIENT_CONTROL_UPDATE_size(const vanilla_SMSG_CLIENT_
 }
 
 static WowWorldResult vanilla_SMSG_CLIENT_CONTROL_UPDATE_read(WowWorldReader* reader, vanilla_SMSG_CLIENT_CONTROL_UPDATE* object) {
+    int _return_value = 1;
+
+    if (2 > (reader->length - reader->index)) {
+        _return_value = (size_t)2 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     READ_BOOL8(object->allow_movement);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CLIENT_CONTROL_UPDATE_write(WowWorldWriter* writer, const vanilla_SMSG_CLIENT_CONTROL_UPDATE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_CLIENT_CONTROL_UPDATE_size(object) + 2); /* size */
 
     WRITE_U16(0x00000159); /* opcode */
@@ -12345,15 +17226,29 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CLIENT_CONTROL_UPDATE_wr
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_REPOP_REQUEST_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x0000015a); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_RESURRECT_REQUEST_free(vanilla_SMSG_RESURRECT_REQUEST* object) {
+    FREE_STRING(object->name);
+
 }
 
 static size_t vanilla_SMSG_RESURRECT_REQUEST_size(const vanilla_SMSG_RESURRECT_REQUEST* object) {
@@ -12361,6 +17256,15 @@ static size_t vanilla_SMSG_RESURRECT_REQUEST_size(const vanilla_SMSG_RESURRECT_R
 }
 
 static WowWorldResult vanilla_SMSG_RESURRECT_REQUEST_read(WowWorldReader* reader, vanilla_SMSG_RESURRECT_REQUEST* object) {
+    int _return_value = 1;
+
+    if (14 > (reader->length - reader->index)) {
+        _return_value = (size_t)14 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->name = NULL;
+
     READ_U64(object->guid);
 
     READ_SIZED_CSTRING(object->name);
@@ -12368,9 +17272,19 @@ static WowWorldResult vanilla_SMSG_RESURRECT_REQUEST_read(WowWorldReader* reader
     READ_BOOL8(object->player);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_RESURRECT_REQUEST_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_RESURRECT_REQUEST_write(WowWorldWriter* writer, const vanilla_SMSG_RESURRECT_REQUEST* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_RESURRECT_REQUEST_size(object) + 2); /* size */
 
     WRITE_U16(0x0000015b); /* opcode */
@@ -12383,22 +17297,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_RESURRECT_REQUEST_write(
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_RESURRECT_REQUEST_free(vanilla_SMSG_RESURRECT_REQUEST* object) {
-    FREE_STRING(object->name);
-
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_RESURRECT_RESPONSE_read(WowWorldReader* reader, vanilla_CMSG_RESURRECT_RESPONSE* object) {
+    int _return_value = 1;
+
+    if (9 > (reader->length - reader->index)) {
+        _return_value = (size_t)9 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_U8(object->status);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_RESURRECT_RESPONSE_write(WowWorldWriter* writer, const vanilla_CMSG_RESURRECT_RESPONSE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0009 + 4); /* size */
 
     WRITE_U32(0x0000015c); /* opcode */
@@ -12409,15 +17335,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_RESURRECT_RESPONSE_write
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_LOOT_read(WowWorldReader* reader, vanilla_CMSG_LOOT* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_LOOT_write(WowWorldWriter* writer, const vanilla_CMSG_LOOT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x0000015d); /* opcode */
@@ -12426,24 +17369,49 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_LOOT_write(WowWorldWrite
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_LOOT_MONEY_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x0000015e); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_LOOT_RELEASE_read(WowWorldReader* reader, vanilla_CMSG_LOOT_RELEASE* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_LOOT_RELEASE_write(WowWorldWriter* writer, const vanilla_CMSG_LOOT_RELEASE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x0000015f); /* opcode */
@@ -12452,6 +17420,16 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_LOOT_RELEASE_write(WowWo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_LOOT_RESPONSE_free(vanilla_SMSG_LOOT_RESPONSE* object) {
+    if (object->loot_method == VANILLA_LOOT_METHOD_ERROR) {
+    }
+    if (object->items != NULL) {
+        free(object->items);
+        object->items = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_LOOT_RESPONSE_size(const vanilla_SMSG_LOOT_RESPONSE* object) {
@@ -12465,6 +17443,15 @@ static size_t vanilla_SMSG_LOOT_RESPONSE_size(const vanilla_SMSG_LOOT_RESPONSE* 
 }
 
 static WowWorldResult vanilla_SMSG_LOOT_RESPONSE_read(WowWorldReader* reader, vanilla_SMSG_LOOT_RESPONSE* object) {
+    int _return_value = 1;
+
+    if (14 > (reader->length - reader->index)) {
+        _return_value = (size_t)14 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->items = NULL;
+
     READ_U64(object->guid);
 
     object->loot_method = 0;
@@ -12479,7 +17466,7 @@ static WowWorldResult vanilla_SMSG_LOOT_RESPONSE_read(WowWorldReader* reader, va
 
     READ_U8(object->amount_of_items);
 
-    object->items = malloc(object->amount_of_items * sizeof(vanilla_LootItem));
+    object->items = calloc(object->amount_of_items, sizeof(vanilla_LootItem));
     if (object->items == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -12487,9 +17474,19 @@ static WowWorldResult vanilla_SMSG_LOOT_RESPONSE_read(WowWorldReader* reader, va
 
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_LOOT_RESPONSE_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOOT_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_LOOT_RESPONSE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_LOOT_RESPONSE_size(object) + 2); /* size */
 
     WRITE_U16(0x00000160); /* opcode */
@@ -12510,24 +17507,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOOT_RESPONSE_write(WowW
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_LOOT_RESPONSE_free(vanilla_SMSG_LOOT_RESPONSE* object) {
-    if (object->loot_method == VANILLA_LOOT_METHOD_ERROR) {
-    }
-    free(object->items);
-    object->items = NULL;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_LOOT_RELEASE_RESPONSE_read(WowWorldReader* reader, vanilla_SMSG_LOOT_RELEASE_RESPONSE* object) {
+    int _return_value = 1;
+
+    if (9 > (reader->length - reader->index)) {
+        _return_value = (size_t)9 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_U8(object->unknown1);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOOT_RELEASE_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_LOOT_RELEASE_RESPONSE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0009 + 2); /* size */
 
     WRITE_U16(0x00000161); /* opcode */
@@ -12538,15 +17545,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOOT_RELEASE_RESPONSE_wr
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_LOOT_REMOVED_read(WowWorldReader* reader, vanilla_SMSG_LOOT_REMOVED* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U8(object->slot);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOOT_REMOVED_write(WowWorldWriter* writer, const vanilla_SMSG_LOOT_REMOVED* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0001 + 2); /* size */
 
     WRITE_U16(0x00000162); /* opcode */
@@ -12555,15 +17579,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOOT_REMOVED_write(WowWo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_LOOT_MONEY_NOTIFY_read(WowWorldReader* reader, vanilla_SMSG_LOOT_MONEY_NOTIFY* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->amount);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOOT_MONEY_NOTIFY_write(WowWorldWriter* writer, const vanilla_SMSG_LOOT_MONEY_NOTIFY* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 2); /* size */
 
     WRITE_U16(0x00000163); /* opcode */
@@ -12572,18 +17613,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOOT_MONEY_NOTIFY_write(
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOOT_CLEAR_MONEY_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 2); /* size */
 
     WRITE_U16(0x00000165); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_ITEM_PUSH_RESULT_read(WowWorldReader* reader, vanilla_SMSG_ITEM_PUSH_RESULT* object) {
+    int _return_value = 1;
+
+    if (41 > (reader->length - reader->index)) {
+        _return_value = (size_t)41 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     object->source = 0;
@@ -12608,9 +17665,18 @@ static WowWorldResult vanilla_SMSG_ITEM_PUSH_RESULT_read(WowWorldReader* reader,
     READ_U32(object->item_count);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ITEM_PUSH_RESULT_write(WowWorldWriter* writer, const vanilla_SMSG_ITEM_PUSH_RESULT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0029 + 2); /* size */
 
     WRITE_U16(0x00000166); /* opcode */
@@ -12637,17 +17703,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ITEM_PUSH_RESULT_write(W
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_DUEL_REQUESTED_read(WowWorldReader* reader, vanilla_SMSG_DUEL_REQUESTED* object) {
+    int _return_value = 1;
+
+    if (16 > (reader->length - reader->index)) {
+        _return_value = (size_t)16 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->initiator);
 
     READ_U64(object->target);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_DUEL_REQUESTED_write(WowWorldWriter* writer, const vanilla_SMSG_DUEL_REQUESTED* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0010 + 2); /* size */
 
     WRITE_U16(0x00000167); /* opcode */
@@ -12658,33 +17741,66 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_DUEL_REQUESTED_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_DUEL_OUTOFBOUNDS_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 2); /* size */
 
     WRITE_U16(0x00000168); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_DUEL_INBOUNDS_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 2); /* size */
 
     WRITE_U16(0x00000169); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_DUEL_COMPLETE_read(WowWorldReader* reader, vanilla_SMSG_DUEL_COMPLETE* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_BOOL8(object->ended_without_interruption);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_DUEL_COMPLETE_write(WowWorldWriter* writer, const vanilla_SMSG_DUEL_COMPLETE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0001 + 2); /* size */
 
     WRITE_U16(0x0000016a); /* opcode */
@@ -12693,6 +17809,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_DUEL_COMPLETE_write(WowW
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_DUEL_WINNER_free(vanilla_SMSG_DUEL_WINNER* object) {
+    FREE_STRING(object->opponent_name);
+
+    FREE_STRING(object->initiator_name);
+
 }
 
 static size_t vanilla_SMSG_DUEL_WINNER_size(const vanilla_SMSG_DUEL_WINNER* object) {
@@ -12700,6 +17824,16 @@ static size_t vanilla_SMSG_DUEL_WINNER_size(const vanilla_SMSG_DUEL_WINNER* obje
 }
 
 static WowWorldResult vanilla_SMSG_DUEL_WINNER_read(WowWorldReader* reader, vanilla_SMSG_DUEL_WINNER* object) {
+    int _return_value = 1;
+
+    if (3 > (reader->length - reader->index)) {
+        _return_value = (size_t)3 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->opponent_name = NULL;
+    object->initiator_name = NULL;
+
     object->reason = 0;
     READ_U8(object->reason);
 
@@ -12708,9 +17842,19 @@ static WowWorldResult vanilla_SMSG_DUEL_WINNER_read(WowWorldReader* reader, vani
     READ_CSTRING(object->initiator_name);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_DUEL_WINNER_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_DUEL_WINNER_write(WowWorldWriter* writer, const vanilla_SMSG_DUEL_WINNER* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_DUEL_WINNER_size(object) + 2); /* size */
 
     WRITE_U16(0x0000016b); /* opcode */
@@ -12723,22 +17867,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_DUEL_WINNER_write(WowWor
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_DUEL_WINNER_free(vanilla_SMSG_DUEL_WINNER* object) {
-    FREE_STRING(object->opponent_name);
-
-    FREE_STRING(object->initiator_name);
-
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_DUEL_ACCEPTED_read(WowWorldReader* reader, vanilla_CMSG_DUEL_ACCEPTED* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_DUEL_ACCEPTED_write(WowWorldWriter* writer, const vanilla_CMSG_DUEL_ACCEPTED* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x0000016c); /* opcode */
@@ -12747,15 +17901,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_DUEL_ACCEPTED_write(WowW
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_DUEL_CANCELLED_read(WowWorldReader* reader, vanilla_CMSG_DUEL_CANCELLED* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_DUEL_CANCELLED_write(WowWorldWriter* writer, const vanilla_CMSG_DUEL_CANCELLED* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x0000016d); /* opcode */
@@ -12764,16 +17935,33 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_DUEL_CANCELLED_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_MOUNTRESULT_read(WowWorldReader* reader, vanilla_SMSG_MOUNTRESULT* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->result = 0;
     READ_U32(object->result);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MOUNTRESULT_write(WowWorldWriter* writer, const vanilla_SMSG_MOUNTRESULT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 2); /* size */
 
     WRITE_U16(0x0000016e); /* opcode */
@@ -12782,16 +17970,33 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MOUNTRESULT_write(WowWor
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_DISMOUNTRESULT_read(WowWorldReader* reader, vanilla_SMSG_DISMOUNTRESULT* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->result = 0;
     READ_U32(object->result);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_DISMOUNTRESULT_write(WowWorldWriter* writer, const vanilla_SMSG_DISMOUNTRESULT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 2); /* size */
 
     WRITE_U16(0x0000016f); /* opcode */
@@ -12800,24 +18005,49 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_DISMOUNTRESULT_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MOUNTSPECIAL_ANIM_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x00000171); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_MOUNTSPECIAL_ANIM_read(WowWorldReader* reader, vanilla_SMSG_MOUNTSPECIAL_ANIM* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MOUNTSPECIAL_ANIM_write(WowWorldWriter* writer, const vanilla_SMSG_MOUNTSPECIAL_ANIM* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 2); /* size */
 
     WRITE_U16(0x00000172); /* opcode */
@@ -12826,16 +18056,33 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MOUNTSPECIAL_ANIM_write(
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_PET_TAME_FAILURE_read(WowWorldReader* reader, vanilla_SMSG_PET_TAME_FAILURE* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->reason = 0;
     READ_U8(object->reason);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PET_TAME_FAILURE_write(WowWorldWriter* writer, const vanilla_SMSG_PET_TAME_FAILURE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0001 + 2); /* size */
 
     WRITE_U16(0x00000173); /* opcode */
@@ -12844,6 +18091,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PET_TAME_FAILURE_write(W
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_PET_SET_ACTION_free(vanilla_CMSG_PET_SET_ACTION* object) {
+    if (object->extra != NULL) {
+        free(object->extra);
+        object->extra = NULL;
+    }
 }
 
 static size_t vanilla_CMSG_PET_SET_ACTION_size(const vanilla_CMSG_PET_SET_ACTION* object) {
@@ -12857,8 +18112,16 @@ static size_t vanilla_CMSG_PET_SET_ACTION_size(const vanilla_CMSG_PET_SET_ACTION
 }
 
 static WowWorldResult vanilla_CMSG_PET_SET_ACTION_read(WowWorldReader* reader, vanilla_CMSG_PET_SET_ACTION* object, size_t body_size) {
+    int _return_value = 1;
+
     size_t _size = 0;
 
+    if (16 > (reader->length - reader->index)) {
+        _return_value = (size_t)16 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->extra = NULL;
     READ_U64(object->guid);
     _size += 8;
 
@@ -12872,7 +18135,8 @@ static WowWorldResult vanilla_CMSG_PET_SET_ACTION_read(WowWorldReader* reader, v
     if (_size < body_size) {
         object->extra = malloc(sizeof(vanilla_CMSG_PET_SET_ACTION_extra));
         if (object->extra == NULL) {
-            return WWM_RESULT_MALLOC_FAIL;
+            _return_value = WWM_RESULT_MALLOC_FAIL;
+            goto cleanup;
         }
 
         READ_U32(object->extra->position2);
@@ -12881,9 +18145,19 @@ static WowWorldResult vanilla_CMSG_PET_SET_ACTION_read(WowWorldReader* reader, v
 
     }
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_PET_SET_ACTION_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PET_SET_ACTION_write(WowWorldWriter* writer, const vanilla_CMSG_PET_SET_ACTION* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_PET_SET_ACTION_size(object) + 4); /* size */
 
     WRITE_U32(0x00000174); /* opcode */
@@ -12902,13 +18176,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PET_SET_ACTION_write(Wow
     }
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_PET_SET_ACTION_free(vanilla_CMSG_PET_SET_ACTION* object) {
-    free(object->extra);
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_PET_ACTION_read(WowWorldReader* reader, vanilla_CMSG_PET_ACTION* object) {
+    int _return_value = 1;
+
+    if (20 > (reader->length - reader->index)) {
+        _return_value = (size_t)20 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->pet);
 
     READ_U32(object->data);
@@ -12916,9 +18194,18 @@ static WowWorldResult vanilla_CMSG_PET_ACTION_read(WowWorldReader* reader, vanil
     READ_U64(object->target);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PET_ACTION_write(WowWorldWriter* writer, const vanilla_CMSG_PET_ACTION* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0014 + 4); /* size */
 
     WRITE_U32(0x00000175); /* opcode */
@@ -12931,15 +18218,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PET_ACTION_write(WowWorl
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_PET_ABANDON_read(WowWorldReader* reader, vanilla_CMSG_PET_ABANDON* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->pet);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PET_ABANDON_write(WowWorldWriter* writer, const vanilla_CMSG_PET_ABANDON* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x00000176); /* opcode */
@@ -12948,6 +18252,12 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PET_ABANDON_write(WowWor
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_PET_RENAME_free(vanilla_CMSG_PET_RENAME* object) {
+    FREE_STRING(object->name);
+
 }
 
 static size_t vanilla_CMSG_PET_RENAME_size(const vanilla_CMSG_PET_RENAME* object) {
@@ -12955,14 +18265,33 @@ static size_t vanilla_CMSG_PET_RENAME_size(const vanilla_CMSG_PET_RENAME* object
 }
 
 static WowWorldResult vanilla_CMSG_PET_RENAME_read(WowWorldReader* reader, vanilla_CMSG_PET_RENAME* object) {
+    int _return_value = 1;
+
+    if (9 > (reader->length - reader->index)) {
+        _return_value = (size_t)9 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->name = NULL;
+
     READ_U64(object->pet);
 
     READ_CSTRING(object->name);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_PET_RENAME_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PET_RENAME_write(WowWorldWriter* writer, const vanilla_CMSG_PET_RENAME* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_PET_RENAME_size(object) + 4); /* size */
 
     WRITE_U32(0x00000177); /* opcode */
@@ -12973,20 +18302,39 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PET_RENAME_write(WowWorl
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_PET_RENAME_free(vanilla_CMSG_PET_RENAME* object) {
-    FREE_STRING(object->name);
-
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PET_NAME_INVALID_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 2); /* size */
 
     WRITE_U16(0x00000178); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_PET_SPELLS_free(vanilla_SMSG_PET_SPELLS* object) {
+    if (object->action_bars != NULL) {
+        if (object->action_bars->spells != NULL) {
+            free(object->action_bars->spells);
+            object->action_bars->spells = NULL;
+        }
+        if (object->action_bars->cooldowns != NULL) {
+            free(object->action_bars->cooldowns);
+            object->action_bars->cooldowns = NULL;
+        }
+        free(object->action_bars);
+        object->action_bars = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_PET_SPELLS_size(const vanilla_SMSG_PET_SPELLS* object) {
@@ -13000,8 +18348,16 @@ static size_t vanilla_SMSG_PET_SPELLS_size(const vanilla_SMSG_PET_SPELLS* object
 }
 
 static WowWorldResult vanilla_SMSG_PET_SPELLS_read(WowWorldReader* reader, vanilla_SMSG_PET_SPELLS* object, size_t body_size) {
+    int _return_value = 1;
+
     size_t _size = 0;
 
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->action_bars = NULL;
     READ_U64(object->pet);
     _size += 8;
 
@@ -13009,8 +18365,12 @@ static WowWorldResult vanilla_SMSG_PET_SPELLS_read(WowWorldReader* reader, vanil
     if (_size < body_size) {
         object->action_bars = malloc(sizeof(vanilla_SMSG_PET_SPELLS_action_bars));
         if (object->action_bars == NULL) {
-            return WWM_RESULT_MALLOC_FAIL;
+            _return_value = WWM_RESULT_MALLOC_FAIL;
+            goto cleanup;
         }
+
+        object->action_bars->spells = NULL;
+        object->action_bars->cooldowns = NULL;
 
         READ_U32(object->action_bars->duration);
 
@@ -13029,7 +18389,7 @@ static WowWorldResult vanilla_SMSG_PET_SPELLS_read(WowWorldReader* reader, vanil
 
         READ_U8(object->action_bars->amount_of_spells);
 
-        object->action_bars->spells = malloc(object->action_bars->amount_of_spells * sizeof(uint32_t));
+        object->action_bars->spells = calloc(object->action_bars->amount_of_spells, sizeof(uint32_t));
         if (object->action_bars->spells == NULL) {
             return WWM_RESULT_MALLOC_FAIL;
         }
@@ -13038,7 +18398,7 @@ static WowWorldResult vanilla_SMSG_PET_SPELLS_read(WowWorldReader* reader, vanil
 
         READ_U8(object->action_bars->amount_of_cooldowns);
 
-        object->action_bars->cooldowns = malloc(object->action_bars->amount_of_cooldowns * sizeof(vanilla_PetSpellCooldown));
+        object->action_bars->cooldowns = calloc(object->action_bars->amount_of_cooldowns, sizeof(vanilla_PetSpellCooldown));
         if (object->action_bars->cooldowns == NULL) {
             return WWM_RESULT_MALLOC_FAIL;
         }
@@ -13047,9 +18407,19 @@ static WowWorldResult vanilla_SMSG_PET_SPELLS_read(WowWorldReader* reader, vanil
 
     }
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_PET_SPELLS_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PET_SPELLS_write(WowWorldWriter* writer, const vanilla_SMSG_PET_SPELLS* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_PET_SPELLS_size(object) + 2); /* size */
 
     WRITE_U16(0x00000179); /* opcode */
@@ -13080,17 +18450,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PET_SPELLS_write(WowWorl
     }
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_PET_SPELLS_free(vanilla_SMSG_PET_SPELLS* object) {
-    free(object->action_bars->spells);
-    object->action_bars->spells = NULL;
-    free(object->action_bars->cooldowns);
-    object->action_bars->cooldowns = NULL;
-    free(object->action_bars);
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_PET_MODE_read(WowWorldReader* reader, vanilla_SMSG_PET_MODE* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     object->react_state = 0;
@@ -13105,9 +18475,18 @@ static WowWorldResult vanilla_SMSG_PET_MODE_read(WowWorldReader* reader, vanilla
     READ_U8(object->pet_enabled);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PET_MODE_write(WowWorldWriter* writer, const vanilla_SMSG_PET_MODE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 2); /* size */
 
     WRITE_U16(0x0000017a); /* opcode */
@@ -13124,15 +18503,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PET_MODE_write(WowWorldW
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_GOSSIP_HELLO_read(WowWorldReader* reader, vanilla_CMSG_GOSSIP_HELLO* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GOSSIP_HELLO_write(WowWorldWriter* writer, const vanilla_CMSG_GOSSIP_HELLO* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x0000017b); /* opcode */
@@ -13141,6 +18537,16 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GOSSIP_HELLO_write(WowWo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GOSSIP_SELECT_OPTION_free(vanilla_CMSG_GOSSIP_SELECT_OPTION* object) {
+    if (object->unknown != NULL) {
+        FREE_STRING(object->unknown->code);
+
+        free(object->unknown);
+        object->unknown = NULL;
+    }
 }
 
 static size_t vanilla_CMSG_GOSSIP_SELECT_OPTION_size(const vanilla_CMSG_GOSSIP_SELECT_OPTION* object) {
@@ -13154,8 +18560,16 @@ static size_t vanilla_CMSG_GOSSIP_SELECT_OPTION_size(const vanilla_CMSG_GOSSIP_S
 }
 
 static WowWorldResult vanilla_CMSG_GOSSIP_SELECT_OPTION_read(WowWorldReader* reader, vanilla_CMSG_GOSSIP_SELECT_OPTION* object, size_t body_size) {
+    int _return_value = 1;
+
     size_t _size = 0;
 
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->unknown = NULL;
     READ_U64(object->guid);
     _size += 8;
 
@@ -13166,16 +18580,29 @@ static WowWorldResult vanilla_CMSG_GOSSIP_SELECT_OPTION_read(WowWorldReader* rea
     if (_size < body_size) {
         object->unknown = malloc(sizeof(vanilla_CMSG_GOSSIP_SELECT_OPTION_unknown));
         if (object->unknown == NULL) {
-            return WWM_RESULT_MALLOC_FAIL;
+            _return_value = WWM_RESULT_MALLOC_FAIL;
+            goto cleanup;
         }
+
+        object->unknown->code = NULL;
 
         READ_CSTRING(object->unknown->code);
 
     }
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_GOSSIP_SELECT_OPTION_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GOSSIP_SELECT_OPTION_write(WowWorldWriter* writer, const vanilla_CMSG_GOSSIP_SELECT_OPTION* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_GOSSIP_SELECT_OPTION_size(object) + 4); /* size */
 
     WRITE_U32(0x0000017c); /* opcode */
@@ -13190,12 +18617,26 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GOSSIP_SELECT_OPTION_wri
     }
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GOSSIP_SELECT_OPTION_free(vanilla_CMSG_GOSSIP_SELECT_OPTION* object) {
-    FREE_STRING(object->unknown->code);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GOSSIP_MESSAGE_free(vanilla_SMSG_GOSSIP_MESSAGE* object) {
+    size_t i;
 
-    free(object->unknown);
+    if (object->gossips != NULL) {
+        for (i = 0; i < object->amount_of_gossip_items; ++i) {
+            vanilla_GossipItem_free(&((object->gossips)[i]));
+        }
+        free(object->gossips);
+        object->gossips = NULL;
+    }
+    if (object->quests != NULL) {
+        for (i = 0; i < object->amount_of_quests; ++i) {
+            vanilla_QuestItem_free(&((object->quests)[i]));
+        }
+        free(object->quests);
+        object->quests = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_GOSSIP_MESSAGE_size(const vanilla_SMSG_GOSSIP_MESSAGE* object) {
@@ -13219,13 +18660,23 @@ static size_t vanilla_SMSG_GOSSIP_MESSAGE_size(const vanilla_SMSG_GOSSIP_MESSAGE
 }
 
 static WowWorldResult vanilla_SMSG_GOSSIP_MESSAGE_read(WowWorldReader* reader, vanilla_SMSG_GOSSIP_MESSAGE* object) {
+    int _return_value = 1;
+
+    if (20 > (reader->length - reader->index)) {
+        _return_value = (size_t)20 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->gossips = NULL;
+    object->quests = NULL;
+
     READ_U64(object->guid);
 
     READ_U32(object->title_text_id);
 
     READ_U32(object->amount_of_gossip_items);
 
-    object->gossips = malloc(object->amount_of_gossip_items * sizeof(vanilla_GossipItem));
+    object->gossips = calloc(object->amount_of_gossip_items, sizeof(vanilla_GossipItem));
     if (object->gossips == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -13234,7 +18685,7 @@ static WowWorldResult vanilla_SMSG_GOSSIP_MESSAGE_read(WowWorldReader* reader, v
 
     READ_U32(object->amount_of_quests);
 
-    object->quests = malloc(object->amount_of_quests * sizeof(vanilla_QuestItem));
+    object->quests = calloc(object->amount_of_quests, sizeof(vanilla_QuestItem));
     if (object->quests == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -13242,9 +18693,19 @@ static WowWorldResult vanilla_SMSG_GOSSIP_MESSAGE_read(WowWorldReader* reader, v
 
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_GOSSIP_MESSAGE_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GOSSIP_MESSAGE_write(WowWorldWriter* writer, const vanilla_SMSG_GOSSIP_MESSAGE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_GOSSIP_MESSAGE_size(object) + 2); /* size */
 
     WRITE_U16(0x0000017d); /* opcode */
@@ -13263,41 +18724,51 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GOSSIP_MESSAGE_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GOSSIP_MESSAGE_free(vanilla_SMSG_GOSSIP_MESSAGE* object) {
-    size_t i;
-
-    for (i = 0; i < object->amount_of_gossip_items; ++i) {
-        vanilla_GossipItem_free(&((object->gossips)[i]));
-    }
-    free(object->gossips);
-    object->gossips = NULL;
-    for (i = 0; i < object->amount_of_quests; ++i) {
-        vanilla_QuestItem_free(&((object->quests)[i]));
-    }
-    free(object->quests);
-    object->quests = NULL;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GOSSIP_COMPLETE_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 2); /* size */
 
     WRITE_U16(0x0000017e); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_NPC_TEXT_QUERY_read(WowWorldReader* reader, vanilla_CMSG_NPC_TEXT_QUERY* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->text_id);
 
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_NPC_TEXT_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_NPC_TEXT_QUERY* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 4); /* size */
 
     WRITE_U32(0x0000017f); /* opcode */
@@ -13308,6 +18779,15 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_NPC_TEXT_QUERY_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_NPC_TEXT_UPDATE_free(vanilla_SMSG_NPC_TEXT_UPDATE* object) {
+    size_t i;
+
+    for (i = 0; i < 8; ++i) {
+        vanilla_NpcTextUpdate_free(&((object->texts)[i]));
+    }
 }
 
 static size_t vanilla_SMSG_NPC_TEXT_UPDATE_size(const vanilla_SMSG_NPC_TEXT_UPDATE* object) {
@@ -13324,14 +18804,32 @@ static size_t vanilla_SMSG_NPC_TEXT_UPDATE_size(const vanilla_SMSG_NPC_TEXT_UPDA
 }
 
 static WowWorldResult vanilla_SMSG_NPC_TEXT_UPDATE_read(WowWorldReader* reader, vanilla_SMSG_NPC_TEXT_UPDATE* object) {
+    int _return_value = 1;
+
+    if (276 > (reader->length - reader->index)) {
+        _return_value = (size_t)276 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+
     READ_U32(object->text_id);
 
     READ_ARRAY(object->texts, 8, WWM_CHECK_RETURN_CODE(vanilla_NpcTextUpdate_read(reader, &object->texts[i])));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_NPC_TEXT_UPDATE_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_NPC_TEXT_UPDATE_write(WowWorldWriter* writer, const vanilla_SMSG_NPC_TEXT_UPDATE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_NPC_TEXT_UPDATE_size(object) + 2); /* size */
 
     WRITE_U16(0x00000180); /* opcode */
@@ -13342,23 +18840,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_NPC_TEXT_UPDATE_write(Wo
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_NPC_TEXT_UPDATE_free(vanilla_SMSG_NPC_TEXT_UPDATE* object) {
-    size_t i;
-
-    for (i = 0; i < 8; ++i) {
-        vanilla_NpcTextUpdate_free(&((object->texts)[i]));
-    }
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_QUESTGIVER_STATUS_QUERY_read(WowWorldReader* reader, vanilla_CMSG_QUESTGIVER_STATUS_QUERY* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUESTGIVER_STATUS_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_QUESTGIVER_STATUS_QUERY* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x00000182); /* opcode */
@@ -13367,18 +18874,35 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUESTGIVER_STATUS_QUERY_
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_QUESTGIVER_STATUS_read(WowWorldReader* reader, vanilla_SMSG_QUESTGIVER_STATUS* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     object->status = 0;
     READ_U32(object->status);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTGIVER_STATUS_write(WowWorldWriter* writer, const vanilla_SMSG_QUESTGIVER_STATUS* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 2); /* size */
 
     WRITE_U16(0x00000183); /* opcode */
@@ -13389,15 +18913,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTGIVER_STATUS_write(
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_QUESTGIVER_HELLO_read(WowWorldReader* reader, vanilla_CMSG_QUESTGIVER_HELLO* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUESTGIVER_HELLO_write(WowWorldWriter* writer, const vanilla_CMSG_QUESTGIVER_HELLO* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x00000184); /* opcode */
@@ -13406,6 +18947,21 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUESTGIVER_HELLO_write(W
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_QUESTGIVER_QUEST_LIST_free(vanilla_SMSG_QUESTGIVER_QUEST_LIST* object) {
+    size_t i;
+
+    FREE_STRING(object->title);
+
+    if (object->quest_items != NULL) {
+        for (i = 0; i < object->amount_of_entries; ++i) {
+            vanilla_QuestItem_free(&((object->quest_items)[i]));
+        }
+        free(object->quest_items);
+        object->quest_items = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_QUESTGIVER_QUEST_LIST_size(const vanilla_SMSG_QUESTGIVER_QUEST_LIST* object) {
@@ -13422,6 +18978,16 @@ static size_t vanilla_SMSG_QUESTGIVER_QUEST_LIST_size(const vanilla_SMSG_QUESTGI
 }
 
 static WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_LIST_read(WowWorldReader* reader, vanilla_SMSG_QUESTGIVER_QUEST_LIST* object) {
+    int _return_value = 1;
+
+    if (18 > (reader->length - reader->index)) {
+        _return_value = (size_t)18 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->title = NULL;
+    object->quest_items = NULL;
+
     READ_U64(object->npc);
 
     READ_CSTRING(object->title);
@@ -13432,7 +18998,7 @@ static WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_LIST_read(WowWorldReader* re
 
     READ_U8(object->amount_of_entries);
 
-    object->quest_items = malloc(object->amount_of_entries * sizeof(vanilla_QuestItem));
+    object->quest_items = calloc(object->amount_of_entries, sizeof(vanilla_QuestItem));
     if (object->quest_items == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -13440,9 +19006,19 @@ static WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_LIST_read(WowWorldReader* re
 
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_QUESTGIVER_QUEST_LIST_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_LIST_write(WowWorldWriter* writer, const vanilla_SMSG_QUESTGIVER_QUEST_LIST* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_QUESTGIVER_QUEST_LIST_size(object) + 2); /* size */
 
     WRITE_U16(0x00000185); /* opcode */
@@ -13461,29 +19037,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_LIST_wr
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_QUESTGIVER_QUEST_LIST_free(vanilla_SMSG_QUESTGIVER_QUEST_LIST* object) {
-    size_t i;
-
-    FREE_STRING(object->title);
-
-    for (i = 0; i < object->amount_of_entries; ++i) {
-        vanilla_QuestItem_free(&((object->quest_items)[i]));
-    }
-    free(object->quest_items);
-    object->quest_items = NULL;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_QUESTGIVER_QUERY_QUEST_read(WowWorldReader* reader, vanilla_CMSG_QUESTGIVER_QUERY_QUEST* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_U32(object->quest_id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUESTGIVER_QUERY_QUEST_write(WowWorldWriter* writer, const vanilla_CMSG_QUESTGIVER_QUERY_QUEST* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 4); /* size */
 
     WRITE_U32(0x00000186); /* opcode */
@@ -13494,15 +19075,45 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUESTGIVER_QUERY_QUEST_w
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUESTGIVER_QUEST_AUTOLAUNCH_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x00000187); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_QUESTGIVER_QUEST_DETAILS_free(vanilla_SMSG_QUESTGIVER_QUEST_DETAILS* object) {
+    FREE_STRING(object->title);
+
+    FREE_STRING(object->details);
+
+    FREE_STRING(object->objectives);
+
+    if (object->choice_item_rewards != NULL) {
+        free(object->choice_item_rewards);
+        object->choice_item_rewards = NULL;
+    }
+    if (object->item_rewards != NULL) {
+        free(object->item_rewards);
+        object->item_rewards = NULL;
+    }
+    if (object->emotes != NULL) {
+        free(object->emotes);
+        object->emotes = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_QUESTGIVER_QUEST_DETAILS_size(const vanilla_SMSG_QUESTGIVER_QUEST_DETAILS* object) {
@@ -13510,6 +19121,20 @@ static size_t vanilla_SMSG_QUESTGIVER_QUEST_DETAILS_size(const vanilla_SMSG_QUES
 }
 
 static WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_DETAILS_read(WowWorldReader* reader, vanilla_SMSG_QUESTGIVER_QUEST_DETAILS* object) {
+    int _return_value = 1;
+
+    if (39 > (reader->length - reader->index)) {
+        _return_value = (size_t)39 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->title = NULL;
+    object->details = NULL;
+    object->objectives = NULL;
+    object->choice_item_rewards = NULL;
+    object->item_rewards = NULL;
+    object->emotes = NULL;
+
     READ_U64(object->guid);
 
     READ_U32(object->quest_id);
@@ -13524,7 +19149,7 @@ static WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_DETAILS_read(WowWorldReader*
 
     READ_U32(object->amount_of_choice_item_rewards);
 
-    object->choice_item_rewards = malloc(object->amount_of_choice_item_rewards * sizeof(vanilla_QuestItemReward));
+    object->choice_item_rewards = calloc(object->amount_of_choice_item_rewards, sizeof(vanilla_QuestItemReward));
     if (object->choice_item_rewards == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -13533,7 +19158,7 @@ static WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_DETAILS_read(WowWorldReader*
 
     READ_U32(object->amount_of_item_rewards);
 
-    object->item_rewards = malloc(object->amount_of_item_rewards * sizeof(vanilla_QuestItemReward));
+    object->item_rewards = calloc(object->amount_of_item_rewards, sizeof(vanilla_QuestItemReward));
     if (object->item_rewards == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -13546,7 +19171,7 @@ static WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_DETAILS_read(WowWorldReader*
 
     READ_U32(object->amount_of_emotes);
 
-    object->emotes = malloc(object->amount_of_emotes * sizeof(vanilla_QuestDetailsEmote));
+    object->emotes = calloc(object->amount_of_emotes, sizeof(vanilla_QuestDetailsEmote));
     if (object->emotes == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -13554,9 +19179,19 @@ static WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_DETAILS_read(WowWorldReader*
 
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_QUESTGIVER_QUEST_DETAILS_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_DETAILS_write(WowWorldWriter* writer, const vanilla_SMSG_QUESTGIVER_QUEST_DETAILS* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_QUESTGIVER_QUEST_DETAILS_size(object) + 2); /* size */
 
     WRITE_U16(0x00000188); /* opcode */
@@ -13591,32 +19226,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_DETAILS
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_QUESTGIVER_QUEST_DETAILS_free(vanilla_SMSG_QUESTGIVER_QUEST_DETAILS* object) {
-    FREE_STRING(object->title);
-
-    FREE_STRING(object->details);
-
-    FREE_STRING(object->objectives);
-
-    free(object->choice_item_rewards);
-    object->choice_item_rewards = NULL;
-    free(object->item_rewards);
-    object->item_rewards = NULL;
-    free(object->emotes);
-    object->emotes = NULL;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_QUESTGIVER_ACCEPT_QUEST_read(WowWorldReader* reader, vanilla_CMSG_QUESTGIVER_ACCEPT_QUEST* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_U32(object->quest_id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUESTGIVER_ACCEPT_QUEST_write(WowWorldWriter* writer, const vanilla_CMSG_QUESTGIVER_ACCEPT_QUEST* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 4); /* size */
 
     WRITE_U32(0x00000189); /* opcode */
@@ -13627,17 +19264,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUESTGIVER_ACCEPT_QUEST_
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_QUESTGIVER_COMPLETE_QUEST_read(WowWorldReader* reader, vanilla_CMSG_QUESTGIVER_COMPLETE_QUEST* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_U32(object->quest_id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUESTGIVER_COMPLETE_QUEST_write(WowWorldWriter* writer, const vanilla_CMSG_QUESTGIVER_COMPLETE_QUEST* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 4); /* size */
 
     WRITE_U32(0x0000018a); /* opcode */
@@ -13648,6 +19302,18 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUESTGIVER_COMPLETE_QUES
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_QUESTGIVER_REQUEST_ITEMS_free(vanilla_SMSG_QUESTGIVER_REQUEST_ITEMS* object) {
+    FREE_STRING(object->title);
+
+    FREE_STRING(object->request_items_text);
+
+    if (object->required_items != NULL) {
+        free(object->required_items);
+        object->required_items = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_QUESTGIVER_REQUEST_ITEMS_size(const vanilla_SMSG_QUESTGIVER_REQUEST_ITEMS* object) {
@@ -13655,6 +19321,17 @@ static size_t vanilla_SMSG_QUESTGIVER_REQUEST_ITEMS_size(const vanilla_SMSG_QUES
 }
 
 static WowWorldResult vanilla_SMSG_QUESTGIVER_REQUEST_ITEMS_read(WowWorldReader* reader, vanilla_SMSG_QUESTGIVER_REQUEST_ITEMS* object) {
+    int _return_value = 1;
+
+    if (50 > (reader->length - reader->index)) {
+        _return_value = (size_t)50 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->title = NULL;
+    object->request_items_text = NULL;
+    object->required_items = NULL;
+
     READ_U64(object->npc);
 
     READ_U32(object->quest_id);
@@ -13673,7 +19350,7 @@ static WowWorldResult vanilla_SMSG_QUESTGIVER_REQUEST_ITEMS_read(WowWorldReader*
 
     READ_U32(object->amount_of_required_items);
 
-    object->required_items = malloc(object->amount_of_required_items * sizeof(vanilla_QuestItemRequirement));
+    object->required_items = calloc(object->amount_of_required_items, sizeof(vanilla_QuestItemRequirement));
     if (object->required_items == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -13690,9 +19367,19 @@ static WowWorldResult vanilla_SMSG_QUESTGIVER_REQUEST_ITEMS_read(WowWorldReader*
     READ_U32(object->flags3);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_QUESTGIVER_REQUEST_ITEMS_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTGIVER_REQUEST_ITEMS_write(WowWorldWriter* writer, const vanilla_SMSG_QUESTGIVER_REQUEST_ITEMS* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_QUESTGIVER_REQUEST_ITEMS_size(object) + 2); /* size */
 
     WRITE_U16(0x0000018b); /* opcode */
@@ -13727,26 +19414,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTGIVER_REQUEST_ITEMS
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_QUESTGIVER_REQUEST_ITEMS_free(vanilla_SMSG_QUESTGIVER_REQUEST_ITEMS* object) {
-    FREE_STRING(object->title);
-
-    FREE_STRING(object->request_items_text);
-
-    free(object->required_items);
-    object->required_items = NULL;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_QUESTGIVER_REQUEST_REWARD_read(WowWorldReader* reader, vanilla_CMSG_QUESTGIVER_REQUEST_REWARD* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_U32(object->quest_id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUESTGIVER_REQUEST_REWARD_write(WowWorldWriter* writer, const vanilla_CMSG_QUESTGIVER_REQUEST_REWARD* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 4); /* size */
 
     WRITE_U32(0x0000018c); /* opcode */
@@ -13757,6 +19452,26 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUESTGIVER_REQUEST_REWAR
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_QUESTGIVER_OFFER_REWARD_free(vanilla_SMSG_QUESTGIVER_OFFER_REWARD* object) {
+    FREE_STRING(object->title);
+
+    FREE_STRING(object->offer_reward_text);
+
+    if (object->emotes != NULL) {
+        free(object->emotes);
+        object->emotes = NULL;
+    }
+    if (object->choice_item_rewards != NULL) {
+        free(object->choice_item_rewards);
+        object->choice_item_rewards = NULL;
+    }
+    if (object->item_rewards != NULL) {
+        free(object->item_rewards);
+        object->item_rewards = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_QUESTGIVER_OFFER_REWARD_size(const vanilla_SMSG_QUESTGIVER_OFFER_REWARD* object) {
@@ -13764,6 +19479,19 @@ static size_t vanilla_SMSG_QUESTGIVER_OFFER_REWARD_size(const vanilla_SMSG_QUEST
 }
 
 static WowWorldResult vanilla_SMSG_QUESTGIVER_OFFER_REWARD_read(WowWorldReader* reader, vanilla_SMSG_QUESTGIVER_OFFER_REWARD* object) {
+    int _return_value = 1;
+
+    if (42 > (reader->length - reader->index)) {
+        _return_value = (size_t)42 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->title = NULL;
+    object->offer_reward_text = NULL;
+    object->emotes = NULL;
+    object->choice_item_rewards = NULL;
+    object->item_rewards = NULL;
+
     READ_U64(object->npc);
 
     READ_U32(object->quest_id);
@@ -13776,7 +19504,7 @@ static WowWorldResult vanilla_SMSG_QUESTGIVER_OFFER_REWARD_read(WowWorldReader* 
 
     READ_U32(object->amount_of_emotes);
 
-    object->emotes = malloc(object->amount_of_emotes * sizeof(vanilla_NpcTextUpdateEmote));
+    object->emotes = calloc(object->amount_of_emotes, sizeof(vanilla_NpcTextUpdateEmote));
     if (object->emotes == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -13785,7 +19513,7 @@ static WowWorldResult vanilla_SMSG_QUESTGIVER_OFFER_REWARD_read(WowWorldReader* 
 
     READ_U32(object->amount_of_choice_item_rewards);
 
-    object->choice_item_rewards = malloc(object->amount_of_choice_item_rewards * sizeof(vanilla_QuestItemRequirement));
+    object->choice_item_rewards = calloc(object->amount_of_choice_item_rewards, sizeof(vanilla_QuestItemRequirement));
     if (object->choice_item_rewards == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -13794,7 +19522,7 @@ static WowWorldResult vanilla_SMSG_QUESTGIVER_OFFER_REWARD_read(WowWorldReader* 
 
     READ_U32(object->amount_of_item_rewards);
 
-    object->item_rewards = malloc(object->amount_of_item_rewards * sizeof(vanilla_QuestItemRequirement));
+    object->item_rewards = calloc(object->amount_of_item_rewards, sizeof(vanilla_QuestItemRequirement));
     if (object->item_rewards == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -13808,9 +19536,19 @@ static WowWorldResult vanilla_SMSG_QUESTGIVER_OFFER_REWARD_read(WowWorldReader* 
     READ_U32(object->reward_spell_cast);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_QUESTGIVER_OFFER_REWARD_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTGIVER_OFFER_REWARD_write(WowWorldWriter* writer, const vanilla_SMSG_QUESTGIVER_OFFER_REWARD* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_QUESTGIVER_OFFER_REWARD_size(object) + 2); /* size */
 
     WRITE_U16(0x0000018d); /* opcode */
@@ -13845,22 +19583,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTGIVER_OFFER_REWARD_
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_QUESTGIVER_OFFER_REWARD_free(vanilla_SMSG_QUESTGIVER_OFFER_REWARD* object) {
-    FREE_STRING(object->title);
-
-    FREE_STRING(object->offer_reward_text);
-
-    free(object->emotes);
-    object->emotes = NULL;
-    free(object->choice_item_rewards);
-    object->choice_item_rewards = NULL;
-    free(object->item_rewards);
-    object->item_rewards = NULL;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_QUESTGIVER_CHOOSE_REWARD_read(WowWorldReader* reader, vanilla_CMSG_QUESTGIVER_CHOOSE_REWARD* object) {
+    int _return_value = 1;
+
+    if (16 > (reader->length - reader->index)) {
+        _return_value = (size_t)16 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_U32(object->quest_id);
@@ -13868,9 +19601,18 @@ static WowWorldResult vanilla_CMSG_QUESTGIVER_CHOOSE_REWARD_read(WowWorldReader*
     READ_U32(object->reward);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUESTGIVER_CHOOSE_REWARD_write(WowWorldWriter* writer, const vanilla_CMSG_QUESTGIVER_CHOOSE_REWARD* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0010 + 4); /* size */
 
     WRITE_U32(0x0000018e); /* opcode */
@@ -13883,16 +19625,33 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUESTGIVER_CHOOSE_REWARD
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_INVALID_read(WowWorldReader* reader, vanilla_SMSG_QUESTGIVER_QUEST_INVALID* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->msg = 0;
     READ_U32(object->msg);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_INVALID_write(WowWorldWriter* writer, const vanilla_SMSG_QUESTGIVER_QUEST_INVALID* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 2); /* size */
 
     WRITE_U16(0x0000018f); /* opcode */
@@ -13901,15 +19660,31 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_INVALID
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUESTGIVER_CANCEL_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x00000190); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_QUESTGIVER_QUEST_COMPLETE_free(vanilla_SMSG_QUESTGIVER_QUEST_COMPLETE* object) {
+    if (object->item_rewards != NULL) {
+        free(object->item_rewards);
+        object->item_rewards = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_QUESTGIVER_QUEST_COMPLETE_size(const vanilla_SMSG_QUESTGIVER_QUEST_COMPLETE* object) {
@@ -13917,6 +19692,15 @@ static size_t vanilla_SMSG_QUESTGIVER_QUEST_COMPLETE_size(const vanilla_SMSG_QUE
 }
 
 static WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_COMPLETE_read(WowWorldReader* reader, vanilla_SMSG_QUESTGIVER_QUEST_COMPLETE* object) {
+    int _return_value = 1;
+
+    if (20 > (reader->length - reader->index)) {
+        _return_value = (size_t)20 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->item_rewards = NULL;
+
     READ_U32(object->quest_id);
 
     READ_U32(object->unknown);
@@ -13927,7 +19711,7 @@ static WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_COMPLETE_read(WowWorldReader
 
     READ_U32(object->amount_of_item_rewards);
 
-    object->item_rewards = malloc(object->amount_of_item_rewards * sizeof(vanilla_QuestItemReward));
+    object->item_rewards = calloc(object->amount_of_item_rewards, sizeof(vanilla_QuestItemReward));
     if (object->item_rewards == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -13935,9 +19719,19 @@ static WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_COMPLETE_read(WowWorldReader
 
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_QUESTGIVER_QUEST_COMPLETE_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_COMPLETE_write(WowWorldWriter* writer, const vanilla_SMSG_QUESTGIVER_QUEST_COMPLETE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_QUESTGIVER_QUEST_COMPLETE_size(object) + 2); /* size */
 
     WRITE_U16(0x00000191); /* opcode */
@@ -13956,23 +19750,35 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_COMPLET
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_QUESTGIVER_QUEST_COMPLETE_free(vanilla_SMSG_QUESTGIVER_QUEST_COMPLETE* object) {
-    free(object->item_rewards);
-    object->item_rewards = NULL;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_FAILED_read(WowWorldReader* reader, vanilla_SMSG_QUESTGIVER_QUEST_FAILED* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->quest_id);
 
     object->reason = 0;
     READ_U32(object->reason);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_FAILED_write(WowWorldWriter* writer, const vanilla_SMSG_QUESTGIVER_QUEST_FAILED* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 2); /* size */
 
     WRITE_U16(0x00000192); /* opcode */
@@ -13983,17 +19789,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_FAILED_
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_QUESTLOG_SWAP_QUEST_read(WowWorldReader* reader, vanilla_CMSG_QUESTLOG_SWAP_QUEST* object) {
+    int _return_value = 1;
+
+    if (2 > (reader->length - reader->index)) {
+        _return_value = (size_t)2 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U8(object->slot1);
 
     READ_U8(object->slot2);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUESTLOG_SWAP_QUEST_write(WowWorldWriter* writer, const vanilla_CMSG_QUESTLOG_SWAP_QUEST* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0002 + 4); /* size */
 
     WRITE_U32(0x00000193); /* opcode */
@@ -14004,15 +19827,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUESTLOG_SWAP_QUEST_writ
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_QUESTLOG_REMOVE_QUEST_read(WowWorldReader* reader, vanilla_CMSG_QUESTLOG_REMOVE_QUEST* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U8(object->slot);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUESTLOG_REMOVE_QUEST_write(WowWorldWriter* writer, const vanilla_CMSG_QUESTLOG_REMOVE_QUEST* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0001 + 4); /* size */
 
     WRITE_U32(0x00000194); /* opcode */
@@ -14021,24 +19861,49 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUESTLOG_REMOVE_QUEST_wr
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTLOG_FULL_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 2); /* size */
 
     WRITE_U16(0x00000195); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_QUESTUPDATE_FAILED_read(WowWorldReader* reader, vanilla_SMSG_QUESTUPDATE_FAILED* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->quest_id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTUPDATE_FAILED_write(WowWorldWriter* writer, const vanilla_SMSG_QUESTUPDATE_FAILED* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 2); /* size */
 
     WRITE_U16(0x00000196); /* opcode */
@@ -14047,15 +19912,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTUPDATE_FAILED_write
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_QUESTUPDATE_FAILEDTIMER_read(WowWorldReader* reader, vanilla_SMSG_QUESTUPDATE_FAILEDTIMER* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->quest_id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTUPDATE_FAILEDTIMER_write(WowWorldWriter* writer, const vanilla_SMSG_QUESTUPDATE_FAILEDTIMER* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 2); /* size */
 
     WRITE_U16(0x00000197); /* opcode */
@@ -14064,15 +19946,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTUPDATE_FAILEDTIMER_
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_QUESTUPDATE_COMPLETE_read(WowWorldReader* reader, vanilla_SMSG_QUESTUPDATE_COMPLETE* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->quest_id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTUPDATE_COMPLETE_write(WowWorldWriter* writer, const vanilla_SMSG_QUESTUPDATE_COMPLETE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 2); /* size */
 
     WRITE_U16(0x00000198); /* opcode */
@@ -14081,9 +19980,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTUPDATE_COMPLETE_wri
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_QUESTUPDATE_ADD_KILL_read(WowWorldReader* reader, vanilla_SMSG_QUESTUPDATE_ADD_KILL* object) {
+    int _return_value = 1;
+
+    if (24 > (reader->length - reader->index)) {
+        _return_value = (size_t)24 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->quest_id);
 
     READ_U32(object->creature_id);
@@ -14095,9 +20002,18 @@ static WowWorldResult vanilla_SMSG_QUESTUPDATE_ADD_KILL_read(WowWorldReader* rea
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTUPDATE_ADD_KILL_write(WowWorldWriter* writer, const vanilla_SMSG_QUESTUPDATE_ADD_KILL* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0018 + 2); /* size */
 
     WRITE_U16(0x00000199); /* opcode */
@@ -14114,17 +20030,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTUPDATE_ADD_KILL_wri
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_QUESTUPDATE_ADD_ITEM_read(WowWorldReader* reader, vanilla_SMSG_QUESTUPDATE_ADD_ITEM* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->required_item_id);
 
     READ_U32(object->items_required);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTUPDATE_ADD_ITEM_write(WowWorldWriter* writer, const vanilla_SMSG_QUESTUPDATE_ADD_ITEM* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 2); /* size */
 
     WRITE_U16(0x0000019a); /* opcode */
@@ -14135,15 +20068,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUESTUPDATE_ADD_ITEM_wri
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_QUEST_CONFIRM_ACCEPT_read(WowWorldReader* reader, vanilla_CMSG_QUEST_CONFIRM_ACCEPT* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->quest_id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUEST_CONFIRM_ACCEPT_write(WowWorldWriter* writer, const vanilla_CMSG_QUEST_CONFIRM_ACCEPT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 4); /* size */
 
     WRITE_U32(0x0000019b); /* opcode */
@@ -14152,6 +20102,12 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUEST_CONFIRM_ACCEPT_wri
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_QUEST_CONFIRM_ACCEPT_free(vanilla_SMSG_QUEST_CONFIRM_ACCEPT* object) {
+    FREE_STRING(object->quest_title);
+
 }
 
 static size_t vanilla_SMSG_QUEST_CONFIRM_ACCEPT_size(const vanilla_SMSG_QUEST_CONFIRM_ACCEPT* object) {
@@ -14159,6 +20115,15 @@ static size_t vanilla_SMSG_QUEST_CONFIRM_ACCEPT_size(const vanilla_SMSG_QUEST_CO
 }
 
 static WowWorldResult vanilla_SMSG_QUEST_CONFIRM_ACCEPT_read(WowWorldReader* reader, vanilla_SMSG_QUEST_CONFIRM_ACCEPT* object) {
+    int _return_value = 1;
+
+    if (13 > (reader->length - reader->index)) {
+        _return_value = (size_t)13 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->quest_title = NULL;
+
     READ_U32(object->quest_id);
 
     READ_CSTRING(object->quest_title);
@@ -14166,9 +20131,19 @@ static WowWorldResult vanilla_SMSG_QUEST_CONFIRM_ACCEPT_read(WowWorldReader* rea
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_QUEST_CONFIRM_ACCEPT_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUEST_CONFIRM_ACCEPT_write(WowWorldWriter* writer, const vanilla_SMSG_QUEST_CONFIRM_ACCEPT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_QUEST_CONFIRM_ACCEPT_size(object) + 2); /* size */
 
     WRITE_U16(0x0000019c); /* opcode */
@@ -14181,20 +20156,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUEST_CONFIRM_ACCEPT_wri
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_QUEST_CONFIRM_ACCEPT_free(vanilla_SMSG_QUEST_CONFIRM_ACCEPT* object) {
-    FREE_STRING(object->quest_title);
-
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_PUSHQUESTTOPARTY_read(WowWorldReader* reader, vanilla_CMSG_PUSHQUESTTOPARTY* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->quest_id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PUSHQUESTTOPARTY_write(WowWorldWriter* writer, const vanilla_CMSG_PUSHQUESTTOPARTY* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 4); /* size */
 
     WRITE_U32(0x0000019d); /* opcode */
@@ -14203,15 +20190,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PUSHQUESTTOPARTY_write(W
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_LIST_INVENTORY_read(WowWorldReader* reader, vanilla_CMSG_LIST_INVENTORY* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_LIST_INVENTORY_write(WowWorldWriter* writer, const vanilla_CMSG_LIST_INVENTORY* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x0000019e); /* opcode */
@@ -14220,6 +20224,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_LIST_INVENTORY_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_LIST_INVENTORY_free(vanilla_SMSG_LIST_INVENTORY* object) {
+    if (object->items != NULL) {
+        free(object->items);
+        object->items = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_LIST_INVENTORY_size(const vanilla_SMSG_LIST_INVENTORY* object) {
@@ -14227,11 +20239,20 @@ static size_t vanilla_SMSG_LIST_INVENTORY_size(const vanilla_SMSG_LIST_INVENTORY
 }
 
 static WowWorldResult vanilla_SMSG_LIST_INVENTORY_read(WowWorldReader* reader, vanilla_SMSG_LIST_INVENTORY* object) {
+    int _return_value = 1;
+
+    if (9 > (reader->length - reader->index)) {
+        _return_value = (size_t)9 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->items = NULL;
+
     READ_U64(object->vendor);
 
     READ_U8(object->amount_of_items);
 
-    object->items = malloc(object->amount_of_items * sizeof(vanilla_ListInventoryItem));
+    object->items = calloc(object->amount_of_items, sizeof(vanilla_ListInventoryItem));
     if (object->items == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -14239,9 +20260,19 @@ static WowWorldResult vanilla_SMSG_LIST_INVENTORY_read(WowWorldReader* reader, v
 
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_LIST_INVENTORY_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LIST_INVENTORY_write(WowWorldWriter* writer, const vanilla_SMSG_LIST_INVENTORY* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_LIST_INVENTORY_size(object) + 2); /* size */
 
     WRITE_U16(0x0000019f); /* opcode */
@@ -14254,14 +20285,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LIST_INVENTORY_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_LIST_INVENTORY_free(vanilla_SMSG_LIST_INVENTORY* object) {
-    free(object->items);
-    object->items = NULL;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_SELL_ITEM_read(WowWorldReader* reader, vanilla_CMSG_SELL_ITEM* object) {
+    int _return_value = 1;
+
+    if (17 > (reader->length - reader->index)) {
+        _return_value = (size_t)17 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->vendor);
 
     READ_U64(object->item);
@@ -14269,9 +20303,18 @@ static WowWorldResult vanilla_CMSG_SELL_ITEM_read(WowWorldReader* reader, vanill
     READ_U8(object->amount);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SELL_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_SELL_ITEM* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0011 + 4); /* size */
 
     WRITE_U32(0x000001a0); /* opcode */
@@ -14284,9 +20327,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SELL_ITEM_write(WowWorld
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_SELL_ITEM_read(WowWorldReader* reader, vanilla_SMSG_SELL_ITEM* object) {
+    int _return_value = 1;
+
+    if (17 > (reader->length - reader->index)) {
+        _return_value = (size_t)17 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_U64(object->item);
@@ -14295,9 +20346,18 @@ static WowWorldResult vanilla_SMSG_SELL_ITEM_read(WowWorldReader* reader, vanill
     READ_U8(object->result);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SELL_ITEM_write(WowWorldWriter* writer, const vanilla_SMSG_SELL_ITEM* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0011 + 2); /* size */
 
     WRITE_U16(0x000001a1); /* opcode */
@@ -14310,9 +20370,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SELL_ITEM_write(WowWorld
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_BUY_ITEM_read(WowWorldReader* reader, vanilla_CMSG_BUY_ITEM* object) {
+    int _return_value = 1;
+
+    if (14 > (reader->length - reader->index)) {
+        _return_value = (size_t)14 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->vendor);
 
     READ_U32(object->item);
@@ -14322,9 +20390,18 @@ static WowWorldResult vanilla_CMSG_BUY_ITEM_read(WowWorldReader* reader, vanilla
     READ_U8(object->unknown1);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BUY_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_BUY_ITEM* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000e + 4); /* size */
 
     WRITE_U32(0x000001a2); /* opcode */
@@ -14339,9 +20416,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BUY_ITEM_write(WowWorldW
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_BUY_ITEM_IN_SLOT_read(WowWorldReader* reader, vanilla_CMSG_BUY_ITEM_IN_SLOT* object) {
+    int _return_value = 1;
+
+    if (22 > (reader->length - reader->index)) {
+        _return_value = (size_t)22 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->vendor);
 
     READ_U32(object->item);
@@ -14353,9 +20438,18 @@ static WowWorldResult vanilla_CMSG_BUY_ITEM_IN_SLOT_read(WowWorldReader* reader,
     READ_U8(object->amount);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BUY_ITEM_IN_SLOT_write(WowWorldWriter* writer, const vanilla_CMSG_BUY_ITEM_IN_SLOT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0016 + 4); /* size */
 
     WRITE_U32(0x000001a3); /* opcode */
@@ -14372,9 +20466,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BUY_ITEM_IN_SLOT_write(W
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_BUY_ITEM_read(WowWorldReader* reader, vanilla_SMSG_BUY_ITEM* object) {
+    int _return_value = 1;
+
+    if (20 > (reader->length - reader->index)) {
+        _return_value = (size_t)20 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_U32(object->vendor_slot);
@@ -14384,9 +20486,18 @@ static WowWorldResult vanilla_SMSG_BUY_ITEM_read(WowWorldReader* reader, vanilla
     READ_U32(object->amount_bought);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_BUY_ITEM_write(WowWorldWriter* writer, const vanilla_SMSG_BUY_ITEM* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0014 + 2); /* size */
 
     WRITE_U16(0x000001a4); /* opcode */
@@ -14401,9 +20512,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_BUY_ITEM_write(WowWorldW
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_BUY_FAILED_read(WowWorldReader* reader, vanilla_SMSG_BUY_FAILED* object) {
+    int _return_value = 1;
+
+    if (13 > (reader->length - reader->index)) {
+        _return_value = (size_t)13 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_U32(object->item);
@@ -14412,9 +20531,18 @@ static WowWorldResult vanilla_SMSG_BUY_FAILED_read(WowWorldReader* reader, vanil
     READ_U8(object->result);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_BUY_FAILED_write(WowWorldWriter* writer, const vanilla_SMSG_BUY_FAILED* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000d + 2); /* size */
 
     WRITE_U16(0x000001a5); /* opcode */
@@ -14427,6 +20555,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_BUY_FAILED_write(WowWorl
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_SHOWTAXINODES_free(vanilla_SMSG_SHOWTAXINODES* object) {
+    if (object->nodes != NULL) {
+        free(object->nodes);
+        object->nodes = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_SHOWTAXINODES_size(const vanilla_SMSG_SHOWTAXINODES* object) {
@@ -14434,7 +20570,16 @@ static size_t vanilla_SMSG_SHOWTAXINODES_size(const vanilla_SMSG_SHOWTAXINODES* 
 }
 
 static WowWorldResult vanilla_SMSG_SHOWTAXINODES_read(WowWorldReader* reader, vanilla_SMSG_SHOWTAXINODES* object, size_t body_size) {
+    int _return_value = 1;
+
     size_t _size = 0;
+
+    if (16 > (reader->length - reader->index)) {
+        _return_value = (size_t)16 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->nodes = NULL;
 
     READ_U32(object->unknown1);
     _size += 4;
@@ -14452,7 +20597,8 @@ static WowWorldResult vanilla_SMSG_SHOWTAXINODES_read(WowWorldReader* reader, va
 
         object->nodes = malloc(_current_size);
         if (object->nodes == NULL) {
-            return WWM_RESULT_MALLOC_FAIL;
+            _return_value = WWM_RESULT_MALLOC_FAIL;
+            goto cleanup;
         }
         while (_size < body_size) {
             READ_U32(object->nodes[i]);
@@ -14464,7 +20610,8 @@ static WowWorldResult vanilla_SMSG_SHOWTAXINODES_read(WowWorldReader* reader, va
                 object->nodes = realloc(object->nodes, _current_size);
                 if (object->nodes == NULL) {
                     free(object->nodes);
-                    return WWM_RESULT_MALLOC_FAIL;
+                    _return_value = WWM_RESULT_MALLOC_FAIL;
+                    goto cleanup;
                 }
             }
         }
@@ -14473,9 +20620,19 @@ static WowWorldResult vanilla_SMSG_SHOWTAXINODES_read(WowWorldReader* reader, va
     }
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_SHOWTAXINODES_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SHOWTAXINODES_write(WowWorldWriter* writer, const vanilla_SMSG_SHOWTAXINODES* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_SHOWTAXINODES_size(object) + 2); /* size */
 
     WRITE_U16(0x000001a9); /* opcode */
@@ -14490,20 +20647,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SHOWTAXINODES_write(WowW
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_SHOWTAXINODES_free(vanilla_SMSG_SHOWTAXINODES* object) {
-    free(object->nodes);
-    object->nodes = NULL;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_TAXINODE_STATUS_QUERY_read(WowWorldReader* reader, vanilla_CMSG_TAXINODE_STATUS_QUERY* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_TAXINODE_STATUS_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_TAXINODE_STATUS_QUERY* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x000001aa); /* opcode */
@@ -14512,17 +20681,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_TAXINODE_STATUS_QUERY_wr
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_TAXINODE_STATUS_read(WowWorldReader* reader, vanilla_SMSG_TAXINODE_STATUS* object) {
+    int _return_value = 1;
+
+    if (9 > (reader->length - reader->index)) {
+        _return_value = (size_t)9 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_BOOL8(object->taxi_mask_node_known);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TAXINODE_STATUS_write(WowWorldWriter* writer, const vanilla_SMSG_TAXINODE_STATUS* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0009 + 2); /* size */
 
     WRITE_U16(0x000001ab); /* opcode */
@@ -14533,15 +20719,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TAXINODE_STATUS_write(Wo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_TAXIQUERYAVAILABLENODES_read(WowWorldReader* reader, vanilla_CMSG_TAXIQUERYAVAILABLENODES* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_TAXIQUERYAVAILABLENODES_write(WowWorldWriter* writer, const vanilla_CMSG_TAXIQUERYAVAILABLENODES* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x000001ac); /* opcode */
@@ -14550,9 +20753,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_TAXIQUERYAVAILABLENODES_
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_ACTIVATETAXI_read(WowWorldReader* reader, vanilla_CMSG_ACTIVATETAXI* object) {
+    int _return_value = 1;
+
+    if (16 > (reader->length - reader->index)) {
+        _return_value = (size_t)16 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_U32(object->source_node);
@@ -14560,9 +20771,18 @@ static WowWorldResult vanilla_CMSG_ACTIVATETAXI_read(WowWorldReader* reader, van
     READ_U32(object->destination_node);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_ACTIVATETAXI_write(WowWorldWriter* writer, const vanilla_CMSG_ACTIVATETAXI* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0010 + 4); /* size */
 
     WRITE_U32(0x000001ad); /* opcode */
@@ -14575,16 +20795,33 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_ACTIVATETAXI_write(WowWo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_ACTIVATETAXIREPLY_read(WowWorldReader* reader, vanilla_SMSG_ACTIVATETAXIREPLY* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->reply = 0;
     READ_U32(object->reply);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ACTIVATETAXIREPLY_write(WowWorldWriter* writer, const vanilla_SMSG_ACTIVATETAXIREPLY* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 2); /* size */
 
     WRITE_U16(0x000001ae); /* opcode */
@@ -14593,24 +20830,49 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ACTIVATETAXIREPLY_write(
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_NEW_TAXI_PATH_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 2); /* size */
 
     WRITE_U16(0x000001af); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_TRAINER_LIST_read(WowWorldReader* reader, vanilla_CMSG_TRAINER_LIST* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_TRAINER_LIST_write(WowWorldWriter* writer, const vanilla_CMSG_TRAINER_LIST* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x000001b0); /* opcode */
@@ -14619,6 +20881,16 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_TRAINER_LIST_write(WowWo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_TRAINER_LIST_free(vanilla_SMSG_TRAINER_LIST* object) {
+    if (object->spells != NULL) {
+        free(object->spells);
+        object->spells = NULL;
+    }
+    FREE_STRING(object->greeting);
+
 }
 
 static size_t vanilla_SMSG_TRAINER_LIST_size(const vanilla_SMSG_TRAINER_LIST* object) {
@@ -14626,13 +20898,23 @@ static size_t vanilla_SMSG_TRAINER_LIST_size(const vanilla_SMSG_TRAINER_LIST* ob
 }
 
 static WowWorldResult vanilla_SMSG_TRAINER_LIST_read(WowWorldReader* reader, vanilla_SMSG_TRAINER_LIST* object) {
+    int _return_value = 1;
+
+    if (17 > (reader->length - reader->index)) {
+        _return_value = (size_t)17 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->spells = NULL;
+    object->greeting = NULL;
+
     READ_U64(object->guid);
 
     READ_U32(object->trainer_type);
 
     READ_U32(object->amount_of_spells);
 
-    object->spells = malloc(object->amount_of_spells * sizeof(vanilla_TrainerSpell));
+    object->spells = calloc(object->amount_of_spells, sizeof(vanilla_TrainerSpell));
     if (object->spells == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -14642,9 +20924,19 @@ static WowWorldResult vanilla_SMSG_TRAINER_LIST_read(WowWorldReader* reader, van
     READ_CSTRING(object->greeting);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_TRAINER_LIST_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TRAINER_LIST_write(WowWorldWriter* writer, const vanilla_SMSG_TRAINER_LIST* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_TRAINER_LIST_size(object) + 2); /* size */
 
     WRITE_U16(0x000001b1); /* opcode */
@@ -14661,24 +20953,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TRAINER_LIST_write(WowWo
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_TRAINER_LIST_free(vanilla_SMSG_TRAINER_LIST* object) {
-    free(object->spells);
-    object->spells = NULL;
-    FREE_STRING(object->greeting);
-
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_TRAINER_BUY_SPELL_read(WowWorldReader* reader, vanilla_CMSG_TRAINER_BUY_SPELL* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_U32(object->id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_TRAINER_BUY_SPELL_write(WowWorldWriter* writer, const vanilla_CMSG_TRAINER_BUY_SPELL* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 4); /* size */
 
     WRITE_U32(0x000001b2); /* opcode */
@@ -14689,17 +20991,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_TRAINER_BUY_SPELL_write(
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_TRAINER_BUY_SUCCEEDED_read(WowWorldReader* reader, vanilla_SMSG_TRAINER_BUY_SUCCEEDED* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_U32(object->id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TRAINER_BUY_SUCCEEDED_write(WowWorldWriter* writer, const vanilla_SMSG_TRAINER_BUY_SUCCEEDED* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 2); /* size */
 
     WRITE_U16(0x000001b3); /* opcode */
@@ -14710,9 +21029,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TRAINER_BUY_SUCCEEDED_wr
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_TRAINER_BUY_FAILED_read(WowWorldReader* reader, vanilla_SMSG_TRAINER_BUY_FAILED* object) {
+    int _return_value = 1;
+
+    if (16 > (reader->length - reader->index)) {
+        _return_value = (size_t)16 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_U32(object->id);
@@ -14721,9 +21048,18 @@ static WowWorldResult vanilla_SMSG_TRAINER_BUY_FAILED_read(WowWorldReader* reade
     READ_U32(object->error);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TRAINER_BUY_FAILED_write(WowWorldWriter* writer, const vanilla_SMSG_TRAINER_BUY_FAILED* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0010 + 2); /* size */
 
     WRITE_U16(0x000001b4); /* opcode */
@@ -14736,15 +21072,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TRAINER_BUY_FAILED_write
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_BINDER_ACTIVATE_read(WowWorldReader* reader, vanilla_CMSG_BINDER_ACTIVATE* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BINDER_ACTIVATE_write(WowWorldWriter* writer, const vanilla_CMSG_BINDER_ACTIVATE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x000001b5); /* opcode */
@@ -14753,15 +21106,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BINDER_ACTIVATE_write(Wo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_BANKER_ACTIVATE_read(WowWorldReader* reader, vanilla_CMSG_BANKER_ACTIVATE* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BANKER_ACTIVATE_write(WowWorldWriter* writer, const vanilla_CMSG_BANKER_ACTIVATE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x000001b7); /* opcode */
@@ -14770,15 +21140,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BANKER_ACTIVATE_write(Wo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_SHOW_BANK_read(WowWorldReader* reader, vanilla_SMSG_SHOW_BANK* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SHOW_BANK_write(WowWorldWriter* writer, const vanilla_SMSG_SHOW_BANK* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 2); /* size */
 
     WRITE_U16(0x000001b8); /* opcode */
@@ -14787,15 +21174,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SHOW_BANK_write(WowWorld
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_BUY_BANK_SLOT_read(WowWorldReader* reader, vanilla_CMSG_BUY_BANK_SLOT* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BUY_BANK_SLOT_write(WowWorldWriter* writer, const vanilla_CMSG_BUY_BANK_SLOT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x000001b9); /* opcode */
@@ -14804,16 +21208,33 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BUY_BANK_SLOT_write(WowW
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_BUY_BANK_SLOT_RESULT_read(WowWorldReader* reader, vanilla_SMSG_BUY_BANK_SLOT_RESULT* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->result = 0;
     READ_U32(object->result);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_BUY_BANK_SLOT_RESULT_write(WowWorldWriter* writer, const vanilla_SMSG_BUY_BANK_SLOT_RESULT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 2); /* size */
 
     WRITE_U16(0x000001ba); /* opcode */
@@ -14822,15 +21243,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_BUY_BANK_SLOT_RESULT_wri
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_PETITION_SHOWLIST_read(WowWorldReader* reader, vanilla_CMSG_PETITION_SHOWLIST* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PETITION_SHOWLIST_write(WowWorldWriter* writer, const vanilla_CMSG_PETITION_SHOWLIST* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x000001bb); /* opcode */
@@ -14839,6 +21277,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PETITION_SHOWLIST_write(
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_PETITION_SHOWLIST_free(vanilla_SMSG_PETITION_SHOWLIST* object) {
+    if (object->petitions != NULL) {
+        free(object->petitions);
+        object->petitions = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_PETITION_SHOWLIST_size(const vanilla_SMSG_PETITION_SHOWLIST* object) {
@@ -14846,11 +21292,20 @@ static size_t vanilla_SMSG_PETITION_SHOWLIST_size(const vanilla_SMSG_PETITION_SH
 }
 
 static WowWorldResult vanilla_SMSG_PETITION_SHOWLIST_read(WowWorldReader* reader, vanilla_SMSG_PETITION_SHOWLIST* object) {
+    int _return_value = 1;
+
+    if (9 > (reader->length - reader->index)) {
+        _return_value = (size_t)9 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->petitions = NULL;
+
     READ_U64(object->npc);
 
     READ_U8(object->amount_of_petitions);
 
-    object->petitions = malloc(object->amount_of_petitions * sizeof(vanilla_PetitionShowlist));
+    object->petitions = calloc(object->amount_of_petitions, sizeof(vanilla_PetitionShowlist));
     if (object->petitions == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -14858,9 +21313,19 @@ static WowWorldResult vanilla_SMSG_PETITION_SHOWLIST_read(WowWorldReader* reader
 
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_PETITION_SHOWLIST_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PETITION_SHOWLIST_write(WowWorldWriter* writer, const vanilla_SMSG_PETITION_SHOWLIST* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_PETITION_SHOWLIST_size(object) + 2); /* size */
 
     WRITE_U16(0x000001bc); /* opcode */
@@ -14873,11 +21338,12 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PETITION_SHOWLIST_write(
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_PETITION_SHOWLIST_free(vanilla_SMSG_PETITION_SHOWLIST* object) {
-    free(object->petitions);
-    object->petitions = NULL;
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_PETITION_BUY_free(vanilla_CMSG_PETITION_BUY* object) {
+    FREE_STRING(object->name);
+
 }
 
 static size_t vanilla_CMSG_PETITION_BUY_size(const vanilla_CMSG_PETITION_BUY* object) {
@@ -14885,6 +21351,15 @@ static size_t vanilla_CMSG_PETITION_BUY_size(const vanilla_CMSG_PETITION_BUY* ob
 }
 
 static WowWorldResult vanilla_CMSG_PETITION_BUY_read(WowWorldReader* reader, vanilla_CMSG_PETITION_BUY* object) {
+    int _return_value = 1;
+
+    if (72 > (reader->length - reader->index)) {
+        _return_value = (size_t)72 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->name = NULL;
+
     READ_U64(object->npc);
 
     READ_U32(object->unknown1);
@@ -14922,9 +21397,19 @@ static WowWorldResult vanilla_CMSG_PETITION_BUY_read(WowWorldReader* reader, van
     READ_U32(object->unknown15);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_PETITION_BUY_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PETITION_BUY_write(WowWorldWriter* writer, const vanilla_CMSG_PETITION_BUY* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_PETITION_BUY_size(object) + 4); /* size */
 
     WRITE_U32(0x000001bd); /* opcode */
@@ -14967,20 +21452,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PETITION_BUY_write(WowWo
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_PETITION_BUY_free(vanilla_CMSG_PETITION_BUY* object) {
-    FREE_STRING(object->name);
-
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_PETITION_SHOW_SIGNATURES_read(WowWorldReader* reader, vanilla_CMSG_PETITION_SHOW_SIGNATURES* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->item);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PETITION_SHOW_SIGNATURES_write(WowWorldWriter* writer, const vanilla_CMSG_PETITION_SHOW_SIGNATURES* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x000001be); /* opcode */
@@ -14989,6 +21486,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PETITION_SHOW_SIGNATURES
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_PETITION_SHOW_SIGNATURES_free(vanilla_SMSG_PETITION_SHOW_SIGNATURES* object) {
+    if (object->signatures != NULL) {
+        free(object->signatures);
+        object->signatures = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_PETITION_SHOW_SIGNATURES_size(const vanilla_SMSG_PETITION_SHOW_SIGNATURES* object) {
@@ -14996,6 +21501,15 @@ static size_t vanilla_SMSG_PETITION_SHOW_SIGNATURES_size(const vanilla_SMSG_PETI
 }
 
 static WowWorldResult vanilla_SMSG_PETITION_SHOW_SIGNATURES_read(WowWorldReader* reader, vanilla_SMSG_PETITION_SHOW_SIGNATURES* object) {
+    int _return_value = 1;
+
+    if (21 > (reader->length - reader->index)) {
+        _return_value = (size_t)21 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->signatures = NULL;
+
     READ_U64(object->item);
 
     READ_U64(object->owner);
@@ -15004,7 +21518,7 @@ static WowWorldResult vanilla_SMSG_PETITION_SHOW_SIGNATURES_read(WowWorldReader*
 
     READ_U8(object->amount_of_signatures);
 
-    object->signatures = malloc(object->amount_of_signatures * sizeof(vanilla_PetitionSignature));
+    object->signatures = calloc(object->amount_of_signatures, sizeof(vanilla_PetitionSignature));
     if (object->signatures == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -15012,9 +21526,19 @@ static WowWorldResult vanilla_SMSG_PETITION_SHOW_SIGNATURES_read(WowWorldReader*
 
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_PETITION_SHOW_SIGNATURES_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PETITION_SHOW_SIGNATURES_write(WowWorldWriter* writer, const vanilla_SMSG_PETITION_SHOW_SIGNATURES* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_PETITION_SHOW_SIGNATURES_size(object) + 2); /* size */
 
     WRITE_U16(0x000001bf); /* opcode */
@@ -15031,22 +21555,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PETITION_SHOW_SIGNATURES
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_PETITION_SHOW_SIGNATURES_free(vanilla_SMSG_PETITION_SHOW_SIGNATURES* object) {
-    free(object->signatures);
-    object->signatures = NULL;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_PETITION_SIGN_read(WowWorldReader* reader, vanilla_CMSG_PETITION_SIGN* object) {
+    int _return_value = 1;
+
+    if (9 > (reader->length - reader->index)) {
+        _return_value = (size_t)9 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->petition);
 
     READ_U8(object->unknown1);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PETITION_SIGN_write(WowWorldWriter* writer, const vanilla_CMSG_PETITION_SIGN* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0009 + 4); /* size */
 
     WRITE_U32(0x000001c0); /* opcode */
@@ -15057,9 +21593,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PETITION_SIGN_write(WowW
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_PETITION_SIGN_RESULTS_read(WowWorldReader* reader, vanilla_SMSG_PETITION_SIGN_RESULTS* object) {
+    int _return_value = 1;
+
+    if (20 > (reader->length - reader->index)) {
+        _return_value = (size_t)20 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->petition);
 
     READ_U64(object->owner);
@@ -15068,9 +21612,18 @@ static WowWorldResult vanilla_SMSG_PETITION_SIGN_RESULTS_read(WowWorldReader* re
     READ_U32(object->result);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PETITION_SIGN_RESULTS_write(WowWorldWriter* writer, const vanilla_SMSG_PETITION_SIGN_RESULTS* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0014 + 2); /* size */
 
     WRITE_U16(0x000001c1); /* opcode */
@@ -15083,15 +21636,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PETITION_SIGN_RESULTS_wr
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_MSG_PETITION_DECLINE_read(WowWorldReader* reader, vanilla_MSG_PETITION_DECLINE* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->petition);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_PETITION_DECLINE_cmsg_write(WowWorldWriter* writer, const vanilla_MSG_PETITION_DECLINE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x000001c2); /* opcode */
@@ -15100,9 +21670,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_PETITION_DECLINE_cmsg_wri
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_PETITION_DECLINE_smsg_write(WowWorldWriter* writer, const vanilla_MSG_PETITION_DECLINE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 2); /* size */
 
     WRITE_U16(0x000001c2); /* opcode */
@@ -15111,17 +21689,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_PETITION_DECLINE_smsg_wri
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_OFFER_PETITION_read(WowWorldReader* reader, vanilla_CMSG_OFFER_PETITION* object) {
+    int _return_value = 1;
+
+    if (16 > (reader->length - reader->index)) {
+        _return_value = (size_t)16 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->petition);
 
     READ_U64(object->target);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_OFFER_PETITION_write(WowWorldWriter* writer, const vanilla_CMSG_OFFER_PETITION* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0010 + 4); /* size */
 
     WRITE_U32(0x000001c3); /* opcode */
@@ -15132,15 +21727,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_OFFER_PETITION_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_TURN_IN_PETITION_read(WowWorldReader* reader, vanilla_CMSG_TURN_IN_PETITION* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->petition);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_TURN_IN_PETITION_write(WowWorldWriter* writer, const vanilla_CMSG_TURN_IN_PETITION* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x000001c4); /* opcode */
@@ -15149,16 +21761,33 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_TURN_IN_PETITION_write(W
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_TURN_IN_PETITION_RESULTS_read(WowWorldReader* reader, vanilla_SMSG_TURN_IN_PETITION_RESULTS* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->result = 0;
     READ_U32(object->result);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TURN_IN_PETITION_RESULTS_write(WowWorldWriter* writer, const vanilla_SMSG_TURN_IN_PETITION_RESULTS* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 2); /* size */
 
     WRITE_U16(0x000001c5); /* opcode */
@@ -15167,17 +21796,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_TURN_IN_PETITION_RESULTS
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_PETITION_QUERY_read(WowWorldReader* reader, vanilla_CMSG_PETITION_QUERY* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->guild_id);
 
     READ_U64(object->petition);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PETITION_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_PETITION_QUERY* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 4); /* size */
 
     WRITE_U32(0x000001c6); /* opcode */
@@ -15188,6 +21834,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PETITION_QUERY_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_PETITION_QUERY_RESPONSE_free(vanilla_SMSG_PETITION_QUERY_RESPONSE* object) {
+    FREE_STRING(object->guild_name);
+
+    FREE_STRING(object->body_text);
+
 }
 
 static size_t vanilla_SMSG_PETITION_QUERY_RESPONSE_size(const vanilla_SMSG_PETITION_QUERY_RESPONSE* object) {
@@ -15195,6 +21849,16 @@ static size_t vanilla_SMSG_PETITION_QUERY_RESPONSE_size(const vanilla_SMSG_PETIT
 }
 
 static WowWorldResult vanilla_SMSG_PETITION_QUERY_RESPONSE_read(WowWorldReader* reader, vanilla_SMSG_PETITION_QUERY_RESPONSE* object) {
+    int _return_value = 1;
+
+    if (64 > (reader->length - reader->index)) {
+        _return_value = (size_t)64 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->guild_name = NULL;
+    object->body_text = NULL;
+
     READ_U32(object->petition_id);
 
     READ_U64(object->charter_owner);
@@ -15232,9 +21896,19 @@ static WowWorldResult vanilla_SMSG_PETITION_QUERY_RESPONSE_read(WowWorldReader* 
     READ_U32(object->number_of_choices);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_PETITION_QUERY_RESPONSE_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PETITION_QUERY_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_PETITION_QUERY_RESPONSE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_PETITION_QUERY_RESPONSE_size(object) + 2); /* size */
 
     WRITE_U16(0x000001c7); /* opcode */
@@ -15275,31 +21949,48 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PETITION_QUERY_RESPONSE_
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_PETITION_QUERY_RESPONSE_free(vanilla_SMSG_PETITION_QUERY_RESPONSE* object) {
-    FREE_STRING(object->guild_name);
-
-    FREE_STRING(object->body_text);
-
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_FISH_NOT_HOOKED_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 2); /* size */
 
     WRITE_U16(0x000001c8); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_FISH_ESCAPED_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 2); /* size */
 
     WRITE_U16(0x000001c9); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_BUG_free(vanilla_CMSG_BUG* object) {
+    FREE_STRING(object->content);
+
+    FREE_STRING(object->bug_type);
+
 }
 
 static size_t vanilla_CMSG_BUG_size(const vanilla_CMSG_BUG* object) {
@@ -15307,6 +21998,16 @@ static size_t vanilla_CMSG_BUG_size(const vanilla_CMSG_BUG* object) {
 }
 
 static WowWorldResult vanilla_CMSG_BUG_read(WowWorldReader* reader, vanilla_CMSG_BUG* object) {
+    int _return_value = 1;
+
+    if (14 > (reader->length - reader->index)) {
+        _return_value = (size_t)14 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->content = NULL;
+    object->bug_type = NULL;
+
     READ_U32(object->suggestion);
 
     READ_SIZED_CSTRING(object->content);
@@ -15314,9 +22015,19 @@ static WowWorldResult vanilla_CMSG_BUG_read(WowWorldReader* reader, vanilla_CMSG
     READ_SIZED_CSTRING(object->bug_type);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_BUG_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BUG_write(WowWorldWriter* writer, const vanilla_CMSG_BUG* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_BUG_size(object) + 4); /* size */
 
     WRITE_U32(0x000001ca); /* opcode */
@@ -15329,12 +22040,11 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BUG_write(WowWorldWriter
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_BUG_free(vanilla_CMSG_BUG* object) {
-    FREE_STRING(object->content);
-
-    FREE_STRING(object->bug_type);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_NOTIFICATION_free(vanilla_SMSG_NOTIFICATION* object) {
+    FREE_STRING(object->notification);
 
 }
 
@@ -15343,12 +22053,31 @@ static size_t vanilla_SMSG_NOTIFICATION_size(const vanilla_SMSG_NOTIFICATION* ob
 }
 
 static WowWorldResult vanilla_SMSG_NOTIFICATION_read(WowWorldReader* reader, vanilla_SMSG_NOTIFICATION* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->notification = NULL;
+
     READ_CSTRING(object->notification);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_NOTIFICATION_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_NOTIFICATION_write(WowWorldWriter* writer, const vanilla_SMSG_NOTIFICATION* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_NOTIFICATION_size(object) + 2); /* size */
 
     WRITE_U16(0x000001cb); /* opcode */
@@ -15357,31 +22086,51 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_NOTIFICATION_write(WowWo
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_NOTIFICATION_free(vanilla_SMSG_NOTIFICATION* object) {
-    FREE_STRING(object->notification);
-
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PLAYED_TIME_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x000001cc); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_PLAYED_TIME_read(WowWorldReader* reader, vanilla_SMSG_PLAYED_TIME* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->total_played_time);
 
     READ_U32(object->level_played_time);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PLAYED_TIME_write(WowWorldWriter* writer, const vanilla_SMSG_PLAYED_TIME* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 2); /* size */
 
     WRITE_U16(0x000001cd); /* opcode */
@@ -15392,24 +22141,49 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PLAYED_TIME_write(WowWor
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_QUERY_TIME_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x000001ce); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_QUERY_TIME_RESPONSE_read(WowWorldReader* reader, vanilla_SMSG_QUERY_TIME_RESPONSE* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->time);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUERY_TIME_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_QUERY_TIME_RESPONSE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 2); /* size */
 
     WRITE_U16(0x000001cf); /* opcode */
@@ -15418,6 +22192,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_QUERY_TIME_RESPONSE_writ
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_LOG_XPGAIN_size(const vanilla_SMSG_LOG_XPGAIN* object) {
@@ -15431,6 +22206,13 @@ static size_t vanilla_SMSG_LOG_XPGAIN_size(const vanilla_SMSG_LOG_XPGAIN* object
 }
 
 static WowWorldResult vanilla_SMSG_LOG_XPGAIN_read(WowWorldReader* reader, vanilla_SMSG_LOG_XPGAIN* object) {
+    int _return_value = 1;
+
+    if (13 > (reader->length - reader->index)) {
+        _return_value = (size_t)13 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->target);
 
     READ_U32(object->total_exp);
@@ -15445,9 +22227,18 @@ static WowWorldResult vanilla_SMSG_LOG_XPGAIN_read(WowWorldReader* reader, vanil
 
     }
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOG_XPGAIN_write(WowWorldWriter* writer, const vanilla_SMSG_LOG_XPGAIN* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_LOG_XPGAIN_size(object) + 2); /* size */
 
     WRITE_U16(0x000001d0); /* opcode */
@@ -15466,20 +22257,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOG_XPGAIN_write(WowWorl
     }
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_LOG_XPGAIN_free(vanilla_SMSG_LOG_XPGAIN* object) {
-    if (object->exp_type == VANILLA_EXPERIENCE_AWARD_TYPE_NON_KILL) {
-    }
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_RECLAIM_CORPSE_read(WowWorldReader* reader, vanilla_CMSG_RECLAIM_CORPSE* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_RECLAIM_CORPSE_write(WowWorldWriter* writer, const vanilla_CMSG_RECLAIM_CORPSE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x000001d2); /* opcode */
@@ -15488,9 +22291,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_RECLAIM_CORPSE_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_WRAP_ITEM_read(WowWorldReader* reader, vanilla_CMSG_WRAP_ITEM* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U8(object->gift_bag_index);
 
     READ_U8(object->gift_slot);
@@ -15500,9 +22311,18 @@ static WowWorldResult vanilla_CMSG_WRAP_ITEM_read(WowWorldReader* reader, vanill
     READ_U8(object->item_slot);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_WRAP_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_WRAP_ITEM* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 4); /* size */
 
     WRITE_U32(0x000001d3); /* opcode */
@@ -15517,9 +22337,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_WRAP_ITEM_write(WowWorld
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_LEVELUP_INFO_read(WowWorldReader* reader, vanilla_SMSG_LEVELUP_INFO* object) {
+    int _return_value = 1;
+
+    if (48 > (reader->length - reader->index)) {
+        _return_value = (size_t)48 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->new_level);
 
     READ_U32(object->health);
@@ -15545,9 +22373,18 @@ static WowWorldResult vanilla_SMSG_LEVELUP_INFO_read(WowWorldReader* reader, van
     READ_U32(object->spirit);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LEVELUP_INFO_write(WowWorldWriter* writer, const vanilla_SMSG_LEVELUP_INFO* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0030 + 2); /* size */
 
     WRITE_U16(0x000001d4); /* opcode */
@@ -15578,17 +22415,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LEVELUP_INFO_write(WowWo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_MSG_MINIMAP_PING_Client_read(WowWorldReader* reader, vanilla_MSG_MINIMAP_PING_Client* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_FLOAT(object->position_x);
 
     READ_FLOAT(object->position_y);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MINIMAP_PING_Client_write(WowWorldWriter* writer, const vanilla_MSG_MINIMAP_PING_Client* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x000001d5); /* opcode */
@@ -15599,9 +22453,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MINIMAP_PING_Client_write
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_MSG_MINIMAP_PING_Server_read(WowWorldReader* reader, vanilla_MSG_MINIMAP_PING_Server* object) {
+    int _return_value = 1;
+
+    if (16 > (reader->length - reader->index)) {
+        _return_value = (size_t)16 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_FLOAT(object->position_x);
@@ -15609,9 +22471,18 @@ static WowWorldResult vanilla_MSG_MINIMAP_PING_Server_read(WowWorldReader* reade
     READ_FLOAT(object->position_y);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MINIMAP_PING_Server_write(WowWorldWriter* writer, const vanilla_MSG_MINIMAP_PING_Server* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0010 + 2); /* size */
 
     WRITE_U16(0x000001d5); /* opcode */
@@ -15624,9 +22495,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MINIMAP_PING_Server_write
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_RESISTLOG_read(WowWorldReader* reader, vanilla_SMSG_RESISTLOG* object) {
+    int _return_value = 1;
+
+    if (36 > (reader->length - reader->index)) {
+        _return_value = (size_t)36 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid1);
 
     READ_U64(object->guid2);
@@ -15642,9 +22521,18 @@ static WowWorldResult vanilla_SMSG_RESISTLOG_read(WowWorldReader* reader, vanill
     READ_U32(object->unknown5);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_RESISTLOG_write(WowWorldWriter* writer, const vanilla_SMSG_RESISTLOG* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0024 + 2); /* size */
 
     WRITE_U16(0x000001d6); /* opcode */
@@ -15665,9 +22553,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_RESISTLOG_write(WowWorld
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_ENCHANTMENTLOG_read(WowWorldReader* reader, vanilla_SMSG_ENCHANTMENTLOG* object) {
+    int _return_value = 1;
+
+    if (25 > (reader->length - reader->index)) {
+        _return_value = (size_t)25 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->target);
 
     READ_U64(object->caster);
@@ -15679,9 +22575,18 @@ static WowWorldResult vanilla_SMSG_ENCHANTMENTLOG_read(WowWorldReader* reader, v
     READ_BOOL8(object->show_affiliation);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ENCHANTMENTLOG_write(WowWorldWriter* writer, const vanilla_SMSG_ENCHANTMENTLOG* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0019 + 2); /* size */
 
     WRITE_U16(0x000001d7); /* opcode */
@@ -15698,9 +22603,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ENCHANTMENTLOG_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_START_MIRROR_TIMER_read(WowWorldReader* reader, vanilla_SMSG_START_MIRROR_TIMER* object) {
+    int _return_value = 1;
+
+    if (21 > (reader->length - reader->index)) {
+        _return_value = (size_t)21 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->timer = 0;
     READ_U32(object->timer);
 
@@ -15715,9 +22628,18 @@ static WowWorldResult vanilla_SMSG_START_MIRROR_TIMER_read(WowWorldReader* reade
     READ_U32(object->id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_START_MIRROR_TIMER_write(WowWorldWriter* writer, const vanilla_SMSG_START_MIRROR_TIMER* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0015 + 2); /* size */
 
     WRITE_U16(0x000001d9); /* opcode */
@@ -15736,18 +22658,35 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_START_MIRROR_TIMER_write
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_PAUSE_MIRROR_TIMER_read(WowWorldReader* reader, vanilla_SMSG_PAUSE_MIRROR_TIMER* object) {
+    int _return_value = 1;
+
+    if (5 > (reader->length - reader->index)) {
+        _return_value = (size_t)5 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->timer = 0;
     READ_U32(object->timer);
 
     READ_BOOL8(object->is_frozen);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PAUSE_MIRROR_TIMER_write(WowWorldWriter* writer, const vanilla_SMSG_PAUSE_MIRROR_TIMER* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0005 + 2); /* size */
 
     WRITE_U16(0x000001da); /* opcode */
@@ -15758,16 +22697,33 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PAUSE_MIRROR_TIMER_write
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_STOP_MIRROR_TIMER_read(WowWorldReader* reader, vanilla_SMSG_STOP_MIRROR_TIMER* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->timer = 0;
     READ_U32(object->timer);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_STOP_MIRROR_TIMER_write(WowWorldWriter* writer, const vanilla_SMSG_STOP_MIRROR_TIMER* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 2); /* size */
 
     WRITE_U16(0x000001db); /* opcode */
@@ -15776,17 +22732,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_STOP_MIRROR_TIMER_write(
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_PING_read(WowWorldReader* reader, vanilla_CMSG_PING* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->sequence_id);
 
     READ_U32(object->round_time_in_ms);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PING_write(WowWorldWriter* writer, const vanilla_CMSG_PING* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x000001dc); /* opcode */
@@ -15797,15 +22770,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PING_write(WowWorldWrite
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_PONG_read(WowWorldReader* reader, vanilla_SMSG_PONG* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->sequence_id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PONG_write(WowWorldWriter* writer, const vanilla_SMSG_PONG* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 2); /* size */
 
     WRITE_U16(0x000001dd); /* opcode */
@@ -15814,17 +22804,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PONG_write(WowWorldWrite
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_CLEAR_COOLDOWN_read(WowWorldReader* reader, vanilla_SMSG_CLEAR_COOLDOWN* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->id);
 
     READ_U64(object->target);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CLEAR_COOLDOWN_write(WowWorldWriter* writer, const vanilla_SMSG_CLEAR_COOLDOWN* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 2); /* size */
 
     WRITE_U16(0x000001de); /* opcode */
@@ -15835,15 +22842,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CLEAR_COOLDOWN_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_GAMEOBJECT_PAGETEXT_read(WowWorldReader* reader, vanilla_SMSG_GAMEOBJECT_PAGETEXT* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GAMEOBJECT_PAGETEXT_write(WowWorldWriter* writer, const vanilla_SMSG_GAMEOBJECT_PAGETEXT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 2); /* size */
 
     WRITE_U16(0x000001df); /* opcode */
@@ -15852,16 +22876,33 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GAMEOBJECT_PAGETEXT_writ
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_SETSHEATHED_read(WowWorldReader* reader, vanilla_CMSG_SETSHEATHED* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->sheathed = 0;
     READ_U32(object->sheathed);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SETSHEATHED_write(WowWorldWriter* writer, const vanilla_CMSG_SETSHEATHED* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 4); /* size */
 
     WRITE_U32(0x000001e0); /* opcode */
@@ -15870,17 +22911,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SETSHEATHED_write(WowWor
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_SPELL_DELAYED_read(WowWorldReader* reader, vanilla_SMSG_SPELL_DELAYED* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_U32(object->delay_time);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELL_DELAYED_write(WowWorldWriter* writer, const vanilla_SMSG_SPELL_DELAYED* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 2); /* size */
 
     WRITE_U16(0x000001e2); /* opcode */
@@ -15891,17 +22949,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELL_DELAYED_write(WowW
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_ITEM_TIME_UPDATE_read(WowWorldReader* reader, vanilla_SMSG_ITEM_TIME_UPDATE* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_U32(object->duration);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ITEM_TIME_UPDATE_write(WowWorldWriter* writer, const vanilla_SMSG_ITEM_TIME_UPDATE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 2); /* size */
 
     WRITE_U16(0x000001ea); /* opcode */
@@ -15912,9 +22987,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ITEM_TIME_UPDATE_write(W
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_ITEM_ENCHANT_TIME_UPDATE_read(WowWorldReader* reader, vanilla_SMSG_ITEM_ENCHANT_TIME_UPDATE* object) {
+    int _return_value = 1;
+
+    if (24 > (reader->length - reader->index)) {
+        _return_value = (size_t)24 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->item);
 
     READ_U32(object->slot);
@@ -15924,9 +23007,18 @@ static WowWorldResult vanilla_SMSG_ITEM_ENCHANT_TIME_UPDATE_read(WowWorldReader*
     READ_U64(object->player);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ITEM_ENCHANT_TIME_UPDATE_write(WowWorldWriter* writer, const vanilla_SMSG_ITEM_ENCHANT_TIME_UPDATE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0018 + 2); /* size */
 
     WRITE_U16(0x000001eb); /* opcode */
@@ -15941,15 +23033,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ITEM_ENCHANT_TIME_UPDATE
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_AUTH_CHALLENGE_read(WowWorldReader* reader, vanilla_SMSG_AUTH_CHALLENGE* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->server_seed);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_AUTH_CHALLENGE_write(WowWorldWriter* writer, const vanilla_SMSG_AUTH_CHALLENGE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 2); /* size */
 
     WRITE_U16(0x000001ec); /* opcode */
@@ -15958,14 +23067,28 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_AUTH_CHALLENGE_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_AUTH_SESSION_free(vanilla_CMSG_AUTH_SESSION* object) {
+    size_t i;
+
+    FREE_STRING(object->username);
+
+    if (object->addon_info != NULL) {
+        for (i = 0; i < object->amount_of_addon_info; ++i) {
+            vanilla_AddonInfo_free(&((object->addon_info)[i]));
+        }
+        free(object->addon_info);
+        object->addon_info = NULL;
+    }
 }
 
 static size_t vanilla_CMSG_AUTH_SESSION_size(const vanilla_CMSG_AUTH_SESSION* object) {
     size_t _size = 33 + STRING_SIZE(object->username);
 
     /* C89 scope for compressed size */ {
-        unsigned char* addon_info_uncompressed_data = NULL;
-        unsigned char* addon_info_compressed_data = NULL;
+        unsigned char addon_info_uncompressed_data[65498];
         uint32_t compressed_i;
         size_t compressed_size = 0;
 
@@ -15977,16 +23100,13 @@ static size_t vanilla_CMSG_AUTH_SESSION_size(const vanilla_CMSG_AUTH_SESSION* ob
         }
 
         if (compressed_size) {
-            addon_info_uncompressed_data = malloc(compressed_size);
-            addon_info_compressed_data = malloc(compressed_size + WWM_COMPRESS_EXTRA_LENGTH);
-
+            int _return_value = 1;
             stack_writer = wwm_create_writer(addon_info_uncompressed_data, compressed_size);
             WRITE_ARRAY(object->addon_info, object->amount_of_addon_info, WWM_CHECK_RETURN_CODE(vanilla_AddonInfo_write(writer, &object->addon_info[i])));
 
-            _size += wwm_compress_data(addon_info_uncompressed_data, compressed_size, addon_info_compressed_data, compressed_size + WWM_COMPRESS_EXTRA_LENGTH);
+cleanup:
+            _size += wwm_compress_data_size(addon_info_uncompressed_data, compressed_size);
 
-            free(addon_info_uncompressed_data);
-            free(addon_info_compressed_data);
         }
     }
 
@@ -15994,6 +23114,8 @@ static size_t vanilla_CMSG_AUTH_SESSION_size(const vanilla_CMSG_AUTH_SESSION* ob
 }
 
 static WowWorldResult vanilla_CMSG_AUTH_SESSION_read(WowWorldReader* reader, vanilla_CMSG_AUTH_SESSION* object, size_t body_size) {
+    int _return_value = 1;
+
     size_t _size = 0;
 
     unsigned char* addon_info_decompressed_data = NULL;
@@ -16001,6 +23123,14 @@ static WowWorldResult vanilla_CMSG_AUTH_SESSION_read(WowWorldReader* reader, van
     uint32_t addon_info_decompressed_size;
 
     WowWorldReader new_reader;
+
+    if (37 > (reader->length - reader->index)) {
+        _return_value = (size_t)37 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->username = NULL;
+    object->addon_info = NULL;
 
     READ_U32(object->build);
     _size += 4;
@@ -16017,7 +23147,8 @@ static WowWorldResult vanilla_CMSG_AUTH_SESSION_read(WowWorldReader* reader, van
     READ_ARRAY(object->client_proof, 20, READ_U8(object->client_proof[i]);_size += 1;);
 
     if((body_size - _size) > (reader->length - reader->index)) {
-        return WWM_RESULT_NOT_ENOUGH_BYTES;
+        _return_value = WWM_RESULT_NOT_ENOUGH_BYTES;
+        goto cleanup;
     }
 
     /* addon_info_decompressed_size: u32 */
@@ -16029,16 +23160,19 @@ static WowWorldResult vanilla_CMSG_AUTH_SESSION_read(WowWorldReader* reader, van
     if(addon_info_decompressed_size) {
         const size_t addon_info_compressed_data_size = body_size - _size;
         if (addon_info_compressed_data_size > reader->length - reader->index) {
-            return WWM_RESULT_NOT_ENOUGH_BYTES;
+            _return_value = WWM_RESULT_NOT_ENOUGH_BYTES;
+            goto cleanup;
         }
         addon_info_decompressed_data = malloc(addon_info_decompressed_size);
         if (addon_info_decompressed_data == NULL) {
-            return WWM_RESULT_MALLOC_FAIL;
+            _return_value = WWM_RESULT_MALLOC_FAIL;
+            goto cleanup;
         }
 
         addon_info_decompressed_size = (uint32_t)wwm_decompress_data(&reader->source[reader->index], addon_info_compressed_data_size, addon_info_decompressed_data, addon_info_decompressed_size);
         if (addon_info_decompressed_size == 0) {
-            return WWM_RESULT_COMPRESSION_ERROR;
+            _return_value = WWM_RESULT_COMPRESSION_ERROR;
+            goto cleanup;
         }
         new_reader = wwm_create_reader(addon_info_decompressed_data, addon_info_decompressed_size);
         reader = &new_reader;
@@ -16050,7 +23184,8 @@ static WowWorldResult vanilla_CMSG_AUTH_SESSION_read(WowWorldReader* reader, van
 
             object->addon_info = malloc(_current_size);
             if (object->addon_info == NULL) {
-                return WWM_RESULT_MALLOC_FAIL;
+                _return_value = WWM_RESULT_MALLOC_FAIL;
+                goto cleanup;
             }
             while (reader->index < reader->length) {
                 WWM_CHECK_RETURN_CODE(vanilla_AddonInfo_read(reader, &object->addon_info[i]));
@@ -16061,7 +23196,8 @@ static WowWorldResult vanilla_CMSG_AUTH_SESSION_read(WowWorldReader* reader, van
                     object->addon_info = realloc(object->addon_info, _current_size);
                     if (object->addon_info == NULL) {
                         free(object->addon_info);
-                        return WWM_RESULT_MALLOC_FAIL;
+                        _return_value = WWM_RESULT_MALLOC_FAIL;
+                        goto cleanup;
                     }
                 }
             }
@@ -16074,9 +23210,19 @@ static WowWorldResult vanilla_CMSG_AUTH_SESSION_read(WowWorldReader* reader, van
     }
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_AUTH_SESSION_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUTH_SESSION_write(WowWorldWriter* writer, const vanilla_CMSG_AUTH_SESSION* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_AUTH_SESSION_size(object) + 4); /* size */
 
     WRITE_U32(0x000001ed); /* opcode */
@@ -16108,7 +23254,8 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUTH_SESSION_write(WowWo
 
             addon_info_uncompressed_data = malloc(_size);
             if (addon_info_uncompressed_data == NULL) {
-                return WWM_RESULT_MALLOC_FAIL;
+                _return_value = WWM_RESULT_MALLOC_FAIL;
+                goto cleanup;
             }
             new_writer = wwm_create_writer(addon_info_uncompressed_data, _size);
             writer = &new_writer;
@@ -16125,18 +23272,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUTH_SESSION_write(WowWo
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_AUTH_SESSION_free(vanilla_CMSG_AUTH_SESSION* object) {
-    size_t i;
-
-    FREE_STRING(object->username);
-
-    for (i = 0; i < object->amount_of_addon_info; ++i) {
-        vanilla_AddonInfo_free(&((object->addon_info)[i]));
-    }
-    free(object->addon_info);
-    object->addon_info = NULL;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_AUTH_RESPONSE_size(const vanilla_SMSG_AUTH_RESPONSE* object) {
@@ -16153,6 +23289,13 @@ static size_t vanilla_SMSG_AUTH_RESPONSE_size(const vanilla_SMSG_AUTH_RESPONSE* 
 }
 
 static WowWorldResult vanilla_SMSG_AUTH_RESPONSE_read(WowWorldReader* reader, vanilla_SMSG_AUTH_RESPONSE* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->result = 0;
     READ_U8(object->result);
 
@@ -16169,9 +23312,18 @@ static WowWorldResult vanilla_SMSG_AUTH_RESPONSE_read(WowWorldReader* reader, va
 
     }
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_AUTH_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_AUTH_RESPONSE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_AUTH_RESPONSE_size(object) + 2); /* size */
 
     WRITE_U16(0x000001ee); /* opcode */
@@ -16192,13 +23344,11 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_AUTH_RESPONSE_write(WowW
     }
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_AUTH_RESPONSE_free(vanilla_SMSG_AUTH_RESPONSE* object) {
-    if (object->result == VANILLA_WORLD_RESULT_AUTH_OK) {
-    }
-    else if (object->result == VANILLA_WORLD_RESULT_AUTH_WAIT_QUEUE) {
-    }
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_PET_CAST_SPELL_free(vanilla_CMSG_PET_CAST_SPELL* object) {
+    vanilla_SpellCastTargets_free(&object->targets);
 }
 
 static size_t vanilla_CMSG_PET_CAST_SPELL_size(const vanilla_CMSG_PET_CAST_SPELL* object) {
@@ -16206,6 +23356,14 @@ static size_t vanilla_CMSG_PET_CAST_SPELL_size(const vanilla_CMSG_PET_CAST_SPELL
 }
 
 static WowWorldResult vanilla_CMSG_PET_CAST_SPELL_read(WowWorldReader* reader, vanilla_CMSG_PET_CAST_SPELL* object) {
+    int _return_value = 1;
+
+    if (14 > (reader->length - reader->index)) {
+        _return_value = (size_t)14 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+
     READ_U64(object->guid);
 
     READ_U32(object->id);
@@ -16213,9 +23371,19 @@ static WowWorldResult vanilla_CMSG_PET_CAST_SPELL_read(WowWorldReader* reader, v
     WWM_CHECK_RETURN_CODE(vanilla_SpellCastTargets_read(reader, &object->targets));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_PET_CAST_SPELL_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PET_CAST_SPELL_write(WowWorldWriter* writer, const vanilla_CMSG_PET_CAST_SPELL* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_PET_CAST_SPELL_size(object) + 4); /* size */
 
     WRITE_U32(0x000001f0); /* opcode */
@@ -16228,20 +23396,33 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PET_CAST_SPELL_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_PET_CAST_SPELL_free(vanilla_CMSG_PET_CAST_SPELL* object) {
-    vanilla_SpellCastTargets_free(&object->targets);
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_MSG_SAVE_GUILD_EMBLEM_Server_read(WowWorldReader* reader, vanilla_MSG_SAVE_GUILD_EMBLEM_Server* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->result = 0;
     READ_U32(object->result);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_SAVE_GUILD_EMBLEM_Server_write(WowWorldWriter* writer, const vanilla_MSG_SAVE_GUILD_EMBLEM_Server* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 2); /* size */
 
     WRITE_U16(0x000001f1); /* opcode */
@@ -16250,9 +23431,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_SAVE_GUILD_EMBLEM_Server_
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_MSG_SAVE_GUILD_EMBLEM_Client_read(WowWorldReader* reader, vanilla_MSG_SAVE_GUILD_EMBLEM_Client* object) {
+    int _return_value = 1;
+
+    if (28 > (reader->length - reader->index)) {
+        _return_value = (size_t)28 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->vendor);
 
     READ_U32(object->emblem_style);
@@ -16266,9 +23455,18 @@ static WowWorldResult vanilla_MSG_SAVE_GUILD_EMBLEM_Client_read(WowWorldReader* 
     READ_U32(object->background_color);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_SAVE_GUILD_EMBLEM_Client_write(WowWorldWriter* writer, const vanilla_MSG_SAVE_GUILD_EMBLEM_Client* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x001c + 4); /* size */
 
     WRITE_U32(0x000001f1); /* opcode */
@@ -16287,15 +23485,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_SAVE_GUILD_EMBLEM_Client_
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_MSG_TABARDVENDOR_ACTIVATE_read(WowWorldReader* reader, vanilla_MSG_TABARDVENDOR_ACTIVATE* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_TABARDVENDOR_ACTIVATE_cmsg_write(WowWorldWriter* writer, const vanilla_MSG_TABARDVENDOR_ACTIVATE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x000001f2); /* opcode */
@@ -16304,9 +23519,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_TABARDVENDOR_ACTIVATE_cms
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_TABARDVENDOR_ACTIVATE_smsg_write(WowWorldWriter* writer, const vanilla_MSG_TABARDVENDOR_ACTIVATE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 2); /* size */
 
     WRITE_U16(0x000001f2); /* opcode */
@@ -16315,17 +23538,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_TABARDVENDOR_ACTIVATE_sms
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_PLAY_SPELL_VISUAL_read(WowWorldReader* reader, vanilla_SMSG_PLAY_SPELL_VISUAL* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_U32(object->spell_art_kit);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PLAY_SPELL_VISUAL_write(WowWorldWriter* writer, const vanilla_SMSG_PLAY_SPELL_VISUAL* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 2); /* size */
 
     WRITE_U16(0x000001f3); /* opcode */
@@ -16336,16 +23576,33 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PLAY_SPELL_VISUAL_write(
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_ZONEUPDATE_read(WowWorldReader* reader, vanilla_CMSG_ZONEUPDATE* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->area = 0;
     READ_U32(object->area);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_ZONEUPDATE_write(WowWorldWriter* writer, const vanilla_CMSG_ZONEUPDATE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 4); /* size */
 
     WRITE_U32(0x000001f4); /* opcode */
@@ -16354,17 +23611,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_ZONEUPDATE_write(WowWorl
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_PARTYKILLLOG_read(WowWorldReader* reader, vanilla_SMSG_PARTYKILLLOG* object) {
+    int _return_value = 1;
+
+    if (16 > (reader->length - reader->index)) {
+        _return_value = (size_t)16 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->player_with_killing_blow);
 
     READ_U64(object->victim);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PARTYKILLLOG_write(WowWorldWriter* writer, const vanilla_SMSG_PARTYKILLLOG* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0010 + 2); /* size */
 
     WRITE_U16(0x000001f5); /* opcode */
@@ -16375,6 +23649,19 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PARTYKILLLOG_write(WowWo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_COMPRESSED_UPDATE_OBJECT_free(vanilla_SMSG_COMPRESSED_UPDATE_OBJECT* object) {
+    size_t i;
+
+    if (object->objects != NULL) {
+        for (i = 0; i < object->amount_of_objects; ++i) {
+            vanilla_Object_free(&((object->objects)[i]));
+        }
+        free(object->objects);
+        object->objects = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_COMPRESSED_UPDATE_OBJECT_size(const vanilla_SMSG_COMPRESSED_UPDATE_OBJECT* object) {
@@ -16391,18 +23678,28 @@ static size_t vanilla_SMSG_COMPRESSED_UPDATE_OBJECT_size(const vanilla_SMSG_COMP
 }
 
 static WowWorldResult vanilla_SMSG_COMPRESSED_UPDATE_OBJECT_read(WowWorldReader* reader, vanilla_SMSG_COMPRESSED_UPDATE_OBJECT* object, size_t body_size) {
+    int _return_value = 1;
+
     size_t _size = 0;
 
     WowWorldReader stack_reader;
     unsigned char* _compressed_data = NULL;
     uint32_t _decompressed_size;
 
+    if (5 > (reader->length - reader->index)) {
+        _return_value = (size_t)5 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->objects = NULL;
+
     READ_U32(_decompressed_size);
     _size += 4;
 
     _compressed_data = malloc(_decompressed_size);
     if (_compressed_data == NULL) {
-        return WWM_RESULT_MALLOC_FAIL;
+        _return_value = WWM_RESULT_MALLOC_FAIL;
+        goto cleanup;
     }
 
     if (!wwm_decompress_data(&reader->source[reader->index], body_size - _size, _compressed_data, _decompressed_size)) {
@@ -16418,7 +23715,7 @@ static WowWorldResult vanilla_SMSG_COMPRESSED_UPDATE_OBJECT_read(WowWorldReader*
     READ_U8(object->has_transport);
     _size += 1;
 
-    object->objects = malloc(object->amount_of_objects * sizeof(vanilla_Object));
+    object->objects = calloc(object->amount_of_objects, sizeof(vanilla_Object));
     if (object->objects == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -16428,6 +23725,9 @@ static WowWorldResult vanilla_SMSG_COMPRESSED_UPDATE_OBJECT_read(WowWorldReader*
     free(_compressed_data);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_COMPRESSED_UPDATE_OBJECT_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_COMPRESSED_UPDATE_OBJECT_write(WowWorldWriter* writer, const vanilla_SMSG_COMPRESSED_UPDATE_OBJECT* object) {
@@ -16437,6 +23737,13 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_COMPRESSED_UPDATE_OBJECT
     size_t _compressed_data_length;
     size_t saved_writer_index;
     const uint32_t _decompressed_data_length = (uint32_t)vanilla_SMSG_COMPRESSED_UPDATE_OBJECT_size(object);
+
+
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
 
 
     WRITE_U16_BE(0 /* place holder */ + 2); /* size */
@@ -16452,7 +23759,8 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_COMPRESSED_UPDATE_OBJECT
 
     _decompressed_data = malloc(_decompressed_data_length);
     if (_decompressed_data == NULL) {
-        return WWM_RESULT_MALLOC_FAIL;
+        _return_value = WWM_RESULT_MALLOC_FAIL;
+        goto cleanup;
     }
     stack_writer = wwm_create_writer(_decompressed_data, _decompressed_data_length);
 
@@ -16475,27 +23783,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_COMPRESSED_UPDATE_OBJECT
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_COMPRESSED_UPDATE_OBJECT_free(vanilla_SMSG_COMPRESSED_UPDATE_OBJECT* object) {
-    size_t i;
-
-    for (i = 0; i < object->amount_of_objects; ++i) {
-        vanilla_Object_free(&((object->objects)[i]));
-    }
-    free(object->objects);
-    object->objects = NULL;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_PLAY_SPELL_IMPACT_read(WowWorldReader* reader, vanilla_SMSG_PLAY_SPELL_IMPACT* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_U32(object->spell_visual_kit);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PLAY_SPELL_IMPACT_write(WowWorldWriter* writer, const vanilla_SMSG_PLAY_SPELL_IMPACT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 2); /* size */
 
     WRITE_U16(0x000001f7); /* opcode */
@@ -16506,18 +23821,35 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PLAY_SPELL_IMPACT_write(
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_EXPLORATION_EXPERIENCE_read(WowWorldReader* reader, vanilla_SMSG_EXPLORATION_EXPERIENCE* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->area = 0;
     READ_U32(object->area);
 
     READ_U32(object->experience);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_EXPLORATION_EXPERIENCE_write(WowWorldWriter* writer, const vanilla_SMSG_EXPLORATION_EXPERIENCE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 2); /* size */
 
     WRITE_U16(0x000001f8); /* opcode */
@@ -16528,17 +23860,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_EXPLORATION_EXPERIENCE_w
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_MSG_RANDOM_ROLL_Client_read(WowWorldReader* reader, vanilla_MSG_RANDOM_ROLL_Client* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->minimum);
 
     READ_U32(object->maximum);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_RANDOM_ROLL_Client_write(WowWorldWriter* writer, const vanilla_MSG_RANDOM_ROLL_Client* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x000001fb); /* opcode */
@@ -16549,9 +23898,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_RANDOM_ROLL_Client_write(
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_MSG_RANDOM_ROLL_Server_read(WowWorldReader* reader, vanilla_MSG_RANDOM_ROLL_Server* object) {
+    int _return_value = 1;
+
+    if (20 > (reader->length - reader->index)) {
+        _return_value = (size_t)20 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->minimum);
 
     READ_U32(object->maximum);
@@ -16561,9 +23918,18 @@ static WowWorldResult vanilla_MSG_RANDOM_ROLL_Server_read(WowWorldReader* reader
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_RANDOM_ROLL_Server_write(WowWorldWriter* writer, const vanilla_MSG_RANDOM_ROLL_Server* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0014 + 2); /* size */
 
     WRITE_U16(0x000001fb); /* opcode */
@@ -16578,9 +23944,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_RANDOM_ROLL_Server_write(
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_ENVIRONMENTAL_DAMAGE_LOG_read(WowWorldReader* reader, vanilla_SMSG_ENVIRONMENTAL_DAMAGE_LOG* object) {
+    int _return_value = 1;
+
+    if (21 > (reader->length - reader->index)) {
+        _return_value = (size_t)21 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     object->damage_type = 0;
@@ -16593,9 +23967,18 @@ static WowWorldResult vanilla_SMSG_ENVIRONMENTAL_DAMAGE_LOG_read(WowWorldReader*
     READ_U32(object->resist);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ENVIRONMENTAL_DAMAGE_LOG_write(WowWorldWriter* writer, const vanilla_SMSG_ENVIRONMENTAL_DAMAGE_LOG* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0015 + 2); /* size */
 
     WRITE_U16(0x000001fc); /* opcode */
@@ -16612,24 +23995,49 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ENVIRONMENTAL_DAMAGE_LOG
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_LOOKING_FOR_GROUP_Client_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x000001ff); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_MSG_LOOKING_FOR_GROUP_Server_read(WowWorldReader* reader, vanilla_MSG_LOOKING_FOR_GROUP_Server* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->unknown1);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_LOOKING_FOR_GROUP_Server_write(WowWorldWriter* writer, const vanilla_MSG_LOOKING_FOR_GROUP_Server* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 2); /* size */
 
     WRITE_U16(0x000001ff); /* opcode */
@@ -16638,16 +24046,33 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_LOOKING_FOR_GROUP_Server_
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_UNLEARN_SKILL_read(WowWorldReader* reader, vanilla_CMSG_UNLEARN_SKILL* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->skill = 0;
     READ_U32(object->skill);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_UNLEARN_SKILL_write(WowWorldWriter* writer, const vanilla_CMSG_UNLEARN_SKILL* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 4); /* size */
 
     WRITE_U32(0x00000202); /* opcode */
@@ -16656,15 +24081,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_UNLEARN_SKILL_write(WowW
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_REMOVED_SPELL_read(WowWorldReader* reader, vanilla_SMSG_REMOVED_SPELL* object) {
+    int _return_value = 1;
+
+    if (2 > (reader->length - reader->index)) {
+        _return_value = (size_t)2 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U16(object->spell);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_REMOVED_SPELL_write(WowWorldWriter* writer, const vanilla_SMSG_REMOVED_SPELL* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0002 + 2); /* size */
 
     WRITE_U16(0x00000203); /* opcode */
@@ -16673,6 +24115,20 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_REMOVED_SPELL_write(WowW
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GMTICKET_CREATE_free(vanilla_CMSG_GMTICKET_CREATE* object) {
+    FREE_STRING(object->message);
+
+    FREE_STRING(object->reserved_for_future_use);
+
+    if (object->category == VANILLA_GM_TICKET_TYPE_BEHAVIOR_HARASSMENT) {
+        if (object->compressed_chat_data != NULL) {
+            free(object->compressed_chat_data);
+            object->compressed_chat_data = NULL;
+        }
+    }
 }
 
 static size_t vanilla_CMSG_GMTICKET_CREATE_size(const vanilla_CMSG_GMTICKET_CREATE* object) {
@@ -16682,8 +24138,7 @@ static size_t vanilla_CMSG_GMTICKET_CREATE_size(const vanilla_CMSG_GMTICKET_CREA
         _size += 4;
 
         /* C89 scope for compressed size */ {
-            unsigned char* compressed_chat_data_uncompressed_data = NULL;
-            unsigned char* compressed_chat_data_compressed_data = NULL;
+            unsigned char compressed_chat_data_uncompressed_data[65527];
             uint32_t compressed_i;
             size_t compressed_size = 0;
 
@@ -16695,16 +24150,13 @@ static size_t vanilla_CMSG_GMTICKET_CREATE_size(const vanilla_CMSG_GMTICKET_CREA
             }
 
             if (compressed_size) {
-                compressed_chat_data_uncompressed_data = malloc(compressed_size);
-                compressed_chat_data_compressed_data = malloc(compressed_size + WWM_COMPRESS_EXTRA_LENGTH);
-
+                int _return_value = 1;
                 stack_writer = wwm_create_writer(compressed_chat_data_uncompressed_data, compressed_size);
                 WRITE_ARRAY(object->compressed_chat_data, object->amount_of_compressed_chat_data, WRITE_U8(object->compressed_chat_data[i]));
 
-                _size += wwm_compress_data(compressed_chat_data_uncompressed_data, compressed_size, compressed_chat_data_compressed_data, compressed_size + WWM_COMPRESS_EXTRA_LENGTH);
+cleanup:
+                _size += wwm_compress_data_size(compressed_chat_data_uncompressed_data, compressed_size);
 
-                free(compressed_chat_data_uncompressed_data);
-                free(compressed_chat_data_compressed_data);
             }
         }
 
@@ -16714,6 +24166,8 @@ static size_t vanilla_CMSG_GMTICKET_CREATE_size(const vanilla_CMSG_GMTICKET_CREA
 }
 
 static WowWorldResult vanilla_CMSG_GMTICKET_CREATE_read(WowWorldReader* reader, vanilla_CMSG_GMTICKET_CREATE* object, size_t body_size) {
+    int _return_value = 1;
+
     size_t _size = 0;
 
     unsigned char* compressed_chat_data_decompressed_data = NULL;
@@ -16721,6 +24175,15 @@ static WowWorldResult vanilla_CMSG_GMTICKET_CREATE_read(WowWorldReader* reader, 
     uint32_t compressed_chat_data_decompressed_size;
 
     WowWorldReader new_reader;
+
+    if (19 > (reader->length - reader->index)) {
+        _return_value = (size_t)19 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->message = NULL;
+    object->reserved_for_future_use = NULL;
+    object->compressed_chat_data = NULL;
 
     object->category = 0;
     READ_U8(object->category);
@@ -16744,7 +24207,8 @@ static WowWorldResult vanilla_CMSG_GMTICKET_CREATE_read(WowWorldReader* reader, 
         _size += 4;
 
         if((body_size - _size) > (reader->length - reader->index)) {
-            return WWM_RESULT_NOT_ENOUGH_BYTES;
+            _return_value = WWM_RESULT_NOT_ENOUGH_BYTES;
+            goto cleanup;
         }
 
         /* compressed_chat_data_decompressed_size: u32 */
@@ -16756,16 +24220,19 @@ static WowWorldResult vanilla_CMSG_GMTICKET_CREATE_read(WowWorldReader* reader, 
         if(compressed_chat_data_decompressed_size) {
             const size_t compressed_chat_data_compressed_data_size = body_size - _size;
             if (compressed_chat_data_compressed_data_size > reader->length - reader->index) {
-                return WWM_RESULT_NOT_ENOUGH_BYTES;
+                _return_value = WWM_RESULT_NOT_ENOUGH_BYTES;
+                goto cleanup;
             }
             compressed_chat_data_decompressed_data = malloc(compressed_chat_data_decompressed_size);
             if (compressed_chat_data_decompressed_data == NULL) {
-                return WWM_RESULT_MALLOC_FAIL;
+                _return_value = WWM_RESULT_MALLOC_FAIL;
+                goto cleanup;
             }
 
             compressed_chat_data_decompressed_size = (uint32_t)wwm_decompress_data(&reader->source[reader->index], compressed_chat_data_compressed_data_size, compressed_chat_data_decompressed_data, compressed_chat_data_decompressed_size);
             if (compressed_chat_data_decompressed_size == 0) {
-                return WWM_RESULT_COMPRESSION_ERROR;
+                _return_value = WWM_RESULT_COMPRESSION_ERROR;
+                goto cleanup;
             }
             new_reader = wwm_create_reader(compressed_chat_data_decompressed_data, compressed_chat_data_decompressed_size);
             reader = &new_reader;
@@ -16777,7 +24244,8 @@ static WowWorldResult vanilla_CMSG_GMTICKET_CREATE_read(WowWorldReader* reader, 
 
                 object->compressed_chat_data = malloc(_current_size);
                 if (object->compressed_chat_data == NULL) {
-                    return WWM_RESULT_MALLOC_FAIL;
+                    _return_value = WWM_RESULT_MALLOC_FAIL;
+                    goto cleanup;
                 }
                 while (reader->index < reader->length) {
                     READ_U8(object->compressed_chat_data[i]);
@@ -16788,7 +24256,8 @@ static WowWorldResult vanilla_CMSG_GMTICKET_CREATE_read(WowWorldReader* reader, 
                         object->compressed_chat_data = realloc(object->compressed_chat_data, _current_size);
                         if (object->compressed_chat_data == NULL) {
                             free(object->compressed_chat_data);
-                            return WWM_RESULT_MALLOC_FAIL;
+                            _return_value = WWM_RESULT_MALLOC_FAIL;
+                            goto cleanup;
                         }
                     }
                 }
@@ -16802,9 +24271,19 @@ static WowWorldResult vanilla_CMSG_GMTICKET_CREATE_read(WowWorldReader* reader, 
     }
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_GMTICKET_CREATE_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GMTICKET_CREATE_write(WowWorldWriter* writer, const vanilla_CMSG_GMTICKET_CREATE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_GMTICKET_CREATE_size(object) + 4); /* size */
 
     WRITE_U32(0x00000205); /* opcode */
@@ -16839,7 +24318,8 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GMTICKET_CREATE_write(Wo
 
                 compressed_chat_data_uncompressed_data = malloc(_size);
                 if (compressed_chat_data_uncompressed_data == NULL) {
-                    return WWM_RESULT_MALLOC_FAIL;
+                    _return_value = WWM_RESULT_MALLOC_FAIL;
+                    goto cleanup;
                 }
                 new_writer = wwm_create_writer(compressed_chat_data_uncompressed_data, _size);
                 writer = &new_writer;
@@ -16857,27 +24337,33 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GMTICKET_CREATE_write(Wo
     }
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GMTICKET_CREATE_free(vanilla_CMSG_GMTICKET_CREATE* object) {
-    FREE_STRING(object->message);
-
-    FREE_STRING(object->reserved_for_future_use);
-
-    if (object->category == VANILLA_GM_TICKET_TYPE_BEHAVIOR_HARASSMENT) {
-        free(object->compressed_chat_data);
-        object->compressed_chat_data = NULL;
-    }
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_GMTICKET_CREATE_read(WowWorldReader* reader, vanilla_SMSG_GMTICKET_CREATE* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->response = 0;
     READ_U32(object->response);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GMTICKET_CREATE_write(WowWorldWriter* writer, const vanilla_SMSG_GMTICKET_CREATE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 2); /* size */
 
     WRITE_U16(0x00000206); /* opcode */
@@ -16886,6 +24372,12 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GMTICKET_CREATE_write(Wo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GMTICKET_UPDATETEXT_free(vanilla_CMSG_GMTICKET_UPDATETEXT* object) {
+    FREE_STRING(object->message);
+
 }
 
 static size_t vanilla_CMSG_GMTICKET_UPDATETEXT_size(const vanilla_CMSG_GMTICKET_UPDATETEXT* object) {
@@ -16893,15 +24385,34 @@ static size_t vanilla_CMSG_GMTICKET_UPDATETEXT_size(const vanilla_CMSG_GMTICKET_
 }
 
 static WowWorldResult vanilla_CMSG_GMTICKET_UPDATETEXT_read(WowWorldReader* reader, vanilla_CMSG_GMTICKET_UPDATETEXT* object) {
+    int _return_value = 1;
+
+    if (2 > (reader->length - reader->index)) {
+        _return_value = (size_t)2 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->message = NULL;
+
     object->ticket_type = 0;
     READ_U8(object->ticket_type);
 
     READ_CSTRING(object->message);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_GMTICKET_UPDATETEXT_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GMTICKET_UPDATETEXT_write(WowWorldWriter* writer, const vanilla_CMSG_GMTICKET_UPDATETEXT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_GMTICKET_UPDATETEXT_size(object) + 4); /* size */
 
     WRITE_U32(0x00000207); /* opcode */
@@ -16912,21 +24423,33 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GMTICKET_UPDATETEXT_writ
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GMTICKET_UPDATETEXT_free(vanilla_CMSG_GMTICKET_UPDATETEXT* object) {
-    FREE_STRING(object->message);
-
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_GMTICKET_UPDATETEXT_read(WowWorldReader* reader, vanilla_SMSG_GMTICKET_UPDATETEXT* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->response = 0;
     READ_U32(object->response);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GMTICKET_UPDATETEXT_write(WowWorldWriter* writer, const vanilla_SMSG_GMTICKET_UPDATETEXT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 2); /* size */
 
     WRITE_U16(0x00000208); /* opcode */
@@ -16935,15 +24458,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GMTICKET_UPDATETEXT_writ
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_ACCOUNT_DATA_TIMES_read(WowWorldReader* reader, vanilla_SMSG_ACCOUNT_DATA_TIMES* object) {
+    int _return_value = 1;
+
+    if (128 > (reader->length - reader->index)) {
+        _return_value = (size_t)128 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_ARRAY(object->data, 32, READ_U32(object->data[i]));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ACCOUNT_DATA_TIMES_write(WowWorldWriter* writer, const vanilla_SMSG_ACCOUNT_DATA_TIMES* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0080 + 2); /* size */
 
     WRITE_U16(0x00000209); /* opcode */
@@ -16952,15 +24492,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ACCOUNT_DATA_TIMES_write
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_REQUEST_ACCOUNT_DATA_read(WowWorldReader* reader, vanilla_CMSG_REQUEST_ACCOUNT_DATA* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->data_type);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_REQUEST_ACCOUNT_DATA_write(WowWorldWriter* writer, const vanilla_CMSG_REQUEST_ACCOUNT_DATA* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 4); /* size */
 
     WRITE_U32(0x0000020a); /* opcode */
@@ -16969,14 +24526,21 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_REQUEST_ACCOUNT_DATA_wri
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_UPDATE_ACCOUNT_DATA_free(vanilla_CMSG_UPDATE_ACCOUNT_DATA* object) {
+    if (object->compressed_data != NULL) {
+        free(object->compressed_data);
+        object->compressed_data = NULL;
+    }
 }
 
 static size_t vanilla_CMSG_UPDATE_ACCOUNT_DATA_size(const vanilla_CMSG_UPDATE_ACCOUNT_DATA* object) {
     size_t _size = 4;
 
     /* C89 scope for compressed size */ {
-        unsigned char* compressed_data_uncompressed_data = NULL;
-        unsigned char* compressed_data_compressed_data = NULL;
+        unsigned char compressed_data_uncompressed_data[65527];
         uint32_t compressed_i;
         size_t compressed_size = 0;
 
@@ -16988,16 +24552,13 @@ static size_t vanilla_CMSG_UPDATE_ACCOUNT_DATA_size(const vanilla_CMSG_UPDATE_AC
         }
 
         if (compressed_size) {
-            compressed_data_uncompressed_data = malloc(compressed_size);
-            compressed_data_compressed_data = malloc(compressed_size + WWM_COMPRESS_EXTRA_LENGTH);
-
+            int _return_value = 1;
             stack_writer = wwm_create_writer(compressed_data_uncompressed_data, compressed_size);
             WRITE_ARRAY(object->compressed_data, object->amount_of_compressed_data, WRITE_U8(object->compressed_data[i]));
 
-            _size += wwm_compress_data(compressed_data_uncompressed_data, compressed_size, compressed_data_compressed_data, compressed_size + WWM_COMPRESS_EXTRA_LENGTH);
+cleanup:
+            _size += wwm_compress_data_size(compressed_data_uncompressed_data, compressed_size);
 
-            free(compressed_data_uncompressed_data);
-            free(compressed_data_compressed_data);
         }
     }
 
@@ -17005,6 +24566,8 @@ static size_t vanilla_CMSG_UPDATE_ACCOUNT_DATA_size(const vanilla_CMSG_UPDATE_AC
 }
 
 static WowWorldResult vanilla_CMSG_UPDATE_ACCOUNT_DATA_read(WowWorldReader* reader, vanilla_CMSG_UPDATE_ACCOUNT_DATA* object, size_t body_size) {
+    int _return_value = 1;
+
     size_t _size = 0;
 
     unsigned char* compressed_data_decompressed_data = NULL;
@@ -17013,12 +24576,20 @@ static WowWorldResult vanilla_CMSG_UPDATE_ACCOUNT_DATA_read(WowWorldReader* read
 
     WowWorldReader new_reader;
 
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->compressed_data = NULL;
+
     object->data_type = 0;
     READ_U32(object->data_type);
     _size += 4;
 
     if((body_size - _size) > (reader->length - reader->index)) {
-        return WWM_RESULT_NOT_ENOUGH_BYTES;
+        _return_value = WWM_RESULT_NOT_ENOUGH_BYTES;
+        goto cleanup;
     }
 
     /* compressed_data_decompressed_size: u32 */
@@ -17030,16 +24601,19 @@ static WowWorldResult vanilla_CMSG_UPDATE_ACCOUNT_DATA_read(WowWorldReader* read
     if(compressed_data_decompressed_size) {
         const size_t compressed_data_compressed_data_size = body_size - _size;
         if (compressed_data_compressed_data_size > reader->length - reader->index) {
-            return WWM_RESULT_NOT_ENOUGH_BYTES;
+            _return_value = WWM_RESULT_NOT_ENOUGH_BYTES;
+            goto cleanup;
         }
         compressed_data_decompressed_data = malloc(compressed_data_decompressed_size);
         if (compressed_data_decompressed_data == NULL) {
-            return WWM_RESULT_MALLOC_FAIL;
+            _return_value = WWM_RESULT_MALLOC_FAIL;
+            goto cleanup;
         }
 
         compressed_data_decompressed_size = (uint32_t)wwm_decompress_data(&reader->source[reader->index], compressed_data_compressed_data_size, compressed_data_decompressed_data, compressed_data_decompressed_size);
         if (compressed_data_decompressed_size == 0) {
-            return WWM_RESULT_COMPRESSION_ERROR;
+            _return_value = WWM_RESULT_COMPRESSION_ERROR;
+            goto cleanup;
         }
         new_reader = wwm_create_reader(compressed_data_decompressed_data, compressed_data_decompressed_size);
         reader = &new_reader;
@@ -17051,7 +24625,8 @@ static WowWorldResult vanilla_CMSG_UPDATE_ACCOUNT_DATA_read(WowWorldReader* read
 
             object->compressed_data = malloc(_current_size);
             if (object->compressed_data == NULL) {
-                return WWM_RESULT_MALLOC_FAIL;
+                _return_value = WWM_RESULT_MALLOC_FAIL;
+                goto cleanup;
             }
             while (reader->index < reader->length) {
                 READ_U8(object->compressed_data[i]);
@@ -17062,7 +24637,8 @@ static WowWorldResult vanilla_CMSG_UPDATE_ACCOUNT_DATA_read(WowWorldReader* read
                     object->compressed_data = realloc(object->compressed_data, _current_size);
                     if (object->compressed_data == NULL) {
                         free(object->compressed_data);
-                        return WWM_RESULT_MALLOC_FAIL;
+                        _return_value = WWM_RESULT_MALLOC_FAIL;
+                        goto cleanup;
                     }
                 }
             }
@@ -17075,9 +24651,19 @@ static WowWorldResult vanilla_CMSG_UPDATE_ACCOUNT_DATA_read(WowWorldReader* read
     }
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_UPDATE_ACCOUNT_DATA_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_UPDATE_ACCOUNT_DATA_write(WowWorldWriter* writer, const vanilla_CMSG_UPDATE_ACCOUNT_DATA* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_UPDATE_ACCOUNT_DATA_size(object) + 4); /* size */
 
     WRITE_U32(0x0000020b); /* opcode */
@@ -17101,7 +24687,8 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_UPDATE_ACCOUNT_DATA_writ
 
             compressed_data_uncompressed_data = malloc(_size);
             if (compressed_data_uncompressed_data == NULL) {
-                return WWM_RESULT_MALLOC_FAIL;
+                _return_value = WWM_RESULT_MALLOC_FAIL;
+                goto cleanup;
             }
             new_writer = wwm_create_writer(compressed_data_uncompressed_data, _size);
             writer = &new_writer;
@@ -17118,20 +24705,31 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_UPDATE_ACCOUNT_DATA_writ
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_UPDATE_ACCOUNT_DATA_free(vanilla_CMSG_UPDATE_ACCOUNT_DATA* object) {
-    free(object->compressed_data);
-    object->compressed_data = NULL;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GMTICKET_GETTICKET_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x00000211); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GMTICKET_GETTICKET_free(vanilla_SMSG_GMTICKET_GETTICKET* object) {
+    if (object->status == VANILLA_GM_TICKET_STATUS_HAS_TEXT) {
+        FREE_STRING(object->text);
+
+    }
 }
 
 static size_t vanilla_SMSG_GMTICKET_GETTICKET_size(const vanilla_SMSG_GMTICKET_GETTICKET* object) {
@@ -17145,6 +24743,15 @@ static size_t vanilla_SMSG_GMTICKET_GETTICKET_size(const vanilla_SMSG_GMTICKET_G
 }
 
 static WowWorldResult vanilla_SMSG_GMTICKET_GETTICKET_read(WowWorldReader* reader, vanilla_SMSG_GMTICKET_GETTICKET* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->text = NULL;
+
     object->status = 0;
     READ_U32(object->status);
 
@@ -17167,9 +24774,19 @@ static WowWorldResult vanilla_SMSG_GMTICKET_GETTICKET_read(WowWorldReader* reade
 
     }
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_GMTICKET_GETTICKET_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GMTICKET_GETTICKET_write(WowWorldWriter* writer, const vanilla_SMSG_GMTICKET_GETTICKET* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_GMTICKET_GETTICKET_size(object) + 2); /* size */
 
     WRITE_U16(0x00000212); /* opcode */
@@ -17194,22 +24811,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GMTICKET_GETTICKET_write
     }
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GMTICKET_GETTICKET_free(vanilla_SMSG_GMTICKET_GETTICKET* object) {
-    if (object->status == VANILLA_GM_TICKET_STATUS_HAS_TEXT) {
-        FREE_STRING(object->text);
-
-    }
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_GAMEOBJECT_SPAWN_ANIM_read(WowWorldReader* reader, vanilla_SMSG_GAMEOBJECT_SPAWN_ANIM* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GAMEOBJECT_SPAWN_ANIM_write(WowWorldWriter* writer, const vanilla_SMSG_GAMEOBJECT_SPAWN_ANIM* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 2); /* size */
 
     WRITE_U16(0x00000214); /* opcode */
@@ -17218,15 +24845,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GAMEOBJECT_SPAWN_ANIM_wr
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_GAMEOBJECT_DESPAWN_ANIM_read(WowWorldReader* reader, vanilla_SMSG_GAMEOBJECT_DESPAWN_ANIM* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GAMEOBJECT_DESPAWN_ANIM_write(WowWorldWriter* writer, const vanilla_SMSG_GAMEOBJECT_DESPAWN_ANIM* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 2); /* size */
 
     WRITE_U16(0x00000215); /* opcode */
@@ -17235,15 +24879,24 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GAMEOBJECT_DESPAWN_ANIM_
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_CORPSE_QUERY_Client_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x00000216); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_CORPSE_QUERY_Server_size(const vanilla_MSG_CORPSE_QUERY_Server* object) {
@@ -17257,6 +24910,13 @@ static size_t vanilla_MSG_CORPSE_QUERY_Server_size(const vanilla_MSG_CORPSE_QUER
 }
 
 static WowWorldResult vanilla_MSG_CORPSE_QUERY_Server_read(WowWorldReader* reader, vanilla_MSG_CORPSE_QUERY_Server* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->result = 0;
     READ_U8(object->result);
 
@@ -17271,9 +24931,18 @@ static WowWorldResult vanilla_MSG_CORPSE_QUERY_Server_read(WowWorldReader* reade
 
     }
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_CORPSE_QUERY_Server_write(WowWorldWriter* writer, const vanilla_MSG_CORPSE_QUERY_Server* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_CORPSE_QUERY_Server_size(object) + 2); /* size */
 
     WRITE_U16(0x00000216); /* opcode */
@@ -17290,30 +24959,50 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_CORPSE_QUERY_Server_write
     }
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_CORPSE_QUERY_Server_free(vanilla_MSG_CORPSE_QUERY_Server* object) {
-    if (object->result == VANILLA_CORPSE_QUERY_RESULT_FOUND) {
-    }
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GMTICKET_DELETETICKET_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x00000217); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_GMTICKET_DELETETICKET_read(WowWorldReader* reader, vanilla_SMSG_GMTICKET_DELETETICKET* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->response = 0;
     READ_U32(object->response);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GMTICKET_DELETETICKET_write(WowWorldWriter* writer, const vanilla_SMSG_GMTICKET_DELETETICKET* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 2); /* size */
 
     WRITE_U16(0x00000218); /* opcode */
@@ -17322,34 +25011,67 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GMTICKET_DELETETICKET_wr
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CHAT_WRONG_FACTION_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 2); /* size */
 
     WRITE_U16(0x00000219); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GMTICKET_SYSTEMSTATUS_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x0000021a); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_GMTICKET_SYSTEMSTATUS_read(WowWorldReader* reader, vanilla_SMSG_GMTICKET_SYSTEMSTATUS* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->will_accept_tickets = 0;
     READ_U32(object->will_accept_tickets);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GMTICKET_SYSTEMSTATUS_write(WowWorldWriter* writer, const vanilla_SMSG_GMTICKET_SYSTEMSTATUS* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 2); /* size */
 
     WRITE_U16(0x0000021b); /* opcode */
@@ -17358,15 +25080,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GMTICKET_SYSTEMSTATUS_wr
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_SPIRIT_HEALER_ACTIVATE_read(WowWorldReader* reader, vanilla_CMSG_SPIRIT_HEALER_ACTIVATE* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SPIRIT_HEALER_ACTIVATE_write(WowWorldWriter* writer, const vanilla_CMSG_SPIRIT_HEALER_ACTIVATE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x0000021c); /* opcode */
@@ -17375,15 +25114,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SPIRIT_HEALER_ACTIVATE_w
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_SET_REST_START_read(WowWorldReader* reader, vanilla_SMSG_SET_REST_START* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->unknown1);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SET_REST_START_write(WowWorldWriter* writer, const vanilla_SMSG_SET_REST_START* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 2); /* size */
 
     WRITE_U16(0x0000021e); /* opcode */
@@ -17392,15 +25148,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SET_REST_START_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_SPIRIT_HEALER_CONFIRM_read(WowWorldReader* reader, vanilla_SMSG_SPIRIT_HEALER_CONFIRM* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPIRIT_HEALER_CONFIRM_write(WowWorldWriter* writer, const vanilla_SMSG_SPIRIT_HEALER_CONFIRM* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 2); /* size */
 
     WRITE_U16(0x00000222); /* opcode */
@@ -17409,6 +25182,12 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPIRIT_HEALER_CONFIRM_wr
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GOSSIP_POI_free(vanilla_SMSG_GOSSIP_POI* object) {
+    FREE_STRING(object->location_name);
+
 }
 
 static size_t vanilla_SMSG_GOSSIP_POI_size(const vanilla_SMSG_GOSSIP_POI* object) {
@@ -17416,6 +25195,15 @@ static size_t vanilla_SMSG_GOSSIP_POI_size(const vanilla_SMSG_GOSSIP_POI* object
 }
 
 static WowWorldResult vanilla_SMSG_GOSSIP_POI_read(WowWorldReader* reader, vanilla_SMSG_GOSSIP_POI* object) {
+    int _return_value = 1;
+
+    if (21 > (reader->length - reader->index)) {
+        _return_value = (size_t)21 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->location_name = NULL;
+
     READ_U32(object->flags);
 
     WWM_CHECK_RETURN_CODE(all_Vector2d_read(reader, &object->position));
@@ -17427,9 +25215,19 @@ static WowWorldResult vanilla_SMSG_GOSSIP_POI_read(WowWorldReader* reader, vanil
     READ_CSTRING(object->location_name);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_GOSSIP_POI_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GOSSIP_POI_write(WowWorldWriter* writer, const vanilla_SMSG_GOSSIP_POI* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_GOSSIP_POI_size(object) + 2); /* size */
 
     WRITE_U16(0x00000224); /* opcode */
@@ -17446,20 +25244,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GOSSIP_POI_write(WowWorl
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_GOSSIP_POI_free(vanilla_SMSG_GOSSIP_POI* object) {
-    FREE_STRING(object->location_name);
-
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_CHAT_IGNORED_read(WowWorldReader* reader, vanilla_CMSG_CHAT_IGNORED* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHAT_IGNORED_write(WowWorldWriter* writer, const vanilla_CMSG_CHAT_IGNORED* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x00000225); /* opcode */
@@ -17468,6 +25278,12 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHAT_IGNORED_write(WowWo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GUILD_RANK_free(vanilla_CMSG_GUILD_RANK* object) {
+    FREE_STRING(object->rank_name);
+
 }
 
 static size_t vanilla_CMSG_GUILD_RANK_size(const vanilla_CMSG_GUILD_RANK* object) {
@@ -17475,6 +25291,15 @@ static size_t vanilla_CMSG_GUILD_RANK_size(const vanilla_CMSG_GUILD_RANK* object
 }
 
 static WowWorldResult vanilla_CMSG_GUILD_RANK_read(WowWorldReader* reader, vanilla_CMSG_GUILD_RANK* object) {
+    int _return_value = 1;
+
+    if (9 > (reader->length - reader->index)) {
+        _return_value = (size_t)9 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->rank_name = NULL;
+
     READ_U32(object->rank_id);
 
     READ_U32(object->rights);
@@ -17482,9 +25307,19 @@ static WowWorldResult vanilla_CMSG_GUILD_RANK_read(WowWorldReader* reader, vanil
     READ_CSTRING(object->rank_name);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_GUILD_RANK_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_RANK_write(WowWorldWriter* writer, const vanilla_CMSG_GUILD_RANK* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_GUILD_RANK_size(object) + 4); /* size */
 
     WRITE_U32(0x00000231); /* opcode */
@@ -17497,9 +25332,10 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_RANK_write(WowWorl
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GUILD_RANK_free(vanilla_CMSG_GUILD_RANK* object) {
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GUILD_ADD_RANK_free(vanilla_CMSG_GUILD_ADD_RANK* object) {
     FREE_STRING(object->rank_name);
 
 }
@@ -17509,12 +25345,31 @@ static size_t vanilla_CMSG_GUILD_ADD_RANK_size(const vanilla_CMSG_GUILD_ADD_RANK
 }
 
 static WowWorldResult vanilla_CMSG_GUILD_ADD_RANK_read(WowWorldReader* reader, vanilla_CMSG_GUILD_ADD_RANK* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->rank_name = NULL;
+
     READ_CSTRING(object->rank_name);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_GUILD_ADD_RANK_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_ADD_RANK_write(WowWorldWriter* writer, const vanilla_CMSG_GUILD_ADD_RANK* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_GUILD_ADD_RANK_size(object) + 4); /* size */
 
     WRITE_U32(0x00000232); /* opcode */
@@ -17523,20 +25378,31 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_ADD_RANK_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GUILD_ADD_RANK_free(vanilla_CMSG_GUILD_ADD_RANK* object) {
-    FREE_STRING(object->rank_name);
-
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_DEL_RANK_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x00000233); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GUILD_SET_PUBLIC_NOTE_free(vanilla_CMSG_GUILD_SET_PUBLIC_NOTE* object) {
+    FREE_STRING(object->player_name);
+
+    FREE_STRING(object->note);
+
 }
 
 static size_t vanilla_CMSG_GUILD_SET_PUBLIC_NOTE_size(const vanilla_CMSG_GUILD_SET_PUBLIC_NOTE* object) {
@@ -17544,14 +25410,34 @@ static size_t vanilla_CMSG_GUILD_SET_PUBLIC_NOTE_size(const vanilla_CMSG_GUILD_S
 }
 
 static WowWorldResult vanilla_CMSG_GUILD_SET_PUBLIC_NOTE_read(WowWorldReader* reader, vanilla_CMSG_GUILD_SET_PUBLIC_NOTE* object) {
+    int _return_value = 1;
+
+    if (2 > (reader->length - reader->index)) {
+        _return_value = (size_t)2 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->player_name = NULL;
+    object->note = NULL;
+
     READ_CSTRING(object->player_name);
 
     READ_CSTRING(object->note);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_GUILD_SET_PUBLIC_NOTE_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_SET_PUBLIC_NOTE_write(WowWorldWriter* writer, const vanilla_CMSG_GUILD_SET_PUBLIC_NOTE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_GUILD_SET_PUBLIC_NOTE_size(object) + 4); /* size */
 
     WRITE_U32(0x00000234); /* opcode */
@@ -17562,9 +25448,10 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_SET_PUBLIC_NOTE_wr
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GUILD_SET_PUBLIC_NOTE_free(vanilla_CMSG_GUILD_SET_PUBLIC_NOTE* object) {
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GUILD_SET_OFFICER_NOTE_free(vanilla_CMSG_GUILD_SET_OFFICER_NOTE* object) {
     FREE_STRING(object->player_name);
 
     FREE_STRING(object->note);
@@ -17576,14 +25463,34 @@ static size_t vanilla_CMSG_GUILD_SET_OFFICER_NOTE_size(const vanilla_CMSG_GUILD_
 }
 
 static WowWorldResult vanilla_CMSG_GUILD_SET_OFFICER_NOTE_read(WowWorldReader* reader, vanilla_CMSG_GUILD_SET_OFFICER_NOTE* object) {
+    int _return_value = 1;
+
+    if (2 > (reader->length - reader->index)) {
+        _return_value = (size_t)2 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->player_name = NULL;
+    object->note = NULL;
+
     READ_CSTRING(object->player_name);
 
     READ_CSTRING(object->note);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_GUILD_SET_OFFICER_NOTE_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_SET_OFFICER_NOTE_write(WowWorldWriter* writer, const vanilla_CMSG_GUILD_SET_OFFICER_NOTE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_GUILD_SET_OFFICER_NOTE_size(object) + 4); /* size */
 
     WRITE_U32(0x00000235); /* opcode */
@@ -17594,16 +25501,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_SET_OFFICER_NOTE_w
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GUILD_SET_OFFICER_NOTE_free(vanilla_CMSG_GUILD_SET_OFFICER_NOTE* object) {
-    FREE_STRING(object->player_name);
-
-    FREE_STRING(object->note);
-
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_LOGIN_VERIFY_WORLD_read(WowWorldReader* reader, vanilla_SMSG_LOGIN_VERIFY_WORLD* object) {
+    int _return_value = 1;
+
+    if (20 > (reader->length - reader->index)) {
+        _return_value = (size_t)20 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->map = 0;
     READ_U32(object->map);
 
@@ -17612,9 +25520,18 @@ static WowWorldResult vanilla_SMSG_LOGIN_VERIFY_WORLD_read(WowWorldReader* reade
     READ_FLOAT(object->orientation);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOGIN_VERIFY_WORLD_write(WowWorldWriter* writer, const vanilla_SMSG_LOGIN_VERIFY_WORLD* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0014 + 2); /* size */
 
     WRITE_U16(0x00000236); /* opcode */
@@ -17627,6 +25544,16 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOGIN_VERIFY_WORLD_write
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_SEND_MAIL_free(vanilla_CMSG_SEND_MAIL* object) {
+    FREE_STRING(object->receiver);
+
+    FREE_STRING(object->subject);
+
+    FREE_STRING(object->body);
+
 }
 
 static size_t vanilla_CMSG_SEND_MAIL_size(const vanilla_CMSG_SEND_MAIL* object) {
@@ -17634,6 +25561,17 @@ static size_t vanilla_CMSG_SEND_MAIL_size(const vanilla_CMSG_SEND_MAIL* object) 
 }
 
 static WowWorldResult vanilla_CMSG_SEND_MAIL_read(WowWorldReader* reader, vanilla_CMSG_SEND_MAIL* object) {
+    int _return_value = 1;
+
+    if (43 > (reader->length - reader->index)) {
+        _return_value = (size_t)43 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->receiver = NULL;
+    object->subject = NULL;
+    object->body = NULL;
+
     READ_U64(object->mailbox);
 
     READ_CSTRING(object->receiver);
@@ -17657,9 +25595,19 @@ static WowWorldResult vanilla_CMSG_SEND_MAIL_read(WowWorldReader* reader, vanill
     READ_U32(object->unknown4);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_SEND_MAIL_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SEND_MAIL_write(WowWorldWriter* writer, const vanilla_CMSG_SEND_MAIL* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_SEND_MAIL_size(object) + 4); /* size */
 
     WRITE_U32(0x00000238); /* opcode */
@@ -17688,15 +25636,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SEND_MAIL_write(WowWorld
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_SEND_MAIL_free(vanilla_CMSG_SEND_MAIL* object) {
-    FREE_STRING(object->receiver);
-
-    FREE_STRING(object->subject);
-
-    FREE_STRING(object->body);
-
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_SEND_MAIL_RESULT_size(const vanilla_SMSG_SEND_MAIL_RESULT* object) {
@@ -17726,6 +25666,13 @@ static size_t vanilla_SMSG_SEND_MAIL_RESULT_size(const vanilla_SMSG_SEND_MAIL_RE
 }
 
 static WowWorldResult vanilla_SMSG_SEND_MAIL_RESULT_read(WowWorldReader* reader, vanilla_SMSG_SEND_MAIL_RESULT* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->mail_id);
 
     object->action = 0;
@@ -17756,9 +25703,18 @@ static WowWorldResult vanilla_SMSG_SEND_MAIL_RESULT_read(WowWorldReader* reader,
         }
     }
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SEND_MAIL_RESULT_write(WowWorldWriter* writer, const vanilla_SMSG_SEND_MAIL_RESULT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_SEND_MAIL_RESULT_size(object) + 2); /* size */
 
     WRITE_U16(0x00000239); /* opcode */
@@ -17791,28 +25747,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SEND_MAIL_RESULT_write(W
     }
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_SEND_MAIL_RESULT_free(vanilla_SMSG_SEND_MAIL_RESULT* object) {
-    if (object->action == VANILLA_MAIL_ACTION_ITEM_TAKEN) {
-        if (object->result == VANILLA_MAIL_RESULT_ERR_EQUIP_ERROR) {
-        }
-        else if (object->result == VANILLA_MAIL_RESULT_OK|| object->result == VANILLA_MAIL_RESULT_ERR_CANNOT_SEND_TO_SELF|| object->result == VANILLA_MAIL_RESULT_ERR_NOT_ENOUGH_MONEY|| object->result == VANILLA_MAIL_RESULT_ERR_RECIPIENT_NOT_FOUND|| object->result == VANILLA_MAIL_RESULT_ERR_NOT_YOUR_TEAM|| object->result == VANILLA_MAIL_RESULT_ERR_INTERNAL_ERROR|| object->result == VANILLA_MAIL_RESULT_ERR_DISABLED_FOR_TRIAL_ACC|| object->result == VANILLA_MAIL_RESULT_ERR_RECIPIENT_CAP_REACHED|| object->result == VANILLA_MAIL_RESULT_ERR_CANT_SEND_WRAPPED_COD|| object->result == VANILLA_MAIL_RESULT_ERR_MAIL_AND_CHAT_SUSPENDED|| object->result == VANILLA_MAIL_RESULT_ERR_TOO_MANY_ATTACHMENTS|| object->result == VANILLA_MAIL_RESULT_ERR_MAIL_ATTACHMENT_INVALID) {
-        }
-    }
-    else if (object->action == VANILLA_MAIL_ACTION_SEND|| object->action == VANILLA_MAIL_ACTION_MONEY_TAKEN|| object->action == VANILLA_MAIL_ACTION_RETURNED_TO_SENDER|| object->action == VANILLA_MAIL_ACTION_DELETED|| object->action == VANILLA_MAIL_ACTION_MADE_PERMANENT) {
-        if (object->result2 == VANILLA_MAIL_RESULT_TWO_ERR_EQUIP_ERROR) {
-        }
-    }
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_GET_MAIL_LIST_read(WowWorldReader* reader, vanilla_CMSG_GET_MAIL_LIST* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->mailbox);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GET_MAIL_LIST_write(WowWorldWriter* writer, const vanilla_CMSG_GET_MAIL_LIST* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x0000023a); /* opcode */
@@ -17821,6 +25781,19 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GET_MAIL_LIST_write(WowW
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_MAIL_LIST_RESULT_free(vanilla_SMSG_MAIL_LIST_RESULT* object) {
+    size_t i;
+
+    if (object->mails != NULL) {
+        for (i = 0; i < object->amount_of_mails; ++i) {
+            vanilla_Mail_free(&((object->mails)[i]));
+        }
+        free(object->mails);
+        object->mails = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_MAIL_LIST_RESULT_size(const vanilla_SMSG_MAIL_LIST_RESULT* object) {
@@ -17837,9 +25810,18 @@ static size_t vanilla_SMSG_MAIL_LIST_RESULT_size(const vanilla_SMSG_MAIL_LIST_RE
 }
 
 static WowWorldResult vanilla_SMSG_MAIL_LIST_RESULT_read(WowWorldReader* reader, vanilla_SMSG_MAIL_LIST_RESULT* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->mails = NULL;
+
     READ_U8(object->amount_of_mails);
 
-    object->mails = malloc(object->amount_of_mails * sizeof(vanilla_Mail));
+    object->mails = calloc(object->amount_of_mails, sizeof(vanilla_Mail));
     if (object->mails == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -17847,9 +25829,19 @@ static WowWorldResult vanilla_SMSG_MAIL_LIST_RESULT_read(WowWorldReader* reader,
 
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_MAIL_LIST_RESULT_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MAIL_LIST_RESULT_write(WowWorldWriter* writer, const vanilla_SMSG_MAIL_LIST_RESULT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_MAIL_LIST_RESULT_size(object) + 2); /* size */
 
     WRITE_U16(0x0000023b); /* opcode */
@@ -17860,26 +25852,33 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MAIL_LIST_RESULT_write(W
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_MAIL_LIST_RESULT_free(vanilla_SMSG_MAIL_LIST_RESULT* object) {
-    size_t i;
-
-    for (i = 0; i < object->amount_of_mails; ++i) {
-        vanilla_Mail_free(&((object->mails)[i]));
-    }
-    free(object->mails);
-    object->mails = NULL;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_BATTLEFIELD_LIST_read(WowWorldReader* reader, vanilla_CMSG_BATTLEFIELD_LIST* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->map = 0;
     READ_U32(object->map);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BATTLEFIELD_LIST_write(WowWorldWriter* writer, const vanilla_CMSG_BATTLEFIELD_LIST* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 4); /* size */
 
     WRITE_U32(0x0000023c); /* opcode */
@@ -17888,6 +25887,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BATTLEFIELD_LIST_write(W
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_BATTLEFIELD_LIST_free(vanilla_SMSG_BATTLEFIELD_LIST* object) {
+    if (object->battlegrounds != NULL) {
+        free(object->battlegrounds);
+        object->battlegrounds = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_BATTLEFIELD_LIST_size(const vanilla_SMSG_BATTLEFIELD_LIST* object) {
@@ -17895,6 +25902,15 @@ static size_t vanilla_SMSG_BATTLEFIELD_LIST_size(const vanilla_SMSG_BATTLEFIELD_
 }
 
 static WowWorldResult vanilla_SMSG_BATTLEFIELD_LIST_read(WowWorldReader* reader, vanilla_SMSG_BATTLEFIELD_LIST* object) {
+    int _return_value = 1;
+
+    if (17 > (reader->length - reader->index)) {
+        _return_value = (size_t)17 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->battlegrounds = NULL;
+
     READ_U64(object->battlemaster);
 
     object->map = 0;
@@ -17905,7 +25921,7 @@ static WowWorldResult vanilla_SMSG_BATTLEFIELD_LIST_read(WowWorldReader* reader,
 
     READ_U32(object->number_of_battlegrounds);
 
-    object->battlegrounds = malloc(object->number_of_battlegrounds * sizeof(uint32_t));
+    object->battlegrounds = calloc(object->number_of_battlegrounds, sizeof(uint32_t));
     if (object->battlegrounds == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -17913,9 +25929,19 @@ static WowWorldResult vanilla_SMSG_BATTLEFIELD_LIST_read(WowWorldReader* reader,
 
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_BATTLEFIELD_LIST_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_BATTLEFIELD_LIST_write(WowWorldWriter* writer, const vanilla_SMSG_BATTLEFIELD_LIST* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_BATTLEFIELD_LIST_size(object) + 2); /* size */
 
     WRITE_U16(0x0000023d); /* opcode */
@@ -17932,21 +25958,33 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_BATTLEFIELD_LIST_write(W
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_BATTLEFIELD_LIST_free(vanilla_SMSG_BATTLEFIELD_LIST* object) {
-    free(object->battlegrounds);
-    object->battlegrounds = NULL;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_BATTLEFIELD_JOIN_read(WowWorldReader* reader, vanilla_CMSG_BATTLEFIELD_JOIN* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->map = 0;
     READ_U32(object->map);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BATTLEFIELD_JOIN_write(WowWorldWriter* writer, const vanilla_CMSG_BATTLEFIELD_JOIN* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 4); /* size */
 
     WRITE_U32(0x0000023e); /* opcode */
@@ -17955,9 +25993,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BATTLEFIELD_JOIN_write(W
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_ITEM_TEXT_QUERY_read(WowWorldReader* reader, vanilla_CMSG_ITEM_TEXT_QUERY* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->item_text_id);
 
     READ_U32(object->mail_id);
@@ -17965,9 +26011,18 @@ static WowWorldResult vanilla_CMSG_ITEM_TEXT_QUERY_read(WowWorldReader* reader, 
     READ_U32(object->unknown1);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_ITEM_TEXT_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_ITEM_TEXT_QUERY* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 4); /* size */
 
     WRITE_U32(0x00000243); /* opcode */
@@ -17980,6 +26035,12 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_ITEM_TEXT_QUERY_write(Wo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_ITEM_TEXT_QUERY_RESPONSE_free(vanilla_SMSG_ITEM_TEXT_QUERY_RESPONSE* object) {
+    FREE_STRING(object->text);
+
 }
 
 static size_t vanilla_SMSG_ITEM_TEXT_QUERY_RESPONSE_size(const vanilla_SMSG_ITEM_TEXT_QUERY_RESPONSE* object) {
@@ -17987,14 +26048,33 @@ static size_t vanilla_SMSG_ITEM_TEXT_QUERY_RESPONSE_size(const vanilla_SMSG_ITEM
 }
 
 static WowWorldResult vanilla_SMSG_ITEM_TEXT_QUERY_RESPONSE_read(WowWorldReader* reader, vanilla_SMSG_ITEM_TEXT_QUERY_RESPONSE* object) {
+    int _return_value = 1;
+
+    if (5 > (reader->length - reader->index)) {
+        _return_value = (size_t)5 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->text = NULL;
+
     READ_U32(object->item_text_id);
 
     READ_CSTRING(object->text);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_ITEM_TEXT_QUERY_RESPONSE_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ITEM_TEXT_QUERY_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_ITEM_TEXT_QUERY_RESPONSE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_ITEM_TEXT_QUERY_RESPONSE_size(object) + 2); /* size */
 
     WRITE_U16(0x00000244); /* opcode */
@@ -18005,22 +26085,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ITEM_TEXT_QUERY_RESPONSE
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_ITEM_TEXT_QUERY_RESPONSE_free(vanilla_SMSG_ITEM_TEXT_QUERY_RESPONSE* object) {
-    FREE_STRING(object->text);
-
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_MAIL_TAKE_MONEY_read(WowWorldReader* reader, vanilla_CMSG_MAIL_TAKE_MONEY* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->mailbox);
 
     READ_U32(object->mail_id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MAIL_TAKE_MONEY_write(WowWorldWriter* writer, const vanilla_CMSG_MAIL_TAKE_MONEY* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 4); /* size */
 
     WRITE_U32(0x00000245); /* opcode */
@@ -18031,17 +26123,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MAIL_TAKE_MONEY_write(Wo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_MAIL_TAKE_ITEM_read(WowWorldReader* reader, vanilla_CMSG_MAIL_TAKE_ITEM* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->mailbox);
 
     READ_U32(object->mail_id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MAIL_TAKE_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_MAIL_TAKE_ITEM* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 4); /* size */
 
     WRITE_U32(0x00000246); /* opcode */
@@ -18052,17 +26161,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MAIL_TAKE_ITEM_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_MAIL_MARK_AS_READ_read(WowWorldReader* reader, vanilla_CMSG_MAIL_MARK_AS_READ* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->mailbox);
 
     READ_U32(object->mail_id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MAIL_MARK_AS_READ_write(WowWorldWriter* writer, const vanilla_CMSG_MAIL_MARK_AS_READ* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 4); /* size */
 
     WRITE_U32(0x00000247); /* opcode */
@@ -18073,17 +26199,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MAIL_MARK_AS_READ_write(
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_MAIL_RETURN_TO_SENDER_read(WowWorldReader* reader, vanilla_CMSG_MAIL_RETURN_TO_SENDER* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->mailbox_id);
 
     READ_U32(object->mail_id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MAIL_RETURN_TO_SENDER_write(WowWorldWriter* writer, const vanilla_CMSG_MAIL_RETURN_TO_SENDER* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 4); /* size */
 
     WRITE_U32(0x00000248); /* opcode */
@@ -18094,17 +26237,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MAIL_RETURN_TO_SENDER_wr
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_MAIL_DELETE_read(WowWorldReader* reader, vanilla_CMSG_MAIL_DELETE* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->mailbox_id);
 
     READ_U32(object->mail_id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MAIL_DELETE_write(WowWorldWriter* writer, const vanilla_CMSG_MAIL_DELETE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 4); /* size */
 
     WRITE_U32(0x00000249); /* opcode */
@@ -18115,9 +26275,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MAIL_DELETE_write(WowWor
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_MAIL_CREATE_TEXT_ITEM_read(WowWorldReader* reader, vanilla_CMSG_MAIL_CREATE_TEXT_ITEM* object) {
+    int _return_value = 1;
+
+    if (16 > (reader->length - reader->index)) {
+        _return_value = (size_t)16 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->mailbox);
 
     READ_U32(object->mail_id);
@@ -18125,9 +26293,18 @@ static WowWorldResult vanilla_CMSG_MAIL_CREATE_TEXT_ITEM_read(WowWorldReader* re
     READ_U32(object->mail_template_id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MAIL_CREATE_TEXT_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_MAIL_CREATE_TEXT_ITEM* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0010 + 4); /* size */
 
     WRITE_U32(0x0000024a); /* opcode */
@@ -18140,6 +26317,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MAIL_CREATE_TEXT_ITEM_wr
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_SPELLLOGMISS_free(vanilla_SMSG_SPELLLOGMISS* object) {
+    if (object->targets != NULL) {
+        free(object->targets);
+        object->targets = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_SPELLLOGMISS_size(const vanilla_SMSG_SPELLLOGMISS* object) {
@@ -18147,6 +26332,15 @@ static size_t vanilla_SMSG_SPELLLOGMISS_size(const vanilla_SMSG_SPELLLOGMISS* ob
 }
 
 static WowWorldResult vanilla_SMSG_SPELLLOGMISS_read(WowWorldReader* reader, vanilla_SMSG_SPELLLOGMISS* object) {
+    int _return_value = 1;
+
+    if (17 > (reader->length - reader->index)) {
+        _return_value = (size_t)17 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->targets = NULL;
+
     READ_U32(object->id);
 
     READ_U64(object->caster);
@@ -18155,7 +26349,7 @@ static WowWorldResult vanilla_SMSG_SPELLLOGMISS_read(WowWorldReader* reader, van
 
     READ_U32(object->amount_of_targets);
 
-    object->targets = malloc(object->amount_of_targets * sizeof(vanilla_SpellLogMiss));
+    object->targets = calloc(object->amount_of_targets, sizeof(vanilla_SpellLogMiss));
     if (object->targets == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -18163,9 +26357,19 @@ static WowWorldResult vanilla_SMSG_SPELLLOGMISS_read(WowWorldReader* reader, van
 
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_SPELLLOGMISS_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELLLOGMISS_write(WowWorldWriter* writer, const vanilla_SMSG_SPELLLOGMISS* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_SPELLLOGMISS_size(object) + 2); /* size */
 
     WRITE_U16(0x0000024b); /* opcode */
@@ -18182,11 +26386,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELLLOGMISS_write(WowWo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_SPELLLOGMISS_free(vanilla_SMSG_SPELLLOGMISS* object) {
-    free(object->targets);
-    object->targets = NULL;
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_SPELLLOGEXECUTE_free(vanilla_SMSG_SPELLLOGEXECUTE* object) {
+    if (object->logs != NULL) {
+        free(object->logs);
+        object->logs = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_SPELLLOGEXECUTE_size(const vanilla_SMSG_SPELLLOGEXECUTE* object) {
@@ -18203,13 +26410,22 @@ static size_t vanilla_SMSG_SPELLLOGEXECUTE_size(const vanilla_SMSG_SPELLLOGEXECU
 }
 
 static WowWorldResult vanilla_SMSG_SPELLLOGEXECUTE_read(WowWorldReader* reader, vanilla_SMSG_SPELLLOGEXECUTE* object) {
+    int _return_value = 1;
+
+    if (9 > (reader->length - reader->index)) {
+        _return_value = (size_t)9 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->logs = NULL;
+
     READ_PACKED_GUID(object->caster);
 
     READ_U32(object->spell);
 
     READ_U32(object->amount_of_effects);
 
-    object->logs = malloc(object->amount_of_effects * sizeof(vanilla_SpellLog));
+    object->logs = calloc(object->amount_of_effects, sizeof(vanilla_SpellLog));
     if (object->logs == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -18217,9 +26433,19 @@ static WowWorldResult vanilla_SMSG_SPELLLOGEXECUTE_read(WowWorldReader* reader, 
 
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_SPELLLOGEXECUTE_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELLLOGEXECUTE_write(WowWorldWriter* writer, const vanilla_SMSG_SPELLLOGEXECUTE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_SPELLLOGEXECUTE_size(object) + 2); /* size */
 
     WRITE_U16(0x0000024c); /* opcode */
@@ -18234,16 +26460,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELLLOGEXECUTE_write(Wo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_SPELLLOGEXECUTE_free(vanilla_SMSG_SPELLLOGEXECUTE* object) {
-    size_t i;
-
-    for (i = 0; i < object->amount_of_effects; ++i) {
-        vanilla_SpellLog_free(&((object->logs)[i]));
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_PERIODICAURALOG_free(vanilla_SMSG_PERIODICAURALOG* object) {
+    if (object->auras != NULL) {
+        free(object->auras);
+        object->auras = NULL;
     }
-    free(object->logs);
-    object->logs = NULL;
 }
 
 static size_t vanilla_SMSG_PERIODICAURALOG_size(const vanilla_SMSG_PERIODICAURALOG* object) {
@@ -18260,6 +26484,15 @@ static size_t vanilla_SMSG_PERIODICAURALOG_size(const vanilla_SMSG_PERIODICAURAL
 }
 
 static WowWorldResult vanilla_SMSG_PERIODICAURALOG_read(WowWorldReader* reader, vanilla_SMSG_PERIODICAURALOG* object) {
+    int _return_value = 1;
+
+    if (10 > (reader->length - reader->index)) {
+        _return_value = (size_t)10 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->auras = NULL;
+
     READ_PACKED_GUID(object->target);
 
     READ_PACKED_GUID(object->caster);
@@ -18268,7 +26501,7 @@ static WowWorldResult vanilla_SMSG_PERIODICAURALOG_read(WowWorldReader* reader, 
 
     READ_U32(object->amount_of_auras);
 
-    object->auras = malloc(object->amount_of_auras * sizeof(vanilla_AuraLog));
+    object->auras = calloc(object->amount_of_auras, sizeof(vanilla_AuraLog));
     if (object->auras == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -18276,9 +26509,19 @@ static WowWorldResult vanilla_SMSG_PERIODICAURALOG_read(WowWorldReader* reader, 
 
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_PERIODICAURALOG_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PERIODICAURALOG_write(WowWorldWriter* writer, const vanilla_SMSG_PERIODICAURALOG* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_PERIODICAURALOG_size(object) + 2); /* size */
 
     WRITE_U16(0x0000024e); /* opcode */
@@ -18295,19 +26538,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PERIODICAURALOG_write(Wo
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_PERIODICAURALOG_free(vanilla_SMSG_PERIODICAURALOG* object) {
-    size_t i;
-
-    for (i = 0; i < object->amount_of_auras; ++i) {
-        vanilla_AuraLog_free(&((object->auras)[i]));
-    }
-    free(object->auras);
-    object->auras = NULL;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_SPELLDAMAGESHIELD_read(WowWorldReader* reader, vanilla_SMSG_SPELLDAMAGESHIELD* object) {
+    int _return_value = 1;
+
+    if (24 > (reader->length - reader->index)) {
+        _return_value = (size_t)24 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->victim);
 
     READ_U64(object->caster);
@@ -18318,9 +26559,18 @@ static WowWorldResult vanilla_SMSG_SPELLDAMAGESHIELD_read(WowWorldReader* reader
     READ_U32(object->school);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELLDAMAGESHIELD_write(WowWorldWriter* writer, const vanilla_SMSG_SPELLDAMAGESHIELD* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0018 + 2); /* size */
 
     WRITE_U16(0x0000024f); /* opcode */
@@ -18335,6 +26585,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELLDAMAGESHIELD_write(
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_SPELLNONMELEEDAMAGELOG_size(const vanilla_SMSG_SPELLNONMELEEDAMAGELOG* object) {
@@ -18342,6 +26593,13 @@ static size_t vanilla_SMSG_SPELLNONMELEEDAMAGELOG_size(const vanilla_SMSG_SPELLN
 }
 
 static WowWorldResult vanilla_SMSG_SPELLNONMELEEDAMAGELOG_read(WowWorldReader* reader, vanilla_SMSG_SPELLNONMELEEDAMAGELOG* object) {
+    int _return_value = 1;
+
+    if (30 > (reader->length - reader->index)) {
+        _return_value = (size_t)30 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->target);
 
     READ_PACKED_GUID(object->attacker);
@@ -18369,9 +26627,18 @@ static WowWorldResult vanilla_SMSG_SPELLNONMELEEDAMAGELOG_read(WowWorldReader* r
     READ_U8(object->extend_flag);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELLNONMELEEDAMAGELOG_write(WowWorldWriter* writer, const vanilla_SMSG_SPELLNONMELEEDAMAGELOG* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_SPELLNONMELEEDAMAGELOG_size(object) + 2); /* size */
 
     WRITE_U16(0x00000250); /* opcode */
@@ -18402,18 +26669,35 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELLNONMELEEDAMAGELOG_w
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_LEARN_TALENT_read(WowWorldReader* reader, vanilla_CMSG_LEARN_TALENT* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->talent = 0;
     READ_U32(object->talent);
 
     READ_U32(object->requested_rank);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_LEARN_TALENT_write(WowWorldWriter* writer, const vanilla_CMSG_LEARN_TALENT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x00000251); /* opcode */
@@ -18424,6 +26708,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_LEARN_TALENT_write(WowWo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_TOGGLE_PVP_free(vanilla_CMSG_TOGGLE_PVP* object) {
+    if (object->set != NULL) {
+        free(object->set);
+        object->set = NULL;
+    }
 }
 
 static size_t vanilla_CMSG_TOGGLE_PVP_size(const vanilla_CMSG_TOGGLE_PVP* object) {
@@ -18437,22 +26729,36 @@ static size_t vanilla_CMSG_TOGGLE_PVP_size(const vanilla_CMSG_TOGGLE_PVP* object
 }
 
 static WowWorldResult vanilla_CMSG_TOGGLE_PVP_read(WowWorldReader* reader, vanilla_CMSG_TOGGLE_PVP* object, size_t body_size) {
+    int _return_value = 1;
+
     size_t _size = 0;
 
+    object->set = NULL;
     object->set = NULL;
     if (_size < body_size) {
         object->set = malloc(sizeof(vanilla_CMSG_TOGGLE_PVP_set));
         if (object->set == NULL) {
-            return WWM_RESULT_MALLOC_FAIL;
+            _return_value = WWM_RESULT_MALLOC_FAIL;
+            goto cleanup;
         }
 
         READ_BOOL8(object->set->enable_pvp);
 
     }
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_TOGGLE_PVP_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_TOGGLE_PVP_write(WowWorldWriter* writer, const vanilla_CMSG_TOGGLE_PVP* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_TOGGLE_PVP_size(object) + 4); /* size */
 
     WRITE_U32(0x00000253); /* opcode */
@@ -18463,20 +26769,33 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_TOGGLE_PVP_write(WowWorl
     }
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_TOGGLE_PVP_free(vanilla_CMSG_TOGGLE_PVP* object) {
-    free(object->set);
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_ZONE_UNDER_ATTACK_read(WowWorldReader* reader, vanilla_SMSG_ZONE_UNDER_ATTACK* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->zone_id = 0;
     READ_U32(object->zone_id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ZONE_UNDER_ATTACK_write(WowWorldWriter* writer, const vanilla_SMSG_ZONE_UNDER_ATTACK* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 2); /* size */
 
     WRITE_U16(0x00000254); /* opcode */
@@ -18485,15 +26804,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ZONE_UNDER_ATTACK_write(
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_MSG_AUCTION_HELLO_Client_read(WowWorldReader* reader, vanilla_MSG_AUCTION_HELLO_Client* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->auctioneer);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_AUCTION_HELLO_Client_write(WowWorldWriter* writer, const vanilla_MSG_AUCTION_HELLO_Client* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x00000255); /* opcode */
@@ -18502,18 +26838,35 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_AUCTION_HELLO_Client_writ
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_MSG_AUCTION_HELLO_Server_read(WowWorldReader* reader, vanilla_MSG_AUCTION_HELLO_Server* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->auctioneer);
 
     object->auction_house = 0;
     READ_U32(object->auction_house);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_AUCTION_HELLO_Server_write(WowWorldWriter* writer, const vanilla_MSG_AUCTION_HELLO_Server* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 2); /* size */
 
     WRITE_U16(0x00000255); /* opcode */
@@ -18524,9 +26877,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_AUCTION_HELLO_Server_writ
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_AUCTION_SELL_ITEM_read(WowWorldReader* reader, vanilla_CMSG_AUCTION_SELL_ITEM* object) {
+    int _return_value = 1;
+
+    if (28 > (reader->length - reader->index)) {
+        _return_value = (size_t)28 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->auctioneer);
 
     READ_U64(object->item);
@@ -18538,9 +26899,18 @@ static WowWorldResult vanilla_CMSG_AUCTION_SELL_ITEM_read(WowWorldReader* reader
     READ_U32(object->auction_duration_in_minutes);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUCTION_SELL_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_AUCTION_SELL_ITEM* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x001c + 4); /* size */
 
     WRITE_U32(0x00000256); /* opcode */
@@ -18557,17 +26927,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUCTION_SELL_ITEM_write(
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_AUCTION_REMOVE_ITEM_read(WowWorldReader* reader, vanilla_CMSG_AUCTION_REMOVE_ITEM* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->auctioneer);
 
     READ_U32(object->auction_id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUCTION_REMOVE_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_AUCTION_REMOVE_ITEM* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 4); /* size */
 
     WRITE_U32(0x00000257); /* opcode */
@@ -18578,6 +26965,12 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUCTION_REMOVE_ITEM_writ
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_AUCTION_LIST_ITEMS_free(vanilla_CMSG_AUCTION_LIST_ITEMS* object) {
+    FREE_STRING(object->searched_name);
+
 }
 
 static size_t vanilla_CMSG_AUCTION_LIST_ITEMS_size(const vanilla_CMSG_AUCTION_LIST_ITEMS* object) {
@@ -18585,6 +26978,15 @@ static size_t vanilla_CMSG_AUCTION_LIST_ITEMS_size(const vanilla_CMSG_AUCTION_LI
 }
 
 static WowWorldResult vanilla_CMSG_AUCTION_LIST_ITEMS_read(WowWorldReader* reader, vanilla_CMSG_AUCTION_LIST_ITEMS* object) {
+    int _return_value = 1;
+
+    if (32 > (reader->length - reader->index)) {
+        _return_value = (size_t)32 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->searched_name = NULL;
+
     READ_U64(object->auctioneer);
 
     READ_U32(object->list_start_item);
@@ -18607,9 +27009,19 @@ static WowWorldResult vanilla_CMSG_AUCTION_LIST_ITEMS_read(WowWorldReader* reade
     READ_U8(object->usable);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_AUCTION_LIST_ITEMS_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUCTION_LIST_ITEMS_write(WowWorldWriter* writer, const vanilla_CMSG_AUCTION_LIST_ITEMS* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_AUCTION_LIST_ITEMS_size(object) + 4); /* size */
 
     WRITE_U32(0x00000258); /* opcode */
@@ -18636,22 +27048,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUCTION_LIST_ITEMS_write
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_AUCTION_LIST_ITEMS_free(vanilla_CMSG_AUCTION_LIST_ITEMS* object) {
-    FREE_STRING(object->searched_name);
-
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_AUCTION_LIST_OWNER_ITEMS_read(WowWorldReader* reader, vanilla_CMSG_AUCTION_LIST_OWNER_ITEMS* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->auctioneer);
 
     READ_U32(object->list_from);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUCTION_LIST_OWNER_ITEMS_write(WowWorldWriter* writer, const vanilla_CMSG_AUCTION_LIST_OWNER_ITEMS* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 4); /* size */
 
     WRITE_U32(0x00000259); /* opcode */
@@ -18662,9 +27086,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUCTION_LIST_OWNER_ITEMS
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_AUCTION_PLACE_BID_read(WowWorldReader* reader, vanilla_CMSG_AUCTION_PLACE_BID* object) {
+    int _return_value = 1;
+
+    if (16 > (reader->length - reader->index)) {
+        _return_value = (size_t)16 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->auctioneer);
 
     READ_U32(object->auction_id);
@@ -18672,9 +27104,18 @@ static WowWorldResult vanilla_CMSG_AUCTION_PLACE_BID_read(WowWorldReader* reader
     READ_U32(object->price);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUCTION_PLACE_BID_write(WowWorldWriter* writer, const vanilla_CMSG_AUCTION_PLACE_BID* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0010 + 4); /* size */
 
     WRITE_U32(0x0000025a); /* opcode */
@@ -18687,6 +27128,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUCTION_PLACE_BID_write(
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_AUCTION_COMMAND_RESULT_size(const vanilla_SMSG_AUCTION_COMMAND_RESULT* object) {
@@ -18722,6 +27164,13 @@ static size_t vanilla_SMSG_AUCTION_COMMAND_RESULT_size(const vanilla_SMSG_AUCTIO
 }
 
 static WowWorldResult vanilla_SMSG_AUCTION_COMMAND_RESULT_read(WowWorldReader* reader, vanilla_SMSG_AUCTION_COMMAND_RESULT* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->auction_id);
 
     object->action = 0;
@@ -18768,9 +27217,18 @@ static WowWorldResult vanilla_SMSG_AUCTION_COMMAND_RESULT_read(WowWorldReader* r
         }
     }
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_AUCTION_COMMAND_RESULT_write(WowWorldWriter* writer, const vanilla_SMSG_AUCTION_COMMAND_RESULT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_AUCTION_COMMAND_RESULT_size(object) + 2); /* size */
 
     WRITE_U16(0x0000025b); /* opcode */
@@ -18817,22 +27275,13 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_AUCTION_COMMAND_RESULT_w
     }
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_AUCTION_COMMAND_RESULT_free(vanilla_SMSG_AUCTION_COMMAND_RESULT* object) {
-    if (object->action == VANILLA_AUCTION_COMMAND_ACTION_BID_PLACED) {
-        if (object->result == VANILLA_AUCTION_COMMAND_RESULT_OK) {
-        }
-        else if (object->result == VANILLA_AUCTION_COMMAND_RESULT_ERR_INVENTORY) {
-        }
-        else if (object->result == VANILLA_AUCTION_COMMAND_RESULT_ERR_HIGHER_BID) {
-        }
-    }
-    else if (object->action == VANILLA_AUCTION_COMMAND_ACTION_STARTED|| object->action == VANILLA_AUCTION_COMMAND_ACTION_REMOVED) {
-        if (object->result2 == VANILLA_AUCTION_COMMAND_RESULT_TWO_ERR_INVENTORY) {
-        }
-        else if (object->result2 == VANILLA_AUCTION_COMMAND_RESULT_TWO_ERR_HIGHER_BID) {
-        }
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_AUCTION_LIST_RESULT_free(vanilla_SMSG_AUCTION_LIST_RESULT* object) {
+    if (object->auctions != NULL) {
+        free(object->auctions);
+        object->auctions = NULL;
     }
 }
 
@@ -18841,9 +27290,18 @@ static size_t vanilla_SMSG_AUCTION_LIST_RESULT_size(const vanilla_SMSG_AUCTION_L
 }
 
 static WowWorldResult vanilla_SMSG_AUCTION_LIST_RESULT_read(WowWorldReader* reader, vanilla_SMSG_AUCTION_LIST_RESULT* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->auctions = NULL;
+
     READ_U32(object->count);
 
-    object->auctions = malloc(object->count * sizeof(vanilla_AuctionListItem));
+    object->auctions = calloc(object->count, sizeof(vanilla_AuctionListItem));
     if (object->auctions == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -18853,9 +27311,19 @@ static WowWorldResult vanilla_SMSG_AUCTION_LIST_RESULT_read(WowWorldReader* read
     READ_U32(object->total_amount_of_auctions);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_AUCTION_LIST_RESULT_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_AUCTION_LIST_RESULT_write(WowWorldWriter* writer, const vanilla_SMSG_AUCTION_LIST_RESULT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_AUCTION_LIST_RESULT_size(object) + 2); /* size */
 
     WRITE_U16(0x0000025c); /* opcode */
@@ -18868,11 +27336,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_AUCTION_LIST_RESULT_writ
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_AUCTION_LIST_RESULT_free(vanilla_SMSG_AUCTION_LIST_RESULT* object) {
-    free(object->auctions);
-    object->auctions = NULL;
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_AUCTION_OWNER_LIST_RESULT_free(vanilla_SMSG_AUCTION_OWNER_LIST_RESULT* object) {
+    if (object->auctions != NULL) {
+        free(object->auctions);
+        object->auctions = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_AUCTION_OWNER_LIST_RESULT_size(const vanilla_SMSG_AUCTION_OWNER_LIST_RESULT* object) {
@@ -18880,9 +27351,18 @@ static size_t vanilla_SMSG_AUCTION_OWNER_LIST_RESULT_size(const vanilla_SMSG_AUC
 }
 
 static WowWorldResult vanilla_SMSG_AUCTION_OWNER_LIST_RESULT_read(WowWorldReader* reader, vanilla_SMSG_AUCTION_OWNER_LIST_RESULT* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->auctions = NULL;
+
     READ_U32(object->count);
 
-    object->auctions = malloc(object->count * sizeof(vanilla_AuctionListItem));
+    object->auctions = calloc(object->count, sizeof(vanilla_AuctionListItem));
     if (object->auctions == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -18892,9 +27372,19 @@ static WowWorldResult vanilla_SMSG_AUCTION_OWNER_LIST_RESULT_read(WowWorldReader
     READ_U32(object->total_amount_of_auctions);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_AUCTION_OWNER_LIST_RESULT_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_AUCTION_OWNER_LIST_RESULT_write(WowWorldWriter* writer, const vanilla_SMSG_AUCTION_OWNER_LIST_RESULT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_AUCTION_OWNER_LIST_RESULT_size(object) + 2); /* size */
 
     WRITE_U16(0x0000025d); /* opcode */
@@ -18907,14 +27397,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_AUCTION_OWNER_LIST_RESUL
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_AUCTION_OWNER_LIST_RESULT_free(vanilla_SMSG_AUCTION_OWNER_LIST_RESULT* object) {
-    free(object->auctions);
-    object->auctions = NULL;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_AUCTION_BIDDER_NOTIFICATION_read(WowWorldReader* reader, vanilla_SMSG_AUCTION_BIDDER_NOTIFICATION* object) {
+    int _return_value = 1;
+
+    if (32 > (reader->length - reader->index)) {
+        _return_value = (size_t)32 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->auction_house = 0;
     READ_U32(object->auction_house);
 
@@ -18931,9 +27424,18 @@ static WowWorldResult vanilla_SMSG_AUCTION_BIDDER_NOTIFICATION_read(WowWorldRead
     READ_U32(object->item_random_property_id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_AUCTION_BIDDER_NOTIFICATION_write(WowWorldWriter* writer, const vanilla_SMSG_AUCTION_BIDDER_NOTIFICATION* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0020 + 2); /* size */
 
     WRITE_U16(0x0000025e); /* opcode */
@@ -18954,9 +27456,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_AUCTION_BIDDER_NOTIFICAT
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_AUCTION_OWNER_NOTIFICATION_read(WowWorldReader* reader, vanilla_SMSG_AUCTION_OWNER_NOTIFICATION* object) {
+    int _return_value = 1;
+
+    if (28 > (reader->length - reader->index)) {
+        _return_value = (size_t)28 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->auction_id);
 
     READ_U32(object->bid);
@@ -18970,9 +27480,18 @@ static WowWorldResult vanilla_SMSG_AUCTION_OWNER_NOTIFICATION_read(WowWorldReade
     READ_U32(object->item_random_property_id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_AUCTION_OWNER_NOTIFICATION_write(WowWorldWriter* writer, const vanilla_SMSG_AUCTION_OWNER_NOTIFICATION* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x001c + 2); /* size */
 
     WRITE_U16(0x0000025f); /* opcode */
@@ -18991,9 +27510,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_AUCTION_OWNER_NOTIFICATI
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_PROCRESIST_read(WowWorldReader* reader, vanilla_SMSG_PROCRESIST* object) {
+    int _return_value = 1;
+
+    if (21 > (reader->length - reader->index)) {
+        _return_value = (size_t)21 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->caster);
 
     READ_U64(object->target);
@@ -19004,9 +27531,18 @@ static WowWorldResult vanilla_SMSG_PROCRESIST_read(WowWorldReader* reader, vanil
     READ_U8(object->log_format);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PROCRESIST_write(WowWorldWriter* writer, const vanilla_SMSG_PROCRESIST* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0015 + 2); /* size */
 
     WRITE_U16(0x00000260); /* opcode */
@@ -19021,6 +27557,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PROCRESIST_write(WowWorl
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_DISPEL_FAILED_free(vanilla_SMSG_DISPEL_FAILED* object) {
+    if (object->spells != NULL) {
+        free(object->spells);
+        object->spells = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_DISPEL_FAILED_size(const vanilla_SMSG_DISPEL_FAILED* object) {
@@ -19028,7 +27572,16 @@ static size_t vanilla_SMSG_DISPEL_FAILED_size(const vanilla_SMSG_DISPEL_FAILED* 
 }
 
 static WowWorldResult vanilla_SMSG_DISPEL_FAILED_read(WowWorldReader* reader, vanilla_SMSG_DISPEL_FAILED* object, size_t body_size) {
+    int _return_value = 1;
+
     size_t _size = 0;
+
+    if (16 > (reader->length - reader->index)) {
+        _return_value = (size_t)16 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->spells = NULL;
 
     READ_U64(object->caster);
     _size += 8;
@@ -19043,7 +27596,8 @@ static WowWorldResult vanilla_SMSG_DISPEL_FAILED_read(WowWorldReader* reader, va
 
         object->spells = malloc(_current_size);
         if (object->spells == NULL) {
-            return WWM_RESULT_MALLOC_FAIL;
+            _return_value = WWM_RESULT_MALLOC_FAIL;
+            goto cleanup;
         }
         while (_size < body_size) {
             READ_U32(object->spells[i]);
@@ -19055,7 +27609,8 @@ static WowWorldResult vanilla_SMSG_DISPEL_FAILED_read(WowWorldReader* reader, va
                 object->spells = realloc(object->spells, _current_size);
                 if (object->spells == NULL) {
                     free(object->spells);
-                    return WWM_RESULT_MALLOC_FAIL;
+                    _return_value = WWM_RESULT_MALLOC_FAIL;
+                    goto cleanup;
                 }
             }
         }
@@ -19064,9 +27619,19 @@ static WowWorldResult vanilla_SMSG_DISPEL_FAILED_read(WowWorldReader* reader, va
     }
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_DISPEL_FAILED_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_DISPEL_FAILED_write(WowWorldWriter* writer, const vanilla_SMSG_DISPEL_FAILED* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_DISPEL_FAILED_size(object) + 2); /* size */
 
     WRITE_U16(0x00000262); /* opcode */
@@ -19079,14 +27644,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_DISPEL_FAILED_write(WowW
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_DISPEL_FAILED_free(vanilla_SMSG_DISPEL_FAILED* object) {
-    free(object->spells);
-    object->spells = NULL;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_SPELLORDAMAGE_IMMUNE_read(WowWorldReader* reader, vanilla_SMSG_SPELLORDAMAGE_IMMUNE* object) {
+    int _return_value = 1;
+
+    if (21 > (reader->length - reader->index)) {
+        _return_value = (size_t)21 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->caster);
 
     READ_U64(object->target);
@@ -19096,9 +27664,18 @@ static WowWorldResult vanilla_SMSG_SPELLORDAMAGE_IMMUNE_read(WowWorldReader* rea
     READ_BOOL8(object->debug_log_format);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELLORDAMAGE_IMMUNE_write(WowWorldWriter* writer, const vanilla_SMSG_SPELLORDAMAGE_IMMUNE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0015 + 2); /* size */
 
     WRITE_U16(0x00000263); /* opcode */
@@ -19113,6 +27690,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELLORDAMAGE_IMMUNE_wri
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_AUCTION_LIST_BIDDER_ITEMS_free(vanilla_CMSG_AUCTION_LIST_BIDDER_ITEMS* object) {
+    if (object->outbid_item_ids != NULL) {
+        free(object->outbid_item_ids);
+        object->outbid_item_ids = NULL;
+    }
 }
 
 static size_t vanilla_CMSG_AUCTION_LIST_BIDDER_ITEMS_size(const vanilla_CMSG_AUCTION_LIST_BIDDER_ITEMS* object) {
@@ -19120,13 +27705,22 @@ static size_t vanilla_CMSG_AUCTION_LIST_BIDDER_ITEMS_size(const vanilla_CMSG_AUC
 }
 
 static WowWorldResult vanilla_CMSG_AUCTION_LIST_BIDDER_ITEMS_read(WowWorldReader* reader, vanilla_CMSG_AUCTION_LIST_BIDDER_ITEMS* object) {
+    int _return_value = 1;
+
+    if (16 > (reader->length - reader->index)) {
+        _return_value = (size_t)16 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->outbid_item_ids = NULL;
+
     READ_U64(object->auctioneer);
 
     READ_U32(object->start_from_page);
 
     READ_U32(object->amount_of_outbid_items);
 
-    object->outbid_item_ids = malloc(object->amount_of_outbid_items * sizeof(uint32_t));
+    object->outbid_item_ids = calloc(object->amount_of_outbid_items, sizeof(uint32_t));
     if (object->outbid_item_ids == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -19134,9 +27728,19 @@ static WowWorldResult vanilla_CMSG_AUCTION_LIST_BIDDER_ITEMS_read(WowWorldReader
 
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_AUCTION_LIST_BIDDER_ITEMS_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUCTION_LIST_BIDDER_ITEMS_write(WowWorldWriter* writer, const vanilla_CMSG_AUCTION_LIST_BIDDER_ITEMS* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_AUCTION_LIST_BIDDER_ITEMS_size(object) + 4); /* size */
 
     WRITE_U32(0x00000264); /* opcode */
@@ -19151,11 +27755,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUCTION_LIST_BIDDER_ITEM
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_AUCTION_LIST_BIDDER_ITEMS_free(vanilla_CMSG_AUCTION_LIST_BIDDER_ITEMS* object) {
-    free(object->outbid_item_ids);
-    object->outbid_item_ids = NULL;
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_AUCTION_BIDDER_LIST_RESULT_free(vanilla_SMSG_AUCTION_BIDDER_LIST_RESULT* object) {
+    if (object->auctions != NULL) {
+        free(object->auctions);
+        object->auctions = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_AUCTION_BIDDER_LIST_RESULT_size(const vanilla_SMSG_AUCTION_BIDDER_LIST_RESULT* object) {
@@ -19163,9 +27770,18 @@ static size_t vanilla_SMSG_AUCTION_BIDDER_LIST_RESULT_size(const vanilla_SMSG_AU
 }
 
 static WowWorldResult vanilla_SMSG_AUCTION_BIDDER_LIST_RESULT_read(WowWorldReader* reader, vanilla_SMSG_AUCTION_BIDDER_LIST_RESULT* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->auctions = NULL;
+
     READ_U32(object->count);
 
-    object->auctions = malloc(object->count * sizeof(vanilla_AuctionListItem));
+    object->auctions = calloc(object->count, sizeof(vanilla_AuctionListItem));
     if (object->auctions == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -19175,9 +27791,19 @@ static WowWorldResult vanilla_SMSG_AUCTION_BIDDER_LIST_RESULT_read(WowWorldReade
     READ_U32(object->total_amount_of_auctions);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_AUCTION_BIDDER_LIST_RESULT_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_AUCTION_BIDDER_LIST_RESULT_write(WowWorldWriter* writer, const vanilla_SMSG_AUCTION_BIDDER_LIST_RESULT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_AUCTION_BIDDER_LIST_RESULT_size(object) + 2); /* size */
 
     WRITE_U16(0x00000265); /* opcode */
@@ -19190,14 +27816,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_AUCTION_BIDDER_LIST_RESU
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_AUCTION_BIDDER_LIST_RESULT_free(vanilla_SMSG_AUCTION_BIDDER_LIST_RESULT* object) {
-    free(object->auctions);
-    object->auctions = NULL;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_SET_FLAT_SPELL_MODIFIER_read(WowWorldReader* reader, vanilla_SMSG_SET_FLAT_SPELL_MODIFIER* object) {
+    int _return_value = 1;
+
+    if (6 > (reader->length - reader->index)) {
+        _return_value = (size_t)6 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U8(object->eff);
 
     READ_U8(object->op);
@@ -19205,9 +27834,18 @@ static WowWorldResult vanilla_SMSG_SET_FLAT_SPELL_MODIFIER_read(WowWorldReader* 
     READ_U32(object->value);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SET_FLAT_SPELL_MODIFIER_write(WowWorldWriter* writer, const vanilla_SMSG_SET_FLAT_SPELL_MODIFIER* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0006 + 2); /* size */
 
     WRITE_U16(0x00000266); /* opcode */
@@ -19220,9 +27858,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SET_FLAT_SPELL_MODIFIER_
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_SET_PCT_SPELL_MODIFIER_read(WowWorldReader* reader, vanilla_SMSG_SET_PCT_SPELL_MODIFIER* object) {
+    int _return_value = 1;
+
+    if (6 > (reader->length - reader->index)) {
+        _return_value = (size_t)6 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U8(object->eff);
 
     READ_U8(object->op);
@@ -19230,9 +27876,18 @@ static WowWorldResult vanilla_SMSG_SET_PCT_SPELL_MODIFIER_read(WowWorldReader* r
     READ_U32(object->value);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SET_PCT_SPELL_MODIFIER_write(WowWorldWriter* writer, const vanilla_SMSG_SET_PCT_SPELL_MODIFIER* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0006 + 2); /* size */
 
     WRITE_U16(0x00000267); /* opcode */
@@ -19245,15 +27900,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SET_PCT_SPELL_MODIFIER_w
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_SET_AMMO_read(WowWorldReader* reader, vanilla_CMSG_SET_AMMO* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->item);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SET_AMMO_write(WowWorldWriter* writer, const vanilla_CMSG_SET_AMMO* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 4); /* size */
 
     WRITE_U32(0x00000268); /* opcode */
@@ -19262,15 +27934,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SET_AMMO_write(WowWorldW
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_CORPSE_RECLAIM_DELAY_read(WowWorldReader* reader, vanilla_SMSG_CORPSE_RECLAIM_DELAY* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->delay);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CORPSE_RECLAIM_DELAY_write(WowWorldWriter* writer, const vanilla_SMSG_CORPSE_RECLAIM_DELAY* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 2); /* size */
 
     WRITE_U16(0x00000269); /* opcode */
@@ -19279,15 +27968,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CORPSE_RECLAIM_DELAY_wri
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_SET_ACTIVE_MOVER_read(WowWorldReader* reader, vanilla_CMSG_SET_ACTIVE_MOVER* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SET_ACTIVE_MOVER_write(WowWorldWriter* writer, const vanilla_CMSG_SET_ACTIVE_MOVER* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x0000026a); /* opcode */
@@ -19296,17 +28002,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SET_ACTIVE_MOVER_write(W
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_PET_CANCEL_AURA_read(WowWorldReader* reader, vanilla_CMSG_PET_CANCEL_AURA* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_U32(object->id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PET_CANCEL_AURA_write(WowWorldWriter* writer, const vanilla_CMSG_PET_CANCEL_AURA* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 4); /* size */
 
     WRITE_U32(0x0000026b); /* opcode */
@@ -19317,24 +28040,49 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PET_CANCEL_AURA_write(Wo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CANCEL_AUTO_REPEAT_SPELL_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x0000026d); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_MSG_LIST_STABLED_PETS_Client_read(WowWorldReader* reader, vanilla_MSG_LIST_STABLED_PETS_Client* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->npc);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_LIST_STABLED_PETS_Client_write(WowWorldWriter* writer, const vanilla_MSG_LIST_STABLED_PETS_Client* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x0000026f); /* opcode */
@@ -19343,6 +28091,19 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_LIST_STABLED_PETS_Client_
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_LIST_STABLED_PETS_Server_free(vanilla_MSG_LIST_STABLED_PETS_Server* object) {
+    size_t i;
+
+    if (object->pets != NULL) {
+        for (i = 0; i < object->amount_of_pets; ++i) {
+            vanilla_StabledPet_free(&((object->pets)[i]));
+        }
+        free(object->pets);
+        object->pets = NULL;
+    }
 }
 
 static size_t vanilla_MSG_LIST_STABLED_PETS_Server_size(const vanilla_MSG_LIST_STABLED_PETS_Server* object) {
@@ -19359,13 +28120,22 @@ static size_t vanilla_MSG_LIST_STABLED_PETS_Server_size(const vanilla_MSG_LIST_S
 }
 
 static WowWorldResult vanilla_MSG_LIST_STABLED_PETS_Server_read(WowWorldReader* reader, vanilla_MSG_LIST_STABLED_PETS_Server* object) {
+    int _return_value = 1;
+
+    if (10 > (reader->length - reader->index)) {
+        _return_value = (size_t)10 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->pets = NULL;
+
     READ_U64(object->npc);
 
     READ_U8(object->amount_of_pets);
 
     READ_U8(object->stable_slots);
 
-    object->pets = malloc(object->amount_of_pets * sizeof(vanilla_StabledPet));
+    object->pets = calloc(object->amount_of_pets, sizeof(vanilla_StabledPet));
     if (object->pets == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -19373,9 +28143,19 @@ static WowWorldResult vanilla_MSG_LIST_STABLED_PETS_Server_read(WowWorldReader* 
 
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_MSG_LIST_STABLED_PETS_Server_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_LIST_STABLED_PETS_Server_write(WowWorldWriter* writer, const vanilla_MSG_LIST_STABLED_PETS_Server* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_LIST_STABLED_PETS_Server_size(object) + 2); /* size */
 
     WRITE_U16(0x0000026f); /* opcode */
@@ -19390,25 +28170,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_LIST_STABLED_PETS_Server_
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_LIST_STABLED_PETS_Server_free(vanilla_MSG_LIST_STABLED_PETS_Server* object) {
-    size_t i;
-
-    for (i = 0; i < object->amount_of_pets; ++i) {
-        vanilla_StabledPet_free(&((object->pets)[i]));
-    }
-    free(object->pets);
-    object->pets = NULL;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_STABLE_PET_read(WowWorldReader* reader, vanilla_CMSG_STABLE_PET* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->stable_master);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_STABLE_PET_write(WowWorldWriter* writer, const vanilla_CMSG_STABLE_PET* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x00000270); /* opcode */
@@ -19417,17 +28204,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_STABLE_PET_write(WowWorl
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_UNSTABLE_PET_read(WowWorldReader* reader, vanilla_CMSG_UNSTABLE_PET* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->stable_master);
 
     READ_U32(object->pet_number);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_UNSTABLE_PET_write(WowWorldWriter* writer, const vanilla_CMSG_UNSTABLE_PET* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 4); /* size */
 
     WRITE_U32(0x00000271); /* opcode */
@@ -19438,15 +28242,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_UNSTABLE_PET_write(WowWo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_BUY_STABLE_SLOT_read(WowWorldReader* reader, vanilla_CMSG_BUY_STABLE_SLOT* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->npc);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BUY_STABLE_SLOT_write(WowWorldWriter* writer, const vanilla_CMSG_BUY_STABLE_SLOT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x00000272); /* opcode */
@@ -19455,16 +28276,33 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BUY_STABLE_SLOT_write(Wo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_STABLE_RESULT_read(WowWorldReader* reader, vanilla_SMSG_STABLE_RESULT* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->result = 0;
     READ_U8(object->result);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_STABLE_RESULT_write(WowWorldWriter* writer, const vanilla_SMSG_STABLE_RESULT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0001 + 2); /* size */
 
     WRITE_U16(0x00000273); /* opcode */
@@ -19473,17 +28311,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_STABLE_RESULT_write(WowW
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_STABLE_SWAP_PET_read(WowWorldReader* reader, vanilla_CMSG_STABLE_SWAP_PET* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->npc);
 
     READ_U32(object->pet_slot);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_STABLE_SWAP_PET_write(WowWorldWriter* writer, const vanilla_CMSG_STABLE_SWAP_PET* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 4); /* size */
 
     WRITE_U32(0x00000275); /* opcode */
@@ -19494,18 +28349,35 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_STABLE_SWAP_PET_write(Wo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_MSG_QUEST_PUSH_RESULT_read(WowWorldReader* reader, vanilla_MSG_QUEST_PUSH_RESULT* object) {
+    int _return_value = 1;
+
+    if (9 > (reader->length - reader->index)) {
+        _return_value = (size_t)9 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     object->message = 0;
     READ_U8(object->message);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_QUEST_PUSH_RESULT_cmsg_write(WowWorldWriter* writer, const vanilla_MSG_QUEST_PUSH_RESULT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0009 + 4); /* size */
 
     WRITE_U32(0x00000276); /* opcode */
@@ -19516,9 +28388,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_QUEST_PUSH_RESULT_cmsg_wr
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_QUEST_PUSH_RESULT_smsg_write(WowWorldWriter* writer, const vanilla_MSG_QUEST_PUSH_RESULT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0009 + 2); /* size */
 
     WRITE_U16(0x00000276); /* opcode */
@@ -19529,15 +28409,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_QUEST_PUSH_RESULT_smsg_wr
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_PLAY_MUSIC_read(WowWorldReader* reader, vanilla_SMSG_PLAY_MUSIC* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->sound_id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PLAY_MUSIC_write(WowWorldWriter* writer, const vanilla_SMSG_PLAY_MUSIC* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 2); /* size */
 
     WRITE_U16(0x00000277); /* opcode */
@@ -19546,17 +28443,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PLAY_MUSIC_write(WowWorl
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_PLAY_OBJECT_SOUND_read(WowWorldReader* reader, vanilla_SMSG_PLAY_OBJECT_SOUND* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->sound_id);
 
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PLAY_OBJECT_SOUND_write(WowWorldWriter* writer, const vanilla_SMSG_PLAY_OBJECT_SOUND* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 2); /* size */
 
     WRITE_U16(0x00000278); /* opcode */
@@ -19567,25 +28481,50 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PLAY_OBJECT_SOUND_write(
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_REQUEST_PET_INFO_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x00000279); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_FAR_SIGHT_read(WowWorldReader* reader, vanilla_CMSG_FAR_SIGHT* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->operation = 0;
     READ_U8(object->operation);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_FAR_SIGHT_write(WowWorldWriter* writer, const vanilla_CMSG_FAR_SIGHT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0001 + 4); /* size */
 
     WRITE_U32(0x0000027a); /* opcode */
@@ -19594,6 +28533,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_FAR_SIGHT_write(WowWorld
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_SPELLDISPELLOG_free(vanilla_SMSG_SPELLDISPELLOG* object) {
+    if (object->spells != NULL) {
+        free(object->spells);
+        object->spells = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_SPELLDISPELLOG_size(const vanilla_SMSG_SPELLDISPELLOG* object) {
@@ -19601,13 +28548,22 @@ static size_t vanilla_SMSG_SPELLDISPELLOG_size(const vanilla_SMSG_SPELLDISPELLOG
 }
 
 static WowWorldResult vanilla_SMSG_SPELLDISPELLOG_read(WowWorldReader* reader, vanilla_SMSG_SPELLDISPELLOG* object) {
+    int _return_value = 1;
+
+    if (6 > (reader->length - reader->index)) {
+        _return_value = (size_t)6 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->spells = NULL;
+
     READ_PACKED_GUID(object->victim);
 
     READ_PACKED_GUID(object->caster);
 
     READ_U32(object->amount_of_spells);
 
-    object->spells = malloc(object->amount_of_spells * sizeof(uint32_t));
+    object->spells = calloc(object->amount_of_spells, sizeof(uint32_t));
     if (object->spells == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -19615,9 +28571,19 @@ static WowWorldResult vanilla_SMSG_SPELLDISPELLOG_read(WowWorldReader* reader, v
 
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_SPELLDISPELLOG_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELLDISPELLOG_write(WowWorldWriter* writer, const vanilla_SMSG_SPELLDISPELLOG* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_SPELLDISPELLOG_size(object) + 2); /* size */
 
     WRITE_U16(0x0000027b); /* opcode */
@@ -19632,11 +28598,12 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELLDISPELLOG_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_SPELLDISPELLOG_free(vanilla_SMSG_SPELLDISPELLOG* object) {
-    free(object->spells);
-    object->spells = NULL;
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GROUP_CHANGE_SUB_GROUP_free(vanilla_CMSG_GROUP_CHANGE_SUB_GROUP* object) {
+    FREE_STRING(object->name);
+
 }
 
 static size_t vanilla_CMSG_GROUP_CHANGE_SUB_GROUP_size(const vanilla_CMSG_GROUP_CHANGE_SUB_GROUP* object) {
@@ -19644,14 +28611,33 @@ static size_t vanilla_CMSG_GROUP_CHANGE_SUB_GROUP_size(const vanilla_CMSG_GROUP_
 }
 
 static WowWorldResult vanilla_CMSG_GROUP_CHANGE_SUB_GROUP_read(WowWorldReader* reader, vanilla_CMSG_GROUP_CHANGE_SUB_GROUP* object) {
+    int _return_value = 1;
+
+    if (2 > (reader->length - reader->index)) {
+        _return_value = (size_t)2 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->name = NULL;
+
     READ_CSTRING(object->name);
 
     READ_U8(object->group_number);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_GROUP_CHANGE_SUB_GROUP_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GROUP_CHANGE_SUB_GROUP_write(WowWorldWriter* writer, const vanilla_CMSG_GROUP_CHANGE_SUB_GROUP* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_GROUP_CHANGE_SUB_GROUP_size(object) + 4); /* size */
 
     WRITE_U32(0x0000027e); /* opcode */
@@ -19662,20 +28648,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GROUP_CHANGE_SUB_GROUP_w
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GROUP_CHANGE_SUB_GROUP_free(vanilla_CMSG_GROUP_CHANGE_SUB_GROUP* object) {
-    FREE_STRING(object->name);
-
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_REQUEST_PARTY_MEMBER_STATS_read(WowWorldReader* reader, vanilla_CMSG_REQUEST_PARTY_MEMBER_STATS* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_REQUEST_PARTY_MEMBER_STATS_write(WowWorldWriter* writer, const vanilla_CMSG_REQUEST_PARTY_MEMBER_STATS* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x0000027f); /* opcode */
@@ -19684,6 +28682,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_REQUEST_PARTY_MEMBER_STA
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GROUP_SWAP_SUB_GROUP_free(vanilla_CMSG_GROUP_SWAP_SUB_GROUP* object) {
+    FREE_STRING(object->name);
+
+    FREE_STRING(object->swap_with_name);
+
 }
 
 static size_t vanilla_CMSG_GROUP_SWAP_SUB_GROUP_size(const vanilla_CMSG_GROUP_SWAP_SUB_GROUP* object) {
@@ -19691,14 +28697,34 @@ static size_t vanilla_CMSG_GROUP_SWAP_SUB_GROUP_size(const vanilla_CMSG_GROUP_SW
 }
 
 static WowWorldResult vanilla_CMSG_GROUP_SWAP_SUB_GROUP_read(WowWorldReader* reader, vanilla_CMSG_GROUP_SWAP_SUB_GROUP* object) {
+    int _return_value = 1;
+
+    if (2 > (reader->length - reader->index)) {
+        _return_value = (size_t)2 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->name = NULL;
+    object->swap_with_name = NULL;
+
     READ_CSTRING(object->name);
 
     READ_CSTRING(object->swap_with_name);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_GROUP_SWAP_SUB_GROUP_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GROUP_SWAP_SUB_GROUP_write(WowWorldWriter* writer, const vanilla_CMSG_GROUP_SWAP_SUB_GROUP* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_GROUP_SWAP_SUB_GROUP_size(object) + 4); /* size */
 
     WRITE_U32(0x00000280); /* opcode */
@@ -19709,24 +28735,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GROUP_SWAP_SUB_GROUP_wri
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GROUP_SWAP_SUB_GROUP_free(vanilla_CMSG_GROUP_SWAP_SUB_GROUP* object) {
-    FREE_STRING(object->name);
-
-    FREE_STRING(object->swap_with_name);
-
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_AUTOSTORE_BANK_ITEM_read(WowWorldReader* reader, vanilla_CMSG_AUTOSTORE_BANK_ITEM* object) {
+    int _return_value = 1;
+
+    if (2 > (reader->length - reader->index)) {
+        _return_value = (size_t)2 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U8(object->bag_index);
 
     READ_U8(object->slot_index);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUTOSTORE_BANK_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_AUTOSTORE_BANK_ITEM* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0002 + 4); /* size */
 
     WRITE_U32(0x00000282); /* opcode */
@@ -19737,17 +28773,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUTOSTORE_BANK_ITEM_writ
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_AUTOBANK_ITEM_read(WowWorldReader* reader, vanilla_CMSG_AUTOBANK_ITEM* object) {
+    int _return_value = 1;
+
+    if (2 > (reader->length - reader->index)) {
+        _return_value = (size_t)2 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U8(object->bag_index);
 
     READ_U8(object->slot_index);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUTOBANK_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_AUTOBANK_ITEM* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0002 + 4); /* size */
 
     WRITE_U32(0x00000283); /* opcode */
@@ -19758,15 +28811,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AUTOBANK_ITEM_write(WowW
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_MSG_QUERY_NEXT_MAIL_TIME_Server_read(WowWorldReader* reader, vanilla_MSG_QUERY_NEXT_MAIL_TIME_Server* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_FLOAT(object->unread_mails);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_QUERY_NEXT_MAIL_TIME_Server_write(WowWorldWriter* writer, const vanilla_MSG_QUERY_NEXT_MAIL_TIME_Server* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 2); /* size */
 
     WRITE_U16(0x00000284); /* opcode */
@@ -19775,24 +28845,49 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_QUERY_NEXT_MAIL_TIME_Serv
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_QUERY_NEXT_MAIL_TIME_Client_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x00000284); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_RECEIVED_MAIL_read(WowWorldReader* reader, vanilla_SMSG_RECEIVED_MAIL* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->unknown1);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_RECEIVED_MAIL_write(WowWorldWriter* writer, const vanilla_SMSG_RECEIVED_MAIL* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 2); /* size */
 
     WRITE_U16(0x00000285); /* opcode */
@@ -19801,18 +28896,35 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_RECEIVED_MAIL_write(WowW
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_RAID_GROUP_ONLY_read(WowWorldReader* reader, vanilla_SMSG_RAID_GROUP_ONLY* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->homebind_timer);
 
     object->error = 0;
     READ_U32(object->error);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_RAID_GROUP_ONLY_write(WowWorldWriter* writer, const vanilla_SMSG_RAID_GROUP_ONLY* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 2); /* size */
 
     WRITE_U16(0x00000286); /* opcode */
@@ -19823,9 +28935,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_RAID_GROUP_ONLY_write(Wo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_PVP_CREDIT_read(WowWorldReader* reader, vanilla_SMSG_PVP_CREDIT* object) {
+    int _return_value = 1;
+
+    if (16 > (reader->length - reader->index)) {
+        _return_value = (size_t)16 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->honor_points);
 
     READ_U64(object->victim);
@@ -19834,9 +28954,18 @@ static WowWorldResult vanilla_SMSG_PVP_CREDIT_read(WowWorldReader* reader, vanil
     READ_U32(object->rank);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PVP_CREDIT_write(WowWorldWriter* writer, const vanilla_SMSG_PVP_CREDIT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0010 + 2); /* size */
 
     WRITE_U16(0x0000028c); /* opcode */
@@ -19849,9 +28978,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PVP_CREDIT_write(WowWorl
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_AUCTION_REMOVED_NOTIFICATION_read(WowWorldReader* reader, vanilla_SMSG_AUCTION_REMOVED_NOTIFICATION* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->item);
 
     READ_U32(object->item_template);
@@ -19859,9 +28996,18 @@ static WowWorldResult vanilla_SMSG_AUCTION_REMOVED_NOTIFICATION_read(WowWorldRea
     READ_U32(object->random_property_id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_AUCTION_REMOVED_NOTIFICATION_write(WowWorldWriter* writer, const vanilla_SMSG_AUCTION_REMOVED_NOTIFICATION* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 2); /* size */
 
     WRITE_U16(0x0000028d); /* opcode */
@@ -19874,26 +29020,51 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_AUCTION_REMOVED_NOTIFICA
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GROUP_RAID_CONVERT_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x0000028e); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_GROUP_ASSISTANT_LEADER_read(WowWorldReader* reader, vanilla_CMSG_GROUP_ASSISTANT_LEADER* object) {
+    int _return_value = 1;
+
+    if (9 > (reader->length - reader->index)) {
+        _return_value = (size_t)9 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_BOOL8(object->set_assistant);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GROUP_ASSISTANT_LEADER_write(WowWorldWriter* writer, const vanilla_CMSG_GROUP_ASSISTANT_LEADER* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0009 + 4); /* size */
 
     WRITE_U32(0x0000028f); /* opcode */
@@ -19904,18 +29075,35 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GROUP_ASSISTANT_LEADER_w
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_BUYBACK_ITEM_read(WowWorldReader* reader, vanilla_CMSG_BUYBACK_ITEM* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     object->slot = 0;
     READ_U32(object->slot);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BUYBACK_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_BUYBACK_ITEM* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 4); /* size */
 
     WRITE_U32(0x00000290); /* opcode */
@@ -19926,6 +29114,12 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BUYBACK_ITEM_write(WowWo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_SERVER_MESSAGE_free(vanilla_SMSG_SERVER_MESSAGE* object) {
+    FREE_STRING(object->message);
+
 }
 
 static size_t vanilla_SMSG_SERVER_MESSAGE_size(const vanilla_SMSG_SERVER_MESSAGE* object) {
@@ -19933,15 +29127,34 @@ static size_t vanilla_SMSG_SERVER_MESSAGE_size(const vanilla_SMSG_SERVER_MESSAGE
 }
 
 static WowWorldResult vanilla_SMSG_SERVER_MESSAGE_read(WowWorldReader* reader, vanilla_SMSG_SERVER_MESSAGE* object) {
+    int _return_value = 1;
+
+    if (5 > (reader->length - reader->index)) {
+        _return_value = (size_t)5 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->message = NULL;
+
     object->message_type = 0;
     READ_U32(object->message_type);
 
     READ_CSTRING(object->message);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_SERVER_MESSAGE_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SERVER_MESSAGE_write(WowWorldWriter* writer, const vanilla_SMSG_SERVER_MESSAGE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_SERVER_MESSAGE_size(object) + 2); /* size */
 
     WRITE_U16(0x00000291); /* opcode */
@@ -19952,20 +29165,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SERVER_MESSAGE_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_SERVER_MESSAGE_free(vanilla_SMSG_SERVER_MESSAGE* object) {
-    FREE_STRING(object->message);
-
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_MEETINGSTONE_JOIN_read(WowWorldReader* reader, vanilla_CMSG_MEETINGSTONE_JOIN* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MEETINGSTONE_JOIN_write(WowWorldWriter* writer, const vanilla_CMSG_MEETINGSTONE_JOIN* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x00000292); /* opcode */
@@ -19974,18 +29199,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MEETINGSTONE_JOIN_write(
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MEETINGSTONE_LEAVE_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x00000293); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_MEETINGSTONE_SETQUEUE_read(WowWorldReader* reader, vanilla_SMSG_MEETINGSTONE_SETQUEUE* object) {
+    int _return_value = 1;
+
+    if (5 > (reader->length - reader->index)) {
+        _return_value = (size_t)5 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->area = 0;
     READ_U32(object->area);
 
@@ -19993,9 +29234,18 @@ static WowWorldResult vanilla_SMSG_MEETINGSTONE_SETQUEUE_read(WowWorldReader* re
     READ_U8(object->status);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MEETINGSTONE_SETQUEUE_write(WowWorldWriter* writer, const vanilla_SMSG_MEETINGSTONE_SETQUEUE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0005 + 2); /* size */
 
     WRITE_U16(0x00000295); /* opcode */
@@ -20006,42 +29256,83 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MEETINGSTONE_SETQUEUE_wr
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MEETINGSTONE_INFO_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x00000296); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MEETINGSTONE_COMPLETE_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 2); /* size */
 
     WRITE_U16(0x00000297); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MEETINGSTONE_IN_PROGRESS_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 2); /* size */
 
     WRITE_U16(0x00000298); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_MEETINGSTONE_MEMBER_ADDED_read(WowWorldReader* reader, vanilla_SMSG_MEETINGSTONE_MEMBER_ADDED* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MEETINGSTONE_MEMBER_ADDED_write(WowWorldWriter* writer, const vanilla_SMSG_MEETINGSTONE_MEMBER_ADDED* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 2); /* size */
 
     WRITE_U16(0x00000299); /* opcode */
@@ -20050,34 +29341,67 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MEETINGSTONE_MEMBER_ADDE
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CANCEL_GROWTH_AURA_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x0000029b); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CANCEL_AUTO_REPEAT_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 2); /* size */
 
     WRITE_U16(0x0000029c); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_STANDSTATE_UPDATE_read(WowWorldReader* reader, vanilla_SMSG_STANDSTATE_UPDATE* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->state = 0;
     READ_U8(object->state);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_STANDSTATE_UPDATE_write(WowWorldWriter* writer, const vanilla_SMSG_STANDSTATE_UPDATE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0001 + 2); /* size */
 
     WRITE_U16(0x0000029d); /* opcode */
@@ -20086,9 +29410,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_STANDSTATE_UPDATE_write(
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_LOOT_ALL_PASSED_read(WowWorldReader* reader, vanilla_SMSG_LOOT_ALL_PASSED* object) {
+    int _return_value = 1;
+
+    if (24 > (reader->length - reader->index)) {
+        _return_value = (size_t)24 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->looted_target);
 
     READ_U32(object->loot_slot);
@@ -20100,9 +29432,18 @@ static WowWorldResult vanilla_SMSG_LOOT_ALL_PASSED_read(WowWorldReader* reader, 
     READ_U32(object->item_random_suffix_id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOOT_ALL_PASSED_write(WowWorldWriter* writer, const vanilla_SMSG_LOOT_ALL_PASSED* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0018 + 2); /* size */
 
     WRITE_U16(0x0000029e); /* opcode */
@@ -20119,9 +29460,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOOT_ALL_PASSED_write(Wo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_LOOT_ROLL_WON_read(WowWorldReader* reader, vanilla_SMSG_LOOT_ROLL_WON* object) {
+    int _return_value = 1;
+
+    if (34 > (reader->length - reader->index)) {
+        _return_value = (size_t)34 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->looted_target);
 
     READ_U32(object->loot_slot);
@@ -20140,9 +29489,18 @@ static WowWorldResult vanilla_SMSG_LOOT_ROLL_WON_read(WowWorldReader* reader, va
     READ_U8(object->vote);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOOT_ROLL_WON_write(WowWorldWriter* writer, const vanilla_SMSG_LOOT_ROLL_WON* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0022 + 2); /* size */
 
     WRITE_U16(0x0000029f); /* opcode */
@@ -20165,9 +29523,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOOT_ROLL_WON_write(WowW
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_LOOT_ROLL_read(WowWorldReader* reader, vanilla_CMSG_LOOT_ROLL* object) {
+    int _return_value = 1;
+
+    if (13 > (reader->length - reader->index)) {
+        _return_value = (size_t)13 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->item);
 
     READ_U32(object->item_slot);
@@ -20176,9 +29542,18 @@ static WowWorldResult vanilla_CMSG_LOOT_ROLL_read(WowWorldReader* reader, vanill
     READ_U8(object->vote);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_LOOT_ROLL_write(WowWorldWriter* writer, const vanilla_CMSG_LOOT_ROLL* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000d + 4); /* size */
 
     WRITE_U32(0x000002a0); /* opcode */
@@ -20191,9 +29566,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_LOOT_ROLL_write(WowWorld
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_LOOT_START_ROLL_read(WowWorldReader* reader, vanilla_SMSG_LOOT_START_ROLL* object) {
+    int _return_value = 1;
+
+    if (28 > (reader->length - reader->index)) {
+        _return_value = (size_t)28 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->creature);
 
     READ_U32(object->loot_slot);
@@ -20207,9 +29590,18 @@ static WowWorldResult vanilla_SMSG_LOOT_START_ROLL_read(WowWorldReader* reader, 
     READ_U32(object->countdown_time);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOOT_START_ROLL_write(WowWorldWriter* writer, const vanilla_SMSG_LOOT_START_ROLL* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x001c + 2); /* size */
 
     WRITE_U16(0x000002a1); /* opcode */
@@ -20228,9 +29620,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOOT_START_ROLL_write(Wo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_LOOT_ROLL_read(WowWorldReader* reader, vanilla_SMSG_LOOT_ROLL* object) {
+    int _return_value = 1;
+
+    if (34 > (reader->length - reader->index)) {
+        _return_value = (size_t)34 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->creature);
 
     READ_U32(object->loot_slot);
@@ -20249,9 +29649,18 @@ static WowWorldResult vanilla_SMSG_LOOT_ROLL_read(WowWorldReader* reader, vanill
     READ_U8(object->vote);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOOT_ROLL_write(WowWorldWriter* writer, const vanilla_SMSG_LOOT_ROLL* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0022 + 2); /* size */
 
     WRITE_U16(0x000002a2); /* opcode */
@@ -20274,9 +29683,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOOT_ROLL_write(WowWorld
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_LOOT_MASTER_GIVE_read(WowWorldReader* reader, vanilla_CMSG_LOOT_MASTER_GIVE* object) {
+    int _return_value = 1;
+
+    if (17 > (reader->length - reader->index)) {
+        _return_value = (size_t)17 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->loot);
 
     READ_U8(object->slot_id);
@@ -20284,9 +29701,18 @@ static WowWorldResult vanilla_CMSG_LOOT_MASTER_GIVE_read(WowWorldReader* reader,
     READ_U64(object->player);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_LOOT_MASTER_GIVE_write(WowWorldWriter* writer, const vanilla_CMSG_LOOT_MASTER_GIVE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0011 + 4); /* size */
 
     WRITE_U32(0x000002a3); /* opcode */
@@ -20299,6 +29725,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_LOOT_MASTER_GIVE_write(W
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_LOOT_MASTER_LIST_free(vanilla_SMSG_LOOT_MASTER_LIST* object) {
+    if (object->guids != NULL) {
+        free(object->guids);
+        object->guids = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_LOOT_MASTER_LIST_size(const vanilla_SMSG_LOOT_MASTER_LIST* object) {
@@ -20306,9 +29740,18 @@ static size_t vanilla_SMSG_LOOT_MASTER_LIST_size(const vanilla_SMSG_LOOT_MASTER_
 }
 
 static WowWorldResult vanilla_SMSG_LOOT_MASTER_LIST_read(WowWorldReader* reader, vanilla_SMSG_LOOT_MASTER_LIST* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->guids = NULL;
+
     READ_U8(object->amount_of_players);
 
-    object->guids = malloc(object->amount_of_players * sizeof(uint64_t));
+    object->guids = calloc(object->amount_of_players, sizeof(uint64_t));
     if (object->guids == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -20316,9 +29759,19 @@ static WowWorldResult vanilla_SMSG_LOOT_MASTER_LIST_read(WowWorldReader* reader,
 
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_LOOT_MASTER_LIST_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOOT_MASTER_LIST_write(WowWorldWriter* writer, const vanilla_SMSG_LOOT_MASTER_LIST* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_LOOT_MASTER_LIST_size(object) + 2); /* size */
 
     WRITE_U16(0x000002a4); /* opcode */
@@ -20329,11 +29782,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_LOOT_MASTER_LIST_write(W
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_LOOT_MASTER_LIST_free(vanilla_SMSG_LOOT_MASTER_LIST* object) {
-    free(object->guids);
-    object->guids = NULL;
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_SET_FORCED_REACTIONS_free(vanilla_SMSG_SET_FORCED_REACTIONS* object) {
+    if (object->reactions != NULL) {
+        free(object->reactions);
+        object->reactions = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_SET_FORCED_REACTIONS_size(const vanilla_SMSG_SET_FORCED_REACTIONS* object) {
@@ -20341,9 +29797,18 @@ static size_t vanilla_SMSG_SET_FORCED_REACTIONS_size(const vanilla_SMSG_SET_FORC
 }
 
 static WowWorldResult vanilla_SMSG_SET_FORCED_REACTIONS_read(WowWorldReader* reader, vanilla_SMSG_SET_FORCED_REACTIONS* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->reactions = NULL;
+
     READ_U32(object->amount_of_reactions);
 
-    object->reactions = malloc(object->amount_of_reactions * sizeof(vanilla_ForcedReaction));
+    object->reactions = calloc(object->amount_of_reactions, sizeof(vanilla_ForcedReaction));
     if (object->reactions == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -20351,9 +29816,19 @@ static WowWorldResult vanilla_SMSG_SET_FORCED_REACTIONS_read(WowWorldReader* rea
 
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_SET_FORCED_REACTIONS_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SET_FORCED_REACTIONS_write(WowWorldWriter* writer, const vanilla_SMSG_SET_FORCED_REACTIONS* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_SET_FORCED_REACTIONS_size(object) + 2); /* size */
 
     WRITE_U16(0x000002a5); /* opcode */
@@ -20364,22 +29839,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SET_FORCED_REACTIONS_wri
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_SET_FORCED_REACTIONS_free(vanilla_SMSG_SET_FORCED_REACTIONS* object) {
-    free(object->reactions);
-    object->reactions = NULL;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_SPELL_FAILED_OTHER_read(WowWorldReader* reader, vanilla_SMSG_SPELL_FAILED_OTHER* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->caster);
 
     READ_U32(object->id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELL_FAILED_OTHER_write(WowWorldWriter* writer, const vanilla_SMSG_SPELL_FAILED_OTHER* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 2); /* size */
 
     WRITE_U16(0x000002a6); /* opcode */
@@ -20390,15 +29877,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELL_FAILED_OTHER_write
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_GAMEOBJECT_RESET_STATE_read(WowWorldReader* reader, vanilla_SMSG_GAMEOBJECT_RESET_STATE* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GAMEOBJECT_RESET_STATE_write(WowWorldWriter* writer, const vanilla_SMSG_GAMEOBJECT_RESET_STATE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 2); /* size */
 
     WRITE_U16(0x000002a7); /* opcode */
@@ -20407,17 +29911,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GAMEOBJECT_RESET_STATE_w
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_REPAIR_ITEM_read(WowWorldReader* reader, vanilla_CMSG_REPAIR_ITEM* object) {
+    int _return_value = 1;
+
+    if (16 > (reader->length - reader->index)) {
+        _return_value = (size_t)16 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->npc);
 
     READ_U64(object->item);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_REPAIR_ITEM_write(WowWorldWriter* writer, const vanilla_CMSG_REPAIR_ITEM* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0010 + 4); /* size */
 
     WRITE_U32(0x000002a8); /* opcode */
@@ -20428,6 +29949,12 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_REPAIR_ITEM_write(WowWor
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_CHAT_PLAYER_NOT_FOUND_free(vanilla_SMSG_CHAT_PLAYER_NOT_FOUND* object) {
+    FREE_STRING(object->name);
+
 }
 
 static size_t vanilla_SMSG_CHAT_PLAYER_NOT_FOUND_size(const vanilla_SMSG_CHAT_PLAYER_NOT_FOUND* object) {
@@ -20435,12 +29962,31 @@ static size_t vanilla_SMSG_CHAT_PLAYER_NOT_FOUND_size(const vanilla_SMSG_CHAT_PL
 }
 
 static WowWorldResult vanilla_SMSG_CHAT_PLAYER_NOT_FOUND_read(WowWorldReader* reader, vanilla_SMSG_CHAT_PLAYER_NOT_FOUND* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->name = NULL;
+
     READ_CSTRING(object->name);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_CHAT_PLAYER_NOT_FOUND_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CHAT_PLAYER_NOT_FOUND_write(WowWorldWriter* writer, const vanilla_SMSG_CHAT_PLAYER_NOT_FOUND* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_CHAT_PLAYER_NOT_FOUND_size(object) + 2); /* size */
 
     WRITE_U16(0x000002a9); /* opcode */
@@ -20449,20 +29995,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CHAT_PLAYER_NOT_FOUND_wr
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_CHAT_PLAYER_NOT_FOUND_free(vanilla_SMSG_CHAT_PLAYER_NOT_FOUND* object) {
-    FREE_STRING(object->name);
-
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_MSG_TALENT_WIPE_CONFIRM_Client_read(WowWorldReader* reader, vanilla_MSG_TALENT_WIPE_CONFIRM_Client* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->wiping_npc);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_TALENT_WIPE_CONFIRM_Client_write(WowWorldWriter* writer, const vanilla_MSG_TALENT_WIPE_CONFIRM_Client* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x000002aa); /* opcode */
@@ -20471,17 +30029,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_TALENT_WIPE_CONFIRM_Clien
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_MSG_TALENT_WIPE_CONFIRM_Server_read(WowWorldReader* reader, vanilla_MSG_TALENT_WIPE_CONFIRM_Server* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->wiping_npc);
 
     READ_U32(object->cost_in_copper);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_TALENT_WIPE_CONFIRM_Server_write(WowWorldWriter* writer, const vanilla_MSG_TALENT_WIPE_CONFIRM_Server* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 2); /* size */
 
     WRITE_U16(0x000002aa); /* opcode */
@@ -20492,9 +30067,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_TALENT_WIPE_CONFIRM_Serve
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_SUMMON_REQUEST_read(WowWorldReader* reader, vanilla_SMSG_SUMMON_REQUEST* object) {
+    int _return_value = 1;
+
+    if (16 > (reader->length - reader->index)) {
+        _return_value = (size_t)16 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->summoner);
 
     object->area = 0;
@@ -20503,9 +30086,18 @@ static WowWorldResult vanilla_SMSG_SUMMON_REQUEST_read(WowWorldReader* reader, v
     READ_U32(object->auto_decline_time);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SUMMON_REQUEST_write(WowWorldWriter* writer, const vanilla_SMSG_SUMMON_REQUEST* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0010 + 2); /* size */
 
     WRITE_U16(0x000002ab); /* opcode */
@@ -20518,15 +30110,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SUMMON_REQUEST_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_SUMMON_RESPONSE_read(WowWorldReader* reader, vanilla_CMSG_SUMMON_RESPONSE* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->summoner);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SUMMON_RESPONSE_write(WowWorldWriter* writer, const vanilla_CMSG_SUMMON_RESPONSE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x000002ac); /* opcode */
@@ -20535,6 +30144,18 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SUMMON_RESPONSE_write(Wo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_MONSTER_MOVE_TRANSPORT_free(vanilla_SMSG_MONSTER_MOVE_TRANSPORT* object) {
+    if (object->move_type == VANILLA_MONSTER_MOVE_TYPE_FACING_TARGET) {
+    }
+    else if (object->move_type == VANILLA_MONSTER_MOVE_TYPE_FACING_ANGLE) {
+    }
+    else if (object->move_type == VANILLA_MONSTER_MOVE_TYPE_FACING_SPOT) {
+    }
+    wwm_monster_move_spline_free(&object->splines);
+
 }
 
 static size_t vanilla_SMSG_MONSTER_MOVE_TRANSPORT_size(const vanilla_SMSG_MONSTER_MOVE_TRANSPORT* object) {
@@ -20554,6 +30175,16 @@ static size_t vanilla_SMSG_MONSTER_MOVE_TRANSPORT_size(const vanilla_SMSG_MONSTE
 }
 
 static WowWorldResult vanilla_SMSG_MONSTER_MOVE_TRANSPORT_read(WowWorldReader* reader, vanilla_SMSG_MONSTER_MOVE_TRANSPORT* object) {
+    int _return_value = 1;
+
+    if (31 > (reader->length - reader->index)) {
+        _return_value = (size_t)31 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->splines.amount_of_splines = 0;
+    object->splines.splines = NULL;
+
     READ_PACKED_GUID(object->guid);
 
     READ_PACKED_GUID(object->transport);
@@ -20585,9 +30216,19 @@ static WowWorldResult vanilla_SMSG_MONSTER_MOVE_TRANSPORT_read(WowWorldReader* r
     READ_MONSTER_MOVE_SPLINE(object->splines);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_MONSTER_MOVE_TRANSPORT_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MONSTER_MOVE_TRANSPORT_write(WowWorldWriter* writer, const vanilla_SMSG_MONSTER_MOVE_TRANSPORT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_MONSTER_MOVE_TRANSPORT_size(object) + 2); /* size */
 
     WRITE_U16(0x000002ae); /* opcode */
@@ -20622,26 +30263,24 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MONSTER_MOVE_TRANSPORT_w
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_MONSTER_MOVE_TRANSPORT_free(vanilla_SMSG_MONSTER_MOVE_TRANSPORT* object) {
-    if (object->move_type == VANILLA_MONSTER_MOVE_TYPE_FACING_TARGET) {
-    }
-    else if (object->move_type == VANILLA_MONSTER_MOVE_TYPE_FACING_ANGLE) {
-    }
-    else if (object->move_type == VANILLA_MONSTER_MOVE_TYPE_FACING_SPOT) {
-    }
-    wwm_monster_move_spline_free(&object->splines);
-
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PET_BROKEN_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 2); /* size */
 
     WRITE_U16(0x000002af); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_FEATHER_FALL_Server_size(const vanilla_MSG_MOVE_FEATHER_FALL_Server* object) {
@@ -20649,14 +30288,30 @@ static size_t vanilla_MSG_MOVE_FEATHER_FALL_Server_size(const vanilla_MSG_MOVE_F
 }
 
 static WowWorldResult vanilla_MSG_MOVE_FEATHER_FALL_Server_read(WowWorldReader* reader, vanilla_MSG_MOVE_FEATHER_FALL_Server* object) {
+    int _return_value = 1;
+
+    if (29 > (reader->length - reader->index)) {
+        _return_value = (size_t)29 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->player);
 
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_FEATHER_FALL_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_FEATHER_FALL_Server* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_FEATHER_FALL_Server_size(object) + 2); /* size */
 
     WRITE_U16(0x000002b0); /* opcode */
@@ -20667,10 +30322,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_FEATHER_FALL_Server_
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_FEATHER_FALL_Server_free(vanilla_MSG_MOVE_FEATHER_FALL_Server* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_WATER_WALK_size(const vanilla_MSG_MOVE_WATER_WALK* object) {
@@ -20678,14 +30330,30 @@ static size_t vanilla_MSG_MOVE_WATER_WALK_size(const vanilla_MSG_MOVE_WATER_WALK
 }
 
 static WowWorldResult vanilla_MSG_MOVE_WATER_WALK_read(WowWorldReader* reader, vanilla_MSG_MOVE_WATER_WALK* object) {
+    int _return_value = 1;
+
+    if (29 > (reader->length - reader->index)) {
+        _return_value = (size_t)29 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->player);
 
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_WATER_WALK_cmsg_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_WATER_WALK* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_WATER_WALK_size(object) + 4); /* size */
 
     WRITE_U32(0x000002b1); /* opcode */
@@ -20696,9 +30364,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_WATER_WALK_cmsg_writ
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_WATER_WALK_smsg_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_WATER_WALK* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_WATER_WALK_size(object) + 2); /* size */
 
     WRITE_U16(0x000002b1); /* opcode */
@@ -20709,37 +30385,66 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_WATER_WALK_smsg_writ
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_MOVE_WATER_WALK_free(vanilla_MSG_MOVE_WATER_WALK* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SELF_RES_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x000002b3); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_FEIGN_DEATH_RESISTED_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 2); /* size */
 
     WRITE_U16(0x000002b4); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_DUEL_COUNTDOWN_read(WowWorldReader* reader, vanilla_SMSG_DUEL_COUNTDOWN* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->time);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_DUEL_COUNTDOWN_write(WowWorldWriter* writer, const vanilla_SMSG_DUEL_COUNTDOWN* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 2); /* size */
 
     WRITE_U16(0x000002b7); /* opcode */
@@ -20748,6 +30453,12 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_DUEL_COUNTDOWN_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_AREA_TRIGGER_MESSAGE_free(vanilla_SMSG_AREA_TRIGGER_MESSAGE* object) {
+    FREE_STRING(object->message);
+
 }
 
 static size_t vanilla_SMSG_AREA_TRIGGER_MESSAGE_size(const vanilla_SMSG_AREA_TRIGGER_MESSAGE* object) {
@@ -20755,12 +30466,31 @@ static size_t vanilla_SMSG_AREA_TRIGGER_MESSAGE_size(const vanilla_SMSG_AREA_TRI
 }
 
 static WowWorldResult vanilla_SMSG_AREA_TRIGGER_MESSAGE_read(WowWorldReader* reader, vanilla_SMSG_AREA_TRIGGER_MESSAGE* object) {
+    int _return_value = 1;
+
+    if (5 > (reader->length - reader->index)) {
+        _return_value = (size_t)5 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->message = NULL;
+
     READ_SIZED_CSTRING(object->message);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_AREA_TRIGGER_MESSAGE_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_AREA_TRIGGER_MESSAGE_write(WowWorldWriter* writer, const vanilla_SMSG_AREA_TRIGGER_MESSAGE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_AREA_TRIGGER_MESSAGE_size(object) + 2); /* size */
 
     WRITE_U16(0x000002b8); /* opcode */
@@ -20769,39 +30499,67 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_AREA_TRIGGER_MESSAGE_wri
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_AREA_TRIGGER_MESSAGE_free(vanilla_SMSG_AREA_TRIGGER_MESSAGE* object) {
-    FREE_STRING(object->message);
-
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_TOGGLE_HELM_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x000002b9); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_TOGGLE_CLOAK_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x000002ba); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_MEETINGSTONE_JOINFAILED_read(WowWorldReader* reader, vanilla_SMSG_MEETINGSTONE_JOINFAILED* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->reason = 0;
     READ_U8(object->reason);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MEETINGSTONE_JOINFAILED_write(WowWorldWriter* writer, const vanilla_SMSG_MEETINGSTONE_JOINFAILED* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0001 + 2); /* size */
 
     WRITE_U16(0x000002bb); /* opcode */
@@ -20810,15 +30568,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_MEETINGSTONE_JOINFAILED_
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_PLAYER_SKINNED_read(WowWorldReader* reader, vanilla_SMSG_PLAYER_SKINNED* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_BOOL8(object->spirit_released);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PLAYER_SKINNED_write(WowWorldWriter* writer, const vanilla_SMSG_PLAYER_SKINNED* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0001 + 2); /* size */
 
     WRITE_U16(0x000002bc); /* opcode */
@@ -20827,24 +30602,49 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PLAYER_SKINNED_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_DURABILITY_DAMAGE_DEATH_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 2); /* size */
 
     WRITE_U16(0x000002bd); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_SET_ACTIONBAR_TOGGLES_read(WowWorldReader* reader, vanilla_CMSG_SET_ACTIONBAR_TOGGLES* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U8(object->action_bar);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SET_ACTIONBAR_TOGGLES_write(WowWorldWriter* writer, const vanilla_CMSG_SET_ACTIONBAR_TOGGLES* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0001 + 4); /* size */
 
     WRITE_U32(0x000002bf); /* opcode */
@@ -20853,6 +30653,12 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SET_ACTIONBAR_TOGGLES_wr
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_PETITION_RENAME_free(vanilla_MSG_PETITION_RENAME* object) {
+    FREE_STRING(object->new_name);
+
 }
 
 static size_t vanilla_MSG_PETITION_RENAME_size(const vanilla_MSG_PETITION_RENAME* object) {
@@ -20860,14 +30666,33 @@ static size_t vanilla_MSG_PETITION_RENAME_size(const vanilla_MSG_PETITION_RENAME
 }
 
 static WowWorldResult vanilla_MSG_PETITION_RENAME_read(WowWorldReader* reader, vanilla_MSG_PETITION_RENAME* object) {
+    int _return_value = 1;
+
+    if (9 > (reader->length - reader->index)) {
+        _return_value = (size_t)9 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->new_name = NULL;
+
     READ_U64(object->petition);
 
     READ_CSTRING(object->new_name);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_MSG_PETITION_RENAME_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_PETITION_RENAME_cmsg_write(WowWorldWriter* writer, const vanilla_MSG_PETITION_RENAME* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_PETITION_RENAME_size(object) + 4); /* size */
 
     WRITE_U32(0x000002c1); /* opcode */
@@ -20878,9 +30703,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_PETITION_RENAME_cmsg_writ
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_PETITION_RENAME_smsg_write(WowWorldWriter* writer, const vanilla_MSG_PETITION_RENAME* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_PETITION_RENAME_size(object) + 2); /* size */
 
     WRITE_U16(0x000002c1); /* opcode */
@@ -20891,11 +30724,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_PETITION_RENAME_smsg_writ
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_PETITION_RENAME_free(vanilla_MSG_PETITION_RENAME* object) {
-    FREE_STRING(object->new_name);
-
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_INIT_WORLD_STATES_free(vanilla_SMSG_INIT_WORLD_STATES* object) {
+    if (object->states != NULL) {
+        free(object->states);
+        object->states = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_INIT_WORLD_STATES_size(const vanilla_SMSG_INIT_WORLD_STATES* object) {
@@ -20903,6 +30739,15 @@ static size_t vanilla_SMSG_INIT_WORLD_STATES_size(const vanilla_SMSG_INIT_WORLD_
 }
 
 static WowWorldResult vanilla_SMSG_INIT_WORLD_STATES_read(WowWorldReader* reader, vanilla_SMSG_INIT_WORLD_STATES* object) {
+    int _return_value = 1;
+
+    if (10 > (reader->length - reader->index)) {
+        _return_value = (size_t)10 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->states = NULL;
+
     object->map = 0;
     READ_U32(object->map);
 
@@ -20911,7 +30756,7 @@ static WowWorldResult vanilla_SMSG_INIT_WORLD_STATES_read(WowWorldReader* reader
 
     READ_U16(object->amount_of_states);
 
-    object->states = malloc(object->amount_of_states * sizeof(vanilla_WorldState));
+    object->states = calloc(object->amount_of_states, sizeof(vanilla_WorldState));
     if (object->states == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -20919,9 +30764,19 @@ static WowWorldResult vanilla_SMSG_INIT_WORLD_STATES_read(WowWorldReader* reader
 
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_INIT_WORLD_STATES_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_INIT_WORLD_STATES_write(WowWorldWriter* writer, const vanilla_SMSG_INIT_WORLD_STATES* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_INIT_WORLD_STATES_size(object) + 2); /* size */
 
     WRITE_U16(0x000002c2); /* opcode */
@@ -20936,20 +30791,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_INIT_WORLD_STATES_write(
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_INIT_WORLD_STATES_free(vanilla_SMSG_INIT_WORLD_STATES* object) {
-    free(object->states);
-    object->states = NULL;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_UPDATE_WORLD_STATE_read(WowWorldReader* reader, vanilla_SMSG_UPDATE_WORLD_STATE* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     WWM_CHECK_RETURN_CODE(vanilla_WorldState_read(reader, &object->state));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_UPDATE_WORLD_STATE_write(WowWorldWriter* writer, const vanilla_SMSG_UPDATE_WORLD_STATE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 2); /* size */
 
     WRITE_U16(0x000002c3); /* opcode */
@@ -20958,17 +30825,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_UPDATE_WORLD_STATE_write
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_ITEM_NAME_QUERY_read(WowWorldReader* reader, vanilla_CMSG_ITEM_NAME_QUERY* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->item);
 
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_ITEM_NAME_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_ITEM_NAME_QUERY* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 4); /* size */
 
     WRITE_U32(0x000002c4); /* opcode */
@@ -20979,6 +30863,12 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_ITEM_NAME_QUERY_write(Wo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_ITEM_NAME_QUERY_RESPONSE_free(vanilla_SMSG_ITEM_NAME_QUERY_RESPONSE* object) {
+    FREE_STRING(object->item_name);
+
 }
 
 static size_t vanilla_SMSG_ITEM_NAME_QUERY_RESPONSE_size(const vanilla_SMSG_ITEM_NAME_QUERY_RESPONSE* object) {
@@ -20986,14 +30876,33 @@ static size_t vanilla_SMSG_ITEM_NAME_QUERY_RESPONSE_size(const vanilla_SMSG_ITEM
 }
 
 static WowWorldResult vanilla_SMSG_ITEM_NAME_QUERY_RESPONSE_read(WowWorldReader* reader, vanilla_SMSG_ITEM_NAME_QUERY_RESPONSE* object) {
+    int _return_value = 1;
+
+    if (5 > (reader->length - reader->index)) {
+        _return_value = (size_t)5 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->item_name = NULL;
+
     READ_U32(object->item);
 
     READ_CSTRING(object->item_name);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_ITEM_NAME_QUERY_RESPONSE_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ITEM_NAME_QUERY_RESPONSE_write(WowWorldWriter* writer, const vanilla_SMSG_ITEM_NAME_QUERY_RESPONSE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_ITEM_NAME_QUERY_RESPONSE_size(object) + 2); /* size */
 
     WRITE_U16(0x000002c5); /* opcode */
@@ -21004,21 +30913,33 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ITEM_NAME_QUERY_RESPONSE
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_ITEM_NAME_QUERY_RESPONSE_free(vanilla_SMSG_ITEM_NAME_QUERY_RESPONSE* object) {
-    FREE_STRING(object->item_name);
-
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_PET_ACTION_FEEDBACK_read(WowWorldReader* reader, vanilla_SMSG_PET_ACTION_FEEDBACK* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->feedback = 0;
     READ_U8(object->feedback);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PET_ACTION_FEEDBACK_write(WowWorldWriter* writer, const vanilla_SMSG_PET_ACTION_FEEDBACK* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0001 + 2); /* size */
 
     WRITE_U16(0x000002c6); /* opcode */
@@ -21027,6 +30948,12 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PET_ACTION_FEEDBACK_writ
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHAR_RENAME_free(vanilla_CMSG_CHAR_RENAME* object) {
+    FREE_STRING(object->new_name);
+
 }
 
 static size_t vanilla_CMSG_CHAR_RENAME_size(const vanilla_CMSG_CHAR_RENAME* object) {
@@ -21034,14 +30961,33 @@ static size_t vanilla_CMSG_CHAR_RENAME_size(const vanilla_CMSG_CHAR_RENAME* obje
 }
 
 static WowWorldResult vanilla_CMSG_CHAR_RENAME_read(WowWorldReader* reader, vanilla_CMSG_CHAR_RENAME* object) {
+    int _return_value = 1;
+
+    if (9 > (reader->length - reader->index)) {
+        _return_value = (size_t)9 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->new_name = NULL;
+
     READ_U64(object->character);
 
     READ_CSTRING(object->new_name);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_CHAR_RENAME_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHAR_RENAME_write(WowWorldWriter* writer, const vanilla_CMSG_CHAR_RENAME* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_CHAR_RENAME_size(object) + 4); /* size */
 
     WRITE_U32(0x000002c7); /* opcode */
@@ -21052,11 +30998,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_CHAR_RENAME_write(WowWor
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_CHAR_RENAME_free(vanilla_CMSG_CHAR_RENAME* object) {
-    FREE_STRING(object->new_name);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_CHAR_RENAME_free(vanilla_SMSG_CHAR_RENAME* object) {
+    if (object->result == VANILLA_WORLD_RESULT_RESPONSE_SUCCESS) {
+        FREE_STRING(object->new_name);
 
+    }
 }
 
 static size_t vanilla_SMSG_CHAR_RENAME_size(const vanilla_SMSG_CHAR_RENAME* object) {
@@ -21070,6 +31019,15 @@ static size_t vanilla_SMSG_CHAR_RENAME_size(const vanilla_SMSG_CHAR_RENAME* obje
 }
 
 static WowWorldResult vanilla_SMSG_CHAR_RENAME_read(WowWorldReader* reader, vanilla_SMSG_CHAR_RENAME* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->new_name = NULL;
+
     object->result = 0;
     READ_U8(object->result);
 
@@ -21080,9 +31038,19 @@ static WowWorldResult vanilla_SMSG_CHAR_RENAME_read(WowWorldReader* reader, vani
 
     }
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_CHAR_RENAME_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CHAR_RENAME_write(WowWorldWriter* writer, const vanilla_SMSG_CHAR_RENAME* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_CHAR_RENAME_size(object) + 2); /* size */
 
     WRITE_U16(0x000002c8); /* opcode */
@@ -21097,13 +31065,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CHAR_RENAME_write(WowWor
     }
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_CHAR_RENAME_free(vanilla_SMSG_CHAR_RENAME* object) {
-    if (object->result == VANILLA_WORLD_RESULT_RESPONSE_SUCCESS) {
-        FREE_STRING(object->new_name);
-
-    }
+cleanup: return _return_value;
 }
 
 static size_t vanilla_CMSG_MOVE_SPLINE_DONE_size(const vanilla_CMSG_MOVE_SPLINE_DONE* object) {
@@ -21111,6 +31073,13 @@ static size_t vanilla_CMSG_MOVE_SPLINE_DONE_size(const vanilla_CMSG_MOVE_SPLINE_
 }
 
 static WowWorldResult vanilla_CMSG_MOVE_SPLINE_DONE_read(WowWorldReader* reader, vanilla_CMSG_MOVE_SPLINE_DONE* object) {
+    int _return_value = 1;
+
+    if (36 > (reader->length - reader->index)) {
+        _return_value = (size_t)36 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     READ_U32(object->movement_counter);
@@ -21118,9 +31087,18 @@ static WowWorldResult vanilla_CMSG_MOVE_SPLINE_DONE_read(WowWorldReader* reader,
     READ_U32(object->unknown1);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MOVE_SPLINE_DONE_write(WowWorldWriter* writer, const vanilla_CMSG_MOVE_SPLINE_DONE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_MOVE_SPLINE_DONE_size(object) + 4); /* size */
 
     WRITE_U32(0x000002c9); /* opcode */
@@ -21133,10 +31111,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MOVE_SPLINE_DONE_write(W
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_MOVE_SPLINE_DONE_free(vanilla_CMSG_MOVE_SPLINE_DONE* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_CMSG_MOVE_FALL_RESET_size(const vanilla_CMSG_MOVE_FALL_RESET* object) {
@@ -21144,12 +31119,28 @@ static size_t vanilla_CMSG_MOVE_FALL_RESET_size(const vanilla_CMSG_MOVE_FALL_RES
 }
 
 static WowWorldResult vanilla_CMSG_MOVE_FALL_RESET_read(WowWorldReader* reader, vanilla_CMSG_MOVE_FALL_RESET* object) {
+    int _return_value = 1;
+
+    if (28 > (reader->length - reader->index)) {
+        _return_value = (size_t)28 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MOVE_FALL_RESET_write(WowWorldWriter* writer, const vanilla_CMSG_MOVE_FALL_RESET* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_MOVE_FALL_RESET_size(object) + 4); /* size */
 
     WRITE_U32(0x000002ca); /* opcode */
@@ -21158,19 +31149,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MOVE_FALL_RESET_write(Wo
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_MOVE_FALL_RESET_free(vanilla_CMSG_MOVE_FALL_RESET* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_INSTANCE_SAVE_CREATED_read(WowWorldReader* reader, vanilla_SMSG_INSTANCE_SAVE_CREATED* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->unknown);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_INSTANCE_SAVE_CREATED_write(WowWorldWriter* writer, const vanilla_SMSG_INSTANCE_SAVE_CREATED* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 2); /* size */
 
     WRITE_U16(0x000002cb); /* opcode */
@@ -21179,6 +31183,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_INSTANCE_SAVE_CREATED_wr
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_RAID_INSTANCE_INFO_free(vanilla_SMSG_RAID_INSTANCE_INFO* object) {
+    if (object->raid_infos != NULL) {
+        free(object->raid_infos);
+        object->raid_infos = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_RAID_INSTANCE_INFO_size(const vanilla_SMSG_RAID_INSTANCE_INFO* object) {
@@ -21186,9 +31198,18 @@ static size_t vanilla_SMSG_RAID_INSTANCE_INFO_size(const vanilla_SMSG_RAID_INSTA
 }
 
 static WowWorldResult vanilla_SMSG_RAID_INSTANCE_INFO_read(WowWorldReader* reader, vanilla_SMSG_RAID_INSTANCE_INFO* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->raid_infos = NULL;
+
     READ_U32(object->amount_of_raid_infos);
 
-    object->raid_infos = malloc(object->amount_of_raid_infos * sizeof(vanilla_RaidInfo));
+    object->raid_infos = calloc(object->amount_of_raid_infos, sizeof(vanilla_RaidInfo));
     if (object->raid_infos == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -21196,9 +31217,19 @@ static WowWorldResult vanilla_SMSG_RAID_INSTANCE_INFO_read(WowWorldReader* reade
 
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_RAID_INSTANCE_INFO_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_RAID_INSTANCE_INFO_write(WowWorldWriter* writer, const vanilla_SMSG_RAID_INSTANCE_INFO* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_RAID_INSTANCE_INFO_size(object) + 2); /* size */
 
     WRITE_U16(0x000002cc); /* opcode */
@@ -21209,31 +31240,51 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_RAID_INSTANCE_INFO_write
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_RAID_INSTANCE_INFO_free(vanilla_SMSG_RAID_INSTANCE_INFO* object) {
-    free(object->raid_infos);
-    object->raid_infos = NULL;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_REQUEST_RAID_INFO_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x000002cd); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_MOVE_TIME_SKIPPED_read(WowWorldReader* reader, vanilla_CMSG_MOVE_TIME_SKIPPED* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_U32(object->lag);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MOVE_TIME_SKIPPED_write(WowWorldWriter* writer, const vanilla_CMSG_MOVE_TIME_SKIPPED* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 4); /* size */
 
     WRITE_U32(0x000002ce); /* opcode */
@@ -21244,6 +31295,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MOVE_TIME_SKIPPED_write(
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_CMSG_MOVE_FEATHER_FALL_ACK_size(const vanilla_CMSG_MOVE_FEATHER_FALL_ACK* object) {
@@ -21251,6 +31303,13 @@ static size_t vanilla_CMSG_MOVE_FEATHER_FALL_ACK_size(const vanilla_CMSG_MOVE_FE
 }
 
 static WowWorldResult vanilla_CMSG_MOVE_FEATHER_FALL_ACK_read(WowWorldReader* reader, vanilla_CMSG_MOVE_FEATHER_FALL_ACK* object) {
+    int _return_value = 1;
+
+    if (44 > (reader->length - reader->index)) {
+        _return_value = (size_t)44 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_U32(object->movement_counter);
@@ -21260,9 +31319,18 @@ static WowWorldResult vanilla_CMSG_MOVE_FEATHER_FALL_ACK_read(WowWorldReader* re
     READ_U32(object->apply);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MOVE_FEATHER_FALL_ACK_write(WowWorldWriter* writer, const vanilla_CMSG_MOVE_FEATHER_FALL_ACK* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_MOVE_FEATHER_FALL_ACK_size(object) + 4); /* size */
 
     WRITE_U32(0x000002cf); /* opcode */
@@ -21277,10 +31345,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MOVE_FEATHER_FALL_ACK_wr
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_MOVE_FEATHER_FALL_ACK_free(vanilla_CMSG_MOVE_FEATHER_FALL_ACK* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_CMSG_MOVE_WATER_WALK_ACK_size(const vanilla_CMSG_MOVE_WATER_WALK_ACK* object) {
@@ -21288,6 +31353,13 @@ static size_t vanilla_CMSG_MOVE_WATER_WALK_ACK_size(const vanilla_CMSG_MOVE_WATE
 }
 
 static WowWorldResult vanilla_CMSG_MOVE_WATER_WALK_ACK_read(WowWorldReader* reader, vanilla_CMSG_MOVE_WATER_WALK_ACK* object) {
+    int _return_value = 1;
+
+    if (44 > (reader->length - reader->index)) {
+        _return_value = (size_t)44 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_U32(object->movement_counter);
@@ -21297,9 +31369,18 @@ static WowWorldResult vanilla_CMSG_MOVE_WATER_WALK_ACK_read(WowWorldReader* read
     READ_U32(object->apply);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MOVE_WATER_WALK_ACK_write(WowWorldWriter* writer, const vanilla_CMSG_MOVE_WATER_WALK_ACK* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_MOVE_WATER_WALK_ACK_size(object) + 4); /* size */
 
     WRITE_U32(0x000002d0); /* opcode */
@@ -21314,10 +31395,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MOVE_WATER_WALK_ACK_writ
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_MOVE_WATER_WALK_ACK_free(vanilla_CMSG_MOVE_WATER_WALK_ACK* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_CMSG_MOVE_NOT_ACTIVE_MOVER_size(const vanilla_CMSG_MOVE_NOT_ACTIVE_MOVER* object) {
@@ -21325,14 +31403,30 @@ static size_t vanilla_CMSG_MOVE_NOT_ACTIVE_MOVER_size(const vanilla_CMSG_MOVE_NO
 }
 
 static WowWorldResult vanilla_CMSG_MOVE_NOT_ACTIVE_MOVER_read(WowWorldReader* reader, vanilla_CMSG_MOVE_NOT_ACTIVE_MOVER* object) {
+    int _return_value = 1;
+
+    if (36 > (reader->length - reader->index)) {
+        _return_value = (size_t)36 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->old_mover);
 
     WWM_CHECK_RETURN_CODE(vanilla_MovementInfo_read(reader, &object->info));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MOVE_NOT_ACTIVE_MOVER_write(WowWorldWriter* writer, const vanilla_CMSG_MOVE_NOT_ACTIVE_MOVER* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_MOVE_NOT_ACTIVE_MOVER_size(object) + 4); /* size */
 
     WRITE_U32(0x000002d1); /* opcode */
@@ -21343,19 +31437,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_MOVE_NOT_ACTIVE_MOVER_wr
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_MOVE_NOT_ACTIVE_MOVER_free(vanilla_CMSG_MOVE_NOT_ACTIVE_MOVER* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_PLAY_SOUND_read(WowWorldReader* reader, vanilla_SMSG_PLAY_SOUND* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->sound_id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PLAY_SOUND_write(WowWorldWriter* writer, const vanilla_SMSG_PLAY_SOUND* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 2); /* size */
 
     WRITE_U16(0x000002d2); /* opcode */
@@ -21364,15 +31471,24 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PLAY_SOUND_write(WowWorl
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BATTLEFIELD_STATUS_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x000002d3); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_BATTLEFIELD_STATUS_size(const vanilla_SMSG_BATTLEFIELD_STATUS* object) {
@@ -21397,6 +31513,13 @@ static size_t vanilla_SMSG_BATTLEFIELD_STATUS_size(const vanilla_SMSG_BATTLEFIEL
 }
 
 static WowWorldResult vanilla_SMSG_BATTLEFIELD_STATUS_read(WowWorldReader* reader, vanilla_SMSG_BATTLEFIELD_STATUS* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->queue_slot);
 
     object->map = 0;
@@ -21429,9 +31552,18 @@ static WowWorldResult vanilla_SMSG_BATTLEFIELD_STATUS_read(WowWorldReader* reade
         }
     }
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_BATTLEFIELD_STATUS_write(WowWorldWriter* writer, const vanilla_SMSG_BATTLEFIELD_STATUS* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_BATTLEFIELD_STATUS_size(object) + 2); /* size */
 
     WRITE_U16(0x000002d4); /* opcode */
@@ -21466,20 +31598,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_BATTLEFIELD_STATUS_write
     }
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_BATTLEFIELD_STATUS_free(vanilla_SMSG_BATTLEFIELD_STATUS* object) {
-    if (object->map == VANILLA_MAP_KALIMDOR|| object->map == VANILLA_MAP_TESTING|| object->map == VANILLA_MAP_SCOTT_TEST|| object->map == VANILLA_MAP_CASH_TEST|| object->map == VANILLA_MAP_ALTERAC_VALLEY|| object->map == VANILLA_MAP_SHADOWFANG_KEEP|| object->map == VANILLA_MAP_STORMWIND_STOCKADE|| object->map == VANILLA_MAP_STORMWIND_PRISON|| object->map == VANILLA_MAP_DEADMINES|| object->map == VANILLA_MAP_AZSHARA_CRATER|| object->map == VANILLA_MAP_COLLINS_TEST|| object->map == VANILLA_MAP_WAILING_CAVERNS|| object->map == VANILLA_MAP_MONASTERY_UNUSED|| object->map == VANILLA_MAP_RAZORFEN_KRAUL|| object->map == VANILLA_MAP_BLACKFATHOM_DEEPS|| object->map == VANILLA_MAP_ULDAMAN|| object->map == VANILLA_MAP_GNOMEREGAN|| object->map == VANILLA_MAP_SUNKEN_TEMPLE|| object->map == VANILLA_MAP_RAZORFEN_DOWNS|| object->map == VANILLA_MAP_EMERALD_DREAM|| object->map == VANILLA_MAP_SCARLET_MONASTERY|| object->map == VANILLA_MAP_ZUL_FARRAK|| object->map == VANILLA_MAP_BLACKROCK_SPIRE|| object->map == VANILLA_MAP_BLACKROCK_DEPTHS|| object->map == VANILLA_MAP_ONYXIAS_LAIR|| object->map == VANILLA_MAP_OPENING_OF_THE_DARK_PORTAL|| object->map == VANILLA_MAP_SCHOLOMANCE|| object->map == VANILLA_MAP_ZUL_GURUB|| object->map == VANILLA_MAP_STRATHOLME|| object->map == VANILLA_MAP_MARAUDON|| object->map == VANILLA_MAP_DEEPRUN_TRAM|| object->map == VANILLA_MAP_RAGEFIRE_CHASM|| object->map == VANILLA_MAP_MOLTEN_CORE|| object->map == VANILLA_MAP_DIRE_MAUL|| object->map == VANILLA_MAP_ALLIANCE_PVP_BARRACKS|| object->map == VANILLA_MAP_HORDE_PVP_BARRACKS|| object->map == VANILLA_MAP_DEVELOPMENT_LAND|| object->map == VANILLA_MAP_BLACKWING_LAIR|| object->map == VANILLA_MAP_WARSONG_GULCH|| object->map == VANILLA_MAP_RUINS_OF_AHN_QIRAJ|| object->map == VANILLA_MAP_ARATHI_BASIN|| object->map == VANILLA_MAP_AHN_QIRAJ_TEMPLE|| object->map == VANILLA_MAP_NAXXRAMAS) {
-        if (object->status_id == VANILLA_STATUS_ID_WAIT_QUEUE) {
-        }
-        else if (object->status_id == VANILLA_STATUS_ID_WAIT_JOIN) {
-        }
-        else if (object->status_id == VANILLA_STATUS_ID_IN_PROGRESS) {
-        }
-    }
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_BATTLEFIELD_PORT_read(WowWorldReader* reader, vanilla_CMSG_BATTLEFIELD_PORT* object) {
+    int _return_value = 1;
+
+    if (5 > (reader->length - reader->index)) {
+        _return_value = (size_t)5 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->map = 0;
     READ_U32(object->map);
 
@@ -21487,9 +31616,18 @@ static WowWorldResult vanilla_CMSG_BATTLEFIELD_PORT_read(WowWorldReader* reader,
     READ_U8(object->action);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BATTLEFIELD_PORT_write(WowWorldWriter* writer, const vanilla_CMSG_BATTLEFIELD_PORT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0005 + 4); /* size */
 
     WRITE_U32(0x000002d5); /* opcode */
@@ -21500,15 +31638,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BATTLEFIELD_PORT_write(W
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_MSG_INSPECT_HONOR_STATS_Client_read(WowWorldReader* reader, vanilla_MSG_INSPECT_HONOR_STATS_Client* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_INSPECT_HONOR_STATS_Client_write(WowWorldWriter* writer, const vanilla_MSG_INSPECT_HONOR_STATS_Client* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x000002d6); /* opcode */
@@ -21517,9 +31672,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_INSPECT_HONOR_STATS_Clien
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_MSG_INSPECT_HONOR_STATS_Server_read(WowWorldReader* reader, vanilla_MSG_INSPECT_HONOR_STATS_Server* object) {
+    int _return_value = 1;
+
+    if (50 > (reader->length - reader->index)) {
+        _return_value = (size_t)50 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     object->highest_rank = 0;
@@ -21555,9 +31718,18 @@ static WowWorldResult vanilla_MSG_INSPECT_HONOR_STATS_Server_read(WowWorldReader
     READ_U8(object->rank_progress_bar);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_INSPECT_HONOR_STATS_Server_write(WowWorldWriter* writer, const vanilla_MSG_INSPECT_HONOR_STATS_Server* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0032 + 2); /* size */
 
     WRITE_U16(0x000002d6); /* opcode */
@@ -21596,15 +31768,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_INSPECT_HONOR_STATS_Serve
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_BATTLEMASTER_HELLO_read(WowWorldReader* reader, vanilla_CMSG_BATTLEMASTER_HELLO* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BATTLEMASTER_HELLO_write(WowWorldWriter* writer, const vanilla_CMSG_BATTLEMASTER_HELLO* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x000002d7); /* opcode */
@@ -21613,6 +31802,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BATTLEMASTER_HELLO_write
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_FORCE_WALK_SPEED_CHANGE_size(const vanilla_SMSG_FORCE_WALK_SPEED_CHANGE* object) {
@@ -21620,6 +31810,13 @@ static size_t vanilla_SMSG_FORCE_WALK_SPEED_CHANGE_size(const vanilla_SMSG_FORCE
 }
 
 static WowWorldResult vanilla_SMSG_FORCE_WALK_SPEED_CHANGE_read(WowWorldReader* reader, vanilla_SMSG_FORCE_WALK_SPEED_CHANGE* object) {
+    int _return_value = 1;
+
+    if (9 > (reader->length - reader->index)) {
+        _return_value = (size_t)9 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     READ_U32(object->move_event);
@@ -21627,9 +31824,18 @@ static WowWorldResult vanilla_SMSG_FORCE_WALK_SPEED_CHANGE_read(WowWorldReader* 
     READ_FLOAT(object->speed);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_FORCE_WALK_SPEED_CHANGE_write(WowWorldWriter* writer, const vanilla_SMSG_FORCE_WALK_SPEED_CHANGE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_FORCE_WALK_SPEED_CHANGE_size(object) + 2); /* size */
 
     WRITE_U16(0x000002da); /* opcode */
@@ -21642,6 +31848,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_FORCE_WALK_SPEED_CHANGE_
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_CMSG_FORCE_WALK_SPEED_CHANGE_ACK_size(const vanilla_CMSG_FORCE_WALK_SPEED_CHANGE_ACK* object) {
@@ -21649,6 +31856,13 @@ static size_t vanilla_CMSG_FORCE_WALK_SPEED_CHANGE_ACK_size(const vanilla_CMSG_F
 }
 
 static WowWorldResult vanilla_CMSG_FORCE_WALK_SPEED_CHANGE_ACK_read(WowWorldReader* reader, vanilla_CMSG_FORCE_WALK_SPEED_CHANGE_ACK* object) {
+    int _return_value = 1;
+
+    if (44 > (reader->length - reader->index)) {
+        _return_value = (size_t)44 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_U32(object->counter);
@@ -21658,9 +31872,18 @@ static WowWorldResult vanilla_CMSG_FORCE_WALK_SPEED_CHANGE_ACK_read(WowWorldRead
     READ_FLOAT(object->new_speed);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_FORCE_WALK_SPEED_CHANGE_ACK_write(WowWorldWriter* writer, const vanilla_CMSG_FORCE_WALK_SPEED_CHANGE_ACK* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_FORCE_WALK_SPEED_CHANGE_ACK_size(object) + 4); /* size */
 
     WRITE_U32(0x000002db); /* opcode */
@@ -21675,10 +31898,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_FORCE_WALK_SPEED_CHANGE_
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_FORCE_WALK_SPEED_CHANGE_ACK_free(vanilla_CMSG_FORCE_WALK_SPEED_CHANGE_ACK* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_FORCE_SWIM_BACK_SPEED_CHANGE_size(const vanilla_SMSG_FORCE_SWIM_BACK_SPEED_CHANGE* object) {
@@ -21686,6 +31906,13 @@ static size_t vanilla_SMSG_FORCE_SWIM_BACK_SPEED_CHANGE_size(const vanilla_SMSG_
 }
 
 static WowWorldResult vanilla_SMSG_FORCE_SWIM_BACK_SPEED_CHANGE_read(WowWorldReader* reader, vanilla_SMSG_FORCE_SWIM_BACK_SPEED_CHANGE* object) {
+    int _return_value = 1;
+
+    if (9 > (reader->length - reader->index)) {
+        _return_value = (size_t)9 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     READ_U32(object->move_event);
@@ -21693,9 +31920,18 @@ static WowWorldResult vanilla_SMSG_FORCE_SWIM_BACK_SPEED_CHANGE_read(WowWorldRea
     READ_FLOAT(object->speed);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_FORCE_SWIM_BACK_SPEED_CHANGE_write(WowWorldWriter* writer, const vanilla_SMSG_FORCE_SWIM_BACK_SPEED_CHANGE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_FORCE_SWIM_BACK_SPEED_CHANGE_size(object) + 2); /* size */
 
     WRITE_U16(0x000002dc); /* opcode */
@@ -21708,6 +31944,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_FORCE_SWIM_BACK_SPEED_CH
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK_size(const vanilla_CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK* object) {
@@ -21715,6 +31952,13 @@ static size_t vanilla_CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK_size(const vanilla_C
 }
 
 static WowWorldResult vanilla_CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK_read(WowWorldReader* reader, vanilla_CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK* object) {
+    int _return_value = 1;
+
+    if (44 > (reader->length - reader->index)) {
+        _return_value = (size_t)44 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_U32(object->counter);
@@ -21724,9 +31968,18 @@ static WowWorldResult vanilla_CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK_read(WowWorl
     READ_FLOAT(object->new_speed);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK_write(WowWorldWriter* writer, const vanilla_CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK_size(object) + 4); /* size */
 
     WRITE_U32(0x000002dd); /* opcode */
@@ -21741,10 +31994,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_FORCE_SWIM_BACK_SPEED_CH
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK_free(vanilla_CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_FORCE_TURN_RATE_CHANGE_size(const vanilla_SMSG_FORCE_TURN_RATE_CHANGE* object) {
@@ -21752,6 +32002,13 @@ static size_t vanilla_SMSG_FORCE_TURN_RATE_CHANGE_size(const vanilla_SMSG_FORCE_
 }
 
 static WowWorldResult vanilla_SMSG_FORCE_TURN_RATE_CHANGE_read(WowWorldReader* reader, vanilla_SMSG_FORCE_TURN_RATE_CHANGE* object) {
+    int _return_value = 1;
+
+    if (9 > (reader->length - reader->index)) {
+        _return_value = (size_t)9 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     READ_U32(object->move_event);
@@ -21759,9 +32016,18 @@ static WowWorldResult vanilla_SMSG_FORCE_TURN_RATE_CHANGE_read(WowWorldReader* r
     READ_FLOAT(object->speed);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_FORCE_TURN_RATE_CHANGE_write(WowWorldWriter* writer, const vanilla_SMSG_FORCE_TURN_RATE_CHANGE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_FORCE_TURN_RATE_CHANGE_size(object) + 2); /* size */
 
     WRITE_U16(0x000002de); /* opcode */
@@ -21774,6 +32040,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_FORCE_TURN_RATE_CHANGE_w
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_CMSG_FORCE_TURN_RATE_CHANGE_ACK_size(const vanilla_CMSG_FORCE_TURN_RATE_CHANGE_ACK* object) {
@@ -21781,6 +32048,13 @@ static size_t vanilla_CMSG_FORCE_TURN_RATE_CHANGE_ACK_size(const vanilla_CMSG_FO
 }
 
 static WowWorldResult vanilla_CMSG_FORCE_TURN_RATE_CHANGE_ACK_read(WowWorldReader* reader, vanilla_CMSG_FORCE_TURN_RATE_CHANGE_ACK* object) {
+    int _return_value = 1;
+
+    if (44 > (reader->length - reader->index)) {
+        _return_value = (size_t)44 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_U32(object->counter);
@@ -21790,9 +32064,18 @@ static WowWorldResult vanilla_CMSG_FORCE_TURN_RATE_CHANGE_ACK_read(WowWorldReade
     READ_FLOAT(object->new_speed);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_FORCE_TURN_RATE_CHANGE_ACK_write(WowWorldWriter* writer, const vanilla_CMSG_FORCE_TURN_RATE_CHANGE_ACK* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_FORCE_TURN_RATE_CHANGE_ACK_size(object) + 4); /* size */
 
     WRITE_U32(0x000002df); /* opcode */
@@ -21807,19 +32090,38 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_FORCE_TURN_RATE_CHANGE_A
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_FORCE_TURN_RATE_CHANGE_ACK_free(vanilla_CMSG_FORCE_TURN_RATE_CHANGE_ACK* object) {
-    vanilla_MovementInfo_free(&object->info);
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_PVP_LOG_DATA_Client_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x000002e0); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_PVP_LOG_DATA_Server_free(vanilla_MSG_PVP_LOG_DATA_Server* object) {
+    size_t i;
+
+    if (object->status == VANILLA_BATTLEGROUND_END_STATUS_ENDED) {
+    }
+    if (object->players != NULL) {
+        for (i = 0; i < object->amount_of_players; ++i) {
+            vanilla_BattlegroundPlayer_free(&((object->players)[i]));
+        }
+        free(object->players);
+        object->players = NULL;
+    }
 }
 
 static size_t vanilla_MSG_PVP_LOG_DATA_Server_size(const vanilla_MSG_PVP_LOG_DATA_Server* object) {
@@ -21840,6 +32142,15 @@ static size_t vanilla_MSG_PVP_LOG_DATA_Server_size(const vanilla_MSG_PVP_LOG_DAT
 }
 
 static WowWorldResult vanilla_MSG_PVP_LOG_DATA_Server_read(WowWorldReader* reader, vanilla_MSG_PVP_LOG_DATA_Server* object) {
+    int _return_value = 1;
+
+    if (5 > (reader->length - reader->index)) {
+        _return_value = (size_t)5 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->players = NULL;
+
     object->status = 0;
     READ_U8(object->status);
 
@@ -21850,7 +32161,7 @@ static WowWorldResult vanilla_MSG_PVP_LOG_DATA_Server_read(WowWorldReader* reade
     }
     READ_U32(object->amount_of_players);
 
-    object->players = malloc(object->amount_of_players * sizeof(vanilla_BattlegroundPlayer));
+    object->players = calloc(object->amount_of_players, sizeof(vanilla_BattlegroundPlayer));
     if (object->players == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -21858,9 +32169,19 @@ static WowWorldResult vanilla_MSG_PVP_LOG_DATA_Server_read(WowWorldReader* reade
 
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_MSG_PVP_LOG_DATA_Server_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_PVP_LOG_DATA_Server_write(WowWorldWriter* writer, const vanilla_MSG_PVP_LOG_DATA_Server* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_PVP_LOG_DATA_Server_size(object) + 2); /* size */
 
     WRITE_U16(0x000002e0); /* opcode */
@@ -21877,28 +32198,33 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_PVP_LOG_DATA_Server_write
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_PVP_LOG_DATA_Server_free(vanilla_MSG_PVP_LOG_DATA_Server* object) {
-    size_t i;
-
-    if (object->status == VANILLA_BATTLEGROUND_END_STATUS_ENDED) {
-    }
-    for (i = 0; i < object->amount_of_players; ++i) {
-        vanilla_BattlegroundPlayer_free(&((object->players)[i]));
-    }
-    free(object->players);
-    object->players = NULL;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_LEAVE_BATTLEFIELD_read(WowWorldReader* reader, vanilla_CMSG_LEAVE_BATTLEFIELD* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->map = 0;
     READ_U32(object->map);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_LEAVE_BATTLEFIELD_write(WowWorldWriter* writer, const vanilla_CMSG_LEAVE_BATTLEFIELD* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 4); /* size */
 
     WRITE_U32(0x000002e1); /* opcode */
@@ -21907,15 +32233,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_LEAVE_BATTLEFIELD_write(
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_AREA_SPIRIT_HEALER_QUERY_read(WowWorldReader* reader, vanilla_CMSG_AREA_SPIRIT_HEALER_QUERY* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AREA_SPIRIT_HEALER_QUERY_write(WowWorldWriter* writer, const vanilla_CMSG_AREA_SPIRIT_HEALER_QUERY* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x000002e2); /* opcode */
@@ -21924,15 +32267,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AREA_SPIRIT_HEALER_QUERY
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_AREA_SPIRIT_HEALER_QUEUE_read(WowWorldReader* reader, vanilla_CMSG_AREA_SPIRIT_HEALER_QUEUE* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AREA_SPIRIT_HEALER_QUEUE_write(WowWorldWriter* writer, const vanilla_CMSG_AREA_SPIRIT_HEALER_QUEUE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x000002e3); /* opcode */
@@ -21941,17 +32301,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_AREA_SPIRIT_HEALER_QUEUE
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_AREA_SPIRIT_HEALER_TIME_read(WowWorldReader* reader, vanilla_SMSG_AREA_SPIRIT_HEALER_TIME* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_U32(object->next_resurrect_time);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_AREA_SPIRIT_HEALER_TIME_write(WowWorldWriter* writer, const vanilla_SMSG_AREA_SPIRIT_HEALER_TIME* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 2); /* size */
 
     WRITE_U16(0x000002e4); /* opcode */
@@ -21962,6 +32339,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_AREA_SPIRIT_HEALER_TIME_
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_WARDEN_DATA_free(vanilla_SMSG_WARDEN_DATA* object) {
+    if (object->encrypted_data != NULL) {
+        free(object->encrypted_data);
+        object->encrypted_data = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_WARDEN_DATA_size(const vanilla_SMSG_WARDEN_DATA* object) {
@@ -21969,7 +32354,11 @@ static size_t vanilla_SMSG_WARDEN_DATA_size(const vanilla_SMSG_WARDEN_DATA* obje
 }
 
 static WowWorldResult vanilla_SMSG_WARDEN_DATA_read(WowWorldReader* reader, vanilla_SMSG_WARDEN_DATA* object, size_t body_size) {
+    int _return_value = 1;
+
     size_t _size = 0;
+
+    object->encrypted_data = NULL;
 
     object->amount_of_encrypted_data = 0;
     /* C89 scope to allow variable declarations */ {
@@ -21978,7 +32367,8 @@ static WowWorldResult vanilla_SMSG_WARDEN_DATA_read(WowWorldReader* reader, vani
 
         object->encrypted_data = malloc(_current_size);
         if (object->encrypted_data == NULL) {
-            return WWM_RESULT_MALLOC_FAIL;
+            _return_value = WWM_RESULT_MALLOC_FAIL;
+            goto cleanup;
         }
         while (_size < body_size) {
             READ_U8(object->encrypted_data[i]);
@@ -21990,7 +32380,8 @@ static WowWorldResult vanilla_SMSG_WARDEN_DATA_read(WowWorldReader* reader, vani
                 object->encrypted_data = realloc(object->encrypted_data, _current_size);
                 if (object->encrypted_data == NULL) {
                     free(object->encrypted_data);
-                    return WWM_RESULT_MALLOC_FAIL;
+                    _return_value = WWM_RESULT_MALLOC_FAIL;
+                    goto cleanup;
                 }
             }
         }
@@ -21999,9 +32390,19 @@ static WowWorldResult vanilla_SMSG_WARDEN_DATA_read(WowWorldReader* reader, vani
     }
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_WARDEN_DATA_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_WARDEN_DATA_write(WowWorldWriter* writer, const vanilla_SMSG_WARDEN_DATA* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_WARDEN_DATA_size(object) + 2); /* size */
 
     WRITE_U16(0x000002e6); /* opcode */
@@ -22010,11 +32411,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_WARDEN_DATA_write(WowWor
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_WARDEN_DATA_free(vanilla_SMSG_WARDEN_DATA* object) {
-    free(object->encrypted_data);
-    object->encrypted_data = NULL;
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_WARDEN_DATA_free(vanilla_CMSG_WARDEN_DATA* object) {
+    if (object->encrypted_data != NULL) {
+        free(object->encrypted_data);
+        object->encrypted_data = NULL;
+    }
 }
 
 static size_t vanilla_CMSG_WARDEN_DATA_size(const vanilla_CMSG_WARDEN_DATA* object) {
@@ -22022,7 +32426,11 @@ static size_t vanilla_CMSG_WARDEN_DATA_size(const vanilla_CMSG_WARDEN_DATA* obje
 }
 
 static WowWorldResult vanilla_CMSG_WARDEN_DATA_read(WowWorldReader* reader, vanilla_CMSG_WARDEN_DATA* object, size_t body_size) {
+    int _return_value = 1;
+
     size_t _size = 0;
+
+    object->encrypted_data = NULL;
 
     object->amount_of_encrypted_data = 0;
     /* C89 scope to allow variable declarations */ {
@@ -22031,7 +32439,8 @@ static WowWorldResult vanilla_CMSG_WARDEN_DATA_read(WowWorldReader* reader, vani
 
         object->encrypted_data = malloc(_current_size);
         if (object->encrypted_data == NULL) {
-            return WWM_RESULT_MALLOC_FAIL;
+            _return_value = WWM_RESULT_MALLOC_FAIL;
+            goto cleanup;
         }
         while (_size < body_size) {
             READ_U8(object->encrypted_data[i]);
@@ -22043,7 +32452,8 @@ static WowWorldResult vanilla_CMSG_WARDEN_DATA_read(WowWorldReader* reader, vani
                 object->encrypted_data = realloc(object->encrypted_data, _current_size);
                 if (object->encrypted_data == NULL) {
                     free(object->encrypted_data);
-                    return WWM_RESULT_MALLOC_FAIL;
+                    _return_value = WWM_RESULT_MALLOC_FAIL;
+                    goto cleanup;
                 }
             }
         }
@@ -22052,9 +32462,19 @@ static WowWorldResult vanilla_CMSG_WARDEN_DATA_read(WowWorldReader* reader, vani
     }
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_WARDEN_DATA_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_WARDEN_DATA_write(WowWorldWriter* writer, const vanilla_CMSG_WARDEN_DATA* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_WARDEN_DATA_size(object) + 4); /* size */
 
     WRITE_U32(0x000002e7); /* opcode */
@@ -22063,21 +32483,33 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_WARDEN_DATA_write(WowWor
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_WARDEN_DATA_free(vanilla_CMSG_WARDEN_DATA* object) {
-    free(object->encrypted_data);
-    object->encrypted_data = NULL;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_GROUP_JOINED_BATTLEGROUND_read(WowWorldReader* reader, vanilla_SMSG_GROUP_JOINED_BATTLEGROUND* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->id = 0;
     READ_U32(object->id);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GROUP_JOINED_BATTLEGROUND_write(WowWorldWriter* writer, const vanilla_SMSG_GROUP_JOINED_BATTLEGROUND* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 2); /* size */
 
     WRITE_U16(0x000002e8); /* opcode */
@@ -22086,15 +32518,35 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GROUP_JOINED_BATTLEGROUN
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_BATTLEGROUND_PLAYER_POSITIONS_Client_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x000002e9); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_BATTLEGROUND_PLAYER_POSITIONS_Server_free(vanilla_MSG_BATTLEGROUND_PLAYER_POSITIONS_Server* object) {
+    if (object->teammates != NULL) {
+        free(object->teammates);
+        object->teammates = NULL;
+    }
+    if (object->carriers != NULL) {
+        free(object->carriers);
+        object->carriers = NULL;
+    }
 }
 
 static size_t vanilla_MSG_BATTLEGROUND_PLAYER_POSITIONS_Server_size(const vanilla_MSG_BATTLEGROUND_PLAYER_POSITIONS_Server* object) {
@@ -22102,9 +32554,19 @@ static size_t vanilla_MSG_BATTLEGROUND_PLAYER_POSITIONS_Server_size(const vanill
 }
 
 static WowWorldResult vanilla_MSG_BATTLEGROUND_PLAYER_POSITIONS_Server_read(WowWorldReader* reader, vanilla_MSG_BATTLEGROUND_PLAYER_POSITIONS_Server* object) {
+    int _return_value = 1;
+
+    if (5 > (reader->length - reader->index)) {
+        _return_value = (size_t)5 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->teammates = NULL;
+    object->carriers = NULL;
+
     READ_U32(object->amount_of_teammates);
 
-    object->teammates = malloc(object->amount_of_teammates * sizeof(vanilla_BattlegroundPlayerPosition));
+    object->teammates = calloc(object->amount_of_teammates, sizeof(vanilla_BattlegroundPlayerPosition));
     if (object->teammates == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -22113,7 +32575,7 @@ static WowWorldResult vanilla_MSG_BATTLEGROUND_PLAYER_POSITIONS_Server_read(WowW
 
     READ_U8(object->amount_of_carriers);
 
-    object->carriers = malloc(object->amount_of_carriers * sizeof(vanilla_BattlegroundPlayerPosition));
+    object->carriers = calloc(object->amount_of_carriers, sizeof(vanilla_BattlegroundPlayerPosition));
     if (object->carriers == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -22121,9 +32583,19 @@ static WowWorldResult vanilla_MSG_BATTLEGROUND_PLAYER_POSITIONS_Server_read(WowW
 
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_MSG_BATTLEGROUND_PLAYER_POSITIONS_Server_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_BATTLEGROUND_PLAYER_POSITIONS_Server_write(WowWorldWriter* writer, const vanilla_MSG_BATTLEGROUND_PLAYER_POSITIONS_Server* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_BATTLEGROUND_PLAYER_POSITIONS_Server_size(object) + 2); /* size */
 
     WRITE_U16(0x000002e9); /* opcode */
@@ -22138,22 +32610,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_BATTLEGROUND_PLAYER_POSIT
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_BATTLEGROUND_PLAYER_POSITIONS_Server_free(vanilla_MSG_BATTLEGROUND_PLAYER_POSITIONS_Server* object) {
-    free(object->teammates);
-    object->teammates = NULL;
-    free(object->carriers);
-    object->carriers = NULL;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_PET_STOP_ATTACK_read(WowWorldReader* reader, vanilla_CMSG_PET_STOP_ATTACK* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->pet);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PET_STOP_ATTACK_write(WowWorldWriter* writer, const vanilla_CMSG_PET_STOP_ATTACK* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x000002ea); /* opcode */
@@ -22162,15 +32644,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PET_STOP_ATTACK_write(Wo
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_BINDER_CONFIRM_read(WowWorldReader* reader, vanilla_SMSG_BINDER_CONFIRM* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_BINDER_CONFIRM_write(WowWorldWriter* writer, const vanilla_SMSG_BINDER_CONFIRM* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 2); /* size */
 
     WRITE_U16(0x000002eb); /* opcode */
@@ -22179,15 +32678,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_BINDER_CONFIRM_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_BATTLEGROUND_PLAYER_JOINED_read(WowWorldReader* reader, vanilla_SMSG_BATTLEGROUND_PLAYER_JOINED* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->player);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_BATTLEGROUND_PLAYER_JOINED_write(WowWorldWriter* writer, const vanilla_SMSG_BATTLEGROUND_PLAYER_JOINED* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 2); /* size */
 
     WRITE_U16(0x000002ec); /* opcode */
@@ -22196,15 +32712,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_BATTLEGROUND_PLAYER_JOIN
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_BATTLEGROUND_PLAYER_LEFT_read(WowWorldReader* reader, vanilla_SMSG_BATTLEGROUND_PLAYER_LEFT* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_BATTLEGROUND_PLAYER_LEFT_write(WowWorldWriter* writer, const vanilla_SMSG_BATTLEGROUND_PLAYER_LEFT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 2); /* size */
 
     WRITE_U16(0x000002ed); /* opcode */
@@ -22213,9 +32746,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_BATTLEGROUND_PLAYER_LEFT
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_BATTLEMASTER_JOIN_read(WowWorldReader* reader, vanilla_CMSG_BATTLEMASTER_JOIN* object) {
+    int _return_value = 1;
+
+    if (17 > (reader->length - reader->index)) {
+        _return_value = (size_t)17 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     object->map = 0;
@@ -22226,9 +32767,18 @@ static WowWorldResult vanilla_CMSG_BATTLEMASTER_JOIN_read(WowWorldReader* reader
     READ_BOOL8(object->join_as_group);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BATTLEMASTER_JOIN_write(WowWorldWriter* writer, const vanilla_CMSG_BATTLEMASTER_JOIN* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0011 + 4); /* size */
 
     WRITE_U32(0x000002ee); /* opcode */
@@ -22243,6 +32793,19 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_BATTLEMASTER_JOIN_write(
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_ADDON_INFO_free(vanilla_SMSG_ADDON_INFO* object) {
+    size_t i;
+
+    if (object->addons != NULL) {
+        for (i = 0; i < object->amount_of_addons; ++i) {
+            vanilla_Addon_free(&((object->addons)[i]));
+        }
+        free(object->addons);
+        object->addons = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_ADDON_INFO_size(const vanilla_SMSG_ADDON_INFO* object) {
@@ -22259,7 +32822,11 @@ static size_t vanilla_SMSG_ADDON_INFO_size(const vanilla_SMSG_ADDON_INFO* object
 }
 
 static WowWorldResult vanilla_SMSG_ADDON_INFO_read(WowWorldReader* reader, vanilla_SMSG_ADDON_INFO* object, size_t body_size) {
+    int _return_value = 1;
+
     size_t _size = 0;
+
+    object->addons = NULL;
 
     object->amount_of_addons = 0;
     /* C89 scope to allow variable declarations */ {
@@ -22268,7 +32835,8 @@ static WowWorldResult vanilla_SMSG_ADDON_INFO_read(WowWorldReader* reader, vanil
 
         object->addons = malloc(_current_size);
         if (object->addons == NULL) {
-            return WWM_RESULT_MALLOC_FAIL;
+            _return_value = WWM_RESULT_MALLOC_FAIL;
+            goto cleanup;
         }
         while (_size < body_size) {
             WWM_CHECK_RETURN_CODE(vanilla_Addon_read(reader, &object->addons[i]));
@@ -22280,7 +32848,8 @@ static WowWorldResult vanilla_SMSG_ADDON_INFO_read(WowWorldReader* reader, vanil
                 object->addons = realloc(object->addons, _current_size);
                 if (object->addons == NULL) {
                     free(object->addons);
-                    return WWM_RESULT_MALLOC_FAIL;
+                    _return_value = WWM_RESULT_MALLOC_FAIL;
+                    goto cleanup;
                 }
             }
         }
@@ -22289,9 +32858,19 @@ static WowWorldResult vanilla_SMSG_ADDON_INFO_read(WowWorldReader* reader, vanil
     }
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_ADDON_INFO_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ADDON_INFO_write(WowWorldWriter* writer, const vanilla_SMSG_ADDON_INFO* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_ADDON_INFO_size(object) + 2); /* size */
 
     WRITE_U16(0x000002ef); /* opcode */
@@ -22300,25 +32879,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_ADDON_INFO_write(WowWorl
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_ADDON_INFO_free(vanilla_SMSG_ADDON_INFO* object) {
-    size_t i;
-
-    for (i = 0; i < object->amount_of_addons; ++i) {
-        vanilla_Addon_free(&((object->addons)[i]));
-    }
-    free(object->addons);
-    object->addons = NULL;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_PET_UNLEARN_read(WowWorldReader* reader, vanilla_CMSG_PET_UNLEARN* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->pet);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PET_UNLEARN_write(WowWorldWriter* writer, const vanilla_CMSG_PET_UNLEARN* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 4); /* size */
 
     WRITE_U32(0x000002f0); /* opcode */
@@ -22327,17 +32913,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PET_UNLEARN_write(WowWor
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_PET_UNLEARN_CONFIRM_read(WowWorldReader* reader, vanilla_SMSG_PET_UNLEARN_CONFIRM* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->pet);
 
     READ_U32(object->talent_reset_cost);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PET_UNLEARN_CONFIRM_write(WowWorldWriter* writer, const vanilla_SMSG_PET_UNLEARN_CONFIRM* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 2); /* size */
 
     WRITE_U16(0x000002f1); /* opcode */
@@ -22348,6 +32951,50 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PET_UNLEARN_CONFIRM_writ
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_PARTY_MEMBER_STATS_FULL_free(vanilla_SMSG_PARTY_MEMBER_STATS_FULL* object) {
+    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_STATUS) != 0) {
+    }
+    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_CUR_HP) != 0) {
+    }
+    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_MAX_HP) != 0) {
+    }
+    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_POWER_TYPE) != 0) {
+    }
+    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_CUR_POWER) != 0) {
+    }
+    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_MAX_POWER) != 0) {
+    }
+    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_LEVEL) != 0) {
+    }
+    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_ZONE) != 0) {
+    }
+    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_POSITION) != 0) {
+    }
+    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_AURAS) != 0) {
+    }
+    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_PET_GUID) != 0) {
+    }
+    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_PET_NAME) != 0) {
+        FREE_STRING(object->pet_name);
+
+    }
+    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_PET_MODEL_ID) != 0) {
+    }
+    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_PET_CUR_HP) != 0) {
+    }
+    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_PET_MAX_HP) != 0) {
+    }
+    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_PET_POWER_TYPE) != 0) {
+    }
+    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_PET_CUR_POWER) != 0) {
+    }
+    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_PET_MAX_POWER) != 0) {
+    }
+    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_PET_AURAS) != 0) {
+    }
 }
 
 static size_t vanilla_SMSG_PARTY_MEMBER_STATS_FULL_size(const vanilla_SMSG_PARTY_MEMBER_STATS_FULL* object) {
@@ -22433,6 +33080,15 @@ static size_t vanilla_SMSG_PARTY_MEMBER_STATS_FULL_size(const vanilla_SMSG_PARTY
 }
 
 static WowWorldResult vanilla_SMSG_PARTY_MEMBER_STATS_FULL_read(WowWorldReader* reader, vanilla_SMSG_PARTY_MEMBER_STATS_FULL* object) {
+    int _return_value = 1;
+
+    if (5 > (reader->length - reader->index)) {
+        _return_value = (size_t)5 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->pet_name = NULL;
+
     READ_PACKED_GUID(object->player);
 
     object->mask = 0;
@@ -22521,9 +33177,19 @@ static WowWorldResult vanilla_SMSG_PARTY_MEMBER_STATS_FULL_read(WowWorldReader* 
 
     }
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_PARTY_MEMBER_STATS_FULL_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PARTY_MEMBER_STATS_FULL_write(WowWorldWriter* writer, const vanilla_SMSG_PARTY_MEMBER_STATS_FULL* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_PARTY_MEMBER_STATS_FULL_size(object) + 2); /* size */
 
     WRITE_U16(0x000002f2); /* opcode */
@@ -22612,52 +33278,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PARTY_MEMBER_STATS_FULL_
     }
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_PARTY_MEMBER_STATS_FULL_free(vanilla_SMSG_PARTY_MEMBER_STATS_FULL* object) {
-    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_STATUS) != 0) {
-    }
-    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_CUR_HP) != 0) {
-    }
-    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_MAX_HP) != 0) {
-    }
-    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_POWER_TYPE) != 0) {
-    }
-    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_CUR_POWER) != 0) {
-    }
-    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_MAX_POWER) != 0) {
-    }
-    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_LEVEL) != 0) {
-    }
-    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_ZONE) != 0) {
-    }
-    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_POSITION) != 0) {
-    }
-    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_AURAS) != 0) {
-    }
-    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_PET_GUID) != 0) {
-    }
-    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_PET_NAME) != 0) {
-        FREE_STRING(object->pet_name);
-
-    }
-    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_PET_MODEL_ID) != 0) {
-    }
-    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_PET_CUR_HP) != 0) {
-    }
-    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_PET_MAX_HP) != 0) {
-    }
-    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_PET_POWER_TYPE) != 0) {
-    }
-    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_PET_CUR_POWER) != 0) {
-    }
-    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_PET_MAX_POWER) != 0) {
-    }
-    if ((object->mask & VANILLA_GROUP_UPDATE_FLAGS_PET_AURAS) != 0) {
-    }
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_PET_SPELL_AUTOCAST_read(WowWorldReader* reader, vanilla_CMSG_PET_SPELL_AUTOCAST* object) {
+    int _return_value = 1;
+
+    if (13 > (reader->length - reader->index)) {
+        _return_value = (size_t)13 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     READ_U32(object->id);
@@ -22665,9 +33296,18 @@ static WowWorldResult vanilla_CMSG_PET_SPELL_AUTOCAST_read(WowWorldReader* reade
     READ_BOOL8(object->autocast_enabled);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PET_SPELL_AUTOCAST_write(WowWorldWriter* writer, const vanilla_CMSG_PET_SPELL_AUTOCAST* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000d + 4); /* size */
 
     WRITE_U32(0x000002f3); /* opcode */
@@ -22680,9 +33320,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_PET_SPELL_AUTOCAST_write
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_WEATHER_read(WowWorldReader* reader, vanilla_SMSG_WEATHER* object) {
+    int _return_value = 1;
+
+    if (13 > (reader->length - reader->index)) {
+        _return_value = (size_t)13 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->weather_type = 0;
     READ_U32(object->weather_type);
 
@@ -22694,9 +33342,18 @@ static WowWorldResult vanilla_SMSG_WEATHER_read(WowWorldReader* reader, vanilla_
     READ_U8(object->change);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_WEATHER_write(WowWorldWriter* writer, const vanilla_SMSG_WEATHER* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000d + 2); /* size */
 
     WRITE_U16(0x000002f4); /* opcode */
@@ -22711,9 +33368,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_WEATHER_write(WowWorldWr
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_RAID_INSTANCE_MESSAGE_read(WowWorldReader* reader, vanilla_SMSG_RAID_INSTANCE_MESSAGE* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->message_type = 0;
     READ_U32(object->message_type);
 
@@ -22723,9 +33388,18 @@ static WowWorldResult vanilla_SMSG_RAID_INSTANCE_MESSAGE_read(WowWorldReader* re
     READ_U32(object->time_left);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_RAID_INSTANCE_MESSAGE_write(WowWorldWriter* writer, const vanilla_SMSG_RAID_INSTANCE_MESSAGE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 2); /* size */
 
     WRITE_U16(0x000002fa); /* opcode */
@@ -22738,6 +33412,19 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_RAID_INSTANCE_MESSAGE_wr
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_COMPRESSED_MOVES_free(vanilla_SMSG_COMPRESSED_MOVES* object) {
+    size_t i;
+
+    if (object->moves != NULL) {
+        for (i = 0; i < object->amount_of_moves; ++i) {
+            vanilla_CompressedMove_free(&((object->moves)[i]));
+        }
+        free(object->moves);
+        object->moves = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_COMPRESSED_MOVES_size(const vanilla_SMSG_COMPRESSED_MOVES* object) {
@@ -22754,18 +33441,23 @@ static size_t vanilla_SMSG_COMPRESSED_MOVES_size(const vanilla_SMSG_COMPRESSED_M
 }
 
 static WowWorldResult vanilla_SMSG_COMPRESSED_MOVES_read(WowWorldReader* reader, vanilla_SMSG_COMPRESSED_MOVES* object, size_t body_size) {
+    int _return_value = 1;
+
     size_t _size = 0;
 
     WowWorldReader stack_reader;
     unsigned char* _compressed_data = NULL;
     uint32_t _decompressed_size;
 
+    object->moves = NULL;
+
     READ_U32(_decompressed_size);
     _size += 4;
 
     _compressed_data = malloc(_decompressed_size);
     if (_compressed_data == NULL) {
-        return WWM_RESULT_MALLOC_FAIL;
+        _return_value = WWM_RESULT_MALLOC_FAIL;
+        goto cleanup;
     }
 
     if (!wwm_decompress_data(&reader->source[reader->index], body_size - _size, _compressed_data, _decompressed_size)) {
@@ -22782,7 +33474,8 @@ static WowWorldResult vanilla_SMSG_COMPRESSED_MOVES_read(WowWorldReader* reader,
 
         object->moves = malloc(_current_size);
         if (object->moves == NULL) {
-            return WWM_RESULT_MALLOC_FAIL;
+            _return_value = WWM_RESULT_MALLOC_FAIL;
+            goto cleanup;
         }
         while (reader->index < reader->length) {
             WWM_CHECK_RETURN_CODE(vanilla_CompressedMove_read(reader, &object->moves[i]));
@@ -22793,7 +33486,8 @@ static WowWorldResult vanilla_SMSG_COMPRESSED_MOVES_read(WowWorldReader* reader,
                 object->moves = realloc(object->moves, _current_size);
                 if (object->moves == NULL) {
                     free(object->moves);
-                    return WWM_RESULT_MALLOC_FAIL;
+                    _return_value = WWM_RESULT_MALLOC_FAIL;
+                    goto cleanup;
                 }
             }
         }
@@ -22804,6 +33498,9 @@ static WowWorldResult vanilla_SMSG_COMPRESSED_MOVES_read(WowWorldReader* reader,
     free(_compressed_data);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_COMPRESSED_MOVES_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_COMPRESSED_MOVES_write(WowWorldWriter* writer, const vanilla_SMSG_COMPRESSED_MOVES* object) {
@@ -22813,6 +33510,13 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_COMPRESSED_MOVES_write(W
     size_t _compressed_data_length;
     size_t saved_writer_index;
     const uint32_t _decompressed_data_length = (uint32_t)vanilla_SMSG_COMPRESSED_MOVES_size(object);
+
+
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
 
 
     WRITE_U16_BE(0 /* place holder */ + 2); /* size */
@@ -22828,7 +33532,8 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_COMPRESSED_MOVES_write(W
 
     _decompressed_data = malloc(_decompressed_data_length);
     if (_decompressed_data == NULL) {
-        return WWM_RESULT_MALLOC_FAIL;
+        _return_value = WWM_RESULT_MALLOC_FAIL;
+        goto cleanup;
     }
     stack_writer = wwm_create_writer(_decompressed_data, _decompressed_data_length);
 
@@ -22847,16 +33552,12 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_COMPRESSED_MOVES_write(W
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_COMPRESSED_MOVES_free(vanilla_SMSG_COMPRESSED_MOVES* object) {
-    size_t i;
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GUILD_INFO_TEXT_free(vanilla_CMSG_GUILD_INFO_TEXT* object) {
+    FREE_STRING(object->guild_info);
 
-    for (i = 0; i < object->amount_of_moves; ++i) {
-        vanilla_CompressedMove_free(&((object->moves)[i]));
-    }
-    free(object->moves);
-    object->moves = NULL;
 }
 
 static size_t vanilla_CMSG_GUILD_INFO_TEXT_size(const vanilla_CMSG_GUILD_INFO_TEXT* object) {
@@ -22864,12 +33565,31 @@ static size_t vanilla_CMSG_GUILD_INFO_TEXT_size(const vanilla_CMSG_GUILD_INFO_TE
 }
 
 static WowWorldResult vanilla_CMSG_GUILD_INFO_TEXT_read(WowWorldReader* reader, vanilla_CMSG_GUILD_INFO_TEXT* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->guild_info = NULL;
+
     READ_CSTRING(object->guild_info);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_GUILD_INFO_TEXT_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_INFO_TEXT_write(WowWorldWriter* writer, const vanilla_CMSG_GUILD_INFO_TEXT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_GUILD_INFO_TEXT_size(object) + 4); /* size */
 
     WRITE_U32(0x000002fc); /* opcode */
@@ -22878,20 +33598,24 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GUILD_INFO_TEXT_write(Wo
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GUILD_INFO_TEXT_free(vanilla_CMSG_GUILD_INFO_TEXT* object) {
-    FREE_STRING(object->guild_info);
-
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_CHAT_RESTRICTED_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 2); /* size */
 
     WRITE_U16(0x000002fd); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_SPLINE_SET_RUN_SPEED_size(const vanilla_SMSG_SPLINE_SET_RUN_SPEED* object) {
@@ -22899,14 +33623,30 @@ static size_t vanilla_SMSG_SPLINE_SET_RUN_SPEED_size(const vanilla_SMSG_SPLINE_S
 }
 
 static WowWorldResult vanilla_SMSG_SPLINE_SET_RUN_SPEED_read(WowWorldReader* reader, vanilla_SMSG_SPLINE_SET_RUN_SPEED* object) {
+    int _return_value = 1;
+
+    if (5 > (reader->length - reader->index)) {
+        _return_value = (size_t)5 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     READ_FLOAT(object->speed);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_SET_RUN_SPEED_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_SET_RUN_SPEED* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_SPLINE_SET_RUN_SPEED_size(object) + 2); /* size */
 
     WRITE_U16(0x000002fe); /* opcode */
@@ -22917,6 +33657,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_SET_RUN_SPEED_wri
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_SPLINE_SET_RUN_BACK_SPEED_size(const vanilla_SMSG_SPLINE_SET_RUN_BACK_SPEED* object) {
@@ -22924,14 +33665,30 @@ static size_t vanilla_SMSG_SPLINE_SET_RUN_BACK_SPEED_size(const vanilla_SMSG_SPL
 }
 
 static WowWorldResult vanilla_SMSG_SPLINE_SET_RUN_BACK_SPEED_read(WowWorldReader* reader, vanilla_SMSG_SPLINE_SET_RUN_BACK_SPEED* object) {
+    int _return_value = 1;
+
+    if (5 > (reader->length - reader->index)) {
+        _return_value = (size_t)5 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     READ_FLOAT(object->speed);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_SET_RUN_BACK_SPEED_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_SET_RUN_BACK_SPEED* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_SPLINE_SET_RUN_BACK_SPEED_size(object) + 2); /* size */
 
     WRITE_U16(0x000002ff); /* opcode */
@@ -22942,6 +33699,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_SET_RUN_BACK_SPEE
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_SPLINE_SET_SWIM_SPEED_size(const vanilla_SMSG_SPLINE_SET_SWIM_SPEED* object) {
@@ -22949,14 +33707,30 @@ static size_t vanilla_SMSG_SPLINE_SET_SWIM_SPEED_size(const vanilla_SMSG_SPLINE_
 }
 
 static WowWorldResult vanilla_SMSG_SPLINE_SET_SWIM_SPEED_read(WowWorldReader* reader, vanilla_SMSG_SPLINE_SET_SWIM_SPEED* object) {
+    int _return_value = 1;
+
+    if (5 > (reader->length - reader->index)) {
+        _return_value = (size_t)5 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     READ_FLOAT(object->speed);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_SET_SWIM_SPEED_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_SET_SWIM_SPEED* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_SPLINE_SET_SWIM_SPEED_size(object) + 2); /* size */
 
     WRITE_U16(0x00000300); /* opcode */
@@ -22967,6 +33741,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_SET_SWIM_SPEED_wr
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_SPLINE_SET_WALK_SPEED_size(const vanilla_SMSG_SPLINE_SET_WALK_SPEED* object) {
@@ -22974,14 +33749,30 @@ static size_t vanilla_SMSG_SPLINE_SET_WALK_SPEED_size(const vanilla_SMSG_SPLINE_
 }
 
 static WowWorldResult vanilla_SMSG_SPLINE_SET_WALK_SPEED_read(WowWorldReader* reader, vanilla_SMSG_SPLINE_SET_WALK_SPEED* object) {
+    int _return_value = 1;
+
+    if (5 > (reader->length - reader->index)) {
+        _return_value = (size_t)5 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     READ_FLOAT(object->speed);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_SET_WALK_SPEED_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_SET_WALK_SPEED* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_SPLINE_SET_WALK_SPEED_size(object) + 2); /* size */
 
     WRITE_U16(0x00000301); /* opcode */
@@ -22992,6 +33783,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_SET_WALK_SPEED_wr
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_SPLINE_SET_SWIM_BACK_SPEED_size(const vanilla_SMSG_SPLINE_SET_SWIM_BACK_SPEED* object) {
@@ -22999,14 +33791,30 @@ static size_t vanilla_SMSG_SPLINE_SET_SWIM_BACK_SPEED_size(const vanilla_SMSG_SP
 }
 
 static WowWorldResult vanilla_SMSG_SPLINE_SET_SWIM_BACK_SPEED_read(WowWorldReader* reader, vanilla_SMSG_SPLINE_SET_SWIM_BACK_SPEED* object) {
+    int _return_value = 1;
+
+    if (5 > (reader->length - reader->index)) {
+        _return_value = (size_t)5 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     READ_FLOAT(object->speed);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_SET_SWIM_BACK_SPEED_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_SET_SWIM_BACK_SPEED* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_SPLINE_SET_SWIM_BACK_SPEED_size(object) + 2); /* size */
 
     WRITE_U16(0x00000302); /* opcode */
@@ -23017,6 +33825,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_SET_SWIM_BACK_SPE
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_SPLINE_SET_TURN_RATE_size(const vanilla_SMSG_SPLINE_SET_TURN_RATE* object) {
@@ -23024,14 +33833,30 @@ static size_t vanilla_SMSG_SPLINE_SET_TURN_RATE_size(const vanilla_SMSG_SPLINE_S
 }
 
 static WowWorldResult vanilla_SMSG_SPLINE_SET_TURN_RATE_read(WowWorldReader* reader, vanilla_SMSG_SPLINE_SET_TURN_RATE* object) {
+    int _return_value = 1;
+
+    if (5 > (reader->length - reader->index)) {
+        _return_value = (size_t)5 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     READ_FLOAT(object->speed);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_SET_TURN_RATE_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_SET_TURN_RATE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_SPLINE_SET_TURN_RATE_size(object) + 2); /* size */
 
     WRITE_U16(0x00000303); /* opcode */
@@ -23042,6 +33867,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_SET_TURN_RATE_wri
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_SPLINE_MOVE_UNROOT_size(const vanilla_SMSG_SPLINE_MOVE_UNROOT* object) {
@@ -23049,12 +33875,28 @@ static size_t vanilla_SMSG_SPLINE_MOVE_UNROOT_size(const vanilla_SMSG_SPLINE_MOV
 }
 
 static WowWorldResult vanilla_SMSG_SPLINE_MOVE_UNROOT_read(WowWorldReader* reader, vanilla_SMSG_SPLINE_MOVE_UNROOT* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_UNROOT_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_MOVE_UNROOT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_SPLINE_MOVE_UNROOT_size(object) + 2); /* size */
 
     WRITE_U16(0x00000304); /* opcode */
@@ -23063,6 +33905,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_UNROOT_write
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_SPLINE_MOVE_FEATHER_FALL_size(const vanilla_SMSG_SPLINE_MOVE_FEATHER_FALL* object) {
@@ -23070,12 +33913,28 @@ static size_t vanilla_SMSG_SPLINE_MOVE_FEATHER_FALL_size(const vanilla_SMSG_SPLI
 }
 
 static WowWorldResult vanilla_SMSG_SPLINE_MOVE_FEATHER_FALL_read(WowWorldReader* reader, vanilla_SMSG_SPLINE_MOVE_FEATHER_FALL* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_FEATHER_FALL_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_MOVE_FEATHER_FALL* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_SPLINE_MOVE_FEATHER_FALL_size(object) + 2); /* size */
 
     WRITE_U16(0x00000305); /* opcode */
@@ -23084,6 +33943,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_FEATHER_FALL
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_SPLINE_MOVE_NORMAL_FALL_size(const vanilla_SMSG_SPLINE_MOVE_NORMAL_FALL* object) {
@@ -23091,12 +33951,28 @@ static size_t vanilla_SMSG_SPLINE_MOVE_NORMAL_FALL_size(const vanilla_SMSG_SPLIN
 }
 
 static WowWorldResult vanilla_SMSG_SPLINE_MOVE_NORMAL_FALL_read(WowWorldReader* reader, vanilla_SMSG_SPLINE_MOVE_NORMAL_FALL* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_NORMAL_FALL_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_MOVE_NORMAL_FALL* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_SPLINE_MOVE_NORMAL_FALL_size(object) + 2); /* size */
 
     WRITE_U16(0x00000306); /* opcode */
@@ -23105,6 +33981,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_NORMAL_FALL_
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_SPLINE_MOVE_SET_HOVER_size(const vanilla_SMSG_SPLINE_MOVE_SET_HOVER* object) {
@@ -23112,12 +33989,28 @@ static size_t vanilla_SMSG_SPLINE_MOVE_SET_HOVER_size(const vanilla_SMSG_SPLINE_
 }
 
 static WowWorldResult vanilla_SMSG_SPLINE_MOVE_SET_HOVER_read(WowWorldReader* reader, vanilla_SMSG_SPLINE_MOVE_SET_HOVER* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_SET_HOVER_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_MOVE_SET_HOVER* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_SPLINE_MOVE_SET_HOVER_size(object) + 2); /* size */
 
     WRITE_U16(0x00000307); /* opcode */
@@ -23126,6 +34019,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_SET_HOVER_wr
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_SPLINE_MOVE_UNSET_HOVER_size(const vanilla_SMSG_SPLINE_MOVE_UNSET_HOVER* object) {
@@ -23133,12 +34027,28 @@ static size_t vanilla_SMSG_SPLINE_MOVE_UNSET_HOVER_size(const vanilla_SMSG_SPLIN
 }
 
 static WowWorldResult vanilla_SMSG_SPLINE_MOVE_UNSET_HOVER_read(WowWorldReader* reader, vanilla_SMSG_SPLINE_MOVE_UNSET_HOVER* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_UNSET_HOVER_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_MOVE_UNSET_HOVER* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_SPLINE_MOVE_UNSET_HOVER_size(object) + 2); /* size */
 
     WRITE_U16(0x00000308); /* opcode */
@@ -23147,6 +34057,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_UNSET_HOVER_
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_SPLINE_MOVE_WATER_WALK_size(const vanilla_SMSG_SPLINE_MOVE_WATER_WALK* object) {
@@ -23154,12 +34065,28 @@ static size_t vanilla_SMSG_SPLINE_MOVE_WATER_WALK_size(const vanilla_SMSG_SPLINE
 }
 
 static WowWorldResult vanilla_SMSG_SPLINE_MOVE_WATER_WALK_read(WowWorldReader* reader, vanilla_SMSG_SPLINE_MOVE_WATER_WALK* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_WATER_WALK_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_MOVE_WATER_WALK* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_SPLINE_MOVE_WATER_WALK_size(object) + 2); /* size */
 
     WRITE_U16(0x00000309); /* opcode */
@@ -23168,6 +34095,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_WATER_WALK_w
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_SPLINE_MOVE_LAND_WALK_size(const vanilla_SMSG_SPLINE_MOVE_LAND_WALK* object) {
@@ -23175,12 +34103,28 @@ static size_t vanilla_SMSG_SPLINE_MOVE_LAND_WALK_size(const vanilla_SMSG_SPLINE_
 }
 
 static WowWorldResult vanilla_SMSG_SPLINE_MOVE_LAND_WALK_read(WowWorldReader* reader, vanilla_SMSG_SPLINE_MOVE_LAND_WALK* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_LAND_WALK_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_MOVE_LAND_WALK* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_SPLINE_MOVE_LAND_WALK_size(object) + 2); /* size */
 
     WRITE_U16(0x0000030a); /* opcode */
@@ -23189,6 +34133,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_LAND_WALK_wr
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_SPLINE_MOVE_START_SWIM_size(const vanilla_SMSG_SPLINE_MOVE_START_SWIM* object) {
@@ -23196,12 +34141,28 @@ static size_t vanilla_SMSG_SPLINE_MOVE_START_SWIM_size(const vanilla_SMSG_SPLINE
 }
 
 static WowWorldResult vanilla_SMSG_SPLINE_MOVE_START_SWIM_read(WowWorldReader* reader, vanilla_SMSG_SPLINE_MOVE_START_SWIM* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_START_SWIM_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_MOVE_START_SWIM* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_SPLINE_MOVE_START_SWIM_size(object) + 2); /* size */
 
     WRITE_U16(0x0000030b); /* opcode */
@@ -23210,6 +34171,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_START_SWIM_w
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_SPLINE_MOVE_STOP_SWIM_size(const vanilla_SMSG_SPLINE_MOVE_STOP_SWIM* object) {
@@ -23217,12 +34179,28 @@ static size_t vanilla_SMSG_SPLINE_MOVE_STOP_SWIM_size(const vanilla_SMSG_SPLINE_
 }
 
 static WowWorldResult vanilla_SMSG_SPLINE_MOVE_STOP_SWIM_read(WowWorldReader* reader, vanilla_SMSG_SPLINE_MOVE_STOP_SWIM* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_STOP_SWIM_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_MOVE_STOP_SWIM* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_SPLINE_MOVE_STOP_SWIM_size(object) + 2); /* size */
 
     WRITE_U16(0x0000030c); /* opcode */
@@ -23231,6 +34209,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_STOP_SWIM_wr
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_SPLINE_MOVE_SET_RUN_MODE_size(const vanilla_SMSG_SPLINE_MOVE_SET_RUN_MODE* object) {
@@ -23238,12 +34217,28 @@ static size_t vanilla_SMSG_SPLINE_MOVE_SET_RUN_MODE_size(const vanilla_SMSG_SPLI
 }
 
 static WowWorldResult vanilla_SMSG_SPLINE_MOVE_SET_RUN_MODE_read(WowWorldReader* reader, vanilla_SMSG_SPLINE_MOVE_SET_RUN_MODE* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_SET_RUN_MODE_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_MOVE_SET_RUN_MODE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_SPLINE_MOVE_SET_RUN_MODE_size(object) + 2); /* size */
 
     WRITE_U16(0x0000030d); /* opcode */
@@ -23252,6 +34247,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_SET_RUN_MODE
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_SMSG_SPLINE_MOVE_SET_WALK_MODE_size(const vanilla_SMSG_SPLINE_MOVE_SET_WALK_MODE* object) {
@@ -23259,12 +34255,28 @@ static size_t vanilla_SMSG_SPLINE_MOVE_SET_WALK_MODE_size(const vanilla_SMSG_SPL
 }
 
 static WowWorldResult vanilla_SMSG_SPLINE_MOVE_SET_WALK_MODE_read(WowWorldReader* reader, vanilla_SMSG_SPLINE_MOVE_SET_WALK_MODE* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_SET_WALK_MODE_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_MOVE_SET_WALK_MODE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_SPLINE_MOVE_SET_WALK_MODE_size(object) + 2); /* size */
 
     WRITE_U16(0x0000030e); /* opcode */
@@ -23273,6 +34285,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_SET_WALK_MOD
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_ACTIVATETAXIEXPRESS_free(vanilla_CMSG_ACTIVATETAXIEXPRESS* object) {
+    if (object->nodes != NULL) {
+        free(object->nodes);
+        object->nodes = NULL;
+    }
 }
 
 static size_t vanilla_CMSG_ACTIVATETAXIEXPRESS_size(const vanilla_CMSG_ACTIVATETAXIEXPRESS* object) {
@@ -23280,13 +34300,22 @@ static size_t vanilla_CMSG_ACTIVATETAXIEXPRESS_size(const vanilla_CMSG_ACTIVATET
 }
 
 static WowWorldResult vanilla_CMSG_ACTIVATETAXIEXPRESS_read(WowWorldReader* reader, vanilla_CMSG_ACTIVATETAXIEXPRESS* object) {
+    int _return_value = 1;
+
+    if (16 > (reader->length - reader->index)) {
+        _return_value = (size_t)16 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->nodes = NULL;
+
     READ_U64(object->guid);
 
     READ_U32(object->total_cost);
 
     READ_U32(object->node_count);
 
-    object->nodes = malloc(object->node_count * sizeof(uint32_t));
+    object->nodes = calloc(object->node_count, sizeof(uint32_t));
     if (object->nodes == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -23294,9 +34323,19 @@ static WowWorldResult vanilla_CMSG_ACTIVATETAXIEXPRESS_read(WowWorldReader* read
 
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_ACTIVATETAXIEXPRESS_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_ACTIVATETAXIEXPRESS_write(WowWorldWriter* writer, const vanilla_CMSG_ACTIVATETAXIEXPRESS* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_ACTIVATETAXIEXPRESS_size(object) + 4); /* size */
 
     WRITE_U32(0x00000312); /* opcode */
@@ -23311,23 +34350,35 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_ACTIVATETAXIEXPRESS_writ
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_ACTIVATETAXIEXPRESS_free(vanilla_CMSG_ACTIVATETAXIEXPRESS* object) {
-    free(object->nodes);
-    object->nodes = NULL;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_SET_FACTION_INACTIVE_read(WowWorldReader* reader, vanilla_CMSG_SET_FACTION_INACTIVE* object) {
+    int _return_value = 1;
+
+    if (3 > (reader->length - reader->index)) {
+        _return_value = (size_t)3 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->faction = 0;
     READ_U16(object->faction);
 
     READ_BOOL8(object->inactive);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SET_FACTION_INACTIVE_write(WowWorldWriter* writer, const vanilla_CMSG_SET_FACTION_INACTIVE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0003 + 4); /* size */
 
     WRITE_U32(0x00000317); /* opcode */
@@ -23338,16 +34389,33 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SET_FACTION_INACTIVE_wri
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_CMSG_SET_WATCHED_FACTION_read(WowWorldReader* reader, vanilla_CMSG_SET_WATCHED_FACTION* object) {
+    int _return_value = 1;
+
+    if (2 > (reader->length - reader->index)) {
+        _return_value = (size_t)2 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->faction = 0;
     READ_U16(object->faction);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SET_WATCHED_FACTION_write(WowWorldWriter* writer, const vanilla_CMSG_SET_WATCHED_FACTION* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0002 + 4); /* size */
 
     WRITE_U32(0x00000318); /* opcode */
@@ -23356,6 +34424,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_SET_WATCHED_FACTION_writ
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_MOVE_TIME_SKIPPED_Server_size(const vanilla_MSG_MOVE_TIME_SKIPPED_Server* object) {
@@ -23363,14 +34432,30 @@ static size_t vanilla_MSG_MOVE_TIME_SKIPPED_Server_size(const vanilla_MSG_MOVE_T
 }
 
 static WowWorldResult vanilla_MSG_MOVE_TIME_SKIPPED_Server_read(WowWorldReader* reader, vanilla_MSG_MOVE_TIME_SKIPPED_Server* object) {
+    int _return_value = 1;
+
+    if (5 > (reader->length - reader->index)) {
+        _return_value = (size_t)5 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_PACKED_GUID(object->player);
 
     READ_U32(object->time_skipped);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_TIME_SKIPPED_Server_write(WowWorldWriter* writer, const vanilla_MSG_MOVE_TIME_SKIPPED_Server* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_MOVE_TIME_SKIPPED_Server_size(object) + 2); /* size */
 
     WRITE_U16(0x00000319); /* opcode */
@@ -23381,15 +34466,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_MOVE_TIME_SKIPPED_Server_
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_SPLINE_MOVE_ROOT_read(WowWorldReader* reader, vanilla_SMSG_SPLINE_MOVE_ROOT* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_ROOT_write(WowWorldWriter* writer, const vanilla_SMSG_SPLINE_MOVE_ROOT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 2); /* size */
 
     WRITE_U16(0x0000031a); /* opcode */
@@ -23398,15 +34500,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPLINE_MOVE_ROOT_write(W
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_INVALIDATE_PLAYER_read(WowWorldReader* reader, vanilla_SMSG_INVALIDATE_PLAYER* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_INVALIDATE_PLAYER_write(WowWorldWriter* writer, const vanilla_SMSG_INVALIDATE_PLAYER* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 2); /* size */
 
     WRITE_U16(0x0000031c); /* opcode */
@@ -23415,25 +34534,50 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_INVALIDATE_PLAYER_write(
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_RESET_INSTANCES_write(WowWorldWriter* writer) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0000 + 4); /* size */
 
     WRITE_U32(0x0000031d); /* opcode */
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_INSTANCE_RESET_read(WowWorldReader* reader, vanilla_SMSG_INSTANCE_RESET* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->map = 0;
     READ_U32(object->map);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_INSTANCE_RESET_write(WowWorldWriter* writer, const vanilla_SMSG_INSTANCE_RESET* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 2); /* size */
 
     WRITE_U16(0x0000031e); /* opcode */
@@ -23442,9 +34586,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_INSTANCE_RESET_write(Wow
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_INSTANCE_RESET_FAILED_read(WowWorldReader* reader, vanilla_SMSG_INSTANCE_RESET_FAILED* object) {
+    int _return_value = 1;
+
+    if (8 > (reader->length - reader->index)) {
+        _return_value = (size_t)8 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->reason = 0;
     READ_U32(object->reason);
 
@@ -23452,9 +34604,18 @@ static WowWorldResult vanilla_SMSG_INSTANCE_RESET_FAILED_read(WowWorldReader* re
     READ_U32(object->map);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_INSTANCE_RESET_FAILED_write(WowWorldWriter* writer, const vanilla_SMSG_INSTANCE_RESET_FAILED* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0008 + 2); /* size */
 
     WRITE_U16(0x0000031f); /* opcode */
@@ -23465,16 +34626,33 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_INSTANCE_RESET_FAILED_wr
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_UPDATE_LAST_INSTANCE_read(WowWorldReader* reader, vanilla_SMSG_UPDATE_LAST_INSTANCE* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->map = 0;
     READ_U32(object->map);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_UPDATE_LAST_INSTANCE_write(WowWorldWriter* writer, const vanilla_SMSG_UPDATE_LAST_INSTANCE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 2); /* size */
 
     WRITE_U16(0x00000320); /* opcode */
@@ -23483,6 +34661,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_UPDATE_LAST_INSTANCE_wri
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_RAID_TARGET_UPDATE_Client_size(const vanilla_MSG_RAID_TARGET_UPDATE_Client* object) {
@@ -23496,6 +34675,13 @@ static size_t vanilla_MSG_RAID_TARGET_UPDATE_Client_size(const vanilla_MSG_RAID_
 }
 
 static WowWorldResult vanilla_MSG_RAID_TARGET_UPDATE_Client_read(WowWorldReader* reader, vanilla_MSG_RAID_TARGET_UPDATE_Client* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->target_index = 0;
     READ_U8(object->target_index);
 
@@ -23504,9 +34690,18 @@ static WowWorldResult vanilla_MSG_RAID_TARGET_UPDATE_Client_read(WowWorldReader*
 
     }
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_RAID_TARGET_UPDATE_Client_write(WowWorldWriter* writer, const vanilla_MSG_RAID_TARGET_UPDATE_Client* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_RAID_TARGET_UPDATE_Client_size(object) + 4); /* size */
 
     WRITE_U32(0x00000321); /* opcode */
@@ -23519,11 +34714,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_RAID_TARGET_UPDATE_Client
     }
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_RAID_TARGET_UPDATE_Client_free(vanilla_MSG_RAID_TARGET_UPDATE_Client* object) {
-    if (object->target_index == VANILLA_RAID_TARGET_INDEX_UNKNOWN0|| object->target_index == VANILLA_RAID_TARGET_INDEX_UNKNOWN1|| object->target_index == VANILLA_RAID_TARGET_INDEX_UNKNOWN2|| object->target_index == VANILLA_RAID_TARGET_INDEX_UNKNOWN3|| object->target_index == VANILLA_RAID_TARGET_INDEX_UNKNOWN4|| object->target_index == VANILLA_RAID_TARGET_INDEX_UNKNOWN5|| object->target_index == VANILLA_RAID_TARGET_INDEX_UNKNOWN6|| object->target_index == VANILLA_RAID_TARGET_INDEX_UNKNOWN7|| object->target_index == VANILLA_RAID_TARGET_INDEX_UNKNOWN8) {
-    }
+cleanup: return _return_value;
 }
 
 static size_t vanilla_MSG_RAID_TARGET_UPDATE_Server_size(const vanilla_MSG_RAID_TARGET_UPDATE_Server* object) {
@@ -23540,6 +34731,13 @@ static size_t vanilla_MSG_RAID_TARGET_UPDATE_Server_size(const vanilla_MSG_RAID_
 }
 
 static WowWorldResult vanilla_MSG_RAID_TARGET_UPDATE_Server_read(WowWorldReader* reader, vanilla_MSG_RAID_TARGET_UPDATE_Server* object) {
+    int _return_value = 1;
+
+    if (1 > (reader->length - reader->index)) {
+        _return_value = (size_t)1 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->update_type = 0;
     READ_U8(object->update_type);
 
@@ -23552,9 +34750,18 @@ static WowWorldResult vanilla_MSG_RAID_TARGET_UPDATE_Server_read(WowWorldReader*
 
     }
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_RAID_TARGET_UPDATE_Server_write(WowWorldWriter* writer, const vanilla_MSG_RAID_TARGET_UPDATE_Server* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_RAID_TARGET_UPDATE_Server_size(object) + 2); /* size */
 
     WRITE_U16(0x00000321); /* opcode */
@@ -23571,12 +34778,13 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_RAID_TARGET_UPDATE_Server
     }
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_RAID_TARGET_UPDATE_Server_free(vanilla_MSG_RAID_TARGET_UPDATE_Server* object) {
-    if (object->update_type == VANILLA_RAID_TARGET_UPDATE_TYPE_FULL) {
-    }
-    else if (object->update_type == VANILLA_RAID_TARGET_UPDATE_TYPE_PARTIAL) {
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_RAID_READY_CHECK_Client_free(vanilla_MSG_RAID_READY_CHECK_Client* object) {
+    if (object->answer != NULL) {
+        free(object->answer);
+        object->answer = NULL;
     }
 }
 
@@ -23591,22 +34799,36 @@ static size_t vanilla_MSG_RAID_READY_CHECK_Client_size(const vanilla_MSG_RAID_RE
 }
 
 static WowWorldResult vanilla_MSG_RAID_READY_CHECK_Client_read(WowWorldReader* reader, vanilla_MSG_RAID_READY_CHECK_Client* object, size_t body_size) {
+    int _return_value = 1;
+
     size_t _size = 0;
 
+    object->answer = NULL;
     object->answer = NULL;
     if (_size < body_size) {
         object->answer = malloc(sizeof(vanilla_MSG_RAID_READY_CHECK_Client_answer));
         if (object->answer == NULL) {
-            return WWM_RESULT_MALLOC_FAIL;
+            _return_value = WWM_RESULT_MALLOC_FAIL;
+            goto cleanup;
         }
 
         READ_U8(object->answer->state);
 
     }
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_MSG_RAID_READY_CHECK_Client_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_RAID_READY_CHECK_Client_write(WowWorldWriter* writer, const vanilla_MSG_RAID_READY_CHECK_Client* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_RAID_READY_CHECK_Client_size(object) + 4); /* size */
 
     WRITE_U32(0x00000322); /* opcode */
@@ -23617,10 +34839,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_RAID_READY_CHECK_Client_w
     }
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_RAID_READY_CHECK_Client_free(vanilla_MSG_RAID_READY_CHECK_Client* object) {
-    free(object->answer);
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_RAID_READY_CHECK_Server_free(vanilla_MSG_RAID_READY_CHECK_Server* object) {
+    if (object->state_check != NULL) {
+        free(object->state_check);
+        object->state_check = NULL;
+    }
 }
 
 static size_t vanilla_MSG_RAID_READY_CHECK_Server_size(const vanilla_MSG_RAID_READY_CHECK_Server* object) {
@@ -23634,13 +34860,17 @@ static size_t vanilla_MSG_RAID_READY_CHECK_Server_size(const vanilla_MSG_RAID_RE
 }
 
 static WowWorldResult vanilla_MSG_RAID_READY_CHECK_Server_read(WowWorldReader* reader, vanilla_MSG_RAID_READY_CHECK_Server* object, size_t body_size) {
+    int _return_value = 1;
+
     size_t _size = 0;
 
+    object->state_check = NULL;
     object->state_check = NULL;
     if (_size < body_size) {
         object->state_check = malloc(sizeof(vanilla_MSG_RAID_READY_CHECK_Server_state_check));
         if (object->state_check == NULL) {
-            return WWM_RESULT_MALLOC_FAIL;
+            _return_value = WWM_RESULT_MALLOC_FAIL;
+            goto cleanup;
         }
 
         READ_U64(object->state_check->guid);
@@ -23649,9 +34879,19 @@ static WowWorldResult vanilla_MSG_RAID_READY_CHECK_Server_read(WowWorldReader* r
 
     }
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_MSG_RAID_READY_CHECK_Server_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_RAID_READY_CHECK_Server_write(WowWorldWriter* writer, const vanilla_MSG_RAID_READY_CHECK_Server* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_MSG_RAID_READY_CHECK_Server_size(object) + 2); /* size */
 
     WRITE_U16(0x00000322); /* opcode */
@@ -23664,22 +34904,35 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_MSG_RAID_READY_CHECK_Server_w
     }
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_MSG_RAID_READY_CHECK_Server_free(vanilla_MSG_RAID_READY_CHECK_Server* object) {
-    free(object->state_check);
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_PET_ACTION_SOUND_read(WowWorldReader* reader, vanilla_SMSG_PET_ACTION_SOUND* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->guid);
 
     object->reason = 0;
     READ_U32(object->reason);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PET_ACTION_SOUND_write(WowWorldWriter* writer, const vanilla_SMSG_PET_ACTION_SOUND* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 2); /* size */
 
     WRITE_U16(0x00000324); /* opcode */
@@ -23690,17 +34943,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PET_ACTION_SOUND_write(W
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_PET_DISMISS_SOUND_read(WowWorldReader* reader, vanilla_SMSG_PET_DISMISS_SOUND* object) {
+    int _return_value = 1;
+
+    if (16 > (reader->length - reader->index)) {
+        _return_value = (size_t)16 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U32(object->sound_id);
 
     WWM_CHECK_RETURN_CODE(all_Vector3d_read(reader, &object->position));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PET_DISMISS_SOUND_write(WowWorldWriter* writer, const vanilla_SMSG_PET_DISMISS_SOUND* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0010 + 2); /* size */
 
     WRITE_U16(0x00000325); /* opcode */
@@ -23711,16 +34981,33 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_PET_DISMISS_SOUND_write(
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_GM_TICKET_STATUS_UPDATE_read(WowWorldReader* reader, vanilla_SMSG_GM_TICKET_STATUS_UPDATE* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     object->response = 0;
     READ_U32(object->response);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GM_TICKET_STATUS_UPDATE_write(WowWorldWriter* writer, const vanilla_SMSG_GM_TICKET_STATUS_UPDATE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 2); /* size */
 
     WRITE_U16(0x00000328); /* opcode */
@@ -23729,6 +35016,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_GM_TICKET_STATUS_UPDATE_
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GMSURVEY_SUBMIT_free(vanilla_CMSG_GMSURVEY_SUBMIT* object) {
+    size_t i;
+
+    for (i = 0; i < 10; ++i) {
+        vanilla_GmSurveyQuestion_free(&((object->questions)[i]));
+    }
+    FREE_STRING(object->answer_comment);
+
 }
 
 static size_t vanilla_CMSG_GMSURVEY_SUBMIT_size(const vanilla_CMSG_GMSURVEY_SUBMIT* object) {
@@ -23745,6 +35043,15 @@ static size_t vanilla_CMSG_GMSURVEY_SUBMIT_size(const vanilla_CMSG_GMSURVEY_SUBM
 }
 
 static WowWorldResult vanilla_CMSG_GMSURVEY_SUBMIT_read(WowWorldReader* reader, vanilla_CMSG_GMSURVEY_SUBMIT* object) {
+    int _return_value = 1;
+
+    if (65 > (reader->length - reader->index)) {
+        _return_value = (size_t)65 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->answer_comment = NULL;
+
     READ_U32(object->survey_id);
 
     READ_ARRAY(object->questions, 10, WWM_CHECK_RETURN_CODE(vanilla_GmSurveyQuestion_read(reader, &object->questions[i])));
@@ -23752,9 +35059,19 @@ static WowWorldResult vanilla_CMSG_GMSURVEY_SUBMIT_read(WowWorldReader* reader, 
     READ_CSTRING(object->answer_comment);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_CMSG_GMSURVEY_SUBMIT_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GMSURVEY_SUBMIT_write(WowWorldWriter* writer, const vanilla_CMSG_GMSURVEY_SUBMIT* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_CMSG_GMSURVEY_SUBMIT_size(object) + 4); /* size */
 
     WRITE_U32(0x0000032a); /* opcode */
@@ -23767,25 +35084,32 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_CMSG_GMSURVEY_SUBMIT_write(Wo
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_CMSG_GMSURVEY_SUBMIT_free(vanilla_CMSG_GMSURVEY_SUBMIT* object) {
-    size_t i;
-
-    for (i = 0; i < 10; ++i) {
-        vanilla_GmSurveyQuestion_free(&((object->questions)[i]));
-    }
-    FREE_STRING(object->answer_comment);
-
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_UPDATE_INSTANCE_OWNERSHIP_read(WowWorldReader* reader, vanilla_SMSG_UPDATE_INSTANCE_OWNERSHIP* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_BOOL32(object->player_is_saved_to_a_raid);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_UPDATE_INSTANCE_OWNERSHIP_write(WowWorldWriter* writer, const vanilla_SMSG_UPDATE_INSTANCE_OWNERSHIP* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x0004 + 2); /* size */
 
     WRITE_U16(0x0000032b); /* opcode */
@@ -23794,17 +35118,34 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_UPDATE_INSTANCE_OWNERSHI
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 static WowWorldResult vanilla_SMSG_SPELLINSTAKILLLOG_read(WowWorldReader* reader, vanilla_SMSG_SPELLINSTAKILLLOG* object) {
+    int _return_value = 1;
+
+    if (12 > (reader->length - reader->index)) {
+        _return_value = (size_t)12 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
     READ_U64(object->target);
 
     READ_U32(object->spell);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELLINSTAKILLLOG_write(WowWorldWriter* writer, const vanilla_SMSG_SPELLINSTAKILLLOG* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE(0x000c + 2); /* size */
 
     WRITE_U16(0x0000032f); /* opcode */
@@ -23815,6 +35156,14 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELLINSTAKILLLOG_write(
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
+}
+
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_SPELL_UPDATE_CHAIN_TARGETS_free(vanilla_SMSG_SPELL_UPDATE_CHAIN_TARGETS* object) {
+    if (object->targets != NULL) {
+        free(object->targets);
+        object->targets = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_SPELL_UPDATE_CHAIN_TARGETS_size(const vanilla_SMSG_SPELL_UPDATE_CHAIN_TARGETS* object) {
@@ -23822,13 +35171,22 @@ static size_t vanilla_SMSG_SPELL_UPDATE_CHAIN_TARGETS_size(const vanilla_SMSG_SP
 }
 
 static WowWorldResult vanilla_SMSG_SPELL_UPDATE_CHAIN_TARGETS_read(WowWorldReader* reader, vanilla_SMSG_SPELL_UPDATE_CHAIN_TARGETS* object) {
+    int _return_value = 1;
+
+    if (16 > (reader->length - reader->index)) {
+        _return_value = (size_t)16 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->targets = NULL;
+
     READ_U64(object->caster);
 
     READ_U32(object->spell);
 
     READ_U32(object->amount_of_targets);
 
-    object->targets = malloc(object->amount_of_targets * sizeof(uint64_t));
+    object->targets = calloc(object->amount_of_targets, sizeof(uint64_t));
     if (object->targets == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -23836,9 +35194,19 @@ static WowWorldResult vanilla_SMSG_SPELL_UPDATE_CHAIN_TARGETS_read(WowWorldReade
 
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_SPELL_UPDATE_CHAIN_TARGETS_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELL_UPDATE_CHAIN_TARGETS_write(WowWorldWriter* writer, const vanilla_SMSG_SPELL_UPDATE_CHAIN_TARGETS* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_SPELL_UPDATE_CHAIN_TARGETS_size(object) + 2); /* size */
 
     WRITE_U16(0x00000330); /* opcode */
@@ -23853,11 +35221,19 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_SPELL_UPDATE_CHAIN_TARGE
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_SPELL_UPDATE_CHAIN_TARGETS_free(vanilla_SMSG_SPELL_UPDATE_CHAIN_TARGETS* object) {
-    free(object->targets);
-    object->targets = NULL;
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_EXPECTED_SPAM_RECORDS_free(vanilla_SMSG_EXPECTED_SPAM_RECORDS* object) {
+    size_t i;
+
+    if (object->records != NULL) {
+        for (i = 0; i < object->amount_of_records; ++i) {
+            FREE_STRING(((object->records)[i]));
+        }
+        free(object->records);
+        object->records = NULL;
+    }
 }
 
 static size_t vanilla_SMSG_EXPECTED_SPAM_RECORDS_size(const vanilla_SMSG_EXPECTED_SPAM_RECORDS* object) {
@@ -23874,9 +35250,18 @@ static size_t vanilla_SMSG_EXPECTED_SPAM_RECORDS_size(const vanilla_SMSG_EXPECTE
 }
 
 static WowWorldResult vanilla_SMSG_EXPECTED_SPAM_RECORDS_read(WowWorldReader* reader, vanilla_SMSG_EXPECTED_SPAM_RECORDS* object) {
+    int _return_value = 1;
+
+    if (4 > (reader->length - reader->index)) {
+        _return_value = (size_t)4 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->records = NULL;
+
     READ_U32(object->amount_of_records);
 
-    object->records = malloc(object->amount_of_records * sizeof(char*));
+    object->records = calloc(object->amount_of_records, sizeof(char*));
     if (object->records == NULL) {
         return WWM_RESULT_MALLOC_FAIL;
     }
@@ -23884,9 +35269,19 @@ static WowWorldResult vanilla_SMSG_EXPECTED_SPAM_RECORDS_read(WowWorldReader* re
 
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_EXPECTED_SPAM_RECORDS_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_EXPECTED_SPAM_RECORDS_write(WowWorldWriter* writer, const vanilla_SMSG_EXPECTED_SPAM_RECORDS* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_EXPECTED_SPAM_RECORDS_size(object) + 2); /* size */
 
     WRITE_U16(0x00000332); /* opcode */
@@ -23897,16 +35292,12 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_EXPECTED_SPAM_RECORDS_wr
 
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_EXPECTED_SPAM_RECORDS_free(vanilla_SMSG_EXPECTED_SPAM_RECORDS* object) {
-    size_t i;
+WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_DEFENSE_MESSAGE_free(vanilla_SMSG_DEFENSE_MESSAGE* object) {
+    FREE_STRING(object->message);
 
-    for (i = 0; i < object->amount_of_records; ++i) {
-        FREE_STRING(((object->records)[i]));
-    }
-    free(object->records);
-    object->records = NULL;
 }
 
 static size_t vanilla_SMSG_DEFENSE_MESSAGE_size(const vanilla_SMSG_DEFENSE_MESSAGE* object) {
@@ -23914,15 +35305,34 @@ static size_t vanilla_SMSG_DEFENSE_MESSAGE_size(const vanilla_SMSG_DEFENSE_MESSA
 }
 
 static WowWorldResult vanilla_SMSG_DEFENSE_MESSAGE_read(WowWorldReader* reader, vanilla_SMSG_DEFENSE_MESSAGE* object) {
+    int _return_value = 1;
+
+    if (9 > (reader->length - reader->index)) {
+        _return_value = (size_t)9 - (reader->length - reader->index);
+        goto cleanup;
+    }
+
+    object->message = NULL;
+
     object->area = 0;
     READ_U32(object->area);
 
     READ_SIZED_CSTRING(object->message);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    vanilla_SMSG_DEFENSE_MESSAGE_free(object);
+    return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_DEFENSE_MESSAGE_write(WowWorldWriter* writer, const vanilla_SMSG_DEFENSE_MESSAGE* object) {
+    int _return_value = 1;
+
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     WRITE_U16_BE((uint16_t)vanilla_SMSG_DEFENSE_MESSAGE_size(object) + 2); /* size */
 
     WRITE_U16(0x0000033b); /* opcode */
@@ -23933,14 +35343,16 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_SMSG_DEFENSE_MESSAGE_write(Wo
 
 
     return WWM_RESULT_SUCCESS;
-}
-
-WOW_WORLD_MESSAGES_C_EXPORT void vanilla_SMSG_DEFENSE_MESSAGE_free(vanilla_SMSG_DEFENSE_MESSAGE* object) {
-    FREE_STRING(object->message);
-
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_client_opcode_write(WowWorldWriter* writer, const VanillaClientOpcodeContainer* opcodes) {
+    int _return_value = 1;
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     switch (opcodes->opcode) {
         case V_CMSG_DBLOOKUP:
             WWM_CHECK_RETURN_CODE(vanilla_CMSG_DBLOOKUP_write(writer, &opcodes->body.CMSG_DBLOOKUP));
@@ -24703,10 +36115,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_client_opcode_write(WowWorldW
     }
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_client_opcode_read(WowWorldReader* reader, VanillaClientOpcodeContainer* opcodes) {
+    int _return_value = 1;
     uint16_t _size;
+    if (reader->index > reader->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     READ_U16_BE(_size);
 
     opcodes->opcode = 0;
@@ -25474,6 +36893,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_client_opcode_read(WowWorldRe
     }
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT void vanilla_client_opcode_free(VanillaClientOpcodeContainer* opcodes) {
@@ -25580,90 +37000,6 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_client_opcode_free(VanillaClientOpcodeC
         case V_CMSG_USE_ITEM:
             vanilla_CMSG_USE_ITEM_free(&opcodes->body.CMSG_USE_ITEM);
             break;
-        case V_MSG_MOVE_START_FORWARD:
-            vanilla_MSG_MOVE_START_FORWARD_Client_free(&opcodes->body.MSG_MOVE_START_FORWARD_Client);
-            break;
-        case V_MSG_MOVE_START_BACKWARD:
-            vanilla_MSG_MOVE_START_BACKWARD_Client_free(&opcodes->body.MSG_MOVE_START_BACKWARD_Client);
-            break;
-        case V_MSG_MOVE_STOP:
-            vanilla_MSG_MOVE_STOP_Client_free(&opcodes->body.MSG_MOVE_STOP_Client);
-            break;
-        case V_MSG_MOVE_START_STRAFE_LEFT:
-            vanilla_MSG_MOVE_START_STRAFE_LEFT_Client_free(&opcodes->body.MSG_MOVE_START_STRAFE_LEFT_Client);
-            break;
-        case V_MSG_MOVE_START_STRAFE_RIGHT:
-            vanilla_MSG_MOVE_START_STRAFE_RIGHT_Client_free(&opcodes->body.MSG_MOVE_START_STRAFE_RIGHT_Client);
-            break;
-        case V_MSG_MOVE_STOP_STRAFE:
-            vanilla_MSG_MOVE_STOP_STRAFE_Client_free(&opcodes->body.MSG_MOVE_STOP_STRAFE_Client);
-            break;
-        case V_MSG_MOVE_JUMP:
-            vanilla_MSG_MOVE_JUMP_Client_free(&opcodes->body.MSG_MOVE_JUMP_Client);
-            break;
-        case V_MSG_MOVE_START_TURN_LEFT:
-            vanilla_MSG_MOVE_START_TURN_LEFT_Client_free(&opcodes->body.MSG_MOVE_START_TURN_LEFT_Client);
-            break;
-        case V_MSG_MOVE_START_TURN_RIGHT:
-            vanilla_MSG_MOVE_START_TURN_RIGHT_Client_free(&opcodes->body.MSG_MOVE_START_TURN_RIGHT_Client);
-            break;
-        case V_MSG_MOVE_STOP_TURN:
-            vanilla_MSG_MOVE_STOP_TURN_Client_free(&opcodes->body.MSG_MOVE_STOP_TURN_Client);
-            break;
-        case V_MSG_MOVE_START_PITCH_UP:
-            vanilla_MSG_MOVE_START_PITCH_UP_Client_free(&opcodes->body.MSG_MOVE_START_PITCH_UP_Client);
-            break;
-        case V_MSG_MOVE_START_PITCH_DOWN:
-            vanilla_MSG_MOVE_START_PITCH_DOWN_Client_free(&opcodes->body.MSG_MOVE_START_PITCH_DOWN_Client);
-            break;
-        case V_MSG_MOVE_STOP_PITCH:
-            vanilla_MSG_MOVE_STOP_PITCH_Client_free(&opcodes->body.MSG_MOVE_STOP_PITCH_Client);
-            break;
-        case V_MSG_MOVE_SET_RUN_MODE:
-            vanilla_MSG_MOVE_SET_RUN_MODE_Client_free(&opcodes->body.MSG_MOVE_SET_RUN_MODE_Client);
-            break;
-        case V_MSG_MOVE_SET_WALK_MODE:
-            vanilla_MSG_MOVE_SET_WALK_MODE_Client_free(&opcodes->body.MSG_MOVE_SET_WALK_MODE_Client);
-            break;
-        case V_MSG_MOVE_FALL_LAND:
-            vanilla_MSG_MOVE_FALL_LAND_Client_free(&opcodes->body.MSG_MOVE_FALL_LAND_Client);
-            break;
-        case V_MSG_MOVE_START_SWIM:
-            vanilla_MSG_MOVE_START_SWIM_Client_free(&opcodes->body.MSG_MOVE_START_SWIM_Client);
-            break;
-        case V_MSG_MOVE_STOP_SWIM:
-            vanilla_MSG_MOVE_STOP_SWIM_Client_free(&opcodes->body.MSG_MOVE_STOP_SWIM_Client);
-            break;
-        case V_MSG_MOVE_SET_FACING:
-            vanilla_MSG_MOVE_SET_FACING_Client_free(&opcodes->body.MSG_MOVE_SET_FACING_Client);
-            break;
-        case V_MSG_MOVE_SET_PITCH:
-            vanilla_MSG_MOVE_SET_PITCH_Client_free(&opcodes->body.MSG_MOVE_SET_PITCH_Client);
-            break;
-        case V_CMSG_FORCE_RUN_SPEED_CHANGE_ACK:
-            vanilla_CMSG_FORCE_RUN_SPEED_CHANGE_ACK_free(&opcodes->body.CMSG_FORCE_RUN_SPEED_CHANGE_ACK);
-            break;
-        case V_CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK:
-            vanilla_CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK_free(&opcodes->body.CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK);
-            break;
-        case V_CMSG_FORCE_SWIM_SPEED_CHANGE_ACK:
-            vanilla_CMSG_FORCE_SWIM_SPEED_CHANGE_ACK_free(&opcodes->body.CMSG_FORCE_SWIM_SPEED_CHANGE_ACK);
-            break;
-        case V_CMSG_FORCE_MOVE_ROOT_ACK:
-            vanilla_CMSG_FORCE_MOVE_ROOT_ACK_free(&opcodes->body.CMSG_FORCE_MOVE_ROOT_ACK);
-            break;
-        case V_CMSG_FORCE_MOVE_UNROOT_ACK:
-            vanilla_CMSG_FORCE_MOVE_UNROOT_ACK_free(&opcodes->body.CMSG_FORCE_MOVE_UNROOT_ACK);
-            break;
-        case V_MSG_MOVE_HEARTBEAT:
-            vanilla_MSG_MOVE_HEARTBEAT_Client_free(&opcodes->body.MSG_MOVE_HEARTBEAT_Client);
-            break;
-        case V_CMSG_MOVE_KNOCK_BACK_ACK:
-            vanilla_CMSG_MOVE_KNOCK_BACK_ACK_free(&opcodes->body.CMSG_MOVE_KNOCK_BACK_ACK);
-            break;
-        case V_CMSG_MOVE_HOVER_ACK:
-            vanilla_CMSG_MOVE_HOVER_ACK_free(&opcodes->body.CMSG_MOVE_HOVER_ACK);
-            break;
         case V_CMSG_CAST_SPELL:
             vanilla_CMSG_CAST_SPELL_free(&opcodes->body.CMSG_CAST_SPELL);
             break;
@@ -25727,38 +37063,11 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_client_opcode_free(VanillaClientOpcodeC
         case V_CMSG_GROUP_SWAP_SUB_GROUP:
             vanilla_CMSG_GROUP_SWAP_SUB_GROUP_free(&opcodes->body.CMSG_GROUP_SWAP_SUB_GROUP);
             break;
-        case V_MSG_MOVE_WATER_WALK:
-            vanilla_MSG_MOVE_WATER_WALK_free(&opcodes->body.MSG_MOVE_WATER_WALK);
-            break;
         case V_MSG_PETITION_RENAME:
             vanilla_MSG_PETITION_RENAME_free(&opcodes->body.MSG_PETITION_RENAME);
             break;
         case V_CMSG_CHAR_RENAME:
             vanilla_CMSG_CHAR_RENAME_free(&opcodes->body.CMSG_CHAR_RENAME);
-            break;
-        case V_CMSG_MOVE_SPLINE_DONE:
-            vanilla_CMSG_MOVE_SPLINE_DONE_free(&opcodes->body.CMSG_MOVE_SPLINE_DONE);
-            break;
-        case V_CMSG_MOVE_FALL_RESET:
-            vanilla_CMSG_MOVE_FALL_RESET_free(&opcodes->body.CMSG_MOVE_FALL_RESET);
-            break;
-        case V_CMSG_MOVE_FEATHER_FALL_ACK:
-            vanilla_CMSG_MOVE_FEATHER_FALL_ACK_free(&opcodes->body.CMSG_MOVE_FEATHER_FALL_ACK);
-            break;
-        case V_CMSG_MOVE_WATER_WALK_ACK:
-            vanilla_CMSG_MOVE_WATER_WALK_ACK_free(&opcodes->body.CMSG_MOVE_WATER_WALK_ACK);
-            break;
-        case V_CMSG_MOVE_NOT_ACTIVE_MOVER:
-            vanilla_CMSG_MOVE_NOT_ACTIVE_MOVER_free(&opcodes->body.CMSG_MOVE_NOT_ACTIVE_MOVER);
-            break;
-        case V_CMSG_FORCE_WALK_SPEED_CHANGE_ACK:
-            vanilla_CMSG_FORCE_WALK_SPEED_CHANGE_ACK_free(&opcodes->body.CMSG_FORCE_WALK_SPEED_CHANGE_ACK);
-            break;
-        case V_CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK:
-            vanilla_CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK_free(&opcodes->body.CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK);
-            break;
-        case V_CMSG_FORCE_TURN_RATE_CHANGE_ACK:
-            vanilla_CMSG_FORCE_TURN_RATE_CHANGE_ACK_free(&opcodes->body.CMSG_FORCE_TURN_RATE_CHANGE_ACK);
             break;
         case V_CMSG_WARDEN_DATA:
             vanilla_CMSG_WARDEN_DATA_free(&opcodes->body.CMSG_WARDEN_DATA);
@@ -25768,9 +37077,6 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_client_opcode_free(VanillaClientOpcodeC
             break;
         case V_CMSG_ACTIVATETAXIEXPRESS:
             vanilla_CMSG_ACTIVATETAXIEXPRESS_free(&opcodes->body.CMSG_ACTIVATETAXIEXPRESS);
-            break;
-        case V_MSG_RAID_TARGET_UPDATE:
-            vanilla_MSG_RAID_TARGET_UPDATE_Client_free(&opcodes->body.MSG_RAID_TARGET_UPDATE_Client);
             break;
         case V_MSG_RAID_READY_CHECK:
             vanilla_MSG_RAID_READY_CHECK_Client_free(&opcodes->body.MSG_RAID_READY_CHECK_Client);
@@ -26045,6 +37351,12 @@ WOW_WORLD_MESSAGES_C_EXPORT char* vanilla_client_opcode_to_str(VanillaClientOpco
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_server_opcode_write(WowWorldWriter* writer, const VanillaServerOpcodeContainer* opcodes) {
+    int _return_value = 1;
+    if (writer->index > writer->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     switch (opcodes->opcode) {
         case V_SMSG_CHAR_CREATE:
             WWM_CHECK_RETURN_CODE(vanilla_SMSG_CHAR_CREATE_write(writer, &opcodes->body.SMSG_CHAR_CREATE));
@@ -27017,10 +38329,17 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_server_opcode_write(WowWorldW
     }
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_server_opcode_read(WowWorldReader* reader, VanillaServerOpcodeContainer* opcodes) {
+    int _return_value = 1;
     uint16_t _size;
+    if (reader->index > reader->length) {
+        return WWM_RESULT_INVALID_PARAMETERS;
+    }
+
+
     READ_U16_BE(_size);
 
     opcodes->opcode = 0;
@@ -27998,6 +39317,7 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult vanilla_server_opcode_read(WowWorldRe
     }
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT void vanilla_server_opcode_free(VanillaServerOpcodeContainer* opcodes) {
@@ -28089,83 +39409,11 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_server_opcode_free(VanillaServerOpcodeC
         case V_SMSG_UPDATE_OBJECT:
             vanilla_SMSG_UPDATE_OBJECT_free(&opcodes->body.SMSG_UPDATE_OBJECT);
             break;
-        case V_MSG_MOVE_START_FORWARD:
-            vanilla_MSG_MOVE_START_FORWARD_Server_free(&opcodes->body.MSG_MOVE_START_FORWARD_Server);
-            break;
-        case V_MSG_MOVE_START_BACKWARD:
-            vanilla_MSG_MOVE_START_BACKWARD_Server_free(&opcodes->body.MSG_MOVE_START_BACKWARD_Server);
-            break;
-        case V_MSG_MOVE_STOP:
-            vanilla_MSG_MOVE_STOP_Server_free(&opcodes->body.MSG_MOVE_STOP_Server);
-            break;
-        case V_MSG_MOVE_START_STRAFE_LEFT:
-            vanilla_MSG_MOVE_START_STRAFE_LEFT_Server_free(&opcodes->body.MSG_MOVE_START_STRAFE_LEFT_Server);
-            break;
-        case V_MSG_MOVE_START_STRAFE_RIGHT:
-            vanilla_MSG_MOVE_START_STRAFE_RIGHT_Server_free(&opcodes->body.MSG_MOVE_START_STRAFE_RIGHT_Server);
-            break;
-        case V_MSG_MOVE_STOP_STRAFE:
-            vanilla_MSG_MOVE_STOP_STRAFE_Server_free(&opcodes->body.MSG_MOVE_STOP_STRAFE_Server);
-            break;
-        case V_MSG_MOVE_JUMP:
-            vanilla_MSG_MOVE_JUMP_Server_free(&opcodes->body.MSG_MOVE_JUMP_Server);
-            break;
-        case V_MSG_MOVE_START_TURN_LEFT:
-            vanilla_MSG_MOVE_START_TURN_LEFT_Server_free(&opcodes->body.MSG_MOVE_START_TURN_LEFT_Server);
-            break;
-        case V_MSG_MOVE_START_TURN_RIGHT:
-            vanilla_MSG_MOVE_START_TURN_RIGHT_Server_free(&opcodes->body.MSG_MOVE_START_TURN_RIGHT_Server);
-            break;
-        case V_MSG_MOVE_STOP_TURN:
-            vanilla_MSG_MOVE_STOP_TURN_Server_free(&opcodes->body.MSG_MOVE_STOP_TURN_Server);
-            break;
-        case V_MSG_MOVE_START_PITCH_UP:
-            vanilla_MSG_MOVE_START_PITCH_UP_Server_free(&opcodes->body.MSG_MOVE_START_PITCH_UP_Server);
-            break;
-        case V_MSG_MOVE_START_PITCH_DOWN:
-            vanilla_MSG_MOVE_START_PITCH_DOWN_Server_free(&opcodes->body.MSG_MOVE_START_PITCH_DOWN_Server);
-            break;
-        case V_MSG_MOVE_STOP_PITCH:
-            vanilla_MSG_MOVE_STOP_PITCH_Server_free(&opcodes->body.MSG_MOVE_STOP_PITCH_Server);
-            break;
-        case V_MSG_MOVE_SET_RUN_MODE:
-            vanilla_MSG_MOVE_SET_RUN_MODE_Server_free(&opcodes->body.MSG_MOVE_SET_RUN_MODE_Server);
-            break;
-        case V_MSG_MOVE_SET_WALK_MODE:
-            vanilla_MSG_MOVE_SET_WALK_MODE_Server_free(&opcodes->body.MSG_MOVE_SET_WALK_MODE_Server);
-            break;
-        case V_MSG_MOVE_TELEPORT_ACK:
-            vanilla_MSG_MOVE_TELEPORT_ACK_Server_free(&opcodes->body.MSG_MOVE_TELEPORT_ACK_Server);
-            break;
-        case V_MSG_MOVE_FALL_LAND:
-            vanilla_MSG_MOVE_FALL_LAND_Server_free(&opcodes->body.MSG_MOVE_FALL_LAND_Server);
-            break;
-        case V_MSG_MOVE_START_SWIM:
-            vanilla_MSG_MOVE_START_SWIM_Server_free(&opcodes->body.MSG_MOVE_START_SWIM_Server);
-            break;
-        case V_MSG_MOVE_STOP_SWIM:
-            vanilla_MSG_MOVE_STOP_SWIM_Server_free(&opcodes->body.MSG_MOVE_STOP_SWIM_Server);
-            break;
-        case V_MSG_MOVE_SET_FACING:
-            vanilla_MSG_MOVE_SET_FACING_Server_free(&opcodes->body.MSG_MOVE_SET_FACING_Server);
-            break;
-        case V_MSG_MOVE_SET_PITCH:
-            vanilla_MSG_MOVE_SET_PITCH_Server_free(&opcodes->body.MSG_MOVE_SET_PITCH_Server);
-            break;
         case V_SMSG_MONSTER_MOVE:
             vanilla_SMSG_MONSTER_MOVE_free(&opcodes->body.SMSG_MONSTER_MOVE);
             break;
-        case V_MSG_MOVE_HEARTBEAT:
-            vanilla_MSG_MOVE_HEARTBEAT_Server_free(&opcodes->body.MSG_MOVE_HEARTBEAT_Server);
-            break;
         case V_SMSG_TEXT_EMOTE:
             vanilla_SMSG_TEXT_EMOTE_free(&opcodes->body.SMSG_TEXT_EMOTE);
-            break;
-        case V_SMSG_INVENTORY_CHANGE_FAILURE:
-            vanilla_SMSG_INVENTORY_CHANGE_FAILURE_free(&opcodes->body.SMSG_INVENTORY_CHANGE_FAILURE);
-            break;
-        case V_SMSG_TRADE_STATUS:
-            vanilla_SMSG_TRADE_STATUS_free(&opcodes->body.SMSG_TRADE_STATUS);
             break;
         case V_SMSG_INITIALIZE_FACTIONS:
             vanilla_SMSG_INITIALIZE_FACTIONS_free(&opcodes->body.SMSG_INITIALIZE_FACTIONS);
@@ -28175,9 +39423,6 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_server_opcode_free(VanillaServerOpcodeC
             break;
         case V_SMSG_INITIAL_SPELLS:
             vanilla_SMSG_INITIAL_SPELLS_free(&opcodes->body.SMSG_INITIAL_SPELLS);
-            break;
-        case V_SMSG_CAST_RESULT:
-            vanilla_SMSG_CAST_RESULT_free(&opcodes->body.SMSG_CAST_RESULT);
             break;
         case V_SMSG_SPELL_START:
             vanilla_SMSG_SPELL_START_free(&opcodes->body.SMSG_SPELL_START);
@@ -28248,26 +39493,14 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_server_opcode_free(VanillaServerOpcodeC
         case V_SMSG_NOTIFICATION:
             vanilla_SMSG_NOTIFICATION_free(&opcodes->body.SMSG_NOTIFICATION);
             break;
-        case V_SMSG_LOG_XPGAIN:
-            vanilla_SMSG_LOG_XPGAIN_free(&opcodes->body.SMSG_LOG_XPGAIN);
-            break;
-        case V_SMSG_AUTH_RESPONSE:
-            vanilla_SMSG_AUTH_RESPONSE_free(&opcodes->body.SMSG_AUTH_RESPONSE);
-            break;
         case V_SMSG_COMPRESSED_UPDATE_OBJECT:
             vanilla_SMSG_COMPRESSED_UPDATE_OBJECT_free(&opcodes->body.SMSG_COMPRESSED_UPDATE_OBJECT);
             break;
         case V_SMSG_GMTICKET_GETTICKET:
             vanilla_SMSG_GMTICKET_GETTICKET_free(&opcodes->body.SMSG_GMTICKET_GETTICKET);
             break;
-        case V_MSG_CORPSE_QUERY:
-            vanilla_MSG_CORPSE_QUERY_Server_free(&opcodes->body.MSG_CORPSE_QUERY_Server);
-            break;
         case V_SMSG_GOSSIP_POI:
             vanilla_SMSG_GOSSIP_POI_free(&opcodes->body.SMSG_GOSSIP_POI);
-            break;
-        case V_SMSG_SEND_MAIL_RESULT:
-            vanilla_SMSG_SEND_MAIL_RESULT_free(&opcodes->body.SMSG_SEND_MAIL_RESULT);
             break;
         case V_SMSG_MAIL_LIST_RESULT:
             vanilla_SMSG_MAIL_LIST_RESULT_free(&opcodes->body.SMSG_MAIL_LIST_RESULT);
@@ -28286,9 +39519,6 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_server_opcode_free(VanillaServerOpcodeC
             break;
         case V_SMSG_PERIODICAURALOG:
             vanilla_SMSG_PERIODICAURALOG_free(&opcodes->body.SMSG_PERIODICAURALOG);
-            break;
-        case V_SMSG_AUCTION_COMMAND_RESULT:
-            vanilla_SMSG_AUCTION_COMMAND_RESULT_free(&opcodes->body.SMSG_AUCTION_COMMAND_RESULT);
             break;
         case V_SMSG_AUCTION_LIST_RESULT:
             vanilla_SMSG_AUCTION_LIST_RESULT_free(&opcodes->body.SMSG_AUCTION_LIST_RESULT);
@@ -28323,12 +39553,6 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_server_opcode_free(VanillaServerOpcodeC
         case V_SMSG_MONSTER_MOVE_TRANSPORT:
             vanilla_SMSG_MONSTER_MOVE_TRANSPORT_free(&opcodes->body.SMSG_MONSTER_MOVE_TRANSPORT);
             break;
-        case V_MSG_MOVE_FEATHER_FALL:
-            vanilla_MSG_MOVE_FEATHER_FALL_Server_free(&opcodes->body.MSG_MOVE_FEATHER_FALL_Server);
-            break;
-        case V_MSG_MOVE_WATER_WALK:
-            vanilla_MSG_MOVE_WATER_WALK_free(&opcodes->body.MSG_MOVE_WATER_WALK);
-            break;
         case V_SMSG_AREA_TRIGGER_MESSAGE:
             vanilla_SMSG_AREA_TRIGGER_MESSAGE_free(&opcodes->body.SMSG_AREA_TRIGGER_MESSAGE);
             break;
@@ -28347,9 +39571,6 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_server_opcode_free(VanillaServerOpcodeC
         case V_SMSG_RAID_INSTANCE_INFO:
             vanilla_SMSG_RAID_INSTANCE_INFO_free(&opcodes->body.SMSG_RAID_INSTANCE_INFO);
             break;
-        case V_SMSG_BATTLEFIELD_STATUS:
-            vanilla_SMSG_BATTLEFIELD_STATUS_free(&opcodes->body.SMSG_BATTLEFIELD_STATUS);
-            break;
         case V_MSG_PVP_LOG_DATA:
             vanilla_MSG_PVP_LOG_DATA_Server_free(&opcodes->body.MSG_PVP_LOG_DATA_Server);
             break;
@@ -28367,9 +39588,6 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_server_opcode_free(VanillaServerOpcodeC
             break;
         case V_SMSG_COMPRESSED_MOVES:
             vanilla_SMSG_COMPRESSED_MOVES_free(&opcodes->body.SMSG_COMPRESSED_MOVES);
-            break;
-        case V_MSG_RAID_TARGET_UPDATE:
-            vanilla_MSG_RAID_TARGET_UPDATE_Server_free(&opcodes->body.MSG_RAID_TARGET_UPDATE_Server);
             break;
         case V_MSG_RAID_READY_CHECK:
             vanilla_MSG_RAID_READY_CHECK_Server_free(&opcodes->body.MSG_RAID_READY_CHECK_Server);

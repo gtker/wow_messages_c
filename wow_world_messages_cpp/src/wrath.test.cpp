@@ -1,3 +1,4 @@
+/* clang-format off */
 #include "wow_world_messages_cpp/wrath.hpp"
 #include "test_utils.h"
 

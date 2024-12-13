@@ -1,3 +1,4 @@
+/* clang-format off */
 #include <utility>
 
 #include "wow_login_messages_cpp/all.hpp"

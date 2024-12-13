@@ -12,6 +12,7 @@ def print_achievement_done_array_c(s: Writer, h: Writer):
 
     s.write_block(f"""
         static WowWorldResult wrath_achievement_done_array_write(WowWorldWriter* stream, const wrath_AchievementDoneArray* mask) {{
+            int _return_value = 1;
             uint32_t i;
             for (i = 0; i < mask->amount_of_achievements; ++i) {{
                 WWM_CHECK_RETURN_CODE(wrath_AchievementDone_write(stream, &mask->achievements[i]));
@@ -20,9 +21,11 @@ def print_achievement_done_array_c(s: Writer, h: Writer):
             WWM_CHECK_RETURN_CODE(wwm_write_u32(stream, 0xFFFFFFFF));
 
             return WWM_RESULT_SUCCESS;
+        cleanup: return _return_value;
         }}
 
         static WowWorldResult wrath_achievement_done_array_read(WowWorldReader* stream, wrath_AchievementDoneArray* mask) {{
+            int _return_value = 1;
             uint32_t achievement;
             size_t array_size = 8;
 
@@ -53,6 +56,7 @@ def print_achievement_done_array_c(s: Writer, h: Writer):
             }}
 
             return WWM_RESULT_SUCCESS;
+        cleanup: return _return_value;
         }}
 
         static size_t wrath_achievement_done_array_size(const wrath_AchievementDoneArray* mask) {{

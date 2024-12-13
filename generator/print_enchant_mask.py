@@ -14,6 +14,7 @@ def print_enchant_mask_c(s: Writer, h: Writer):
 
     s.write_block(f"""
         static WowWorldResult wrath_enchant_mask_write(WowWorldWriter* stream, const wrath_EnchantMask* mask) {{
+            int _return_value = 1;
             int i;
             uint16_t header = 0;
 
@@ -32,9 +33,11 @@ def print_enchant_mask_c(s: Writer, h: Writer):
             }}
 
             return WWM_RESULT_SUCCESS;
+        cleanup: return _return_value; /* TODO Pre check size better */
         }}
 
         static WowWorldResult wrath_enchant_mask_read(WowWorldReader* stream, wrath_EnchantMask* mask) {{
+            int _return_value = 1;
             int i = 0;
             uint16_t header = 0;
             WWM_CHECK_RETURN_CODE(wwm_read_u16(stream, &header));
@@ -48,6 +51,7 @@ def print_enchant_mask_c(s: Writer, h: Writer):
             }}
 
             return WWM_RESULT_SUCCESS;
+        cleanup: return _return_value; /* TODO Pre check size better */
         }}
 
         static size_t wrath_enchant_mask_size(const wrath_EnchantMask* mask) {{

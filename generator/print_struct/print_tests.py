@@ -1,8 +1,9 @@
 import typing
 
-from print_struct import container_has_c_members, container_has_free
+from print_struct import container_has_c_members
 
 import model
+from print_struct.print_free import container_has_free
 from print_struct.struct_util import container_should_have_size_function, all_members_from_container, \
     container_has_compressed_array, container_uses_compression
 from util import first_login_version, VERSIONS, world_version_to_module_name, \
@@ -110,6 +111,8 @@ def print_individual_test(s: Writer, e: model.Container, test_case: model.TestCa
                 f'wlm_test_compare_buffers(buffer.data(), write_buffer.data(), write_buffer.size(),  __FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i}");')
         s.closing_curly()  # /* name */
     else:
+        wlm_prefix = f"W{'W' if is_world(e.tags) else 'L'}M"
+
         s.open_curly("do")
         s.w("unsigned char buffer[] = {")
         for b in test_case.raw_bytes:
@@ -124,39 +127,61 @@ def print_individual_test(s: Writer, e: model.Container, test_case: model.TestCa
             s.wln(f"{opcode_type} opcode2;")
             s.newline()
 
-        s.wln(f"reader = {library_prefix}_create_reader(buffer, sizeof(buffer));")
-        s.wln(f"result = {function_version}_{function_side}_opcode_read(&reader, &opcode);")
-        s.newline()
-
-        s.wln(f'check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "{e.name} {i}", "failed to read");')
-        s.wln(f'check_opcode(opcode.opcode, {opcode_id}, __FILE__ ":" STRINGIFY(__LINE__), "{e.name} {i}");')
-
-        s.wln(f"writer = {library_prefix}_create_writer(write_buffer, sizeof(write_buffer));")
         extra_argument = f", &opcode.body.{e.name}" if container_has_c_members(e) else ""
-        s.wln(f"result = {function_version}_{e.name}_write(&writer{extra_argument});")
-        s.newline()
+        s.write_block(f"""
+            reader = {library_prefix}_create_reader(buffer, sizeof(buffer));
+            result = {function_version}_{function_side}_opcode_read(&reader, &opcode);
+        """)
+        if container_has_free(e, function_version):
+            s.wln(f"{function_version}_{function_side}_opcode_free(&opcode);")
 
-        s.wln(f'check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "{e.name} {i}", "failed to write");')
+        s.write_block(f"""
+            check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "{e.name} {i}", "failed to read");
+            check_opcode(opcode.opcode, {opcode_id}, __FILE__ ":" STRINGIFY(__LINE__), "{e.name} {i}");
+
+            reader.index = 0;
+            reader.length = 1;
+            
+            while (true) {{
+                result = {function_version}_{function_side}_opcode_read(&reader, &opcode);
+                check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "{e.name} {i}", "failed partial");
+                if (result == {wlm_prefix}_RESULT_SUCCESS) {{
+                    break;
+                }}
+                reader.index = 0;
+                reader.length += result;
+                if(reader.length > sizeof(buffer)) {{
+                    check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "{e.name} {i}", "gave too much index back");
+                }}
+            }}
+
+            writer = {library_prefix}_create_writer(write_buffer, sizeof(write_buffer));
+            result = {function_version}_{e.name}_write(&writer{extra_argument});
+
+            check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "{e.name} {i}", "failed to write");
+        """)
+
 
         if container_uses_compression(e):
             s.write_block(f"""
                 reader2 = {library_prefix}_create_reader(write_buffer, sizeof(write_buffer));
 
                 result = {function_version}_{function_side}_opcode_read(&reader2, &opcode2);
-                check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "{e.name} {i}", "failed to read second");
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "{e.name} {i}", "failed to read second");
                 check_opcode(opcode2.opcode, {opcode_id}, __FILE__ ":" STRINGIFY(__LINE__), "{e.name} {i}");
 
                 writer2 = wwm_create_writer(write_buffer2, sizeof(write_buffer));
                 result = {function_version}_{function_side}_opcode_write(&writer2, &opcode2);
-                check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "{e.name} {i}", "failed to write second");
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "{e.name} {i}", "failed to write second");
 
-                wlm_test_compare_buffers(write_buffer, write_buffer2, writer.index, __FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i}");
+                world_test_compare_buffers(write_buffer, write_buffer2, writer.index, __FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i}", TEST_UTILS_SIDE_{function_side.upper()});
             """)
             if container_has_free(e, function_version):
                 s.wln(f"{function_version}_{function_side}_opcode_free(&opcode2);")
+        elif is_world(e.tags):
+            s.wln( f'world_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i}", TEST_UTILS_SIDE_{function_side.upper()});')
         else:
-            s.wln(
-                f'wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i}");')
+            s.wln( f'wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " {e.name} {i}");')
 
         if container_has_free(e, function_version):
             s.wln(f"{function_version}_{function_side}_opcode_free(&opcode);")
@@ -166,6 +191,7 @@ def print_individual_test(s: Writer, e: model.Container, test_case: model.TestCa
 
 
 def print_login_test_prefix(tests: Writer, m: model.IntermediateRepresentationSchema):
+    tests.wln("/* clang-format off */")
     if is_cpp():
         tests.wln("#include <utility>")
         tests.newline()
@@ -196,6 +222,8 @@ def print_world_tests(s: Writer, messages: typing.List[model.Container], v: mode
     module_name = world_version_to_module_name(v)
     pp = "pp" if is_cpp() else ""
     cpp = "_cpp" if is_cpp() else ""
+
+    s.wln("/* clang-format off */")
     s.wln(f"#include \"wow_world_messages{cpp}/{module_name}.h{pp}\"")
 
     write_includes(s)
@@ -266,12 +294,20 @@ public:
 
 def write_check_functions(s: Writer, world: bool):
     result_type = f"Wow{'World' if world else 'Login'}Result"
-    result_prefix = f"W{'W' if world else 'L'}M"
+    wlm_prefix = f"W{'W' if world else 'L'}M"
     if not is_cpp():
         s.write_block(f"""
+            static void check_complete(const {result_type} result, const char* location, const char* object, const char* reason) {{
+                if (result != {wlm_prefix}_RESULT_SUCCESS) {{
+                    printf("%s: %s %s %s\\n", location, object, reason, {wlm_prefix.lower()}_error_code_to_string(result));
+                    fflush(NULL);
+                    abort();
+                }}
+            }}
+
             static void check_result(const {result_type} result, const char* location, const char* object, const char* reason) {{
-                if (result != {result_prefix}_RESULT_SUCCESS) {{
-                    printf("%s: %s %s %s\\n", location, object, reason, {result_prefix.lower()}_error_code_to_string(result));
+                if (result < {wlm_prefix}_RESULT_SUCCESS) {{
+                    printf("%s: %s %s %s\\n", location, object, reason, {wlm_prefix.lower()}_error_code_to_string(result));
                     fflush(NULL);
                     abort();
                 }}

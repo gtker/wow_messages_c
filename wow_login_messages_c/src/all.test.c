@@ -1,3 +1,4 @@
+/* clang-format off */
 #include "wow_login_messages/all.h"
 #include "wow_login_messages/version2.h"
 #include "wow_login_messages/version3.h"
@@ -9,8 +10,16 @@
 
 #include <stdlib.h> /* abort() */
 
-static void check_result(const WowLoginResult result, const char* location, const char* object, const char* reason) {
+static void check_complete(const WowLoginResult result, const char* location, const char* object, const char* reason) {
     if (result != WLM_RESULT_SUCCESS) {
+        printf("%s: %s %s %s\n", location, object, reason, wlm_error_code_to_string(result));
+        fflush(NULL);
+        abort();
+    }
+}
+
+static void check_result(const WowLoginResult result, const char* location, const char* object, const char* reason) {
+    if (result < WLM_RESULT_SUCCESS) {
         printf("%s: %s %s %s\n", location, object, reason, wlm_error_code_to_string(result));
         fflush(NULL);
         abort();
@@ -42,12 +51,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = all_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Client 0", "failed to read");
+        all_client_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Client 0", "failed to read");
         check_opcode(opcode.opcode, CMD_AUTH_LOGON_CHALLENGE, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Client 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = all_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Client 0", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Client 0", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = all_CMD_AUTH_LOGON_CHALLENGE_Client_write(&writer, &opcode.body.CMD_AUTH_LOGON_CHALLENGE_Client);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Client 0", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Client 0", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Client 0");
         all_client_opcode_free(&opcode);
     }while (0);
@@ -61,12 +89,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = all_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Client 0", "failed to read");
+        all_client_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Client 0", "failed to read");
         check_opcode(opcode.opcode, CMD_AUTH_RECONNECT_CHALLENGE, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Client 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = all_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Client 0", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Client 0", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = all_CMD_AUTH_RECONNECT_CHALLENGE_Client_write(&writer, &opcode.body.CMD_AUTH_RECONNECT_CHALLENGE_Client);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Client 0", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Client 0", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Client 0");
         all_client_opcode_free(&opcode);
     }while (0);
@@ -79,12 +126,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = all_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Client 1", "failed to read");
+        all_client_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Client 1", "failed to read");
         check_opcode(opcode.opcode, CMD_AUTH_RECONNECT_CHALLENGE, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Client 1");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = all_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Client 1", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Client 1", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = all_CMD_AUTH_RECONNECT_CHALLENGE_Client_write(&writer, &opcode.body.CMD_AUTH_RECONNECT_CHALLENGE_Client);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Client 1", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Client 1", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Client 1");
         all_client_opcode_free(&opcode);
     }while (0);
@@ -98,12 +164,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version2_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 0", "failed to read");
+        version2_server_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 0", "failed to read");
         check_opcode(opcode.opcode, CMD_AUTH_LOGON_CHALLENGE, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version2_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 0", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 0", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version2_CMD_AUTH_LOGON_CHALLENGE_Server_write(&writer, &opcode.body.CMD_AUTH_LOGON_CHALLENGE_Server);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 0", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 0", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 0");
         version2_server_opcode_free(&opcode);
     }while (0);
@@ -117,12 +202,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version2_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 0", "failed to read");
+        version2_client_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 0", "failed to read");
         check_opcode(opcode.opcode, CMD_AUTH_LOGON_PROOF, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version2_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 0", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 0", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version2_CMD_AUTH_LOGON_PROOF_Client_write(&writer, &opcode.body.CMD_AUTH_LOGON_PROOF_Client);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 0", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 0", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 0");
         version2_client_opcode_free(&opcode);
     }while (0);
@@ -135,12 +239,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version2_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 1", "failed to read");
+        version2_client_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 1", "failed to read");
         check_opcode(opcode.opcode, CMD_AUTH_LOGON_PROOF, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 1");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version2_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 1", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 1", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version2_CMD_AUTH_LOGON_PROOF_Client_write(&writer, &opcode.body.CMD_AUTH_LOGON_PROOF_Client);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 1", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 1", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 1");
         version2_client_opcode_free(&opcode);
     }while (0);
@@ -153,12 +276,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version2_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 2", "failed to read");
+        version2_client_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 2", "failed to read");
         check_opcode(opcode.opcode, CMD_AUTH_LOGON_PROOF, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 2");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version2_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 2", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 2", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version2_CMD_AUTH_LOGON_PROOF_Client_write(&writer, &opcode.body.CMD_AUTH_LOGON_PROOF_Client);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 2", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 2", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 2");
         version2_client_opcode_free(&opcode);
     }while (0);
@@ -172,14 +314,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version2_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Server 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Server 0", "failed to read");
         check_opcode(opcode.opcode, CMD_AUTH_LOGON_PROOF, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Server 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version2_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Server 0", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Server 0", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version2_CMD_AUTH_LOGON_PROOF_Server_write(&writer, &opcode.body.CMD_AUTH_LOGON_PROOF_Server);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Server 0", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Server 0", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Server 0");
-        version2_server_opcode_free(&opcode);
     }while (0);
 
     /* CMD_AUTH_RECONNECT_CHALLENGE_Server */
@@ -191,14 +350,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version2_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Server 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Server 0", "failed to read");
         check_opcode(opcode.opcode, CMD_AUTH_RECONNECT_CHALLENGE, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Server 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version2_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Server 0", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Server 0", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version2_CMD_AUTH_RECONNECT_CHALLENGE_Server_write(&writer, &opcode.body.CMD_AUTH_RECONNECT_CHALLENGE_Server);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Server 0", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Server 0", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Server 0");
-        version2_server_opcode_free(&opcode);
     }while (0);
 
     do {
@@ -209,14 +385,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version2_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Server 1", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Server 1", "failed to read");
         check_opcode(opcode.opcode, CMD_AUTH_RECONNECT_CHALLENGE, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Server 1");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version2_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Server 1", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Server 1", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version2_CMD_AUTH_RECONNECT_CHALLENGE_Server_write(&writer, &opcode.body.CMD_AUTH_RECONNECT_CHALLENGE_Server);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Server 1", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Server 1", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Server 1");
-        version2_server_opcode_free(&opcode);
     }while (0);
 
     /* CMD_AUTH_RECONNECT_PROOF_Server */
@@ -228,12 +421,30 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version2_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 0", "failed to read");
         check_opcode(opcode.opcode, CMD_AUTH_RECONNECT_PROOF, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version2_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 0", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 0", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version2_CMD_AUTH_RECONNECT_PROOF_Server_write(&writer, &opcode.body.CMD_AUTH_RECONNECT_PROOF_Server);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 0", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 0", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 0");
     }while (0);
 
@@ -245,12 +456,30 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version2_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 1", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 1", "failed to read");
         check_opcode(opcode.opcode, CMD_AUTH_RECONNECT_PROOF, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 1");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version2_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 1", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 1", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version2_CMD_AUTH_RECONNECT_PROOF_Server_write(&writer, &opcode.body.CMD_AUTH_RECONNECT_PROOF_Server);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 1", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 1", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 1");
     }while (0);
 
@@ -262,12 +491,30 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version2_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 2", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 2", "failed to read");
         check_opcode(opcode.opcode, CMD_AUTH_RECONNECT_PROOF, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 2");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version2_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 2", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 2", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version2_CMD_AUTH_RECONNECT_PROOF_Server_write(&writer, &opcode.body.CMD_AUTH_RECONNECT_PROOF_Server);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 2", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 2", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 2");
     }while (0);
 
@@ -280,12 +527,30 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version2_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Client 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Client 0", "failed to read");
         check_opcode(opcode.opcode, CMD_AUTH_RECONNECT_PROOF, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Client 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version2_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Client 0", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Client 0", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version2_CMD_AUTH_RECONNECT_PROOF_Client_write(&writer, &opcode.body.CMD_AUTH_RECONNECT_PROOF_Client);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Client 0", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Client 0", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Client 0");
     }while (0);
 
@@ -298,12 +563,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version2_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 0", "failed to read");
+        version2_server_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 0", "failed to read");
         check_opcode(opcode.opcode, CMD_REALM_LIST, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version2_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 0", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 0", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version2_CMD_REALM_LIST_Server_write(&writer, &opcode.body.CMD_REALM_LIST_Server);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 0", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 0", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 0");
         version2_server_opcode_free(&opcode);
     }while (0);
@@ -316,12 +600,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version2_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 1", "failed to read");
+        version2_server_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 1", "failed to read");
         check_opcode(opcode.opcode, CMD_REALM_LIST, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 1");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version2_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 1", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 1", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version2_CMD_REALM_LIST_Server_write(&writer, &opcode.body.CMD_REALM_LIST_Server);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 1", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 1", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 1");
         version2_server_opcode_free(&opcode);
     }while (0);
@@ -335,12 +638,30 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version2_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Client 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Client 0", "failed to read");
         check_opcode(opcode.opcode, CMD_REALM_LIST, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Client 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version2_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Client 0", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Client 0", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version2_CMD_REALM_LIST_Client_write(&writer);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Client 0", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Client 0", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Client 0");
     }while (0);
 
@@ -353,12 +674,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version2_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_XFER_INITIATE 0", "failed to read");
+        version2_server_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_XFER_INITIATE 0", "failed to read");
         check_opcode(opcode.opcode, CMD_XFER_INITIATE, __FILE__ ":" STRINGIFY(__LINE__), "CMD_XFER_INITIATE 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version2_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_XFER_INITIATE 0", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_XFER_INITIATE 0", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version2_CMD_XFER_INITIATE_write(&writer, &opcode.body.CMD_XFER_INITIATE);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_XFER_INITIATE 0", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_XFER_INITIATE 0", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_XFER_INITIATE 0");
         version2_server_opcode_free(&opcode);
     }while (0);
@@ -372,12 +712,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version2_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_XFER_DATA 0", "failed to read");
+        version2_server_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_XFER_DATA 0", "failed to read");
         check_opcode(opcode.opcode, CMD_XFER_DATA, __FILE__ ":" STRINGIFY(__LINE__), "CMD_XFER_DATA 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version2_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_XFER_DATA 0", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_XFER_DATA 0", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version2_CMD_XFER_DATA_write(&writer, &opcode.body.CMD_XFER_DATA);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_XFER_DATA 0", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_XFER_DATA 0", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_XFER_DATA 0");
         version2_server_opcode_free(&opcode);
     }while (0);
@@ -391,12 +750,30 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version2_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_XFER_ACCEPT 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_XFER_ACCEPT 0", "failed to read");
         check_opcode(opcode.opcode, CMD_XFER_ACCEPT, __FILE__ ":" STRINGIFY(__LINE__), "CMD_XFER_ACCEPT 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version2_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_XFER_ACCEPT 0", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_XFER_ACCEPT 0", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version2_CMD_XFER_ACCEPT_write(&writer);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_XFER_ACCEPT 0", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_XFER_ACCEPT 0", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_XFER_ACCEPT 0");
     }while (0);
 
@@ -409,12 +786,30 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version2_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_XFER_RESUME 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_XFER_RESUME 0", "failed to read");
         check_opcode(opcode.opcode, CMD_XFER_RESUME, __FILE__ ":" STRINGIFY(__LINE__), "CMD_XFER_RESUME 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version2_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_XFER_RESUME 0", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_XFER_RESUME 0", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version2_CMD_XFER_RESUME_write(&writer, &opcode.body.CMD_XFER_RESUME);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_XFER_RESUME 0", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_XFER_RESUME 0", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_XFER_RESUME 0");
     }while (0);
 
@@ -427,12 +822,30 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version2_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_XFER_CANCEL 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_XFER_CANCEL 0", "failed to read");
         check_opcode(opcode.opcode, CMD_XFER_CANCEL, __FILE__ ":" STRINGIFY(__LINE__), "CMD_XFER_CANCEL 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version2_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_XFER_CANCEL 0", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_XFER_CANCEL 0", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version2_CMD_XFER_CANCEL_write(&writer);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_XFER_CANCEL 0", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_XFER_CANCEL 0", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_XFER_CANCEL 0");
     }while (0);
 
@@ -445,12 +858,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version3_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 0", "failed to read");
+        version3_server_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 0", "failed to read");
         check_opcode(opcode.opcode, CMD_AUTH_LOGON_CHALLENGE, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version3_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 0", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 0", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version3_CMD_AUTH_LOGON_CHALLENGE_Server_write(&writer, &opcode.body.CMD_AUTH_LOGON_CHALLENGE_Server);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 0", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 0", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 0");
         version3_server_opcode_free(&opcode);
     }while (0);
@@ -463,12 +895,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version3_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 1", "failed to read");
+        version3_server_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 1", "failed to read");
         check_opcode(opcode.opcode, CMD_AUTH_LOGON_CHALLENGE, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 1");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version3_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 1", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 1", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version3_CMD_AUTH_LOGON_CHALLENGE_Server_write(&writer, &opcode.body.CMD_AUTH_LOGON_CHALLENGE_Server);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 1", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 1", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 1");
         version3_server_opcode_free(&opcode);
     }while (0);
@@ -482,12 +933,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version3_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 0", "failed to read");
+        version3_client_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 0", "failed to read");
         check_opcode(opcode.opcode, CMD_AUTH_LOGON_PROOF, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version3_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 0", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 0", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version3_CMD_AUTH_LOGON_PROOF_Client_write(&writer, &opcode.body.CMD_AUTH_LOGON_PROOF_Client);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 0", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 0", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 0");
         version3_client_opcode_free(&opcode);
     }while (0);
@@ -500,12 +970,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version3_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 1", "failed to read");
+        version3_client_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 1", "failed to read");
         check_opcode(opcode.opcode, CMD_AUTH_LOGON_PROOF, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 1");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version3_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 1", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 1", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version3_CMD_AUTH_LOGON_PROOF_Client_write(&writer, &opcode.body.CMD_AUTH_LOGON_PROOF_Client);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 1", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 1", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 1");
         version3_client_opcode_free(&opcode);
     }while (0);
@@ -518,12 +1007,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version3_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 2", "failed to read");
+        version3_client_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 2", "failed to read");
         check_opcode(opcode.opcode, CMD_AUTH_LOGON_PROOF, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 2");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version3_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 2", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 2", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version3_CMD_AUTH_LOGON_PROOF_Client_write(&writer, &opcode.body.CMD_AUTH_LOGON_PROOF_Client);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 2", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 2", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 2");
         version3_client_opcode_free(&opcode);
     }while (0);
@@ -536,12 +1044,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version3_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 3", "failed to read");
+        version3_client_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 3", "failed to read");
         check_opcode(opcode.opcode, CMD_AUTH_LOGON_PROOF, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 3");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version3_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 3", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 3", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version3_CMD_AUTH_LOGON_PROOF_Client_write(&writer, &opcode.body.CMD_AUTH_LOGON_PROOF_Client);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 3", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 3", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 3");
         version3_client_opcode_free(&opcode);
     }while (0);
@@ -555,12 +1082,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version3_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_SURVEY_RESULT 0", "failed to read");
+        version3_client_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_SURVEY_RESULT 0", "failed to read");
         check_opcode(opcode.opcode, CMD_SURVEY_RESULT, __FILE__ ":" STRINGIFY(__LINE__), "CMD_SURVEY_RESULT 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version3_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_SURVEY_RESULT 0", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_SURVEY_RESULT 0", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version3_CMD_SURVEY_RESULT_write(&writer, &opcode.body.CMD_SURVEY_RESULT);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_SURVEY_RESULT 0", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_SURVEY_RESULT 0", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_SURVEY_RESULT 0");
         version3_client_opcode_free(&opcode);
     }while (0);
@@ -574,12 +1120,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version5_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 0", "failed to read");
+        version5_server_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 0", "failed to read");
         check_opcode(opcode.opcode, CMD_AUTH_LOGON_CHALLENGE, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version5_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 0", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 0", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version5_CMD_AUTH_LOGON_CHALLENGE_Server_write(&writer, &opcode.body.CMD_AUTH_LOGON_CHALLENGE_Server);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 0", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 0", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 0");
         version5_server_opcode_free(&opcode);
     }while (0);
@@ -593,12 +1158,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version5_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 0", "failed to read");
+        version5_client_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 0", "failed to read");
         check_opcode(opcode.opcode, CMD_AUTH_LOGON_PROOF, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version5_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 0", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 0", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version5_CMD_AUTH_LOGON_PROOF_Client_write(&writer, &opcode.body.CMD_AUTH_LOGON_PROOF_Client);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 0", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 0", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 0");
         version5_client_opcode_free(&opcode);
     }while (0);
@@ -612,14 +1196,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version5_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Server 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Server 0", "failed to read");
         check_opcode(opcode.opcode, CMD_AUTH_LOGON_PROOF, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Server 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version5_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Server 0", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Server 0", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version5_CMD_AUTH_LOGON_PROOF_Server_write(&writer, &opcode.body.CMD_AUTH_LOGON_PROOF_Server);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Server 0", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Server 0", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Server 0");
-        version5_server_opcode_free(&opcode);
     }while (0);
 
     /* CMD_AUTH_RECONNECT_PROOF_Server */
@@ -631,12 +1232,30 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version5_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 0", "failed to read");
         check_opcode(opcode.opcode, CMD_AUTH_RECONNECT_PROOF, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version5_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 0", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 0", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version5_CMD_AUTH_RECONNECT_PROOF_Server_write(&writer, &opcode.body.CMD_AUTH_RECONNECT_PROOF_Server);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 0", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 0", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 0");
     }while (0);
 
@@ -649,12 +1268,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version5_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 0", "failed to read");
+        version5_server_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 0", "failed to read");
         check_opcode(opcode.opcode, CMD_REALM_LIST, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version5_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 0", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 0", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version5_CMD_REALM_LIST_Server_write(&writer, &opcode.body.CMD_REALM_LIST_Server);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 0", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 0", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 0");
         version5_server_opcode_free(&opcode);
     }while (0);
@@ -668,12 +1306,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version6_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 0", "failed to read");
+        version6_server_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 0", "failed to read");
         check_opcode(opcode.opcode, CMD_REALM_LIST, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version6_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 0", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 0", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version6_CMD_REALM_LIST_Server_write(&writer, &opcode.body.CMD_REALM_LIST_Server);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 0", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 0", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 0");
         version6_server_opcode_free(&opcode);
     }while (0);
@@ -687,12 +1344,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version8_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 0", "failed to read");
+        version8_server_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 0", "failed to read");
         check_opcode(opcode.opcode, CMD_AUTH_LOGON_CHALLENGE, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version8_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 0", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 0", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version8_CMD_AUTH_LOGON_CHALLENGE_Server_write(&writer, &opcode.body.CMD_AUTH_LOGON_CHALLENGE_Server);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 0", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 0", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 0");
         version8_server_opcode_free(&opcode);
     }while (0);
@@ -705,12 +1381,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version8_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 1", "failed to read");
+        version8_server_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 1", "failed to read");
         check_opcode(opcode.opcode, CMD_AUTH_LOGON_CHALLENGE, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 1");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version8_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 1", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 1", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version8_CMD_AUTH_LOGON_CHALLENGE_Server_write(&writer, &opcode.body.CMD_AUTH_LOGON_CHALLENGE_Server);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 1", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 1", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 1");
         version8_server_opcode_free(&opcode);
     }while (0);
@@ -723,12 +1418,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version8_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 2", "failed to read");
+        version8_server_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 2", "failed to read");
         check_opcode(opcode.opcode, CMD_AUTH_LOGON_CHALLENGE, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 2");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version8_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 2", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 2", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version8_CMD_AUTH_LOGON_CHALLENGE_Server_write(&writer, &opcode.body.CMD_AUTH_LOGON_CHALLENGE_Server);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 2", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 2", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 2");
         version8_server_opcode_free(&opcode);
     }while (0);
@@ -741,12 +1455,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version8_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 3", "failed to read");
+        version8_server_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 3", "failed to read");
         check_opcode(opcode.opcode, CMD_AUTH_LOGON_CHALLENGE, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 3");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version8_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 3", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 3", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version8_CMD_AUTH_LOGON_CHALLENGE_Server_write(&writer, &opcode.body.CMD_AUTH_LOGON_CHALLENGE_Server);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 3", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 3", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 3");
         version8_server_opcode_free(&opcode);
     }while (0);
@@ -759,12 +1492,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version8_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 4", "failed to read");
+        version8_server_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 4", "failed to read");
         check_opcode(opcode.opcode, CMD_AUTH_LOGON_CHALLENGE, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 4");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version8_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 4", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 4", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version8_CMD_AUTH_LOGON_CHALLENGE_Server_write(&writer, &opcode.body.CMD_AUTH_LOGON_CHALLENGE_Server);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 4", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 4", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 4");
         version8_server_opcode_free(&opcode);
     }while (0);
@@ -777,12 +1529,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version8_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 5", "failed to read");
+        version8_server_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 5", "failed to read");
         check_opcode(opcode.opcode, CMD_AUTH_LOGON_CHALLENGE, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 5");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version8_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 5", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 5", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version8_CMD_AUTH_LOGON_CHALLENGE_Server_write(&writer, &opcode.body.CMD_AUTH_LOGON_CHALLENGE_Server);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 5", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 5", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 5");
         version8_server_opcode_free(&opcode);
     }while (0);
@@ -795,12 +1566,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version8_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 6", "failed to read");
+        version8_server_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 6", "failed to read");
         check_opcode(opcode.opcode, CMD_AUTH_LOGON_CHALLENGE, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 6");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version8_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 6", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 6", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version8_CMD_AUTH_LOGON_CHALLENGE_Server_write(&writer, &opcode.body.CMD_AUTH_LOGON_CHALLENGE_Server);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 6", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_CHALLENGE_Server 6", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_CHALLENGE_Server 6");
         version8_server_opcode_free(&opcode);
     }while (0);
@@ -814,12 +1604,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version8_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 0", "failed to read");
+        version8_client_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 0", "failed to read");
         check_opcode(opcode.opcode, CMD_AUTH_LOGON_PROOF, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version8_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 0", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 0", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version8_CMD_AUTH_LOGON_PROOF_Client_write(&writer, &opcode.body.CMD_AUTH_LOGON_PROOF_Client);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 0", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 0", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 0");
         version8_client_opcode_free(&opcode);
     }while (0);
@@ -832,12 +1641,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version8_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 1", "failed to read");
+        version8_client_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 1", "failed to read");
         check_opcode(opcode.opcode, CMD_AUTH_LOGON_PROOF, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 1");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version8_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 1", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 1", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version8_CMD_AUTH_LOGON_PROOF_Client_write(&writer, &opcode.body.CMD_AUTH_LOGON_PROOF_Client);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 1", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 1", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 1");
         version8_client_opcode_free(&opcode);
     }while (0);
@@ -850,12 +1678,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version8_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 2", "failed to read");
+        version8_client_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 2", "failed to read");
         check_opcode(opcode.opcode, CMD_AUTH_LOGON_PROOF, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 2");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version8_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 2", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 2", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version8_CMD_AUTH_LOGON_PROOF_Client_write(&writer, &opcode.body.CMD_AUTH_LOGON_PROOF_Client);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 2", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 2", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 2");
         version8_client_opcode_free(&opcode);
     }while (0);
@@ -868,12 +1715,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version8_client_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 3", "failed to read");
+        version8_client_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 3", "failed to read");
         check_opcode(opcode.opcode, CMD_AUTH_LOGON_PROOF, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 3");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version8_client_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 3", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 3", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version8_CMD_AUTH_LOGON_PROOF_Client_write(&writer, &opcode.body.CMD_AUTH_LOGON_PROOF_Client);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 3", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Client 3", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Client 3");
         version8_client_opcode_free(&opcode);
     }while (0);
@@ -887,14 +1753,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version8_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Server 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Server 0", "failed to read");
         check_opcode(opcode.opcode, CMD_AUTH_LOGON_PROOF, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Server 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version8_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Server 0", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Server 0", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version8_CMD_AUTH_LOGON_PROOF_Server_write(&writer, &opcode.body.CMD_AUTH_LOGON_PROOF_Server);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Server 0", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Server 0", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Server 0");
-        version8_server_opcode_free(&opcode);
     }while (0);
 
     do {
@@ -905,14 +1788,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version8_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Server 1", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Server 1", "failed to read");
         check_opcode(opcode.opcode, CMD_AUTH_LOGON_PROOF, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Server 1");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version8_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Server 1", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Server 1", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version8_CMD_AUTH_LOGON_PROOF_Server_write(&writer, &opcode.body.CMD_AUTH_LOGON_PROOF_Server);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Server 1", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_LOGON_PROOF_Server 1", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_LOGON_PROOF_Server 1");
-        version8_server_opcode_free(&opcode);
     }while (0);
 
     /* CMD_AUTH_RECONNECT_CHALLENGE_Server */
@@ -924,14 +1824,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version8_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Server 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Server 0", "failed to read");
         check_opcode(opcode.opcode, CMD_AUTH_RECONNECT_CHALLENGE, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Server 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version8_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Server 0", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Server 0", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version8_CMD_AUTH_RECONNECT_CHALLENGE_Server_write(&writer, &opcode.body.CMD_AUTH_RECONNECT_CHALLENGE_Server);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Server 0", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Server 0", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Server 0");
-        version8_server_opcode_free(&opcode);
     }while (0);
 
     do {
@@ -942,14 +1859,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version8_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Server 1", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Server 1", "failed to read");
         check_opcode(opcode.opcode, CMD_AUTH_RECONNECT_CHALLENGE, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Server 1");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version8_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Server 1", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Server 1", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version8_CMD_AUTH_RECONNECT_CHALLENGE_Server_write(&writer, &opcode.body.CMD_AUTH_RECONNECT_CHALLENGE_Server);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Server 1", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_CHALLENGE_Server 1", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_CHALLENGE_Server 1");
-        version8_server_opcode_free(&opcode);
     }while (0);
 
     /* CMD_AUTH_RECONNECT_PROOF_Server */
@@ -961,12 +1895,30 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version8_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 0", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 0", "failed to read");
         check_opcode(opcode.opcode, CMD_AUTH_RECONNECT_PROOF, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version8_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 0", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 0", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version8_CMD_AUTH_RECONNECT_PROOF_Server_write(&writer, &opcode.body.CMD_AUTH_RECONNECT_PROOF_Server);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 0", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 0", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 0");
     }while (0);
 
@@ -978,12 +1930,30 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version8_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 1", "failed to read");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 1", "failed to read");
         check_opcode(opcode.opcode, CMD_AUTH_RECONNECT_PROOF, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 1");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version8_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 1", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 1", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version8_CMD_AUTH_RECONNECT_PROOF_Server_write(&writer, &opcode.body.CMD_AUTH_RECONNECT_PROOF_Server);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 1", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_AUTH_RECONNECT_PROOF_Server 1", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_AUTH_RECONNECT_PROOF_Server 1");
     }while (0);
 
@@ -996,12 +1966,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version8_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 0", "failed to read");
+        version8_server_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 0", "failed to read");
         check_opcode(opcode.opcode, CMD_REALM_LIST, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 0");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version8_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 0", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 0", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version8_CMD_REALM_LIST_Server_write(&writer, &opcode.body.CMD_REALM_LIST_Server);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 0", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 0", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 0");
         version8_server_opcode_free(&opcode);
     }while (0);
@@ -1014,12 +2003,31 @@ int main(void) {
         reader = wlm_create_reader(buffer, sizeof(buffer));
         result = version8_server_opcode_read(&reader, &opcode);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 1", "failed to read");
+        version8_server_opcode_free(&opcode);
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 1", "failed to read");
         check_opcode(opcode.opcode, CMD_REALM_LIST, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 1");
+
+        reader.index = 0;
+        reader.length = 1;
+
+        while (true) {
+            result = version8_server_opcode_read(&reader, &opcode);
+            check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 1", "failed partial");
+            if (result == WLM_RESULT_SUCCESS) {
+                break;
+            }
+            reader.index = 0;
+            reader.length += result;
+            if(reader.length > sizeof(buffer)) {
+                check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 1", "gave too much index back");
+            }
+        }
+
         writer = wlm_create_writer(write_buffer, sizeof(write_buffer));
         result = version8_CMD_REALM_LIST_Server_write(&writer, &opcode.body.CMD_REALM_LIST_Server);
 
-        check_result(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 1", "failed to write");
+        check_complete(result, __FILE__ ":" STRINGIFY(__LINE__), "CMD_REALM_LIST_Server 1", "failed to write");
+
         wlm_test_compare_buffers(buffer, write_buffer, sizeof(buffer), __FILE__ ":" STRINGIFY(__LINE__) " CMD_REALM_LIST_Server 1");
         version8_server_opcode_free(&opcode);
     }while (0);

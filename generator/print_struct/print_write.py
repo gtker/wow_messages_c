@@ -242,7 +242,8 @@ def print_write_struct_member(s: Writer, d: model.Definition, module_name: str, 
 
                     s.wln(f"{d.name}_uncompressed_data = malloc(_size);")
                     s.open_curly(f"if ({d.name}_uncompressed_data == NULL)")
-                    s.wln("return WWM_RESULT_MALLOC_FAIL;")
+                    s.wln("_return_value = WWM_RESULT_MALLOC_FAIL;")
+                    s.wln("goto cleanup;")
                     s.closing_curly()
                     s.wln(f"new_writer = wwm_create_writer({d.name}_uncompressed_data, _size);")
                     s.wln("writer = &new_writer;")
@@ -430,6 +431,8 @@ def print_write(s: Writer, h: Writer, container: Container, object_type: model.O
 
 
     else:
+        wlm_prefix = "WWM" if is_world(container.tags) else "WLM"
+
         if container.tags.compressed:
             s.write_block(f"""
                 WowWorldWriter* old_writer = writer;
@@ -438,6 +441,17 @@ def print_write(s: Writer, h: Writer, container: Container, object_type: model.O
                 size_t _compressed_data_length;
                 size_t saved_writer_index;
                 const uint32_t _decompressed_data_length = (uint32_t){module_name}_{container.name}_size(object);
+            """)
+            s.newline()
+
+        s.wln("int _return_value = 1;")
+        s.newline()
+
+        if type(container.object_type) is not model.ObjectTypeStruct:
+            s.write_block(f"""
+                if (writer->index > writer->length) {{
+                    return {wlm_prefix}_RESULT_INVALID_PARAMETERS;
+                }}
             """)
             s.newline()
 
@@ -485,7 +499,8 @@ def print_write(s: Writer, h: Writer, container: Container, object_type: model.O
                 
                 _decompressed_data = malloc(_decompressed_data_length);
                 if (_decompressed_data == NULL) {{
-                    return WWM_RESULT_MALLOC_FAIL;
+                    _return_value = WWM_RESULT_MALLOC_FAIL;
+                    goto cleanup;
                 }}
                 stack_writer = wwm_create_writer(_decompressed_data, _decompressed_data_length);
             """)
@@ -535,6 +550,9 @@ def print_write(s: Writer, h: Writer, container: Container, object_type: model.O
             s.wln("return WWM_RESULT_SUCCESS;")
         else:
             s.wln("return WLM_RESULT_SUCCESS;")
+
+    if not is_cpp():
+        s.wln_no_indent("cleanup: return _return_value;")
 
     s.closing_curly()
     s.newline()

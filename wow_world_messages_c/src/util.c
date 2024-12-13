@@ -5,6 +5,18 @@
 
 #include "puff.c"
 
+#define WWM_CHECK_LENGTH(type_size)                                      \
+    stream->index;                                                       \
+    do                                                                   \
+    {                                                                    \
+        if (stream->index + (size_t)(type_size) > stream->length)        \
+        {                                                                \
+            return stream->index + (size_t)(type_size) - stream->length; \
+        }                                                                \
+        stream->index += (size_t)(type_size);                            \
+    }                                                                    \
+    while (0)
+
 WowWorldResult wwm_read_u8(WowWorldReader* stream, uint8_t* value)
 {
     const size_t index = WWM_CHECK_LENGTH(1);
@@ -227,9 +239,21 @@ WowWorldResult wwm_write_cstring(WowWorldWriter* stream, const char* string)
 WowWorldResult wwm_read_sized_cstring(WowWorldReader* stream, char** string)
 {
     size_t index;
-    uint32_t length;
+    uint32_t length = 0;
+    int _return_value;
 
     WWM_CHECK_RETURN_CODE(wwm_read_u32(stream, &length));
+
+    if (length == 0)
+    {
+        *string = malloc(1);
+        if (*string == NULL)
+        {
+            return WWM_RESULT_MALLOC_FAIL;
+        }
+        (*string)[0] = '\0';
+        return WWM_RESULT_SUCCESS;
+    }
 
     index = WWM_CHECK_LENGTH(length);
 
@@ -242,12 +266,17 @@ WowWorldResult wwm_read_sized_cstring(WowWorldReader* stream, char** string)
     memcpy(*string, &stream->source[index], length);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WowWorldResult wwm_write_sized_cstring(WowWorldWriter* stream, const char* string)
 {
     size_t index;
-    const uint32_t length = (uint32_t)strlen(string);
+    int _return_value;
+    uint32_t length;
+
+    length = (uint32_t)strlen(string);
 
     WWM_CHECK_RETURN_CODE(wwm_write_u32(stream, length + 1));
 
@@ -256,6 +285,8 @@ WowWorldResult wwm_write_sized_cstring(WowWorldWriter* stream, const char* strin
     memcpy(&stream->destination[index], string, length + 1);
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WowWorldResult wwm_read_float(WowWorldReader* stream, float* value)
@@ -278,42 +309,54 @@ WowWorldResult wwm_write_float(WowWorldWriter* stream, const float value)
 
 WowWorldResult wwm_read_bool8(WowWorldReader* stream, bool* value)
 {
-    uint8_t v;
+    uint8_t v = 0;
+    int _return_value;
 
     WWM_CHECK_RETURN_CODE(wwm_read_u8(stream, &v));
 
     *value = v == 1 ? true : false;
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WowWorldResult wwm_write_bool8(WowWorldWriter* stream, const bool value)
 {
     const uint8_t v = value ? 1 : 0;
+    int _return_value;
 
     WWM_CHECK_RETURN_CODE(wwm_write_u8(stream, v));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WowWorldResult wwm_read_bool32(WowWorldReader* stream, bool* value)
 {
-    uint32_t v;
+    uint32_t v = 0;
+    int _return_value;
 
     WWM_CHECK_RETURN_CODE(wwm_read_u32(stream, &v));
 
     *value = v == 1 ? true : false;
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WowWorldResult wwm_write_bool32(WowWorldWriter* stream, const bool value)
 {
     const uint32_t v = value ? 1 : 0;
+    int _return_value;
 
     WWM_CHECK_RETURN_CODE(wwm_write_u32(stream, v));
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 void wwm_free_string(char** string)
@@ -414,6 +457,7 @@ WowWorldResult all_Vector3d_write(WowWorldWriter* writer, const all_Vector3d* ob
 WowWorldResult wwm_read_monster_move_spline(WowWorldReader* stream, MonsterMoveSpline* value)
 {
     uint32_t i;
+    int _return_value;
     WWM_CHECK_RETURN_CODE(wwm_read_u32(stream, &value->amount_of_splines));
 
     if (value->amount_of_splines == 0)
@@ -432,17 +476,20 @@ WowWorldResult wwm_read_monster_move_spline(WowWorldReader* stream, MonsterMoveS
 
     for (i = 1; i < value->amount_of_splines; ++i)
     {
-        uint32_t packed;
+        uint32_t packed = 0;
         WWM_CHECK_RETURN_CODE(wwm_read_u32(stream, &packed));
         from_packed(packed, &value->splines[i]);
     }
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WowWorldResult wwm_write_monster_move_spline(WowWorldWriter* stream, const MonsterMoveSpline* value)
 {
     uint32_t i;
+    int _return_value;
 
     WWM_CHECK_RETURN_CODE(wwm_write_u32(stream, value->amount_of_splines));
 
@@ -460,6 +507,8 @@ WowWorldResult wwm_write_monster_move_spline(WowWorldWriter* stream, const Monst
     }
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 size_t wwm_monster_move_spline_size(const MonsterMoveSpline* value)
@@ -482,6 +531,7 @@ void wwm_monster_move_spline_free(const MonsterMoveSpline* value)
 
 WowWorldResult wwm_read_named_guid(WowWorldReader* stream, NamedGuid* value)
 {
+    int _return_value;
     WWM_CHECK_RETURN_CODE(wwm_read_u64(stream, &value->guid));
 
     if (value->guid != 0)
@@ -490,10 +540,13 @@ WowWorldResult wwm_read_named_guid(WowWorldReader* stream, NamedGuid* value)
     }
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WowWorldResult wwm_write_named_guid(WowWorldWriter* stream, const NamedGuid* value)
 {
+    int _return_value;
     WWM_CHECK_RETURN_CODE(wwm_write_u64(stream, value->guid));
 
     if (value->guid != 0)
@@ -502,6 +555,8 @@ WowWorldResult wwm_write_named_guid(WowWorldWriter* stream, const NamedGuid* val
     }
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 size_t wwm_named_guid_size(const NamedGuid* value)
@@ -526,6 +581,7 @@ void wwm_named_guid_free(NamedGuid* value)
 
 WowWorldResult wwm_read_variable_item_random_property(WowWorldReader* reader, VariableItemRandomProperty* value)
 {
+    int _return_value;
     READ_U32(value->item_random_property_id);
 
     if (value->item_random_property_id != 0)
@@ -534,10 +590,13 @@ WowWorldResult wwm_read_variable_item_random_property(WowWorldReader* reader, Va
     }
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 WowWorldResult wwm_write_variable_item_random_property(WowWorldWriter* writer, const VariableItemRandomProperty* value)
 {
+    int _return_value;
     WRITE_U32(value->item_random_property_id);
 
     if (value->item_random_property_id != 0)
@@ -546,6 +605,8 @@ WowWorldResult wwm_write_variable_item_random_property(WowWorldWriter* writer, c
     }
 
     return WWM_RESULT_SUCCESS;
+cleanup:
+    return _return_value;
 }
 
 size_t wwm_variable_item_random_property_size(const VariableItemRandomProperty* value)
@@ -577,6 +638,8 @@ WOW_WORLD_MESSAGES_C_EXPORT const char* wwm_error_code_to_string(const WowWorldR
     {
         case WWM_RESULT_SUCCESS:
             return "Success";
+        case WWM_RESULT_INVALID_PARAMETERS:
+            return "Invalid parameters";
         case WWM_RESULT_NOT_ENOUGH_BYTES:
             return "Not enough bytes";
         case WWM_RESULT_COMPRESSION_ERROR:
@@ -597,13 +660,13 @@ void wwm_update_mask_set_u32(uint32_t* headers, uint32_t* values, const uint32_t
     values[offset] = value;
 }
 
-uint32_t wwm_update_mask_get_u32(const uint32_t* headers,
-                                 const uint32_t* values, const uint32_t offset)
+uint32_t wwm_update_mask_get_u32(const uint32_t* headers, const uint32_t* values, const uint32_t offset)
 {
     const uint32_t block = offset / 32;
     const uint32_t bit = offset % 32;
 
-    if((headers[block] & 1 << bit) != 0) {
+    if ((headers[block] & 1 << bit) != 0)
+    {
         return values[offset];
     }
 
@@ -642,7 +705,9 @@ float wwm_update_mask_get_float(const uint32_t* headers, const uint32_t* values,
     return val;
 }
 
-void wwm_update_mask_set_two_shorts(uint32_t* headers, uint32_t* values, const uint32_t offset,
+void wwm_update_mask_set_two_shorts(uint32_t* headers,
+                                    uint32_t* values,
+                                    const uint32_t offset,
                                     const WowTwoShorts value)
 {
     const uint32_t val = value.lower | ((uint32_t)value.upper << 16);
@@ -693,6 +758,12 @@ static uint32_t wwm_adler32(const unsigned char* data, const size_t len)
     return (b << 16) | a;
 }
 
+size_t wwm_compress_data_size(const unsigned char* src, const size_t src_length)
+{
+    (void)src;
+    return src_length + WWM_COMPRESS_EXTRA_LENGTH;
+}
+
 size_t wwm_compress_data(const unsigned char* src, const size_t src_length, unsigned char* dst, const size_t dst_length)
 {
     size_t index = 0;
@@ -739,7 +810,10 @@ size_t wwm_compress_data(const unsigned char* src, const size_t src_length, unsi
     return index;
 }
 
-size_t wwm_decompress_data(const unsigned char* src, const size_t src_length, unsigned char* dst, const size_t dst_length)
+size_t wwm_decompress_data(const unsigned char* src,
+                           const size_t src_length,
+                           unsigned char* dst,
+                           const size_t dst_length)
 {
     unsigned long source_length = (unsigned long)(src_length - 2);
     unsigned long destination_length = (unsigned long)dst_length;
@@ -753,3 +827,5 @@ size_t wwm_decompress_data(const unsigned char* src, const size_t src_length, un
 
     return destination_length;
 }
+
+#undef WWM_CHECK_LENGTH

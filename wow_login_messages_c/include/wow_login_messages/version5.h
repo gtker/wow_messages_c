@@ -78,8 +78,8 @@ typedef struct {
     uint64_t seed;
 
 } version5_CMD_AUTH_LOGON_CHALLENGE_Server;
-WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version5_CMD_AUTH_LOGON_CHALLENGE_Server_write(WowLoginWriter* writer, const version5_CMD_AUTH_LOGON_CHALLENGE_Server* object);
 WOW_LOGIN_MESSAGES_C_EXPORT void version5_CMD_AUTH_LOGON_CHALLENGE_Server_free(version5_CMD_AUTH_LOGON_CHALLENGE_Server* object);
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version5_CMD_AUTH_LOGON_CHALLENGE_Server_write(WowLoginWriter* writer, const version5_CMD_AUTH_LOGON_CHALLENGE_Server* object);
 
 typedef all_CMD_AUTH_LOGON_CHALLENGE_Client version5_CMD_AUTH_LOGON_CHALLENGE_Client;
 
@@ -98,8 +98,8 @@ Implementation details at `https://gist.github.com/barncastle/979c12a9c5e64d810a
     uint8_t matrix_card_proof[20];
 
 } version5_CMD_AUTH_LOGON_PROOF_Client;
-WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version5_CMD_AUTH_LOGON_PROOF_Client_write(WowLoginWriter* writer, const version5_CMD_AUTH_LOGON_PROOF_Client* object);
 WOW_LOGIN_MESSAGES_C_EXPORT void version5_CMD_AUTH_LOGON_PROOF_Client_free(version5_CMD_AUTH_LOGON_PROOF_Client* object);
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version5_CMD_AUTH_LOGON_PROOF_Client_write(WowLoginWriter* writer, const version5_CMD_AUTH_LOGON_PROOF_Client* object);
 
 /* Reply to [CMD_AUTH_LOGON_PROOF_Client]. */
 typedef struct {
@@ -110,7 +110,6 @@ typedef struct {
 
 } version5_CMD_AUTH_LOGON_PROOF_Server;
 WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version5_CMD_AUTH_LOGON_PROOF_Server_write(WowLoginWriter* writer, const version5_CMD_AUTH_LOGON_PROOF_Server* object);
-WOW_LOGIN_MESSAGES_C_EXPORT void version5_CMD_AUTH_LOGON_PROOF_Server_free(version5_CMD_AUTH_LOGON_PROOF_Server* object);
 
 typedef version2_CMD_AUTH_RECONNECT_CHALLENGE_Server version5_CMD_AUTH_RECONNECT_CHALLENGE_Server;
 
@@ -132,8 +131,8 @@ typedef struct {
     version5_Realm* realms;
 
 } version5_CMD_REALM_LIST_Server;
-WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version5_CMD_REALM_LIST_Server_write(WowLoginWriter* writer, const version5_CMD_REALM_LIST_Server* object);
 WOW_LOGIN_MESSAGES_C_EXPORT void version5_CMD_REALM_LIST_Server_free(version5_CMD_REALM_LIST_Server* object);
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version5_CMD_REALM_LIST_Server_write(WowLoginWriter* writer, const version5_CMD_REALM_LIST_Server* object);
 
 typedef version2_CMD_XFER_INITIATE version5_CMD_XFER_INITIATE;
 

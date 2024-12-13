@@ -115,8 +115,8 @@ typedef struct {
     uint8_t required;
 
 } version8_CMD_AUTH_LOGON_CHALLENGE_Server;
-WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version8_CMD_AUTH_LOGON_CHALLENGE_Server_write(WowLoginWriter* writer, const version8_CMD_AUTH_LOGON_CHALLENGE_Server* object);
 WOW_LOGIN_MESSAGES_C_EXPORT void version8_CMD_AUTH_LOGON_CHALLENGE_Server_free(version8_CMD_AUTH_LOGON_CHALLENGE_Server* object);
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version8_CMD_AUTH_LOGON_CHALLENGE_Server_write(WowLoginWriter* writer, const version8_CMD_AUTH_LOGON_CHALLENGE_Server* object);
 
 typedef all_CMD_AUTH_LOGON_CHALLENGE_Client version8_CMD_AUTH_LOGON_CHALLENGE_Client;
 
@@ -139,8 +139,8 @@ Is not used by the client in any way but just sent directly, so this could in th
     char* authenticator;
 
 } version8_CMD_AUTH_LOGON_PROOF_Client;
-WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version8_CMD_AUTH_LOGON_PROOF_Client_write(WowLoginWriter* writer, const version8_CMD_AUTH_LOGON_PROOF_Client* object);
 WOW_LOGIN_MESSAGES_C_EXPORT void version8_CMD_AUTH_LOGON_PROOF_Client_free(version8_CMD_AUTH_LOGON_PROOF_Client* object);
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version8_CMD_AUTH_LOGON_PROOF_Client_write(WowLoginWriter* writer, const version8_CMD_AUTH_LOGON_PROOF_Client* object);
 
 typedef struct {
     version8_LoginResult result;
@@ -151,7 +151,6 @@ typedef struct {
 
 } version8_CMD_AUTH_LOGON_PROOF_Server;
 WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version8_CMD_AUTH_LOGON_PROOF_Server_write(WowLoginWriter* writer, const version8_CMD_AUTH_LOGON_PROOF_Server* object);
-WOW_LOGIN_MESSAGES_C_EXPORT void version8_CMD_AUTH_LOGON_PROOF_Server_free(version8_CMD_AUTH_LOGON_PROOF_Server* object);
 
 /* Reply to [CMD_AUTH_RECONNECT_CHALLENGE_Client]. */
 typedef struct {
@@ -161,7 +160,6 @@ typedef struct {
 
 } version8_CMD_AUTH_RECONNECT_CHALLENGE_Server;
 WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version8_CMD_AUTH_RECONNECT_CHALLENGE_Server_write(WowLoginWriter* writer, const version8_CMD_AUTH_RECONNECT_CHALLENGE_Server* object);
-WOW_LOGIN_MESSAGES_C_EXPORT void version8_CMD_AUTH_RECONNECT_CHALLENGE_Server_free(version8_CMD_AUTH_RECONNECT_CHALLENGE_Server* object);
 
 typedef all_CMD_AUTH_RECONNECT_CHALLENGE_Client version8_CMD_AUTH_RECONNECT_CHALLENGE_Client;
 
@@ -181,8 +179,8 @@ typedef struct {
     version8_Realm* realms;
 
 } version8_CMD_REALM_LIST_Server;
-WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version8_CMD_REALM_LIST_Server_write(WowLoginWriter* writer, const version8_CMD_REALM_LIST_Server* object);
 WOW_LOGIN_MESSAGES_C_EXPORT void version8_CMD_REALM_LIST_Server_free(version8_CMD_REALM_LIST_Server* object);
+WOW_LOGIN_MESSAGES_C_EXPORT WowLoginResult version8_CMD_REALM_LIST_Server_write(WowLoginWriter* writer, const version8_CMD_REALM_LIST_Server* object);
 
 typedef version2_CMD_XFER_INITIATE version8_CMD_XFER_INITIATE;
 

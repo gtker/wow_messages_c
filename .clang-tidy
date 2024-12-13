@@ -1,5 +1,5 @@
 ---
-Checks: 'clang-diagnostic-*,clang-analyzer-*,performance-*,-clang-analyzer-optin.core.EnumCastOutOfRange,-clang-analyzer-unix.Malloc,-clang-diagnostic-unused-function,-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling,-clang-analyzer-deadcode.DeadStores,-performance-move-const-arg'
+Checks: 'clang-diagnostic-*,clang-analyzer-*,performance-*,-clang-analyzer-optin.core.EnumCastOutOfRange,-clang-analyzer-deadcode.DeadStores,-performance-move-const-arg'
 WarningsAsErrors: '*'
 HeaderFilterRegex: ''
 CheckOptions:

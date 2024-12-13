@@ -296,6 +296,7 @@ typedef struct {{
 
     s.write_block(f"""
 static WowWorldResult {module_name}_update_mask_write(WowWorldWriter* stream, const {module_name}_UpdateMask* mask) {{
+    int _return_value = 1;
     uint8_t i;
     uint8_t j;
     uint8_t amount_of_headers = 0;
@@ -323,9 +324,11 @@ static WowWorldResult {module_name}_update_mask_write(WowWorldWriter* stream, co
     }}
 
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }}
 
 static WowWorldResult {module_name}_update_mask_read(WowWorldReader* stream, {module_name}_UpdateMask* mask) {{
+    int _return_value = 1;
     uint8_t i;
     uint8_t j;
     
@@ -350,6 +353,7 @@ static WowWorldResult {module_name}_update_mask_read(WowWorldReader* stream, {mo
     }}
     
     return WWM_RESULT_SUCCESS;
+cleanup: return _return_value;
 }}
 
 static size_t {module_name}_update_mask_size(const {module_name}_UpdateMask* mask) {{

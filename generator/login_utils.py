@@ -440,17 +440,26 @@ def write_opcode_write(s: Writer, h: Writer, messages: list[model.Container], v:
 
     export = get_export_define(messages[0].tags)
     result_type = get_type_prefix(messages[0].tags)
+    world = is_world(messages[0].tags)
     function_declaration = f"{export} {result_type}Result {module_name}_{side}_opcode_write({result_type}Writer* writer, const {module_name_pascal}{side.capitalize()}OpcodeContainer* opcodes)"
+    wlm_prefix = "WWM" if world else "WLM"
 
     h.wln(f"{function_declaration};")
     h.newline()
 
     s.open_curly(function_declaration)
+    s.wln("int _return_value = 1;")
+
+    s.write_block(f"""
+        if (writer->index > writer->length) {{
+            return {wlm_prefix}_RESULT_INVALID_PARAMETERS;
+        }}
+    """)
+    s.newline()
 
     s.open_curly("switch (opcodes->opcode)")
-    prefix = f"{module_name[0].upper()}_" if is_world(messages[0].tags) else ""
+    prefix = f"{module_name[0].upper()}_" if world else ""
 
-    wlm_prefix = "WWM" if is_world(messages[0].tags) else "WLM"
     for e in messages:
         if not version_matches(e.tags, v) \
                 or side_matches(e, side) == INVALID_OPCODE \
@@ -478,6 +487,9 @@ def write_opcode_write(s: Writer, h: Writer, messages: list[model.Container], v:
     s.closing_curly()  # switch
     s.newline()
     s.wln(f"return {wlm_prefix}_RESULT_SUCCESS;")
+
+    s.wln_no_indent("cleanup: return _return_value;")
+
     s.closing_curly()  # function decl
     s.newline()
 
@@ -490,23 +502,34 @@ def write_opcode_read(s: Writer, h: Writer, messages: list[model.Container], v: 
     size_field_size = 2 if side == "server" else 4
 
     if not is_cpp():
+        wlm_prefix = "WWM" if world else "WLM"
+
         function_declaration = f"{export} {result_type}Result {module_name}_{side}_opcode_read({result_type}Reader* reader, {module_name_pascal}{side_pascal}OpcodeContainer* opcodes)"
 
         h.wln(f"{function_declaration};")
         h.newline()
 
         s.open_curly(function_declaration)
+        s.wln("int _return_value = 1;")
 
-        if is_world(messages[0].tags):
+        if world:
+            s.wln("uint16_t _size;")
+
+        s.write_block(f"""
+            if (reader->index > reader->length) {{
+                return {wlm_prefix}_RESULT_INVALID_PARAMETERS;
+            }}
+        """)
+        s.newline()
+
+        if world:
             if side == "server":
-                s.wln("uint16_t _size;")
                 s.wln("READ_U16_BE(_size);")
                 s.newline()
 
                 s.wln("opcodes->opcode = 0;")
                 s.wln("READ_U16(opcodes->opcode);")
             else:
-                s.wln("uint16_t _size;")
                 s.wln("READ_U16_BE(_size);")
                 s.newline()
 
@@ -556,6 +579,8 @@ def write_opcode_read(s: Writer, h: Writer, messages: list[model.Container], v: 
         else:
             s.wln("return WLM_RESULT_SUCCESS;")
 
+        s.wln_no_indent("cleanup: return _return_value;")
+
         s.closing_curly()  # function_declaration
         s.newline()
 
@@ -578,7 +603,7 @@ def write_opcode_free(s: Writer, h: Writer, messages: list[model.Container], v: 
                 or (first_version_as_module(e.tags) == "all" and version_to_module_name(v) != "all"):
             continue
 
-        if not print_struct.container_has_free(e, module_name):
+        if not print_struct.print_free.container_has_free(e, module_name):
             continue
 
         s.wln(f"case {prefix}{e.name.replace('_Client', '').replace('_Server', '')}:")

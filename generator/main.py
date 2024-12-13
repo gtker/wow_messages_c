@@ -95,7 +95,7 @@ def sanitize_model(
         m: model.IntermediateRepresentationSchema,
 ) -> model.IntermediateRepresentationSchema:
     def containers(container: model.Container) -> model.Container:
-        for d in all_members_from_container(e):
+        for d, _ in all_members_from_container(e):
             if d.name == "class":
                 d.name = "class_type"
             if d.name == "float":

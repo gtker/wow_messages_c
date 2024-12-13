@@ -26,7 +26,7 @@ def container_uses_compression(container: model.Container) -> bool:
     return False
 
 def container_has_compressed_array(container: model.Container) -> bool:
-    for d in all_members_from_container(container):
+    for d, _ in all_members_from_container(container):
         match d.data_type:
             case model.DataTypeArray(compressed=compressed):
                 if compressed:
@@ -103,7 +103,7 @@ def integer_type_to_size(ty: model.IntegerType) -> int:
 
 
 def container_has_c_members(e: model.Container) -> bool:
-    for m in all_members_from_container(e):
+    for m, _ in all_members_from_container(e):
         if m.constant_value is None and m.used_as_size_in is None:
             return True
 
@@ -223,22 +223,22 @@ def array_type_to_c_str(ty: model.ArrayType, module_name: str):
 
 def all_members_from_container(
         container: model.Container,
-) -> typing.List[model.Definition]:
-    out_members: typing.List[model.Definition] = []
+) -> typing.List[typing.Tuple[model.Definition, str]]:
+    out_members: typing.List[typing.Tuple[model.Definition, str]] = []
 
-    def inner(m: model.StructMember, out_members: typing.List[model.Definition]):
+    def inner(m: model.StructMember, out_members: typing.List[typing.Tuple[model.Definition, str]], extra: str):
         def inner_if(
-                statement: model.IfStatement, out_members: typing.List[model.Definition]
+                statement: model.IfStatement, out_members: typing.List[typing.Tuple[model.Definition, str]]
         ):
             for member in statement.members:
-                inner(member, out_members)
+                inner(member, out_members, extra)
 
             for elseif in statement.else_if_statements:
                 inner_if(elseif, out_members)
 
         match m:
             case model.StructMemberDefinition(_tag, definition):
-                out_members.append(definition)
+                out_members.append((definition, extra))
 
             case model.StructMemberIfStatement(_tag, struct_member_content=statement):
                 inner_if(statement, out_members)
@@ -247,11 +247,11 @@ def all_members_from_container(
                 raise Exception(f"invalid struct member {v}")
 
     for m in container.members:
-        inner(m, out_members)
+        inner(m, out_members, "")
 
     if container.optional is not None:
         for m in container.optional.members:
-            inner(m, out_members)
+            inner(m, out_members, f"{container.optional.name}->")
 
     return out_members
 
