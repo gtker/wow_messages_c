@@ -29,8 +29,8 @@
         "base-preset"
       ],
       "cacheVariables": {
-        "CMAKE_C_FLAGS_INIT": "-Wall -Wpedantic -Wextra -fsanitize=address,undefined -fsanitize-undefined-trap-on-error",
-        "CMAKE_CXX_FLAGS_INIT": "-Wall -Wpedantic -Wextra -fsanitize=address,undefined -fsanitize-undefined-trap-on-error",
+        "CMAKE_C_FLAGS_INIT": "-Wall -Wpedantic -Wextra -Wunused-function -fsanitize=address,undefined -fsanitize-undefined-trap-on-error",
+        "CMAKE_CXX_FLAGS_INIT": "-Wall -Wpedantic -Wextra -Wunused-function -fsanitize=address,undefined -fsanitize-undefined-trap-on-error",
         "CMAKE_C_CLANG_TIDY": "clang-tidy",
         "CMAKE_CXX_CLANG_TIDY": "clang-tidy"
       }
@@ -41,8 +41,8 @@
         "base-preset"
       ],
       "cacheVariables": {
-        "CMAKE_C_FLAGS_INIT": "-Wall -Wpedantic -Wextra -fsanitize=address,undefined -fsanitize-undefined-trap-on-error",
-        "CMAKE_CXX_FLAGS_INIT": "-Wall -Wpedantic -Wextra -fsanitize=address,undefined -fsanitize-undefined-trap-on-error"
+        "CMAKE_C_FLAGS_INIT": "-Wall -Wpedantic -Wextra -Wunused-function -fsanitize=address,undefined -fsanitize-undefined-trap-on-error",
+        "CMAKE_CXX_FLAGS_INIT": "-Wall -Wpedantic -Wextra -Wunused-function -fsanitize=address,undefined -fsanitize-undefined-trap-on-error"
       }
     },
     {
