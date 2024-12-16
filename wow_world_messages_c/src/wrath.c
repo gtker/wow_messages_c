@@ -2246,29 +2246,6 @@ static WowWorldResult wrath_ActionButton_write(WowWorldWriter* writer, const wra
 cleanup: return _return_value;
 }
 
-static WowWorldResult wrath_Addon_read(WowWorldReader* reader, wrath_Addon* object) {
-    int _return_value = 1;
-
-    if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
-    }
-
-    READ_U8(object->addon_type);
-
-    READ_U8(object->uses_crc);
-
-    READ_BOOL8(object->uses_diffent_public_key);
-
-    READ_U32(object->unknown1);
-
-    READ_U8(object->unknown2);
-
-    return WWM_RESULT_SUCCESS;
-cleanup:
-    return _return_value;
-}
-
 static WowWorldResult wrath_Addon_write(WowWorldWriter* writer, const wrath_Addon* object) {
     int _return_value = 1;
 

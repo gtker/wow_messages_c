@@ -1965,22 +1965,6 @@ static size_t update_mask_size(const UpdateMask& mask) {
     return size + amount_of_values + (max_header * 4);
 }
 
-Addon Addon_read(Reader& reader) {
-    Addon obj{};
-
-    obj.addon_type = reader.read_u8();
-
-    obj.uses_crc = reader.read_u8();
-
-    obj.uses_diffent_public_key = reader.read_bool8();
-
-    obj.unknown1 = reader.read_u32();
-
-    obj.unknown2 = reader.read_u8();
-
-    return obj;
-}
-
 static void Addon_write(Writer& writer, const Addon& obj) {
     writer.write_u8(obj.addon_type);
 

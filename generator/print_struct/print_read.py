@@ -590,6 +590,9 @@ def print_read(s: Writer, container: Container, module_name: str):
     if not container_has_c_members(container):
         return
 
+    if container.name == "Addon" and (module_name == "wrath" or module_name == "tbc"):
+        return
+
     wlm_prefix = "WWM" if is_world(container.tags) else "WLM"
     needs_size = container_needs_size_in_read(container)
 
