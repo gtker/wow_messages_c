@@ -157,11 +157,15 @@ public:
 
     template<typename T>
     // NOLINTNEXTLINE
-    WOW_LOGIN_MESSAGES_CPP_EXPORT T& get(); // All possible types have been specialized
+    T& get() {
+        static_assert(std::is_same<T, version3::CMD_AUTH_LOGON_PROOF_Client>::value, "Invalid type. All possible types have been specialized below.");
+    }
 
     template<typename T>
     // NOLINTNEXTLINE
-    WOW_LOGIN_MESSAGES_CPP_EXPORT T* get_if(); // All possible types have been specialized
+    T* get_if() {
+        static_assert(std::is_same<T, version3::CMD_AUTH_LOGON_PROOF_Client>::value, "Invalid type. All possible types have been specialized below.");
+    }
 
     WOW_LOGIN_MESSAGES_CPP_EXPORT const char* to_string() const;
 };
@@ -241,11 +245,15 @@ public:
 
     template<typename T>
     // NOLINTNEXTLINE
-    WOW_LOGIN_MESSAGES_CPP_EXPORT T& get(); // All possible types have been specialized
+    T& get() {
+        static_assert(std::is_same<T, version3::CMD_AUTH_LOGON_CHALLENGE_Server>::value, "Invalid type. All possible types have been specialized below.");
+    }
 
     template<typename T>
     // NOLINTNEXTLINE
-    WOW_LOGIN_MESSAGES_CPP_EXPORT T* get_if(); // All possible types have been specialized
+    T* get_if() {
+        static_assert(std::is_same<T, version3::CMD_AUTH_LOGON_CHALLENGE_Server>::value, "Invalid type. All possible types have been specialized below.");
+    }
 
     WOW_LOGIN_MESSAGES_CPP_EXPORT const char* to_string() const;
 };

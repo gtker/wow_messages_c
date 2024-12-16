@@ -69,10 +69,12 @@ def print_login_utils_side(s: Writer, h: Writer, messages: list[model.Container]
         h.open_curly("union")
 
         first_opcode: typing.Union[None, str] = None
+        first_type: typing.Union[None, str] = None
         for e in filter(matches, messages):
             ty = e.name.replace("_Client", "").replace("_Server", "")
             if first_opcode is None:
                 first_opcode = ty
+                first_type = e.name
 
             h.wln(f"{module_name}::{e.name} {ty};")
 
@@ -311,12 +313,16 @@ def print_login_utils_side(s: Writer, h: Writer, messages: list[model.Container]
 
         h.wln("template<typename T>")
         h.wln("// NOLINTNEXTLINE")
-        h.wln(f"{export_define} T& get(); // All possible types have been specialized")
+        h.open_curly(f"T& get()")
+        h.wln(f'static_assert(std::is_same<T, {module_name}::{first_type}>::value, "Invalid type. All possible types have been specialized below.");')
+        h.closing_curly()
         h.newline()
 
         h.wln("template<typename T>")
         h.wln("// NOLINTNEXTLINE")
-        h.wln(f"{export_define} T* get_if(); // All possible types have been specialized")
+        h.open_curly(f"T* get_if()")
+        h.wln(f'static_assert(std::is_same<T, {module_name}::{first_type}>::value, "Invalid type. All possible types have been specialized below.");')
+        h.closing_curly()
 
         h.newline()
         h.wln(f"{export_define} const char* to_string() const;")
