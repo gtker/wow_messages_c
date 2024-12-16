@@ -21,7 +21,7 @@ public:
 
     void send_encrypted(const wow_world_messages::vanilla::ServerOpcode& opcode, wow_srp::VanillaHeaderCrypto& header)
     {
-        send(opcode.write([&header](auto data, auto length) { header.encrypt(data, length); }));
+        send(opcode.write([&header](auto data, auto length) { header.encrypt(data, static_cast<uint16_t>(length)); }));
     }
 
 private:
@@ -96,8 +96,8 @@ void auth_flow(NetworkReader& auth, NetworkReader& world)
 
     while (opcode.get_if<vanilla::CMSG_PLAYER_LOGIN>() == nullptr)
     {
-        opcode = vanilla::ClientOpcode::read(
-            world, [&header_crypto](unsigned char* data, const size_t length) { header_crypto.decrypt(data, length); });
+        opcode = vanilla::ClientOpcode::read(world, [&header_crypto](unsigned char* data, const size_t length)
+                                             { header_crypto.decrypt(data, static_cast<uint16_t>(length)); });
 
         printf("%s\n", opcode.to_string());
 
