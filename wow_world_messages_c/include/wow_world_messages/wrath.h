@@ -9077,14 +9077,6 @@ typedef struct {
 } wrath_AddonArray;
 
 typedef struct {
-    char* addon_name;
-    uint8_t addon_has_signature;
-    uint32_t addon_crc;
-    uint32_t addon_extra_crc;
-
-} wrath_AddonInfo;
-
-typedef struct {
     uint64_t guid;
     bool online;
     char* name;
@@ -9915,6 +9907,7 @@ typedef struct {
 typedef struct {
     uint32_t quest_id;
     uint32_t amount_of_pois;
+    wrath_QuestPoi* pois;
 
 } wrath_QuestPoiList;
 
@@ -16905,6 +16898,7 @@ typedef struct {
     uint32_t amount_of_reset_times;
     wrath_SendCalendarResetTime* reset_times;
     uint32_t amount_of_holidays;
+    wrath_SendCalendarHoliday* holidays;
 
 } wrath_SMSG_CALENDAR_SEND_CALENDAR;
 WOW_WORLD_MESSAGES_C_EXPORT void wrath_SMSG_CALENDAR_SEND_CALENDAR_free(wrath_SMSG_CALENDAR_SEND_CALENDAR* object);

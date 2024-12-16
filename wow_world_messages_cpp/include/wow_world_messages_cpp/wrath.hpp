@@ -9064,13 +9064,6 @@ struct Addon {
     uint8_t unknown2;
 };
 
-struct AddonInfo {
-    std::string addon_name;
-    uint8_t addon_has_signature;
-    uint32_t addon_crc;
-    uint32_t addon_extra_crc;
-};
-
 struct ArenaTeamMember {
     uint64_t guid;
     bool online;
@@ -9813,7 +9806,7 @@ struct QuestPoi {
 
 struct QuestPoiList {
     uint32_t quest_id;
-    uint32_t amount_of_pois;
+    std::vector<wrath::QuestPoi> pois;
 };
 
 struct RaidInfo {
@@ -16754,7 +16747,7 @@ struct SMSG_CALENDAR_SEND_CALENDAR {
     std::vector<wrath::SendCalendarInstance> instances;
     uint32_t relative_time;
     std::vector<wrath::SendCalendarResetTime> reset_times;
-    uint32_t amount_of_holidays;
+    std::vector<wrath::SendCalendarHoliday> holidays;
 
     WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> write(const std::function<void(unsigned char*, size_t)>& encrypt) const;
 };

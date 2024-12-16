@@ -2286,55 +2286,6 @@ static WowWorldResult wrath_addon_array_write(WowWorldWriter* writer, const wrat
 cleanup: return _return_value; /* TODO pre check before writing */
 }
 
-WOW_WORLD_MESSAGES_C_EXPORT void wrath_AddonInfo_free(wrath_AddonInfo* object) {
-    FREE_STRING(object->addon_name);
-
-}
-
-static size_t wrath_AddonInfo_size(const wrath_AddonInfo* object) {
-    return 10 + STRING_SIZE(object->addon_name);
-}
-
-static WowWorldResult wrath_AddonInfo_read(WowWorldReader* reader, wrath_AddonInfo* object) {
-    int _return_value = 1;
-
-    if (10 > (reader->length - reader->index)) {
-        _return_value = (int)(10 - (reader->length - reader->index));
-        goto cleanup;
-    }
-
-    object->addon_name = NULL;
-
-    READ_CSTRING(object->addon_name);
-
-    READ_U8(object->addon_has_signature);
-
-    READ_U32(object->addon_crc);
-
-    READ_U32(object->addon_extra_crc);
-
-    return WWM_RESULT_SUCCESS;
-cleanup:
-    wrath_AddonInfo_free(object);
-    return _return_value;
-}
-
-static WowWorldResult wrath_AddonInfo_write(WowWorldWriter* writer, const wrath_AddonInfo* object) {
-    int _return_value = 1;
-
-    WRITE_CSTRING(object->addon_name);
-
-    WRITE_U8(object->addon_has_signature);
-
-    WRITE_U32(object->addon_crc);
-
-    WRITE_U32(object->addon_extra_crc);
-
-
-    return WWM_RESULT_SUCCESS;
-cleanup: return _return_value;
-}
-
 WOW_WORLD_MESSAGES_C_EXPORT void wrath_ArenaTeamMember_free(wrath_ArenaTeamMember* object) {
     FREE_STRING(object->name);
 
@@ -6837,6 +6788,31 @@ static WowWorldResult wrath_QuestPoi_write(WowWorldWriter* writer, const wrath_Q
 cleanup: return _return_value;
 }
 
+WOW_WORLD_MESSAGES_C_EXPORT void wrath_QuestPoiList_free(wrath_QuestPoiList* object) {
+    size_t i;
+
+    if (object->pois != NULL) {
+        for (i = 0; i < object->amount_of_pois; ++i) {
+            wrath_QuestPoi_free(&((object->pois)[i]));
+        }
+        free(object->pois);
+        object->pois = NULL;
+    }
+}
+
+static size_t wrath_QuestPoiList_size(const wrath_QuestPoiList* object) {
+    size_t _size = 8;
+
+    /* C89 scope to allow variable declarations */ {
+        int i;
+        for(i = 0; i < (int)object->amount_of_pois; ++i) {
+            _size += wrath_QuestPoi_size(&object->pois[i]);
+        }
+    }
+
+    return _size;
+}
+
 static WowWorldResult wrath_QuestPoiList_read(WowWorldReader* reader, wrath_QuestPoiList* object) {
     int _return_value = 1;
 
@@ -6845,12 +6821,22 @@ static WowWorldResult wrath_QuestPoiList_read(WowWorldReader* reader, wrath_Ques
         goto cleanup;
     }
 
+    object->pois = NULL;
+
     READ_U32(object->quest_id);
 
     READ_U32(object->amount_of_pois);
 
+    object->pois = calloc(object->amount_of_pois, sizeof(wrath_QuestPoi));
+    if (object->pois == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
+    READ_ARRAY(object->pois, object->amount_of_pois, WWM_CHECK_RETURN_CODE(wrath_QuestPoi_read(reader, &object->pois[i])));
+
+
     return WWM_RESULT_SUCCESS;
 cleanup:
+    wrath_QuestPoiList_free(object);
     return _return_value;
 }
 
@@ -6860,6 +6846,8 @@ static WowWorldResult wrath_QuestPoiList_write(WowWorldWriter* writer, const wra
     WRITE_U32(object->quest_id);
 
     WRITE_U32(object->amount_of_pois);
+
+    WRITE_ARRAY(object->pois, object->amount_of_pois, WWM_CHECK_RETURN_CODE(wrath_QuestPoi_write(writer, &object->pois[i])));
 
 
     return WWM_RESULT_SUCCESS;
@@ -27905,14 +27893,28 @@ cleanup: return _return_value;
 }
 
 WOW_WORLD_MESSAGES_C_EXPORT void wrath_SMSG_QUEST_POI_QUERY_RESPONSE_free(wrath_SMSG_QUEST_POI_QUERY_RESPONSE* object) {
+    size_t i;
+
     if (object->quests != NULL) {
+        for (i = 0; i < object->amount_of_quests; ++i) {
+            wrath_QuestPoiList_free(&((object->quests)[i]));
+        }
         free(object->quests);
         object->quests = NULL;
     }
 }
 
 static size_t wrath_SMSG_QUEST_POI_QUERY_RESPONSE_size(const wrath_SMSG_QUEST_POI_QUERY_RESPONSE* object) {
-    return 4 + 8 * object->amount_of_quests;
+    size_t _size = 4;
+
+    /* C89 scope to allow variable declarations */ {
+        int i;
+        for(i = 0; i < (int)object->amount_of_quests; ++i) {
+            _size += wrath_QuestPoiList_size(&object->quests[i]);
+        }
+    }
+
+    return _size;
 }
 
 static WowWorldResult wrath_SMSG_QUEST_POI_QUERY_RESPONSE_read(WowWorldReader* reader, wrath_SMSG_QUEST_POI_QUERY_RESPONSE* object) {
@@ -48883,6 +48885,13 @@ WOW_WORLD_MESSAGES_C_EXPORT void wrath_SMSG_CALENDAR_SEND_CALENDAR_free(wrath_SM
         free(object->reset_times);
         object->reset_times = NULL;
     }
+    if (object->holidays != NULL) {
+        for (i = 0; i < object->amount_of_holidays; ++i) {
+            wrath_SendCalendarHoliday_free(&((object->holidays)[i]));
+        }
+        free(object->holidays);
+        object->holidays = NULL;
+    }
 }
 
 static size_t wrath_SMSG_CALENDAR_SEND_CALENDAR_size(const wrath_SMSG_CALENDAR_SEND_CALENDAR* object) {
@@ -48902,6 +48911,13 @@ static size_t wrath_SMSG_CALENDAR_SEND_CALENDAR_size(const wrath_SMSG_CALENDAR_S
         }
     }
 
+    /* C89 scope to allow variable declarations */ {
+        int i;
+        for(i = 0; i < (int)object->amount_of_holidays; ++i) {
+            _size += wrath_SendCalendarHoliday_size(&object->holidays[i]);
+        }
+    }
+
     return _size;
 }
 
@@ -48917,6 +48933,7 @@ static WowWorldResult wrath_SMSG_CALENDAR_SEND_CALENDAR_read(WowWorldReader* rea
     object->events = NULL;
     object->instances = NULL;
     object->reset_times = NULL;
+    object->holidays = NULL;
 
     READ_U32(object->amount_of_invites);
 
@@ -48962,6 +48979,13 @@ static WowWorldResult wrath_SMSG_CALENDAR_SEND_CALENDAR_read(WowWorldReader* rea
 
     READ_U32(object->amount_of_holidays);
 
+    object->holidays = calloc(object->amount_of_holidays, sizeof(wrath_SendCalendarHoliday));
+    if (object->holidays == NULL) {
+        return WWM_RESULT_MALLOC_FAIL;
+    }
+    READ_ARRAY(object->holidays, object->amount_of_holidays, WWM_CHECK_RETURN_CODE(wrath_SendCalendarHoliday_read(reader, &object->holidays[i])));
+
+
     return WWM_RESULT_SUCCESS;
 cleanup:
     wrath_SMSG_CALENDAR_SEND_CALENDAR_free(object);
@@ -49003,6 +49027,8 @@ WOW_WORLD_MESSAGES_C_EXPORT WowWorldResult wrath_SMSG_CALENDAR_SEND_CALENDAR_wri
     WRITE_ARRAY(object->reset_times, object->amount_of_reset_times, WWM_CHECK_RETURN_CODE(wrath_SendCalendarResetTime_write(writer, &object->reset_times[i])));
 
     WRITE_U32(object->amount_of_holidays);
+
+    WRITE_ARRAY(object->holidays, object->amount_of_holidays, WWM_CHECK_RETURN_CODE(wrath_SendCalendarHoliday_write(writer, &object->holidays[i])));
 
 
     return WWM_RESULT_SUCCESS;

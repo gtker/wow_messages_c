@@ -2212,35 +2212,6 @@ static void addon_array_write(Writer& writer, const std::vector<Addon>& array) {
     }
 }
 
-static size_t AddonInfo_size(const AddonInfo& obj) {
-    return 10 + obj.addon_name.size();
-}
-
-AddonInfo AddonInfo_read(Reader& reader) {
-    AddonInfo obj{};
-
-    obj.addon_name = reader.read_cstring();
-
-    obj.addon_has_signature = reader.read_u8();
-
-    obj.addon_crc = reader.read_u32();
-
-    obj.addon_extra_crc = reader.read_u32();
-
-    return obj;
-}
-
-static void AddonInfo_write(Writer& writer, const AddonInfo& obj) {
-    writer.write_cstring(obj.addon_name);
-
-    writer.write_u8(obj.addon_has_signature);
-
-    writer.write_u32(obj.addon_crc);
-
-    writer.write_u32(obj.addon_extra_crc);
-
-}
-
 static size_t ArenaTeamMember_size(const ArenaTeamMember& obj) {
     return 32 + obj.name.size();
 }
@@ -5461,12 +5432,26 @@ static void QuestPoi_write(Writer& writer, const QuestPoi& obj) {
 
 }
 
+static size_t QuestPoiList_size(const QuestPoiList& obj) {
+    size_t _size = 8;
+
+    for(const auto& v : obj.pois) {
+        _size += QuestPoi_size(v);
+    }
+
+    return _size;
+}
+
 QuestPoiList QuestPoiList_read(Reader& reader) {
     QuestPoiList obj{};
 
     obj.quest_id = reader.read_u32();
 
-    obj.amount_of_pois = reader.read_u32();
+    auto amount_of_pois = reader.read_u32();
+
+    for (uint32_t i = 0; i < amount_of_pois; ++i) {
+        obj.pois.push_back(::wow_world_messages::wrath::QuestPoi_read(reader));
+    }
 
     return obj;
 }
@@ -5474,7 +5459,11 @@ QuestPoiList QuestPoiList_read(Reader& reader) {
 static void QuestPoiList_write(Writer& writer, const QuestPoiList& obj) {
     writer.write_u32(obj.quest_id);
 
-    writer.write_u32(obj.amount_of_pois);
+    writer.write_u32(static_cast<uint32_t>(obj.pois.size()));
+
+    for (const auto& v : obj.pois) {
+        QuestPoi_write(writer, v);
+    }
 
 }
 
@@ -20597,7 +20586,13 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> CMSG_QUEST_POI_QUERY::w
 }
 
 static size_t SMSG_QUEST_POI_QUERY_RESPONSE_size(const SMSG_QUEST_POI_QUERY_RESPONSE& obj) {
-    return 4 + 8 * obj.quests.size();
+    size_t _size = 4;
+
+    for(const auto& v : obj.quests) {
+        _size += QuestPoiList_size(v);
+    }
+
+    return _size;
 }
 
 SMSG_QUEST_POI_QUERY_RESPONSE SMSG_QUEST_POI_QUERY_RESPONSE_read(Reader& reader) {
@@ -35198,6 +35193,10 @@ static size_t SMSG_CALENDAR_SEND_CALENDAR_size(const SMSG_CALENDAR_SEND_CALENDAR
         _size += SendCalendarEvent_size(v);
     }
 
+    for(const auto& v : obj.holidays) {
+        _size += SendCalendarHoliday_size(v);
+    }
+
     return _size;
 }
 
@@ -35234,7 +35233,11 @@ SMSG_CALENDAR_SEND_CALENDAR SMSG_CALENDAR_SEND_CALENDAR_read(Reader& reader) {
         obj.reset_times.push_back(::wow_world_messages::wrath::SendCalendarResetTime_read(reader));
     }
 
-    obj.amount_of_holidays = reader.read_u32();
+    auto amount_of_holidays = reader.read_u32();
+
+    for (uint32_t i = 0; i < amount_of_holidays; ++i) {
+        obj.holidays.push_back(::wow_world_messages::wrath::SendCalendarHoliday_read(reader));
+    }
 
     return obj;
 }
@@ -35279,7 +35282,11 @@ WOW_WORLD_MESSAGES_CPP_EXPORT std::vector<unsigned char> SMSG_CALENDAR_SEND_CALE
         SendCalendarResetTime_write(writer, v);
     }
 
-    writer.write_u32(obj.amount_of_holidays);
+    writer.write_u32(static_cast<uint32_t>(obj.holidays.size()));
+
+    for (const auto& v : obj.holidays) {
+        SendCalendarHoliday_write(writer, v);
+    }
 
     return writer.m_buf;
 }
