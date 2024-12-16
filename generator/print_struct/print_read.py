@@ -681,7 +681,7 @@ def print_read(s: Writer, container: Container, module_name: str):
         if container.sizes.minimum_size != 0:
             s.write_block(f"""
                 if ({container.sizes.minimum_size} > (reader->length - reader->index)) {{
-                    _return_value = (size_t){container.sizes.minimum_size} - (reader->length - reader->index);
+                    _return_value = (int)({container.sizes.minimum_size} - (reader->length - reader->index));
                     goto cleanup;
                 }}
             """)

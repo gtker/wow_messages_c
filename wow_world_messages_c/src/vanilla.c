@@ -1601,7 +1601,7 @@ static WowWorldResult vanilla_Addon_read(WowWorldReader* reader, vanilla_Addon* 
     int _return_value = 1;
 
     if (3 > (reader->length - reader->index)) {
-        _return_value = (size_t)3 - (reader->length - reader->index);
+        _return_value = (int)(3 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -1678,7 +1678,7 @@ static WowWorldResult vanilla_AddonInfo_read(WowWorldReader* reader, vanilla_Add
     int _return_value = 1;
 
     if (10 > (reader->length - reader->index)) {
-        _return_value = (size_t)10 - (reader->length - reader->index);
+        _return_value = (int)(10 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -1718,7 +1718,7 @@ static WowWorldResult vanilla_AuctionListItem_read(WowWorldReader* reader, vanil
     int _return_value = 1;
 
     if (64 > (reader->length - reader->index)) {
-        _return_value = (size_t)64 - (reader->length - reader->index);
+        _return_value = (int)(64 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -1814,7 +1814,7 @@ static WowWorldResult vanilla_AuraLog_read(WowWorldReader* reader, vanilla_AuraL
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -1908,7 +1908,7 @@ static WowWorldResult vanilla_BattlegroundPlayer_read(WowWorldReader* reader, va
     int _return_value = 1;
 
     if (32 > (reader->length - reader->index)) {
-        _return_value = (size_t)32 - (reader->length - reader->index);
+        _return_value = (int)(32 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -1970,7 +1970,7 @@ static WowWorldResult vanilla_BattlegroundPlayerPosition_read(WowWorldReader* re
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (size_t)16 - (reader->length - reader->index);
+        _return_value = (int)(16 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -2003,7 +2003,7 @@ static WowWorldResult vanilla_ChannelMember_read(WowWorldReader* reader, vanilla
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (size_t)9 - (reader->length - reader->index);
+        _return_value = (int)(9 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -2033,7 +2033,7 @@ static WowWorldResult vanilla_CharacterGear_read(WowWorldReader* reader, vanilla
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (size_t)5 - (reader->length - reader->index);
+        _return_value = (int)(5 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -2072,7 +2072,7 @@ static WowWorldResult vanilla_Character_read(WowWorldReader* reader, vanilla_Cha
     int _return_value = 1;
 
     if (159 > (reader->length - reader->index)) {
-        _return_value = (size_t)159 - (reader->length - reader->index);
+        _return_value = (int)(159 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -2228,7 +2228,7 @@ static WowWorldResult vanilla_MonsterMove_read(WowWorldReader* reader, vanilla_M
     int _return_value = 1;
 
     if (17 > (reader->length - reader->index)) {
-        _return_value = (size_t)17 - (reader->length - reader->index);
+        _return_value = (int)(17 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -2334,7 +2334,7 @@ static WowWorldResult vanilla_CompressedMove_read(WowWorldReader* reader, vanill
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -2398,7 +2398,7 @@ static WowWorldResult vanilla_CooldownSpell_read(WowWorldReader* reader, vanilla
     int _return_value = 1;
 
     if (14 > (reader->length - reader->index)) {
-        _return_value = (size_t)14 - (reader->length - reader->index);
+        _return_value = (int)(14 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -2439,7 +2439,7 @@ static WowWorldResult vanilla_DamageInfo_read(WowWorldReader* reader, vanilla_Da
     int _return_value = 1;
 
     if (20 > (reader->length - reader->index)) {
-        _return_value = (size_t)20 - (reader->length - reader->index);
+        _return_value = (int)(20 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -2480,7 +2480,7 @@ static WowWorldResult vanilla_FactionInitializer_read(WowWorldReader* reader, va
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (size_t)5 - (reader->length - reader->index);
+        _return_value = (int)(5 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -2510,7 +2510,7 @@ static WowWorldResult vanilla_FactionStanding_read(WowWorldReader* reader, vanil
     int _return_value = 1;
 
     if (6 > (reader->length - reader->index)) {
-        _return_value = (size_t)6 - (reader->length - reader->index);
+        _return_value = (int)(6 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -2540,7 +2540,7 @@ static WowWorldResult vanilla_ForcedReaction_read(WowWorldReader* reader, vanill
     int _return_value = 1;
 
     if (6 > (reader->length - reader->index)) {
-        _return_value = (size_t)6 - (reader->length - reader->index);
+        _return_value = (int)(6 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -2580,7 +2580,7 @@ static WowWorldResult vanilla_Friend_read(WowWorldReader* reader, vanilla_Friend
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (size_t)9 - (reader->length - reader->index);
+        _return_value = (int)(9 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -2637,7 +2637,7 @@ static WowWorldResult vanilla_GmSurveyQuestion_read(WowWorldReader* reader, vani
     int _return_value = 1;
 
     if (6 > (reader->length - reader->index)) {
-        _return_value = (size_t)6 - (reader->length - reader->index);
+        _return_value = (int)(6 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -2682,7 +2682,7 @@ static WowWorldResult vanilla_GossipItem_read(WowWorldReader* reader, vanilla_Go
     int _return_value = 1;
 
     if (7 > (reader->length - reader->index)) {
-        _return_value = (size_t)7 - (reader->length - reader->index);
+        _return_value = (int)(7 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -2731,7 +2731,7 @@ static WowWorldResult vanilla_GroupListMember_read(WowWorldReader* reader, vanil
     int _return_value = 1;
 
     if (11 > (reader->length - reader->index)) {
-        _return_value = (size_t)11 - (reader->length - reader->index);
+        _return_value = (int)(11 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -2792,7 +2792,7 @@ static WowWorldResult vanilla_GuildMember_read(WowWorldReader* reader, vanilla_G
     int _return_value = 1;
 
     if (22 > (reader->length - reader->index)) {
-        _return_value = (size_t)22 - (reader->length - reader->index);
+        _return_value = (int)(22 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -2865,7 +2865,7 @@ static WowWorldResult vanilla_InitialSpell_read(WowWorldReader* reader, vanilla_
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -2894,7 +2894,7 @@ static WowWorldResult vanilla_ItemDamageType_read(WowWorldReader* reader, vanill
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -2928,7 +2928,7 @@ static WowWorldResult vanilla_ItemSpells_read(WowWorldReader* reader, vanilla_It
     int _return_value = 1;
 
     if (24 > (reader->length - reader->index)) {
-        _return_value = (size_t)24 - (reader->length - reader->index);
+        _return_value = (int)(24 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -2974,7 +2974,7 @@ static WowWorldResult vanilla_ItemStat_read(WowWorldReader* reader, vanilla_Item
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -3004,7 +3004,7 @@ static WowWorldResult vanilla_ListInventoryItem_read(WowWorldReader* reader, van
     int _return_value = 1;
 
     if (28 > (reader->length - reader->index)) {
-        _return_value = (size_t)28 - (reader->length - reader->index);
+        _return_value = (int)(28 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -3053,7 +3053,7 @@ static WowWorldResult vanilla_LootItem_read(WowWorldReader* reader, vanilla_Loot
     int _return_value = 1;
 
     if (6 > (reader->length - reader->index)) {
-        _return_value = (size_t)6 - (reader->length - reader->index);
+        _return_value = (int)(6 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -3114,7 +3114,7 @@ static WowWorldResult vanilla_Mail_read(WowWorldReader* reader, vanilla_Mail* ob
     int _return_value = 1;
 
     if (67 > (reader->length - reader->index)) {
-        _return_value = (size_t)67 - (reader->length - reader->index);
+        _return_value = (int)(67 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -3335,7 +3335,7 @@ static WowWorldResult vanilla_MovementBlock_read(WowWorldReader* reader, vanilla
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -3575,7 +3575,7 @@ static WowWorldResult vanilla_TransportInfo_read(WowWorldReader* reader, vanilla
     int _return_value = 1;
 
     if (21 > (reader->length - reader->index)) {
-        _return_value = (size_t)21 - (reader->length - reader->index);
+        _return_value = (int)(21 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -3634,7 +3634,7 @@ static WowWorldResult vanilla_MovementInfo_read(WowWorldReader* reader, vanilla_
     int _return_value = 1;
 
     if (28 > (reader->length - reader->index)) {
-        _return_value = (size_t)28 - (reader->length - reader->index);
+        _return_value = (int)(28 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -3720,7 +3720,7 @@ static WowWorldResult vanilla_NpcTextUpdateEmote_read(WowWorldReader* reader, va
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -3770,7 +3770,7 @@ static WowWorldResult vanilla_NpcTextUpdate_read(WowWorldReader* reader, vanilla
     int _return_value = 1;
 
     if (34 > (reader->length - reader->index)) {
-        _return_value = (size_t)34 - (reader->length - reader->index);
+        _return_value = (int)(34 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -3856,7 +3856,7 @@ static WowWorldResult vanilla_Object_read(WowWorldReader* reader, vanilla_Object
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -3947,7 +3947,7 @@ static WowWorldResult vanilla_PetSpellCooldown_read(WowWorldReader* reader, vani
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -3984,7 +3984,7 @@ static WowWorldResult vanilla_PetitionShowlist_read(WowWorldReader* reader, vani
     int _return_value = 1;
 
     if (20 > (reader->length - reader->index)) {
-        _return_value = (size_t)20 - (reader->length - reader->index);
+        _return_value = (int)(20 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -4025,7 +4025,7 @@ static WowWorldResult vanilla_PetitionSignature_read(WowWorldReader* reader, van
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -4054,7 +4054,7 @@ static WowWorldResult vanilla_QuestDetailsEmote_read(WowWorldReader* reader, van
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -4092,7 +4092,7 @@ static WowWorldResult vanilla_QuestItem_read(WowWorldReader* reader, vanilla_Que
     int _return_value = 1;
 
     if (13 > (reader->length - reader->index)) {
-        _return_value = (size_t)13 - (reader->length - reader->index);
+        _return_value = (int)(13 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -4132,7 +4132,7 @@ static WowWorldResult vanilla_QuestItemRequirement_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -4165,7 +4165,7 @@ static WowWorldResult vanilla_QuestItemReward_read(WowWorldReader* reader, vanil
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -4194,7 +4194,7 @@ static WowWorldResult vanilla_QuestObjective_read(WowWorldReader* reader, vanill
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (size_t)16 - (reader->length - reader->index);
+        _return_value = (int)(16 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -4231,7 +4231,7 @@ static WowWorldResult vanilla_RaidInfo_read(WowWorldReader* reader, vanilla_Raid
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -4265,7 +4265,7 @@ static WowWorldResult vanilla_RaidTargetUpdate_read(WowWorldReader* reader, vani
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (size_t)9 - (reader->length - reader->index);
+        _return_value = (int)(9 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -4363,7 +4363,7 @@ static WowWorldResult vanilla_SpellCastTargets_read(WowWorldReader* reader, vani
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (size_t)2 - (reader->length - reader->index);
+        _return_value = (int)(2 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -4472,7 +4472,7 @@ static WowWorldResult vanilla_SpellCooldownStatus_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -4535,7 +4535,7 @@ static WowWorldResult vanilla_SpellLog_read(WowWorldReader* reader, vanilla_Spel
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -4682,7 +4682,7 @@ static WowWorldResult vanilla_SpellLogMiss_read(WowWorldReader* reader, vanilla_
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (size_t)9 - (reader->length - reader->index);
+        _return_value = (int)(9 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -4712,7 +4712,7 @@ static WowWorldResult vanilla_SpellMiss_read(WowWorldReader* reader, vanilla_Spe
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (size_t)9 - (reader->length - reader->index);
+        _return_value = (int)(9 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -4751,7 +4751,7 @@ static WowWorldResult vanilla_StabledPet_read(WowWorldReader* reader, vanilla_St
     int _return_value = 1;
 
     if (18 > (reader->length - reader->index)) {
-        _return_value = (size_t)18 - (reader->length - reader->index);
+        _return_value = (int)(18 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -4799,7 +4799,7 @@ static WowWorldResult vanilla_TradeSlot_read(WowWorldReader* reader, vanilla_Tra
     int _return_value = 1;
 
     if (61 > (reader->length - reader->index)) {
-        _return_value = (size_t)61 - (reader->length - reader->index);
+        _return_value = (int)(61 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -4876,7 +4876,7 @@ static WowWorldResult vanilla_TrainerSpell_read(WowWorldReader* reader, vanilla_
     int _return_value = 1;
 
     if (38 > (reader->length - reader->index)) {
-        _return_value = (size_t)38 - (reader->length - reader->index);
+        _return_value = (int)(38 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -4946,7 +4946,7 @@ static WowWorldResult vanilla_WhoPlayer_read(WowWorldReader* reader, vanilla_Who
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (size_t)16 - (reader->length - reader->index);
+        _return_value = (int)(16 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -5002,7 +5002,7 @@ static WowWorldResult vanilla_WorldState_read(WowWorldReader* reader, vanilla_Wo
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -5111,7 +5111,7 @@ static WowWorldResult vanilla_CMSG_DBLOOKUP_read(WowWorldReader* reader, vanilla
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -5148,7 +5148,7 @@ static WowWorldResult vanilla_CMSG_WORLD_TELEPORT_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (24 > (reader->length - reader->index)) {
-        _return_value = (size_t)24 - (reader->length - reader->index);
+        _return_value = (int)(24 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -5204,7 +5204,7 @@ static WowWorldResult vanilla_CMSG_TELEPORT_TO_UNIT_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -5250,7 +5250,7 @@ static WowWorldResult vanilla_CMSG_CHAR_CREATE_read(WowWorldReader* reader, vani
     int _return_value = 1;
 
     if (10 > (reader->length - reader->index)) {
-        _return_value = (size_t)10 - (reader->length - reader->index);
+        _return_value = (int)(10 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -5343,7 +5343,7 @@ static WowWorldResult vanilla_CMSG_CHAR_DELETE_read(WowWorldReader* reader, vani
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -5377,7 +5377,7 @@ static WowWorldResult vanilla_SMSG_CHAR_CREATE_read(WowWorldReader* reader, vani
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -5437,7 +5437,7 @@ static WowWorldResult vanilla_SMSG_CHAR_ENUM_read(WowWorldReader* reader, vanill
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -5483,7 +5483,7 @@ static WowWorldResult vanilla_SMSG_CHAR_DELETE_read(WowWorldReader* reader, vani
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -5518,7 +5518,7 @@ static WowWorldResult vanilla_CMSG_PLAYER_LOGIN_read(WowWorldReader* reader, van
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -5552,7 +5552,7 @@ static WowWorldResult vanilla_SMSG_NEW_WORLD_read(WowWorldReader* reader, vanill
     int _return_value = 1;
 
     if (20 > (reader->length - reader->index)) {
-        _return_value = (size_t)20 - (reader->length - reader->index);
+        _return_value = (int)(20 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -5614,7 +5614,7 @@ static WowWorldResult vanilla_SMSG_TRANSFER_PENDING_read(WowWorldReader* reader,
     size_t _size = 0;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -5672,7 +5672,7 @@ static WowWorldResult vanilla_SMSG_TRANSFER_ABORTED_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (6 > (reader->length - reader->index)) {
-        _return_value = (size_t)6 - (reader->length - reader->index);
+        _return_value = (int)(6 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -5716,7 +5716,7 @@ static WowWorldResult vanilla_SMSG_CHARACTER_LOGIN_FAILED_read(WowWorldReader* r
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -5751,7 +5751,7 @@ static WowWorldResult vanilla_SMSG_LOGIN_SETTIMESPEED_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -5823,7 +5823,7 @@ static WowWorldResult vanilla_SMSG_LOGOUT_RESPONSE_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (size_t)5 - (reader->length - reader->index);
+        _return_value = (int)(5 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -5914,7 +5914,7 @@ static WowWorldResult vanilla_CMSG_NAME_QUERY_read(WowWorldReader* reader, vanil
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -5959,7 +5959,7 @@ static WowWorldResult vanilla_SMSG_NAME_QUERY_RESPONSE_read(WowWorldReader* read
     int _return_value = 1;
 
     if (22 > (reader->length - reader->index)) {
-        _return_value = (size_t)22 - (reader->length - reader->index);
+        _return_value = (int)(22 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -6020,7 +6020,7 @@ static WowWorldResult vanilla_CMSG_PET_NAME_QUERY_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -6067,7 +6067,7 @@ static WowWorldResult vanilla_SMSG_PET_NAME_QUERY_RESPONSE_read(WowWorldReader* 
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (size_t)9 - (reader->length - reader->index);
+        _return_value = (int)(9 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -6112,7 +6112,7 @@ static WowWorldResult vanilla_CMSG_GUILD_QUERY_read(WowWorldReader* reader, vani
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -6169,7 +6169,7 @@ static WowWorldResult vanilla_SMSG_GUILD_QUERY_RESPONSE_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (35 > (reader->length - reader->index)) {
-        _return_value = (size_t)35 - (reader->length - reader->index);
+        _return_value = (int)(35 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -6244,7 +6244,7 @@ static WowWorldResult vanilla_CMSG_ITEM_QUERY_SINGLE_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -6311,7 +6311,7 @@ static WowWorldResult vanilla_SMSG_ITEM_QUERY_SINGLE_RESPONSE_read(WowWorldReade
     size_t _size = 0;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -6597,7 +6597,7 @@ static WowWorldResult vanilla_CMSG_PAGE_TEXT_QUERY_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -6640,7 +6640,7 @@ static WowWorldResult vanilla_SMSG_PAGE_TEXT_QUERY_RESPONSE_read(WowWorldReader*
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (size_t)9 - (reader->length - reader->index);
+        _return_value = (int)(9 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -6685,7 +6685,7 @@ static WowWorldResult vanilla_CMSG_QUEST_QUERY_read(WowWorldReader* reader, vani
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -6748,7 +6748,7 @@ static WowWorldResult vanilla_SMSG_QUEST_QUERY_RESPONSE_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (224 > (reader->length - reader->index)) {
-        _return_value = (size_t)224 - (reader->length - reader->index);
+        _return_value = (int)(224 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -6894,7 +6894,7 @@ static WowWorldResult vanilla_CMSG_GAMEOBJECT_QUERY_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -6961,7 +6961,7 @@ static WowWorldResult vanilla_SMSG_GAMEOBJECT_QUERY_RESPONSE_read(WowWorldReader
     size_t _size = 0;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -7047,7 +7047,7 @@ static WowWorldResult vanilla_CMSG_CREATURE_QUERY_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -7114,7 +7114,7 @@ static WowWorldResult vanilla_SMSG_CREATURE_QUERY_RESPONSE_read(WowWorldReader* 
     size_t _size = 0;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -7258,7 +7258,7 @@ static WowWorldResult vanilla_CMSG_WHO_read(WowWorldReader* reader, vanilla_CMSG
     int _return_value = 1;
 
     if (26 > (reader->length - reader->index)) {
-        _return_value = (size_t)26 - (reader->length - reader->index);
+        _return_value = (int)(26 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -7369,7 +7369,7 @@ static WowWorldResult vanilla_SMSG_WHO_read(WowWorldReader* reader, vanilla_SMSG
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -7428,7 +7428,7 @@ static WowWorldResult vanilla_CMSG_WHOIS_read(WowWorldReader* reader, vanilla_CM
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -7474,7 +7474,7 @@ static WowWorldResult vanilla_SMSG_WHOIS_read(WowWorldReader* reader, vanilla_SM
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -7548,7 +7548,7 @@ static WowWorldResult vanilla_SMSG_FRIEND_LIST_read(WowWorldReader* reader, vani
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -7594,7 +7594,7 @@ static WowWorldResult vanilla_SMSG_FRIEND_STATUS_read(WowWorldReader* reader, va
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (size_t)9 - (reader->length - reader->index);
+        _return_value = (int)(9 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -7642,7 +7642,7 @@ static WowWorldResult vanilla_CMSG_ADD_FRIEND_read(WowWorldReader* reader, vanil
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -7679,7 +7679,7 @@ static WowWorldResult vanilla_CMSG_DEL_FRIEND_read(WowWorldReader* reader, vanil
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -7724,7 +7724,7 @@ static WowWorldResult vanilla_SMSG_IGNORE_LIST_read(WowWorldReader* reader, vani
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -7779,7 +7779,7 @@ static WowWorldResult vanilla_CMSG_ADD_IGNORE_read(WowWorldReader* reader, vanil
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -7816,7 +7816,7 @@ static WowWorldResult vanilla_CMSG_DEL_IGNORE_read(WowWorldReader* reader, vanil
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -7859,7 +7859,7 @@ static WowWorldResult vanilla_CMSG_GROUP_INVITE_read(WowWorldReader* reader, van
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -7905,7 +7905,7 @@ static WowWorldResult vanilla_SMSG_GROUP_INVITE_read(WowWorldReader* reader, van
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -7985,7 +7985,7 @@ static WowWorldResult vanilla_SMSG_GROUP_DECLINE_read(WowWorldReader* reader, va
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -8031,7 +8031,7 @@ static WowWorldResult vanilla_CMSG_GROUP_UNINVITE_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -8068,7 +8068,7 @@ static WowWorldResult vanilla_CMSG_GROUP_UNINVITE_GUID_read(WowWorldReader* read
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -8119,7 +8119,7 @@ static WowWorldResult vanilla_CMSG_GROUP_SET_LEADER_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -8162,7 +8162,7 @@ static WowWorldResult vanilla_SMSG_GROUP_SET_LEADER_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -8199,7 +8199,7 @@ static WowWorldResult vanilla_CMSG_LOOT_METHOD_read(WowWorldReader* reader, vani
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (size_t)16 - (reader->length - reader->index);
+        _return_value = (int)(16 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -8312,7 +8312,7 @@ static WowWorldResult vanilla_SMSG_GROUP_LIST_read(WowWorldReader* reader, vanil
     size_t _size = 0;
 
     if (14 > (reader->length - reader->index)) {
-        _return_value = (size_t)14 - (reader->length - reader->index);
+        _return_value = (int)(14 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -8532,7 +8532,7 @@ static WowWorldResult vanilla_SMSG_PARTY_MEMBER_STATS_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (size_t)5 - (reader->length - reader->index);
+        _return_value = (int)(5 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -8751,7 +8751,7 @@ static WowWorldResult vanilla_SMSG_PARTY_COMMAND_RESULT_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (size_t)9 - (reader->length - reader->index);
+        _return_value = (int)(9 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -8807,7 +8807,7 @@ static WowWorldResult vanilla_CMSG_GUILD_CREATE_read(WowWorldReader* reader, van
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -8853,7 +8853,7 @@ static WowWorldResult vanilla_CMSG_GUILD_INVITE_read(WowWorldReader* reader, van
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -8901,7 +8901,7 @@ static WowWorldResult vanilla_SMSG_GUILD_INVITE_read(WowWorldReader* reader, van
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (size_t)2 - (reader->length - reader->index);
+        _return_value = (int)(2 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -9003,7 +9003,7 @@ static WowWorldResult vanilla_SMSG_GUILD_INFO_read(WowWorldReader* reader, vanil
     int _return_value = 1;
 
     if (21 > (reader->length - reader->index)) {
-        _return_value = (size_t)21 - (reader->length - reader->index);
+        _return_value = (int)(21 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -9110,7 +9110,7 @@ static WowWorldResult vanilla_SMSG_GUILD_ROSTER_read(WowWorldReader* reader, van
     int _return_value = 1;
 
     if (10 > (reader->length - reader->index)) {
-        _return_value = (size_t)10 - (reader->length - reader->index);
+        _return_value = (int)(10 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -9189,7 +9189,7 @@ static WowWorldResult vanilla_CMSG_GUILD_PROMOTE_read(WowWorldReader* reader, va
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -9235,7 +9235,7 @@ static WowWorldResult vanilla_CMSG_GUILD_DEMOTE_read(WowWorldReader* reader, van
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -9298,7 +9298,7 @@ static WowWorldResult vanilla_CMSG_GUILD_REMOVE_read(WowWorldReader* reader, van
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -9361,7 +9361,7 @@ static WowWorldResult vanilla_CMSG_GUILD_LEADER_read(WowWorldReader* reader, van
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -9407,7 +9407,7 @@ static WowWorldResult vanilla_CMSG_GUILD_MOTD_read(WowWorldReader* reader, vanil
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -9469,7 +9469,7 @@ static WowWorldResult vanilla_SMSG_GUILD_EVENT_read(WowWorldReader* reader, vani
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (size_t)2 - (reader->length - reader->index);
+        _return_value = (int)(2 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -9529,7 +9529,7 @@ static WowWorldResult vanilla_SMSG_GUILD_COMMAND_RESULT_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (size_t)9 - (reader->length - reader->index);
+        _return_value = (int)(9 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -9602,7 +9602,7 @@ static WowWorldResult vanilla_CMSG_MESSAGECHAT_read(WowWorldReader* reader, vani
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (size_t)9 - (reader->length - reader->index);
+        _return_value = (int)(9 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -9710,7 +9710,7 @@ static WowWorldResult vanilla_SMSG_MESSAGECHAT_read(WowWorldReader* reader, vani
     int _return_value = 1;
 
     if (19 > (reader->length - reader->index)) {
-        _return_value = (size_t)19 - (reader->length - reader->index);
+        _return_value = (int)(19 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -9840,7 +9840,7 @@ static WowWorldResult vanilla_CMSG_JOIN_CHANNEL_read(WowWorldReader* reader, van
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (size_t)2 - (reader->length - reader->index);
+        _return_value = (int)(2 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -9891,7 +9891,7 @@ static WowWorldResult vanilla_CMSG_LEAVE_CHANNEL_read(WowWorldReader* reader, va
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -9937,7 +9937,7 @@ static WowWorldResult vanilla_SMSG_CHANNEL_NOTIFY_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (size_t)2 - (reader->length - reader->index);
+        _return_value = (int)(2 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -9988,7 +9988,7 @@ static WowWorldResult vanilla_CMSG_CHANNEL_LIST_read(WowWorldReader* reader, van
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -10038,7 +10038,7 @@ static WowWorldResult vanilla_SMSG_CHANNEL_LIST_read(WowWorldReader* reader, van
     int _return_value = 1;
 
     if (6 > (reader->length - reader->index)) {
-        _return_value = (size_t)6 - (reader->length - reader->index);
+        _return_value = (int)(6 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -10105,7 +10105,7 @@ static WowWorldResult vanilla_CMSG_CHANNEL_PASSWORD_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (size_t)2 - (reader->length - reader->index);
+        _return_value = (int)(2 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -10158,7 +10158,7 @@ static WowWorldResult vanilla_CMSG_CHANNEL_SET_OWNER_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (size_t)2 - (reader->length - reader->index);
+        _return_value = (int)(2 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -10209,7 +10209,7 @@ static WowWorldResult vanilla_CMSG_CHANNEL_OWNER_read(WowWorldReader* reader, va
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -10257,7 +10257,7 @@ static WowWorldResult vanilla_CMSG_CHANNEL_MODERATOR_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (size_t)2 - (reader->length - reader->index);
+        _return_value = (int)(2 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -10310,7 +10310,7 @@ static WowWorldResult vanilla_CMSG_CHANNEL_UNMODERATOR_read(WowWorldReader* read
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (size_t)2 - (reader->length - reader->index);
+        _return_value = (int)(2 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -10363,7 +10363,7 @@ static WowWorldResult vanilla_CMSG_CHANNEL_MUTE_read(WowWorldReader* reader, van
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (size_t)2 - (reader->length - reader->index);
+        _return_value = (int)(2 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -10416,7 +10416,7 @@ static WowWorldResult vanilla_CMSG_CHANNEL_UNMUTE_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (size_t)2 - (reader->length - reader->index);
+        _return_value = (int)(2 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -10469,7 +10469,7 @@ static WowWorldResult vanilla_CMSG_CHANNEL_INVITE_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (size_t)2 - (reader->length - reader->index);
+        _return_value = (int)(2 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -10522,7 +10522,7 @@ static WowWorldResult vanilla_CMSG_CHANNEL_KICK_read(WowWorldReader* reader, van
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (size_t)2 - (reader->length - reader->index);
+        _return_value = (int)(2 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -10575,7 +10575,7 @@ static WowWorldResult vanilla_CMSG_CHANNEL_BAN_read(WowWorldReader* reader, vani
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (size_t)2 - (reader->length - reader->index);
+        _return_value = (int)(2 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -10628,7 +10628,7 @@ static WowWorldResult vanilla_CMSG_CHANNEL_UNBAN_read(WowWorldReader* reader, va
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (size_t)2 - (reader->length - reader->index);
+        _return_value = (int)(2 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -10679,7 +10679,7 @@ static WowWorldResult vanilla_CMSG_CHANNEL_ANNOUNCEMENTS_read(WowWorldReader* re
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -10725,7 +10725,7 @@ static WowWorldResult vanilla_CMSG_CHANNEL_MODERATE_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -10787,7 +10787,7 @@ static WowWorldResult vanilla_SMSG_UPDATE_OBJECT_read(WowWorldReader* reader, va
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (size_t)5 - (reader->length - reader->index);
+        _return_value = (int)(5 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -10837,7 +10837,7 @@ static WowWorldResult vanilla_SMSG_DESTROY_OBJECT_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -10879,7 +10879,7 @@ static WowWorldResult vanilla_CMSG_USE_ITEM_read(WowWorldReader* reader, vanilla
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (size_t)5 - (reader->length - reader->index);
+        _return_value = (int)(5 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -10927,7 +10927,7 @@ static WowWorldResult vanilla_CMSG_OPEN_ITEM_read(WowWorldReader* reader, vanill
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (size_t)2 - (reader->length - reader->index);
+        _return_value = (int)(2 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -10965,7 +10965,7 @@ static WowWorldResult vanilla_CMSG_READ_ITEM_read(WowWorldReader* reader, vanill
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (size_t)2 - (reader->length - reader->index);
+        _return_value = (int)(2 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -11003,7 +11003,7 @@ static WowWorldResult vanilla_SMSG_READ_ITEM_OK_read(WowWorldReader* reader, van
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -11037,7 +11037,7 @@ static WowWorldResult vanilla_SMSG_READ_ITEM_FAILED_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -11071,7 +11071,7 @@ static WowWorldResult vanilla_SMSG_ITEM_COOLDOWN_read(WowWorldReader* reader, va
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -11109,7 +11109,7 @@ static WowWorldResult vanilla_CMSG_GAMEOBJ_USE_read(WowWorldReader* reader, vani
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -11143,7 +11143,7 @@ static WowWorldResult vanilla_SMSG_GAMEOBJECT_CUSTOM_ANIM_read(WowWorldReader* r
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -11181,7 +11181,7 @@ static WowWorldResult vanilla_CMSG_AREATRIGGER_read(WowWorldReader* reader, vani
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -11219,7 +11219,7 @@ static WowWorldResult vanilla_MSG_MOVE_START_FORWARD_Client_read(WowWorldReader*
     int _return_value = 1;
 
     if (28 > (reader->length - reader->index)) {
-        _return_value = (size_t)28 - (reader->length - reader->index);
+        _return_value = (int)(28 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -11257,7 +11257,7 @@ static WowWorldResult vanilla_MSG_MOVE_START_FORWARD_Server_read(WowWorldReader*
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (size_t)29 - (reader->length - reader->index);
+        _return_value = (int)(29 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -11299,7 +11299,7 @@ static WowWorldResult vanilla_MSG_MOVE_START_BACKWARD_Client_read(WowWorldReader
     int _return_value = 1;
 
     if (28 > (reader->length - reader->index)) {
-        _return_value = (size_t)28 - (reader->length - reader->index);
+        _return_value = (int)(28 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -11337,7 +11337,7 @@ static WowWorldResult vanilla_MSG_MOVE_START_BACKWARD_Server_read(WowWorldReader
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (size_t)29 - (reader->length - reader->index);
+        _return_value = (int)(29 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -11379,7 +11379,7 @@ static WowWorldResult vanilla_MSG_MOVE_STOP_Client_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (28 > (reader->length - reader->index)) {
-        _return_value = (size_t)28 - (reader->length - reader->index);
+        _return_value = (int)(28 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -11417,7 +11417,7 @@ static WowWorldResult vanilla_MSG_MOVE_STOP_Server_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (size_t)29 - (reader->length - reader->index);
+        _return_value = (int)(29 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -11459,7 +11459,7 @@ static WowWorldResult vanilla_MSG_MOVE_START_STRAFE_LEFT_Client_read(WowWorldRea
     int _return_value = 1;
 
     if (28 > (reader->length - reader->index)) {
-        _return_value = (size_t)28 - (reader->length - reader->index);
+        _return_value = (int)(28 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -11497,7 +11497,7 @@ static WowWorldResult vanilla_MSG_MOVE_START_STRAFE_LEFT_Server_read(WowWorldRea
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (size_t)29 - (reader->length - reader->index);
+        _return_value = (int)(29 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -11539,7 +11539,7 @@ static WowWorldResult vanilla_MSG_MOVE_START_STRAFE_RIGHT_Client_read(WowWorldRe
     int _return_value = 1;
 
     if (28 > (reader->length - reader->index)) {
-        _return_value = (size_t)28 - (reader->length - reader->index);
+        _return_value = (int)(28 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -11577,7 +11577,7 @@ static WowWorldResult vanilla_MSG_MOVE_START_STRAFE_RIGHT_Server_read(WowWorldRe
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (size_t)29 - (reader->length - reader->index);
+        _return_value = (int)(29 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -11619,7 +11619,7 @@ static WowWorldResult vanilla_MSG_MOVE_STOP_STRAFE_Client_read(WowWorldReader* r
     int _return_value = 1;
 
     if (28 > (reader->length - reader->index)) {
-        _return_value = (size_t)28 - (reader->length - reader->index);
+        _return_value = (int)(28 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -11657,7 +11657,7 @@ static WowWorldResult vanilla_MSG_MOVE_STOP_STRAFE_Server_read(WowWorldReader* r
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (size_t)29 - (reader->length - reader->index);
+        _return_value = (int)(29 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -11699,7 +11699,7 @@ static WowWorldResult vanilla_MSG_MOVE_JUMP_Client_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (28 > (reader->length - reader->index)) {
-        _return_value = (size_t)28 - (reader->length - reader->index);
+        _return_value = (int)(28 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -11737,7 +11737,7 @@ static WowWorldResult vanilla_MSG_MOVE_JUMP_Server_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (size_t)29 - (reader->length - reader->index);
+        _return_value = (int)(29 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -11779,7 +11779,7 @@ static WowWorldResult vanilla_MSG_MOVE_START_TURN_LEFT_Client_read(WowWorldReade
     int _return_value = 1;
 
     if (28 > (reader->length - reader->index)) {
-        _return_value = (size_t)28 - (reader->length - reader->index);
+        _return_value = (int)(28 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -11817,7 +11817,7 @@ static WowWorldResult vanilla_MSG_MOVE_START_TURN_LEFT_Server_read(WowWorldReade
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (size_t)29 - (reader->length - reader->index);
+        _return_value = (int)(29 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -11859,7 +11859,7 @@ static WowWorldResult vanilla_MSG_MOVE_START_TURN_RIGHT_Client_read(WowWorldRead
     int _return_value = 1;
 
     if (28 > (reader->length - reader->index)) {
-        _return_value = (size_t)28 - (reader->length - reader->index);
+        _return_value = (int)(28 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -11897,7 +11897,7 @@ static WowWorldResult vanilla_MSG_MOVE_START_TURN_RIGHT_Server_read(WowWorldRead
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (size_t)29 - (reader->length - reader->index);
+        _return_value = (int)(29 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -11939,7 +11939,7 @@ static WowWorldResult vanilla_MSG_MOVE_STOP_TURN_Client_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (28 > (reader->length - reader->index)) {
-        _return_value = (size_t)28 - (reader->length - reader->index);
+        _return_value = (int)(28 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -11977,7 +11977,7 @@ static WowWorldResult vanilla_MSG_MOVE_STOP_TURN_Server_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (size_t)29 - (reader->length - reader->index);
+        _return_value = (int)(29 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -12019,7 +12019,7 @@ static WowWorldResult vanilla_MSG_MOVE_START_PITCH_UP_Client_read(WowWorldReader
     int _return_value = 1;
 
     if (28 > (reader->length - reader->index)) {
-        _return_value = (size_t)28 - (reader->length - reader->index);
+        _return_value = (int)(28 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -12057,7 +12057,7 @@ static WowWorldResult vanilla_MSG_MOVE_START_PITCH_UP_Server_read(WowWorldReader
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (size_t)29 - (reader->length - reader->index);
+        _return_value = (int)(29 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -12099,7 +12099,7 @@ static WowWorldResult vanilla_MSG_MOVE_START_PITCH_DOWN_Client_read(WowWorldRead
     int _return_value = 1;
 
     if (28 > (reader->length - reader->index)) {
-        _return_value = (size_t)28 - (reader->length - reader->index);
+        _return_value = (int)(28 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -12137,7 +12137,7 @@ static WowWorldResult vanilla_MSG_MOVE_START_PITCH_DOWN_Server_read(WowWorldRead
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (size_t)29 - (reader->length - reader->index);
+        _return_value = (int)(29 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -12179,7 +12179,7 @@ static WowWorldResult vanilla_MSG_MOVE_STOP_PITCH_Client_read(WowWorldReader* re
     int _return_value = 1;
 
     if (28 > (reader->length - reader->index)) {
-        _return_value = (size_t)28 - (reader->length - reader->index);
+        _return_value = (int)(28 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -12217,7 +12217,7 @@ static WowWorldResult vanilla_MSG_MOVE_STOP_PITCH_Server_read(WowWorldReader* re
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (size_t)29 - (reader->length - reader->index);
+        _return_value = (int)(29 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -12259,7 +12259,7 @@ static WowWorldResult vanilla_MSG_MOVE_SET_RUN_MODE_Client_read(WowWorldReader* 
     int _return_value = 1;
 
     if (28 > (reader->length - reader->index)) {
-        _return_value = (size_t)28 - (reader->length - reader->index);
+        _return_value = (int)(28 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -12297,7 +12297,7 @@ static WowWorldResult vanilla_MSG_MOVE_SET_RUN_MODE_Server_read(WowWorldReader* 
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (size_t)29 - (reader->length - reader->index);
+        _return_value = (int)(29 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -12339,7 +12339,7 @@ static WowWorldResult vanilla_MSG_MOVE_SET_WALK_MODE_Client_read(WowWorldReader*
     int _return_value = 1;
 
     if (28 > (reader->length - reader->index)) {
-        _return_value = (size_t)28 - (reader->length - reader->index);
+        _return_value = (int)(28 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -12377,7 +12377,7 @@ static WowWorldResult vanilla_MSG_MOVE_SET_WALK_MODE_Server_read(WowWorldReader*
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (size_t)29 - (reader->length - reader->index);
+        _return_value = (int)(29 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -12419,7 +12419,7 @@ static WowWorldResult vanilla_MSG_MOVE_TELEPORT_ACK_Client_read(WowWorldReader* 
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (size_t)9 - (reader->length - reader->index);
+        _return_value = (int)(9 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -12465,7 +12465,7 @@ static WowWorldResult vanilla_MSG_MOVE_TELEPORT_ACK_Server_read(WowWorldReader* 
     int _return_value = 1;
 
     if (33 > (reader->length - reader->index)) {
-        _return_value = (size_t)33 - (reader->length - reader->index);
+        _return_value = (int)(33 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -12511,7 +12511,7 @@ static WowWorldResult vanilla_MSG_MOVE_FALL_LAND_Client_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (28 > (reader->length - reader->index)) {
-        _return_value = (size_t)28 - (reader->length - reader->index);
+        _return_value = (int)(28 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -12549,7 +12549,7 @@ static WowWorldResult vanilla_MSG_MOVE_FALL_LAND_Server_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (size_t)29 - (reader->length - reader->index);
+        _return_value = (int)(29 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -12591,7 +12591,7 @@ static WowWorldResult vanilla_MSG_MOVE_START_SWIM_Client_read(WowWorldReader* re
     int _return_value = 1;
 
     if (28 > (reader->length - reader->index)) {
-        _return_value = (size_t)28 - (reader->length - reader->index);
+        _return_value = (int)(28 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -12629,7 +12629,7 @@ static WowWorldResult vanilla_MSG_MOVE_START_SWIM_Server_read(WowWorldReader* re
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (size_t)29 - (reader->length - reader->index);
+        _return_value = (int)(29 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -12671,7 +12671,7 @@ static WowWorldResult vanilla_MSG_MOVE_STOP_SWIM_Client_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (28 > (reader->length - reader->index)) {
-        _return_value = (size_t)28 - (reader->length - reader->index);
+        _return_value = (int)(28 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -12709,7 +12709,7 @@ static WowWorldResult vanilla_MSG_MOVE_STOP_SWIM_Server_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (size_t)29 - (reader->length - reader->index);
+        _return_value = (int)(29 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -12751,7 +12751,7 @@ static WowWorldResult vanilla_MSG_MOVE_SET_FACING_Client_read(WowWorldReader* re
     int _return_value = 1;
 
     if (28 > (reader->length - reader->index)) {
-        _return_value = (size_t)28 - (reader->length - reader->index);
+        _return_value = (int)(28 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -12789,7 +12789,7 @@ static WowWorldResult vanilla_MSG_MOVE_SET_FACING_Server_read(WowWorldReader* re
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (size_t)29 - (reader->length - reader->index);
+        _return_value = (int)(29 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -12831,7 +12831,7 @@ static WowWorldResult vanilla_MSG_MOVE_SET_PITCH_Client_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (28 > (reader->length - reader->index)) {
-        _return_value = (size_t)28 - (reader->length - reader->index);
+        _return_value = (int)(28 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -12869,7 +12869,7 @@ static WowWorldResult vanilla_MSG_MOVE_SET_PITCH_Server_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (size_t)29 - (reader->length - reader->index);
+        _return_value = (int)(29 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -12968,7 +12968,7 @@ static WowWorldResult vanilla_SMSG_MONSTER_MOVE_read(WowWorldReader* reader, van
     int _return_value = 1;
 
     if (30 > (reader->length - reader->index)) {
-        _return_value = (size_t)30 - (reader->length - reader->index);
+        _return_value = (int)(30 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -13060,7 +13060,7 @@ static WowWorldResult vanilla_SMSG_MOVE_WATER_WALK_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (size_t)5 - (reader->length - reader->index);
+        _return_value = (int)(5 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -13102,7 +13102,7 @@ static WowWorldResult vanilla_SMSG_MOVE_LAND_WALK_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (size_t)5 - (reader->length - reader->index);
+        _return_value = (int)(5 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -13140,7 +13140,7 @@ static WowWorldResult vanilla_CMSG_MOVE_SET_RAW_POSITION_read(WowWorldReader* re
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (size_t)16 - (reader->length - reader->index);
+        _return_value = (int)(16 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -13182,7 +13182,7 @@ static WowWorldResult vanilla_SMSG_FORCE_RUN_SPEED_CHANGE_read(WowWorldReader* r
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (size_t)9 - (reader->length - reader->index);
+        _return_value = (int)(9 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -13228,7 +13228,7 @@ static WowWorldResult vanilla_CMSG_FORCE_RUN_SPEED_CHANGE_ACK_read(WowWorldReade
     int _return_value = 1;
 
     if (44 > (reader->length - reader->index)) {
-        _return_value = (size_t)44 - (reader->length - reader->index);
+        _return_value = (int)(44 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -13278,7 +13278,7 @@ static WowWorldResult vanilla_SMSG_FORCE_RUN_BACK_SPEED_CHANGE_read(WowWorldRead
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (size_t)9 - (reader->length - reader->index);
+        _return_value = (int)(9 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -13324,7 +13324,7 @@ static WowWorldResult vanilla_CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK_read(WowWorld
     int _return_value = 1;
 
     if (44 > (reader->length - reader->index)) {
-        _return_value = (size_t)44 - (reader->length - reader->index);
+        _return_value = (int)(44 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -13374,7 +13374,7 @@ static WowWorldResult vanilla_SMSG_FORCE_SWIM_SPEED_CHANGE_read(WowWorldReader* 
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (size_t)9 - (reader->length - reader->index);
+        _return_value = (int)(9 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -13420,7 +13420,7 @@ static WowWorldResult vanilla_CMSG_FORCE_SWIM_SPEED_CHANGE_ACK_read(WowWorldRead
     int _return_value = 1;
 
     if (44 > (reader->length - reader->index)) {
-        _return_value = (size_t)44 - (reader->length - reader->index);
+        _return_value = (int)(44 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -13466,7 +13466,7 @@ static WowWorldResult vanilla_SMSG_FORCE_MOVE_ROOT_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -13508,7 +13508,7 @@ static WowWorldResult vanilla_CMSG_FORCE_MOVE_ROOT_ACK_read(WowWorldReader* read
     int _return_value = 1;
 
     if (40 > (reader->length - reader->index)) {
-        _return_value = (size_t)40 - (reader->length - reader->index);
+        _return_value = (int)(40 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -13550,7 +13550,7 @@ static WowWorldResult vanilla_SMSG_FORCE_MOVE_UNROOT_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -13592,7 +13592,7 @@ static WowWorldResult vanilla_CMSG_FORCE_MOVE_UNROOT_ACK_read(WowWorldReader* re
     int _return_value = 1;
 
     if (40 > (reader->length - reader->index)) {
-        _return_value = (size_t)40 - (reader->length - reader->index);
+        _return_value = (int)(40 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -13638,7 +13638,7 @@ static WowWorldResult vanilla_MSG_MOVE_HEARTBEAT_Client_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (28 > (reader->length - reader->index)) {
-        _return_value = (size_t)28 - (reader->length - reader->index);
+        _return_value = (int)(28 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -13676,7 +13676,7 @@ static WowWorldResult vanilla_MSG_MOVE_HEARTBEAT_Server_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (size_t)29 - (reader->length - reader->index);
+        _return_value = (int)(29 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -13718,7 +13718,7 @@ static WowWorldResult vanilla_SMSG_MOVE_KNOCK_BACK_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (21 > (reader->length - reader->index)) {
-        _return_value = (size_t)21 - (reader->length - reader->index);
+        _return_value = (int)(21 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -13776,7 +13776,7 @@ static WowWorldResult vanilla_CMSG_MOVE_KNOCK_BACK_ACK_read(WowWorldReader* read
     int _return_value = 1;
 
     if (40 > (reader->length - reader->index)) {
-        _return_value = (size_t)40 - (reader->length - reader->index);
+        _return_value = (int)(40 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -13822,7 +13822,7 @@ static WowWorldResult vanilla_SMSG_MOVE_FEATHER_FALL_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (size_t)5 - (reader->length - reader->index);
+        _return_value = (int)(5 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -13864,7 +13864,7 @@ static WowWorldResult vanilla_SMSG_MOVE_NORMAL_FALL_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (size_t)5 - (reader->length - reader->index);
+        _return_value = (int)(5 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -13906,7 +13906,7 @@ static WowWorldResult vanilla_SMSG_MOVE_SET_HOVER_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (size_t)5 - (reader->length - reader->index);
+        _return_value = (int)(5 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -13948,7 +13948,7 @@ static WowWorldResult vanilla_SMSG_MOVE_UNSET_HOVER_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (size_t)5 - (reader->length - reader->index);
+        _return_value = (int)(5 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -13990,7 +13990,7 @@ static WowWorldResult vanilla_CMSG_MOVE_HOVER_ACK_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (44 > (reader->length - reader->index)) {
-        _return_value = (size_t)44 - (reader->length - reader->index);
+        _return_value = (int)(44 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -14036,7 +14036,7 @@ static WowWorldResult vanilla_SMSG_TRIGGER_CINEMATIC_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -14105,7 +14105,7 @@ static WowWorldResult vanilla_SMSG_TUTORIAL_FLAGS_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (32 > (reader->length - reader->index)) {
-        _return_value = (size_t)32 - (reader->length - reader->index);
+        _return_value = (int)(32 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -14139,7 +14139,7 @@ static WowWorldResult vanilla_CMSG_TUTORIAL_FLAG_read(WowWorldReader* reader, va
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -14207,7 +14207,7 @@ static WowWorldResult vanilla_CMSG_STANDSTATECHANGE_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -14242,7 +14242,7 @@ static WowWorldResult vanilla_CMSG_EMOTE_read(WowWorldReader* reader, vanilla_CM
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -14277,7 +14277,7 @@ static WowWorldResult vanilla_SMSG_EMOTE_read(WowWorldReader* reader, vanilla_SM
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -14316,7 +14316,7 @@ static WowWorldResult vanilla_CMSG_TEXT_EMOTE_read(WowWorldReader* reader, vanil
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (size_t)16 - (reader->length - reader->index);
+        _return_value = (int)(16 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -14368,7 +14368,7 @@ static WowWorldResult vanilla_SMSG_TEXT_EMOTE_read(WowWorldReader* reader, vanil
     int _return_value = 1;
 
     if (21 > (reader->length - reader->index)) {
-        _return_value = (size_t)21 - (reader->length - reader->index);
+        _return_value = (int)(21 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -14418,7 +14418,7 @@ static WowWorldResult vanilla_CMSG_AUTOSTORE_LOOT_ITEM_read(WowWorldReader* read
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -14452,7 +14452,7 @@ static WowWorldResult vanilla_CMSG_AUTOEQUIP_ITEM_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (size_t)2 - (reader->length - reader->index);
+        _return_value = (int)(2 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -14490,7 +14490,7 @@ static WowWorldResult vanilla_CMSG_AUTOSTORE_BAG_ITEM_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (3 > (reader->length - reader->index)) {
-        _return_value = (size_t)3 - (reader->length - reader->index);
+        _return_value = (int)(3 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -14532,7 +14532,7 @@ static WowWorldResult vanilla_CMSG_SWAP_ITEM_read(WowWorldReader* reader, vanill
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -14578,7 +14578,7 @@ static WowWorldResult vanilla_CMSG_SWAP_INV_ITEM_read(WowWorldReader* reader, va
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (size_t)2 - (reader->length - reader->index);
+        _return_value = (int)(2 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -14618,7 +14618,7 @@ static WowWorldResult vanilla_CMSG_SPLIT_ITEM_read(WowWorldReader* reader, vanil
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (size_t)5 - (reader->length - reader->index);
+        _return_value = (int)(5 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -14668,7 +14668,7 @@ static WowWorldResult vanilla_CMSG_AUTOEQUIP_ITEM_SLOT_read(WowWorldReader* read
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (size_t)9 - (reader->length - reader->index);
+        _return_value = (int)(9 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -14706,7 +14706,7 @@ static WowWorldResult vanilla_CMSG_DESTROYITEM_read(WowWorldReader* reader, vani
     int _return_value = 1;
 
     if (6 > (reader->length - reader->index)) {
-        _return_value = (size_t)6 - (reader->length - reader->index);
+        _return_value = (int)(6 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -14774,7 +14774,7 @@ static WowWorldResult vanilla_SMSG_INVENTORY_CHANGE_FAILURE_read(WowWorldReader*
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -14833,7 +14833,7 @@ static WowWorldResult vanilla_SMSG_OPEN_CONTAINER_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -14867,7 +14867,7 @@ static WowWorldResult vanilla_CMSG_INSPECT_read(WowWorldReader* reader, vanilla_
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -14901,7 +14901,7 @@ static WowWorldResult vanilla_SMSG_INSPECT_read(WowWorldReader* reader, vanilla_
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -14935,7 +14935,7 @@ static WowWorldResult vanilla_CMSG_INITIATE_TRADE_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -15020,7 +15020,7 @@ static WowWorldResult vanilla_CMSG_ACCEPT_TRADE_read(WowWorldReader* reader, van
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -15088,7 +15088,7 @@ static WowWorldResult vanilla_CMSG_SET_TRADE_ITEM_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (3 > (reader->length - reader->index)) {
-        _return_value = (size_t)3 - (reader->length - reader->index);
+        _return_value = (int)(3 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -15130,7 +15130,7 @@ static WowWorldResult vanilla_CMSG_CLEAR_TRADE_ITEM_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -15164,7 +15164,7 @@ static WowWorldResult vanilla_CMSG_SET_TRADE_GOLD_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -15214,7 +15214,7 @@ static WowWorldResult vanilla_SMSG_TRADE_STATUS_read(WowWorldReader* reader, van
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -15282,7 +15282,7 @@ static WowWorldResult vanilla_SMSG_TRADE_STATUS_EXTENDED_read(WowWorldReader* re
     int _return_value = 1;
 
     if (444 > (reader->length - reader->index)) {
-        _return_value = (size_t)444 - (reader->length - reader->index);
+        _return_value = (int)(444 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -15347,7 +15347,7 @@ static WowWorldResult vanilla_SMSG_INITIALIZE_FACTIONS_read(WowWorldReader* read
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -15393,7 +15393,7 @@ static WowWorldResult vanilla_SMSG_SET_FACTION_VISIBLE_read(WowWorldReader* read
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (size_t)2 - (reader->length - reader->index);
+        _return_value = (int)(2 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -15439,7 +15439,7 @@ static WowWorldResult vanilla_SMSG_SET_FACTION_STANDING_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -15485,7 +15485,7 @@ static WowWorldResult vanilla_CMSG_SET_FACTION_ATWAR_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (3 > (reader->length - reader->index)) {
-        _return_value = (size_t)3 - (reader->length - reader->index);
+        _return_value = (int)(3 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -15525,7 +15525,7 @@ static WowWorldResult vanilla_SMSG_SET_PROFICIENCY_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (size_t)5 - (reader->length - reader->index);
+        _return_value = (int)(5 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -15564,7 +15564,7 @@ static WowWorldResult vanilla_CMSG_SET_ACTION_BUTTON_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (size_t)5 - (reader->length - reader->index);
+        _return_value = (int)(5 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -15610,7 +15610,7 @@ static WowWorldResult vanilla_SMSG_ACTION_BUTTONS_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (480 > (reader->length - reader->index)) {
-        _return_value = (size_t)480 - (reader->length - reader->index);
+        _return_value = (int)(480 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -15659,7 +15659,7 @@ static WowWorldResult vanilla_SMSG_INITIAL_SPELLS_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (size_t)5 - (reader->length - reader->index);
+        _return_value = (int)(5 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -15723,7 +15723,7 @@ static WowWorldResult vanilla_SMSG_LEARNED_SPELL_read(WowWorldReader* reader, va
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -15757,7 +15757,7 @@ static WowWorldResult vanilla_SMSG_SUPERCEDED_SPELL_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -15803,7 +15803,7 @@ static WowWorldResult vanilla_CMSG_CAST_SPELL_read(WowWorldReader* reader, vanil
     int _return_value = 1;
 
     if (6 > (reader->length - reader->index)) {
-        _return_value = (size_t)6 - (reader->length - reader->index);
+        _return_value = (int)(6 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -15843,7 +15843,7 @@ static WowWorldResult vanilla_CMSG_CANCEL_CAST_read(WowWorldReader* reader, vani
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -15898,7 +15898,7 @@ static WowWorldResult vanilla_SMSG_CAST_RESULT_read(WowWorldReader* reader, vani
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (size_t)5 - (reader->length - reader->index);
+        _return_value = (int)(5 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -15995,7 +15995,7 @@ static WowWorldResult vanilla_SMSG_SPELL_START_read(WowWorldReader* reader, vani
     int _return_value = 1;
 
     if (14 > (reader->length - reader->index)) {
-        _return_value = (size_t)14 - (reader->length - reader->index);
+        _return_value = (int)(14 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -16088,7 +16088,7 @@ static WowWorldResult vanilla_SMSG_SPELL_GO_read(WowWorldReader* reader, vanilla
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -16181,7 +16181,7 @@ static WowWorldResult vanilla_SMSG_SPELL_FAILURE_read(WowWorldReader* reader, va
     int _return_value = 1;
 
     if (13 > (reader->length - reader->index)) {
-        _return_value = (size_t)13 - (reader->length - reader->index);
+        _return_value = (int)(13 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -16237,7 +16237,7 @@ static WowWorldResult vanilla_SMSG_SPELL_COOLDOWN_read(WowWorldReader* reader, v
     size_t _size = 0;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -16306,7 +16306,7 @@ static WowWorldResult vanilla_SMSG_COOLDOWN_EVENT_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -16344,7 +16344,7 @@ static WowWorldResult vanilla_CMSG_CANCEL_AURA_read(WowWorldReader* reader, vani
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -16378,7 +16378,7 @@ static WowWorldResult vanilla_SMSG_UPDATE_AURA_DURATION_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (size_t)5 - (reader->length - reader->index);
+        _return_value = (int)(5 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -16416,7 +16416,7 @@ static WowWorldResult vanilla_SMSG_PET_CAST_FAILED_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (6 > (reader->length - reader->index)) {
-        _return_value = (size_t)6 - (reader->length - reader->index);
+        _return_value = (int)(6 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -16459,7 +16459,7 @@ static WowWorldResult vanilla_MSG_CHANNEL_START_Server_read(WowWorldReader* read
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -16497,7 +16497,7 @@ static WowWorldResult vanilla_MSG_CHANNEL_UPDATE_Server_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -16531,7 +16531,7 @@ static WowWorldResult vanilla_CMSG_CANCEL_CHANNELLING_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -16565,7 +16565,7 @@ static WowWorldResult vanilla_SMSG_AI_REACTION_read(WowWorldReader* reader, vani
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -16604,7 +16604,7 @@ static WowWorldResult vanilla_CMSG_SET_SELECTION_read(WowWorldReader* reader, va
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -16638,7 +16638,7 @@ static WowWorldResult vanilla_CMSG_SET_TARGET_OBSOLETE_read(WowWorldReader* read
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -16672,7 +16672,7 @@ static WowWorldResult vanilla_CMSG_ATTACKSWING_read(WowWorldReader* reader, vani
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -16723,7 +16723,7 @@ static WowWorldResult vanilla_SMSG_ATTACKSTART_read(WowWorldReader* reader, vani
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (size_t)16 - (reader->length - reader->index);
+        _return_value = (int)(16 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -16765,7 +16765,7 @@ static WowWorldResult vanilla_SMSG_ATTACKSTOP_read(WowWorldReader* reader, vanil
     int _return_value = 1;
 
     if (6 > (reader->length - reader->index)) {
-        _return_value = (size_t)6 - (reader->length - reader->index);
+        _return_value = (int)(6 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -16903,7 +16903,7 @@ static WowWorldResult vanilla_SMSG_ATTACKERSTATEUPDATE_read(WowWorldReader* read
     int _return_value = 1;
 
     if (27 > (reader->length - reader->index)) {
-        _return_value = (size_t)27 - (reader->length - reader->index);
+        _return_value = (int)(27 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -17003,7 +17003,7 @@ static WowWorldResult vanilla_SMSG_SPELLHEALLOG_read(WowWorldReader* reader, van
     int _return_value = 1;
 
     if (11 > (reader->length - reader->index)) {
-        _return_value = (size_t)11 - (reader->length - reader->index);
+        _return_value = (int)(11 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -17057,7 +17057,7 @@ static WowWorldResult vanilla_SMSG_SPELLENERGIZELOG_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (14 > (reader->length - reader->index)) {
-        _return_value = (size_t)14 - (reader->length - reader->index);
+        _return_value = (int)(14 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -17108,7 +17108,7 @@ static WowWorldResult vanilla_SMSG_BINDPOINTUPDATE_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (20 > (reader->length - reader->index)) {
-        _return_value = (size_t)20 - (reader->length - reader->index);
+        _return_value = (int)(20 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -17152,7 +17152,7 @@ static WowWorldResult vanilla_SMSG_PLAYERBOUND_read(WowWorldReader* reader, vani
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -17195,7 +17195,7 @@ static WowWorldResult vanilla_SMSG_CLIENT_CONTROL_UPDATE_read(WowWorldReader* re
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (size_t)2 - (reader->length - reader->index);
+        _return_value = (int)(2 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -17259,7 +17259,7 @@ static WowWorldResult vanilla_SMSG_RESURRECT_REQUEST_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (14 > (reader->length - reader->index)) {
-        _return_value = (size_t)14 - (reader->length - reader->index);
+        _return_value = (int)(14 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -17304,7 +17304,7 @@ static WowWorldResult vanilla_CMSG_RESURRECT_RESPONSE_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (size_t)9 - (reader->length - reader->index);
+        _return_value = (int)(9 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -17342,7 +17342,7 @@ static WowWorldResult vanilla_CMSG_LOOT_read(WowWorldReader* reader, vanilla_CMS
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -17393,7 +17393,7 @@ static WowWorldResult vanilla_CMSG_LOOT_RELEASE_read(WowWorldReader* reader, van
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -17446,7 +17446,7 @@ static WowWorldResult vanilla_SMSG_LOOT_RESPONSE_read(WowWorldReader* reader, va
     int _return_value = 1;
 
     if (14 > (reader->length - reader->index)) {
-        _return_value = (size_t)14 - (reader->length - reader->index);
+        _return_value = (int)(14 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -17514,7 +17514,7 @@ static WowWorldResult vanilla_SMSG_LOOT_RELEASE_RESPONSE_read(WowWorldReader* re
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (size_t)9 - (reader->length - reader->index);
+        _return_value = (int)(9 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -17552,7 +17552,7 @@ static WowWorldResult vanilla_SMSG_LOOT_REMOVED_read(WowWorldReader* reader, van
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -17586,7 +17586,7 @@ static WowWorldResult vanilla_SMSG_LOOT_MONEY_NOTIFY_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -17637,7 +17637,7 @@ static WowWorldResult vanilla_SMSG_ITEM_PUSH_RESULT_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (41 > (reader->length - reader->index)) {
-        _return_value = (size_t)41 - (reader->length - reader->index);
+        _return_value = (int)(41 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -17710,7 +17710,7 @@ static WowWorldResult vanilla_SMSG_DUEL_REQUESTED_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (size_t)16 - (reader->length - reader->index);
+        _return_value = (int)(16 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -17782,7 +17782,7 @@ static WowWorldResult vanilla_SMSG_DUEL_COMPLETE_read(WowWorldReader* reader, va
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -17827,7 +17827,7 @@ static WowWorldResult vanilla_SMSG_DUEL_WINNER_read(WowWorldReader* reader, vani
     int _return_value = 1;
 
     if (3 > (reader->length - reader->index)) {
-        _return_value = (size_t)3 - (reader->length - reader->index);
+        _return_value = (int)(3 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -17874,7 +17874,7 @@ static WowWorldResult vanilla_CMSG_DUEL_ACCEPTED_read(WowWorldReader* reader, va
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -17908,7 +17908,7 @@ static WowWorldResult vanilla_CMSG_DUEL_CANCELLED_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -17942,7 +17942,7 @@ static WowWorldResult vanilla_SMSG_MOUNTRESULT_read(WowWorldReader* reader, vani
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -17977,7 +17977,7 @@ static WowWorldResult vanilla_SMSG_DISMOUNTRESULT_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -18029,7 +18029,7 @@ static WowWorldResult vanilla_SMSG_MOUNTSPECIAL_ANIM_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -18063,7 +18063,7 @@ static WowWorldResult vanilla_SMSG_PET_TAME_FAILURE_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -18117,7 +18117,7 @@ static WowWorldResult vanilla_CMSG_PET_SET_ACTION_read(WowWorldReader* reader, v
     size_t _size = 0;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (size_t)16 - (reader->length - reader->index);
+        _return_value = (int)(16 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -18183,7 +18183,7 @@ static WowWorldResult vanilla_CMSG_PET_ACTION_read(WowWorldReader* reader, vanil
     int _return_value = 1;
 
     if (20 > (reader->length - reader->index)) {
-        _return_value = (size_t)20 - (reader->length - reader->index);
+        _return_value = (int)(20 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -18225,7 +18225,7 @@ static WowWorldResult vanilla_CMSG_PET_ABANDON_read(WowWorldReader* reader, vani
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -18268,7 +18268,7 @@ static WowWorldResult vanilla_CMSG_PET_RENAME_read(WowWorldReader* reader, vanil
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (size_t)9 - (reader->length - reader->index);
+        _return_value = (int)(9 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -18353,7 +18353,7 @@ static WowWorldResult vanilla_SMSG_PET_SPELLS_read(WowWorldReader* reader, vanil
     size_t _size = 0;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -18457,7 +18457,7 @@ static WowWorldResult vanilla_SMSG_PET_MODE_read(WowWorldReader* reader, vanilla
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -18510,7 +18510,7 @@ static WowWorldResult vanilla_CMSG_GOSSIP_HELLO_read(WowWorldReader* reader, van
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -18565,7 +18565,7 @@ static WowWorldResult vanilla_CMSG_GOSSIP_SELECT_OPTION_read(WowWorldReader* rea
     size_t _size = 0;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -18663,7 +18663,7 @@ static WowWorldResult vanilla_SMSG_GOSSIP_MESSAGE_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (20 > (reader->length - reader->index)) {
-        _return_value = (size_t)20 - (reader->length - reader->index);
+        _return_value = (int)(20 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -18748,7 +18748,7 @@ static WowWorldResult vanilla_CMSG_NPC_TEXT_QUERY_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -18807,7 +18807,7 @@ static WowWorldResult vanilla_SMSG_NPC_TEXT_UPDATE_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (276 > (reader->length - reader->index)) {
-        _return_value = (size_t)276 - (reader->length - reader->index);
+        _return_value = (int)(276 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -18847,7 +18847,7 @@ static WowWorldResult vanilla_CMSG_QUESTGIVER_STATUS_QUERY_read(WowWorldReader* 
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -18881,7 +18881,7 @@ static WowWorldResult vanilla_SMSG_QUESTGIVER_STATUS_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -18920,7 +18920,7 @@ static WowWorldResult vanilla_CMSG_QUESTGIVER_HELLO_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -18981,7 +18981,7 @@ static WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_LIST_read(WowWorldReader* re
     int _return_value = 1;
 
     if (18 > (reader->length - reader->index)) {
-        _return_value = (size_t)18 - (reader->length - reader->index);
+        _return_value = (int)(18 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -19044,7 +19044,7 @@ static WowWorldResult vanilla_CMSG_QUESTGIVER_QUERY_QUEST_read(WowWorldReader* r
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -19124,7 +19124,7 @@ static WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_DETAILS_read(WowWorldReader*
     int _return_value = 1;
 
     if (39 > (reader->length - reader->index)) {
-        _return_value = (size_t)39 - (reader->length - reader->index);
+        _return_value = (int)(39 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -19233,7 +19233,7 @@ static WowWorldResult vanilla_CMSG_QUESTGIVER_ACCEPT_QUEST_read(WowWorldReader* 
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -19271,7 +19271,7 @@ static WowWorldResult vanilla_CMSG_QUESTGIVER_COMPLETE_QUEST_read(WowWorldReader
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -19324,7 +19324,7 @@ static WowWorldResult vanilla_SMSG_QUESTGIVER_REQUEST_ITEMS_read(WowWorldReader*
     int _return_value = 1;
 
     if (50 > (reader->length - reader->index)) {
-        _return_value = (size_t)50 - (reader->length - reader->index);
+        _return_value = (int)(50 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -19421,7 +19421,7 @@ static WowWorldResult vanilla_CMSG_QUESTGIVER_REQUEST_REWARD_read(WowWorldReader
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -19482,7 +19482,7 @@ static WowWorldResult vanilla_SMSG_QUESTGIVER_OFFER_REWARD_read(WowWorldReader* 
     int _return_value = 1;
 
     if (42 > (reader->length - reader->index)) {
-        _return_value = (size_t)42 - (reader->length - reader->index);
+        _return_value = (int)(42 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -19590,7 +19590,7 @@ static WowWorldResult vanilla_CMSG_QUESTGIVER_CHOOSE_REWARD_read(WowWorldReader*
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (size_t)16 - (reader->length - reader->index);
+        _return_value = (int)(16 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -19632,7 +19632,7 @@ static WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_INVALID_read(WowWorldReader*
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -19695,7 +19695,7 @@ static WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_COMPLETE_read(WowWorldReader
     int _return_value = 1;
 
     if (20 > (reader->length - reader->index)) {
-        _return_value = (size_t)20 - (reader->length - reader->index);
+        _return_value = (int)(20 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -19757,7 +19757,7 @@ static WowWorldResult vanilla_SMSG_QUESTGIVER_QUEST_FAILED_read(WowWorldReader* 
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -19796,7 +19796,7 @@ static WowWorldResult vanilla_CMSG_QUESTLOG_SWAP_QUEST_read(WowWorldReader* read
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (size_t)2 - (reader->length - reader->index);
+        _return_value = (int)(2 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -19834,7 +19834,7 @@ static WowWorldResult vanilla_CMSG_QUESTLOG_REMOVE_QUEST_read(WowWorldReader* re
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -19885,7 +19885,7 @@ static WowWorldResult vanilla_SMSG_QUESTUPDATE_FAILED_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -19919,7 +19919,7 @@ static WowWorldResult vanilla_SMSG_QUESTUPDATE_FAILEDTIMER_read(WowWorldReader* 
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -19953,7 +19953,7 @@ static WowWorldResult vanilla_SMSG_QUESTUPDATE_COMPLETE_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -19987,7 +19987,7 @@ static WowWorldResult vanilla_SMSG_QUESTUPDATE_ADD_KILL_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (24 > (reader->length - reader->index)) {
-        _return_value = (size_t)24 - (reader->length - reader->index);
+        _return_value = (int)(24 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -20037,7 +20037,7 @@ static WowWorldResult vanilla_SMSG_QUESTUPDATE_ADD_ITEM_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -20075,7 +20075,7 @@ static WowWorldResult vanilla_CMSG_QUEST_CONFIRM_ACCEPT_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -20118,7 +20118,7 @@ static WowWorldResult vanilla_SMSG_QUEST_CONFIRM_ACCEPT_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (13 > (reader->length - reader->index)) {
-        _return_value = (size_t)13 - (reader->length - reader->index);
+        _return_value = (int)(13 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -20163,7 +20163,7 @@ static WowWorldResult vanilla_CMSG_PUSHQUESTTOPARTY_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -20197,7 +20197,7 @@ static WowWorldResult vanilla_CMSG_LIST_INVENTORY_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -20242,7 +20242,7 @@ static WowWorldResult vanilla_SMSG_LIST_INVENTORY_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (size_t)9 - (reader->length - reader->index);
+        _return_value = (int)(9 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -20292,7 +20292,7 @@ static WowWorldResult vanilla_CMSG_SELL_ITEM_read(WowWorldReader* reader, vanill
     int _return_value = 1;
 
     if (17 > (reader->length - reader->index)) {
-        _return_value = (size_t)17 - (reader->length - reader->index);
+        _return_value = (int)(17 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -20334,7 +20334,7 @@ static WowWorldResult vanilla_SMSG_SELL_ITEM_read(WowWorldReader* reader, vanill
     int _return_value = 1;
 
     if (17 > (reader->length - reader->index)) {
-        _return_value = (size_t)17 - (reader->length - reader->index);
+        _return_value = (int)(17 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -20377,7 +20377,7 @@ static WowWorldResult vanilla_CMSG_BUY_ITEM_read(WowWorldReader* reader, vanilla
     int _return_value = 1;
 
     if (14 > (reader->length - reader->index)) {
-        _return_value = (size_t)14 - (reader->length - reader->index);
+        _return_value = (int)(14 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -20423,7 +20423,7 @@ static WowWorldResult vanilla_CMSG_BUY_ITEM_IN_SLOT_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (22 > (reader->length - reader->index)) {
-        _return_value = (size_t)22 - (reader->length - reader->index);
+        _return_value = (int)(22 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -20473,7 +20473,7 @@ static WowWorldResult vanilla_SMSG_BUY_ITEM_read(WowWorldReader* reader, vanilla
     int _return_value = 1;
 
     if (20 > (reader->length - reader->index)) {
-        _return_value = (size_t)20 - (reader->length - reader->index);
+        _return_value = (int)(20 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -20519,7 +20519,7 @@ static WowWorldResult vanilla_SMSG_BUY_FAILED_read(WowWorldReader* reader, vanil
     int _return_value = 1;
 
     if (13 > (reader->length - reader->index)) {
-        _return_value = (size_t)13 - (reader->length - reader->index);
+        _return_value = (int)(13 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -20575,7 +20575,7 @@ static WowWorldResult vanilla_SMSG_SHOWTAXINODES_read(WowWorldReader* reader, va
     size_t _size = 0;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (size_t)16 - (reader->length - reader->index);
+        _return_value = (int)(16 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -20654,7 +20654,7 @@ static WowWorldResult vanilla_CMSG_TAXINODE_STATUS_QUERY_read(WowWorldReader* re
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -20688,7 +20688,7 @@ static WowWorldResult vanilla_SMSG_TAXINODE_STATUS_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (size_t)9 - (reader->length - reader->index);
+        _return_value = (int)(9 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -20726,7 +20726,7 @@ static WowWorldResult vanilla_CMSG_TAXIQUERYAVAILABLENODES_read(WowWorldReader* 
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -20760,7 +20760,7 @@ static WowWorldResult vanilla_CMSG_ACTIVATETAXI_read(WowWorldReader* reader, van
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (size_t)16 - (reader->length - reader->index);
+        _return_value = (int)(16 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -20802,7 +20802,7 @@ static WowWorldResult vanilla_SMSG_ACTIVATETAXIREPLY_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -20854,7 +20854,7 @@ static WowWorldResult vanilla_CMSG_TRAINER_LIST_read(WowWorldReader* reader, van
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -20901,7 +20901,7 @@ static WowWorldResult vanilla_SMSG_TRAINER_LIST_read(WowWorldReader* reader, van
     int _return_value = 1;
 
     if (17 > (reader->length - reader->index)) {
-        _return_value = (size_t)17 - (reader->length - reader->index);
+        _return_value = (int)(17 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -20960,7 +20960,7 @@ static WowWorldResult vanilla_CMSG_TRAINER_BUY_SPELL_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -20998,7 +20998,7 @@ static WowWorldResult vanilla_SMSG_TRAINER_BUY_SUCCEEDED_read(WowWorldReader* re
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -21036,7 +21036,7 @@ static WowWorldResult vanilla_SMSG_TRAINER_BUY_FAILED_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (size_t)16 - (reader->length - reader->index);
+        _return_value = (int)(16 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -21079,7 +21079,7 @@ static WowWorldResult vanilla_CMSG_BINDER_ACTIVATE_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -21113,7 +21113,7 @@ static WowWorldResult vanilla_CMSG_BANKER_ACTIVATE_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -21147,7 +21147,7 @@ static WowWorldResult vanilla_SMSG_SHOW_BANK_read(WowWorldReader* reader, vanill
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -21181,7 +21181,7 @@ static WowWorldResult vanilla_CMSG_BUY_BANK_SLOT_read(WowWorldReader* reader, va
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -21215,7 +21215,7 @@ static WowWorldResult vanilla_SMSG_BUY_BANK_SLOT_RESULT_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -21250,7 +21250,7 @@ static WowWorldResult vanilla_CMSG_PETITION_SHOWLIST_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -21295,7 +21295,7 @@ static WowWorldResult vanilla_SMSG_PETITION_SHOWLIST_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (size_t)9 - (reader->length - reader->index);
+        _return_value = (int)(9 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -21354,7 +21354,7 @@ static WowWorldResult vanilla_CMSG_PETITION_BUY_read(WowWorldReader* reader, van
     int _return_value = 1;
 
     if (72 > (reader->length - reader->index)) {
-        _return_value = (size_t)72 - (reader->length - reader->index);
+        _return_value = (int)(72 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -21459,7 +21459,7 @@ static WowWorldResult vanilla_CMSG_PETITION_SHOW_SIGNATURES_read(WowWorldReader*
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -21504,7 +21504,7 @@ static WowWorldResult vanilla_SMSG_PETITION_SHOW_SIGNATURES_read(WowWorldReader*
     int _return_value = 1;
 
     if (21 > (reader->length - reader->index)) {
-        _return_value = (size_t)21 - (reader->length - reader->index);
+        _return_value = (int)(21 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -21562,7 +21562,7 @@ static WowWorldResult vanilla_CMSG_PETITION_SIGN_read(WowWorldReader* reader, va
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (size_t)9 - (reader->length - reader->index);
+        _return_value = (int)(9 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -21600,7 +21600,7 @@ static WowWorldResult vanilla_SMSG_PETITION_SIGN_RESULTS_read(WowWorldReader* re
     int _return_value = 1;
 
     if (20 > (reader->length - reader->index)) {
-        _return_value = (size_t)20 - (reader->length - reader->index);
+        _return_value = (int)(20 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -21643,7 +21643,7 @@ static WowWorldResult vanilla_MSG_PETITION_DECLINE_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -21696,7 +21696,7 @@ static WowWorldResult vanilla_CMSG_OFFER_PETITION_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (size_t)16 - (reader->length - reader->index);
+        _return_value = (int)(16 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -21734,7 +21734,7 @@ static WowWorldResult vanilla_CMSG_TURN_IN_PETITION_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -21768,7 +21768,7 @@ static WowWorldResult vanilla_SMSG_TURN_IN_PETITION_RESULTS_read(WowWorldReader*
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -21803,7 +21803,7 @@ static WowWorldResult vanilla_CMSG_PETITION_QUERY_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -21852,7 +21852,7 @@ static WowWorldResult vanilla_SMSG_PETITION_QUERY_RESPONSE_read(WowWorldReader* 
     int _return_value = 1;
 
     if (64 > (reader->length - reader->index)) {
-        _return_value = (size_t)64 - (reader->length - reader->index);
+        _return_value = (int)(64 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -22001,7 +22001,7 @@ static WowWorldResult vanilla_CMSG_BUG_read(WowWorldReader* reader, vanilla_CMSG
     int _return_value = 1;
 
     if (14 > (reader->length - reader->index)) {
-        _return_value = (size_t)14 - (reader->length - reader->index);
+        _return_value = (int)(14 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -22056,7 +22056,7 @@ static WowWorldResult vanilla_SMSG_NOTIFICATION_read(WowWorldReader* reader, van
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -22110,7 +22110,7 @@ static WowWorldResult vanilla_SMSG_PLAYED_TIME_read(WowWorldReader* reader, vani
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -22165,7 +22165,7 @@ static WowWorldResult vanilla_SMSG_QUERY_TIME_RESPONSE_read(WowWorldReader* read
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -22209,7 +22209,7 @@ static WowWorldResult vanilla_SMSG_LOG_XPGAIN_read(WowWorldReader* reader, vanil
     int _return_value = 1;
 
     if (13 > (reader->length - reader->index)) {
-        _return_value = (size_t)13 - (reader->length - reader->index);
+        _return_value = (int)(13 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -22264,7 +22264,7 @@ static WowWorldResult vanilla_CMSG_RECLAIM_CORPSE_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -22298,7 +22298,7 @@ static WowWorldResult vanilla_CMSG_WRAP_ITEM_read(WowWorldReader* reader, vanill
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -22344,7 +22344,7 @@ static WowWorldResult vanilla_SMSG_LEVELUP_INFO_read(WowWorldReader* reader, van
     int _return_value = 1;
 
     if (48 > (reader->length - reader->index)) {
-        _return_value = (size_t)48 - (reader->length - reader->index);
+        _return_value = (int)(48 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -22422,7 +22422,7 @@ static WowWorldResult vanilla_MSG_MINIMAP_PING_Client_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -22460,7 +22460,7 @@ static WowWorldResult vanilla_MSG_MINIMAP_PING_Server_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (size_t)16 - (reader->length - reader->index);
+        _return_value = (int)(16 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -22502,7 +22502,7 @@ static WowWorldResult vanilla_SMSG_RESISTLOG_read(WowWorldReader* reader, vanill
     int _return_value = 1;
 
     if (36 > (reader->length - reader->index)) {
-        _return_value = (size_t)36 - (reader->length - reader->index);
+        _return_value = (int)(36 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -22560,7 +22560,7 @@ static WowWorldResult vanilla_SMSG_ENCHANTMENTLOG_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (25 > (reader->length - reader->index)) {
-        _return_value = (size_t)25 - (reader->length - reader->index);
+        _return_value = (int)(25 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -22610,7 +22610,7 @@ static WowWorldResult vanilla_SMSG_START_MIRROR_TIMER_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (21 > (reader->length - reader->index)) {
-        _return_value = (size_t)21 - (reader->length - reader->index);
+        _return_value = (int)(21 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -22665,7 +22665,7 @@ static WowWorldResult vanilla_SMSG_PAUSE_MIRROR_TIMER_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (size_t)5 - (reader->length - reader->index);
+        _return_value = (int)(5 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -22704,7 +22704,7 @@ static WowWorldResult vanilla_SMSG_STOP_MIRROR_TIMER_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -22739,7 +22739,7 @@ static WowWorldResult vanilla_CMSG_PING_read(WowWorldReader* reader, vanilla_CMS
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -22777,7 +22777,7 @@ static WowWorldResult vanilla_SMSG_PONG_read(WowWorldReader* reader, vanilla_SMS
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -22811,7 +22811,7 @@ static WowWorldResult vanilla_SMSG_CLEAR_COOLDOWN_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -22849,7 +22849,7 @@ static WowWorldResult vanilla_SMSG_GAMEOBJECT_PAGETEXT_read(WowWorldReader* read
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -22883,7 +22883,7 @@ static WowWorldResult vanilla_CMSG_SETSHEATHED_read(WowWorldReader* reader, vani
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -22918,7 +22918,7 @@ static WowWorldResult vanilla_SMSG_SPELL_DELAYED_read(WowWorldReader* reader, va
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -22956,7 +22956,7 @@ static WowWorldResult vanilla_SMSG_ITEM_TIME_UPDATE_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -22994,7 +22994,7 @@ static WowWorldResult vanilla_SMSG_ITEM_ENCHANT_TIME_UPDATE_read(WowWorldReader*
     int _return_value = 1;
 
     if (24 > (reader->length - reader->index)) {
-        _return_value = (size_t)24 - (reader->length - reader->index);
+        _return_value = (int)(24 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -23040,7 +23040,7 @@ static WowWorldResult vanilla_SMSG_AUTH_CHALLENGE_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -23125,7 +23125,7 @@ static WowWorldResult vanilla_CMSG_AUTH_SESSION_read(WowWorldReader* reader, van
     WowWorldReader new_reader;
 
     if (37 > (reader->length - reader->index)) {
-        _return_value = (size_t)37 - (reader->length - reader->index);
+        _return_value = (int)(37 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -23292,7 +23292,7 @@ static WowWorldResult vanilla_SMSG_AUTH_RESPONSE_read(WowWorldReader* reader, va
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -23359,7 +23359,7 @@ static WowWorldResult vanilla_CMSG_PET_CAST_SPELL_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (14 > (reader->length - reader->index)) {
-        _return_value = (size_t)14 - (reader->length - reader->index);
+        _return_value = (int)(14 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -23403,7 +23403,7 @@ static WowWorldResult vanilla_MSG_SAVE_GUILD_EMBLEM_Server_read(WowWorldReader* 
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -23438,7 +23438,7 @@ static WowWorldResult vanilla_MSG_SAVE_GUILD_EMBLEM_Client_read(WowWorldReader* 
     int _return_value = 1;
 
     if (28 > (reader->length - reader->index)) {
-        _return_value = (size_t)28 - (reader->length - reader->index);
+        _return_value = (int)(28 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -23492,7 +23492,7 @@ static WowWorldResult vanilla_MSG_TABARDVENDOR_ACTIVATE_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -23545,7 +23545,7 @@ static WowWorldResult vanilla_SMSG_PLAY_SPELL_VISUAL_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -23583,7 +23583,7 @@ static WowWorldResult vanilla_CMSG_ZONEUPDATE_read(WowWorldReader* reader, vanil
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -23618,7 +23618,7 @@ static WowWorldResult vanilla_SMSG_PARTYKILLLOG_read(WowWorldReader* reader, van
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (size_t)16 - (reader->length - reader->index);
+        _return_value = (int)(16 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -23687,7 +23687,7 @@ static WowWorldResult vanilla_SMSG_COMPRESSED_UPDATE_OBJECT_read(WowWorldReader*
     uint32_t _decompressed_size;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (size_t)5 - (reader->length - reader->index);
+        _return_value = (int)(5 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -23790,7 +23790,7 @@ static WowWorldResult vanilla_SMSG_PLAY_SPELL_IMPACT_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -23828,7 +23828,7 @@ static WowWorldResult vanilla_SMSG_EXPLORATION_EXPERIENCE_read(WowWorldReader* r
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -23867,7 +23867,7 @@ static WowWorldResult vanilla_MSG_RANDOM_ROLL_Client_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -23905,7 +23905,7 @@ static WowWorldResult vanilla_MSG_RANDOM_ROLL_Server_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (20 > (reader->length - reader->index)) {
-        _return_value = (size_t)20 - (reader->length - reader->index);
+        _return_value = (int)(20 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -23951,7 +23951,7 @@ static WowWorldResult vanilla_SMSG_ENVIRONMENTAL_DAMAGE_LOG_read(WowWorldReader*
     int _return_value = 1;
 
     if (21 > (reader->length - reader->index)) {
-        _return_value = (size_t)21 - (reader->length - reader->index);
+        _return_value = (int)(21 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -24019,7 +24019,7 @@ static WowWorldResult vanilla_MSG_LOOKING_FOR_GROUP_Server_read(WowWorldReader* 
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -24053,7 +24053,7 @@ static WowWorldResult vanilla_CMSG_UNLEARN_SKILL_read(WowWorldReader* reader, va
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -24088,7 +24088,7 @@ static WowWorldResult vanilla_SMSG_REMOVED_SPELL_read(WowWorldReader* reader, va
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (size_t)2 - (reader->length - reader->index);
+        _return_value = (int)(2 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -24177,7 +24177,7 @@ static WowWorldResult vanilla_CMSG_GMTICKET_CREATE_read(WowWorldReader* reader, 
     WowWorldReader new_reader;
 
     if (19 > (reader->length - reader->index)) {
-        _return_value = (size_t)19 - (reader->length - reader->index);
+        _return_value = (int)(19 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -24344,7 +24344,7 @@ static WowWorldResult vanilla_SMSG_GMTICKET_CREATE_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -24388,7 +24388,7 @@ static WowWorldResult vanilla_CMSG_GMTICKET_UPDATETEXT_read(WowWorldReader* read
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (size_t)2 - (reader->length - reader->index);
+        _return_value = (int)(2 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -24430,7 +24430,7 @@ static WowWorldResult vanilla_SMSG_GMTICKET_UPDATETEXT_read(WowWorldReader* read
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -24465,7 +24465,7 @@ static WowWorldResult vanilla_SMSG_ACCOUNT_DATA_TIMES_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (128 > (reader->length - reader->index)) {
-        _return_value = (size_t)128 - (reader->length - reader->index);
+        _return_value = (int)(128 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -24499,7 +24499,7 @@ static WowWorldResult vanilla_CMSG_REQUEST_ACCOUNT_DATA_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -24577,7 +24577,7 @@ static WowWorldResult vanilla_CMSG_UPDATE_ACCOUNT_DATA_read(WowWorldReader* read
     WowWorldReader new_reader;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -24746,7 +24746,7 @@ static WowWorldResult vanilla_SMSG_GMTICKET_GETTICKET_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -24818,7 +24818,7 @@ static WowWorldResult vanilla_SMSG_GAMEOBJECT_SPAWN_ANIM_read(WowWorldReader* re
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -24852,7 +24852,7 @@ static WowWorldResult vanilla_SMSG_GAMEOBJECT_DESPAWN_ANIM_read(WowWorldReader* 
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -24913,7 +24913,7 @@ static WowWorldResult vanilla_MSG_CORPSE_QUERY_Server_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -24983,7 +24983,7 @@ static WowWorldResult vanilla_SMSG_GMTICKET_DELETETICKET_read(WowWorldReader* re
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -25052,7 +25052,7 @@ static WowWorldResult vanilla_SMSG_GMTICKET_SYSTEMSTATUS_read(WowWorldReader* re
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -25087,7 +25087,7 @@ static WowWorldResult vanilla_CMSG_SPIRIT_HEALER_ACTIVATE_read(WowWorldReader* r
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -25121,7 +25121,7 @@ static WowWorldResult vanilla_SMSG_SET_REST_START_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -25155,7 +25155,7 @@ static WowWorldResult vanilla_SMSG_SPIRIT_HEALER_CONFIRM_read(WowWorldReader* re
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -25198,7 +25198,7 @@ static WowWorldResult vanilla_SMSG_GOSSIP_POI_read(WowWorldReader* reader, vanil
     int _return_value = 1;
 
     if (21 > (reader->length - reader->index)) {
-        _return_value = (size_t)21 - (reader->length - reader->index);
+        _return_value = (int)(21 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -25251,7 +25251,7 @@ static WowWorldResult vanilla_CMSG_CHAT_IGNORED_read(WowWorldReader* reader, van
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -25294,7 +25294,7 @@ static WowWorldResult vanilla_CMSG_GUILD_RANK_read(WowWorldReader* reader, vanil
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (size_t)9 - (reader->length - reader->index);
+        _return_value = (int)(9 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -25348,7 +25348,7 @@ static WowWorldResult vanilla_CMSG_GUILD_ADD_RANK_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -25413,7 +25413,7 @@ static WowWorldResult vanilla_CMSG_GUILD_SET_PUBLIC_NOTE_read(WowWorldReader* re
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (size_t)2 - (reader->length - reader->index);
+        _return_value = (int)(2 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -25466,7 +25466,7 @@ static WowWorldResult vanilla_CMSG_GUILD_SET_OFFICER_NOTE_read(WowWorldReader* r
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (size_t)2 - (reader->length - reader->index);
+        _return_value = (int)(2 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -25508,7 +25508,7 @@ static WowWorldResult vanilla_SMSG_LOGIN_VERIFY_WORLD_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (20 > (reader->length - reader->index)) {
-        _return_value = (size_t)20 - (reader->length - reader->index);
+        _return_value = (int)(20 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -25564,7 +25564,7 @@ static WowWorldResult vanilla_CMSG_SEND_MAIL_read(WowWorldReader* reader, vanill
     int _return_value = 1;
 
     if (43 > (reader->length - reader->index)) {
-        _return_value = (size_t)43 - (reader->length - reader->index);
+        _return_value = (int)(43 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -25669,7 +25669,7 @@ static WowWorldResult vanilla_SMSG_SEND_MAIL_RESULT_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -25754,7 +25754,7 @@ static WowWorldResult vanilla_CMSG_GET_MAIL_LIST_read(WowWorldReader* reader, va
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -25813,7 +25813,7 @@ static WowWorldResult vanilla_SMSG_MAIL_LIST_RESULT_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -25859,7 +25859,7 @@ static WowWorldResult vanilla_CMSG_BATTLEFIELD_LIST_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -25905,7 +25905,7 @@ static WowWorldResult vanilla_SMSG_BATTLEFIELD_LIST_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (17 > (reader->length - reader->index)) {
-        _return_value = (size_t)17 - (reader->length - reader->index);
+        _return_value = (int)(17 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -25965,7 +25965,7 @@ static WowWorldResult vanilla_CMSG_BATTLEFIELD_JOIN_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -26000,7 +26000,7 @@ static WowWorldResult vanilla_CMSG_ITEM_TEXT_QUERY_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -26051,7 +26051,7 @@ static WowWorldResult vanilla_SMSG_ITEM_TEXT_QUERY_RESPONSE_read(WowWorldReader*
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (size_t)5 - (reader->length - reader->index);
+        _return_value = (int)(5 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -26092,7 +26092,7 @@ static WowWorldResult vanilla_CMSG_MAIL_TAKE_MONEY_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -26130,7 +26130,7 @@ static WowWorldResult vanilla_CMSG_MAIL_TAKE_ITEM_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -26168,7 +26168,7 @@ static WowWorldResult vanilla_CMSG_MAIL_MARK_AS_READ_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -26206,7 +26206,7 @@ static WowWorldResult vanilla_CMSG_MAIL_RETURN_TO_SENDER_read(WowWorldReader* re
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -26244,7 +26244,7 @@ static WowWorldResult vanilla_CMSG_MAIL_DELETE_read(WowWorldReader* reader, vani
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -26282,7 +26282,7 @@ static WowWorldResult vanilla_CMSG_MAIL_CREATE_TEXT_ITEM_read(WowWorldReader* re
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (size_t)16 - (reader->length - reader->index);
+        _return_value = (int)(16 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -26335,7 +26335,7 @@ static WowWorldResult vanilla_SMSG_SPELLLOGMISS_read(WowWorldReader* reader, van
     int _return_value = 1;
 
     if (17 > (reader->length - reader->index)) {
-        _return_value = (size_t)17 - (reader->length - reader->index);
+        _return_value = (int)(17 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -26413,7 +26413,7 @@ static WowWorldResult vanilla_SMSG_SPELLLOGEXECUTE_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (size_t)9 - (reader->length - reader->index);
+        _return_value = (int)(9 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -26487,7 +26487,7 @@ static WowWorldResult vanilla_SMSG_PERIODICAURALOG_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (10 > (reader->length - reader->index)) {
-        _return_value = (size_t)10 - (reader->length - reader->index);
+        _return_value = (int)(10 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -26545,7 +26545,7 @@ static WowWorldResult vanilla_SMSG_SPELLDAMAGESHIELD_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (24 > (reader->length - reader->index)) {
-        _return_value = (size_t)24 - (reader->length - reader->index);
+        _return_value = (int)(24 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -26596,7 +26596,7 @@ static WowWorldResult vanilla_SMSG_SPELLNONMELEEDAMAGELOG_read(WowWorldReader* r
     int _return_value = 1;
 
     if (30 > (reader->length - reader->index)) {
-        _return_value = (size_t)30 - (reader->length - reader->index);
+        _return_value = (int)(30 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -26676,7 +26676,7 @@ static WowWorldResult vanilla_CMSG_LEARN_TALENT_read(WowWorldReader* reader, van
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -26776,7 +26776,7 @@ static WowWorldResult vanilla_SMSG_ZONE_UNDER_ATTACK_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -26811,7 +26811,7 @@ static WowWorldResult vanilla_MSG_AUCTION_HELLO_Client_read(WowWorldReader* read
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -26845,7 +26845,7 @@ static WowWorldResult vanilla_MSG_AUCTION_HELLO_Server_read(WowWorldReader* read
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -26884,7 +26884,7 @@ static WowWorldResult vanilla_CMSG_AUCTION_SELL_ITEM_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (28 > (reader->length - reader->index)) {
-        _return_value = (size_t)28 - (reader->length - reader->index);
+        _return_value = (int)(28 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -26934,7 +26934,7 @@ static WowWorldResult vanilla_CMSG_AUCTION_REMOVE_ITEM_read(WowWorldReader* read
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -26981,7 +26981,7 @@ static WowWorldResult vanilla_CMSG_AUCTION_LIST_ITEMS_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (32 > (reader->length - reader->index)) {
-        _return_value = (size_t)32 - (reader->length - reader->index);
+        _return_value = (int)(32 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -27055,7 +27055,7 @@ static WowWorldResult vanilla_CMSG_AUCTION_LIST_OWNER_ITEMS_read(WowWorldReader*
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -27093,7 +27093,7 @@ static WowWorldResult vanilla_CMSG_AUCTION_PLACE_BID_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (size_t)16 - (reader->length - reader->index);
+        _return_value = (int)(16 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -27167,7 +27167,7 @@ static WowWorldResult vanilla_SMSG_AUCTION_COMMAND_RESULT_read(WowWorldReader* r
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -27293,7 +27293,7 @@ static WowWorldResult vanilla_SMSG_AUCTION_LIST_RESULT_read(WowWorldReader* read
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -27354,7 +27354,7 @@ static WowWorldResult vanilla_SMSG_AUCTION_OWNER_LIST_RESULT_read(WowWorldReader
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -27404,7 +27404,7 @@ static WowWorldResult vanilla_SMSG_AUCTION_BIDDER_NOTIFICATION_read(WowWorldRead
     int _return_value = 1;
 
     if (32 > (reader->length - reader->index)) {
-        _return_value = (size_t)32 - (reader->length - reader->index);
+        _return_value = (int)(32 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -27463,7 +27463,7 @@ static WowWorldResult vanilla_SMSG_AUCTION_OWNER_NOTIFICATION_read(WowWorldReade
     int _return_value = 1;
 
     if (28 > (reader->length - reader->index)) {
-        _return_value = (size_t)28 - (reader->length - reader->index);
+        _return_value = (int)(28 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -27517,7 +27517,7 @@ static WowWorldResult vanilla_SMSG_PROCRESIST_read(WowWorldReader* reader, vanil
     int _return_value = 1;
 
     if (21 > (reader->length - reader->index)) {
-        _return_value = (size_t)21 - (reader->length - reader->index);
+        _return_value = (int)(21 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -27577,7 +27577,7 @@ static WowWorldResult vanilla_SMSG_DISPEL_FAILED_read(WowWorldReader* reader, va
     size_t _size = 0;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (size_t)16 - (reader->length - reader->index);
+        _return_value = (int)(16 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -27651,7 +27651,7 @@ static WowWorldResult vanilla_SMSG_SPELLORDAMAGE_IMMUNE_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (21 > (reader->length - reader->index)) {
-        _return_value = (size_t)21 - (reader->length - reader->index);
+        _return_value = (int)(21 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -27708,7 +27708,7 @@ static WowWorldResult vanilla_CMSG_AUCTION_LIST_BIDDER_ITEMS_read(WowWorldReader
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (size_t)16 - (reader->length - reader->index);
+        _return_value = (int)(16 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -27773,7 +27773,7 @@ static WowWorldResult vanilla_SMSG_AUCTION_BIDDER_LIST_RESULT_read(WowWorldReade
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -27823,7 +27823,7 @@ static WowWorldResult vanilla_SMSG_SET_FLAT_SPELL_MODIFIER_read(WowWorldReader* 
     int _return_value = 1;
 
     if (6 > (reader->length - reader->index)) {
-        _return_value = (size_t)6 - (reader->length - reader->index);
+        _return_value = (int)(6 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -27865,7 +27865,7 @@ static WowWorldResult vanilla_SMSG_SET_PCT_SPELL_MODIFIER_read(WowWorldReader* r
     int _return_value = 1;
 
     if (6 > (reader->length - reader->index)) {
-        _return_value = (size_t)6 - (reader->length - reader->index);
+        _return_value = (int)(6 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -27907,7 +27907,7 @@ static WowWorldResult vanilla_CMSG_SET_AMMO_read(WowWorldReader* reader, vanilla
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -27941,7 +27941,7 @@ static WowWorldResult vanilla_SMSG_CORPSE_RECLAIM_DELAY_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -27975,7 +27975,7 @@ static WowWorldResult vanilla_CMSG_SET_ACTIVE_MOVER_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -28009,7 +28009,7 @@ static WowWorldResult vanilla_CMSG_PET_CANCEL_AURA_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -28064,7 +28064,7 @@ static WowWorldResult vanilla_MSG_LIST_STABLED_PETS_Client_read(WowWorldReader* 
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -28123,7 +28123,7 @@ static WowWorldResult vanilla_MSG_LIST_STABLED_PETS_Server_read(WowWorldReader* 
     int _return_value = 1;
 
     if (10 > (reader->length - reader->index)) {
-        _return_value = (size_t)10 - (reader->length - reader->index);
+        _return_value = (int)(10 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -28177,7 +28177,7 @@ static WowWorldResult vanilla_CMSG_STABLE_PET_read(WowWorldReader* reader, vanil
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -28211,7 +28211,7 @@ static WowWorldResult vanilla_CMSG_UNSTABLE_PET_read(WowWorldReader* reader, van
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -28249,7 +28249,7 @@ static WowWorldResult vanilla_CMSG_BUY_STABLE_SLOT_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -28283,7 +28283,7 @@ static WowWorldResult vanilla_SMSG_STABLE_RESULT_read(WowWorldReader* reader, va
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -28318,7 +28318,7 @@ static WowWorldResult vanilla_CMSG_STABLE_SWAP_PET_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -28356,7 +28356,7 @@ static WowWorldResult vanilla_MSG_QUEST_PUSH_RESULT_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (size_t)9 - (reader->length - reader->index);
+        _return_value = (int)(9 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -28416,7 +28416,7 @@ static WowWorldResult vanilla_SMSG_PLAY_MUSIC_read(WowWorldReader* reader, vanil
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -28450,7 +28450,7 @@ static WowWorldResult vanilla_SMSG_PLAY_OBJECT_SOUND_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -28505,7 +28505,7 @@ static WowWorldResult vanilla_CMSG_FAR_SIGHT_read(WowWorldReader* reader, vanill
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -28551,7 +28551,7 @@ static WowWorldResult vanilla_SMSG_SPELLDISPELLOG_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (6 > (reader->length - reader->index)) {
-        _return_value = (size_t)6 - (reader->length - reader->index);
+        _return_value = (int)(6 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -28614,7 +28614,7 @@ static WowWorldResult vanilla_CMSG_GROUP_CHANGE_SUB_GROUP_read(WowWorldReader* r
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (size_t)2 - (reader->length - reader->index);
+        _return_value = (int)(2 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -28655,7 +28655,7 @@ static WowWorldResult vanilla_CMSG_REQUEST_PARTY_MEMBER_STATS_read(WowWorldReade
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -28700,7 +28700,7 @@ static WowWorldResult vanilla_CMSG_GROUP_SWAP_SUB_GROUP_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (size_t)2 - (reader->length - reader->index);
+        _return_value = (int)(2 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -28742,7 +28742,7 @@ static WowWorldResult vanilla_CMSG_AUTOSTORE_BANK_ITEM_read(WowWorldReader* read
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (size_t)2 - (reader->length - reader->index);
+        _return_value = (int)(2 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -28780,7 +28780,7 @@ static WowWorldResult vanilla_CMSG_AUTOBANK_ITEM_read(WowWorldReader* reader, va
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (size_t)2 - (reader->length - reader->index);
+        _return_value = (int)(2 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -28818,7 +28818,7 @@ static WowWorldResult vanilla_MSG_QUERY_NEXT_MAIL_TIME_Server_read(WowWorldReade
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -28869,7 +28869,7 @@ static WowWorldResult vanilla_SMSG_RECEIVED_MAIL_read(WowWorldReader* reader, va
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -28903,7 +28903,7 @@ static WowWorldResult vanilla_SMSG_RAID_GROUP_ONLY_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -28942,7 +28942,7 @@ static WowWorldResult vanilla_SMSG_PVP_CREDIT_read(WowWorldReader* reader, vanil
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (size_t)16 - (reader->length - reader->index);
+        _return_value = (int)(16 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -28985,7 +28985,7 @@ static WowWorldResult vanilla_SMSG_AUCTION_REMOVED_NOTIFICATION_read(WowWorldRea
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -29044,7 +29044,7 @@ static WowWorldResult vanilla_CMSG_GROUP_ASSISTANT_LEADER_read(WowWorldReader* r
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (size_t)9 - (reader->length - reader->index);
+        _return_value = (int)(9 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -29082,7 +29082,7 @@ static WowWorldResult vanilla_CMSG_BUYBACK_ITEM_read(WowWorldReader* reader, van
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -29130,7 +29130,7 @@ static WowWorldResult vanilla_SMSG_SERVER_MESSAGE_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (size_t)5 - (reader->length - reader->index);
+        _return_value = (int)(5 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -29172,7 +29172,7 @@ static WowWorldResult vanilla_CMSG_MEETINGSTONE_JOIN_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -29223,7 +29223,7 @@ static WowWorldResult vanilla_SMSG_MEETINGSTONE_SETQUEUE_read(WowWorldReader* re
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (size_t)5 - (reader->length - reader->index);
+        _return_value = (int)(5 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -29314,7 +29314,7 @@ static WowWorldResult vanilla_SMSG_MEETINGSTONE_MEMBER_ADDED_read(WowWorldReader
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -29382,7 +29382,7 @@ static WowWorldResult vanilla_SMSG_STANDSTATE_UPDATE_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -29417,7 +29417,7 @@ static WowWorldResult vanilla_SMSG_LOOT_ALL_PASSED_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (24 > (reader->length - reader->index)) {
-        _return_value = (size_t)24 - (reader->length - reader->index);
+        _return_value = (int)(24 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -29467,7 +29467,7 @@ static WowWorldResult vanilla_SMSG_LOOT_ROLL_WON_read(WowWorldReader* reader, va
     int _return_value = 1;
 
     if (34 > (reader->length - reader->index)) {
-        _return_value = (size_t)34 - (reader->length - reader->index);
+        _return_value = (int)(34 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -29530,7 +29530,7 @@ static WowWorldResult vanilla_CMSG_LOOT_ROLL_read(WowWorldReader* reader, vanill
     int _return_value = 1;
 
     if (13 > (reader->length - reader->index)) {
-        _return_value = (size_t)13 - (reader->length - reader->index);
+        _return_value = (int)(13 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -29573,7 +29573,7 @@ static WowWorldResult vanilla_SMSG_LOOT_START_ROLL_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (28 > (reader->length - reader->index)) {
-        _return_value = (size_t)28 - (reader->length - reader->index);
+        _return_value = (int)(28 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -29627,7 +29627,7 @@ static WowWorldResult vanilla_SMSG_LOOT_ROLL_read(WowWorldReader* reader, vanill
     int _return_value = 1;
 
     if (34 > (reader->length - reader->index)) {
-        _return_value = (size_t)34 - (reader->length - reader->index);
+        _return_value = (int)(34 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -29690,7 +29690,7 @@ static WowWorldResult vanilla_CMSG_LOOT_MASTER_GIVE_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (17 > (reader->length - reader->index)) {
-        _return_value = (size_t)17 - (reader->length - reader->index);
+        _return_value = (int)(17 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -29743,7 +29743,7 @@ static WowWorldResult vanilla_SMSG_LOOT_MASTER_LIST_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -29800,7 +29800,7 @@ static WowWorldResult vanilla_SMSG_SET_FORCED_REACTIONS_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -29846,7 +29846,7 @@ static WowWorldResult vanilla_SMSG_SPELL_FAILED_OTHER_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -29884,7 +29884,7 @@ static WowWorldResult vanilla_SMSG_GAMEOBJECT_RESET_STATE_read(WowWorldReader* r
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -29918,7 +29918,7 @@ static WowWorldResult vanilla_CMSG_REPAIR_ITEM_read(WowWorldReader* reader, vani
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (size_t)16 - (reader->length - reader->index);
+        _return_value = (int)(16 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -29965,7 +29965,7 @@ static WowWorldResult vanilla_SMSG_CHAT_PLAYER_NOT_FOUND_read(WowWorldReader* re
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -30002,7 +30002,7 @@ static WowWorldResult vanilla_MSG_TALENT_WIPE_CONFIRM_Client_read(WowWorldReader
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -30036,7 +30036,7 @@ static WowWorldResult vanilla_MSG_TALENT_WIPE_CONFIRM_Server_read(WowWorldReader
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -30074,7 +30074,7 @@ static WowWorldResult vanilla_SMSG_SUMMON_REQUEST_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (size_t)16 - (reader->length - reader->index);
+        _return_value = (int)(16 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -30117,7 +30117,7 @@ static WowWorldResult vanilla_CMSG_SUMMON_RESPONSE_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -30178,7 +30178,7 @@ static WowWorldResult vanilla_SMSG_MONSTER_MOVE_TRANSPORT_read(WowWorldReader* r
     int _return_value = 1;
 
     if (31 > (reader->length - reader->index)) {
-        _return_value = (size_t)31 - (reader->length - reader->index);
+        _return_value = (int)(31 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -30291,7 +30291,7 @@ static WowWorldResult vanilla_MSG_MOVE_FEATHER_FALL_Server_read(WowWorldReader* 
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (size_t)29 - (reader->length - reader->index);
+        _return_value = (int)(29 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -30333,7 +30333,7 @@ static WowWorldResult vanilla_MSG_MOVE_WATER_WALK_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (size_t)29 - (reader->length - reader->index);
+        _return_value = (int)(29 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -30426,7 +30426,7 @@ static WowWorldResult vanilla_SMSG_DUEL_COUNTDOWN_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -30469,7 +30469,7 @@ static WowWorldResult vanilla_SMSG_AREA_TRIGGER_MESSAGE_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (size_t)5 - (reader->length - reader->index);
+        _return_value = (int)(5 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -30540,7 +30540,7 @@ static WowWorldResult vanilla_SMSG_MEETINGSTONE_JOINFAILED_read(WowWorldReader* 
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -30575,7 +30575,7 @@ static WowWorldResult vanilla_SMSG_PLAYER_SKINNED_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -30626,7 +30626,7 @@ static WowWorldResult vanilla_CMSG_SET_ACTIONBAR_TOGGLES_read(WowWorldReader* re
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -30669,7 +30669,7 @@ static WowWorldResult vanilla_MSG_PETITION_RENAME_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (size_t)9 - (reader->length - reader->index);
+        _return_value = (int)(9 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -30742,7 +30742,7 @@ static WowWorldResult vanilla_SMSG_INIT_WORLD_STATES_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (10 > (reader->length - reader->index)) {
-        _return_value = (size_t)10 - (reader->length - reader->index);
+        _return_value = (int)(10 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -30798,7 +30798,7 @@ static WowWorldResult vanilla_SMSG_UPDATE_WORLD_STATE_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -30832,7 +30832,7 @@ static WowWorldResult vanilla_CMSG_ITEM_NAME_QUERY_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -30879,7 +30879,7 @@ static WowWorldResult vanilla_SMSG_ITEM_NAME_QUERY_RESPONSE_read(WowWorldReader*
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (size_t)5 - (reader->length - reader->index);
+        _return_value = (int)(5 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -30920,7 +30920,7 @@ static WowWorldResult vanilla_SMSG_PET_ACTION_FEEDBACK_read(WowWorldReader* read
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -30964,7 +30964,7 @@ static WowWorldResult vanilla_CMSG_CHAR_RENAME_read(WowWorldReader* reader, vani
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (size_t)9 - (reader->length - reader->index);
+        _return_value = (int)(9 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -31022,7 +31022,7 @@ static WowWorldResult vanilla_SMSG_CHAR_RENAME_read(WowWorldReader* reader, vani
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -31076,7 +31076,7 @@ static WowWorldResult vanilla_CMSG_MOVE_SPLINE_DONE_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (36 > (reader->length - reader->index)) {
-        _return_value = (size_t)36 - (reader->length - reader->index);
+        _return_value = (int)(36 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -31122,7 +31122,7 @@ static WowWorldResult vanilla_CMSG_MOVE_FALL_RESET_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (28 > (reader->length - reader->index)) {
-        _return_value = (size_t)28 - (reader->length - reader->index);
+        _return_value = (int)(28 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -31156,7 +31156,7 @@ static WowWorldResult vanilla_SMSG_INSTANCE_SAVE_CREATED_read(WowWorldReader* re
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -31201,7 +31201,7 @@ static WowWorldResult vanilla_SMSG_RAID_INSTANCE_INFO_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -31264,7 +31264,7 @@ static WowWorldResult vanilla_CMSG_MOVE_TIME_SKIPPED_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -31306,7 +31306,7 @@ static WowWorldResult vanilla_CMSG_MOVE_FEATHER_FALL_ACK_read(WowWorldReader* re
     int _return_value = 1;
 
     if (44 > (reader->length - reader->index)) {
-        _return_value = (size_t)44 - (reader->length - reader->index);
+        _return_value = (int)(44 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -31356,7 +31356,7 @@ static WowWorldResult vanilla_CMSG_MOVE_WATER_WALK_ACK_read(WowWorldReader* read
     int _return_value = 1;
 
     if (44 > (reader->length - reader->index)) {
-        _return_value = (size_t)44 - (reader->length - reader->index);
+        _return_value = (int)(44 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -31406,7 +31406,7 @@ static WowWorldResult vanilla_CMSG_MOVE_NOT_ACTIVE_MOVER_read(WowWorldReader* re
     int _return_value = 1;
 
     if (36 > (reader->length - reader->index)) {
-        _return_value = (size_t)36 - (reader->length - reader->index);
+        _return_value = (int)(36 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -31444,7 +31444,7 @@ static WowWorldResult vanilla_SMSG_PLAY_SOUND_read(WowWorldReader* reader, vanil
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -31516,7 +31516,7 @@ static WowWorldResult vanilla_SMSG_BATTLEFIELD_STATUS_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -31605,7 +31605,7 @@ static WowWorldResult vanilla_CMSG_BATTLEFIELD_PORT_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (size_t)5 - (reader->length - reader->index);
+        _return_value = (int)(5 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -31645,7 +31645,7 @@ static WowWorldResult vanilla_MSG_INSPECT_HONOR_STATS_Client_read(WowWorldReader
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -31679,7 +31679,7 @@ static WowWorldResult vanilla_MSG_INSPECT_HONOR_STATS_Server_read(WowWorldReader
     int _return_value = 1;
 
     if (50 > (reader->length - reader->index)) {
-        _return_value = (size_t)50 - (reader->length - reader->index);
+        _return_value = (int)(50 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -31775,7 +31775,7 @@ static WowWorldResult vanilla_CMSG_BATTLEMASTER_HELLO_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -31813,7 +31813,7 @@ static WowWorldResult vanilla_SMSG_FORCE_WALK_SPEED_CHANGE_read(WowWorldReader* 
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (size_t)9 - (reader->length - reader->index);
+        _return_value = (int)(9 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -31859,7 +31859,7 @@ static WowWorldResult vanilla_CMSG_FORCE_WALK_SPEED_CHANGE_ACK_read(WowWorldRead
     int _return_value = 1;
 
     if (44 > (reader->length - reader->index)) {
-        _return_value = (size_t)44 - (reader->length - reader->index);
+        _return_value = (int)(44 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -31909,7 +31909,7 @@ static WowWorldResult vanilla_SMSG_FORCE_SWIM_BACK_SPEED_CHANGE_read(WowWorldRea
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (size_t)9 - (reader->length - reader->index);
+        _return_value = (int)(9 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -31955,7 +31955,7 @@ static WowWorldResult vanilla_CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK_read(WowWorl
     int _return_value = 1;
 
     if (44 > (reader->length - reader->index)) {
-        _return_value = (size_t)44 - (reader->length - reader->index);
+        _return_value = (int)(44 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -32005,7 +32005,7 @@ static WowWorldResult vanilla_SMSG_FORCE_TURN_RATE_CHANGE_read(WowWorldReader* r
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (size_t)9 - (reader->length - reader->index);
+        _return_value = (int)(9 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -32051,7 +32051,7 @@ static WowWorldResult vanilla_CMSG_FORCE_TURN_RATE_CHANGE_ACK_read(WowWorldReade
     int _return_value = 1;
 
     if (44 > (reader->length - reader->index)) {
-        _return_value = (size_t)44 - (reader->length - reader->index);
+        _return_value = (int)(44 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -32145,7 +32145,7 @@ static WowWorldResult vanilla_MSG_PVP_LOG_DATA_Server_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (size_t)5 - (reader->length - reader->index);
+        _return_value = (int)(5 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -32205,7 +32205,7 @@ static WowWorldResult vanilla_CMSG_LEAVE_BATTLEFIELD_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -32240,7 +32240,7 @@ static WowWorldResult vanilla_CMSG_AREA_SPIRIT_HEALER_QUERY_read(WowWorldReader*
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -32274,7 +32274,7 @@ static WowWorldResult vanilla_CMSG_AREA_SPIRIT_HEALER_QUEUE_read(WowWorldReader*
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -32308,7 +32308,7 @@ static WowWorldResult vanilla_SMSG_AREA_SPIRIT_HEALER_TIME_read(WowWorldReader* 
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -32490,7 +32490,7 @@ static WowWorldResult vanilla_SMSG_GROUP_JOINED_BATTLEGROUND_read(WowWorldReader
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -32557,7 +32557,7 @@ static WowWorldResult vanilla_MSG_BATTLEGROUND_PLAYER_POSITIONS_Server_read(WowW
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (size_t)5 - (reader->length - reader->index);
+        _return_value = (int)(5 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -32617,7 +32617,7 @@ static WowWorldResult vanilla_CMSG_PET_STOP_ATTACK_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -32651,7 +32651,7 @@ static WowWorldResult vanilla_SMSG_BINDER_CONFIRM_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -32685,7 +32685,7 @@ static WowWorldResult vanilla_SMSG_BATTLEGROUND_PLAYER_JOINED_read(WowWorldReade
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -32719,7 +32719,7 @@ static WowWorldResult vanilla_SMSG_BATTLEGROUND_PLAYER_LEFT_read(WowWorldReader*
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -32753,7 +32753,7 @@ static WowWorldResult vanilla_CMSG_BATTLEMASTER_JOIN_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (17 > (reader->length - reader->index)) {
-        _return_value = (size_t)17 - (reader->length - reader->index);
+        _return_value = (int)(17 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -32886,7 +32886,7 @@ static WowWorldResult vanilla_CMSG_PET_UNLEARN_read(WowWorldReader* reader, vani
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -32920,7 +32920,7 @@ static WowWorldResult vanilla_SMSG_PET_UNLEARN_CONFIRM_read(WowWorldReader* read
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -33083,7 +33083,7 @@ static WowWorldResult vanilla_SMSG_PARTY_MEMBER_STATS_FULL_read(WowWorldReader* 
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (size_t)5 - (reader->length - reader->index);
+        _return_value = (int)(5 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -33285,7 +33285,7 @@ static WowWorldResult vanilla_CMSG_PET_SPELL_AUTOCAST_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (13 > (reader->length - reader->index)) {
-        _return_value = (size_t)13 - (reader->length - reader->index);
+        _return_value = (int)(13 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -33327,7 +33327,7 @@ static WowWorldResult vanilla_SMSG_WEATHER_read(WowWorldReader* reader, vanilla_
     int _return_value = 1;
 
     if (13 > (reader->length - reader->index)) {
-        _return_value = (size_t)13 - (reader->length - reader->index);
+        _return_value = (int)(13 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -33375,7 +33375,7 @@ static WowWorldResult vanilla_SMSG_RAID_INSTANCE_MESSAGE_read(WowWorldReader* re
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -33568,7 +33568,7 @@ static WowWorldResult vanilla_CMSG_GUILD_INFO_TEXT_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -33626,7 +33626,7 @@ static WowWorldResult vanilla_SMSG_SPLINE_SET_RUN_SPEED_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (size_t)5 - (reader->length - reader->index);
+        _return_value = (int)(5 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -33668,7 +33668,7 @@ static WowWorldResult vanilla_SMSG_SPLINE_SET_RUN_BACK_SPEED_read(WowWorldReader
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (size_t)5 - (reader->length - reader->index);
+        _return_value = (int)(5 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -33710,7 +33710,7 @@ static WowWorldResult vanilla_SMSG_SPLINE_SET_SWIM_SPEED_read(WowWorldReader* re
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (size_t)5 - (reader->length - reader->index);
+        _return_value = (int)(5 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -33752,7 +33752,7 @@ static WowWorldResult vanilla_SMSG_SPLINE_SET_WALK_SPEED_read(WowWorldReader* re
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (size_t)5 - (reader->length - reader->index);
+        _return_value = (int)(5 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -33794,7 +33794,7 @@ static WowWorldResult vanilla_SMSG_SPLINE_SET_SWIM_BACK_SPEED_read(WowWorldReade
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (size_t)5 - (reader->length - reader->index);
+        _return_value = (int)(5 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -33836,7 +33836,7 @@ static WowWorldResult vanilla_SMSG_SPLINE_SET_TURN_RATE_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (size_t)5 - (reader->length - reader->index);
+        _return_value = (int)(5 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -33878,7 +33878,7 @@ static WowWorldResult vanilla_SMSG_SPLINE_MOVE_UNROOT_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -33916,7 +33916,7 @@ static WowWorldResult vanilla_SMSG_SPLINE_MOVE_FEATHER_FALL_read(WowWorldReader*
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -33954,7 +33954,7 @@ static WowWorldResult vanilla_SMSG_SPLINE_MOVE_NORMAL_FALL_read(WowWorldReader* 
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -33992,7 +33992,7 @@ static WowWorldResult vanilla_SMSG_SPLINE_MOVE_SET_HOVER_read(WowWorldReader* re
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -34030,7 +34030,7 @@ static WowWorldResult vanilla_SMSG_SPLINE_MOVE_UNSET_HOVER_read(WowWorldReader* 
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -34068,7 +34068,7 @@ static WowWorldResult vanilla_SMSG_SPLINE_MOVE_WATER_WALK_read(WowWorldReader* r
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -34106,7 +34106,7 @@ static WowWorldResult vanilla_SMSG_SPLINE_MOVE_LAND_WALK_read(WowWorldReader* re
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -34144,7 +34144,7 @@ static WowWorldResult vanilla_SMSG_SPLINE_MOVE_START_SWIM_read(WowWorldReader* r
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -34182,7 +34182,7 @@ static WowWorldResult vanilla_SMSG_SPLINE_MOVE_STOP_SWIM_read(WowWorldReader* re
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -34220,7 +34220,7 @@ static WowWorldResult vanilla_SMSG_SPLINE_MOVE_SET_RUN_MODE_read(WowWorldReader*
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -34258,7 +34258,7 @@ static WowWorldResult vanilla_SMSG_SPLINE_MOVE_SET_WALK_MODE_read(WowWorldReader
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -34303,7 +34303,7 @@ static WowWorldResult vanilla_CMSG_ACTIVATETAXIEXPRESS_read(WowWorldReader* read
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (size_t)16 - (reader->length - reader->index);
+        _return_value = (int)(16 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -34357,7 +34357,7 @@ static WowWorldResult vanilla_CMSG_SET_FACTION_INACTIVE_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (3 > (reader->length - reader->index)) {
-        _return_value = (size_t)3 - (reader->length - reader->index);
+        _return_value = (int)(3 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -34396,7 +34396,7 @@ static WowWorldResult vanilla_CMSG_SET_WATCHED_FACTION_read(WowWorldReader* read
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (size_t)2 - (reader->length - reader->index);
+        _return_value = (int)(2 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -34435,7 +34435,7 @@ static WowWorldResult vanilla_MSG_MOVE_TIME_SKIPPED_Server_read(WowWorldReader* 
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (size_t)5 - (reader->length - reader->index);
+        _return_value = (int)(5 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -34473,7 +34473,7 @@ static WowWorldResult vanilla_SMSG_SPLINE_MOVE_ROOT_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -34507,7 +34507,7 @@ static WowWorldResult vanilla_SMSG_INVALIDATE_PLAYER_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -34558,7 +34558,7 @@ static WowWorldResult vanilla_SMSG_INSTANCE_RESET_read(WowWorldReader* reader, v
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -34593,7 +34593,7 @@ static WowWorldResult vanilla_SMSG_INSTANCE_RESET_FAILED_read(WowWorldReader* re
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -34633,7 +34633,7 @@ static WowWorldResult vanilla_SMSG_UPDATE_LAST_INSTANCE_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -34678,7 +34678,7 @@ static WowWorldResult vanilla_MSG_RAID_TARGET_UPDATE_Client_read(WowWorldReader*
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -34734,7 +34734,7 @@ static WowWorldResult vanilla_MSG_RAID_TARGET_UPDATE_Server_read(WowWorldReader*
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -34911,7 +34911,7 @@ static WowWorldResult vanilla_SMSG_PET_ACTION_SOUND_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -34950,7 +34950,7 @@ static WowWorldResult vanilla_SMSG_PET_DISMISS_SOUND_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (size_t)16 - (reader->length - reader->index);
+        _return_value = (int)(16 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -34988,7 +34988,7 @@ static WowWorldResult vanilla_SMSG_GM_TICKET_STATUS_UPDATE_read(WowWorldReader* 
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -35046,7 +35046,7 @@ static WowWorldResult vanilla_CMSG_GMSURVEY_SUBMIT_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (65 > (reader->length - reader->index)) {
-        _return_value = (size_t)65 - (reader->length - reader->index);
+        _return_value = (int)(65 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -35091,7 +35091,7 @@ static WowWorldResult vanilla_SMSG_UPDATE_INSTANCE_OWNERSHIP_read(WowWorldReader
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -35125,7 +35125,7 @@ static WowWorldResult vanilla_SMSG_SPELLINSTAKILLLOG_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -35174,7 +35174,7 @@ static WowWorldResult vanilla_SMSG_SPELL_UPDATE_CHAIN_TARGETS_read(WowWorldReade
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (size_t)16 - (reader->length - reader->index);
+        _return_value = (int)(16 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -35253,7 +35253,7 @@ static WowWorldResult vanilla_SMSG_EXPECTED_SPAM_RECORDS_read(WowWorldReader* re
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (size_t)4 - (reader->length - reader->index);
+        _return_value = (int)(4 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -35308,7 +35308,7 @@ static WowWorldResult vanilla_SMSG_DEFENSE_MESSAGE_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (size_t)9 - (reader->length - reader->index);
+        _return_value = (int)(9 - (reader->length - reader->index));
         goto cleanup;
     }
 

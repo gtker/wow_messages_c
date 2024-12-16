@@ -22,29 +22,29 @@
     }                                            \
     while (0)
 
-#define WLM_CHECK_LENGTH(type_size)                                                 \
-    stream->index;                                                                  \
-    do                                                                              \
-    {                                                                               \
-        if (stream->index + (size_t)(type_size) > stream->length)                   \
-        {                                                                           \
-            _return_value = (stream->index + (size_t)(type_size)) - stream->length; \
-            goto cleanup;                                                           \
-        }                                                                           \
-        stream->index += (size_t)(type_size);                                       \
-    }                                                                               \
+#define WLM_CHECK_LENGTH(type_size)                                                        \
+    stream->index;                                                                         \
+    do                                                                                     \
+    {                                                                                      \
+        if (stream->index + (size_t)(type_size) > stream->length)                          \
+        {                                                                                  \
+            _return_value = (int)((stream->index + (size_t)(type_size)) - stream->length); \
+            goto cleanup;                                                                  \
+        }                                                                                  \
+        stream->index += (size_t)(type_size);                                              \
+    }                                                                                      \
     while (0)
 
-#define SKIP_FORWARD_BYTES(type_size)                                               \
-    do                                                                              \
-    {                                                                               \
-        if (reader->index + (size_t)(type_size) > reader->length)                   \
-        {                                                                           \
-            _return_value = (reader->index + (size_t)(type_size)) - reader->length; \
-            goto cleanup;                                                           \
-        }                                                                           \
-        reader->index += (size_t)(type_size);                                       \
-    }                                                                               \
+#define SKIP_FORWARD_BYTES(type_size)                                                      \
+    do                                                                                     \
+    {                                                                                      \
+        if (reader->index + (size_t)(type_size) > reader->length)                          \
+        {                                                                                  \
+            _return_value = (int)((reader->index + (size_t)(type_size)) - reader->length); \
+            goto cleanup;                                                                  \
+        }                                                                                  \
+        reader->index += (size_t)(type_size);                                              \
+    }                                                                                      \
     while (0)
 
 static WowLoginResult wlm_read_u8(WowLoginReader* stream, uint8_t* value)

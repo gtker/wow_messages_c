@@ -8,7 +8,7 @@ static WowLoginResult all_Version_read(WowLoginReader* reader, all_Version* obje
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (size_t)5 - (reader->length - reader->index);
+        _return_value = (int)(5 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -54,7 +54,7 @@ static WowLoginResult all_CMD_AUTH_LOGON_CHALLENGE_Client_read(WowLoginReader* r
     int _return_value = 1;
 
     if (33 > (reader->length - reader->index)) {
-        _return_value = (size_t)33 - (reader->length - reader->index);
+        _return_value = (int)(33 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -138,7 +138,7 @@ static WowLoginResult all_CMD_AUTH_RECONNECT_CHALLENGE_Client_read(WowLoginReade
     int _return_value = 1;
 
     if (33 > (reader->length - reader->index)) {
-        _return_value = (size_t)33 - (reader->length - reader->index);
+        _return_value = (int)(33 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -299,7 +299,7 @@ static WowLoginResult version2_Realm_read(WowLoginReader* reader, version2_Realm
     int _return_value = 1;
 
     if (14 > (reader->length - reader->index)) {
-        _return_value = (size_t)14 - (reader->length - reader->index);
+        _return_value = (int)(14 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -359,7 +359,7 @@ static WowLoginResult version2_TelemetryKey_read(WowLoginReader* reader, version
     int _return_value = 1;
 
     if (30 > (reader->length - reader->index)) {
-        _return_value = (size_t)30 - (reader->length - reader->index);
+        _return_value = (int)(30 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -409,7 +409,7 @@ static WowLoginResult version2_CMD_AUTH_LOGON_CHALLENGE_Server_read(WowLoginRead
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (size_t)2 - (reader->length - reader->index);
+        _return_value = (int)(2 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -499,7 +499,7 @@ static WowLoginResult version2_CMD_AUTH_LOGON_PROOF_Client_read(WowLoginReader* 
     int _return_value = 1;
 
     if (73 > (reader->length - reader->index)) {
-        _return_value = (size_t)73 - (reader->length - reader->index);
+        _return_value = (int)(73 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -555,7 +555,7 @@ static WowLoginResult version2_CMD_AUTH_LOGON_PROOF_Server_read(WowLoginReader* 
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -600,7 +600,7 @@ static WowLoginResult version2_CMD_AUTH_RECONNECT_CHALLENGE_Server_read(WowLogin
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -645,7 +645,7 @@ static WowLoginResult version2_CMD_AUTH_RECONNECT_PROOF_Server_read(WowLoginRead
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -678,7 +678,7 @@ static WowLoginResult version2_CMD_AUTH_RECONNECT_PROOF_Client_read(WowLoginRead
     int _return_value = 1;
 
     if (57 > (reader->length - reader->index)) {
-        _return_value = (size_t)57 - (reader->length - reader->index);
+        _return_value = (int)(57 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -747,7 +747,7 @@ static WowLoginResult version2_CMD_REALM_LIST_Server_read(WowLoginReader* reader
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (size_t)9 - (reader->length - reader->index);
+        _return_value = (int)(9 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -825,7 +825,7 @@ static WowLoginResult version2_CMD_XFER_INITIATE_read(WowLoginReader* reader, ve
     int _return_value = 1;
 
     if (25 > (reader->length - reader->index)) {
-        _return_value = (size_t)25 - (reader->length - reader->index);
+        _return_value = (int)(25 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -875,7 +875,7 @@ static WowLoginResult version2_CMD_XFER_DATA_read(WowLoginReader* reader, versio
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (size_t)2 - (reader->length - reader->index);
+        _return_value = (int)(2 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -934,7 +934,7 @@ static WowLoginResult version2_CMD_XFER_RESUME_read(WowLoginReader* reader, vers
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (size_t)8 - (reader->length - reader->index);
+        _return_value = (int)(8 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -1187,7 +1187,7 @@ static WowLoginResult version3_CMD_AUTH_LOGON_CHALLENGE_Server_read(WowLoginRead
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (size_t)2 - (reader->length - reader->index);
+        _return_value = (int)(2 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -1296,7 +1296,7 @@ static WowLoginResult version3_CMD_AUTH_LOGON_PROOF_Client_read(WowLoginReader* 
     int _return_value = 1;
 
     if (74 > (reader->length - reader->index)) {
-        _return_value = (size_t)74 - (reader->length - reader->index);
+        _return_value = (int)(74 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -1376,7 +1376,7 @@ static WowLoginResult version3_CMD_SURVEY_RESULT_read(WowLoginReader* reader, ve
     int _return_value = 1;
 
     if (7 > (reader->length - reader->index)) {
-        _return_value = (size_t)7 - (reader->length - reader->index);
+        _return_value = (int)(7 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -1666,7 +1666,7 @@ static WowLoginResult version5_Realm_read(WowLoginReader* reader, version5_Realm
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -1747,7 +1747,7 @@ static WowLoginResult version5_CMD_AUTH_LOGON_CHALLENGE_Server_read(WowLoginRead
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (size_t)2 - (reader->length - reader->index);
+        _return_value = (int)(2 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -1882,7 +1882,7 @@ static WowLoginResult version5_CMD_AUTH_LOGON_PROOF_Client_read(WowLoginReader* 
     int _return_value = 1;
 
     if (74 > (reader->length - reader->index)) {
-        _return_value = (size_t)74 - (reader->length - reader->index);
+        _return_value = (int)(74 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -1963,7 +1963,7 @@ static WowLoginResult version5_CMD_AUTH_LOGON_PROOF_Server_read(WowLoginReader* 
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -2012,7 +2012,7 @@ static WowLoginResult version5_CMD_AUTH_RECONNECT_PROOF_Server_read(WowLoginRead
     int _return_value = 1;
 
     if (3 > (reader->length - reader->index)) {
-        _return_value = (size_t)3 - (reader->length - reader->index);
+        _return_value = (int)(3 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -2091,7 +2091,7 @@ static WowLoginResult version5_CMD_REALM_LIST_Server_read(WowLoginReader* reader
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (size_t)9 - (reader->length - reader->index);
+        _return_value = (int)(9 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -2410,7 +2410,7 @@ static WowLoginResult version6_CMD_REALM_LIST_Server_read(WowLoginReader* reader
     int _return_value = 1;
 
     if (10 > (reader->length - reader->index)) {
-        _return_value = (size_t)10 - (reader->length - reader->index);
+        _return_value = (int)(10 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -2944,7 +2944,7 @@ static WowLoginResult version8_Realm_read(WowLoginReader* reader, version8_Realm
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (size_t)12 - (reader->length - reader->index);
+        _return_value = (int)(12 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -3035,7 +3035,7 @@ static WowLoginResult version8_CMD_AUTH_LOGON_CHALLENGE_Server_read(WowLoginRead
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (size_t)2 - (reader->length - reader->index);
+        _return_value = (int)(2 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -3182,7 +3182,7 @@ static WowLoginResult version8_CMD_AUTH_LOGON_PROOF_Client_read(WowLoginReader* 
     int _return_value = 1;
 
     if (74 > (reader->length - reader->index)) {
-        _return_value = (size_t)74 - (reader->length - reader->index);
+        _return_value = (int)(74 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -3272,7 +3272,7 @@ static WowLoginResult version8_CMD_AUTH_LOGON_PROOF_Server_read(WowLoginReader* 
     int _return_value = 1;
 
     if (3 > (reader->length - reader->index)) {
-        _return_value = (size_t)3 - (reader->length - reader->index);
+        _return_value = (int)(3 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -3334,7 +3334,7 @@ static WowLoginResult version8_CMD_AUTH_RECONNECT_CHALLENGE_Server_read(WowLogin
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (size_t)1 - (reader->length - reader->index);
+        _return_value = (int)(1 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -3379,7 +3379,7 @@ static WowLoginResult version8_CMD_AUTH_RECONNECT_PROOF_Server_read(WowLoginRead
     int _return_value = 1;
 
     if (3 > (reader->length - reader->index)) {
-        _return_value = (size_t)3 - (reader->length - reader->index);
+        _return_value = (int)(3 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -3458,7 +3458,7 @@ static WowLoginResult version8_CMD_REALM_LIST_Server_read(WowLoginReader* reader
     int _return_value = 1;
 
     if (10 > (reader->length - reader->index)) {
-        _return_value = (size_t)10 - (reader->length - reader->index);
+        _return_value = (int)(10 - (reader->length - reader->index));
         goto cleanup;
     }
 

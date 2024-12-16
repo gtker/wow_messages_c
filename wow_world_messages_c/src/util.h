@@ -17,12 +17,12 @@
     }                                            \
     while (0)
 
-#define SKIP_FORWARD_BYTES(type_size)                                           \
-    if (reader->index + (size_t)(type_size) > reader->length)                   \
-    {                                                                           \
-        _return_value = (reader->index + ((size_t)type_size)) - reader->length; \
-        goto cleanup;                                                           \
-    }                                                                           \
+#define SKIP_FORWARD_BYTES(type_size)                                                  \
+    if (reader->index + (size_t)(type_size) > reader->length)                          \
+    {                                                                                  \
+        _return_value = (int)((reader->index + ((size_t)type_size)) - reader->length); \
+        goto cleanup;                                                                  \
+    }                                                                                  \
     reader->index += (size_t)(type_size)
 
 WowWorldResult wwm_read_u8(WowWorldReader* stream, uint8_t* value);
