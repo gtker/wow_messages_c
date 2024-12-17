@@ -52,7 +52,8 @@
       ],
       "cacheVariables": {
         "CMAKE_C_FLAGS_INIT": "/W4",
-        "CMAKE_CXX_FLAGS_INIT": "/W4"
+        "CMAKE_CXX_FLAGS_INIT": "/W4",
+        "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreaded"
       }
     }
   ],
