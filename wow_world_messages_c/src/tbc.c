@@ -2143,8 +2143,7 @@ static WowWorldResult tbc_AuctionEnchantment_read(WowWorldReader* reader, tbc_Au
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U32(object->enchant_id);
@@ -2176,8 +2175,7 @@ static WowWorldResult tbc_AuctionListItem_read(WowWorldReader* reader, tbc_Aucti
     int _return_value = 1;
 
     if (136 > (reader->length - reader->index)) {
-        _return_value = (int)(136 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(136 - (reader->length - reader->index));
     }
 
     READ_U32(object->id);
@@ -2257,8 +2255,7 @@ static WowWorldResult tbc_AuctionSort_read(WowWorldReader* reader, tbc_AuctionSo
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (int)(2 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(2 - (reader->length - reader->index));
     }
 
     READ_U8(object->column);
@@ -2286,8 +2283,7 @@ static WowWorldResult tbc_Aura_read(WowWorldReader* reader, tbc_Aura* object) {
     int _return_value = 1;
 
     if (3 > (reader->length - reader->index)) {
-        _return_value = (int)(3 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(3 - (reader->length - reader->index));
     }
 
     READ_U16(object->aura);
@@ -2334,8 +2330,7 @@ static WowWorldResult tbc_AuraLog_read(WowWorldReader* reader, tbc_AuraLog* obje
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     object->aura_type = 0;
@@ -2417,8 +2412,7 @@ static WowWorldResult tbc_BankTab_read(WowWorldReader* reader, tbc_BankTab* obje
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U32(object->flags);
@@ -2446,8 +2440,7 @@ static WowWorldResult tbc_BattlegroundPlayerPosition_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (int)(16 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(16 - (reader->length - reader->index));
     }
 
     READ_U64(object->player);
@@ -2479,8 +2472,7 @@ static WowWorldResult tbc_ChannelMember_read(WowWorldReader* reader, tbc_Channel
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (int)(9 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(9 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -2509,8 +2501,7 @@ static WowWorldResult tbc_CharacterGear_read(WowWorldReader* reader, tbc_Charact
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (int)(9 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(9 - (reader->length - reader->index));
     }
 
     READ_U32(object->equipment_display_id);
@@ -2666,8 +2657,7 @@ static WowWorldResult tbc_CooldownSpell_read(WowWorldReader* reader, tbc_Cooldow
     int _return_value = 1;
 
     if (14 > (reader->length - reader->index)) {
-        _return_value = (int)(14 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(14 - (reader->length - reader->index));
     }
 
     READ_U16(object->spell_id);
@@ -2707,8 +2697,7 @@ static WowWorldResult tbc_DamageInfo_read(WowWorldReader* reader, tbc_DamageInfo
     int _return_value = 1;
 
     if (20 > (reader->length - reader->index)) {
-        _return_value = (int)(20 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(20 - (reader->length - reader->index));
     }
 
     READ_U32(object->spell_school_mask);
@@ -2748,8 +2737,7 @@ static WowWorldResult tbc_DispelledSpell_read(WowWorldReader* reader, tbc_Dispel
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (int)(5 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(5 - (reader->length - reader->index));
     }
 
     READ_U32(object->spell);
@@ -2778,8 +2766,7 @@ static WowWorldResult tbc_FactionInitializer_read(WowWorldReader* reader, tbc_Fa
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (int)(5 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(5 - (reader->length - reader->index));
     }
 
     object->flag = 0;
@@ -2808,8 +2795,7 @@ static WowWorldResult tbc_FactionStanding_read(WowWorldReader* reader, tbc_Facti
     int _return_value = 1;
 
     if (6 > (reader->length - reader->index)) {
-        _return_value = (int)(6 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(6 - (reader->length - reader->index));
     }
 
     object->faction = 0;
@@ -2838,8 +2824,7 @@ static WowWorldResult tbc_ForcedReaction_read(WowWorldReader* reader, tbc_Forced
     int _return_value = 1;
 
     if (6 > (reader->length - reader->index)) {
-        _return_value = (int)(6 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(6 - (reader->length - reader->index));
     }
 
     object->faction = 0;
@@ -3026,8 +3011,7 @@ static WowWorldResult tbc_GuildBankRights_read(WowWorldReader* reader, tbc_Guild
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U32(object->rights);
@@ -3055,8 +3039,7 @@ static WowWorldResult tbc_GuildBankSocket_read(WowWorldReader* reader, tbc_Guild
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (int)(5 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(5 - (reader->length - reader->index));
     }
 
     READ_U8(object->socket_index);
@@ -3213,8 +3196,7 @@ static WowWorldResult tbc_GuildLogEvent_read(WowWorldReader* reader, tbc_GuildLo
     int _return_value = 1;
 
     if (13 > (reader->length - reader->index)) {
-        _return_value = (int)(13 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(13 - (reader->length - reader->index));
     }
 
     object->event = 0;
@@ -3361,8 +3343,7 @@ static WowWorldResult tbc_GuildRights_read(WowWorldReader* reader, tbc_GuildRigh
     int _return_value = 1;
 
     if (56 > (reader->length - reader->index)) {
-        _return_value = (int)(56 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(56 - (reader->length - reader->index));
     }
 
     READ_U32(object->rights);
@@ -3394,8 +3375,7 @@ static WowWorldResult tbc_InitialSpell_read(WowWorldReader* reader, tbc_InitialS
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U16(object->spell_id);
@@ -3423,8 +3403,7 @@ static WowWorldResult tbc_ItemDamageType_read(WowWorldReader* reader, tbc_ItemDa
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_FLOAT(object->damage_minimum);
@@ -3457,8 +3436,7 @@ static WowWorldResult tbc_ItemSocket_read(WowWorldReader* reader, tbc_ItemSocket
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U32(object->color);
@@ -3486,8 +3464,7 @@ static WowWorldResult tbc_ItemSpells_read(WowWorldReader* reader, tbc_ItemSpells
     int _return_value = 1;
 
     if (24 > (reader->length - reader->index)) {
-        _return_value = (int)(24 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(24 - (reader->length - reader->index));
     }
 
     READ_U32(object->spell);
@@ -3532,8 +3509,7 @@ static WowWorldResult tbc_ItemStat_read(WowWorldReader* reader, tbc_ItemStat* ob
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U32(object->stat_type);
@@ -3561,8 +3537,7 @@ static WowWorldResult tbc_LfgData_read(WowWorldReader* reader, tbc_LfgData* obje
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U16(object->entry);
@@ -3595,8 +3570,7 @@ static WowWorldResult tbc_LfgPlayerMember_read(WowWorldReader* reader, tbc_LfgPl
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (int)(5 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(5 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -3710,8 +3684,7 @@ static WowWorldResult tbc_ListInventoryItem_read(WowWorldReader* reader, tbc_Lis
     int _return_value = 1;
 
     if (32 > (reader->length - reader->index)) {
-        _return_value = (int)(32 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(32 - (reader->length - reader->index));
     }
 
     READ_U32(object->item_stack_count);
@@ -3763,8 +3736,7 @@ static WowWorldResult tbc_LootItem_read(WowWorldReader* reader, tbc_LootItem* ob
     int _return_value = 1;
 
     if (6 > (reader->length - reader->index)) {
-        _return_value = (int)(6 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(6 - (reader->length - reader->index));
     }
 
     READ_U8(object->index);
@@ -3797,8 +3769,7 @@ static WowWorldResult tbc_MailListItemEnchant_read(WowWorldReader* reader, tbc_M
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U32(object->charges);
@@ -3830,8 +3801,7 @@ static WowWorldResult tbc_MailListItem_read(WowWorldReader* reader, tbc_MailList
     int _return_value = 1;
 
     if (102 > (reader->length - reader->index)) {
-        _return_value = (int)(102 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(102 - (reader->length - reader->index));
     }
 
     READ_U8(object->item_index);
@@ -4046,8 +4016,7 @@ static WowWorldResult tbc_MailItem_read(WowWorldReader* reader, tbc_MailItem* ob
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (int)(9 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(9 - (reader->length - reader->index));
     }
 
     READ_U64(object->item);
@@ -4075,8 +4044,7 @@ static WowWorldResult tbc_MoneyLogItem_read(WowWorldReader* reader, tbc_MoneyLog
     int _return_value = 1;
 
     if (17 > (reader->length - reader->index)) {
-        _return_value = (int)(17 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(17 - (reader->length - reader->index));
     }
 
     READ_U8(object->action);
@@ -4116,8 +4084,7 @@ static WowWorldResult tbc_TransportInfo_read(WowWorldReader* reader, tbc_Transpo
     int _return_value = 1;
 
     if (21 > (reader->length - reader->index)) {
-        _return_value = (int)(21 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(21 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -4531,8 +4498,7 @@ static WowWorldResult tbc_MovementInfo_read(WowWorldReader* reader, tbc_Movement
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (int)(29 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(29 - (reader->length - reader->index));
     }
 
     object->flags = 0;
@@ -4629,8 +4595,7 @@ static WowWorldResult tbc_NpcTextUpdateEmote_read(WowWorldReader* reader, tbc_Np
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U32(object->delay);
@@ -4856,8 +4821,7 @@ static WowWorldResult tbc_PetSpellCooldown_read(WowWorldReader* reader, tbc_PetS
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U16(object->spell);
@@ -4893,8 +4857,7 @@ static WowWorldResult tbc_PetitionShowlist_read(WowWorldReader* reader, tbc_Peti
     int _return_value = 1;
 
     if (24 > (reader->length - reader->index)) {
-        _return_value = (int)(24 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(24 - (reader->length - reader->index));
     }
 
     READ_U32(object->index);
@@ -4938,8 +4901,7 @@ static WowWorldResult tbc_PetitionSignature_read(WowWorldReader* reader, tbc_Pet
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U64(object->signer);
@@ -4967,8 +4929,7 @@ static WowWorldResult tbc_QuestDetailsEmote_read(WowWorldReader* reader, tbc_Que
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U32(object->emote);
@@ -4996,8 +4957,7 @@ static WowWorldResult tbc_QuestGiverStatusReport_read(WowWorldReader* reader, tb
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (int)(9 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(9 - (reader->length - reader->index));
     }
 
     READ_U64(object->npc);
@@ -5075,8 +5035,7 @@ static WowWorldResult tbc_QuestItemRequirement_read(WowWorldReader* reader, tbc_
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U32(object->item);
@@ -5108,8 +5067,7 @@ static WowWorldResult tbc_QuestItemReward_read(WowWorldReader* reader, tbc_Quest
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U32(object->item);
@@ -5137,8 +5095,7 @@ static WowWorldResult tbc_QuestObjective_read(WowWorldReader* reader, tbc_QuestO
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (int)(16 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(16 - (reader->length - reader->index));
     }
 
     READ_U32(object->creature_id);
@@ -5174,8 +5131,7 @@ static WowWorldResult tbc_RaidInfo_read(WowWorldReader* reader, tbc_RaidInfo* ob
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (int)(16 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(16 - (reader->length - reader->index));
     }
 
     object->map = 0;
@@ -5212,8 +5168,7 @@ static WowWorldResult tbc_RaidTargetUpdate_read(WowWorldReader* reader, tbc_Raid
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (int)(9 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(9 - (reader->length - reader->index));
     }
 
     object->index = 0;
@@ -5242,8 +5197,7 @@ static WowWorldResult tbc_ReceivedMail_read(WowWorldReader* reader, tbc_Received
     int _return_value = 1;
 
     if (24 > (reader->length - reader->index)) {
-        _return_value = (int)(24 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(24 - (reader->length - reader->index));
     }
 
     READ_U64(object->sender);
@@ -5576,8 +5530,7 @@ static WowWorldResult tbc_SpellCooldownStatus_read(WowWorldReader* reader, tbc_S
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U32(object->id);
@@ -5639,8 +5592,7 @@ static WowWorldResult tbc_SpellLog_read(WowWorldReader* reader, tbc_SpellLog* ob
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     object->effect = 0;
@@ -5770,8 +5722,7 @@ static WowWorldResult tbc_SpellLogMiss_read(WowWorldReader* reader, tbc_SpellLog
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (int)(9 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(9 - (reader->length - reader->index));
     }
 
     READ_U64(object->target);
@@ -5810,8 +5761,7 @@ static WowWorldResult tbc_SpellMiss_read(WowWorldReader* reader, tbc_SpellMiss* 
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (int)(9 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(9 - (reader->length - reader->index));
     }
 
     READ_U64(object->target);
@@ -5848,8 +5798,7 @@ static WowWorldResult tbc_SpellSteal_read(WowWorldReader* reader, tbc_SpellSteal
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (int)(5 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(5 - (reader->length - reader->index));
     }
 
     READ_U32(object->spell);
@@ -5935,8 +5884,7 @@ static WowWorldResult tbc_TradeSlot_read(WowWorldReader* reader, tbc_TradeSlot* 
     int _return_value = 1;
 
     if (73 > (reader->length - reader->index)) {
-        _return_value = (int)(73 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(73 - (reader->length - reader->index));
     }
 
     READ_U8(object->trade_slot_number);
@@ -6016,8 +5964,7 @@ static WowWorldResult tbc_TrainerSpell_read(WowWorldReader* reader, tbc_TrainerS
     int _return_value = 1;
 
     if (38 > (reader->length - reader->index)) {
-        _return_value = (int)(38 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(38 - (reader->length - reader->index));
     }
 
     READ_U32(object->spell);
@@ -6143,8 +6090,7 @@ static WowWorldResult tbc_WorldState_read(WowWorldReader* reader, tbc_WorldState
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U32(object->state);
@@ -6289,8 +6235,7 @@ static WowWorldResult tbc_CMSG_WORLD_TELEPORT_read(WowWorldReader* reader, tbc_C
     int _return_value = 1;
 
     if (24 > (reader->length - reader->index)) {
-        _return_value = (int)(24 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(24 - (reader->length - reader->index));
     }
 
     READ_U32(object->time);
@@ -6484,8 +6429,7 @@ static WowWorldResult tbc_CMSG_CHAR_DELETE_read(WowWorldReader* reader, tbc_CMSG
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -6518,8 +6462,7 @@ static WowWorldResult tbc_SMSG_CHAR_CREATE_read(WowWorldReader* reader, tbc_SMSG
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     object->result = 0;
@@ -6624,8 +6567,7 @@ static WowWorldResult tbc_SMSG_CHAR_DELETE_read(WowWorldReader* reader, tbc_SMSG
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     object->result = 0;
@@ -6659,8 +6601,7 @@ static WowWorldResult tbc_CMSG_PLAYER_LOGIN_read(WowWorldReader* reader, tbc_CMS
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -6693,8 +6634,7 @@ static WowWorldResult tbc_SMSG_NEW_WORLD_read(WowWorldReader* reader, tbc_SMSG_N
     int _return_value = 1;
 
     if (20 > (reader->length - reader->index)) {
-        _return_value = (int)(20 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(20 - (reader->length - reader->index));
     }
 
     object->map = 0;
@@ -6823,8 +6763,7 @@ static WowWorldResult tbc_SMSG_TRANSFER_ABORTED_read(WowWorldReader* reader, tbc
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (int)(5 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(5 - (reader->length - reader->index));
     }
 
     object->map = 0;
@@ -6872,8 +6811,7 @@ static WowWorldResult tbc_SMSG_CHARACTER_LOGIN_FAILED_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     object->result = 0;
@@ -6907,8 +6845,7 @@ static WowWorldResult tbc_SMSG_LOGIN_SETTIMESPEED_read(WowWorldReader* reader, t
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U32(object->datetime);
@@ -6979,8 +6916,7 @@ static WowWorldResult tbc_SMSG_LOGOUT_RESPONSE_read(WowWorldReader* reader, tbc_
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (int)(5 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(5 - (reader->length - reader->index));
     }
 
     object->result = 0;
@@ -7070,8 +7006,7 @@ static WowWorldResult tbc_CMSG_NAME_QUERY_read(WowWorldReader* reader, tbc_CMSG_
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -7215,8 +7150,7 @@ static WowWorldResult tbc_CMSG_PET_NAME_QUERY_read(WowWorldReader* reader, tbc_C
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U32(object->pet_number);
@@ -7346,8 +7280,7 @@ static WowWorldResult tbc_CMSG_GUILD_QUERY_read(WowWorldReader* reader, tbc_CMSG
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U32(object->guild_id);
@@ -7478,8 +7411,7 @@ static WowWorldResult tbc_CMSG_ITEM_QUERY_SINGLE_read(WowWorldReader* reader, tb
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U32(object->item);
@@ -7859,8 +7791,7 @@ static WowWorldResult tbc_CMSG_PAGE_TEXT_QUERY_read(WowWorldReader* reader, tbc_
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U32(object->page_id);
@@ -7951,8 +7882,7 @@ static WowWorldResult tbc_CMSG_QUEST_QUERY_read(WowWorldReader* reader, tbc_CMSG
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U32(object->quest_id);
@@ -8176,8 +8106,7 @@ static WowWorldResult tbc_CMSG_GAMEOBJECT_QUERY_read(WowWorldReader* reader, tbc
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U32(object->entry_id);
@@ -8347,8 +8276,7 @@ static WowWorldResult tbc_CMSG_CREATURE_QUERY_read(WowWorldReader* reader, tbc_C
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U32(object->creature);
@@ -8822,8 +8750,7 @@ static WowWorldResult tbc_CMSG_CONTACT_LIST_read(WowWorldReader* reader, tbc_CMS
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U32(object->flags);
@@ -8932,8 +8859,7 @@ static WowWorldResult tbc_SMSG_FRIEND_STATUS_read(WowWorldReader* reader, tbc_SM
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (int)(9 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(9 - (reader->length - reader->index));
     }
 
     object->result = 0;
@@ -9024,8 +8950,7 @@ static WowWorldResult tbc_CMSG_DEL_FRIEND_read(WowWorldReader* reader, tbc_CMSG_
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -9154,8 +9079,7 @@ static WowWorldResult tbc_CMSG_DEL_IGNORE_read(WowWorldReader* reader, tbc_CMSG_
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -9423,8 +9347,7 @@ static WowWorldResult tbc_CMSG_GROUP_UNINVITE_GUID_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -9474,8 +9397,7 @@ static WowWorldResult tbc_CMSG_GROUP_SET_LEADER_read(WowWorldReader* reader, tbc
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -9554,8 +9476,7 @@ static WowWorldResult tbc_CMSG_LOOT_METHOD_read(WowWorldReader* reader, tbc_CMSG
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (int)(16 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(16 - (reader->length - reader->index));
     }
 
     object->loot_setting = 0;
@@ -12270,8 +12191,7 @@ static WowWorldResult tbc_SMSG_DESTROY_OBJECT_read(WowWorldReader* reader, tbc_S
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -12368,8 +12288,7 @@ static WowWorldResult tbc_CMSG_OPEN_ITEM_read(WowWorldReader* reader, tbc_CMSG_O
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (int)(2 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(2 - (reader->length - reader->index));
     }
 
     READ_U8(object->bag_index);
@@ -12406,8 +12325,7 @@ static WowWorldResult tbc_CMSG_READ_ITEM_read(WowWorldReader* reader, tbc_CMSG_R
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (int)(2 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(2 - (reader->length - reader->index));
     }
 
     READ_U8(object->bag_index);
@@ -12444,8 +12362,7 @@ static WowWorldResult tbc_SMSG_READ_ITEM_OK_read(WowWorldReader* reader, tbc_SMS
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -12478,8 +12395,7 @@ static WowWorldResult tbc_SMSG_READ_ITEM_FAILED_read(WowWorldReader* reader, tbc
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -12512,8 +12428,7 @@ static WowWorldResult tbc_SMSG_ITEM_COOLDOWN_read(WowWorldReader* reader, tbc_SM
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -12550,8 +12465,7 @@ static WowWorldResult tbc_CMSG_GAMEOBJ_USE_read(WowWorldReader* reader, tbc_CMSG
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -12584,8 +12498,7 @@ static WowWorldResult tbc_SMSG_GAMEOBJECT_CUSTOM_ANIM_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -12622,8 +12535,7 @@ static WowWorldResult tbc_CMSG_AREATRIGGER_read(WowWorldReader* reader, tbc_CMSG
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U32(object->trigger_id);
@@ -12660,8 +12572,7 @@ static WowWorldResult tbc_MSG_MOVE_START_FORWARD_Client_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (int)(29 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(29 - (reader->length - reader->index));
     }
 
     WWM_CHECK_RETURN_CODE(tbc_MovementInfo_read(reader, &object->info));
@@ -12698,8 +12609,7 @@ static WowWorldResult tbc_MSG_MOVE_START_FORWARD_Server_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (30 > (reader->length - reader->index)) {
-        _return_value = (int)(30 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(30 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -12740,8 +12650,7 @@ static WowWorldResult tbc_MSG_MOVE_START_BACKWARD_Client_read(WowWorldReader* re
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (int)(29 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(29 - (reader->length - reader->index));
     }
 
     WWM_CHECK_RETURN_CODE(tbc_MovementInfo_read(reader, &object->info));
@@ -12778,8 +12687,7 @@ static WowWorldResult tbc_MSG_MOVE_START_BACKWARD_Server_read(WowWorldReader* re
     int _return_value = 1;
 
     if (30 > (reader->length - reader->index)) {
-        _return_value = (int)(30 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(30 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -12820,8 +12728,7 @@ static WowWorldResult tbc_MSG_MOVE_STOP_Client_read(WowWorldReader* reader, tbc_
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (int)(29 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(29 - (reader->length - reader->index));
     }
 
     WWM_CHECK_RETURN_CODE(tbc_MovementInfo_read(reader, &object->info));
@@ -12858,8 +12765,7 @@ static WowWorldResult tbc_MSG_MOVE_STOP_Server_read(WowWorldReader* reader, tbc_
     int _return_value = 1;
 
     if (30 > (reader->length - reader->index)) {
-        _return_value = (int)(30 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(30 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -12900,8 +12806,7 @@ static WowWorldResult tbc_MSG_MOVE_START_STRAFE_LEFT_Client_read(WowWorldReader*
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (int)(29 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(29 - (reader->length - reader->index));
     }
 
     WWM_CHECK_RETURN_CODE(tbc_MovementInfo_read(reader, &object->info));
@@ -12938,8 +12843,7 @@ static WowWorldResult tbc_MSG_MOVE_START_STRAFE_LEFT_Server_read(WowWorldReader*
     int _return_value = 1;
 
     if (30 > (reader->length - reader->index)) {
-        _return_value = (int)(30 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(30 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -12980,8 +12884,7 @@ static WowWorldResult tbc_MSG_MOVE_START_STRAFE_RIGHT_Client_read(WowWorldReader
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (int)(29 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(29 - (reader->length - reader->index));
     }
 
     WWM_CHECK_RETURN_CODE(tbc_MovementInfo_read(reader, &object->info));
@@ -13018,8 +12921,7 @@ static WowWorldResult tbc_MSG_MOVE_START_STRAFE_RIGHT_Server_read(WowWorldReader
     int _return_value = 1;
 
     if (30 > (reader->length - reader->index)) {
-        _return_value = (int)(30 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(30 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -13060,8 +12962,7 @@ static WowWorldResult tbc_MSG_MOVE_STOP_STRAFE_Client_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (int)(29 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(29 - (reader->length - reader->index));
     }
 
     WWM_CHECK_RETURN_CODE(tbc_MovementInfo_read(reader, &object->info));
@@ -13098,8 +12999,7 @@ static WowWorldResult tbc_MSG_MOVE_STOP_STRAFE_Server_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (30 > (reader->length - reader->index)) {
-        _return_value = (int)(30 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(30 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -13140,8 +13040,7 @@ static WowWorldResult tbc_MSG_MOVE_JUMP_Client_read(WowWorldReader* reader, tbc_
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (int)(29 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(29 - (reader->length - reader->index));
     }
 
     WWM_CHECK_RETURN_CODE(tbc_MovementInfo_read(reader, &object->info));
@@ -13178,8 +13077,7 @@ static WowWorldResult tbc_MSG_MOVE_JUMP_Server_read(WowWorldReader* reader, tbc_
     int _return_value = 1;
 
     if (30 > (reader->length - reader->index)) {
-        _return_value = (int)(30 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(30 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -13220,8 +13118,7 @@ static WowWorldResult tbc_MSG_MOVE_START_TURN_LEFT_Client_read(WowWorldReader* r
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (int)(29 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(29 - (reader->length - reader->index));
     }
 
     WWM_CHECK_RETURN_CODE(tbc_MovementInfo_read(reader, &object->info));
@@ -13258,8 +13155,7 @@ static WowWorldResult tbc_MSG_MOVE_START_TURN_LEFT_Server_read(WowWorldReader* r
     int _return_value = 1;
 
     if (30 > (reader->length - reader->index)) {
-        _return_value = (int)(30 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(30 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -13300,8 +13196,7 @@ static WowWorldResult tbc_MSG_MOVE_START_TURN_RIGHT_Client_read(WowWorldReader* 
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (int)(29 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(29 - (reader->length - reader->index));
     }
 
     WWM_CHECK_RETURN_CODE(tbc_MovementInfo_read(reader, &object->info));
@@ -13338,8 +13233,7 @@ static WowWorldResult tbc_MSG_MOVE_START_TURN_RIGHT_Server_read(WowWorldReader* 
     int _return_value = 1;
 
     if (30 > (reader->length - reader->index)) {
-        _return_value = (int)(30 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(30 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -13380,8 +13274,7 @@ static WowWorldResult tbc_MSG_MOVE_STOP_TURN_Client_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (int)(29 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(29 - (reader->length - reader->index));
     }
 
     WWM_CHECK_RETURN_CODE(tbc_MovementInfo_read(reader, &object->info));
@@ -13418,8 +13311,7 @@ static WowWorldResult tbc_MSG_MOVE_STOP_TURN_Server_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (30 > (reader->length - reader->index)) {
-        _return_value = (int)(30 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(30 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -13460,8 +13352,7 @@ static WowWorldResult tbc_MSG_MOVE_START_PITCH_UP_Client_read(WowWorldReader* re
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (int)(29 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(29 - (reader->length - reader->index));
     }
 
     WWM_CHECK_RETURN_CODE(tbc_MovementInfo_read(reader, &object->info));
@@ -13498,8 +13389,7 @@ static WowWorldResult tbc_MSG_MOVE_START_PITCH_UP_Server_read(WowWorldReader* re
     int _return_value = 1;
 
     if (30 > (reader->length - reader->index)) {
-        _return_value = (int)(30 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(30 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -13540,8 +13430,7 @@ static WowWorldResult tbc_MSG_MOVE_START_PITCH_DOWN_Client_read(WowWorldReader* 
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (int)(29 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(29 - (reader->length - reader->index));
     }
 
     WWM_CHECK_RETURN_CODE(tbc_MovementInfo_read(reader, &object->info));
@@ -13578,8 +13467,7 @@ static WowWorldResult tbc_MSG_MOVE_START_PITCH_DOWN_Server_read(WowWorldReader* 
     int _return_value = 1;
 
     if (30 > (reader->length - reader->index)) {
-        _return_value = (int)(30 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(30 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -13620,8 +13508,7 @@ static WowWorldResult tbc_MSG_MOVE_STOP_PITCH_Client_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (int)(29 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(29 - (reader->length - reader->index));
     }
 
     WWM_CHECK_RETURN_CODE(tbc_MovementInfo_read(reader, &object->info));
@@ -13658,8 +13545,7 @@ static WowWorldResult tbc_MSG_MOVE_STOP_PITCH_Server_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (30 > (reader->length - reader->index)) {
-        _return_value = (int)(30 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(30 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -13700,8 +13586,7 @@ static WowWorldResult tbc_MSG_MOVE_SET_RUN_MODE_Client_read(WowWorldReader* read
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (int)(29 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(29 - (reader->length - reader->index));
     }
 
     WWM_CHECK_RETURN_CODE(tbc_MovementInfo_read(reader, &object->info));
@@ -13738,8 +13623,7 @@ static WowWorldResult tbc_MSG_MOVE_SET_RUN_MODE_Server_read(WowWorldReader* read
     int _return_value = 1;
 
     if (30 > (reader->length - reader->index)) {
-        _return_value = (int)(30 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(30 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -13780,8 +13664,7 @@ static WowWorldResult tbc_MSG_MOVE_SET_WALK_MODE_Client_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (int)(29 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(29 - (reader->length - reader->index));
     }
 
     WWM_CHECK_RETURN_CODE(tbc_MovementInfo_read(reader, &object->info));
@@ -13818,8 +13701,7 @@ static WowWorldResult tbc_MSG_MOVE_SET_WALK_MODE_Server_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (30 > (reader->length - reader->index)) {
-        _return_value = (int)(30 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(30 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -13860,8 +13742,7 @@ static WowWorldResult tbc_MSG_MOVE_TELEPORT_Server_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (30 > (reader->length - reader->index)) {
-        _return_value = (int)(30 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(30 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->player);
@@ -13898,8 +13779,7 @@ static WowWorldResult tbc_MSG_MOVE_TELEPORT_CHEAT_Server_read(WowWorldReader* re
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (int)(16 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(16 - (reader->length - reader->index));
     }
 
     WWM_CHECK_RETURN_CODE(all_Vector3d_read(reader, &object->position));
@@ -13940,8 +13820,7 @@ static WowWorldResult tbc_MSG_MOVE_TELEPORT_ACK_Client_read(WowWorldReader* read
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (int)(9 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(9 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -13986,8 +13865,7 @@ static WowWorldResult tbc_MSG_MOVE_TELEPORT_ACK_Server_read(WowWorldReader* read
     int _return_value = 1;
 
     if (34 > (reader->length - reader->index)) {
-        _return_value = (int)(34 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(34 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -14032,8 +13910,7 @@ static WowWorldResult tbc_MSG_MOVE_FALL_LAND_Client_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (int)(29 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(29 - (reader->length - reader->index));
     }
 
     WWM_CHECK_RETURN_CODE(tbc_MovementInfo_read(reader, &object->info));
@@ -14070,8 +13947,7 @@ static WowWorldResult tbc_MSG_MOVE_FALL_LAND_Server_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (30 > (reader->length - reader->index)) {
-        _return_value = (int)(30 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(30 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -14112,8 +13988,7 @@ static WowWorldResult tbc_MSG_MOVE_START_SWIM_Client_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (int)(29 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(29 - (reader->length - reader->index));
     }
 
     WWM_CHECK_RETURN_CODE(tbc_MovementInfo_read(reader, &object->info));
@@ -14150,8 +14025,7 @@ static WowWorldResult tbc_MSG_MOVE_START_SWIM_Server_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (30 > (reader->length - reader->index)) {
-        _return_value = (int)(30 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(30 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -14192,8 +14066,7 @@ static WowWorldResult tbc_MSG_MOVE_STOP_SWIM_Client_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (int)(29 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(29 - (reader->length - reader->index));
     }
 
     WWM_CHECK_RETURN_CODE(tbc_MovementInfo_read(reader, &object->info));
@@ -14230,8 +14103,7 @@ static WowWorldResult tbc_MSG_MOVE_STOP_SWIM_Server_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (30 > (reader->length - reader->index)) {
-        _return_value = (int)(30 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(30 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -14272,8 +14144,7 @@ static WowWorldResult tbc_MSG_MOVE_SET_FACING_Client_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (int)(29 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(29 - (reader->length - reader->index));
     }
 
     WWM_CHECK_RETURN_CODE(tbc_MovementInfo_read(reader, &object->info));
@@ -14310,8 +14181,7 @@ static WowWorldResult tbc_MSG_MOVE_SET_FACING_Server_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (30 > (reader->length - reader->index)) {
-        _return_value = (int)(30 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(30 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -14352,8 +14222,7 @@ static WowWorldResult tbc_MSG_MOVE_SET_PITCH_Client_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (int)(29 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(29 - (reader->length - reader->index));
     }
 
     WWM_CHECK_RETURN_CODE(tbc_MovementInfo_read(reader, &object->info));
@@ -14390,8 +14259,7 @@ static WowWorldResult tbc_MSG_MOVE_SET_PITCH_Server_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (30 > (reader->length - reader->index)) {
-        _return_value = (int)(30 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(30 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -14581,8 +14449,7 @@ static WowWorldResult tbc_SMSG_MOVE_WATER_WALK_read(WowWorldReader* reader, tbc_
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (int)(5 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(5 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -14623,8 +14490,7 @@ static WowWorldResult tbc_SMSG_MOVE_LAND_WALK_read(WowWorldReader* reader, tbc_S
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (int)(5 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(5 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -14661,8 +14527,7 @@ static WowWorldResult tbc_CMSG_MOVE_SET_RAW_POSITION_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (int)(16 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(16 - (reader->length - reader->index));
     }
 
     WWM_CHECK_RETURN_CODE(all_Vector3d_read(reader, &object->position));
@@ -14703,8 +14568,7 @@ static WowWorldResult tbc_SMSG_FORCE_RUN_SPEED_CHANGE_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (10 > (reader->length - reader->index)) {
-        _return_value = (int)(10 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(10 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -14753,8 +14617,7 @@ static WowWorldResult tbc_CMSG_FORCE_RUN_SPEED_CHANGE_ACK_read(WowWorldReader* r
     int _return_value = 1;
 
     if (45 > (reader->length - reader->index)) {
-        _return_value = (int)(45 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(45 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -14803,8 +14666,7 @@ static WowWorldResult tbc_SMSG_FORCE_RUN_BACK_SPEED_CHANGE_read(WowWorldReader* 
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (int)(9 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(9 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -14849,8 +14711,7 @@ static WowWorldResult tbc_CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK_read(WowWorldRead
     int _return_value = 1;
 
     if (45 > (reader->length - reader->index)) {
-        _return_value = (int)(45 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(45 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -14899,8 +14760,7 @@ static WowWorldResult tbc_SMSG_FORCE_SWIM_SPEED_CHANGE_read(WowWorldReader* read
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (int)(9 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(9 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -14945,8 +14805,7 @@ static WowWorldResult tbc_CMSG_FORCE_SWIM_SPEED_CHANGE_ACK_read(WowWorldReader* 
     int _return_value = 1;
 
     if (45 > (reader->length - reader->index)) {
-        _return_value = (int)(45 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(45 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -14995,8 +14854,7 @@ static WowWorldResult tbc_SMSG_FORCE_MOVE_ROOT_read(WowWorldReader* reader, tbc_
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (int)(5 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(5 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -15037,8 +14895,7 @@ static WowWorldResult tbc_CMSG_FORCE_MOVE_ROOT_ACK_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (41 > (reader->length - reader->index)) {
-        _return_value = (int)(41 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(41 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -15083,8 +14940,7 @@ static WowWorldResult tbc_SMSG_FORCE_MOVE_UNROOT_read(WowWorldReader* reader, tb
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (int)(5 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(5 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -15125,8 +14981,7 @@ static WowWorldResult tbc_CMSG_FORCE_MOVE_UNROOT_ACK_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (41 > (reader->length - reader->index)) {
-        _return_value = (int)(41 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(41 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -15171,8 +15026,7 @@ static WowWorldResult tbc_MSG_MOVE_ROOT_Server_read(WowWorldReader* reader, tbc_
     int _return_value = 1;
 
     if (30 > (reader->length - reader->index)) {
-        _return_value = (int)(30 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(30 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->player);
@@ -15213,8 +15067,7 @@ static WowWorldResult tbc_MSG_MOVE_UNROOT_Server_read(WowWorldReader* reader, tb
     int _return_value = 1;
 
     if (30 > (reader->length - reader->index)) {
-        _return_value = (int)(30 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(30 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->player);
@@ -15255,8 +15108,7 @@ static WowWorldResult tbc_MSG_MOVE_HEARTBEAT_Client_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (int)(29 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(29 - (reader->length - reader->index));
     }
 
     WWM_CHECK_RETURN_CODE(tbc_MovementInfo_read(reader, &object->info));
@@ -15293,8 +15145,7 @@ static WowWorldResult tbc_MSG_MOVE_HEARTBEAT_Server_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (30 > (reader->length - reader->index)) {
-        _return_value = (int)(30 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(30 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -15335,8 +15186,7 @@ static WowWorldResult tbc_SMSG_MOVE_KNOCK_BACK_read(WowWorldReader* reader, tbc_
     int _return_value = 1;
 
     if (21 > (reader->length - reader->index)) {
-        _return_value = (int)(21 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(21 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -15393,8 +15243,7 @@ static WowWorldResult tbc_CMSG_MOVE_KNOCK_BACK_ACK_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (41 > (reader->length - reader->index)) {
-        _return_value = (int)(41 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(41 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -15439,8 +15288,7 @@ static WowWorldResult tbc_MSG_MOVE_KNOCK_BACK_Server_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (46 > (reader->length - reader->index)) {
-        _return_value = (int)(46 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(46 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->player);
@@ -15497,8 +15345,7 @@ static WowWorldResult tbc_SMSG_MOVE_FEATHER_FALL_read(WowWorldReader* reader, tb
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (int)(5 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(5 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -15539,8 +15386,7 @@ static WowWorldResult tbc_SMSG_MOVE_NORMAL_FALL_read(WowWorldReader* reader, tbc
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (int)(5 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(5 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -15581,8 +15427,7 @@ static WowWorldResult tbc_SMSG_MOVE_SET_HOVER_read(WowWorldReader* reader, tbc_S
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (int)(5 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(5 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -15623,8 +15468,7 @@ static WowWorldResult tbc_SMSG_MOVE_UNSET_HOVER_read(WowWorldReader* reader, tbc
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (int)(5 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(5 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -15665,8 +15509,7 @@ static WowWorldResult tbc_CMSG_MOVE_HOVER_ACK_read(WowWorldReader* reader, tbc_C
     int _return_value = 1;
 
     if (45 > (reader->length - reader->index)) {
-        _return_value = (int)(45 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(45 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -15715,8 +15558,7 @@ static WowWorldResult tbc_MSG_MOVE_HOVER_read(WowWorldReader* reader, tbc_MSG_MO
     int _return_value = 1;
 
     if (30 > (reader->length - reader->index)) {
-        _return_value = (int)(30 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(30 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->player);
@@ -15774,8 +15616,7 @@ static WowWorldResult tbc_SMSG_TRIGGER_CINEMATIC_read(WowWorldReader* reader, tb
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     object->cinematic_sequence_id = 0;
@@ -15843,8 +15684,7 @@ static WowWorldResult tbc_SMSG_TUTORIAL_FLAGS_read(WowWorldReader* reader, tbc_S
     int _return_value = 1;
 
     if (32 > (reader->length - reader->index)) {
-        _return_value = (int)(32 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(32 - (reader->length - reader->index));
     }
 
     READ_ARRAY(object->tutorial_data, 8, READ_U32(object->tutorial_data[i]));
@@ -15877,8 +15717,7 @@ static WowWorldResult tbc_CMSG_TUTORIAL_FLAG_read(WowWorldReader* reader, tbc_CM
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U32(object->tutorial_flag);
@@ -15945,8 +15784,7 @@ static WowWorldResult tbc_CMSG_STANDSTATECHANGE_read(WowWorldReader* reader, tbc
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     object->animation_state = 0;
@@ -15980,8 +15818,7 @@ static WowWorldResult tbc_CMSG_EMOTE_read(WowWorldReader* reader, tbc_CMSG_EMOTE
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     object->emote = 0;
@@ -16015,8 +15852,7 @@ static WowWorldResult tbc_SMSG_EMOTE_read(WowWorldReader* reader, tbc_SMSG_EMOTE
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     object->emote = 0;
@@ -16054,8 +15890,7 @@ static WowWorldResult tbc_CMSG_TEXT_EMOTE_read(WowWorldReader* reader, tbc_CMSG_
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (int)(16 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(16 - (reader->length - reader->index));
     }
 
     object->text_emote = 0;
@@ -16156,8 +15991,7 @@ static WowWorldResult tbc_CMSG_AUTOSTORE_LOOT_ITEM_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     READ_U8(object->item_slot);
@@ -16190,8 +16024,7 @@ static WowWorldResult tbc_CMSG_AUTOEQUIP_ITEM_read(WowWorldReader* reader, tbc_C
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (int)(2 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(2 - (reader->length - reader->index));
     }
 
     READ_U8(object->source_bag);
@@ -16228,8 +16061,7 @@ static WowWorldResult tbc_CMSG_AUTOSTORE_BAG_ITEM_read(WowWorldReader* reader, t
     int _return_value = 1;
 
     if (3 > (reader->length - reader->index)) {
-        _return_value = (int)(3 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(3 - (reader->length - reader->index));
     }
 
     READ_U8(object->source_bag);
@@ -16270,8 +16102,7 @@ static WowWorldResult tbc_CMSG_SWAP_ITEM_read(WowWorldReader* reader, tbc_CMSG_S
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U8(object->destination_bag);
@@ -16316,8 +16147,7 @@ static WowWorldResult tbc_CMSG_SWAP_INV_ITEM_read(WowWorldReader* reader, tbc_CM
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (int)(2 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(2 - (reader->length - reader->index));
     }
 
     object->source_slot = 0;
@@ -16356,8 +16186,7 @@ static WowWorldResult tbc_CMSG_SPLIT_ITEM_read(WowWorldReader* reader, tbc_CMSG_
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (int)(5 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(5 - (reader->length - reader->index));
     }
 
     READ_U8(object->source_bag);
@@ -16406,8 +16235,7 @@ static WowWorldResult tbc_CMSG_AUTOEQUIP_ITEM_SLOT_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (int)(9 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(9 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -16444,8 +16272,7 @@ static WowWorldResult tbc_CMSG_DESTROYITEM_read(WowWorldReader* reader, tbc_CMSG
     int _return_value = 1;
 
     if (6 > (reader->length - reader->index)) {
-        _return_value = (int)(6 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(6 - (reader->length - reader->index));
     }
 
     READ_U8(object->bag);
@@ -16512,8 +16339,7 @@ static WowWorldResult tbc_SMSG_INVENTORY_CHANGE_FAILURE_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     object->result = 0;
@@ -16571,8 +16397,7 @@ static WowWorldResult tbc_CMSG_INSPECT_read(WowWorldReader* reader, tbc_CMSG_INS
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -16605,8 +16430,7 @@ static WowWorldResult tbc_CMSG_INITIATE_TRADE_read(WowWorldReader* reader, tbc_C
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -16690,8 +16514,7 @@ static WowWorldResult tbc_CMSG_ACCEPT_TRADE_read(WowWorldReader* reader, tbc_CMS
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U32(object->unknown1);
@@ -16758,8 +16581,7 @@ static WowWorldResult tbc_CMSG_SET_TRADE_ITEM_read(WowWorldReader* reader, tbc_C
     int _return_value = 1;
 
     if (3 > (reader->length - reader->index)) {
-        _return_value = (int)(3 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(3 - (reader->length - reader->index));
     }
 
     READ_U8(object->trade_slot);
@@ -16800,8 +16622,7 @@ static WowWorldResult tbc_CMSG_CLEAR_TRADE_ITEM_read(WowWorldReader* reader, tbc
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     READ_U8(object->trade_slot);
@@ -16834,8 +16655,7 @@ static WowWorldResult tbc_CMSG_SET_TRADE_GOLD_read(WowWorldReader* reader, tbc_C
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U32(object->gold);
@@ -16884,8 +16704,7 @@ static WowWorldResult tbc_SMSG_TRADE_STATUS_read(WowWorldReader* reader, tbc_SMS
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     object->status = 0;
@@ -16952,8 +16771,7 @@ static WowWorldResult tbc_SMSG_TRADE_STATUS_EXTENDED_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (532 > (reader->length - reader->index)) {
-        _return_value = (int)(532 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(532 - (reader->length - reader->index));
     }
 
     READ_BOOL8(object->self_player);
@@ -17067,8 +16885,7 @@ static WowWorldResult tbc_SMSG_SET_FACTION_VISIBLE_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (int)(2 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(2 - (reader->length - reader->index));
     }
 
     object->faction = 0;
@@ -17163,8 +16980,7 @@ static WowWorldResult tbc_CMSG_SET_FACTION_ATWAR_read(WowWorldReader* reader, tb
     int _return_value = 1;
 
     if (3 > (reader->length - reader->index)) {
-        _return_value = (int)(3 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(3 - (reader->length - reader->index));
     }
 
     object->faction = 0;
@@ -17203,8 +17019,7 @@ static WowWorldResult tbc_SMSG_SET_PROFICIENCY_read(WowWorldReader* reader, tbc_
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (int)(5 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(5 - (reader->length - reader->index));
     }
 
     object->class_type = 0;
@@ -17242,8 +17057,7 @@ static WowWorldResult tbc_CMSG_SET_ACTION_BUTTON_read(WowWorldReader* reader, tb
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (int)(5 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(5 - (reader->length - reader->index));
     }
 
     READ_U8(object->button);
@@ -17288,8 +17102,7 @@ static WowWorldResult tbc_SMSG_ACTION_BUTTONS_read(WowWorldReader* reader, tbc_S
     int _return_value = 1;
 
     if (528 > (reader->length - reader->index)) {
-        _return_value = (int)(528 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(528 - (reader->length - reader->index));
     }
 
     READ_ARRAY(object->data, 132, READ_U32(object->data[i]));
@@ -17401,8 +17214,7 @@ static WowWorldResult tbc_SMSG_LEARNED_SPELL_read(WowWorldReader* reader, tbc_SM
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U32(object->id);
@@ -17435,8 +17247,7 @@ static WowWorldResult tbc_SMSG_SUPERCEDED_SPELL_read(WowWorldReader* reader, tbc
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U16(object->new_spell_id);
@@ -17521,8 +17332,7 @@ static WowWorldResult tbc_CMSG_CANCEL_CAST_read(WowWorldReader* reader, tbc_CMSG
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U32(object->id);
@@ -17577,8 +17387,7 @@ static WowWorldResult tbc_SMSG_CAST_FAILED_read(WowWorldReader* reader, tbc_SMSG
     int _return_value = 1;
 
     if (6 > (reader->length - reader->index)) {
-        _return_value = (int)(6 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(6 - (reader->length - reader->index));
     }
 
     READ_U32(object->id);
@@ -17886,8 +17695,7 @@ static WowWorldResult tbc_SMSG_SPELL_FAILURE_read(WowWorldReader* reader, tbc_SM
     int _return_value = 1;
 
     if (13 > (reader->length - reader->index)) {
-        _return_value = (int)(13 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(13 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -18016,8 +17824,7 @@ static WowWorldResult tbc_SMSG_COOLDOWN_EVENT_read(WowWorldReader* reader, tbc_S
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U32(object->id);
@@ -18054,8 +17861,7 @@ static WowWorldResult tbc_CMSG_CANCEL_AURA_read(WowWorldReader* reader, tbc_CMSG
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U32(object->id);
@@ -18088,8 +17894,7 @@ static WowWorldResult tbc_SMSG_UPDATE_AURA_DURATION_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (int)(5 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(5 - (reader->length - reader->index));
     }
 
     READ_U8(object->aura_slot);
@@ -18148,8 +17953,7 @@ static WowWorldResult tbc_SMSG_PET_CAST_FAILED_read(WowWorldReader* reader, tbc_
     int _return_value = 1;
 
     if (6 > (reader->length - reader->index)) {
-        _return_value = (int)(6 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(6 - (reader->length - reader->index));
     }
 
     READ_U32(object->id);
@@ -18244,8 +18048,7 @@ static WowWorldResult tbc_MSG_CHANNEL_START_Server_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (int)(9 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(9 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->caster);
@@ -18290,8 +18093,7 @@ static WowWorldResult tbc_MSG_CHANNEL_UPDATE_Server_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (int)(5 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(5 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->caster);
@@ -18328,8 +18130,7 @@ static WowWorldResult tbc_CMSG_CANCEL_CHANNELLING_read(WowWorldReader* reader, t
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U32(object->id);
@@ -18362,8 +18163,7 @@ static WowWorldResult tbc_SMSG_AI_REACTION_read(WowWorldReader* reader, tbc_SMSG
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -18401,8 +18201,7 @@ static WowWorldResult tbc_CMSG_SET_SELECTION_read(WowWorldReader* reader, tbc_CM
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->target);
@@ -18435,8 +18234,7 @@ static WowWorldResult tbc_CMSG_SET_TARGET_OBSOLETE_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -18469,8 +18267,7 @@ static WowWorldResult tbc_CMSG_ATTACKSWING_read(WowWorldReader* reader, tbc_CMSG
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -18520,8 +18317,7 @@ static WowWorldResult tbc_SMSG_ATTACKSTART_read(WowWorldReader* reader, tbc_SMSG
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (int)(16 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(16 - (reader->length - reader->index));
     }
 
     READ_U64(object->attacker);
@@ -18562,8 +18358,7 @@ static WowWorldResult tbc_SMSG_ATTACKSTOP_read(WowWorldReader* reader, tbc_SMSG_
     int _return_value = 1;
 
     if (6 > (reader->length - reader->index)) {
-        _return_value = (int)(6 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(6 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->player);
@@ -18800,8 +18595,7 @@ static WowWorldResult tbc_SMSG_SPELLHEALLOG_read(WowWorldReader* reader, tbc_SMS
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->victim);
@@ -18858,8 +18652,7 @@ static WowWorldResult tbc_SMSG_SPELLENERGIZELOG_read(WowWorldReader* reader, tbc
     int _return_value = 1;
 
     if (14 > (reader->length - reader->index)) {
-        _return_value = (int)(14 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(14 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->victim);
@@ -18909,8 +18702,7 @@ static WowWorldResult tbc_SMSG_BINDPOINTUPDATE_read(WowWorldReader* reader, tbc_
     int _return_value = 1;
 
     if (20 > (reader->length - reader->index)) {
-        _return_value = (int)(20 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(20 - (reader->length - reader->index));
     }
 
     WWM_CHECK_RETURN_CODE(all_Vector3d_read(reader, &object->position));
@@ -18953,8 +18745,7 @@ static WowWorldResult tbc_SMSG_PLAYERBOUND_read(WowWorldReader* reader, tbc_SMSG
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -18996,8 +18787,7 @@ static WowWorldResult tbc_SMSG_CLIENT_CONTROL_UPDATE_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (int)(2 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(2 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -19105,8 +18895,7 @@ static WowWorldResult tbc_CMSG_RESURRECT_RESPONSE_read(WowWorldReader* reader, t
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (int)(9 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(9 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -19143,8 +18932,7 @@ static WowWorldResult tbc_CMSG_LOOT_read(WowWorldReader* reader, tbc_CMSG_LOOT* 
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -19194,8 +18982,7 @@ static WowWorldResult tbc_CMSG_LOOT_RELEASE_read(WowWorldReader* reader, tbc_CMS
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -19315,8 +19102,7 @@ static WowWorldResult tbc_SMSG_LOOT_RELEASE_RESPONSE_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (int)(9 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(9 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -19353,8 +19139,7 @@ static WowWorldResult tbc_SMSG_LOOT_REMOVED_read(WowWorldReader* reader, tbc_SMS
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     READ_U8(object->slot);
@@ -19387,8 +19172,7 @@ static WowWorldResult tbc_SMSG_LOOT_MONEY_NOTIFY_read(WowWorldReader* reader, tb
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U32(object->amount);
@@ -19438,8 +19222,7 @@ static WowWorldResult tbc_SMSG_ITEM_PUSH_RESULT_read(WowWorldReader* reader, tbc
     int _return_value = 1;
 
     if (45 > (reader->length - reader->index)) {
-        _return_value = (int)(45 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(45 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -19515,8 +19298,7 @@ static WowWorldResult tbc_SMSG_DUEL_REQUESTED_read(WowWorldReader* reader, tbc_S
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (int)(16 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(16 - (reader->length - reader->index));
     }
 
     READ_U64(object->initiator);
@@ -19587,8 +19369,7 @@ static WowWorldResult tbc_SMSG_DUEL_COMPLETE_read(WowWorldReader* reader, tbc_SM
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     READ_BOOL8(object->ended_without_interruption);
@@ -19679,8 +19460,7 @@ static WowWorldResult tbc_CMSG_DUEL_ACCEPTED_read(WowWorldReader* reader, tbc_CM
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -19713,8 +19493,7 @@ static WowWorldResult tbc_CMSG_DUEL_CANCELLED_read(WowWorldReader* reader, tbc_C
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -19747,8 +19526,7 @@ static WowWorldResult tbc_SMSG_MOUNTRESULT_read(WowWorldReader* reader, tbc_SMSG
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     object->result = 0;
@@ -19799,8 +19577,7 @@ static WowWorldResult tbc_SMSG_MOUNTSPECIAL_ANIM_read(WowWorldReader* reader, tb
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -19833,8 +19610,7 @@ static WowWorldResult tbc_SMSG_PET_TAME_FAILURE_read(WowWorldReader* reader, tbc
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     object->reason = 0;
@@ -19953,8 +19729,7 @@ static WowWorldResult tbc_CMSG_PET_ACTION_read(WowWorldReader* reader, tbc_CMSG_
     int _return_value = 1;
 
     if (20 > (reader->length - reader->index)) {
-        _return_value = (int)(20 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(20 - (reader->length - reader->index));
     }
 
     READ_U64(object->pet);
@@ -19995,8 +19770,7 @@ static WowWorldResult tbc_CMSG_PET_ABANDON_read(WowWorldReader* reader, tbc_CMSG
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->pet);
@@ -20304,8 +20078,7 @@ static WowWorldResult tbc_SMSG_PET_MODE_read(WowWorldReader* reader, tbc_SMSG_PE
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -20357,8 +20130,7 @@ static WowWorldResult tbc_CMSG_GOSSIP_HELLO_read(WowWorldReader* reader, tbc_CMS
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -20604,8 +20376,7 @@ static WowWorldResult tbc_CMSG_NPC_TEXT_QUERY_read(WowWorldReader* reader, tbc_C
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U32(object->text_id);
@@ -20703,8 +20474,7 @@ static WowWorldResult tbc_CMSG_QUESTGIVER_STATUS_QUERY_read(WowWorldReader* read
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -20737,8 +20507,7 @@ static WowWorldResult tbc_SMSG_QUESTGIVER_STATUS_read(WowWorldReader* reader, tb
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -20776,8 +20545,7 @@ static WowWorldResult tbc_CMSG_QUESTGIVER_HELLO_read(WowWorldReader* reader, tbc
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -20900,8 +20668,7 @@ static WowWorldResult tbc_CMSG_QUESTGIVER_QUERY_QUEST_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -21105,8 +20872,7 @@ static WowWorldResult tbc_CMSG_QUESTGIVER_ACCEPT_QUEST_read(WowWorldReader* read
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -21143,8 +20909,7 @@ static WowWorldResult tbc_CMSG_QUESTGIVER_COMPLETE_QUEST_read(WowWorldReader* re
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -21297,8 +21062,7 @@ static WowWorldResult tbc_CMSG_QUESTGIVER_REQUEST_REWARD_read(WowWorldReader* re
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -21482,8 +21246,7 @@ static WowWorldResult tbc_CMSG_QUESTGIVER_CHOOSE_REWARD_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (int)(16 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(16 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -21524,8 +21287,7 @@ static WowWorldResult tbc_SMSG_QUESTGIVER_QUEST_INVALID_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     object->msg = 0;
@@ -21653,8 +21415,7 @@ static WowWorldResult tbc_SMSG_QUESTGIVER_QUEST_FAILED_read(WowWorldReader* read
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U32(object->quest_id);
@@ -21692,8 +21453,7 @@ static WowWorldResult tbc_CMSG_QUESTLOG_SWAP_QUEST_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (int)(2 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(2 - (reader->length - reader->index));
     }
 
     READ_U8(object->slot1);
@@ -21730,8 +21490,7 @@ static WowWorldResult tbc_CMSG_QUESTLOG_REMOVE_QUEST_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     READ_U8(object->slot);
@@ -21781,8 +21540,7 @@ static WowWorldResult tbc_SMSG_QUESTUPDATE_FAILED_read(WowWorldReader* reader, t
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U32(object->quest_id);
@@ -21815,8 +21573,7 @@ static WowWorldResult tbc_SMSG_QUESTUPDATE_FAILEDTIMER_read(WowWorldReader* read
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U32(object->quest_id);
@@ -21849,8 +21606,7 @@ static WowWorldResult tbc_SMSG_QUESTUPDATE_COMPLETE_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U32(object->quest_id);
@@ -21883,8 +21639,7 @@ static WowWorldResult tbc_SMSG_QUESTUPDATE_ADD_KILL_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (24 > (reader->length - reader->index)) {
-        _return_value = (int)(24 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(24 - (reader->length - reader->index));
     }
 
     READ_U32(object->quest_id);
@@ -21933,8 +21688,7 @@ static WowWorldResult tbc_SMSG_QUESTUPDATE_ADD_ITEM_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U32(object->required_item_id);
@@ -21971,8 +21725,7 @@ static WowWorldResult tbc_CMSG_QUEST_CONFIRM_ACCEPT_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U32(object->quest_id);
@@ -22059,8 +21812,7 @@ static WowWorldResult tbc_CMSG_PUSHQUESTTOPARTY_read(WowWorldReader* reader, tbc
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U32(object->quest_id);
@@ -22093,8 +21845,7 @@ static WowWorldResult tbc_CMSG_LIST_INVENTORY_read(WowWorldReader* reader, tbc_C
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -22188,8 +21939,7 @@ static WowWorldResult tbc_CMSG_SELL_ITEM_read(WowWorldReader* reader, tbc_CMSG_S
     int _return_value = 1;
 
     if (17 > (reader->length - reader->index)) {
-        _return_value = (int)(17 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(17 - (reader->length - reader->index));
     }
 
     READ_U64(object->vendor);
@@ -22230,8 +21980,7 @@ static WowWorldResult tbc_SMSG_SELL_ITEM_read(WowWorldReader* reader, tbc_SMSG_S
     int _return_value = 1;
 
     if (17 > (reader->length - reader->index)) {
-        _return_value = (int)(17 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(17 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -22273,8 +22022,7 @@ static WowWorldResult tbc_CMSG_BUY_ITEM_read(WowWorldReader* reader, tbc_CMSG_BU
     int _return_value = 1;
 
     if (14 > (reader->length - reader->index)) {
-        _return_value = (int)(14 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(14 - (reader->length - reader->index));
     }
 
     READ_U64(object->vendor);
@@ -22319,8 +22067,7 @@ static WowWorldResult tbc_CMSG_BUY_ITEM_IN_SLOT_read(WowWorldReader* reader, tbc
     int _return_value = 1;
 
     if (22 > (reader->length - reader->index)) {
-        _return_value = (int)(22 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(22 - (reader->length - reader->index));
     }
 
     READ_U64(object->vendor);
@@ -22369,8 +22116,7 @@ static WowWorldResult tbc_SMSG_BUY_ITEM_read(WowWorldReader* reader, tbc_SMSG_BU
     int _return_value = 1;
 
     if (20 > (reader->length - reader->index)) {
-        _return_value = (int)(20 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(20 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -22415,8 +22161,7 @@ static WowWorldResult tbc_SMSG_BUY_FAILED_read(WowWorldReader* reader, tbc_SMSG_
     int _return_value = 1;
 
     if (13 > (reader->length - reader->index)) {
-        _return_value = (int)(13 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(13 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -22550,8 +22295,7 @@ static WowWorldResult tbc_CMSG_TAXINODE_STATUS_QUERY_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -22584,8 +22328,7 @@ static WowWorldResult tbc_SMSG_TAXINODE_STATUS_read(WowWorldReader* reader, tbc_
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (int)(9 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(9 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -22622,8 +22365,7 @@ static WowWorldResult tbc_CMSG_TAXIQUERYAVAILABLENODES_read(WowWorldReader* read
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -22656,8 +22398,7 @@ static WowWorldResult tbc_CMSG_ACTIVATETAXI_read(WowWorldReader* reader, tbc_CMS
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (int)(16 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(16 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -22698,8 +22439,7 @@ static WowWorldResult tbc_SMSG_ACTIVATETAXIREPLY_read(WowWorldReader* reader, tb
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     object->reply = 0;
@@ -22750,8 +22490,7 @@ static WowWorldResult tbc_CMSG_TRAINER_LIST_read(WowWorldReader* reader, tbc_CMS
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -22856,8 +22595,7 @@ static WowWorldResult tbc_CMSG_TRAINER_BUY_SPELL_read(WowWorldReader* reader, tb
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -22894,8 +22632,7 @@ static WowWorldResult tbc_SMSG_TRAINER_BUY_SUCCEEDED_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -22932,8 +22669,7 @@ static WowWorldResult tbc_SMSG_TRAINER_BUY_FAILED_read(WowWorldReader* reader, t
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (int)(16 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(16 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -22975,8 +22711,7 @@ static WowWorldResult tbc_CMSG_BINDER_ACTIVATE_read(WowWorldReader* reader, tbc_
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -23009,8 +22744,7 @@ static WowWorldResult tbc_CMSG_BANKER_ACTIVATE_read(WowWorldReader* reader, tbc_
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -23043,8 +22777,7 @@ static WowWorldResult tbc_SMSG_SHOW_BANK_read(WowWorldReader* reader, tbc_SMSG_S
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -23077,8 +22810,7 @@ static WowWorldResult tbc_CMSG_BUY_BANK_SLOT_read(WowWorldReader* reader, tbc_CM
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -23111,8 +22843,7 @@ static WowWorldResult tbc_SMSG_BUY_BANK_SLOT_RESULT_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     object->result = 0;
@@ -23146,8 +22877,7 @@ static WowWorldResult tbc_CMSG_PETITION_SHOWLIST_read(WowWorldReader* reader, tb
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -23355,8 +23085,7 @@ static WowWorldResult tbc_CMSG_PETITION_SHOW_SIGNATURES_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->item);
@@ -23458,8 +23187,7 @@ static WowWorldResult tbc_CMSG_PETITION_SIGN_read(WowWorldReader* reader, tbc_CM
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (int)(9 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(9 - (reader->length - reader->index));
     }
 
     READ_U64(object->petition);
@@ -23496,8 +23224,7 @@ static WowWorldResult tbc_SMSG_PETITION_SIGN_RESULTS_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (20 > (reader->length - reader->index)) {
-        _return_value = (int)(20 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(20 - (reader->length - reader->index));
     }
 
     READ_U64(object->petition);
@@ -23539,8 +23266,7 @@ static WowWorldResult tbc_MSG_PETITION_DECLINE_read(WowWorldReader* reader, tbc_
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->petition);
@@ -23592,8 +23318,7 @@ static WowWorldResult tbc_CMSG_OFFER_PETITION_read(WowWorldReader* reader, tbc_C
     int _return_value = 1;
 
     if (20 > (reader->length - reader->index)) {
-        _return_value = (int)(20 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(20 - (reader->length - reader->index));
     }
 
     READ_U32(object->unknown0);
@@ -23634,8 +23359,7 @@ static WowWorldResult tbc_CMSG_TURN_IN_PETITION_read(WowWorldReader* reader, tbc
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->petition);
@@ -23668,8 +23392,7 @@ static WowWorldResult tbc_SMSG_TURN_IN_PETITION_RESULTS_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     object->result = 0;
@@ -23703,8 +23426,7 @@ static WowWorldResult tbc_CMSG_PETITION_QUERY_read(WowWorldReader* reader, tbc_C
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U32(object->guild_id);
@@ -24009,8 +23731,7 @@ static WowWorldResult tbc_SMSG_PLAYED_TIME_read(WowWorldReader* reader, tbc_SMSG
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U32(object->total_played_time);
@@ -24064,8 +23785,7 @@ static WowWorldResult tbc_SMSG_QUERY_TIME_RESPONSE_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U32(object->time);
@@ -24112,8 +23832,7 @@ static WowWorldResult tbc_SMSG_LOG_XPGAIN_read(WowWorldReader* reader, tbc_SMSG_
     int _return_value = 1;
 
     if (13 > (reader->length - reader->index)) {
-        _return_value = (int)(13 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(13 - (reader->length - reader->index));
     }
 
     READ_U64(object->target);
@@ -24167,8 +23886,7 @@ static WowWorldResult tbc_CMSG_RECLAIM_CORPSE_read(WowWorldReader* reader, tbc_C
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -24201,8 +23919,7 @@ static WowWorldResult tbc_CMSG_WRAP_ITEM_read(WowWorldReader* reader, tbc_CMSG_W
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U8(object->gift_bag_index);
@@ -24247,8 +23964,7 @@ static WowWorldResult tbc_SMSG_LEVELUP_INFO_read(WowWorldReader* reader, tbc_SMS
     int _return_value = 1;
 
     if (48 > (reader->length - reader->index)) {
-        _return_value = (int)(48 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(48 - (reader->length - reader->index));
     }
 
     READ_U32(object->new_level);
@@ -24325,8 +24041,7 @@ static WowWorldResult tbc_MSG_MINIMAP_PING_Client_read(WowWorldReader* reader, t
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_FLOAT(object->position_x);
@@ -24363,8 +24078,7 @@ static WowWorldResult tbc_MSG_MINIMAP_PING_Server_read(WowWorldReader* reader, t
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (int)(16 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(16 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -24405,8 +24119,7 @@ static WowWorldResult tbc_SMSG_ENCHANTMENTLOG_read(WowWorldReader* reader, tbc_S
     int _return_value = 1;
 
     if (25 > (reader->length - reader->index)) {
-        _return_value = (int)(25 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(25 - (reader->length - reader->index));
     }
 
     READ_U64(object->target);
@@ -24455,8 +24168,7 @@ static WowWorldResult tbc_SMSG_START_MIRROR_TIMER_read(WowWorldReader* reader, t
     int _return_value = 1;
 
     if (21 > (reader->length - reader->index)) {
-        _return_value = (int)(21 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(21 - (reader->length - reader->index));
     }
 
     object->timer = 0;
@@ -24510,8 +24222,7 @@ static WowWorldResult tbc_SMSG_PAUSE_MIRROR_TIMER_read(WowWorldReader* reader, t
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (int)(5 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(5 - (reader->length - reader->index));
     }
 
     object->timer = 0;
@@ -24549,8 +24260,7 @@ static WowWorldResult tbc_SMSG_STOP_MIRROR_TIMER_read(WowWorldReader* reader, tb
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     object->timer = 0;
@@ -24584,8 +24294,7 @@ static WowWorldResult tbc_CMSG_PING_read(WowWorldReader* reader, tbc_CMSG_PING* 
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U32(object->sequence_id);
@@ -24622,8 +24331,7 @@ static WowWorldResult tbc_SMSG_PONG_read(WowWorldReader* reader, tbc_SMSG_PONG* 
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U32(object->sequence_id);
@@ -24656,8 +24364,7 @@ static WowWorldResult tbc_SMSG_CLEAR_COOLDOWN_read(WowWorldReader* reader, tbc_S
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U32(object->id);
@@ -24694,8 +24401,7 @@ static WowWorldResult tbc_SMSG_GAMEOBJECT_PAGETEXT_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -24728,8 +24434,7 @@ static WowWorldResult tbc_CMSG_SETSHEATHED_read(WowWorldReader* reader, tbc_CMSG
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     object->sheathed = 0;
@@ -24763,8 +24468,7 @@ static WowWorldResult tbc_SMSG_SPELL_DELAYED_read(WowWorldReader* reader, tbc_SM
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -24801,8 +24505,7 @@ static WowWorldResult tbc_SMSG_ITEM_TIME_UPDATE_read(WowWorldReader* reader, tbc
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -24839,8 +24542,7 @@ static WowWorldResult tbc_SMSG_ITEM_ENCHANT_TIME_UPDATE_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (24 > (reader->length - reader->index)) {
-        _return_value = (int)(24 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(24 - (reader->length - reader->index));
     }
 
     READ_U64(object->item);
@@ -24885,8 +24587,7 @@ static WowWorldResult tbc_SMSG_AUTH_CHALLENGE_read(WowWorldReader* reader, tbc_S
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U32(object->server_seed);
@@ -25137,8 +24838,7 @@ static WowWorldResult tbc_SMSG_AUTH_RESPONSE_read(WowWorldReader* reader, tbc_SM
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     object->result = 0;
@@ -25254,8 +24954,7 @@ static WowWorldResult tbc_MSG_SAVE_GUILD_EMBLEM_Client_read(WowWorldReader* read
     int _return_value = 1;
 
     if (28 > (reader->length - reader->index)) {
-        _return_value = (int)(28 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(28 - (reader->length - reader->index));
     }
 
     READ_U64(object->vendor);
@@ -25308,8 +25007,7 @@ static WowWorldResult tbc_MSG_SAVE_GUILD_EMBLEM_Server_read(WowWorldReader* read
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     object->result = 0;
@@ -25343,8 +25041,7 @@ static WowWorldResult tbc_MSG_TABARDVENDOR_ACTIVATE_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -25396,8 +25093,7 @@ static WowWorldResult tbc_SMSG_PLAY_SPELL_VISUAL_read(WowWorldReader* reader, tb
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -25434,8 +25130,7 @@ static WowWorldResult tbc_CMSG_ZONEUPDATE_read(WowWorldReader* reader, tbc_CMSG_
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     object->area = 0;
@@ -25469,8 +25164,7 @@ static WowWorldResult tbc_SMSG_PARTYKILLLOG_read(WowWorldReader* reader, tbc_SMS
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (int)(16 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(16 - (reader->length - reader->index));
     }
 
     READ_U64(object->player_with_killing_blow);
@@ -25641,8 +25335,7 @@ static WowWorldResult tbc_SMSG_PLAY_SPELL_IMPACT_read(WowWorldReader* reader, tb
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -25679,8 +25372,7 @@ static WowWorldResult tbc_SMSG_EXPLORATION_EXPERIENCE_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     object->area = 0;
@@ -25718,8 +25410,7 @@ static WowWorldResult tbc_MSG_RANDOM_ROLL_Client_read(WowWorldReader* reader, tb
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U32(object->minimum);
@@ -25756,8 +25447,7 @@ static WowWorldResult tbc_MSG_RANDOM_ROLL_Server_read(WowWorldReader* reader, tb
     int _return_value = 1;
 
     if (20 > (reader->length - reader->index)) {
-        _return_value = (int)(20 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(20 - (reader->length - reader->index));
     }
 
     READ_U32(object->minimum);
@@ -25802,8 +25492,7 @@ static WowWorldResult tbc_SMSG_ENVIRONMENTAL_DAMAGE_LOG_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (21 > (reader->length - reader->index)) {
-        _return_value = (int)(21 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(21 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -25853,8 +25542,7 @@ static WowWorldResult tbc_MSG_LOOKING_FOR_GROUP_Client_read(WowWorldReader* read
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     object->lfg_type = 0;
@@ -25980,8 +25668,7 @@ static WowWorldResult tbc_CMSG_SET_LOOKING_FOR_GROUP_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U32(object->slot);
@@ -26018,8 +25705,7 @@ static WowWorldResult tbc_CMSG_UNLEARN_SKILL_read(WowWorldReader* reader, tbc_CM
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     object->skill = 0;
@@ -26053,8 +25739,7 @@ static WowWorldResult tbc_SMSG_REMOVED_SPELL_read(WowWorldReader* reader, tbc_SM
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (int)(2 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(2 - (reader->length - reader->index));
     }
 
     READ_U16(object->spell);
@@ -26309,8 +25994,7 @@ static WowWorldResult tbc_SMSG_GMTICKET_CREATE_read(WowWorldReader* reader, tbc_
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     object->response = 0;
@@ -26390,8 +26074,7 @@ static WowWorldResult tbc_SMSG_GMTICKET_UPDATETEXT_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     object->response = 0;
@@ -26425,8 +26108,7 @@ static WowWorldResult tbc_SMSG_ACCOUNT_DATA_TIMES_read(WowWorldReader* reader, t
     int _return_value = 1;
 
     if (128 > (reader->length - reader->index)) {
-        _return_value = (int)(128 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(128 - (reader->length - reader->index));
     }
 
     READ_ARRAY(object->data, 32, READ_U32(object->data[i]));
@@ -26459,8 +26141,7 @@ static WowWorldResult tbc_CMSG_REQUEST_ACCOUNT_DATA_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U32(object->data_type);
@@ -26882,8 +26563,7 @@ static WowWorldResult tbc_SMSG_GAMEOBJECT_SPAWN_ANIM_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -26916,8 +26596,7 @@ static WowWorldResult tbc_SMSG_GAMEOBJECT_DESPAWN_ANIM_read(WowWorldReader* read
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -26977,8 +26656,7 @@ static WowWorldResult tbc_MSG_CORPSE_QUERY_Server_read(WowWorldReader* reader, t
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     object->result = 0;
@@ -27047,8 +26725,7 @@ static WowWorldResult tbc_SMSG_GMTICKET_DELETETICKET_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     object->response = 0;
@@ -27116,8 +26793,7 @@ static WowWorldResult tbc_SMSG_GMTICKET_SYSTEMSTATUS_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     object->will_accept_tickets = 0;
@@ -27151,8 +26827,7 @@ static WowWorldResult tbc_CMSG_SPIRIT_HEALER_ACTIVATE_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -27185,8 +26860,7 @@ static WowWorldResult tbc_SMSG_SET_REST_START_read(WowWorldReader* reader, tbc_S
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U32(object->unknown1);
@@ -27219,8 +26893,7 @@ static WowWorldResult tbc_SMSG_SPIRIT_HEALER_CONFIRM_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -27315,8 +26988,7 @@ static WowWorldResult tbc_CMSG_CHAT_IGNORED_read(WowWorldReader* reader, tbc_CMS
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (int)(9 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(9 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -27584,8 +27256,7 @@ static WowWorldResult tbc_SMSG_LOGIN_VERIFY_WORLD_read(WowWorldReader* reader, t
     int _return_value = 1;
 
     if (20 > (reader->length - reader->index)) {
-        _return_value = (int)(20 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(20 - (reader->length - reader->index));
     }
 
     object->map = 0;
@@ -27759,8 +27430,7 @@ static WowWorldResult tbc_SMSG_SEND_MAIL_RESULT_read(WowWorldReader* reader, tbc
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U32(object->mail_id);
@@ -27844,8 +27514,7 @@ static WowWorldResult tbc_CMSG_GET_MAIL_LIST_read(WowWorldReader* reader, tbc_CM
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->mailbox);
@@ -27949,8 +27618,7 @@ static WowWorldResult tbc_CMSG_BATTLEFIELD_LIST_read(WowWorldReader* reader, tbc
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     object->map = 0;
@@ -28050,8 +27718,7 @@ static WowWorldResult tbc_CMSG_ITEM_TEXT_QUERY_read(WowWorldReader* reader, tbc_
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U32(object->item_text_id);
@@ -28142,8 +27809,7 @@ static WowWorldResult tbc_CMSG_MAIL_TAKE_MONEY_read(WowWorldReader* reader, tbc_
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U64(object->mailbox);
@@ -28180,8 +27846,7 @@ static WowWorldResult tbc_CMSG_MAIL_TAKE_ITEM_read(WowWorldReader* reader, tbc_C
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (int)(16 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(16 - (reader->length - reader->index));
     }
 
     READ_U64(object->mailbox);
@@ -28222,8 +27887,7 @@ static WowWorldResult tbc_CMSG_MAIL_MARK_AS_READ_read(WowWorldReader* reader, tb
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U64(object->mailbox);
@@ -28260,8 +27924,7 @@ static WowWorldResult tbc_CMSG_MAIL_RETURN_TO_SENDER_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U64(object->mailbox_id);
@@ -28298,8 +27961,7 @@ static WowWorldResult tbc_CMSG_MAIL_DELETE_read(WowWorldReader* reader, tbc_CMSG
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (int)(16 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(16 - (reader->length - reader->index));
     }
 
     READ_U64(object->mailbox_id);
@@ -28340,8 +28002,7 @@ static WowWorldResult tbc_CMSG_MAIL_CREATE_TEXT_ITEM_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (int)(16 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(16 - (reader->length - reader->index));
     }
 
     READ_U64(object->mailbox);
@@ -28603,8 +28264,7 @@ static WowWorldResult tbc_SMSG_SPELLDAMAGESHIELD_read(WowWorldReader* reader, tb
     int _return_value = 1;
 
     if (28 > (reader->length - reader->index)) {
-        _return_value = (int)(28 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(28 - (reader->length - reader->index));
     }
 
     READ_U64(object->victim);
@@ -28658,8 +28318,7 @@ static WowWorldResult tbc_SMSG_SPELLNONMELEEDAMAGELOG_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (30 > (reader->length - reader->index)) {
-        _return_value = (int)(30 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(30 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->target);
@@ -28738,8 +28397,7 @@ static WowWorldResult tbc_CMSG_LEARN_TALENT_read(WowWorldReader* reader, tbc_CMS
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     object->talent = 0;
@@ -28777,8 +28435,7 @@ static WowWorldResult tbc_SMSG_RESURRECT_FAILED_read(WowWorldReader* reader, tbc
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U32(object->unknown);
@@ -28872,8 +28529,7 @@ static WowWorldResult tbc_SMSG_ZONE_UNDER_ATTACK_read(WowWorldReader* reader, tb
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     object->zone_id = 0;
@@ -28907,8 +28563,7 @@ static WowWorldResult tbc_MSG_AUCTION_HELLO_Client_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->auctioneer);
@@ -28941,8 +28596,7 @@ static WowWorldResult tbc_MSG_AUCTION_HELLO_Server_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U64(object->auctioneer);
@@ -28980,8 +28634,7 @@ static WowWorldResult tbc_CMSG_AUCTION_SELL_ITEM_read(WowWorldReader* reader, tb
     int _return_value = 1;
 
     if (28 > (reader->length - reader->index)) {
-        _return_value = (int)(28 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(28 - (reader->length - reader->index));
     }
 
     READ_U64(object->auctioneer);
@@ -29030,8 +28683,7 @@ static WowWorldResult tbc_CMSG_AUCTION_REMOVE_ITEM_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U64(object->auctioneer);
@@ -29173,8 +28825,7 @@ static WowWorldResult tbc_CMSG_AUCTION_LIST_OWNER_ITEMS_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U64(object->auctioneer);
@@ -29211,8 +28862,7 @@ static WowWorldResult tbc_CMSG_AUCTION_PLACE_BID_read(WowWorldReader* reader, tb
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (int)(16 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(16 - (reader->length - reader->index));
     }
 
     READ_U64(object->auctioneer);
@@ -29285,8 +28935,7 @@ static WowWorldResult tbc_SMSG_AUCTION_COMMAND_RESULT_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U32(object->auction_id);
@@ -29530,8 +29179,7 @@ static WowWorldResult tbc_SMSG_AUCTION_BIDDER_NOTIFICATION_read(WowWorldReader* 
     int _return_value = 1;
 
     if (32 > (reader->length - reader->index)) {
-        _return_value = (int)(32 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(32 - (reader->length - reader->index));
     }
 
     object->auction_house = 0;
@@ -29589,8 +29237,7 @@ static WowWorldResult tbc_SMSG_AUCTION_OWNER_NOTIFICATION_read(WowWorldReader* r
     int _return_value = 1;
 
     if (28 > (reader->length - reader->index)) {
-        _return_value = (int)(28 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(28 - (reader->length - reader->index));
     }
 
     READ_U32(object->auction_id);
@@ -29643,8 +29290,7 @@ static WowWorldResult tbc_SMSG_PROCRESIST_read(WowWorldReader* reader, tbc_SMSG_
     int _return_value = 1;
 
     if (21 > (reader->length - reader->index)) {
-        _return_value = (int)(21 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(21 - (reader->length - reader->index));
     }
 
     READ_U64(object->caster);
@@ -29777,8 +29423,7 @@ static WowWorldResult tbc_SMSG_SPELLORDAMAGE_IMMUNE_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (21 > (reader->length - reader->index)) {
-        _return_value = (int)(21 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(21 - (reader->length - reader->index));
     }
 
     READ_U64(object->caster);
@@ -29953,8 +29598,7 @@ static WowWorldResult tbc_SMSG_SET_FLAT_SPELL_MODIFIER_read(WowWorldReader* read
     int _return_value = 1;
 
     if (6 > (reader->length - reader->index)) {
-        _return_value = (int)(6 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(6 - (reader->length - reader->index));
     }
 
     READ_U8(object->eff);
@@ -29995,8 +29639,7 @@ static WowWorldResult tbc_SMSG_SET_PCT_SPELL_MODIFIER_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (6 > (reader->length - reader->index)) {
-        _return_value = (int)(6 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(6 - (reader->length - reader->index));
     }
 
     READ_U8(object->eff);
@@ -30037,8 +29680,7 @@ static WowWorldResult tbc_CMSG_SET_AMMO_read(WowWorldReader* reader, tbc_CMSG_SE
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U32(object->item);
@@ -30071,8 +29713,7 @@ static WowWorldResult tbc_SMSG_CORPSE_RECLAIM_DELAY_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U32(object->delay);
@@ -30105,8 +29746,7 @@ static WowWorldResult tbc_CMSG_SET_ACTIVE_MOVER_read(WowWorldReader* reader, tbc
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -30139,8 +29779,7 @@ static WowWorldResult tbc_CMSG_PET_CANCEL_AURA_read(WowWorldReader* reader, tbc_
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -30194,8 +29833,7 @@ static WowWorldResult tbc_MSG_LIST_STABLED_PETS_Client_read(WowWorldReader* read
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->npc);
@@ -30307,8 +29945,7 @@ static WowWorldResult tbc_CMSG_STABLE_PET_read(WowWorldReader* reader, tbc_CMSG_
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->stable_master);
@@ -30341,8 +29978,7 @@ static WowWorldResult tbc_CMSG_UNSTABLE_PET_read(WowWorldReader* reader, tbc_CMS
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U64(object->stable_master);
@@ -30379,8 +30015,7 @@ static WowWorldResult tbc_CMSG_BUY_STABLE_SLOT_read(WowWorldReader* reader, tbc_
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->npc);
@@ -30413,8 +30048,7 @@ static WowWorldResult tbc_SMSG_STABLE_RESULT_read(WowWorldReader* reader, tbc_SM
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     object->result = 0;
@@ -30448,8 +30082,7 @@ static WowWorldResult tbc_CMSG_STABLE_SWAP_PET_read(WowWorldReader* reader, tbc_
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U64(object->npc);
@@ -30486,8 +30119,7 @@ static WowWorldResult tbc_MSG_QUEST_PUSH_RESULT_read(WowWorldReader* reader, tbc
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (int)(9 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(9 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -30546,8 +30178,7 @@ static WowWorldResult tbc_SMSG_PLAY_MUSIC_read(WowWorldReader* reader, tbc_SMSG_
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U32(object->sound_id);
@@ -30580,8 +30211,7 @@ static WowWorldResult tbc_SMSG_PLAY_OBJECT_SOUND_read(WowWorldReader* reader, tb
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U32(object->sound_id);
@@ -30635,8 +30265,7 @@ static WowWorldResult tbc_CMSG_FAR_SIGHT_read(WowWorldReader* reader, tbc_CMSG_F
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     object->operation = 0;
@@ -30793,8 +30422,7 @@ static WowWorldResult tbc_CMSG_REQUEST_PARTY_MEMBER_STATS_read(WowWorldReader* r
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -30880,8 +30508,7 @@ static WowWorldResult tbc_CMSG_AUTOSTORE_BANK_ITEM_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (int)(2 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(2 - (reader->length - reader->index));
     }
 
     READ_U8(object->bag_index);
@@ -30918,8 +30545,7 @@ static WowWorldResult tbc_CMSG_AUTOBANK_ITEM_read(WowWorldReader* reader, tbc_CM
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (int)(2 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(2 - (reader->length - reader->index));
     }
 
     READ_U8(object->bag_index);
@@ -31034,8 +30660,7 @@ static WowWorldResult tbc_SMSG_RECEIVED_MAIL_read(WowWorldReader* reader, tbc_SM
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U32(object->unknown1);
@@ -31068,8 +30693,7 @@ static WowWorldResult tbc_SMSG_RAID_GROUP_ONLY_read(WowWorldReader* reader, tbc_
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U32(object->homebind_timer);
@@ -31107,8 +30731,7 @@ static WowWorldResult tbc_SMSG_PVP_CREDIT_read(WowWorldReader* reader, tbc_SMSG_
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (int)(16 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(16 - (reader->length - reader->index));
     }
 
     READ_U32(object->honor_points);
@@ -31150,8 +30773,7 @@ static WowWorldResult tbc_SMSG_AUCTION_REMOVED_NOTIFICATION_read(WowWorldReader*
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U32(object->item);
@@ -31209,8 +30831,7 @@ static WowWorldResult tbc_CMSG_GROUP_ASSISTANT_LEADER_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (int)(9 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(9 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -31247,8 +30868,7 @@ static WowWorldResult tbc_CMSG_BUYBACK_ITEM_read(WowWorldReader* reader, tbc_CMS
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -31337,8 +30957,7 @@ static WowWorldResult tbc_SMSG_MEETINGSTONE_SETQUEUE_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (int)(5 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(5 - (reader->length - reader->index));
     }
 
     object->area = 0;
@@ -31445,8 +31064,7 @@ static WowWorldResult tbc_SMSG_STANDSTATE_UPDATE_read(WowWorldReader* reader, tb
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     object->state = 0;
@@ -31480,8 +31098,7 @@ static WowWorldResult tbc_SMSG_LOOT_ALL_PASSED_read(WowWorldReader* reader, tbc_
     int _return_value = 1;
 
     if (24 > (reader->length - reader->index)) {
-        _return_value = (int)(24 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(24 - (reader->length - reader->index));
     }
 
     READ_U64(object->looted_target);
@@ -31530,8 +31147,7 @@ static WowWorldResult tbc_SMSG_LOOT_ROLL_WON_read(WowWorldReader* reader, tbc_SM
     int _return_value = 1;
 
     if (34 > (reader->length - reader->index)) {
-        _return_value = (int)(34 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(34 - (reader->length - reader->index));
     }
 
     READ_U64(object->looted_target);
@@ -31593,8 +31209,7 @@ static WowWorldResult tbc_CMSG_LOOT_ROLL_read(WowWorldReader* reader, tbc_CMSG_L
     int _return_value = 1;
 
     if (13 > (reader->length - reader->index)) {
-        _return_value = (int)(13 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(13 - (reader->length - reader->index));
     }
 
     READ_U64(object->item);
@@ -31636,8 +31251,7 @@ static WowWorldResult tbc_SMSG_LOOT_START_ROLL_read(WowWorldReader* reader, tbc_
     int _return_value = 1;
 
     if (28 > (reader->length - reader->index)) {
-        _return_value = (int)(28 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(28 - (reader->length - reader->index));
     }
 
     READ_U64(object->creature);
@@ -31690,8 +31304,7 @@ static WowWorldResult tbc_SMSG_LOOT_ROLL_read(WowWorldReader* reader, tbc_SMSG_L
     int _return_value = 1;
 
     if (35 > (reader->length - reader->index)) {
-        _return_value = (int)(35 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(35 - (reader->length - reader->index));
     }
 
     READ_U64(object->creature);
@@ -31757,8 +31370,7 @@ static WowWorldResult tbc_CMSG_LOOT_MASTER_GIVE_read(WowWorldReader* reader, tbc
     int _return_value = 1;
 
     if (17 > (reader->length - reader->index)) {
-        _return_value = (int)(17 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(17 - (reader->length - reader->index));
     }
 
     READ_U64(object->loot);
@@ -31913,8 +31525,7 @@ static WowWorldResult tbc_SMSG_SPELL_FAILED_OTHER_read(WowWorldReader* reader, t
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U64(object->caster);
@@ -31951,8 +31562,7 @@ static WowWorldResult tbc_CMSG_REPAIR_ITEM_read(WowWorldReader* reader, tbc_CMSG
     int _return_value = 1;
 
     if (17 > (reader->length - reader->index)) {
-        _return_value = (int)(17 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(17 - (reader->length - reader->index));
     }
 
     READ_U64(object->npc);
@@ -32039,8 +31649,7 @@ static WowWorldResult tbc_MSG_TALENT_WIPE_CONFIRM_Client_read(WowWorldReader* re
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->wiping_npc);
@@ -32073,8 +31682,7 @@ static WowWorldResult tbc_MSG_TALENT_WIPE_CONFIRM_Server_read(WowWorldReader* re
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U64(object->wiping_npc);
@@ -32111,8 +31719,7 @@ static WowWorldResult tbc_SMSG_SUMMON_REQUEST_read(WowWorldReader* reader, tbc_S
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (int)(16 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(16 - (reader->length - reader->index));
     }
 
     READ_U64(object->summoner);
@@ -32154,8 +31761,7 @@ static WowWorldResult tbc_CMSG_SUMMON_RESPONSE_read(WowWorldReader* reader, tbc_
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (int)(9 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(9 - (reader->length - reader->index));
     }
 
     READ_U64(object->summoner);
@@ -32332,8 +31938,7 @@ static WowWorldResult tbc_MSG_MOVE_FEATHER_FALL_Server_read(WowWorldReader* read
     int _return_value = 1;
 
     if (30 > (reader->length - reader->index)) {
-        _return_value = (int)(30 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(30 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->player);
@@ -32374,8 +31979,7 @@ static WowWorldResult tbc_MSG_MOVE_WATER_WALK_read(WowWorldReader* reader, tbc_M
     int _return_value = 1;
 
     if (30 > (reader->length - reader->index)) {
-        _return_value = (int)(30 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(30 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->player);
@@ -32467,8 +32071,7 @@ static WowWorldResult tbc_SMSG_DUEL_COUNTDOWN_read(WowWorldReader* reader, tbc_S
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U32(object->time);
@@ -32581,8 +32184,7 @@ static WowWorldResult tbc_SMSG_PLAYER_SKINNED_read(WowWorldReader* reader, tbc_S
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     READ_BOOL8(object->spirit_released);
@@ -32632,8 +32234,7 @@ static WowWorldResult tbc_CMSG_SET_ACTIONBAR_TOGGLES_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     READ_U8(object->action_bar);
@@ -32804,8 +32405,7 @@ static WowWorldResult tbc_SMSG_UPDATE_WORLD_STATE_read(WowWorldReader* reader, t
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     WWM_CHECK_RETURN_CODE(tbc_WorldState_read(reader, &object->state));
@@ -32838,8 +32438,7 @@ static WowWorldResult tbc_CMSG_ITEM_NAME_QUERY_read(WowWorldReader* reader, tbc_
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U32(object->item);
@@ -32931,8 +32530,7 @@ static WowWorldResult tbc_SMSG_PET_ACTION_FEEDBACK_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     object->feedback = 0;
@@ -33087,8 +32685,7 @@ static WowWorldResult tbc_CMSG_MOVE_SPLINE_DONE_read(WowWorldReader* reader, tbc
     int _return_value = 1;
 
     if (33 > (reader->length - reader->index)) {
-        _return_value = (int)(33 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(33 - (reader->length - reader->index));
     }
 
     WWM_CHECK_RETURN_CODE(tbc_MovementInfo_read(reader, &object->info));
@@ -33129,8 +32726,7 @@ static WowWorldResult tbc_CMSG_MOVE_FALL_RESET_read(WowWorldReader* reader, tbc_
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (int)(29 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(29 - (reader->length - reader->index));
     }
 
     WWM_CHECK_RETURN_CODE(tbc_MovementInfo_read(reader, &object->info));
@@ -33163,8 +32759,7 @@ static WowWorldResult tbc_SMSG_INSTANCE_SAVE_CREATED_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U32(object->unknown);
@@ -33271,8 +32866,7 @@ static WowWorldResult tbc_CMSG_MOVE_TIME_SKIPPED_read(WowWorldReader* reader, tb
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -33313,8 +32907,7 @@ static WowWorldResult tbc_CMSG_MOVE_FEATHER_FALL_ACK_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (45 > (reader->length - reader->index)) {
-        _return_value = (int)(45 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(45 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -33363,8 +32956,7 @@ static WowWorldResult tbc_CMSG_MOVE_WATER_WALK_ACK_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (45 > (reader->length - reader->index)) {
-        _return_value = (int)(45 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(45 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -33413,8 +33005,7 @@ static WowWorldResult tbc_CMSG_MOVE_NOT_ACTIVE_MOVER_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (37 > (reader->length - reader->index)) {
-        _return_value = (int)(37 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(37 - (reader->length - reader->index));
     }
 
     READ_U64(object->old_mover);
@@ -33451,8 +33042,7 @@ static WowWorldResult tbc_SMSG_PLAY_SOUND_read(WowWorldReader* reader, tbc_SMSG_
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U32(object->sound_id);
@@ -33518,8 +33108,7 @@ static WowWorldResult tbc_SMSG_BATTLEFIELD_STATUS_read(WowWorldReader* reader, t
     int _return_value = 1;
 
     if (18 > (reader->length - reader->index)) {
-        _return_value = (int)(18 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(18 - (reader->length - reader->index));
     }
 
     READ_U32(object->queue_slot);
@@ -33615,8 +33204,7 @@ static WowWorldResult tbc_CMSG_BATTLEFIELD_PORT_read(WowWorldReader* reader, tbc
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (int)(9 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(9 - (reader->length - reader->index));
     }
 
     READ_U8(object->arena_type);
@@ -33666,8 +33254,7 @@ static WowWorldResult tbc_MSG_INSPECT_HONOR_STATS_Client_read(WowWorldReader* re
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -33700,8 +33287,7 @@ static WowWorldResult tbc_MSG_INSPECT_HONOR_STATS_Server_read(WowWorldReader* re
     int _return_value = 1;
 
     if (25 > (reader->length - reader->index)) {
-        _return_value = (int)(25 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(25 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -33754,8 +33340,7 @@ static WowWorldResult tbc_CMSG_BATTLEMASTER_HELLO_read(WowWorldReader* reader, t
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -33792,8 +33377,7 @@ static WowWorldResult tbc_SMSG_FORCE_WALK_SPEED_CHANGE_read(WowWorldReader* read
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (int)(9 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(9 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -33838,8 +33422,7 @@ static WowWorldResult tbc_CMSG_FORCE_WALK_SPEED_CHANGE_ACK_read(WowWorldReader* 
     int _return_value = 1;
 
     if (45 > (reader->length - reader->index)) {
-        _return_value = (int)(45 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(45 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -33888,8 +33471,7 @@ static WowWorldResult tbc_SMSG_FORCE_SWIM_BACK_SPEED_CHANGE_read(WowWorldReader*
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (int)(9 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(9 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -33934,8 +33516,7 @@ static WowWorldResult tbc_CMSG_FORCE_SWIM_BACK_SPEED_CHANGE_ACK_read(WowWorldRea
     int _return_value = 1;
 
     if (45 > (reader->length - reader->index)) {
-        _return_value = (int)(45 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(45 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -33984,8 +33565,7 @@ static WowWorldResult tbc_SMSG_FORCE_TURN_RATE_CHANGE_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (int)(9 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(9 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -34030,8 +33610,7 @@ static WowWorldResult tbc_CMSG_FORCE_TURN_RATE_CHANGE_ACK_read(WowWorldReader* r
     int _return_value = 1;
 
     if (45 > (reader->length - reader->index)) {
-        _return_value = (int)(45 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(45 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -34093,8 +33672,7 @@ static WowWorldResult tbc_CMSG_LEAVE_BATTLEFIELD_read(WowWorldReader* reader, tb
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U8(object->unknown1);
@@ -34140,8 +33718,7 @@ static WowWorldResult tbc_CMSG_AREA_SPIRIT_HEALER_QUERY_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -34174,8 +33751,7 @@ static WowWorldResult tbc_CMSG_AREA_SPIRIT_HEALER_QUEUE_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -34208,8 +33784,7 @@ static WowWorldResult tbc_SMSG_AREA_SPIRIT_HEALER_TIME_read(WowWorldReader* read
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -34390,8 +33965,7 @@ static WowWorldResult tbc_SMSG_GROUP_JOINED_BATTLEGROUND_read(WowWorldReader* re
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     object->id = 0;
@@ -34517,8 +34091,7 @@ static WowWorldResult tbc_CMSG_PET_STOP_ATTACK_read(WowWorldReader* reader, tbc_
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->pet);
@@ -34551,8 +34124,7 @@ static WowWorldResult tbc_SMSG_BINDER_CONFIRM_read(WowWorldReader* reader, tbc_S
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -34585,8 +34157,7 @@ static WowWorldResult tbc_SMSG_BATTLEGROUND_PLAYER_JOINED_read(WowWorldReader* r
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->player);
@@ -34619,8 +34190,7 @@ static WowWorldResult tbc_SMSG_BATTLEGROUND_PLAYER_LEFT_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -34653,8 +34223,7 @@ static WowWorldResult tbc_CMSG_BATTLEMASTER_JOIN_read(WowWorldReader* reader, tb
     int _return_value = 1;
 
     if (17 > (reader->length - reader->index)) {
-        _return_value = (int)(17 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(17 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -34750,8 +34319,7 @@ static WowWorldResult tbc_CMSG_PET_UNLEARN_read(WowWorldReader* reader, tbc_CMSG
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->pet);
@@ -34784,8 +34352,7 @@ static WowWorldResult tbc_SMSG_PET_UNLEARN_CONFIRM_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U64(object->pet);
@@ -35149,8 +34716,7 @@ static WowWorldResult tbc_CMSG_PET_SPELL_AUTOCAST_read(WowWorldReader* reader, t
     int _return_value = 1;
 
     if (13 > (reader->length - reader->index)) {
-        _return_value = (int)(13 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(13 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -35191,8 +34757,7 @@ static WowWorldResult tbc_SMSG_WEATHER_read(WowWorldReader* reader, tbc_SMSG_WEA
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (int)(9 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(9 - (reader->length - reader->index));
     }
 
     object->weather_type = 0;
@@ -35235,8 +34800,7 @@ static WowWorldResult tbc_SMSG_RAID_INSTANCE_MESSAGE_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     object->message_type = 0;
@@ -35325,8 +34889,7 @@ static WowWorldResult tbc_SMSG_CHAT_RESTRICTED_read(WowWorldReader* reader, tbc_
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     object->restriction = 0;
@@ -35364,8 +34927,7 @@ static WowWorldResult tbc_SMSG_SPLINE_SET_RUN_SPEED_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (int)(5 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(5 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -35406,8 +34968,7 @@ static WowWorldResult tbc_SMSG_SPLINE_SET_RUN_BACK_SPEED_read(WowWorldReader* re
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (int)(5 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(5 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -35448,8 +35009,7 @@ static WowWorldResult tbc_SMSG_SPLINE_SET_SWIM_SPEED_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (int)(5 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(5 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -35490,8 +35050,7 @@ static WowWorldResult tbc_SMSG_SPLINE_SET_WALK_SPEED_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (int)(5 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(5 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -35532,8 +35091,7 @@ static WowWorldResult tbc_SMSG_SPLINE_SET_SWIM_BACK_SPEED_read(WowWorldReader* r
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (int)(5 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(5 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -35574,8 +35132,7 @@ static WowWorldResult tbc_SMSG_SPLINE_SET_TURN_RATE_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (int)(5 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(5 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -35616,8 +35173,7 @@ static WowWorldResult tbc_SMSG_SPLINE_MOVE_UNROOT_read(WowWorldReader* reader, t
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -35654,8 +35210,7 @@ static WowWorldResult tbc_SMSG_SPLINE_MOVE_FEATHER_FALL_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -35692,8 +35247,7 @@ static WowWorldResult tbc_SMSG_SPLINE_MOVE_NORMAL_FALL_read(WowWorldReader* read
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -35730,8 +35284,7 @@ static WowWorldResult tbc_SMSG_SPLINE_MOVE_SET_HOVER_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -35768,8 +35321,7 @@ static WowWorldResult tbc_SMSG_SPLINE_MOVE_UNSET_HOVER_read(WowWorldReader* read
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -35806,8 +35358,7 @@ static WowWorldResult tbc_SMSG_SPLINE_MOVE_WATER_WALK_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -35844,8 +35395,7 @@ static WowWorldResult tbc_SMSG_SPLINE_MOVE_LAND_WALK_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -35882,8 +35432,7 @@ static WowWorldResult tbc_SMSG_SPLINE_MOVE_START_SWIM_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -35920,8 +35469,7 @@ static WowWorldResult tbc_SMSG_SPLINE_MOVE_STOP_SWIM_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -35958,8 +35506,7 @@ static WowWorldResult tbc_SMSG_SPLINE_MOVE_SET_RUN_MODE_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -35996,8 +35543,7 @@ static WowWorldResult tbc_SMSG_SPLINE_MOVE_SET_WALK_MODE_read(WowWorldReader* re
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -36095,8 +35641,7 @@ static WowWorldResult tbc_CMSG_SET_FACTION_INACTIVE_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (3 > (reader->length - reader->index)) {
-        _return_value = (int)(3 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(3 - (reader->length - reader->index));
     }
 
     object->faction = 0;
@@ -36134,8 +35679,7 @@ static WowWorldResult tbc_CMSG_SET_WATCHED_FACTION_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (int)(2 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(2 - (reader->length - reader->index));
     }
 
     object->faction = 0;
@@ -36173,8 +35717,7 @@ static WowWorldResult tbc_MSG_MOVE_TIME_SKIPPED_Server_read(WowWorldReader* read
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (int)(5 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(5 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->player);
@@ -36211,8 +35754,7 @@ static WowWorldResult tbc_SMSG_SPLINE_MOVE_ROOT_read(WowWorldReader* reader, tbc
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -36245,8 +35787,7 @@ static WowWorldResult tbc_SMSG_INVALIDATE_PLAYER_read(WowWorldReader* reader, tb
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -36296,8 +35837,7 @@ static WowWorldResult tbc_SMSG_INSTANCE_RESET_read(WowWorldReader* reader, tbc_S
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     object->map = 0;
@@ -36331,8 +35871,7 @@ static WowWorldResult tbc_SMSG_INSTANCE_RESET_FAILED_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     object->reason = 0;
@@ -36371,8 +35910,7 @@ static WowWorldResult tbc_SMSG_UPDATE_LAST_INSTANCE_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     object->map = 0;
@@ -36416,8 +35954,7 @@ static WowWorldResult tbc_MSG_RAID_TARGET_UPDATE_Client_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     object->target_index = 0;
@@ -36472,8 +36009,7 @@ static WowWorldResult tbc_MSG_RAID_TARGET_UPDATE_Server_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     object->update_type = 0;
@@ -36649,8 +36185,7 @@ static WowWorldResult tbc_SMSG_PET_ACTION_SOUND_read(WowWorldReader* reader, tbc
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -36688,8 +36223,7 @@ static WowWorldResult tbc_SMSG_PET_DISMISS_SOUND_read(WowWorldReader* reader, tb
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (int)(16 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(16 - (reader->length - reader->index));
     }
 
     READ_U32(object->sound_id);
@@ -36726,8 +36260,7 @@ static WowWorldResult tbc_SMSG_GM_TICKET_STATUS_UPDATE_read(WowWorldReader* read
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     object->response = 0;
@@ -36761,8 +36294,7 @@ static WowWorldResult tbc_MSG_SET_DUNGEON_DIFFICULTY_Client_read(WowWorldReader*
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     object->difficulty = 0;
@@ -36796,8 +36328,7 @@ static WowWorldResult tbc_MSG_SET_DUNGEON_DIFFICULTY_Server_read(WowWorldReader*
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     object->difficulty = 0;
@@ -36907,8 +36438,7 @@ static WowWorldResult tbc_SMSG_UPDATE_INSTANCE_OWNERSHIP_read(WowWorldReader* re
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_BOOL32(object->player_is_saved_to_a_raid);
@@ -36987,8 +36517,7 @@ static WowWorldResult tbc_SMSG_SPELLINSTAKILLLOG_read(WowWorldReader* reader, tb
     int _return_value = 1;
 
     if (20 > (reader->length - reader->index)) {
-        _return_value = (int)(20 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(20 - (reader->length - reader->index));
     }
 
     READ_U64(object->caster);
@@ -37218,8 +36747,7 @@ static WowWorldResult tbc_SMSG_INSTANCE_DIFFICULTY_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U32(object->difficulty);
@@ -37327,8 +36855,7 @@ static WowWorldResult tbc_SMSG_MOVE_SET_FLIGHT_read(WowWorldReader* reader, tbc_
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -37365,8 +36892,7 @@ static WowWorldResult tbc_SMSG_MOVE_UNSET_FLIGHT_read(WowWorldReader* reader, tb
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -37407,8 +36933,7 @@ static WowWorldResult tbc_SMSG_MOVE_SET_CAN_FLY_read(WowWorldReader* reader, tbc
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (int)(5 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(5 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->player);
@@ -37449,8 +36974,7 @@ static WowWorldResult tbc_SMSG_MOVE_UNSET_CAN_FLY_read(WowWorldReader* reader, t
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (int)(5 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(5 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->player);
@@ -37491,8 +37015,7 @@ static WowWorldResult tbc_CMSG_MOVE_SET_CAN_FLY_ACK_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (45 > (reader->length - reader->index)) {
-        _return_value = (int)(45 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(45 - (reader->length - reader->index));
     }
 
     READ_U64(object->player);
@@ -37541,8 +37064,7 @@ static WowWorldResult tbc_CMSG_MOVE_SET_FLY_read(WowWorldReader* reader, tbc_CMS
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (int)(29 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(29 - (reader->length - reader->index));
     }
 
     WWM_CHECK_RETURN_CODE(tbc_MovementInfo_read(reader, &object->info));
@@ -37575,8 +37097,7 @@ static WowWorldResult tbc_CMSG_SOCKET_GEMS_read(WowWorldReader* reader, tbc_CMSG
     int _return_value = 1;
 
     if (32 > (reader->length - reader->index)) {
-        _return_value = (int)(32 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(32 - (reader->length - reader->index));
     }
 
     READ_U64(object->item);
@@ -37751,8 +37272,7 @@ static WowWorldResult tbc_CMSG_ARENA_TEAM_ROSTER_read(WowWorldReader* reader, tb
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U32(object->arena_team);
@@ -38002,8 +37522,7 @@ static WowWorldResult tbc_CMSG_ARENA_TEAM_LEAVE_read(WowWorldReader* reader, tbc
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U32(object->arena_team);
@@ -38086,8 +37605,7 @@ static WowWorldResult tbc_CMSG_ARENA_TEAM_DISBAND_read(WowWorldReader* reader, t
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U32(object->arena_team);
@@ -38370,8 +37888,7 @@ static WowWorldResult tbc_CMSG_BATTLEMASTER_JOIN_ARENA_read(WowWorldReader* read
     int _return_value = 1;
 
     if (11 > (reader->length - reader->index)) {
-        _return_value = (int)(11 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(11 - (reader->length - reader->index));
     }
 
     READ_U64(object->battlemaster);
@@ -38421,8 +37938,7 @@ static WowWorldResult tbc_MSG_MOVE_START_ASCEND_Client_read(WowWorldReader* read
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (int)(29 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(29 - (reader->length - reader->index));
     }
 
     WWM_CHECK_RETURN_CODE(tbc_MovementInfo_read(reader, &object->info));
@@ -38459,8 +37975,7 @@ static WowWorldResult tbc_MSG_MOVE_START_ASCEND_Server_read(WowWorldReader* read
     int _return_value = 1;
 
     if (30 > (reader->length - reader->index)) {
-        _return_value = (int)(30 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(30 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -38501,8 +38016,7 @@ static WowWorldResult tbc_MSG_MOVE_STOP_ASCEND_Client_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (int)(29 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(29 - (reader->length - reader->index));
     }
 
     WWM_CHECK_RETURN_CODE(tbc_MovementInfo_read(reader, &object->info));
@@ -38539,8 +38053,7 @@ static WowWorldResult tbc_MSG_MOVE_STOP_ASCEND_Server_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (30 > (reader->length - reader->index)) {
-        _return_value = (int)(30 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(30 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -38577,8 +38090,7 @@ static WowWorldResult tbc_SMSG_ARENA_TEAM_STATS_read(WowWorldReader* reader, tbc
     int _return_value = 1;
 
     if (28 > (reader->length - reader->index)) {
-        _return_value = (int)(28 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(28 - (reader->length - reader->index));
     }
 
     READ_U32(object->arena_team);
@@ -38737,8 +38249,7 @@ static WowWorldResult tbc_CMSG_SET_LOOKING_FOR_MORE_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     WWM_CHECK_RETURN_CODE(tbc_LfgData_read(reader, &object->data));
@@ -38844,8 +38355,7 @@ static WowWorldResult tbc_SMSG_LFG_UPDATE_read(WowWorldReader* reader, tbc_SMSG_
     int _return_value = 1;
 
     if (3 > (reader->length - reader->index)) {
-        _return_value = (int)(3 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(3 - (reader->length - reader->index));
     }
 
     READ_BOOL8(object->queued);
@@ -38905,8 +38415,7 @@ static WowWorldResult tbc_SMSG_LFG_UPDATE_LFM_read(WowWorldReader* reader, tbc_S
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     object->looking_for_more = 0;
@@ -38948,8 +38457,7 @@ static WowWorldResult tbc_SMSG_LFG_UPDATE_LFG_read(WowWorldReader* reader, tbc_S
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_ARRAY(object->data, 3, WWM_CHECK_RETURN_CODE(tbc_LfgData_read(reader, &object->data[i])));
@@ -38982,8 +38490,7 @@ static WowWorldResult tbc_SMSG_LFG_UPDATE_QUEUED_read(WowWorldReader* reader, tb
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     READ_BOOL8(object->queued);
@@ -39016,8 +38523,7 @@ static WowWorldResult tbc_SMSG_TITLE_EARNED_read(WowWorldReader* reader, tbc_SMS
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U32(object->title);
@@ -39055,8 +38561,7 @@ static WowWorldResult tbc_CMSG_SET_TITLE_read(WowWorldReader* reader, tbc_CMSG_S
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U32(object->title);
@@ -39106,8 +38611,7 @@ static WowWorldResult tbc_SMSG_ARENA_ERROR_read(WowWorldReader* reader, tbc_SMSG
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (int)(5 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(5 - (reader->length - reader->index));
     }
 
     READ_U32(object->unknown);
@@ -39145,8 +38649,7 @@ static WowWorldResult tbc_MSG_INSPECT_ARENA_TEAMS_Client_read(WowWorldReader* re
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->player);
@@ -39179,8 +38682,7 @@ static WowWorldResult tbc_MSG_INSPECT_ARENA_TEAMS_Server_read(WowWorldReader* re
     int _return_value = 1;
 
     if (33 > (reader->length - reader->index)) {
-        _return_value = (int)(33 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(33 - (reader->length - reader->index));
     }
 
     READ_U64(object->player);
@@ -39241,8 +38743,7 @@ static WowWorldResult tbc_SMSG_DEATH_RELEASE_LOC_read(WowWorldReader* reader, tb
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (int)(16 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(16 - (reader->length - reader->index));
     }
 
     object->map = 0;
@@ -39280,8 +38781,7 @@ static WowWorldResult tbc_CMSG_CANCEL_TEMP_ENCHANTMENT_read(WowWorldReader* read
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U32(object->slot);
@@ -39335,8 +38835,7 @@ static WowWorldResult tbc_MSG_MOVE_SET_FLIGHT_SPEED_Server_read(WowWorldReader* 
     int _return_value = 1;
 
     if (34 > (reader->length - reader->index)) {
-        _return_value = (int)(34 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(34 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->player);
@@ -39381,8 +38880,7 @@ static WowWorldResult tbc_MSG_MOVE_SET_FLIGHT_BACK_SPEED_read(WowWorldReader* re
     int _return_value = 1;
 
     if (34 > (reader->length - reader->index)) {
-        _return_value = (int)(34 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(34 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->player);
@@ -39450,8 +38948,7 @@ static WowWorldResult tbc_SMSG_FORCE_FLIGHT_SPEED_CHANGE_read(WowWorldReader* re
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (int)(9 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(9 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -39496,8 +38993,7 @@ static WowWorldResult tbc_CMSG_FORCE_FLIGHT_SPEED_CHANGE_ACK_read(WowWorldReader
     int _return_value = 1;
 
     if (45 > (reader->length - reader->index)) {
-        _return_value = (int)(45 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(45 - (reader->length - reader->index));
     }
 
     READ_U64(object->player);
@@ -39546,8 +39042,7 @@ static WowWorldResult tbc_SMSG_FORCE_FLIGHT_BACK_SPEED_CHANGE_read(WowWorldReade
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (int)(9 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(9 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -39592,8 +39087,7 @@ static WowWorldResult tbc_CMSG_FORCE_FLIGHT_BACK_SPEED_CHANGE_ACK_read(WowWorldR
     int _return_value = 1;
 
     if (45 > (reader->length - reader->index)) {
-        _return_value = (int)(45 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(45 - (reader->length - reader->index));
     }
 
     READ_U64(object->player);
@@ -39642,8 +39136,7 @@ static WowWorldResult tbc_SMSG_SPLINE_SET_FLIGHT_SPEED_read(WowWorldReader* read
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (int)(5 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(5 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -39684,8 +39177,7 @@ static WowWorldResult tbc_SMSG_SPLINE_SET_FLIGHT_BACK_SPEED_read(WowWorldReader*
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (int)(5 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(5 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -39722,8 +39214,7 @@ static WowWorldResult tbc_SMSG_FLIGHT_SPLINE_SYNC_read(WowWorldReader* reader, t
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_FLOAT(object->elapsed_value);
@@ -39760,8 +39251,7 @@ static WowWorldResult tbc_CMSG_SET_TAXI_BENCHMARK_MODE_read(WowWorldReader* read
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     READ_U8(object->mode);
@@ -39849,8 +39339,7 @@ static WowWorldResult tbc_CMSG_REALM_SPLIT_read(WowWorldReader* reader, tbc_CMSG
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U32(object->realm_id);
@@ -39887,8 +39376,7 @@ static WowWorldResult tbc_CMSG_MOVE_CHNG_TRANSPORT_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (int)(29 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(29 - (reader->length - reader->index));
     }
 
     WWM_CHECK_RETURN_CODE(tbc_MovementInfo_read(reader, &object->info));
@@ -39921,8 +39409,7 @@ static WowWorldResult tbc_MSG_PARTY_ASSIGNMENT_Client_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (10 > (reader->length - reader->index)) {
-        _return_value = (int)(10 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(10 - (reader->length - reader->index));
     }
 
     object->role = 0;
@@ -39964,8 +39451,7 @@ static WowWorldResult tbc_SMSG_TIME_SYNC_REQ_read(WowWorldReader* reader, tbc_SM
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U32(object->time_sync);
@@ -39998,8 +39484,7 @@ static WowWorldResult tbc_CMSG_TIME_SYNC_RESP_read(WowWorldReader* reader, tbc_C
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U32(object->time_sync);
@@ -40036,8 +39521,7 @@ static WowWorldResult tbc_SMSG_RESET_FAILED_NOTIFY_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     object->map = 0;
@@ -40092,8 +39576,7 @@ static WowWorldResult tbc_SMSG_UPDATE_COMBO_POINTS_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (int)(2 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(2 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->target);
@@ -40217,8 +39700,7 @@ static WowWorldResult tbc_SMSG_SET_EXTRA_AURA_INFO_NEED_UPDATE_read(WowWorldRead
     int _return_value = 1;
 
     if (14 > (reader->length - reader->index)) {
-        _return_value = (int)(14 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(14 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->unit);
@@ -40271,8 +39753,7 @@ static WowWorldResult tbc_SMSG_CLEAR_EXTRA_AURA_INFO_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (int)(5 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(5 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->unit);
@@ -40313,8 +39794,7 @@ static WowWorldResult tbc_MSG_MOVE_START_DESCEND_Client_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (29 > (reader->length - reader->index)) {
-        _return_value = (int)(29 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(29 - (reader->length - reader->index));
     }
 
     WWM_CHECK_RETURN_CODE(tbc_MovementInfo_read(reader, &object->info));
@@ -40351,8 +39831,7 @@ static WowWorldResult tbc_MSG_MOVE_START_DESCEND_Server_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (30 > (reader->length - reader->index)) {
-        _return_value = (int)(30 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(30 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -40393,8 +39872,7 @@ static WowWorldResult tbc_SMSG_DISMOUNT_read(WowWorldReader* reader, tbc_SMSG_DI
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->player);
@@ -40431,8 +39909,7 @@ static WowWorldResult tbc_MSG_MOVE_UPDATE_CAN_FLY_Server_read(WowWorldReader* re
     int _return_value = 1;
 
     if (30 > (reader->length - reader->index)) {
-        _return_value = (int)(30 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(30 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->player);
@@ -40530,8 +40007,7 @@ static WowWorldResult tbc_MSG_RAID_READY_CHECK_CONFIRM_Server_read(WowWorldReade
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (int)(9 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(9 - (reader->length - reader->index));
     }
 
     READ_U64(object->player);
@@ -40568,8 +40044,7 @@ static WowWorldResult tbc_CMSG_VOICE_SESSION_ENABLE_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (int)(2 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(2 - (reader->length - reader->index));
     }
 
     READ_BOOL8(object->voice_enabled);
@@ -40787,8 +40262,7 @@ static WowWorldResult tbc_CMSG_COMMENTATOR_ENABLE_read(WowWorldReader* reader, t
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     object->option = 0;
@@ -40822,8 +40296,7 @@ static WowWorldResult tbc_SMSG_CLEAR_TARGET_read(WowWorldReader* reader, tbc_SMS
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->target);
@@ -40856,8 +40329,7 @@ static WowWorldResult tbc_SMSG_CROSSED_INEBRIATION_THRESHOLD_read(WowWorldReader
     int _return_value = 1;
 
     if (16 > (reader->length - reader->index)) {
-        _return_value = (int)(16 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(16 - (reader->length - reader->index));
     }
 
     READ_U64(object->player);
@@ -41069,8 +40541,7 @@ static WowWorldResult tbc_SMSG_COMPLAIN_RESULT_read(WowWorldReader* reader, tbc_
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (int)(2 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(2 - (reader->length - reader->index));
     }
 
     READ_U8(object->unknown);
@@ -41108,8 +40579,7 @@ static WowWorldResult tbc_SMSG_FEATURE_SYSTEM_STATUS_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (2 > (reader->length - reader->index)) {
-        _return_value = (int)(2 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(2 - (reader->length - reader->index));
     }
 
     object->complaint_status = 0;
@@ -41360,8 +40830,7 @@ static WowWorldResult tbc_CMSG_REPORT_PVP_AFK_read(WowWorldReader* reader, tbc_C
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->player);
@@ -41394,8 +40863,7 @@ static WowWorldResult tbc_CMSG_GUILD_BANKER_ACTIVATE_read(WowWorldReader* reader
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (int)(9 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(9 - (reader->length - reader->index));
     }
 
     READ_U64(object->bank);
@@ -41432,8 +40900,7 @@ static WowWorldResult tbc_CMSG_GUILD_BANK_QUERY_TAB_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (10 > (reader->length - reader->index)) {
-        _return_value = (int)(10 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(10 - (reader->length - reader->index));
     }
 
     READ_U64(object->bank);
@@ -41826,8 +41293,7 @@ static WowWorldResult tbc_CMSG_GUILD_BANK_BUY_TAB_read(WowWorldReader* reader, t
     int _return_value = 1;
 
     if (9 > (reader->length - reader->index)) {
-        _return_value = (int)(9 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(9 - (reader->length - reader->index));
     }
 
     READ_U64(object->banker);
@@ -41925,8 +41391,7 @@ static WowWorldResult tbc_CMSG_GUILD_BANK_DEPOSIT_MONEY_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U64(object->bank);
@@ -41963,8 +41428,7 @@ static WowWorldResult tbc_CMSG_GUILD_BANK_WITHDRAW_MONEY_read(WowWorldReader* re
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U64(object->bank);
@@ -42001,8 +41465,7 @@ static WowWorldResult tbc_MSG_GUILD_BANK_LOG_QUERY_Client_read(WowWorldReader* r
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     READ_U8(object->slot);
@@ -42456,8 +41919,7 @@ static WowWorldResult tbc_CMSG_SPELLCLICK_read(WowWorldReader* reader, tbc_CMSG_
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->target);
@@ -42494,8 +41956,7 @@ static WowWorldResult tbc_SMSG_LOOT_LIST_read(WowWorldReader* reader, tbc_SMSG_L
     int _return_value = 1;
 
     if (10 > (reader->length - reader->index)) {
-        _return_value = (int)(10 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(10 - (reader->length - reader->index));
     }
 
     READ_U64(object->creature);
@@ -42553,8 +42014,7 @@ static WowWorldResult tbc_MSG_GUILD_PERMISSIONS_Server_read(WowWorldReader* read
     int _return_value = 1;
 
     if (61 > (reader->length - reader->index)) {
-        _return_value = (int)(61 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(61 - (reader->length - reader->index));
     }
 
     READ_U32(object->id);
@@ -42620,8 +42080,7 @@ static WowWorldResult tbc_MSG_GUILD_BANK_MONEY_WITHDRAWN_Server_read(WowWorldRea
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_U32(object->remaining_withdraw_amount);
@@ -42737,8 +42196,7 @@ static WowWorldResult tbc_CMSG_GET_MIRRORIMAGE_DATA_read(WowWorldReader* reader,
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->target);
@@ -42771,8 +42229,7 @@ static WowWorldResult tbc_SMSG_MIRRORIMAGE_DATA_read(WowWorldReader* reader, tbc
     int _return_value = 1;
 
     if (67 > (reader->length - reader->index)) {
-        _return_value = (int)(67 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(67 - (reader->length - reader->index));
     }
 
     READ_U64(object->guid);
@@ -42864,8 +42321,7 @@ static WowWorldResult tbc_CMSG_OPT_OUT_OF_LOOT_read(WowWorldReader* reader, tbc_
     int _return_value = 1;
 
     if (4 > (reader->length - reader->index)) {
-        _return_value = (int)(4 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(4 - (reader->length - reader->index));
     }
 
     READ_BOOL32(object->pass_on_loot);
@@ -42898,8 +42354,7 @@ static WowWorldResult tbc_MSG_QUERY_GUILD_BANK_TEXT_Client_read(WowWorldReader* 
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     READ_U8(object->tab);
@@ -43036,8 +42491,7 @@ static WowWorldResult tbc_CMSG_GRANT_LEVEL_read(WowWorldReader* reader, tbc_CMSG
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->player);
@@ -43070,8 +42524,7 @@ static WowWorldResult tbc_SMSG_OVERRIDE_LIGHT_read(WowWorldReader* reader, tbc_S
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U32(object->default_id);
@@ -43112,8 +42565,7 @@ static WowWorldResult tbc_SMSG_TOTEM_CREATED_read(WowWorldReader* reader, tbc_SM
     int _return_value = 1;
 
     if (17 > (reader->length - reader->index)) {
-        _return_value = (int)(17 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(17 - (reader->length - reader->index));
     }
 
     READ_U8(object->slot);
@@ -43158,8 +42610,7 @@ static WowWorldResult tbc_CMSG_TOTEM_DESTROYED_read(WowWorldReader* reader, tbc_
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     READ_U8(object->slot);
@@ -43339,8 +42790,7 @@ static WowWorldResult tbc_SMSG_SET_PLAYER_DECLINED_NAMES_RESULT_read(WowWorldRea
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_U32(object->result);
@@ -43438,8 +42888,7 @@ static WowWorldResult tbc_SMSG_PROPOSE_LEVEL_GRANT_read(WowWorldReader* reader, 
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->player);
@@ -43476,8 +42925,7 @@ static WowWorldResult tbc_CMSG_ACCEPT_LEVEL_GRANT_read(WowWorldReader* reader, t
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -43577,8 +43025,7 @@ static WowWorldResult tbc_SMSG_SPLINE_MOVE_SET_FLYING_read(WowWorldReader* reade
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);
@@ -43615,8 +43062,7 @@ static WowWorldResult tbc_SMSG_SPLINE_MOVE_UNSET_FLYING_read(WowWorldReader* rea
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     READ_PACKED_GUID(object->guid);

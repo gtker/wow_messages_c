@@ -8,8 +8,7 @@ WowWorldResult all_Vector3d_read(WowWorldReader* reader, all_Vector3d* object) {
     int _return_value = 1;
 
     if (12 > (reader->length - reader->index)) {
-        _return_value = (int)(12 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(12 - (reader->length - reader->index));
     }
 
     READ_FLOAT(object->x);
@@ -41,8 +40,7 @@ WowWorldResult all_Vector2d_read(WowWorldReader* reader, all_Vector2d* object) {
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_FLOAT(object->x);

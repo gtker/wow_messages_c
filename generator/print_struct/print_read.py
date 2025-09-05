@@ -682,12 +682,15 @@ def print_read(s: Writer, container: Container, module_name: str):
             """)
 
         if container.sizes.minimum_size != 0:
-            s.write_block(f"""
-                if ({container.sizes.minimum_size} > (reader->length - reader->index)) {{
-                    _return_value = (int)({container.sizes.minimum_size} - (reader->length - reader->index));
-                    goto cleanup;
-                }}
-            """)
+            s.open_curly(f"if ({container.sizes.minimum_size} > (reader->length - reader->index))")
+            return_expression = f"(int)({container.sizes.minimum_size} - (reader->length - reader->index))"
+            if container_has_free(container, module_name):
+                s.wln(f"_return_value = {return_expression};")
+                s.wln(f"goto cleanup;")
+            else:
+                s.wln(f"return {return_expression};")
+            s.closing_curly()
+            s.newline()
 
         needs_newline = False
         free_body_members = Writer()

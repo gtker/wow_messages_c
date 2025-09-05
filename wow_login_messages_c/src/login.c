@@ -8,8 +8,7 @@ static WowLoginResult all_Version_read(WowLoginReader* reader, all_Version* obje
     int _return_value = 1;
 
     if (5 > (reader->length - reader->index)) {
-        _return_value = (int)(5 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(5 - (reader->length - reader->index));
     }
 
     READ_U8(object->major);
@@ -359,8 +358,7 @@ static WowLoginResult version2_TelemetryKey_read(WowLoginReader* reader, version
     int _return_value = 1;
 
     if (30 > (reader->length - reader->index)) {
-        _return_value = (int)(30 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(30 - (reader->length - reader->index));
     }
 
     READ_U16(object->unknown1);
@@ -555,8 +553,7 @@ static WowLoginResult version2_CMD_AUTH_LOGON_PROOF_Server_read(WowLoginReader* 
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     object->result = 0;
@@ -600,8 +597,7 @@ static WowLoginResult version2_CMD_AUTH_RECONNECT_CHALLENGE_Server_read(WowLogin
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     object->result = 0;
@@ -645,8 +641,7 @@ static WowLoginResult version2_CMD_AUTH_RECONNECT_PROOF_Server_read(WowLoginRead
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     object->result = 0;
@@ -678,8 +673,7 @@ static WowLoginResult version2_CMD_AUTH_RECONNECT_PROOF_Client_read(WowLoginRead
     int _return_value = 1;
 
     if (57 > (reader->length - reader->index)) {
-        _return_value = (int)(57 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(57 - (reader->length - reader->index));
     }
 
     READ_ARRAY(object->proof_data, 16, READ_U8(object->proof_data[i]));
@@ -934,8 +928,7 @@ static WowLoginResult version2_CMD_XFER_RESUME_read(WowLoginReader* reader, vers
     int _return_value = 1;
 
     if (8 > (reader->length - reader->index)) {
-        _return_value = (int)(8 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(8 - (reader->length - reader->index));
     }
 
     READ_U64(object->offset);
@@ -1963,8 +1956,7 @@ static WowLoginResult version5_CMD_AUTH_LOGON_PROOF_Server_read(WowLoginReader* 
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     object->result = 0;
@@ -2012,8 +2004,7 @@ static WowLoginResult version5_CMD_AUTH_RECONNECT_PROOF_Server_read(WowLoginRead
     int _return_value = 1;
 
     if (3 > (reader->length - reader->index)) {
-        _return_value = (int)(3 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(3 - (reader->length - reader->index));
     }
 
     object->result = 0;
@@ -3272,8 +3263,7 @@ static WowLoginResult version8_CMD_AUTH_LOGON_PROOF_Server_read(WowLoginReader* 
     int _return_value = 1;
 
     if (3 > (reader->length - reader->index)) {
-        _return_value = (int)(3 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(3 - (reader->length - reader->index));
     }
 
     object->result = 0;
@@ -3334,8 +3324,7 @@ static WowLoginResult version8_CMD_AUTH_RECONNECT_CHALLENGE_Server_read(WowLogin
     int _return_value = 1;
 
     if (1 > (reader->length - reader->index)) {
-        _return_value = (int)(1 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(1 - (reader->length - reader->index));
     }
 
     object->result = 0;
@@ -3379,8 +3368,7 @@ static WowLoginResult version8_CMD_AUTH_RECONNECT_PROOF_Server_read(WowLoginRead
     int _return_value = 1;
 
     if (3 > (reader->length - reader->index)) {
-        _return_value = (int)(3 - (reader->length - reader->index));
-        goto cleanup;
+        return (int)(3 - (reader->length - reader->index));
     }
 
     object->result = 0;
