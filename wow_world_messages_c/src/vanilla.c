@@ -4904,14 +4904,14 @@ WOW_WORLD_MESSAGES_C_EXPORT void vanilla_WhoPlayer_free(vanilla_WhoPlayer* objec
 }
 
 static size_t vanilla_WhoPlayer_size(const vanilla_WhoPlayer* object) {
-    return 16 + STRING_SIZE(object->name) + STRING_SIZE(object->guild);
+    return 18 + STRING_SIZE(object->name) + STRING_SIZE(object->guild);
 }
 
 static WowWorldResult vanilla_WhoPlayer_read(WowWorldReader* reader, vanilla_WhoPlayer* object) {
     int _return_value = 1;
 
-    if (16 > (reader->length - reader->index)) {
-        _return_value = (int)(16 - (reader->length - reader->index));
+    if (18 > (reader->length - reader->index)) {
+        _return_value = (int)(18 - (reader->length - reader->index));
         goto cleanup;
     }
 
@@ -4925,15 +4925,13 @@ static WowWorldResult vanilla_WhoPlayer_read(WowWorldReader* reader, vanilla_Who
     READ_U32(object->level);
 
     object->class_type = 0;
-    READ_U8(object->class_type);
+    READ_U32(object->class_type);
 
     object->race = 0;
-    READ_U8(object->race);
+    READ_U32(object->race);
 
     object->area = 0;
     READ_U32(object->area);
-
-    READ_U32(object->party_status);
 
     return WWM_RESULT_SUCCESS;
 cleanup:
@@ -4950,13 +4948,11 @@ static WowWorldResult vanilla_WhoPlayer_write(WowWorldWriter* writer, const vani
 
     WRITE_U32(object->level);
 
-    WRITE_U8(object->class_type);
+    WRITE_U32(object->class_type);
 
-    WRITE_U8(object->race);
+    WRITE_U32(object->race);
 
     WRITE_U32(object->area);
-
-    WRITE_U32(object->party_status);
 
 
     return WWM_RESULT_SUCCESS;

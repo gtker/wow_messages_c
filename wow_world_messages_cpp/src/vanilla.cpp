@@ -4022,7 +4022,7 @@ static void TrainerSpell_write(Writer& writer, const TrainerSpell& obj) {
 }
 
 static size_t WhoPlayer_size(const WhoPlayer& obj) {
-    return 16 + obj.name.size() + obj.guild.size();
+    return 18 + obj.name.size() + obj.guild.size();
 }
 
 WhoPlayer WhoPlayer_read(Reader& reader) {
@@ -4034,13 +4034,11 @@ WhoPlayer WhoPlayer_read(Reader& reader) {
 
     obj.level = reader.read_u32();
 
-    obj.class_type = static_cast<Class>(reader.read_u8());
+    obj.class_type = static_cast<Class>(reader.read_u32());
 
-    obj.race = static_cast<Race>(reader.read_u8());
+    obj.race = static_cast<Race>(reader.read_u32());
 
     obj.area = static_cast<Area>(reader.read_u32());
-
-    obj.party_status = reader.read_u32();
 
     return obj;
 }
@@ -4052,13 +4050,11 @@ static void WhoPlayer_write(Writer& writer, const WhoPlayer& obj) {
 
     writer.write_u32(obj.level);
 
-    writer.write_u8(static_cast<uint8_t>(obj.class_type));
+    writer.write_u32(static_cast<uint32_t>(obj.class_type));
 
-    writer.write_u8(static_cast<uint8_t>(obj.race));
+    writer.write_u32(static_cast<uint32_t>(obj.race));
 
     writer.write_u32(static_cast<uint32_t>(obj.area));
-
-    writer.write_u32(obj.party_status);
 
 }
 

@@ -6420,7 +6420,6 @@ typedef struct {
     vanilla_Class class_type;
     vanilla_Race race;
     vanilla_Area area;
-    uint32_t party_status;
 
 } vanilla_WhoPlayer;
 

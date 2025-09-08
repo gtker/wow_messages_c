@@ -6363,7 +6363,6 @@ struct WhoPlayer {
     Class class_type;
     Race race;
     Area area;
-    uint32_t party_status;
 };
 
 struct WorldState {
